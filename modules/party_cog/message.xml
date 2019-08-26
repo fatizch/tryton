@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<tryton>
+    <data group="1">
+        <record model="ir.message" id="msg_interaction_attachment">
+            <field name="text">Some attachments are used on interactions with the following parties:
+
+%(parties)s
+
+Going on will break the links.</field>
+        </record>
+        <record model="ir.message" id="msg_invalid_email">
+            <field name="text">Invalid Email.</field>
+        </record>
+        <record model="ir.message" id="msg_duplicate_party">
+            <field name="text">Duplicate(s) already exist(s) : %s.</field>
+        </record>
+        <record model="ir.message" id="msg_invalid_birth_date">
+            <field name="text">Birth date can't be in the future:
+%(name)s - %(birthdate)s</field>
+        </record>
+        <record model="ir.message" id="msg_type_is_used">
+            <field name="text">Identifier type is used. Deletion impossible.</field>
+        </record>
+        <record model="ir.message" id="msg_different_first_name">
+            <field name="text">Parties have different first names: %(source_name)s vs %(destination_name)s.</field>
+        </record>
+        <record model="ir.message" id="msg_line_exceeds_max_length">
+            <field name="text">"%(value)s" into the address line "%(line)s" exceeds the configuration limit of character(s) (%(max)s) for the country "%(country)s".</field>
+        </record>
+        <record model="ir.message" id="msg_used_zip_code">
+            <field name="text">You cannot modify this zip code:
+%(zip_info)s
+as it is used in other addresses. Add a new zipcode instead.</field>
+        </record>
+    </data>
+</tryton>

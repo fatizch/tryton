@@ -1,8 +1,12 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 import os
+
+from trytond.exceptions import UserWarning
+from trytond.i18n import gettext
 from trytond.pool import Pool
 from trytond.model import Workflow, ModelView, fields
+from trytond.model.exceptions import AccessError
 from trytond.pyson import Eval
 from trytond.config import config
 
@@ -43,12 +47,6 @@ class DsnMessage(Workflow, model.CoogSQL, model.CoogView):
     @classmethod
     def __setup__(cls):
         super(DsnMessage, cls).__setup__()
-        cls._error_messages.update({
-                'delete_draft_msg': ('Message "%s" must be in draft before '
-                    'deletion.'),
-                'undefined_dsn_section': ('Dsn configuration is not done, '
-                    'message generation will be disabled'),
-                })
         cls._transitions |= {
             ('draft', 'waiting'),
             ('waiting', 'done'),
@@ -143,14 +141,19 @@ class DsnMessage(Workflow, model.CoogSQL, model.CoogView):
     def delete(cls, messages):
         for message in messages:
             if message.state != 'draft':
-                cls.raise_user_error('delete_draft_msg', (message.rec_name))
+                raise AccessError(gettext(
+                        'dsn_standard.msg_delete_draft_msg',
+                        message=message.rec_name))
         super(DsnMessage, cls).delete(messages)
 
     @classmethod
     def check_configuration(cls):
+        pool = Pool()
+        Warning = pool.get('res.user.warning')
         sender_code = config.get('dsn', 'sender_code', default=-1)
         if sender_code == -1:
-            cls.raise_user_warning('undefined_dsn_section',
-                'undefined_dsn_section')
+            if Warning.check('undefined_dsn_section'):
+                    raise UserWarning (
+                        gettext('dsn_standard.msg_undefined_dsn_section'))
             return False
         return True

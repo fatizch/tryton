@@ -38,6 +38,7 @@ this repository contains the full copyright notices and license terms. -->
         </record>
         <!-- Read / Write rule -->
         <record model="ir.rule.group" id="rule_group_product">
+            <field name="name">User in company</field>
             <field name="model" search="[('model', '=', 'offered.product')]"/>
             <field name="global_p" eval="True"/>
         </record>
@@ -95,6 +96,7 @@ this repository contains the full copyright notices and license terms. -->
         </record>
         <!-- Read / Write rule -->
         <record model="ir.rule.group" id="rule_group_coverage">
+            <field name="name">User in company</field>
             <field name="model" search="[('model', '=', 'offered.option.description')]"/>
             <field name="global_p" eval="True"/>
         </record>

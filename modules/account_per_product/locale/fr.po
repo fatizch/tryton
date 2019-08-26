@@ -2,14 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:offered.product:"
-msgid ""
-"The coverage \"%(coverage_code)s - %(coverage_name)s\" is already used in "
-"product(s) %(products)s"
-msgstr ""
-"La garantie \"%(coverage_code)s - %(coverage_name)s\" est déjà utilisée dans"
-" le(s) produit(s) %(products)s"
-
 msgctxt "field:account.aged_balance.context,product:"
 msgid "Product"
 msgstr "Produit"
@@ -46,13 +38,17 @@ msgctxt "field:account.statement,product:"
 msgid "Product"
 msgstr "Produit"
 
-msgctxt "error:offered.product-option.description:"
-msgid "The coverage can have a relation with only one product"
-msgstr "La garantie doit ne peut avoir une relation qu'avec un seul produit"
-
 msgctxt "field:insurer,product:"
 msgid "Product"
 msgstr "Produit"
+
+msgctxt "model:ir.message,text:msg_mixing_products"
+msgid ""
+"The coverage \"%(coverage_code)s - %(coverage_name)s\" is already used in "
+"product(s) %(products)s."
+msgstr ""
+"La garantie \"%(coverage_code)s - %(coverage_name)s\" est déjà utilisée dans"
+" le(s) produit(s) %(products)s."
 
 msgctxt "selection:account.move.template.keyword,type_:"
 msgid "Product"

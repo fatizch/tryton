@@ -3,6 +3,7 @@
 # #Comment# #Imports
 import datetime
 import os
+import shutil
 
 from proteus import Model, Wizard
 from trytond.tests.tools import activate_modules
@@ -64,32 +65,32 @@ config._context['company'] = company.id
 product_account_kind = AccountKind()
 product_account_kind.name = 'Product Account Kind'
 product_account_kind.company = company
+product_account_kind.revenue = True
+product_account_kind.statement = 'income'
 product_account_kind.save()
 receivable_account_kind = AccountKind()
 receivable_account_kind.name = 'Receivable Account Kind'
 receivable_account_kind.company = company
+receivable_account_kind.receivable = True
+receivable_account_kind.statement = 'balance'
 receivable_account_kind.save()
 payable_account_kind = AccountKind()
 payable_account_kind.name = 'Payable Account Kind'
 payable_account_kind.company = company
+payable_account_kind.payable = True
+payable_account_kind.statement = 'balance'
 payable_account_kind.save()
-other_account_kind = AccountKind()
-other_account_kind.name = 'Other Account Kind'
-other_account_kind.company = company
-other_account_kind.save()
 
 # #Comment# #Create Account
 product_account = Account()
 product_account.name = 'Product Account'
 product_account.code = 'product_account'
-product_account.kind = 'revenue'
 product_account.type = product_account_kind
 product_account.company = company
 product_account.save()
 receivable_account = Account()
 receivable_account.name = 'Account Receivable'
 receivable_account.code = 'account_receivable'
-receivable_account.kind = 'receivable'
 receivable_account.party_required = True
 receivable_account.reconcile = True
 receivable_account.type = receivable_account_kind
@@ -110,7 +111,7 @@ payable_account_insurer.name = 'Account Payable Insurer'
 payable_account_insurer.code = 'account_payable_insurer'
 payable_account_insurer.kind = 'payable'
 payable_account_insurer.party_required = True
-payable_account_insurer.type = other_account_kind
+payable_account_insurer.type = payable_account_kind
 payable_account_insurer.company = company
 payable_account_insurer.save()
 
@@ -213,12 +214,14 @@ def import_noemie_flow(file_name):
     dir_ = os.path.join(module_folder, 'tests_imports/')
     out_dir = os.path.join(module_folder, 'tests_exports/')
     file_path = dir_ + file_name
+    out_file_path = out_dir + file_name
     for i in range(0, len(launcher.form.parameters)):
         if launcher.form.parameters[i].code == 'in_directory':
             launcher.form.parameters[i].value = file_path
         elif launcher.form.parameters[i].code == 'out_directory':
             launcher.form.parameters[i].value = out_dir
     launcher.execute('process')
+    shutil.move(out_file_path, file_path)
     return
 
 

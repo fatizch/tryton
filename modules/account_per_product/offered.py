@@ -1,6 +1,8 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
-from trytond.pool import PoolMeta
+from trytond.exceptions import UserWarning
+from trytond.i18n import gettext
+from trytond.pool import PoolMeta, Pool
 from trytond.model import Unique
 from trytond.pyson import Eval
 
@@ -20,11 +22,6 @@ class Product(metaclass=PoolMeta):
                 ('OR', ('products', '=', None), ('products', '=', Eval('id'))),
                 ])
         cls.coverages.depends.append('id')
-        cls._error_messages.update({
-                'mixing_products': 'The coverage '
-                '"%(coverage_code)s - %(coverage_name)s" '
-                'is already used in product(s) %(products)s'
-                })
 
     @classmethod
     def validate(cls, products):
@@ -33,15 +30,19 @@ class Product(metaclass=PoolMeta):
             cls.check_insurer(product)
 
     def check_insurer(self):
+        pool = Pool()
+        Warning = pool.get('res.user.warning')
         for coverage in self.coverages:
             products = list(set(p for p in coverage.insurer.get_products()
                     if p and p != self))
             if len(products) > 0:
-                self.raise_user_warning('mixing_products_%s' % coverage.id,
-                    'mixing_products', {
-                        'coverage_code': coverage.code,
-                        'coverage_name': coverage.name,
-                        'products': ', '.join([p.rec_name for p in products])})
+                key = 'mixing_products_%s' % coverage.id
+                if Warning.check(key):
+                    raise UserWarning(key, gettext(
+                            'account_per_product.msg_mixing_products',
+                            coverage_code=coverage.code,
+                            coverage_name=coverage.name,
+                            products=', '.join(p.rec_name for p in products)))
 
 
 class ProductOptionDescriptionRelation(metaclass=PoolMeta):

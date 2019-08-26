@@ -1,8 +1,10 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+from trytond.i18n import gettext
 from trytond.pool import Pool
 from trytond.pyson import Eval
 from trytond.model import fields as tryton_fields
+from trytond.model.exceptions import ValidationError
 
 from trytond.modules.coog_core import model, fields, utils
 from trytond.modules.rule_engine import get_rule_mixin
@@ -34,14 +36,6 @@ class ProcessAction(
             'invisible': Eval('content', '') != 'rule'}
         cls.rule.depends = ['content']
         cls.rule.domain = [('type_', '=', 'process_check')]
-        cls._error_messages.update({
-                'bad_target_path':
-                'Target path "%s" must start with "object."',
-                'invalid_path_field': 'Invalid field "%(field_name)s" for '
-                'model %(model_name)s',
-                'invalid_path_field_type': 'Invalid field type '
-                '"%(field_type)s" for node "%(node)s"',
-                })
 
     @fields.depends('content', 'rule_extra_data', 'target_path')
     def on_change_with_exec_parameters(self, name=None):
@@ -70,15 +64,17 @@ class ProcessAction(
             if not instance.target_path:
                 continue
             if not instance.target_path.startswith('object.'):
-                cls.raise_user_error('bad_target_path',
-                    (instance.target_path,))
+                raise ValidationError(gettext(
+                        'process_rule.msg_bad_target_path',
+                        path=instance.target_path))
             cur_model = pool.get(instance.on_model.model)
             for path in instance.target_path.split('.')[1:]:
                 cur_field = cur_model._fields.get(path, None)
                 if cur_field is None:
-                    cls.raise_user_error('invalid_path_field', {
-                            'model_name': cur_model.__name__,
-                            'field_name': path})
+                    raise ValidationError(gettext(
+                            'process_rule.msg_invalid_path_field',
+                            model_name=cur_model.__name__,
+                            field_name=path))
                 if isinstance(cur_field, (tryton_fields.Function,
                             tryton_fields.MultiValue)):
                     cur_field = cur_field._field
@@ -92,10 +88,10 @@ class ProcessAction(
                 elif isinstance(cur_field, tryton_fields.Reference):
                     break
                 else:
-                    cls.raise_user_error('invalid_path_field_type', {
-                            'field_type': str(cur_field.__class__.__name__),
-                            'node': path,
-                            })
+                    raise ValidationError(gettext(
+                            'process_rule.msg_invalid_path_field_type',
+                            field_type=str(cur_field.__class__.__name__),
+                            node=path))
 
     def get_rule_targets(self, target):
         if not self.target_path:
@@ -117,7 +113,8 @@ class ProcessAction(
             target.init_dict_for_rule_engine(exec_context)
             result = self.rule.execute(exec_context, self.rule_extra_data)
             if result.errors:
-                self.raise_user_error('\r\r'.join(result.print_errors()))
+                raise ValidationError('\r\r'.join(result.print_errors()))
             if result.warnings:
-                self.raise_user_warning(str((self.id, target)), '\r\r'.join(
-                        result.print_warnings()))
+                key = str((self.id, target))
+                if Warning.check(key):
+                    raise UserWarning(key, '\r\r'.join(result.print_warnings()))

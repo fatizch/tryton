@@ -137,7 +137,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
                 ])
         self.assertEqual(endorsement.endorsement_summary,
             '<div><b>Change Loan Amount</b></div>'
-            '<div><u>Loan Modifications :</u></div>'
+            '<div><u>Loan Modifications:</u></div>'
             '<div>    <i>Amount</i>: %s → 150000</div>' % loan.amount)
 
     @test_framework.prepare_test(

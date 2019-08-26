@@ -152,10 +152,12 @@ Create Test Contract::
     >>> contract.start_date = contract_start_date
     >>> contract.product = product
     >>> contract.subscriber = subscriber
-    >>> contract.quote_number = 'Initial Number'
     >>> contract.contract_number = 'Initial Number'
-    >>> contract.status = 'active'
     >>> contract.save()
+    >>> Contract.write([contract], {
+    ...         'quote_number': 'Initial Number',
+    ...         'status': 'active',
+    ...         }, conf.context)
 
 Start Endorsement::
 
@@ -185,8 +187,9 @@ Modify Contract::
     True
     >>> contract.current_state.id == process.all_steps[0].id
     True
-    >>> contract.quote_number = 'New Number'
-    >>> contract.save()
+    >>> Contract.write([contract], {
+    ...         'quote_number': 'New Number',
+    ...         }, conf.context)
 
 Revert Current process::
 
@@ -219,16 +222,18 @@ Restart Endorsement (Same as before)::
 Modify Contract::
 
     >>> contract = Contract(contract.id)
-    >>> contract.quote_number = 'New Number'
     >>> contract.contract_number = 'New Number'
-    >>> contract.status = 'active'
     >>> contract.save()
+    >>> Contract.write([contract], {
+    ...         'quote_number': 'New Number',
+    ...         'status': 'active',
+    ...         }, conf.context)
     >>> end_view, = View.find([
     ...         ('name', '=', 'process_view_contract_terminated_en')])
     >>> end_process, = Action.find([
     ...         ('xml_id', '=', 'process_cog.act_end_process')])
     >>> Contract._proxy._button_next_1([contract.id], {'language': 'en'}) == [
-    ...     end_process.id, 'toggle_view:%s' % end_view.id]
+    ...     end_process.id, 'switch form %s' % end_view.id]
     True
 
 Check Application::

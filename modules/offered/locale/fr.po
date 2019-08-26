@@ -2,73 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:extra_data:"
-msgid "Data %(data)s has multiple parents with the current configuration"
-msgstr "La donnée %(data)s a plusieurs parents dans la configuration courante"
-
-msgctxt "error:extra_data:"
-msgid "Data %(sub_data)s is missing from the configuration"
-msgstr "La donnée %(sub_data)s est manquante dans la configuration"
-
-msgctxt "error:extra_data:"
-msgid "Expected key %s to be set in field %s of %s"
-msgstr "%s doit être renseigné dans le champ %s de %s"
-
-msgctxt "error:extra_data:"
-msgid "Invalid domain in schema \"%(schema)s\"."
-msgstr "Domaine non valide dans le schéma « %(schema)s »."
-
-msgctxt "error:extra_data:"
-msgid "Invalid value for key %s in field %s of %s"
-msgstr "Valeur invalide pour la donnée %s du champ %s de %s"
-
-msgctxt "error:extra_data:"
-msgid "The code must be unique!"
-msgstr "Le code doit être unique"
-
-msgctxt "error:extra_data:"
-msgid ""
-"The following keys will be removed from all existing data in the database, this may take some time:\n"
-"%(codes)s"
-msgstr ""
-"Toutes les occurences des clefs suivantes seront retirées de la base de données, cela peut prendre du temps:\n"
-"%(codes)s"
-
-msgctxt "error:extra_data:"
-msgid ""
-"The following keys will be renamed in all existing data in the database, this may take some time:\n"
-"%(codes)s"
-msgstr ""
-"Toutes les occurences des clefs suivantes seront renommées en base de données, cela peut prendre du temps:\n"
-"%(codes)s"
-
-msgctxt "error:extra_data:"
-msgid "Too many recursion levels in \"sub data definition"
-msgstr "La définition des sous données a trop de niveaux de récursivité"
-
-msgctxt "error:offered.option.description:"
-msgid "The code must be unique!"
-msgstr "Le code doit être unique"
-
-msgctxt "error:offered.package:"
-msgid "Subscribe by package is only available on quote"
-msgstr "La souscription par formule n'est disponible que sur un devis"
-
-msgctxt "error:offered.package:"
-msgid "The code must be unique!"
-msgstr "Le code doit être unique !"
-
-msgctxt "error:offered.product:"
-msgid "The code must be unique!"
-msgstr "Le code doit être unique"
-
-msgctxt "error:offered.product:"
-msgid "The following contract extradata should be set on the product: %s"
-msgstr ""
-"La donnée complémentaire contrat suivante doit être définie sur le produit: "
-"%s"
-
-#, fuzzy
 msgctxt "field:api.product,id:"
 msgid "ID"
 msgstr "Identifiant"
@@ -1124,9 +1057,7 @@ msgstr ""
 " morale ou les deux)"
 
 msgctxt "help:offered.product,tags:"
-msgid ""
-"Configuration object tags list. Allows searching for all configuration "
-"objects related to a tag."
+msgid "Add and search all related configuration objects based on a tag"
 msgstr ""
 "Liste des labels sur l'objet de configuration. Permet ensuite de rechercher "
 "l'ensemble des objets de configuration liés à un même label."
@@ -1166,6 +1097,50 @@ msgstr "Formule"
 msgctxt "model:ir.action,name:act_product_form"
 msgid "Products"
 msgstr "Produits"
+
+msgctxt "model:ir.message,text:msg_code_uniq"
+msgid "The code must be unique."
+msgstr "Le code doit être unique"
+
+msgctxt "model:ir.message,text:msg_expected_value"
+msgid "Expected key %(key)s to be set in field %(field)s of %(name)s."
+msgstr "%(key)s doit être renseigné dans le champ %(field)s de %(name)s"
+
+msgctxt "model:ir.message,text:msg_invalid_value"
+msgid "Invalid value for key %(key)s in field %(field)s of %(name)s."
+msgstr "Valeur invalide pour la donnée %(key)s du champ %(field)s de %(name)s"
+
+msgctxt "model:ir.message,text:msg_missing_contract_extra_data"
+msgid ""
+"The following contract extra data should be set on the product: %(product)s."
+msgstr ""
+"La donnée complémentaire contrat suivante doit être définie sur le produit: "
+"%(product)s"
+
+msgctxt "model:ir.message,text:msg_missing_sub_data_def"
+msgid "Data %(sub_data)s is missing from the configuration."
+msgstr "La donnée %(sub_data)s est manquante dans la configuration."
+
+msgctxt "model:ir.message,text:msg_multiple_parents_matches"
+msgid "Data %(data)s has multiple parents with the current configuration."
+msgstr ""
+"La donnée %(data)s a plusieurs parents dans la configuration courante."
+
+msgctxt "model:ir.message,text:msg_package_only_on_subscription"
+msgid "Subscribe by package is only available on quote"
+msgstr "La souscription par formule n'est disponible que sur un devis"
+
+msgctxt "model:ir.message,text:msg_too_many_recursion_levels"
+msgid "Too many recursion levels in sub data definition."
+msgstr "La définition des sous données a trop de niveaux de récursivité"
+
+msgctxt "model:ir.rule.group,name:rule_group_coverage"
+msgid "User in company"
+msgstr "Utilisateur dans le société"
+
+msgctxt "model:ir.rule.group,name:rule_group_product"
+msgid "User in company"
+msgstr "Utilisateur dans le société"
 
 msgctxt "model:ir.sequence.type,name:sequence_type_contract_number"
 msgid "Contract Number"

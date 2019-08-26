@@ -3,6 +3,10 @@
 import datetime
 
 from dateutil.relativedelta import relativedelta
+
+from trytond.exceptions import UserError
+from trytond.i18n import gettext
+from trytond.model.exceptions import AccessError
 from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval, Len, If, PYSONEncoder
 from trytond.wizard import StateTransition, StateView, Button, StateAction
@@ -10,6 +14,7 @@ from trytond.transaction import Transaction
 
 from trytond.modules.coog_core import model, fields, coog_string, utils
 from trytond.modules.offered import offered
+from trytond.modules.party.exceptions import EraseError
 
 __all__ = [
     'OptionSubscription',
@@ -305,14 +310,6 @@ class ContractActivate(model.CoogWizard):
             ])
     apply = StateTransition()
 
-    @classmethod
-    def __setup__(cls):
-        super(ContractActivate, cls).__setup__()
-        cls._error_messages.update({
-                'not_quote_hold': 'You cannot activate a contract '
-                'that is not in quote or hold status !',
-                })
-
     def default_confirm(self, name):
         pool = Pool()
         Contract = pool.get('contract')
@@ -332,8 +329,7 @@ class ContractActivate(model.CoogWizard):
         selected_contract = Contract(active_id)
         if (selected_contract.status != 'quote' and
                 selected_contract.status != 'hold'):
-            self.raise_user_error('not_quote_hold')
-            return 'end'
+            raise AccessError(gettext('contract.msg_not_quote_hold'))
         else:
             return 'confirm'
 
@@ -486,17 +482,10 @@ class ContractReactivate(model.CoogWizard):
             ])
     reactivate = StateTransition()
 
-    @classmethod
-    def __setup__(cls):
-        super(ContractReactivate, cls).__setup__()
-        cls._error_messages.update({
-                'need_contract': 'No contract found',
-                })
-
     def default_validate_reactivation(self, name):
         Contract = Pool().get('contract')
         if Transaction().context.get('active_model') != 'contract':
-            self.raise_user_error('need_contract')
+            raise UserError(gettext('contract.msg_need_contract'))
         contract = Contract(Transaction().context.get('active_id'))
         new_end_date = contract.get_reactivation_end_date()
         result = {
@@ -557,17 +546,10 @@ class ChangeSubStatus(model.CoogWizard):
             ])
     apply_sub_status = StateTransition()
 
-    @classmethod
-    def __setup__(cls):
-        super(ChangeSubStatus, cls).__setup__()
-        cls._error_messages.update({
-                'no_selected_contract': 'No contract selected',
-                })
-
     def default_select_sub_status(self, name):
         Contract = Pool().get('contract')
         if Transaction().context.get('active_model') != 'contract':
-            self.raise_user_error('no_selected_contract')
+            raise UserError(gettext('contract.msg_no_selected_contract'))
         contract = Contract(Transaction().context.get('active_id'))
         return {
             'contract': contract.id,
@@ -598,40 +580,28 @@ class SelectSubStatus(model.CoogView):
 class PartyErase(metaclass=PoolMeta):
     __name__ = 'party.erase'
 
-    @classmethod
-    def __setup__(cls):
-        super(PartyErase, cls).__setup__()
-        cls._error_messages.update({
-                'party_has_contract': 'The party %(party)s can not be erased '
-                'because it is on the following active contracts: \n'
-                '%(contracts)s',
-                'party_has_quote': 'The party %(party)s can not be erased '
-                'because it is on the following quotes: \n%(quotes)s',
-                'party_unreached_shelf_life': 'The party %(party)s can not be '
-                'erased because its following terminated contracts have not '
-                'exceeded their shelf life: \n%(contracts)s '
-                })
-
     def check_erase(self, party):
         super(PartyErase, self).check_erase(party)
         active_subscribed_contracts = [c for c in party.contracts
             if c.status in ['active', 'hold']]
         if active_subscribed_contracts:
-            self.raise_user_error('party_has_contract', {
-                    'party': party.rec_name,
-                    'contracts': ', '.join(
+            raise EraseError(gettext(
+                    'contract.msg_party_has_contract',
+                    party=party.rec_name,
+                    contracts=', '.join(
                         [c.contract_number for c in active_subscribed_contracts]
-                        )})
+                        )))
         Contract = Pool().get('contract')
         quote_contracts = Contract.search([
                 ('subscriber', '=', party),
                 ('status', '=', 'quote')
                 ])
         if quote_contracts:
-            self.raise_user_error('party_has_quote', {
-                    'party': party.rec_name,
-                    'quotes': ', '.join(
-                        [c.rec_name for c in quote_contracts])})
+            raise EraseError(gettext(
+                    'contract.msg_party_has_quote',
+                    party=party.rec_name,
+                    quotes=', '.join(
+                        [c.rec_name for c in quote_contracts])))
         terminated_contracts = Contract.search([
                 ('subscriber', '=', party),
                 ('status', 'in', ('terminated', 'void'))
@@ -642,11 +612,12 @@ class PartyErase(metaclass=PoolMeta):
                     c.initial_start_date) + relativedelta(
                     years=c.product.data_shelf_life))]
         if terminated_unreached_shelf:
-            self.raise_user_error('party_unreached_shelf_life', {
-                    'party': party.rec_name,
-                    'contracts': ', '.join(
+            raise EraseError(gettext(
+                    'contract.msg_party_unreached_shelf_life',
+                    party=party.rec_name,
+                    contracts=', '.join(
                         [c.contract_number for c in terminated_unreached_shelf])
-                    })
+                    ))
 
     def contracts_to_erase(self, party_id):
         Contract = Pool().get('contract')

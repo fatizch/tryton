@@ -2,8 +2,10 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 
+from trytond.i18n import gettext
 from trytond.pool import PoolMeta
 from trytond.model import ModelView
+from trytond.model.exceptions import ValidationError
 
 from trytond.modules.coog_core import model
 
@@ -17,15 +19,6 @@ __all__ = [
 class ClaimService(metaclass=PoolMeta):
     __name__ = 'claim.service'
 
-    @classmethod
-    def __setup__(cls):
-        super(ClaimService, cls).__setup__()
-        cls._error_messages.update({
-                'indemnifications_above_ceiling': 'The total of '
-                'indemnifications %(amount)s  for %(service)s is '
-                'above ceiling %(ceiling)s.'
-                })
-
     def calculate_ceiling(self):
         return self.benefit.calculate_ceiling(self)
 
@@ -35,9 +28,12 @@ class ClaimService(metaclass=PoolMeta):
             return
         amount = self.get_indemnifications_total_amount()
         if self.get_indemnifications_total_amount() > ceiling:
-            self.raise_user_error('indemnifications_above_ceiling',
-                {'service': self.rec_name, 'ceiling': ceiling,
-                    'amount': amount})
+            raise ValidationError(gettext(
+                    'claim_indemnification_ceiling'
+                    '.msg_indemnifications_above_ceiling',
+                    service=self.rec_name,
+                    ceiling=ceiling,
+                    amount=amount))
 
     def get_indemnifications_total_amount(self):
         # round how ?

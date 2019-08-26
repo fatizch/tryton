@@ -2,10 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:country.country:"
-msgid "The code must be unique!"
-msgstr "Le code doit être unique !"
-
 msgctxt "field:country.country,create_date_:"
 msgid "Creation date"
 msgstr "Date de Création"

@@ -84,8 +84,10 @@ class OptionDescriptionEligibilityRule(
             self.append_functional_error(error_message)
             result = False
         if rule_result.warnings:
-            self.raise_user_warning(str((self.id, args['option'])),
-                '\r\r'.join(rule_result.print_warnings()))
+            key = str((self.id, args['option']))
+            msg = '\r\r'.join(rule_result.print_warnings())
+            if Warning.check(key):
+                raise UserWarning(key, msg)
         return result
 
     def get_rule_documentation_structure(self):

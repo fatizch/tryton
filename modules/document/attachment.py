@@ -1,5 +1,6 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+from trytond.exceptions import UserError
 from trytond.pool import PoolMeta, Pool
 
 from trytond.modules.coog_core import fields
@@ -45,9 +46,10 @@ class Attachment(metaclass=PoolMeta):
             attributes = pool.get(values[attribute_name]['__name__']).\
                 search_for_export_import(values[attribute_name])
             if len(attributes) != 1:
-                cls.raise_user_error("Can't find object %s %s" % (
-                    values[attribute_name]['__name__'],
-                    values[attribute_name]['_func_key']))
+                raise UserError(
+                    "Can't find object %s %s" % (
+                        values[attribute_name]['__name__'],
+                        values[attribute_name]['_func_key']))
             domain_res = [
                     (attribute_name, '=', '%s,%s' % (attributes[0].__name__,
                         attributes[0].id))

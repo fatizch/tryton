@@ -25,11 +25,11 @@ class Party(metaclass=PoolMeta):
         super(Party, cls).__setup__()
         original_domain = cls.account_payable.domain
         assert original_domain == [
-                ('kind', '=', 'payable'),
+                ('type.payable', '=', True),
                 ('party_required', '=', True),
                 ('company', '=', Eval('context', {}).get('company', -1)),
                 ], original_domain
-        cls.account_payable.domain = [['OR', ('kind', '=', 'other'),
+        cls.account_payable.domain = [['OR', ('type.other', '=', True),
                 original_domain[0]], original_domain[1], original_domain[2]]
 
 
@@ -45,9 +45,9 @@ class PartyAccount(metaclass=PoolMeta):
         super(PartyAccount, cls).__setup__()
         original_domain = cls.account_payable.domain
         assert original_domain == [
-               ('kind', '=', 'payable'),
+               ('type.payable', '=', True),
                ('party_required', '=', True),
                ('company', '=', Eval('context', {}).get('company', -1)),
                ], original_domain
-        cls.account_payable.domain = [['OR', ('kind', '=', 'other'),
+        cls.account_payable.domain = [['OR', ('type.other', '=', True),
                 original_domain[0]], original_domain[1], original_domain[2]]

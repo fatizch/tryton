@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<tryton>
+    <data group="1">
+        <record model="ir.message" id="msg_existing_clone">
+            <field name="text">A clone record already exists: %(name)s (%(code)s).</field>
+        </record>
+        <record model="ir.message" id="msg_multiple_tables">
+            <field name="text">Multiple tables found.</field>
+        </record>
+        <record model="ir.message" id="msg_too_many_dimension_value">
+            <field name="text">Too many dimension values "%(dimension)s" for "%(field)s".</field>
+        </record>
+        <record model="ir.message" id="msg_too_few_dimension_value">
+            <field name="text">Too few dimension values "%(dimension)s" for "%(field)s".</field>
+        </record>
+        <record model="ir.message" id="msg_not_2d">
+            <field name="text">The table is not 2D.</field>
+        </record>
+    </data>
+</tryton>

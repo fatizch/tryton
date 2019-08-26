@@ -68,33 +68,36 @@ class ModuleTestCase(test_framework.CoogTestCase):
             account_kind_receivable, = self.AccountType.create([{
                         'name': 'Receivable',
                         'company': company.id,
+                        'statement': 'balance',
+                        'receivable': True,
                         }])
             account_kind_payable, = self.AccountType.create([{
                         'name': 'Payable',
                         'company': company.id,
+                        'statement': 'balance',
+                        'payable': True,
                         }])
             account_kind_revenue, = self.AccountType.create([{
                         'name': 'Revenue',
                         'company': company.id,
+                        'statement': 'income',
+                        'revenue': True,
                         }])
             account_receivable, account_payable = self.Account.create([{
                         'name': 'Receivable',
                         'company': company.id,
                         'type': account_kind_receivable.id,
-                        'kind': 'receivable',
                         'party_required': True,
                         }, {
                         'name': 'Payable',
                         'company': company.id,
                         'type': account_kind_payable.id,
-                        'kind': 'payable',
                         'party_required': True,
                         }])
             account_revenue, = self.Account.create([{
                         'name': 'Revenu',
                         'company': company.id,
                         'type': account_kind_revenue.id,
-                        'kind': 'revenue',
                         }])
             payment_journal, = self.PaymentJournal.create([{
                         'name': 'Manual',
@@ -132,9 +135,9 @@ class ModuleTestCase(test_framework.CoogTestCase):
             move_line_receivable.get_payment_journal = Mock(
                 return_value=payment_journal)
             payments = self.MoveLine.create_payments(lines_to_pay)
-            self.assertTrue(len(payments) == 1)
-            self.assertTrue(payments[0].amount == Decimal(50))
-            self.assertTrue(payments[0].kind == 'receivable')
+            self.assertEqual(len(payments), 1)
+            self.assertEqual(payments[0].amount, Decimal(50))
+            self.assertEqual(payments[0].kind, 'receivable')
             payments[0].state = 'draft'
             payments[0].save()
             self.Payment.delete(payments)
@@ -161,9 +164,9 @@ class ModuleTestCase(test_framework.CoogTestCase):
             move_line_receivable.get_payment_journal = Mock(
                 return_value=payment_journal)
             payments = self.MoveLine.create_payments(lines_to_pay)
-            self.assertTrue(len(payments) == 1)
-            self.assertTrue(payments[0].amount == Decimal(30))
-            self.assertTrue(payments[0].kind == 'receivable')
+            self.assertEqual(len(payments), 1)
+            self.assertEqual(payments[0].amount, Decimal(30))
+            self.assertEqual(payments[0].kind, 'receivable')
             payments[0].state = 'draft'
             payments[0].save()
             self.Payment.delete(payments)
@@ -173,9 +176,9 @@ class ModuleTestCase(test_framework.CoogTestCase):
             move_line_receivable.save()
             lines_to_pay.append(move_line_receivable)
             payments = self.MoveLine.create_payments(lines_to_pay)
-            self.assertTrue(len(payments) == 1)
-            self.assertTrue(payments[0].amount == Decimal(30))
-            self.assertTrue(payments[0].kind == 'receivable')
+            self.assertEqual(len(payments), 1)
+            self.assertEqual(payments[0].amount, Decimal(30))
+            self.assertEqual(payments[0].kind, 'receivable')
             payments[0].state = 'draft'
             self.Payment.delete(payments)
 
@@ -222,11 +225,12 @@ class ModuleTestCase(test_framework.CoogTestCase):
             move_line_payable.get_payment_journal = Mock(
                 return_value=payment_journal)
             payments = self.MoveLine.create_payments(lines_to_pay)
-            self.assertTrue(len(payments) == 2)
-            self.assertTrue(payments[0].amount == Decimal(40))
-            self.assertTrue(payments[0].kind == 'payable')
-            self.assertTrue(payments[1].amount == Decimal(30))
-            self.assertTrue(payments[1].kind == 'receivable')
+            payments.sort(key=lambda p: p.amount, reverse=True)
+            self.assertEqual(len(payments), 2)
+            self.assertEqual(payments[0].amount, Decimal(40))
+            self.assertEqual(payments[0].kind, 'payable')
+            self.assertEqual(payments[1].amount, Decimal(30))
+            self.assertEqual(payments[1].kind, 'receivable')
 
 
 def suite():

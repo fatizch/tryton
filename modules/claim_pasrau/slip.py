@@ -2,8 +2,10 @@
 # this repository contains the full copyright notices and license terms.
 import datetime
 
+from trytond.i18n import gettext
 from trytond.pool import PoolMeta, Pool
 from trytond.model import ModelView, Workflow
+from trytond.model.exceptions import ValidationError
 from trytond.pyson import Eval
 from trytond.modules.coog_core import utils, coog_date
 
@@ -44,12 +46,6 @@ class Invoice(metaclass=PoolMeta):
                     'invisible': Eval('business_kind') != 'pasrau'
                     },
                 })
-        cls._error_messages.update({
-            'message_dsn_do_not_be_generated': 'You can not generate the DSN '
-            'message after the 10th month',
-            'existing_messages_not_done': 'There are untreated DSN messages '
-            'for this slip',
-            })
 
     def _get_month_dsn_messages(self, _states):
         month_slips = self.search([
@@ -77,7 +73,8 @@ class Invoice(metaclass=PoolMeta):
             messages_not_done = slip._get_month_dsn_messages(
                 ['draft', 'waiting'])
             if messages_not_done:
-                cls.raise_user_error('existing_messages_not_done')
+                raise ValidationError(gettext(
+                        'claim_pasrau.msg_existing_messages_not_done'))
             message = slip._get_neorau_template().generate()
             dsnmessage = DsnMessage(type='out', state='waiting', origin=slip,
                 message=message)
@@ -100,4 +97,5 @@ class Invoice(metaclass=PoolMeta):
             self.invoice_date.month, 10)
         max_date = coog_date.add_month(max_date, 1)
         if utils.today() > max_date:
-            self.raise_user_error('message_dsn_do_not_be_generated')
+            raise ValidationError(gettext(
+                    'claim_pasrau.msg_dsn_do_not_be_generated'))

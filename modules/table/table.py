@@ -7,15 +7,18 @@ from functools import partial
 import json
 
 from lxml import etree
-from sql import Column, Literal, Null
+from sql import Column, Literal, Null, Select
 from sql.functions import Function, CurrentTimestamp
 
+from trytond.exceptions import UserError
+from trytond.i18n import gettext
 from trytond.protocols.jsonrpc import JSONEncoder, JSONDecoder
 from trytond.config import config
 from trytond import backend
 from trytond.cache import Cache
 from trytond.pool import Pool
 from trytond.model import Unique
+from trytond.model.exceptions import ValidationError, ImportDataError
 from trytond.pyson import Eval, Bool, PYSONEncoder
 from trytond.transaction import Transaction
 from trytond.wizard import Wizard, StateView, StateAction, StateTransition, \
@@ -95,9 +98,6 @@ class TableDefinition(ModelSQL, ModelView, model.TaggedMixin):
                 'The code of "Table Definition" must be unique'),
         ]
         cls._order.insert(0, ('name', 'ASC'))
-        cls._error_messages.update({
-                'existing_clone': ('A clone record already exists : %s(%s)'),
-                'multiple_tables': 'Multiple tables found'})
 
     @classmethod
     def __register__(cls, module_name):
@@ -128,8 +128,9 @@ class TableDefinition(ModelSQL, ModelView, model.TaggedMixin):
                     [('code', '=', '%s_clone' % record.code)],
                     [('name', '=', '%s Clone' % record.name)]])
             for existing in existings:
-                cls.raise_user_error('existing_clone',
-                    (existing.name, existing.code))
+                raise ValidationError(gettext(
+                        'table.msg_existing_clone',
+                        name=existing.name, code=existing.code))
             record.export_json(output=output)
             values = json.dumps(output[0], cls=JSONEncoder)
             values = values.replace('"_func_key": "%s"' % record.code,
@@ -207,7 +208,7 @@ class TableDefinition(ModelSQL, ModelView, model.TaggedMixin):
         cells = values.pop('cells')
         tables = cls.search_for_export_import(values)
         if len(tables) > 1:
-            cls.raise_user_error('multiple_tables')
+            raise ImportDataError(gettext('table.msg_multiple_tables'))
         if tables:
             Cell.delete(Cell.search([('definition', '=', tables[0].id)]))
         table = super(TableDefinition, cls).do_import(value)
@@ -694,16 +695,6 @@ class TableCell(ModelSQL, ModelView):
     value = fields.Char('Value')
 
     @classmethod
-    def __setup__(cls):
-        super(TableCell, cls).__setup__()
-        cls._error_messages.update({
-                'too_many_dimension_value':
-                'Too many dimension values "%s" for "%s"',
-                'too_few_dimension_value':
-                'Too few dimension value "%s" for "%s"',
-                })
-
-    @classmethod
     def __register__(cls, module_name):
         TableHandler = backend.get('TableHandler')
 
@@ -820,11 +811,15 @@ class TableCell(ModelSQL, ModelView):
                 dimension_value, = dimension_values
             except ValueError:
                 if dimension_values:
-                    cls.raise_user_error('too_many_dimension_value',
-                        (dimension_name, field_name))
+                    raise ImportDataError(gettext(
+                            'table.msg_too_many_dimension_value',
+                            dimension=dimension_name,
+                            field=field_name))
                 else:
-                    cls.raise_user_error('too_few_dimension_value',
-                        (dimension_name, field_name))
+                    raise ImportDataError(gettext(
+                            'table.msg_too_few_dimension_value',
+                            dimension=dimension_name,
+                            field=field_name))
             return dimension_value.id
 
         table_id = Transaction().context.get('table')
@@ -1096,13 +1091,6 @@ class Table2D(ModelSQL, ModelView):
         readonly=True)
 
     @classmethod
-    def __setup__(cls):
-        super(Table2D, cls).__setup__()
-        cls._error_messages.update({
-                'not_2d': 'The table is not 2D',
-                })
-
-    @classmethod
     def __post_setup__(cls):
         super(Table2D, cls).__post_setup__()
         cls._fields = Table2DDict(cls._fields)
@@ -1117,8 +1105,6 @@ class Table2D(ModelSQL, ModelView):
 
     @classmethod
     def table_query(cls):
-        if not backend.name() == 'postgresql':
-            return super(Table2D, cls).table_query()
         pool = Pool()
         TableCell = pool.get('table.cell')
         TableDefinition = pool.get('table')
@@ -1126,8 +1112,8 @@ class Table2D(ModelSQL, ModelView):
             'table.dimension.value')
         context = Transaction().context
         cursor = Transaction().connection.cursor()
-        definition_id = int(context.get('table', -1))
-        if definition_id != -1:
+        definition_id = int(context.get('table') or -1)
+        if TableDefinition.search([('id', '=', definition_id)]):
             definition = TableDefinition(definition_id)
             dim_test = False
             for i in range(3, DIMENSION_MAX + 1):
@@ -1137,7 +1123,7 @@ class Table2D(ModelSQL, ModelView):
             if (not definition.dimension_kind1
                     or not definition.dimension_kind2
                     or dim_test):
-                cls.raise_user_error('not_2d')
+                raise UserError(gettext('table.msg_not_2d'))
         dimension = TableDefinitionDimension.__table__()
         cell = TableCell.__table__()
 
@@ -1149,6 +1135,17 @@ class Table2D(ModelSQL, ModelView):
         columns_definitions += [
             ('col%d' % d.id, TableCell.value.sql_type().base)
             for d in dimensions2]
+
+        if backend.name() != 'postgresql':
+            return Select([
+                    Literal(0).as_('create_uid'),
+                    Literal(None).as_('write_uid'),
+                    CurrentTimestamp().as_('create_date'),
+                    Literal(None).as_('write_date'),
+                    Literal(1).as_('id'),
+                    Literal(None).as_('row')]
+                + [Literal(None).as_(c) for c, _ in columns_definitions])
+
         dimensions_clause = Literal(True)
         for i in range(3, DIMENSION_MAX + 1):
             dimension_name = 'dimension%s' % i

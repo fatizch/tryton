@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<tryton>
+    <data group="1">
+        <record model="ir.message" id="msg_accounts_with_extra_details">
+            <field name="text">You cannot create a rule using analytic accounts with type "Distribution over extradetails":
+%(accounts)s</field>
+        </record>
+        <record model="ir.message" id="msg_code_unique">
+            <field name="text">The code must be unique.</field>
+        </record>
+    </data>
+</tryton>

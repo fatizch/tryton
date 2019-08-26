@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<tryton>
+    <data group="1">
+        <record model="ir.message" id="msg_missing_pyson">
+            <field name="text">Pyson expression and description is mandatory.</field>
+        </record>
+        <record model="ir.message" id="msg_missing_choice">
+            <field name="text">Both choices must be filled.</field>
+        </record>
+        <record model="ir.message" id="msg_cannot_copy_logs">
+            <field name="text">Copying logs is not allowed.</field>
+        </record>
+        <record model="ir.message" id="msg_cannot_delete_logs">
+            <field name="text">Deleting logs is not allowed.</field>
+        </record>
+        <record model="ir.message" id="msg_button_delete_confirm">
+            <field name="text">The current record (%(name)s) will be deleted, are you sure you want to proceed?</field>
+        </record>
+        <record model="ir.message" id="msg_previous_button_label">
+            <field name="text">Previous</field>
+        </record>
+        <record model="ir.message" id="msg_next_button_label">
+            <field name="text">Next</field>
+        </record>
+        <record model="ir.message" id="msg_no_process_found">
+            <field name="text">No active process found.</field>
+        </record>
+        <record model="ir.message" id="msg_initiate_process">
+            <field name="text">Initiate Process</field>
+        </record>
+        <record model="ir.message" id="msg_clear_process">
+            <field name="text">Clear Process</field>
+        </record>
+        <record model="ir.message" id="msg_no_process">
+            <field name="text">No process was found for the selected element</field>
+        </record>
+    </data>
+</tryton>

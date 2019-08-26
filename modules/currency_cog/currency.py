@@ -1,6 +1,8 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 from decimal import ROUND_HALF_UP
+
+from trytond.i18n import gettext
 from trytond.pool import Pool
 from trytond.transaction import Transaction
 
@@ -19,13 +21,6 @@ DEF_CUR_DIG = 2
 
 class Currency(model.CodedMixin):
     __name__ = 'currency.currency'
-
-    @classmethod
-    def __setup__(cls):
-        super(Currency, cls).__setup__()
-        cls._error_messages.update({
-                'floating_separator_string': 'and',
-                })
 
     def round(self, amount, rounding=ROUND_HALF_UP):
         return super(Currency, self).round(amount, rounding)
@@ -51,9 +46,7 @@ class Currency(model.CodedMixin):
             if integer > 1:
                 string_amount += 's'
             if decimal:
-                conjonction = self.raise_user_error(
-                    'floating_separator_string',
-                    raise_exception=False)
+                conjonction = gettext('currency_cog.floating_separator_string')
                 string_amount += ' %s ' % conjonction
         if decimal:
             # TO DO: retrieve cent from the currency

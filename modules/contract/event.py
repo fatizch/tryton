@@ -7,6 +7,7 @@ from sql.functions import Substring, Position
 
 from trytond import backend
 from trytond.config import config
+from trytond.i18n import gettext
 from trytond.pyson import Eval
 from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
@@ -28,24 +29,15 @@ class EventTypeAction(metaclass=PoolMeta):
         depends=['action'])
 
     @classmethod
-    def __setup__(cls):
-        super(EventTypeAction, cls).__setup__()
-        cls._error_messages.update({
-                'create_contract_notification': 'Create Contract Notification',
-                'notification_descriptor': 'WARNING: The Pyson'
-                ' Condition is applied on contract.'})
-
-    @classmethod
     def get_action_types(cls):
         return super(EventTypeAction, cls).get_action_types() + [
-            ('create_contract_notification', cls.raise_user_error(
-                    'create_contract_notification', raise_exception=False))]
+            ('create_contract_notification',
+                gettext('contract.msg_create_contract_notification'))]
 
     @fields.depends('action')
     def on_change_with_descriptor(self, name=None):
         if (self.action == 'create_contract_notification'):
-            return self.raise_user_error('notification_descriptor',
-                raise_exception=False)
+            return gettext('contract.msg_notification_descriptor')
         return super(EventTypeAction, self).on_change_with_descriptor(name)
 
     def get_objects_to_filter(self, objects):

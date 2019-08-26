@@ -2,26 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:endorsement.contract.beneficiary:"
-msgid "New Beneficiary: %s"
-msgstr "Nouveau bénéficiaire : %s"
-
-msgctxt "error:endorsement.contract.beneficiary:"
-msgid "New version"
-msgstr "Nouvelle version"
-
-msgctxt "error:endorsement.contract.beneficiary:"
-msgid "Remove version of"
-msgstr "Suppression de la version"
-
-msgctxt "error:endorsement.contract.beneficiary:"
-msgid "Update %s"
-msgstr "Mise à jour de %s"
-
-msgctxt "error:endorsement.contract.covered_element.option:"
-msgid "Beneficiaries Modification"
-msgstr "Modification des bénéficiaires"
-
 msgctxt "field:contract.manage_beneficiaries,all_options:"
 msgid "Options"
 msgstr "Garanties"
@@ -271,6 +251,14 @@ msgstr "Champ bénéficiaire"
 msgctxt "model:endorsement.part,name:change_beneficiary_revision_part"
 msgid "Change Beneficiaries"
 msgstr "Modifier les bénéficiaires"
+
+msgctxt "model:ir.message,text:msg_beneficiary_modifications"
+msgid "Beneficiaries Modification:"
+msgstr "Modification des bénéficiaires"
+
+msgctxt "model:ir.message,text:msg_new_beneficiary"
+msgid "New Beneficiary: %(name)s"
+msgstr "Nouveau bénéficiaire : %(name)s"
 
 msgctxt "selection:contract.manage_beneficiaries.beneficiary,action:"
 msgid ""

@@ -3,12 +3,16 @@
 from collections import defaultdict
 
 from dateutil.relativedelta import relativedelta
+
+from trytond.i18n import gettext
+from trytond.model.exceptions import ValidationError
 from trytond.pool import PoolMeta, Pool
 from trytond.wizard import Wizard, StateView, StateTransition, Button, \
     StateAction
 from trytond.pyson import Eval, Bool, Len
 from trytond.transaction import Transaction
 
+from trytond.modules.party.exceptions import EraseError
 from trytond.modules.coog_core import fields, model, utils
 
 __all__ = [
@@ -302,16 +306,6 @@ class ManageExtraPremium(Wizard):
     propagate_selected = StateTransition()
     delete_selected = StateTransition()
 
-    @classmethod
-    def __setup__(cls):
-        super(ManageExtraPremium, cls).__setup__()
-        cls._error_messages.update({
-                'no_extra_selected': 'At least one extra premium must be '
-                'selected',
-                '1_coverage_selected': 'There may be only one coverage '
-                'selected for this action',
-                })
-
     def default_existing(self, name):
         pool = Pool()
         Contract = pool.get('contract')
@@ -347,7 +341,8 @@ class ManageExtraPremium(Wizard):
     def transition_propagate_selected(self):
         selected = [x for x in self.existing.extra_premiums if x.selected]
         if len(selected) == 0:
-            self.raise_user_error('no_extra_selected')
+            raise ValidationError(gettext(
+                    'contract_insurance.msg_no_extra_selected'))
         for cur_selected in selected:
             selected_extra = cur_selected.extra_premium
             for option in self.existing.options:
@@ -361,7 +356,8 @@ class ManageExtraPremium(Wizard):
     def transition_delete_selected(self):
         selected = [x for x in self.existing.extra_premiums if x.selected]
         if len(selected) == 0:
-            self.raise_user_error('no_extra_selected')
+            raise ValidationError(gettext(
+                    'contract_insurance.msg_no_extra_selected'))
         selected[0].extra_premium.delete([x.extra_premium for x in selected])
         return 'existing'
 
@@ -389,14 +385,6 @@ class CreateExtraPremium(Wizard):
     apply_and_relaunch = StateTransition()
     re_launch = StateAction('contract_insurance.act_create_extra_premium')
 
-    @classmethod
-    def __setup__(cls):
-        super(CreateExtraPremium, cls).__setup__()
-        cls._error_messages.update({
-                'option_required': 'An option must be subscribed on the '
-                'contract before going on',
-                })
-
     def default_extra_premium_data(self, name):
         if self.extra_premium_data._default_values:
             return self.extra_premium_data._default_values
@@ -405,7 +393,8 @@ class CreateExtraPremium(Wizard):
         contract = Contract(contract_id)
         all_options = contract.options + contract.covered_element_options
         if not all_options:
-            self.raise_user_error('option_required')
+            raise ValidationError(gettext(
+                    'contract_insurance.msg_option_required'))
         return {
             'manual_start_date': contract.start_date,
             # Set one random option to bypass the "required" attribute
@@ -512,16 +501,6 @@ class ManageExclusion(Wizard):
             ])
     apply = StateTransition()
 
-    @classmethod
-    def __setup__(cls):
-        super(ManageExclusion, cls).__setup__()
-        cls._error_messages.update({
-                'no_exclusion_selected': 'At least one exclusion must be '
-                'selected',
-                'no_option': 'No opion found in the context, '
-                'please report this',
-                })
-
     def default_existing(self, name):
         pool = Pool()
         active_model = Transaction().context.get('active_model')
@@ -539,7 +518,7 @@ class ManageExclusion(Wizard):
             contract = option.parent_contract
             covered_element = option.covered_element
         else:
-            self.raise_user_error('bad_model', active_model)
+            raise ValueError('Unsupported model %s' % active_model)
         defaults = {
             'covered_element': covered_element.id if covered_element else None,
             'possible_covered_elements': [x.id
@@ -730,22 +709,6 @@ class ExclusionOptionSelector(model.CoogView):
 class PartyErase(metaclass=PoolMeta):
     __name__ = 'party.erase'
 
-    @classmethod
-    def __setup__(cls):
-        super(PartyErase, cls).__setup__()
-        cls._error_messages.update({
-                'party_covered_active': 'The party %(party)s can not be '
-                'erased because it is covered by the following active '
-                'contracts: \n%(contracts)s',
-                'party_covered_quote': 'The party %(party)s can not be '
-                'erased because it is covered by the following quotes: \n'
-                '%(quotes)s',
-                'party_covered_unreached_shelf_life': 'The party %(party)s can'
-                'not be erased because it is covered by the following '
-                'contracts which have not exceeded their shelf life: \n'
-                '%(contracts)s'
-                })
-
     def check_erase(self, party):
         super(PartyErase, self).check_erase(party)
         CoveredElement = Pool().get('contract.covered_element')
@@ -754,19 +717,20 @@ class PartyErase(metaclass=PoolMeta):
         active_contracts = list(set([ce.contract for ce in covered_elements
                     if ce.contract.status == 'active']))
         if active_contracts:
-            self.raise_user_error('party_covered_active', {
-                    'party': party.rec_name,
-                    'contracts': ', '.join(
-                        [c.contract_number for c in active_contracts])
-                    })
+            raise EraseError(gettext(
+                    'contract_insurance.msg_party_covered_active',
+                    party=party.rec_name,
+                    contracts=', '.join(
+                        c.contract_number for c in active_contracts)
+                    ))
         quotes = list(set([ce.contract for ce in covered_elements
                     if ce.contract.status == 'quote']))
         if quotes:
-            self.raise_user_error('party_covered_quote', {
-                    'party': party.rec_name,
-                    'quotes': ', '.join(
-                        [c.quote_number for c in quotes])
-                    })
+            raise EraseError(gettext(
+                    'contract_insurance.msg_party_covered_quote',
+                    party=party.rec_name,
+                    quotes=', '.join(c.quote_number for c in quotes)
+                    ))
         terminated_unreached_shelf = list(set([ce.contract
                     for ce in covered_elements
                     if ce.contract.status == 'terminated'
@@ -777,8 +741,9 @@ class PartyErase(metaclass=PoolMeta):
                             years=ce.contract.product.data_shelf_life))
                     ]))
         if terminated_unreached_shelf:
-            self.raise_user_error('party_covered_unreached_shelf_life', {
-                    'party': party.rec_name,
-                    'contracts': ', '.join(
-                        [c.contract_number for c in terminated_unreached_shelf])
-                    })
+            raise EraseError(gettext(
+                    'contract_insurance.msg_party_covered_unreached_shelf_life',
+                    party=party.rec_name,
+                    contracts=', '.join(
+                        c.contract_number for c in terminated_unreached_shelf)
+                    ))

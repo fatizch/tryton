@@ -64,13 +64,14 @@ Create Broker Fee Account::
     >>> broker_fee_kind = AccountKind()
     >>> broker_fee_kind.name = 'Broker Fee Account Kind'
     >>> broker_fee_kind.company = company
+    >>> broker_fee_kind.statement = 'income'
+    >>> broker_fee_kind.expense = True
+    >>> broker_fee_kind.revenue = True
     >>> broker_fee_kind.save()
     >>> Account = Model.get('account.account')
     >>> broker_fee_account = Account()
     >>> broker_fee_account.name = 'Broker Fee Account'
     >>> broker_fee_account.code = 'broker_fee_account'
-    >>> broker_fee_account.kind = 'other'
-    >>> broker_fee_account.party_required = True
     >>> broker_fee_account.type = broker_fee_kind
     >>> broker_fee_account.company = company
     >>> broker_fee_account.save()

@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<tryton>
+    <data group="1">
+        <record model="ir.message" id="msg_no_extra_selected">
+            <field name="text">At least one extra premium must be selected.</field>
+        </record>
+        <record model="ir.message" id="msg_option_required">
+            <field name="text">An option must be subscribed on the contract before going on.</field>
+        </record>
+        <record model="ir.message" id="msg_party_covered_active">
+            <field name="text">The party %(party)s can not be erased because it is covered by the following active contracts:
+%(contracts)s</field>
+        </record>
+        <record model="ir.message" id="msg_party_covered_quote">
+            <field name="text">The party %(party)s can not be erased because it is covered by the following quotes:
+%(quotes)s</field>
+        </record>
+        <record model="ir.message" id="msg_party_covered_unreached_shelf_life">
+            <field name="text">The party %(party)s can not be erased because it is covered by the following contracts which have not exceeded their shelf life:
+%(contracts)s</field>
+        </record>
+        <record model="ir.message" id="msg_need_option">
+            <field name="text">Select at least one option for %(covered)s.</field>
+        </record>
+        <record model="ir.message" id="msg_option_start_anterior_to_covered_start">
+            <field name="text">Manual option start date %(manual_start_date)s is anterior to covered element manual start date %(covered_start_date)s for option %(option)s in contract %(contract)s.</field>
+        </record>
+        <record model="ir.message" id="msg_duplicate_covered">
+            <field name="text">You are trying to create duplicate covered elements on contract: %(contract)s.</field>
+        </record>
+        <record model="ir.message" id="msg_bad_option_start">
+            <field name="text">Covered %(covered)s has an option that starts before its start date.</field>
+        </record>
+        <record model="ir.message" id="msg_bad_option_end">
+            <field name="text">Covered %(covered)s has an option that ends after its end date.</field>
+        </record>
+        <record model="ir.message" id="msg_overlapped_elements">
+            <field name="text">You are trying to create a covered element that overlaps with an old covered element.</field>
+        </record>
+        <record model="ir.message" id="msg_bad_start_date">
+            <field name="text">Extra premium %(motive)s start date (%(start_date)s) should be greater than the coverage's (%(option_start_date)s).</field>
+        </record>
+        <record model="ir.message" id="msg_too_many_party">
+            <field name="text">Too many parties found.</field>
+        </record>
+    </data>
+</tryton>

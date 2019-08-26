@@ -2,50 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:account.fee:"
-msgid "Broker Fee"
-msgstr "Frais d'apporteur"
-
-msgctxt "error:account.invoice.line:"
-msgid "No broker define on contract %s for broker fee %s"
-msgstr ""
-"Pas de courtier défini sur le contrat %s pour facturer le frais d'apporteur "
-"%s"
-
-msgctxt "error:commission.agent:"
-msgid ""
-"Cannot find matching agent for %s :\n"
-"\n"
-"%s"
-msgstr ""
-"Impossible de trouver un protocole de commissionnement pour %s :\n"
-"\n"
-"%s"
-
-msgctxt "error:commission.agent:"
-msgid "The code must be unique"
-msgstr "Le code doit être unique"
-
-msgctxt "error:commission.filter_commission:"
-msgid "The selected contracts do not have any invoice."
-msgstr "Les contrats sélectionnés n'ont pas de quittances"
-
-msgctxt "error:commission.plan.date:"
-msgid "Invalid Month (%s) Day (%s) Combination"
-msgstr "La combinaison Mois (%s) Jour (%s) n'est pas valide"
-
-msgctxt "error:commission.plan.date:"
-msgid "Some date fields must be set"
-msgstr "Au moins un champ de date doit être renseigné"
-
-msgctxt "error:commission.plan:"
-msgid "The code must be unique!"
-msgstr "Le code doit être unique !"
-
-msgctxt "error:commission:"
-msgid "Cannot delete an already invoiced commission"
-msgstr "Impossible de supprimer une commission faisant partie d'un bordereau"
-
 msgctxt "field:account.configuration,broker_bank_transfer_journal:"
 msgid "Broker Bank Transfer Journal"
 msgstr "Journal de paiement automatique des courtiers"
@@ -966,6 +922,12 @@ msgid ""
 "calculation details"
 msgstr "Contient l'introduction au détail des commissions linéaires"
 
+msgctxt "help:commission.plan,commission_method:"
+msgid ""
+". If \"On Payment And Accounted\" is selected, a commission is due after its"
+" invoice's accounting date, if the invoice is paid."
+msgstr ""
+
 msgctxt "help:commission.plan,tags:"
 msgid "Add and search all related configuration objects based on a tag"
 msgstr ""
@@ -1164,6 +1126,42 @@ msgstr "Courtier"
 msgctxt "model:ir.action.act_window.domain,name:act_commission_domain_insurer"
 msgid "Insurer"
 msgstr "Assureur"
+
+msgctxt "model:ir.message,text:msg_agent_not_found"
+msgid ""
+"Cannot find matching agent for %(broker)s:\n"
+"\n"
+"%(agent)s"
+msgstr ""
+"Impossible de trouver un protocole de commissionnement pour %(broker)s :\n"
+"\n"
+"%(agent)s"
+
+msgctxt "model:ir.message,text:msg_broker_fee"
+msgid "Broker Fee"
+msgstr "Frais d'apporteur"
+
+msgctxt "model:ir.message,text:msg_invalid_month_day_combination"
+msgid "Invalid Month (%(month)s) Day (%(day)s) Combination."
+msgstr "La combinaison Mois (%(month)s) Jour (%(day)s) n'est pas valide"
+
+msgctxt "model:ir.message,text:msg_need_date_field_set"
+msgid "Some date fields must be set."
+msgstr "Au moins un champ de date doit être renseigné."
+
+msgctxt "model:ir.message,text:msg_no_broker_define_for_broker_fee"
+msgid "No broker define on contract %(contract)s for broker fee %(fee)s."
+msgstr ""
+"Pas de courtier défini sur le contrat %(contract)s pour facturer le frais "
+"d'apporteur %(fee)s"
+
+msgctxt "model:ir.message,text:msg_no_delete_invoiced_commission"
+msgid "Cannot delete an already invoiced commission."
+msgstr "Impossible de supprimer une commission faisant partie d'un bordereau."
+
+msgctxt "model:ir.message,text:msg_no_invoices"
+msgid "The selected contracts do not have any invoice."
+msgstr "Les contrats sélectionnés n'ont pas de quittances."
 
 msgctxt "model:ir.ui.menu,name:"
 msgid "Brokers"

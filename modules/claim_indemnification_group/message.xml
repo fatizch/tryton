@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<tryton>
+    <data group="1">
+        <record model="ir.message" id="msg_bad_start_date">
+            <field name="text">The contract was terminated on the %(contract_end)s, a new indemnification cannot start on %(indemn_start)s.</field>
+        </record>
+        <record model="ir.message" id="msg_truncated_end_date">
+            <field name="text">The contract was terminated on the %(contract_end)s, so the requested indemnification end (%(indemn_end)s) will automatically be updated.</field>
+        </record>
+        <record model="ir.message" id="msg_lock_end_date">
+            <field name="text">The contract was terminated on the %(contract_end)s, there will not be any revaluation after this date.</field>
+        </record>
+        <record model="ir.message" id="msg_benefit_displayer">
+            <field name="text">%(name)s (%(length)i claims)</field>
+        </record>
+        <record model="ir.message" id="msg_bad_dates">
+            <field name="text">The indemnification period (%(indemn_start)s - %(indemn_end)s) is not compatible with the contract's end date (%(contract_end)s).</field>
+        </record>
+        <record model="ir.message" id="msg_covered_element_rupture">
+            <field name="text">The covered element %(party_rec_name)s is in rupture for the contract %(contract)s at %(date)s and the beneficiary should be the covered element itself, not %(benef_rec_name)s.</field>
+        </record>
+        <record model="ir.message" id="msg_dates_not_in_management">
+            <field name="text">The indemnification period (%(indemn_start)s - %(indemn_end)s) is not compatible with the claim\'s management period (%(management_start)s - %(management_end)s).</field>
+        </record>
+        <record model="ir.message" id="msg_missing_origin_service">
+            <field name="text">The origin service must be set prior to calculation for %(service)s.</field>
+        </record>
+        <record model="ir.message" id="msg_subsidiaries_then_covered_enum">
+            <field name="text">Subsidiaries then Covered</field>
+        </record>
+        <record model="ir.message" id="msg_subsidiaries_covered_subscriber_enum">
+            <field name="text">Subsidiaries, Covered and Subscriber</field>
+        </record>
+        <record model="ir.message" id="msg_multiple_indemnification_rules">
+            <field name="text">Multiple indemnification rules allowed</field>
+        </record>
+        <record model="ir.message" id="msg_previous_insurer_desc">
+            <field name="text">Computed amount transfered by the previous insurer: %(computation)s.</field>
+        </record>
+        <record model="ir.message" id="msg_before_option_start_date">
+            <field name="text">The indemnification %(indemnification)s starts before the option.</field>
+        </record>
+    </data>
+</tryton>

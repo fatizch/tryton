@@ -89,11 +89,11 @@ class ModuleTestCase(test_framework.CoogTestCase):
         tax_account_kind = self.AccountKind()
         tax_account_kind.name = 'Tax Account Kind'
         tax_account_kind.company = company
+        tax_account_kind.statement = 'balance'
         tax_account_kind.save()
         tax_account = self.Account()
         tax_account.name = 'Main tax'
         tax_account.code = 'main_tax'
-        tax_account.kind = 'revenue'
         tax_account.company = company
         tax_account.type = tax_account_kind
         tax_account.save()
@@ -101,15 +101,29 @@ class ModuleTestCase(test_framework.CoogTestCase):
         invoice_account_kind = self.AccountKind()
         invoice_account_kind.name = 'Invoice Account Kind'
         invoice_account_kind.company = company
+        invoice_account_kind.statement = 'balance'
+        invoice_account_kind.receivable = True
         invoice_account_kind.save()
 
         invoice_account = self.Account()
         invoice_account.name = 'Invoice Account'
         invoice_account.code = 'main_account'
-        invoice_account.kind = 'receivable'
         invoice_account.company = company
         invoice_account.type = invoice_account_kind
         invoice_account.save()
+
+        line_account_kind = self.AccountKind()
+        line_account_kind.name = "Invoice Line Account Kind"
+        line_account_kind.company = company
+        line_account_kind.statement = 'income'
+        line_account_kind.revenue = True
+        line_account_kind.save()
+
+        line_account = self.Account()
+        line_account.name = "Invoice Line Account"
+        line_account.company = company
+        line_account.type = line_account_kind
+        line_account.save()
 
         configuration = self.Configuration(1)
         configuration.tax_rounding = 'line'
@@ -153,7 +167,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
                 type='line',
                 description='test',
                 company=company,
-                account=tax_account,
+                account=line_account,
                 quantity=1,
                 taxes=[tax_1],
                 ),

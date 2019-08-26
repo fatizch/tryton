@@ -1,9 +1,12 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+from trytond.exceptions import UserWarning
+from trytond.i18n import gettext
 from trytond.pool import Pool
 from trytond.rpc import RPC
 from trytond.cache import Cache
 from trytond.model import Unique
+from trytond.model.exceptions import ValidationError
 from trytond.transaction import Transaction
 from trytond.wizard import Wizard, StateTransition, StateView, Button
 from trytond.pyson import Eval
@@ -175,12 +178,6 @@ class DocumentReception(model.CoogSQL, model.CoogView):
                     | (Eval('state', '') == 'rejected')},
                 })
         cls.__rpc__.update({'get_models': RPC()})
-        cls._error_messages.update({
-                'no_reception_date': 'A reception date must be set on '
-                '%(document_name)s before going on.',
-                'not_attached': 'The document will not be attached to '
-                'anything !',
-                })
 
     @classmethod
     def default_attachments(cls):
@@ -236,15 +233,21 @@ class DocumentReception(model.CoogSQL, model.CoogView):
         with model.error_manager():
             for document in documents:
                 if not document.reception_date:
-                    document.append_functional_error('no_reception_date',
-                        {'document_name': document.rec_name})
+                    document.append_functional_error(
+                        ValidationError(gettext(
+                                'document.no_reception_date',
+                                document_name=document.rec_name,
+                                )))
 
     @classmethod
     def check_attached(cls, documents):
+        pool = Pool()
+        Warning = pool.get('res.user.warning')
         for document in documents:
             if not document.attachment:
-                document.raise_user_warning('not_attached' + str(document.id),
-                    'not_attached')
+                key = 'not_attached' + str(document.id)
+                if Warning.check(key):
+                    raise UserWarning(gettext('document.msg_not_attached'))
 
     @classmethod
     @model.CoogView.button_action('document.act_receive_document')

@@ -3,6 +3,9 @@
 from collections import defaultdict
 import datetime
 
+from trytond.exceptions import UserWarning
+from trytond.i18n import gettext
+from trytond.model.exceptions import ValidationError
 from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
 from trytond.wizard import StateView, Button, StateTransition
@@ -164,14 +167,6 @@ class AddRemoveLoan(EndorsementWizardStepMixin, model.CoogView):
     possible_contracts = fields.Many2Many('contract', None, None,
         'Possible Contracts', readonly=True)
     new_loan = fields.Many2One('loan', 'New Loan')
-
-    @classmethod
-    def __setup__(cls):
-        super(AddRemoveLoan, cls).__setup__()
-        cls._error_messages.update({
-                'at_least_one_loan':
-                'There must be at least one loan for contract %s',
-                })
 
     @classmethod
     def view_attributes(cls):
@@ -349,8 +344,9 @@ class AddRemoveLoan(EndorsementWizardStepMixin, model.CoogView):
                 OrderedLoan(loan=x, number=i)
                 for i, x in enumerate(added, max_number + 1)]
             if not contract.ordered_loans:
-                self.raise_user_error('at_least_one_loan',
-                    contract.contract_number)
+                raise ValidationError(gettext(
+                        'endorsement_loan.msg_at_least_one_loan',
+                        contract=contract.contract_number))
             final_loans = {x.loan.id for x in contract.ordered_loans}
 
             # Sync loan shares
@@ -452,14 +448,6 @@ class ChangeLoanAtDate(EndorsementWizardStepMixin, model.CoogView):
     current_increments = fields.One2Many('loan.increment', None,
         'Current Increments', readonly=True)
     new_increments = fields.One2Many('loan.increment', None, 'New Increments')
-
-    @classmethod
-    def __setup__(cls):
-        super(ChangeLoanAtDate, cls).__setup__()
-        cls._error_messages.update({
-                'incomplete_loan_data': 'There may be insufficiant data '
-                'to properly compute the loan payments, please double-check',
-                })
 
     @classmethod
     def view_attributes(cls):
@@ -589,10 +577,14 @@ class ChangeLoanAtDate(EndorsementWizardStepMixin, model.CoogView):
         return 'display_updated_payments'
 
     def check_increments(self):
+        pool = Pool()
+        Warning = pool.get('res.user.warning')
         for increment in self.new_increments[:-1]:
             if not increment.payment_amount and not increment.deferral:
-                self.raise_user_warning('incomplete_loan_data_%s' %
-                    self.wizard._session_id, 'incomplete_loan_data')
+                key = 'incomplete_loan_data_%s' % self.wizard._session_id
+                if Warning.check(key):
+                    raise UserWarning(key, gettext(
+                            'endorsement_loan.msg_incomplete_loan_data'))
                 return
 
     def update_increment_displayer(self, increment, loan):
@@ -753,9 +745,11 @@ class ChangeLoan(EndorsementWizardStepMixin):
             for loan in self.loan_changes
             if loan.new_values[0].funds_release_date != base_date]
         if bad_loans:
-            ctr_endorsement.contract.raise_user_warning(
-                ctr_endorsement.contract.rec_name, 'bad_loan_dates',
-                ('\t\n'.join(bad_loans),))
+            key = 'bad_loan_dates_' + ctr_endorsement.contract.rec_name
+            if Warning.check(key):
+                raise UserWarning(key, gettext(
+                        'endorsement_loan.msg_bad_loan_dates',
+                        loans='\t\n'.join(bad_loans)))
 
         endorsements_to_save = []
         for loan_change in self.loan_changes:
@@ -894,14 +888,6 @@ class SelectLoanShares(EndorsementWizardStepMixin):
     shares_per_loan = fields.One2Many(
         'contract.covered_element.add_option.share_per_loan', None,
         'Shares per loan', readonly=True)
-
-    @classmethod
-    def __setup__(cls):
-        super(SelectLoanShares, cls).__setup__()
-        cls._error_messages.update({
-                'no_loan_share_on_new_coverage':
-                'The following coverages have no loan share :\n\t%s',
-                })
 
     @classmethod
     def view_attributes(cls):
@@ -1116,8 +1102,10 @@ class SelectLoanShares(EndorsementWizardStepMixin):
                         start_date=self.effective_date))
             final_shares += per_loan[share.loan]
         if not final_shares:
-            self.append_functional_error('no_loan_share_on_new_coverage',
-                (option.coverage.rec_name,))
+            self.append_functional_error(
+                ValidationError(gettext(
+                        'endorsement_loan.msg_no_loan_share_on_new_coverage',
+                        coverage=option.coverage.rec_name)))
         return final_shares
 
 

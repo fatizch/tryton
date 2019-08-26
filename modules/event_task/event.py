@@ -1,6 +1,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 
+from trytond.i18n import gettext
 from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval
 from trytond.server_context import ServerContext
@@ -22,15 +23,9 @@ class EventTypeAction(metaclass=PoolMeta):
         order=[('order', 'ASC')], delete_missing=True)
 
     @classmethod
-    def __setup__(cls):
-        super(EventTypeAction, cls).__setup__()
-        cls._error_messages.update({'process_task': 'Process Task'})
-
-    @classmethod
     def get_action_types(cls):
         return super(EventTypeAction, cls).get_action_types() + [
-            ('process_task', cls.raise_user_error(
-                    'process_task', raise_exception=False))]
+            ('process_task', gettext('event_task.msg_process_task'))]
 
     @fields.depends('report_templates')
     def on_change_action(self):

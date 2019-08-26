@@ -1,5 +1,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+from trytond.i18n import gettext
+from trytond.model.exceptions import AccessError
 from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
 
@@ -15,14 +17,6 @@ __all__ = [
 class UnderwritingStart(metaclass=PoolMeta):
     __name__ = 'underwriting.start'
 
-    @classmethod
-    def __setup__(cls):
-        super(UnderwritingStart, cls).__setup__()
-        cls._error_messages.update({
-                'closed_claim': 'Cannot start a new underwriting process '
-                'on a closed claim',
-                })
-
     def default_process_parameters(self, name):
         defaults = super(UnderwritingStart, self).default_process_parameters(
             name)
@@ -30,7 +24,8 @@ class UnderwritingStart(metaclass=PoolMeta):
             return defaults
         claim = Pool().get('claim')(Transaction().context.get('active_id'))
         if claim.status == 'closed':
-            self.raise_user_error('closed_claim')
+            raise AccessError(gettext(
+                    'underwriting_claim.msg_closed_claim'))
         defaults['parent'] = str(claim)
         defaults['party'] = claim.claimant.id
         return defaults

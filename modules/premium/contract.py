@@ -9,6 +9,7 @@ from dateutil.relativedelta import relativedelta
 
 from trytond.pool import PoolMeta, Pool
 from trytond import backend
+from trytond.config import config
 from trytond.pyson import Eval, If
 from trytond.transaction import Transaction
 from trytond.rpc import RPC
@@ -459,18 +460,25 @@ class Premium(model.CoogSQL, model.CoogView):
 
     __name__ = 'contract.premium'
     contract = fields.Many2One('contract', 'Contract', select=True,
-        ondelete='CASCADE', readonly=True)
+        ondelete='CASCADE',
+        readonly=not config.getboolean('env', 'testing'))
     option = fields.Many2One('contract.option', 'Option', select=True,
-        ondelete='CASCADE', readonly=True)
+        ondelete='CASCADE',
+        readonly=not config.getboolean('env', 'testing'))
     fee = fields.Many2One('contract.fee', 'Fee', ondelete='CASCADE',
-        select=True, readonly=True)
+        select=True,
+        readonly=not config.getboolean('env', 'testing'))
     rated_entity = fields.Reference('Rated Entity', 'get_rated_entities',
-        required=True, select=True, readonly=True)
-    start = fields.Date('Start', readonly=True)
-    end = fields.Date('End', readonly=True)
-    amount = fields.Numeric('Amount', required=True, readonly=True)
+        required=True, select=True,
+        readonly=not config.getboolean('env', 'testing'))
+    start = fields.Date('Start',
+        readonly=not config.getboolean('env', 'testing'))
+    end = fields.Date('End',
+        readonly=not config.getboolean('env', 'testing'))
+    amount = fields.Numeric('Amount', required=True,
+        readonly=not config.getboolean('env', 'testing'))
     frequency = fields.Selection(PREMIUM_FREQUENCY, 'Frequency', sort=False,
-        readonly=True)
+        readonly=not config.getboolean('env', 'testing'))
     frequency_string = frequency.translated('frequency')
     taxes = fields.Function(
         fields.Many2Many('account.tax', None, None, 'Taxes'),

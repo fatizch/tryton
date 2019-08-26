@@ -2,10 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:contract.right_suspension:"
-msgid "Start date greater than end date (%s > %s)"
-msgstr "La date de début est supérieure à la date de fin (%s > %s)"
-
 msgctxt "field:contract,actives_rights_suspensions:"
 msgid "Actives Rights Suspensions"
 msgstr "Suspensions de droits actives"
@@ -127,6 +123,11 @@ msgctxt ""
 "model:ir.action.act_window.domain,name:act_inactive_contract_right_suspension"
 msgid "Inactives"
 msgstr "Inactives"
+
+msgctxt "model:ir.message,text:msg_invalid_dates"
+msgid "Start date greater than end date (%(start)s > %(end)s)."
+msgstr ""
+"La date de début est supérieure à la date de fin (%(start)s > %(end)s)"
 
 msgctxt "model:ir.ui.menu,name:"
 msgid "Contract Rights Suspensions"

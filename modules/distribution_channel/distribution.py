@@ -1,5 +1,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+from trytond.i18n import gettext
+from trytond.model.exceptions import ValidationError
 from trytond.pool import PoolMeta
 
 from trytond.modules.coog_core import model, fields
@@ -30,14 +32,6 @@ class DistributionNetwork(metaclass=PoolMeta):
             'All network channels'), 'get_all_network_channels_id')
 
     @classmethod
-    def __setup__(cls):
-        super(DistributionNetwork, cls).__setup__()
-        cls._error_messages.update({
-            'net_must_have_at_least_one_channel':
-                'at least one channel is required on %s network '
-                'or its parents'})
-
-    @classmethod
     def _export_light(cls):
         return super()._export_light() | {'authorized_distribution_channels'}
 
@@ -47,8 +41,10 @@ class DistributionNetwork(metaclass=PoolMeta):
             if network.is_distributor:
                 if not network.authorized_distribution_channels \
                         and not network.parent_authorized_distribution_channels:
-                    cls.raise_user_error('net_must_have_at_least_one_channel',
-                        network.get_rec_name(''))
+                    raise ValidationError(gettext(
+                            'distribution_channel'
+                            '.msg_net_must_have_at_least_one_channel',
+                            network=network.get_rec_name('')))
 
     def get_parent_distribution_channels_id(self, name):
         return list({channel.id for parent in self.parents

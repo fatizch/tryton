@@ -2,14 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:commission.create_invoice_principal:"
-msgid "Wholesale broker reimbursement %s"
-msgstr "Remboursement du courtier grossiste %s"
-
-msgctxt "error:report.template:"
-msgid "Whole Sale Invoice Report"
-msgstr "Rapport bordereau courtier grossiste"
-
 msgctxt "field:commission.agent,delegation_of_payment:"
 msgid "Delegation of Commission Payment"
 msgstr "Délégation de paiement"
@@ -21,6 +13,10 @@ msgstr "Courtier grossiste"
 msgctxt "model:ir.action,name:"
 msgid "Insurer Invoices"
 msgstr "Bordereaux courtier grossiste"
+
+msgctxt "model:ir.message,text:msg_wholesale_invoice"
+msgid "Whole Sale Invoice Report"
+msgstr "Rapport bordereau courtier grossiste"
 
 msgctxt "selection:account.invoice,business_kind:"
 msgid "Wholesale Invoice"

@@ -3,6 +3,7 @@
 import datetime
 from decimal import Decimal
 
+from trytond.i18n import gettext
 from trytond.pool import PoolMeta
 from trytond.pyson import And, Eval, Or, Bool
 from trytond.server_context import ServerContext
@@ -33,22 +34,14 @@ class Benefit(metaclass=PoolMeta):
         help='Products available when paying a company')
 
     @classmethod
-    def __setup__(cls):
-        super(Benefit, cls).__setup__()
-        cls._error_messages.update({
-                'subsidiaries_then_covered_enum': 'Subsidiaries then Covered',
-                'subsidiaries_covered_subscriber_enum': 'Subsidiaries, Covered'
-                ' and Subscriber',
-                })
-
-    @classmethod
     def get_beneficiary_kind(cls):
         return super(Benefit, cls).get_beneficiary_kind() + [
-            ('subsidiaries_then_covered', cls.raise_user_error(
-                    'subsidiaries_then_covered_enum', raise_exception=False)),
-            ('subsidiaries_covered_subscriber', cls.raise_user_error(
-                    'subsidiaries_covered_subscriber_enum',
-                    raise_exception=False)),
+            ('subsidiaries_then_covered', gettext(
+                    'claim_indemnification_group'
+                    '.msg_subsidiaries_then_covered_enum')),
+            ('subsidiaries_covered_subscriber', gettext(
+                    'claim_indemnification_group'
+                    '.msg_subsidiaries_covered_subscriber_enum')),
             ]
 
     def _extra_data_structure(self):
@@ -131,14 +124,6 @@ class BenefitRule(metaclass=PoolMeta):
     @classmethod
     def __setup__(cls):
         super(BenefitRule, cls).__setup__()
-        cls._error_messages.update({
-                'multiple_indemnification_rules': 'Multiple indemnification '
-                'rules allowed',
-                'amount_revaluation': 'Amount is replaced by revaluation '
-                'amount.',
-                'previous_insurer_desc': 'Computed amount transfered by the '
-                'previous insurer: %(computation)s',
-                })
         cls.indemnification_rule.states['invisible'] = And(
             cls.indemnification_rule.states.get('invisible', True),
             ~Eval('force_indemnification_rule'))
@@ -176,8 +161,9 @@ class BenefitRule(metaclass=PoolMeta):
 
     def get_rec_name(self, name):
         if not self.indemnification_rule and self.indemnification_rules:
-            return self.raise_user_error('multiple_indemnification_rules',
-                raise_exception=False)
+            return gettext(
+                'claim_indemnification_group'
+                '.msg_multiple_indemnification_rules')
         return super(BenefitRule, self).get_rec_name(name)
 
     @classmethod
@@ -274,9 +260,9 @@ class BenefitRule(metaclass=PoolMeta):
             str_amount = coog_string.format_number('%.2f', amount)
             previous_insurer_desc = '%s = %s * %s\n' % (str_amount,
                 previous_insurer_amount, str_nb_of_unit)
-            description += self.raise_user_error('previous_insurer_desc', {
-                    'computation': previous_insurer_desc,
-                    }, raise_exception=False)
+            description += gettext(
+                'claim_indemnification_group.msg_previous_insurer_desc',
+                computation=previous_insurer_desc)
             return [{
                     'start_date': start_date,
                     'end_date': end_date,

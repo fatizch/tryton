@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<tryton>
+    <data group="1">
+        <record model="ir.message" id="msg_input_text_message">
+            <field name="text">Text Message</field>
+        </record>
+    </data>
+</tryton>

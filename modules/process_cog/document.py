@@ -1,5 +1,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+from trytond.exceptions import UserError
+from trytond.i18n import gettext
 from trytond.pool import PoolMeta
 from trytond.wizard import Button, StateAction, StateTransition
 
@@ -27,13 +29,10 @@ class ReceiveDocument(metaclass=PoolMeta):
                 # client bug which breaks states syncing
                 # states={'readonly': ~Eval('current_process')}))
                 ))
-        cls._error_messages.update({
-                'no_process': 'No process was found for the selected element.',
-                })
 
     def transition_attach_and_resume(self):
         if not self.free_attach.current_process:
-            self.raise_user_error('no_process')
+            raise UserError(gettext('process_cog.msg_no_process'))
         self.transition_reattach()
         return 'resume_process'
 

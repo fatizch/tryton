@@ -5,6 +5,8 @@ from trytond.modules.process_cog.process import ProcessFinder, ProcessStart
 from trytond.modules.coog_core import fields, model
 from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval
+from trytond.i18n import gettext
+from trytond.model.exceptions import ValidationError
 
 
 __all__ = [
@@ -62,14 +64,6 @@ class EndorsementPartyStartProcess(ProcessFinder):
     __name__ = 'endorsement_party.start_process'
 
     @classmethod
-    def __setup__(cls):
-        super(EndorsementPartyStartProcess, cls).__setup__()
-        cls._error_messages.update({
-                'single_party_definition': 'The chosen endorsement definition '
-                'cannot be applied on several parties.',
-                })
-
-    @classmethod
     def get_parameters_model(cls):
         return 'endorsement_party.start.find_process'
 
@@ -83,7 +77,10 @@ class EndorsementPartyStartProcess(ProcessFinder):
         PartyEndorsement = pool.get('endorsement.party')
         if (not process_param.definition.is_multi_instance and
                 len(process_param.parties) > 1):
-            self.raise_user_error('single_party_definition')
+            raise ValidationError(
+                gettext(
+                    'endorsement_party_process'
+                    '.msg_single_party_definition'))
         res, errs = super(EndorsementPartyStartProcess,
             self).init_main_object_from_process(obj, process_param)
         obj.effective_date = process_param.effective_date

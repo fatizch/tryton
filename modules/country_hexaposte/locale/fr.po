@@ -2,10 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:country.hexapost.set:"
-msgid "Can't find subdivision for %s"
-msgstr "Impossible de trouver le département pour %s"
-
 msgctxt "field:country.hexapost.set,data_file:"
 msgid "Default data file"
 msgstr "Fichier de données par défaut"
@@ -53,6 +49,10 @@ msgstr "Mise à jour des codes postaux"
 msgctxt "model:ir.action,name:country_hexapost_set_wizard"
 msgid "Hexapost Loader"
 msgstr "Mise à jour des codes postaux"
+
+msgctxt "model:ir.message,text:msg_cant_find_subdivision"
+msgid "Can't find subdivision for %(post_code)s."
+msgstr "Impossible de trouver le département pour %(post_code)s"
 
 msgctxt "model:ir.ui.menu,name:zip_initialise"
 msgid "Initialise Zipcodes"

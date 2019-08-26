@@ -2,11 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:account.invoice.line:"
-msgid "Amount exceeds %s which is the maximum allowed for product '%s'."
-msgstr ""
-"Le montant excède %s qui est le maximum autorisé pour le produit '%s'."
-
 msgctxt "field:account.invoice,insurer:"
 msgid "Insurer"
 msgstr "Assureur"
@@ -30,6 +25,14 @@ msgstr "Plafond"
 msgctxt "model:ir.action,name:act_supplier_invoice_insurance_relate_form"
 msgid "Supplier Invoice Insurance"
 msgstr "Facture fournisseur assurance"
+
+msgctxt "model:ir.message,text:msg_too_big_amount"
+msgid ""
+"Amount exceeds %(capped_amount)s which is the maximum allowed for product "
+"'%(product)s'."
+msgstr ""
+"Le montant excède %(capped_amount)s qui est le maximum autorisé pour le "
+"produit '%(product)s'."
 
 msgctxt "model:product.category,name:in_invoice_insurance"
 msgid "Supplier Invoice Insurance"

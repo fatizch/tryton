@@ -2,14 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:account.fee:"
-msgid "The code must be unique"
-msgstr "Le code doit être unique"
-
-msgctxt "error:contract.premium.display:"
-msgid "No contract found in context"
-msgstr "Pas de contrat trouvé dans le contexte"
-
 msgctxt "field:account.fee,allow_override:"
 msgid "Allow Override"
 msgstr "Permettre la surcharge"
@@ -538,6 +530,14 @@ msgctxt "field:offered.product.premium_date,rec_name:"
 msgid "Record Name"
 msgstr "Nom"
 
+msgctxt "field:offered.product.premium_date,rule:"
+msgid "Premium Date Rule"
+msgstr ""
+
+msgctxt "field:offered.product.premium_date,rule_extra_data:"
+msgid "Rule Extra Data"
+msgstr "Règle Données complémentaires"
+
 msgctxt "field:offered.product.premium_date,type_:"
 msgid "Date rule"
 msgstr "Règle de date"
@@ -609,6 +609,10 @@ msgstr "Frais"
 msgctxt "model:ir.action,name:act_premium_display"
 msgid "Display Contract Premium"
 msgstr "Afficher les primes du contrat"
+
+msgctxt "model:ir.message,text:msg_no_contract_found"
+msgid "No contract found in context."
+msgstr "Pas de contrat trouvé dans le contexte."
 
 msgctxt "model:ir.ui.menu,name:menu_fee"
 msgid "Fees"
@@ -825,6 +829,10 @@ msgstr "Annuellement à l'anniversaire du contrat"
 msgctxt "selection:rule_engine,type_:"
 msgid "Premium"
 msgstr "Prime"
+
+msgctxt "selection:rule_engine,type_:"
+msgid "Premium Date Rule"
+msgstr "Règle de date de prime"
 
 msgctxt "view:account.fee:"
 msgid "%"

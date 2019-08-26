@@ -117,14 +117,20 @@ Create Account Kind::
     >>> product_account_kind = AccountKind()
     >>> product_account_kind.name = 'Product Account Kind'
     >>> product_account_kind.company = company
+    >>> product_account_kind.statement = 'income'
+    >>> product_account_kind.revenue = True
     >>> product_account_kind.save()
     >>> receivable_account_kind = AccountKind()
     >>> receivable_account_kind.name = 'Receivable Account Kind'
     >>> receivable_account_kind.company = company
+    >>> receivable_account_kind.statement = 'balance'
+    >>> receivable_account_kind.receivable = True
     >>> receivable_account_kind.save()
     >>> payable_account_kind = AccountKind()
     >>> payable_account_kind.name = 'Payable Account Kind'
     >>> payable_account_kind.company = company
+    >>> payable_account_kind.statement = 'balance'
+    >>> payable_account_kind.payable = True
     >>> payable_account_kind.save()
 
 Create Account::
@@ -132,25 +138,22 @@ Create Account::
     >>> product_account = Account()
     >>> product_account.name = 'Product Account'
     >>> product_account.code = 'product_account'
-    >>> product_account.kind = 'revenue'
     >>> product_account.type = product_account_kind
     >>> product_account.company = company
     >>> product_account.save()
     >>> receivable_account = Account()
     >>> receivable_account.name = 'Account Receivable'
     >>> receivable_account.code = 'account_receivable'
-    >>> receivable_account.kind = 'receivable'
+    >>> receivable_account.type = receivable_account_kind
     >>> receivable_account.party_required = True
     >>> receivable_account.reconcile = True
-    >>> receivable_account.type = receivable_account_kind
     >>> receivable_account.company = company
     >>> receivable_account.save()
     >>> payable_account = Account()
     >>> payable_account.name = 'Account Payable'
     >>> payable_account.code = 'account_payable'
-    >>> payable_account.kind = 'payable'
-    >>> payable_account.party_required = True
     >>> payable_account.type = payable_account_kind
+    >>> payable_account.party_required = True
     >>> payable_account.company = company
     >>> payable_account.save()
 
@@ -346,7 +349,6 @@ Create Test Contract::
     >>> contract.subscriber = subscriber
     >>> contract.start_date = contract_start_date
     >>> contract.product = product
-    >>> contract.status = 'active'
     >>> contract.contract_number = '123456'
     >>> covered_element = contract.covered_elements.new()
     >>> covered_element.party = subscriber
@@ -361,6 +363,9 @@ Create Test Contract::
     >>> contract.billing_informations.append(BillingInformation(
     ...         billing_mode=freq_monthly, payment_term=payment_term))
     >>> contract.save()
+    >>> Contract.write([contract.id], {
+    ...         'status': 'active',
+    ...         }, config.context)
 
 New Endorsement::
 
@@ -462,7 +467,6 @@ Create Test Contract::
     >>> contract.subscriber = subscriber
     >>> contract.start_date = contract_start_date
     >>> contract.product = product
-    >>> contract.status = 'active'
     >>> contract.contract_number = 'abcd'
     >>> covered_element = contract.covered_elements.new()
     >>> covered_element.party = subscriber
@@ -476,6 +480,9 @@ Create Test Contract::
     >>> contract.billing_informations.append(BillingInformation(
     ...         billing_mode=freq_monthly, payment_term=payment_term))
     >>> contract.save()
+    >>> Contract.write([contract.id], {
+    ...         'status': 'active',
+    ...         }, config.context)
 
 New Endorsement::
 

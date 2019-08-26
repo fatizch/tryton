@@ -9,7 +9,7 @@ Imports::
     >>> from dateutil.relativedelta import relativedelta
     >>> from decimal import Decimal
     >>> from trytond.tests.tools import activate_modules
-    >>> from trytond.error import UserError
+    >>> from trytond.exceptions import UserError
     >>> from trytond.modules.currency.tests.tools import get_currency
     >>> from trytond.modules.company.tests.tools import get_company
     >>> from trytond.modules.company_cog.tests.tools import create_company
@@ -89,10 +89,14 @@ Create Account Kind::
     >>> receivable_account_kind = AccountKind()
     >>> receivable_account_kind.name = 'Receivable Account Kind'
     >>> receivable_account_kind.company = company
+    >>> receivable_account_kind.receivable = True
+    >>> receivable_account_kind.statement = 'balance'
     >>> receivable_account_kind.save()
     >>> payable_account_kind = AccountKind()
     >>> payable_account_kind.name = 'Payable Account Kind'
     >>> payable_account_kind.company = company
+    >>> payable_account_kind.payable = True
+    >>> payable_account_kind.statement = 'balance'
     >>> payable_account_kind.save()
 
 Create Account::
@@ -371,6 +375,6 @@ Create Test Contract::
     >>> contract.subscriber.birth_date = datetime.date(1969, 10, 14)
     >>> contract.subscriber.save()
     >>> contract.save()
-    >>> "'Option Test Coverage is not eligible'" == test_error(
+    >>> "'Option Test Coverage is not eligible.'" == test_error(
     ...     UserError, Contract.button_calculate, [contract.id], {})
     True

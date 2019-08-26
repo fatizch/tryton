@@ -4,6 +4,8 @@
 
 from collections import OrderedDict
 
+from trytond.i18n import gettext
+from trytond.model.exceptions import ValidationError, AccessError
 from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Bool, Eval
 from trytond.server_context import ServerContext
@@ -38,9 +40,9 @@ class Address(model.FunctionalErrorMixIn, export.ExportImportMixin,
     return_to_sender = fields.Function(fields.Boolean('Return To Sender'),
         'get_return_to_sender', setter='set_return_to_sender',
         searcher='search_return_to_sender')
-    color = fields.Function(fields.Char('Color', states={'invisile': True}),
+    color = fields.Function(fields.Char('Color', states={'invisible': True}),
         'get_color')
-    icon = fields.Function(fields.Char('Icon', states={'invisile': True}),
+    icon = fields.Function(fields.Char('Icon', states={'invisible': True}),
         'get_icon')
     one_line_street = fields.Function(fields.Char('Street'),
         'on_change_with_one_line_street')
@@ -65,11 +67,6 @@ class Address(model.FunctionalErrorMixIn, export.ExportImportMixin,
         cls.subdivision.states['invisible'] = ~Eval('needs_subdivision')
         cls.subdivision.depends += ['country']
         cls.active.states['invisible'] = True
-        cls._error_messages.update({
-                'line_exceeds_max_length': '"%(value)s" into the address line '
-                '"%(line)s" exceeds the configuration limit of character(s) '
-                '(%(max)s) for the country "%(country)s"',
-                })
 
     def check_country_values(self):
         if not self.country:
@@ -88,12 +85,13 @@ class Address(model.FunctionalErrorMixIn, export.ExportImportMixin,
                     continue
                 elif len(value) > line_config.max_length:
                     self.append_functional_error(
-                        'line_exceeds_max_length', {
-                            'line': line_config.string,
-                            'value': value,
-                            'max': line_config.max_length,
-                            'country': self.country.name,
-                            })
+                        ValidationError(
+                            gettext('party_cog.msg_line_exceeds_max_length',
+                                line=line_config.string,
+                                value=value,
+                                max=line_config.max_length,
+                                country=self.country.name,
+                                )))
 
     @classmethod
     def validate(cls, addresses):
@@ -440,15 +438,6 @@ class Zip(metaclass=PoolMeta):
     __name__ = 'country.zip'
 
     @classmethod
-    def __setup__(cls):
-        super(Zip, cls).__setup__()
-        cls._error_messages.update({
-                'used_zip_code': 'You cannot modify this zip code:\n'
-                ' %(zip_info)s \n'
-                ' as it is used in other addresses. Add a new zipcode instead.'
-                })
-
-    @classmethod
     def write(cls, *args):
         # Add check to ensure the user does not overwrite a zip code that is
         # used in other addresses
@@ -460,9 +449,11 @@ class Zip(metaclass=PoolMeta):
                         country_zips)
                     if addresses_with_zip:
                         cls.append_functional_error(
-                            'used_zip_code', {
-                                'zip_info': cls.get_zip_info(addresses_with_zip)
-                                })
+                            AccessError(gettext(
+                                    'party_cog.msg_used_zip_code',
+                                    zip_info=cls.get_zip_info(
+                                        addresses_with_zip),
+                                    )))
             super(Zip, cls).write(*args)
 
     @classmethod

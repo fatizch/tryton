@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<tryton>
+    <data group="1">
+        <record model="ir.message" id="msg_mixing_products">
+            <field name="text">The coverage "%(coverage_code)s - %(coverage_name)s" is already used in product(s) %(products)s.</field>
+        </record>
+    </data>
+</tryton>

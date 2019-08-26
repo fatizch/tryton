@@ -10,6 +10,8 @@ from sql.conditionals import Coalesce
 
 from trytond import backend
 
+from trytond.i18n import gettext
+from trytond.model.exceptions import ValidationError
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, If, Bool, And
 from trytond.transaction import Transaction
@@ -115,7 +117,8 @@ class Loss(metaclass=PoolMeta):
     possible_covered_persons = fields.Function(
         fields.One2Many('party.party', None, 'Covered Persons',
             states={'invisible': True}),
-        'on_change_with_possible_covered_persons')
+        'on_change_with_possible_covered_persons',
+        setter='setter_void')
     covered_person = fields.Many2One('party.party', 'Covered Person',
         # TODO: Temporary hack, the function field is not calculated
         # when storing the object
@@ -196,22 +199,6 @@ class Loss(metaclass=PoolMeta):
         super(Loss, cls).__setup__()
         cls.start_date.depends.append('loss_desc_kind')
         cls.end_date.depends.append('loss_desc_kind')
-        cls._error_messages.update({
-                'relapse': 'Relapse',
-                'previous_loss_end_date_missing': "The previous std "
-                "doesn't have an end date defined",
-                'one_day_between_relapse_and_previous_loss': 'One day is '
-                'required between the relapse and the previous std',
-                'loss_date': 'Loss Date:',
-                'start_date': 'Start Date:',
-                'std_start_date': 'STD Start Date:',
-                'ltd_start_date': 'LTD Start Date:',
-                'end_date': 'End Date:',
-                'std_end_date': 'STD End Date:',
-                'ltd_end_date': 'LTD End Date:',
-                'missing_relapse_initial_loss': 'The initial loss is missing on'
-                ' the relapse: %(loss)s'
-                })
         cls.closing_reason.states.update({
                 'required': Bool(Eval('end_date')),
                 })
@@ -241,7 +228,7 @@ class Loss(metaclass=PoolMeta):
             if self.loss_desc_kind and self.loss_desc_kind in ('std', 'ltd') \
                 and self.loss_desc and self.loss_desc.has_end_date else ''
         key += name[:-7]
-        return self.raise_user_error(key, raise_exception=False)
+        return gettext('claim_life.msg_%s' % key)
 
     @fields.depends('loss_kind', 'is_a_relapse')
     def on_change_with_possible_loss_descs(self, name=None):
@@ -262,8 +249,7 @@ class Loss(metaclass=PoolMeta):
         if self.covered_person:
             res += ' - ' + self.covered_person.full_name
         if self.is_a_relapse:
-            res = '%s (%s)' % (res, self.raise_user_error('relapse',
-                raise_exception=False))
+            res = '%s (%s)' % (res, gettext('claim_life.msg_relapse'))
         return res
 
     def get_possible_covered_persons(self):
@@ -352,14 +338,20 @@ class Loss(metaclass=PoolMeta):
             return
         previous_loss = self.relapse_initial_loss
         if not previous_loss:
-            self.append_functional_error('missing_relapse_initial_loss',
-                {'loss': self.rec_name})
+            self.append_functional_error(
+                ValidationError(gettext(
+                        'claim_life.msg_missing_relapse_initial_loss',
+                        loss=self.rec_name)))
         if not previous_loss.end_date:
-            self.append_functional_error('previous_loss_end_date_missing')
+            self.append_functional_error(
+                ValidationError(gettext(
+                        'claim_life.msg_previous_loss_end_date_missing')))
         if (self.start_date - previous_loss.end_date).days <= 1:
             # As it's a relapse there must be one day of work between two std
             self.append_functional_error(
-                'one_day_between_relapse_and_previous_loss')
+                ValidationError(gettext(
+                        'claim_life'
+                        '.msg_one_day_between_relapse_and_previous_loss')))
 
     @classmethod
     def get_possible_duplicates_fields(cls):
@@ -415,15 +407,6 @@ class ClaimService(metaclass=PoolMeta):
     manual_beneficiaries = fields.Function(
         fields.Boolean('Has Beneficiaries'),
         'get_manual_beneficiaries')
-
-    @classmethod
-    def __setup__(cls):
-        super(ClaimService, cls).__setup__()
-        cls._error_messages.update({
-                'multiple_covered_found': 'More than one covered element have '
-                'been found for the claim %(claim)s at %(date)s for '
-                '%(rec_name)s.',
-                })
 
     def get_covered_person(self):
         return self.loss.get_covered_person()
@@ -490,9 +473,11 @@ class ClaimService(metaclass=PoolMeta):
                     if len(matches) == 1:
                         return matches[0]
                     else:
-                        self.raise_user_error('multiple_covered_found', {
-                                'date': loss_date, 'rec_name': person.rec_name,
-                                'claim': self.loss.claim.name})
+                        raise ValidationError(gettext(
+                                'claim_life.msg_multiple_covered_found',
+                                date=loss_date,
+                                rec_name=person.rec_name,
+                                claim=self.loss.claim.name))
         return super(ClaimService, self).get_theoretical_covered_element(name)
 
     def init_from_option(self, option):
@@ -745,9 +730,9 @@ class Indemnification(metaclass=PoolMeta):
             if self.service.loss.covered_person
             else self.service.loss.claim.claimant.rec_name,
             self.service.loss.rec_name,
-            coog_string.translate_value(self, 'start_date')
+            gettext('claim_life.msg_start_date')
             if self.start_date else '',
-            coog_string.translate_value(self, 'end_date')
+            gettext('claim_life.msg_end_date')
             if self.end_date else '')
 
     def init_dict_for_rule_engine(self, cur_dict):

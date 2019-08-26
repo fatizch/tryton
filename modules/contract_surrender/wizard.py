@@ -2,6 +2,8 @@
 # this repository contains the full copyright notices and license terms.
 from decimal import Decimal
 
+from trytond.i18n import gettext
+from trytond.model.exceptions import ValidationError
 from trytond.pool import Pool
 from trytond.pyson import Eval
 from trytond.transaction import Transaction
@@ -42,14 +44,6 @@ class PlanSurrender(Wizard):
     surrender = StateTransition()
     open_invoice = StateAction('account_invoice.act_invoice_in_form')
 
-    @classmethod
-    def __setup__(cls):
-        super(PlanSurrender, cls).__setup__()
-        cls._error_messages.update({
-                'invalid_date': 'Impossible to surrender before the '
-                'contract\'s start_date (%(start_date)s)',
-                })
-
     def default_parameters(self, name):
         if self.parameters._default_values:
             return self.parameters._default_values
@@ -57,8 +51,9 @@ class PlanSurrender(Wizard):
         contract = Pool().get('contract')(
             Transaction().context.get('active_id'))
         if not contract.can_surrender:
-            contract.raise_user_error('cannot_surrender', {
-                    'contract': contract.rec_name})
+            raise ValidationError(gettext(
+                    'contract_surrender.msg_cannot_surrender',
+                    contract=contract.rec_name))
         return {
             'contract': contract.id,
             }
@@ -71,8 +66,9 @@ class PlanSurrender(Wizard):
     def check_parameters(self):
         if (self.parameters.contract.start_date >=
                 self.parameters.surrender_date):
-            self.raise_user_error('invalid_date', {
-                    'start_date': self.parameters.contract.start_date})
+            raise ValidationError(gettext(
+                    'contract_surrender.msg_invalid_date',
+                    start_date=self.parameters.contract.start_date))
 
     def calculate_surrenders(self):
         contract = self.parameters.contract
@@ -212,19 +208,14 @@ class CancelSurrender(Wizard):
     start_state = 'cancel_surrender'
     cancel_surrender = StateTransition()
 
-    @classmethod
-    def __setup__(cls):
-        super(CancelSurrender, cls).__setup__()
-        cls._error_messages.update({
-                'no_selected_contract': 'No selected contract',
-                })
-
     def transition_cancel_surrender(self):
         assert Transaction().context.get('active_model') == 'contract'
         contract_id = Transaction().context.get('active_id')
         with model.error_manager():
             if not contract_id:
-                self.append_functional_error('no_selected_contract')
+                self.append_functional_error(
+                    ValidationError(gettext(
+                            'contract_surrender.msg_no_selected_contract')))
             contract = Pool().get('contract')(contract_id)
             contract.cancel_surrender([contract])
             return 'end'

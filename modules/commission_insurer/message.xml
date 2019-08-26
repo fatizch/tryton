@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<tryton>
+    <data group="1">
+        <record model="ir.message" id="msg_all_insurer_invoices">
+            <field name="text">All Insurer Invoice</field>
+        </record>
+        <record model="ir.message" id="msg_broker_invoice">
+            <field name="text">Broker Invoice Report</field>
+        </record>
+        <record model="ir.message" id="msg_insurer_invoice">
+            <field name="text">Insurer Invoice Report</field>
+        </record>
+    </data>
+</tryton>

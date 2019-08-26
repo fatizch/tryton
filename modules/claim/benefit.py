@@ -3,6 +3,7 @@
 # this repository contains the full copyright notices and license terms.
 import logging
 
+from trytond.i18n import gettext
 from trytond.pyson import Eval
 from trytond.model import Unique
 from trytond.transaction import Transaction
@@ -275,13 +276,6 @@ class Benefit(model.CoogSQL, model.CoogView,
         cls._sql_constraints += [
             ('code_uniq', Unique(t, t.code), 'The code must be unique!'),
             ]
-        cls._error_messages.update({
-                'other_enum': 'Other',
-                'subscriber_enum': 'Subscriber',
-                'different_product_accounts': 'There are different expense '
-                'accounts on products of the benefit %(benefit)s, ensure all '
-                'the products have the same account before saving',
-                })
         cls.extra_data.help = 'Extra data to characterize the benefit. These '\
             'extra data are available in rule engine.'
         cls.extra_data_def.help = 'List of extra data that will be requested '\
@@ -338,10 +332,8 @@ class Benefit(model.CoogSQL, model.CoogView,
     @classmethod
     def get_beneficiary_kind(cls):
         return [
-            ('subscriber', cls.raise_user_error(
-                    'subscriber_enum', raise_exception=False)),
-            ('other', cls.raise_user_error(
-                    'other_enum', raise_exception=False)),
+            ('subscriber', gettext('claim.msg_subscriber_enum')),
+            ('other', gettext('claim.msg_other_enum')),
             ]
 
     @staticmethod

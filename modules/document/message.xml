@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<tryton>
+    <data group="1">
+        <record model="ir.message" id="msg_no_reception_date">
+            <field name="text">A reception date must be set on %(document_name)s before going on.</field>
+        </record>
+        <record model="ir.message" id="msg_not_attached">
+            <field name="text">The document will not be attached to anything.</field>
+        </record>
+    </data>
+</tryton>

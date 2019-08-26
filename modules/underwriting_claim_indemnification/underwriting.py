@@ -3,6 +3,8 @@
 from decimal import Decimal
 from collections import defaultdict
 
+from trytond.exceptions import UserWarning
+from trytond.i18n import gettext
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval
 
@@ -49,18 +51,6 @@ class UnderwritingResult(metaclass=PoolMeta):
                 'invisible': ~Eval('service')}, depends=['service']),
         'on_change_with_last_indemnification_date')
 
-    @classmethod
-    def __setup__(cls):
-        super(UnderwritingResult, cls).__setup__()
-        cls._error_messages.update({
-                'will_schedule': 'This action will schedule the following '
-                'indemnifications: \n\n%s',
-                'will_reject': 'This action will reject the following '
-                'indemnifications: \n\n%s, because the underwriting decision '
-                'implies a reduction.',
-                'rejected_after_reduction': 'Rejected after reduction decision',
-                })
-
     @fields.depends('service')
     def on_change_with_last_indemnification_date(self, name=None):
         if not self.service:
@@ -104,23 +94,34 @@ class UnderwritingResult(metaclass=PoolMeta):
 
     @classmethod
     def reject_indemnifications(cls, indemnifications):
+        pool = Pool()
+        Indemnification = pool.get('claim.indemnification')
+        Warning = pool.get('res.user.warning')
         if not indemnifications:
             return
-        Indemnification = Pool().get('claim.indemnification')
-        cls.raise_user_warning('will_reject_' + ','.join((str(x.id) for
-                x in indemnifications)), 'will_reject',
-               '\n'.join(x.rec_name for x in indemnifications))
-        to_reject = {x: {'note': cls.raise_user_error(
-            'rejected_after_reduction', raise_exception=False)}
+        key = 'will_reject_' + ','.join(str(x.id) for x in indemnifications)
+        if Warning.check(key):
+            raise UserWarning(key, gettext(
+                    'underwriting_claim_indemnification.msg_will_reject',
+                    indemnifications='\n'.join(
+                        x.rec_name for x in indemnifications)))
+        to_reject = {x: {'note': gettext(
+                    'underwriting_claim_indemnification'
+                    '.msg_rejected_after_reduction')}
             for x in indemnifications}
         Indemnification.reject_indemnification(to_reject)
 
     @classmethod
     def schedule_indemnifications(cls, indemnifications):
+        pool = Pool()
+        Indemnification = pool.get('claim.indemnification')
+        Warning = pool.get('res.user.warning')
         if not indemnifications:
             return
-        Indemnification = Pool().get('claim.indemnification')
-        cls.raise_user_warning('will_schedule_' + ','.join((str(x.id) for
-                x in indemnifications)), 'will_schedule',
-               '\n'.join(x.rec_name for x in indemnifications))
+        key = 'will_schedule_' + ','.join(str(x.id) for x in indemnifications)
+        if Warning.check(key):
+            raise UserWarning(key, gettext(
+                    'underwriting_claim_indemnification.msg_will_schedule',
+                    indemnifications='\n'.join(
+                        x.rec_name for x in indemnifications)))
         Indemnification.schedule(indemnifications)

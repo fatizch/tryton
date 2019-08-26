@@ -19,21 +19,3 @@ def register():
         res.Group,
         res.UserGroup,
         module='api', type_='model')
-
-    Pool.register_post_init_hooks(add_api_error_handler, module='api')
-
-
-def add_api_error_handler(pool, update):
-    if update:
-        return
-
-    from trytond.model import ModelStorage
-    from trytond.modules.api import APIErrorHandler
-
-    # Not so good because technically coog_core is more a dependency of api
-    # than the opposite, but this makes more sense here, and coog_core will be
-    # in the PATH anyway
-    from trytond.modules.coog_core import inject_class
-
-    logging.getLogger('modules').info('Adding error handler for APIs')
-    inject_class(pool, 'model', ModelStorage, APIErrorHandler)

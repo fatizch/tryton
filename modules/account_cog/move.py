@@ -10,7 +10,9 @@ from sql.conditionals import Case
 
 from trytond.wizard import Button, StateTransition
 from trytond import backend
+from trytond.i18n import gettext
 from trytond.transaction import Transaction
+from trytond.model.exceptions import AccessError, ValidationError
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, Bool
 from trytond.modules.coog_core import export, fields, utils, coog_string, model
@@ -146,10 +148,6 @@ class Move(export.ExportImportMixin):
     def __setup__(cls):
         super(Move, cls).__setup__()
         cls.origin.select = True
-        cls._error_messages.update({
-                'cannot_cancel_twice': 'You cannot cancel the move %(move)s '
-                'more than once',
-                })
 
     def get_kind(self, name):
         return ''
@@ -231,8 +229,9 @@ class Move(export.ExportImportMixin):
 
     def cancel(self, default=None):
         if self.cancel_move:
-            self.raise_user_error('cannot_cancel_twice', {
-                    'move': self.rec_name})
+            raise AccessError(gettext(
+                    'account_cog.msg_cannot_cancel_twice',
+                    move=self.rec_name))
         return super(Move, self).cancel(default)
 
 
@@ -247,8 +246,6 @@ class Line(export.ExportImportMixin):
     kind_string = fields.Function(
         fields.Char('Kind'),
         'get_kind_string')
-    account_kind = fields.Function(
-        fields.Char('Account Kind'), 'get_account_kind')
     reconciled_with = fields.Function(
         fields.Many2Many('account.move.line', None, None, 'Reconciled With'),
         'get_reconciled_with')
@@ -282,9 +279,6 @@ class Line(export.ExportImportMixin):
         cls.account.select = False
         cls.tax_lines.states['readonly'] = Eval('move_state') == 'posted'
         cls.tax_lines.depends += ['move_state']
-        cls._error_messages.update({
-                'split_move_description': 'Automatic Split Move',
-                })
 
     @classmethod
     def __register__(cls, module_name):
@@ -451,9 +445,6 @@ class Line(export.ExportImportMixin):
             return 'green'
         return 'black'
 
-    def get_account_kind(self, name):
-        return self.account.kind if self.account else ''
-
     def get_is_reconciled(self, name):
         return self.reconciliation is not None
 
@@ -589,8 +580,7 @@ class Line(export.ExportImportMixin):
 
     @classmethod
     def get_split_move_description(cls, line):
-        return cls.raise_user_error('split_move_description',
-            raise_exception=False)
+        return gettext('account_cog.msg_split_move_description')
 
     def _order_move_field(name):
         def order_field(tables):
@@ -638,10 +628,6 @@ class Reconciliation(metaclass=PoolMeta):
     @classmethod
     def __setup__(cls):
         super(Reconciliation, cls).__setup__()
-        cls._error_messages.update({
-                'unreconcile_cancel_move': 'You cannot unreconcile lines '
-                'which are part of a cancelled move',
-                })
         cls._order = [('id', 'DESC')]
 
     @classmethod
@@ -675,7 +661,8 @@ class Reconciliation(metaclass=PoolMeta):
             if cancel_moves & moves:
                 # The reconciliation contains lines from both a move and its
                 # cancellation, we should not unreconcile
-                cls.raise_user_error('unreconcile_cancel_move')
+                raise AccessError(
+                    gettext('account_cog.msg_unreconcile_cancel_move'))
 
         # Prepare list of split moves which lines will be automatically
         # reconciliated together because each lines are de-reconciled
@@ -711,10 +698,6 @@ class Reconcile(metaclass=PoolMeta):
         cls.show.buttons.insert(idx,
             Button('Postpone Reconciliation', 'postpone', 'tryton-history',
                 states={'invisible': ~Eval('to_postpone')}))
-        cls._error_messages.update({
-                'postpone_date_or_motive': 'Date and motive are required to '
-                'continue',
-                })
 
     def get_accounts(self):
         # Fully override method to filter out draft move lines
@@ -835,7 +818,8 @@ class Reconcile(metaclass=PoolMeta):
 
     def transition_postpone(self):
         if not self.show.postpone_date or not self.show.postpone_motive:
-            self.raise_user_error('postpone_date_or_motive')
+            raise ValidationError(gettext(
+                    'account_cog.msg_postpone_date_or_motive'))
         postponement = Pool().get('manual.reconciliation.postponement')()
         postponement.motive = self.show.postpone_motive
         postponement.date = self.show.postpone_date

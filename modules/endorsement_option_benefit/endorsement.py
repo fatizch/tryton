@@ -1,5 +1,6 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+from trytond.i18n import gettext
 from trytond.transaction import Transaction
 from trytond.pool import PoolMeta
 from trytond.pyson import Eval
@@ -43,13 +44,6 @@ class EndorsementOptionVersion(metaclass=PoolMeta):
         'option_version_endorsement',
         'Option Version Endorsement', delete_missing=True)
 
-    @classmethod
-    def __setup__(cls):
-        super(EndorsementOptionVersion, cls).__setup__()
-        cls._error_messages.update({
-               'msg_benefit_modifications': 'Benefit Modification'
-                })
-
     def get_diff(self, model, base_object=None):
         result = super(
             EndorsementOptionVersion, self).get_diff(model, base_object)
@@ -61,9 +55,11 @@ class EndorsementOptionVersion(metaclass=PoolMeta):
             for x in self.benefits]
 
         if option_benefit_summary:
-            result[1].append(['%s :' % (self.raise_user_error(
-                        'msg_benefit_modifications', raise_exception=False)),
-                        option_benefit_summary])
+            result[1].append([
+                    gettext(
+                        'endorsement_option_benefit'
+                        '.msg_benefit_modifications'),
+                    option_benefit_summary])
         return result
 
     def apply_values(self):
@@ -105,9 +101,6 @@ class EndorsementOptionBenefit(relation_mixin(
         super(EndorsementOptionBenefit, cls).__setup__()
         cls.values.domain = [('definition', '=', Eval('definition'))]
         cls.values.depends = ['definition']
-        cls._error_messages.update({
-                'new_benefit': 'Benefit Endorsement: %s',
-                })
         cls._endorsed_dicts = {
             'indemnification_rule_extra_data':
             'indemnification_rule_extra_data',

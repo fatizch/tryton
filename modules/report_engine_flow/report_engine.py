@@ -3,6 +3,7 @@
 import inspect
 import os
 
+from trytond.i18n import gettext
 from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval, Not, Or
 from trytond.model import Unique
@@ -299,12 +300,6 @@ class ReportTemplate(metaclass=PoolMeta):
     @classmethod
     def __setup__(cls):
         super(ReportTemplate, cls).__setup__()
-        cls._error_messages.update({
-                'output_mixin': 'You cannot print a flow'
-                ' and a model at the same time',
-                'input_flow_variable': 'From Flow Variable',
-                'process_method_default_flux': 'Default Flux',
-                })
         for fname in ['modifiable_before_printing',
                 'split_reports', 'document_desc',
                 'format_for_internal_edm', 'versions']:
@@ -337,8 +332,7 @@ class ReportTemplate(metaclass=PoolMeta):
     @classmethod
     def get_possible_input_kinds(cls):
         return super(ReportTemplate, cls).get_possible_input_kinds() + \
-            [('flow', cls.raise_user_error('input_flow_variable',
-                        raise_exception=False))]
+            [('flow', gettext('report_engine_flow.msg_input_flow_variable'))]
 
     def get_generated_code(self, name=None):
         if not self.override_loop:
@@ -355,8 +349,8 @@ class ReportTemplate(metaclass=PoolMeta):
     def get_possible_process_methods(self):
         if self.input_kind == 'flow':
             return [('default_flux',
-                    self.raise_user_error('process_method_default_flux',
-                        raise_exception=False))]
+                    gettext('report_engine_flow'
+                        '.msg_process_method_default_flux'))]
         return super(ReportTemplate, self).get_possible_process_methods()
 
     @fields.depends('input_kind', 'split_reports')
@@ -408,15 +402,6 @@ class ReportCreate(metaclass=PoolMeta):
             Button('Ok', 'end', 'tryton-ok', default=True),
             ])
 
-    @classmethod
-    def __setup__(cls):
-        super(ReportCreate, cls).__setup__()
-        cls._error_messages.update({
-                'report_template_message': 'Report flow generation '
-                'had succeeded! You generated a '
-                '%(report_template_name)s report.',
-                })
-
     def report_execute(self, ids, doc_template, report_context):
         if doc_template.input_kind != 'flow':
             return super(ReportCreate, self).report_execute(
@@ -441,11 +426,11 @@ class ReportCreate(metaclass=PoolMeta):
                 }]
 
     def default_flow_succeed_generated(self, fields):
-        return {'template_name':
-                self.raise_user_error('report_template_message',
-                    {'report_template_name':
-                        self.select_template.template.name},
-                    raise_exception=False)}
+        return {
+            'template_name': gettext(
+                'report_engine_flow.msg_report_template_message',
+                report_template_name=self.select_template.template.name),
+            }
 
     @classmethod
     def create_flow_file(cls, filepath, content):

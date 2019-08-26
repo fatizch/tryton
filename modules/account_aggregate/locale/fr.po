@@ -2,26 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:account.journal:"
-msgid "Always"
-msgstr "Toujours"
-
-msgctxt "error:account.journal:"
-msgid "Never"
-msgstr "Jamais"
-
-msgctxt "error:account.move.snapshot:"
-msgid "No fiscal year defined with the Export Moves option"
-msgstr "Pas d'année fiscale avec l'option Exporter les mouvements comptables"
-
-msgctxt "error:account.move.snapshot:"
-msgid "No sequence defined in configuration"
-msgstr "Pas de séquence définie dans la configuration"
-
-msgctxt "error:account.move.snapshot:"
-msgid "The name on shapshot must be unique"
-msgstr "Le nom de l'instantané doit être unique"
-
 msgctxt "field:account.configuration,snapshot_sequence:"
 msgid "Snapshot Sequence"
 msgstr "Séquence des instantanés"
@@ -269,6 +249,26 @@ msgstr "Ouvrir les mouvements agrégés"
 msgctxt "model:ir.action,name:act_snapshot"
 msgid "Take a Snapshot of Moves"
 msgstr "Prendre un instantané des mouvements"
+
+msgctxt "model:ir.message,text:msg_always"
+msgid "Always"
+msgstr "Toujours"
+
+msgctxt "model:ir.message,text:msg_never"
+msgid "Never"
+msgstr "Jamais"
+
+msgctxt "model:ir.message,text:msg_no_fiscal_year"
+msgid "No fiscal year defined with the Export Moves option."
+msgstr "Pas d'année fiscale avec l'option Exporter les mouvements comptables."
+
+msgctxt "model:ir.message,text:msg_no_sequence_defined"
+msgid "No sequence defined in configuration."
+msgstr "Pas de séquence définie dans la configuration."
+
+msgctxt "model:ir.message,text:msg_snapshot_uniq_name"
+msgid "The name on shapshot must be unique."
+msgstr "Le nom de l'instantané doit être unique."
 
 msgctxt "model:ir.sequence,name:"
 msgid "Snapshot Sequence"

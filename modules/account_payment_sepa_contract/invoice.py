@@ -31,21 +31,6 @@ class Invoice(metaclass=PoolMeta):
         super(Invoice, cls).__setup__()
         cls._check_modify_exclude.append('sepa_mandate')
 
-    def update_invoice_before_post(self):
-        invoice = super(Invoice, self).update_invoice_before_post()
-        if not self.contract:
-            return invoice
-        contract_revision_date = max(self.invoice_date, utils.today())
-        with Transaction().set_context(
-                contract_revision_date=contract_revision_date):
-            if (self.contract.billing_information.direct_debit and
-                    self.contract.billing_information.sepa_mandate):
-                invoice['sepa_mandate'] = \
-                    self.contract.billing_information.sepa_mandate
-            else:
-                invoice['sepa_mandate'] = None
-            return invoice
-
     def get_bank_account(self, name):
         return (self.sepa_mandate.account_number.account.id
             if self.sepa_mandate else None)

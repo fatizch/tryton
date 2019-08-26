@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<tryton>
+    <data group="1">
+        <record model="ir.message" id="msg_same_set_for_all">
+            <field name="text">The selected contracts must belong to the same contract set.</field>
+        </record>
+        <record model="ir.message" id="msg_no_effective_date">
+            <field name="text">Effective date is not defined</field>
+        </record>
+    </data>
+</tryton>

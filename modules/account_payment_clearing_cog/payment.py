@@ -1,5 +1,6 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+from trytond.i18n import gettext
 from trytond.pool import PoolMeta, Pool
 from trytond.model import Workflow
 from trytond.pyson import Eval
@@ -41,9 +42,6 @@ class Payment(metaclass=PoolMeta):
         super(Payment, cls).__setup__()
         cls.line.states.update({'required': Eval('state', '') != 'draft'})
         cls.line.depends.append('state')
-        cls._error_messages.update({
-                'reject_of': 'Reject of %s',
-                })
 
     def create_clearing_move(self, date=None):
         if date is None:
@@ -110,8 +108,9 @@ class Payment(metaclass=PoolMeta):
 
     @classmethod
     def get_move_reject_description(cls, move_description):
-        return cls.raise_user_error('reject_of', (move_description,),
-            raise_exception=False)
+        return gettext(
+            'account_payment_clearing_cog.msg_reject_of',
+            description=move_description)
 
     @classmethod
     def get_payment_moves(cls, payments):

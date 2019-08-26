@@ -8,6 +8,8 @@ from sql.aggregate import Sum
 from sql.operators import Not, Concat
 
 from trytond import backend
+from trytond.i18n import gettext
+from trytond.model.exceptions import ValidationError
 from trytond.pool import Pool
 from trytond.transaction import Transaction
 
@@ -43,13 +45,6 @@ class InvoiceSlipConfiguration(model.CoogSQL, model.CoogView,
     def _export_light(cls):
         return super(InvoiceSlipConfiguration, cls)._export_light() | {
             'party', 'journal', 'accounts'}
-
-    @classmethod
-    def __setup__(cls):
-        super(InvoiceSlipConfiguration, cls).__setup__()
-        cls._error_messages.update({
-                'duplicate_slip': 'More than one draft slip with domain %s'
-                })
 
     @classmethod
     def __register__(cls, module):
@@ -177,7 +172,9 @@ class InvoiceSlipConfiguration(model.CoogSQL, model.CoogView,
             # return it. If there is more than one, there probably is a problem
             # somewhere
             if len(matches) > 1:
-                cls.raise_user_error('duplicate_slip', str(domain_))
+                raise ValidationError(gettext(
+                        'account_invoice_slip.msg_duplicate_slip',
+                        domain=domain_))
             return matches[0]
         return cls._get_new_slip(parameters)
 

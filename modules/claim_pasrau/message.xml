@@ -25,4 +25,39 @@ this repository contains the full copyright notices and license terms. -->
             <field name="action" ref="act_dsn_message"/>
         </record>
     </data>
+    <data group="1">
+        <record model="ir.message" id="msg_dsn_do_not_be_generated">
+            <field name="text">You can not generate the DSN message after the 10th month.</field>
+        </record>
+        <record model="ir.message" id="msg_existing_messages_not_done">
+            <field name="text">There are untreated DSN messages for this slip.</field>
+        </record>
+        <record model="ir.message" id="msg_invalid_file">
+            <field name="text">The file is not valid.</field>
+        </record>
+        <record model="ir.message" id="msg_no_party_found">
+            <field name="text">No party found for NIR %(ssn)s and matricule %(matricule)s.</field>
+        </record>
+        <record model="ir.message" id="msg_no_rate_found">
+            <field name="text">No pasrau rate found for NIR %(ssn)s.</field>
+        </record>
+        <record model="ir.message" id="msg_party_date_unique">
+            <field name="text">The rate must be unique per party / date.</field>
+        </record>
+        <record model="ir.message" id="msg_no_pasrau_region">
+            <field name="text">Unable to find PASRAU region for zip code %(zip)s.</field>
+        </record>
+        <record model="ir.message" id="msg_no_default_pasrau">
+            <field name="text">Could not compute a default pasrau value for parameters:
+
+Zip: %(zip)s
+Income: %(income)s
+Start: %(start)s
+End: %(end)s
+Invoice Date: %(invoice_date)s</field>
+        </record>
+        <record model="ir.message" id="msg_no_zip_for_pasrau">
+            <field name="text">A zip is required to compute the default pasrau rate.</field>
+        </record>
+    </data>
 </tryton>

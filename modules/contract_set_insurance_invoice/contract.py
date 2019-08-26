@@ -5,6 +5,8 @@ from collections import OrderedDict, defaultdict
 from itertools import groupby
 
 from trytond.pool import Pool, PoolMeta
+from trytond.i18n import gettext
+from trytond.model.exceptions import ValidationError
 from trytond.wizard import Wizard, StateAction
 from trytond.transaction import Transaction
 from trytond.server_context import ServerContext
@@ -53,18 +55,14 @@ class DisplayContractSetPremium(Wizard):
     start_state = 'display'
     display = StateAction('premium.act_premium_display')
 
-    @classmethod
-    def __setup__(cls):
-        super(DisplayContractSetPremium, cls).__setup__()
-        cls._error_messages.update({
-                'no_contract_set_found': 'No contract set found in context',
-                })
-
     def do_display(self, action):
         pool = Pool()
         ContractSet = pool.get('contract.set')
         if Transaction().context.get('active_model', '') != 'contract.set':
-            self.raise_user_error('no_contract_set_found')
+            raise ValidationError(
+                gettext(
+                    'contract_set_insurance_invoice'
+                    '.msg_no_contract_set_found'))
         contract_sets = ContractSet.browse(
             Transaction().context.get('active_ids'))
 

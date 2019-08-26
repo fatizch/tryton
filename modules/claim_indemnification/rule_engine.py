@@ -6,6 +6,8 @@ from decimal import Decimal
 
 from sql.aggregate import Count
 
+from trytond.i18n import gettext
+from trytond.model.exceptions import ValidationError
 from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
 from trytond.modules.rule_engine import check_args
@@ -40,14 +42,6 @@ class RuleEngine(metaclass=PoolMeta):
 
 class RuleEngineRuntime(metaclass=PoolMeta):
     __name__ = 'rule_engine.runtime'
-
-    @classmethod
-    def __setup__(cls):
-        super().__setup__()
-        cls._error_messages.update({
-                'wrong_parameters': 'Invalid configuration: the revaluation '
-                'rule is called with invalid parameters',
-                })
 
     @classmethod
     def _re_indemnification_period_start_date(cls, args):
@@ -205,7 +199,9 @@ class RuleEngineRuntime(metaclass=PoolMeta):
     def _re_revaluation_sub_periods(cls, args, dates, period_start_date,
             period_end_date):
         if period_start_date is None:
-            cls.append_functional_error('wrong_parameters')
+            cls.append_functional_error(
+                ValidationError(gettext(
+                        'claim_indemnification.msg_wrong_parameters')))
         return coog_date.calculate_periods_from_dates(dates, period_start_date,
             period_end_date)
 

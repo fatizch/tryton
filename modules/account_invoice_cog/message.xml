@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<tryton>
+    <data group="1">
+        <record model="ir.message" id="msg_bad_state">
+            <field name="text">The invoice must be posted.</field>
+        </record>
+        <record model="ir.message" id="msg_contract_invoice">
+            <field name="text">Contract Invoice</field>
+        </record>
+        <record model="ir.message" id="msg_bad_taxes_included_config">
+            <field name="text">A given invoice (%(invoice_name)s) must have a uniform tax management method across products.</field>
+        </record>
+    </data>
+</tryton>

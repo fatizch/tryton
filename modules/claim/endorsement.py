@@ -1,5 +1,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+from trytond.i18n import gettext
+from trytond.model.exceptions import ValidationError
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval
 
@@ -64,10 +66,6 @@ class ChangeContractClaimAccount(EndorsementWizardStepMixin):
                     'invisible': ~Eval('possible_contracts'),
                     'readonly': ~Eval('other_contracts'),
                     },
-                })
-        cls._error_messages.update({
-                'missing_new_account':
-                'Please enter the new bank account to use',
                 })
 
     @model.CoogView.button_change('calculated_bank_account',
@@ -138,7 +136,7 @@ class ChangeContractClaimAccount(EndorsementWizardStepMixin):
 
     def step_update(self):
         if not self.new_claim_account:
-            self.raise_user_error('missing_new_account')
+            raise ValidationError(gettext('claim.msg_missing_new_account'))
         ContractEndorsement = Pool().get('endorsement.contract')
         endorsement = self.wizard.endorsement
 

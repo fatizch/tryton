@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<tryton>
+    <data group="1">
+        <record model="ir.message" id="msg_code_uniq">
+            <field name="text">The code must be unique.</field>
+        </record>
+        <record model="ir.message" id="msg_missing_contract_extra_data">
+            <field name="text">The following contract extra data should be set on the product: %(product)s.</field>
+        </record>
+        <record model="ir.message" id="msg_invalid_value">
+            <field name="text">Invalid value for key %(key)s in field %(field)s of %(name)s.</field>
+        </record>
+        <record model="ir.message" id="msg_expected_value">
+            <field name="text">Expected key %(key)s to be set in field %(field)s of %(name)s.</field>
+        </record>
+        <record model="ir.message" id="msg_too_many_recursion_levels">
+            <field name="text">Too many recursion levels in sub data definition.</field>
+        </record>
+        <record model="ir.message" id="msg_missing_sub_data_def">
+            <field name="text">Data %(sub_data)s is missing from the configuration.</field>
+        </record>
+        <record model="ir.message" id="msg_multiple_parents_matches">
+            <field name="text">Data %(data)s has multiple parents with the current configuration.</field>
+        </record>
+        <record model="ir.message" id="msg_package_only_on_subscription">
+            <field name="text">Subscribe by package is only available on quote</field>
+        </record>
+    </data>
+</tryton>

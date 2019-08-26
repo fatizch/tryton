@@ -1,5 +1,6 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+from trytond.i18n import gettext
 from trytond.pool import Pool, PoolMeta
 from trytond.transaction import Transaction
 
@@ -59,25 +60,15 @@ class ContractGroupSubscribe(ContractSubscribe):
 class ImportProcessSelect(metaclass=PoolMeta):
     __name__ = 'import.process.select'
 
-    @classmethod
-    def __setup__(cls):
-        super(ImportProcessSelect, cls).__setup__()
-        cls._error_messages.update({
-                'group_process': 'Subscription Group Process (FR)',
-                'group_process_description': 'This process allows '
-                'managers to launch a group insurance subscription process',
-                })
-
     def available_processes(self):
         return super(ImportProcessSelect, self).available_processes() + [
             {
-                'name': self.raise_user_error(
-                    'group_process', raise_exception=False),
+                'name': gettext('contract_group_process.msg_group_process'),
                 'path':
                 'contract_group_process/json/process_life_group_subscription.'
                 'json',
-                'description': self.raise_user_error(
-                    'group_process_description', raise_exception=False),
+                'description': gettext(
+                    'contract_group_process.msg_group_process_description'),
                 'is_visible': utils.is_module_installed('claim_process'),
                 },
             ]

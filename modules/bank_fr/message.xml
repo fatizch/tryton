@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<tryton>
+    <data group="1">
+        <record model="ir.message" id="msg_wrong_branch_code">
+            <field name="text">The branch code %(code)s must contain 5 numeric chars.</field>
+        </record>
+        <record model="ir.message" id="msg_wrong_bank_code">
+            <field name="text">The bank code %(code)s must contain 5 numeric chars.</field>
+        </record>
+        <record model="ir.message" id="msg_iban_bank_mismatch">
+            <field name="text">The IBAN and bank do not match.</field>
+        </record>
+    </data>
+</tryton>

@@ -7,10 +7,12 @@ from sql import Null
 from sql.aggregate import Count
 from sql.operators import NotIn
 
+from trytond.i18n import gettext
 from trytond.pool import Pool, PoolMeta
 from trytond.transaction import Transaction
 from trytond.pyson import Eval
 from trytond.model import ModelView
+from trytond.model.exceptions import ValidationError
 
 from trytond.modules.coog_core import fields
 from trytond.modules.document_request.document import RemindableInterface
@@ -45,12 +47,6 @@ class Contract(RemindableInterface, metaclass=PoolMeta):
     @classmethod
     def __setup__(cls):
         super(Contract, cls).__setup__()
-        cls._error_messages.update({
-                'missing_required_document':
-                'Some required documents are missing.',
-                'non_conform_documents':
-                'Some required documents are not conform.',
-                })
         cls._buttons.update({
                 'generate_reminds_documents': {}
                 })
@@ -239,9 +235,13 @@ class Contract(RemindableInterface, metaclass=PoolMeta):
                 if line.blocking and line.attachment)):
             non_conform = True
         if missing:
-            self.raise_user_error('missing_required_document')
+            raise ValidationError(gettext(
+                    'contract_insurance_document_request'
+                    '.msg_missing_required_document'))
         if non_conform:
-            self.raise_user_error('non_conform_documents')
+            raise ValidationError(gettext(
+                    'contract_insurance_document_request'
+                    '.msg_non_conform_documents'))
 
     def before_activate(self):
         super(Contract, self).before_activate()

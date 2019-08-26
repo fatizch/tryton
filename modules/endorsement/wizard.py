@@ -4,8 +4,11 @@ import datetime
 from collections import defaultdict
 from dateutil.relativedelta import relativedelta
 
+from trytond.exceptions import UserWarning
+from trytond.i18n import gettext
 from trytond.pool import Pool
 from trytond.model import Model, fields as tryton_fields
+from trytond.model.exceptions import ValidationError, AccessError
 from trytond.transaction import Transaction
 from trytond.server_context import ServerContext
 from trytond.wizard import Wizard, StateView, StateTransition, Button
@@ -48,6 +51,14 @@ __all__ = [
     'EndorsementSelectDeclineReason',
     'EndorsementDecline',
     ]
+
+
+class ActiveContractRequired(ValidationError):
+    pass
+
+
+class EffectiveDateError(ValidationError):
+    pass
 
 
 def add_endorsement_step(wizard_class, step_class, step_name):
@@ -205,18 +216,24 @@ class EndorsementWizardStepMixin(model.CoogView):
                     [x.id for x in contracts])])
         if drafts:
             Endorsement.check_pending_task(drafts)
-        if (not error_manager or 'effective_date_before_start_date'
-                not in [x[0] for x in error_manager._errors]):
+        if (not error_manager
+                or not any(isinstance(x[0], EffectiveDateError)
+                    for x in error_manager._errors)):
             if (not cls.allow_effective_date_before_contract(select_screen) and
                     any([x.initial_start_date > select_screen.effective_date
                             for x in contracts if x.initial_start_date])):
                 Endorsement.append_functional_error(
-                    'effective_date_before_start_date')
-        if (not error_manager or 'active_contract_required'
-                not in [x[0] for x in error_manager._errors]):
+                    EffectiveDateError(gettext(
+                            'endorsement'
+                            '.msg_effective_date_before_start_date')))
+        if (not error_manager
+                or not any(isinstance(x[0], ActiveContractRequired)
+                    for x in error_manager._errors)):
             if (not cls.allow_inactive_contracts() and
                     any([x.status != 'active' for x in contracts])):
-                Endorsement.append_functional_error('active_contract_required')
+                Endorsement.append_functional_error(
+                    ActiveContractRequired(gettext(
+                            'endorsement.msg_active_contract_required')))
 
     @classmethod
     def must_skip_step(cls, data_dict):
@@ -1134,13 +1151,6 @@ class OptionDisplayer(model.CoogView):
                 [])], depends=['action'])
     icon = fields.Char('Icon')
 
-    @classmethod
-    def __setup__(cls):
-        super(OptionDisplayer, cls).__setup__()
-        cls._error_messages.update({
-                'new_option': 'New Option (%s)',
-                })
-
     def get_rec_name(self, name):
         return self.display_name
 
@@ -1240,8 +1250,9 @@ class OptionDisplayer(model.CoogView):
             displayer.cur_option_id = option.id
             displayer.display_name = option.rec_name
         else:
-            displayer.display_name = cls.raise_user_error('new_option', (
-                    option.coverage.rec_name,), raise_exception=False)
+            displayer.display_name = gettext(
+                'endorsement.msg_new_option',
+                option=option.coverage.rec_name)
         if getattr(option, 'versions', None) is None:
             option.versions = [Pool().get(
                     'contract.option.version').get_default_version()]
@@ -1305,21 +1316,6 @@ class TerminateContract(EndorsementWizardStepMixin):
         domain=[('status', '=', 'terminated')])
 
     @classmethod
-    def __setup__(cls):
-        super(TerminateContract, cls).__setup__()
-        cls._error_messages.update({
-                'termination_date_must_be_anterior': 'The termination date '
-                'must be anterior to the end date of the modified period: %s',
-                'termination_date_must_be_posterior': 'The termination date '
-                'must be posterior to the contract start date: %s',
-                'termination_before_active_start_date': 'You are trying to '
-                'terminate the contract before its active start date',
-                'termination_on_terminate_or_void_contract': 'You cannot '
-                'terminate the contracts %(contracts)s because they are '
-                'terminated or void.'
-                })
-
-    @classmethod
     def is_multi_instance(cls):
         return False
 
@@ -1341,6 +1337,8 @@ class TerminateContract(EndorsementWizardStepMixin):
 
     @classmethod
     def check_before_start(cls, select_screen):
+        pool = Pool()
+        Warning = pool.get('res.user.warning')
         super(TerminateContract, cls).check_before_start(select_screen)
         contracts = []
         endorsement = select_screen.endorsement
@@ -1356,15 +1354,15 @@ class TerminateContract(EndorsementWizardStepMixin):
         inactive_contracts = [x.contract_number for x in contracts
             if x.status in ['void', 'terminated']]
         if inactive_contracts:
-            cls.raise_user_error(
-                'termination_on_terminate_or_void_contract', {
-                        'contracts': ', '.join(inactive_contracts),
-                })
+            raise ValidationError(gettext(
+                    'endorsement.msg_termination_on_terminate_or_void_contract',
+                    contracts=', '.join(inactive_contracts)))
         if to_warn:
-            warning_id = ','.join(to_warn[0:10])
-            cls.raise_user_warning(
-                'termination_before_active_start_date_%s' % warning_id,
-                'termination_before_active_start_date')
+            warning_id = 'termination_before_active_start_date_'
+            warning_id += ','.join(to_warn[0:10])
+            if Warning.check(warning_id):
+                raise UserWarning(warning_id, gettext(
+                        'endorsement.msg_termination_before_active_start_date'))
 
     @classmethod
     def allow_effective_date_before_contract(cls, select_screen):
@@ -1406,13 +1404,14 @@ class TerminateContract(EndorsementWizardStepMixin):
         endorsement.values = {'end_date': self.termination_date}
 
         if self.termination_date < contract.initial_start_date:
-            self.raise_user_error('termination_date_must_be_posterior',
-                Date.date_as_string(contract.start_date, lang))
+            raise ValidationError(gettext(
+                    'endorsement.msg_termination_date_must_be_posterior',
+                    start_date=Date.date_as_string(contract.start_date, lang)))
 
         if self.termination_date > (last_period.end_date or datetime.date.max):
-            self.raise_user_error(
-                'termination_date_must_be_anterior',
-                Date.date_as_string(last_period.end_date, lang))
+            raise ValidationError(gettext(
+                    'endorsement.msg_termination_date_must_be_anterior',
+                    end_date=Date.date_as_string(last_period.end_date, lang)))
 
         to_update = next((x for x in contract.activation_history
                 if x.start_date <= self.termination_date and
@@ -1443,14 +1442,6 @@ class VoidContract(EndorsementWizardStepMixin):
     void_reason = fields.Many2One('contract.sub_status', 'Void Reason',
         required=True, domain=[('status', '=', 'void')])
     current_end_date = fields.Date('Current End Date', readonly=True)
-
-    @classmethod
-    def __setup__(cls):
-        super(VoidContract, cls).__setup__()
-        cls._error_messages.update({
-                'void_renewed_contract': 'You are trying to void a renewed '
-                'contract',
-                })
 
     @classmethod
     def is_multi_instance(cls):
@@ -1498,6 +1489,8 @@ class VoidContract(EndorsementWizardStepMixin):
 
     @classmethod
     def check_before_start(cls, select_screen):
+        pool = Pool()
+        Warning = pool.get('res.user.warning')
         super(VoidContract, cls).check_before_start(select_screen)
         contracts = []
         endorsement = select_screen.endorsement
@@ -1511,8 +1504,9 @@ class VoidContract(EndorsementWizardStepMixin):
             if select_screen.effective_date < contract.start_date:
                 to_warn.append(str(contract.id))
         if to_warn:
-            cls.raise_user_warning(
-                'void_renewed_contract', 'void_renewed_contract')
+            if Warning.check('void_renewed_contract'):
+                raise UserWarning(gettext(
+                        'endorsement.msg_void_renewed_contract'))
 
     @classmethod
     def allow_effective_date_before_contract(cls, select_screen):
@@ -2115,23 +2109,6 @@ class StartEndorsement(Wizard):
     change_start_date_next = StateTransition()
     change_start_date_suspend = StateTransition()
 
-    @classmethod
-    def __setup__(cls):
-        super(StartEndorsement, cls).__setup__()
-        cls._error_messages.update({
-                'cannot_resume_applied': 'It is not possible to resume an '
-                'already applied endorsement',
-                'erase_endorsement': 'Going on will erase all data on the '
-                'endorsement.',
-                'no_preview_defined': 'No preview state is defined on the '
-                'endorsement definition',
-                'creation_not_allowed': 'The rule %s defined on endorsement %s '
-                'does not allow you to create an endorsement '
-                'with these parameters.',
-                'apply_button_access_right': 'You are not allowed to apply '
-                'endorsements',
-                })
-
     @property
     def definition(self):
         if not self.select_endorsement:
@@ -2150,7 +2127,8 @@ class StartEndorsement(Wizard):
         endorsement = Pool().get('endorsement')(
             Transaction().context.get('active_id'))
         if endorsement.state == 'applied':
-            self.raise_user_error('cannot_resume_applied')
+            raise ValidationError(gettext(
+                    'endorsement.msg_cannot_resume_applied'))
         self.select_endorsement.endorsement = endorsement
         self.select_endorsement.applicant = endorsement.applicant
         if endorsement.contracts:
@@ -2163,9 +2141,13 @@ class StartEndorsement(Wizard):
         return 'start_endorsement'
 
     def default_select_endorsement(self, name):
+        pool = Pool()
+        Warning = pool.get('res.user.warning')
         if self.endorsement:
-            self.raise_user_warning(str(self.endorsement.id),
-                'erase_endorsement')
+            key = str(self.endorsement)
+            if Warning.check(key):
+                raise UserWarning(key, gettext(
+                        'endorsement.msg_erase_endorsement'))
             self.endorsement.delete([self.endorsement])
             self.select_endorsement.endorsement = None
         if self.select_endorsement._default_values:
@@ -2210,8 +2192,10 @@ class StartEndorsement(Wizard):
             raise_errors=True)
         manager = ServerContext().get('error_manager', None)
         if (res is not True and (not manager or not manager._errors)):
-            self.raise_user_error('creation_not_allowed',
-                (definition.start_rule[0].rule.name, definition.name))
+            raise ValidationError(gettext(
+                    'endorsement.msg_creation_not_allowed',
+                    rule=definition.start_rule[0].rule.name,
+                    endorsement=definition.name))
 
     def check_before_start(self):
         self.check_start_rule()
@@ -2239,7 +2223,8 @@ class StartEndorsement(Wizard):
 
     def transition_preview_changes(self):
         if not self.endorsement.definition.preview_state:
-            self.raise_user_error('no_preview_defined')
+            raise ValidationError(gettext(
+                    'endorsement.msg_no_preview_defined'))
         return self.endorsement.definition.preview_state
 
     def default_basic_preview(self, name):
@@ -2254,7 +2239,8 @@ class StartEndorsement(Wizard):
         # the button is called apply_synchronous instead of apply but is
         # called on both ways
         if not utils.check_button_access('endorsement', 'apply_synchronous'):
-            self.raise_user_error('apply_button_access_right')
+            raise AccessError(gettext(
+                    'endorsement.msg_apply_button_access_right'))
         Endorsement.apply([self.endorsement])
         # Look for possibly created endorsements
         next_endorsements = Endorsement.search([
@@ -2528,18 +2514,12 @@ class OpenContractAtApplicationDate(Wizard):
     start_state = 'open_'
     open_ = StateAction('endorsement.act_open_contract_at_date')
 
-    @classmethod
-    def __setup__(cls):
-        super(OpenContractAtApplicationDate, cls).__setup__()
-        cls._error_messages.update({
-                'endorsement_not_applied': 'Endorsement is not yet applied',
-                })
-
     def do_open_(self, action):
         Endorsement = Pool().get('endorsement')
         endorsement = Endorsement(Transaction().context.get('active_id'))
         if endorsement.state != 'applied':
-            self.raise_user_error('endorsement_not_applied')
+            raise ValidationError(gettext(
+                    'endorsement.msg_endorsement_not_applied'))
         action['pyson_context'] = PYSONEncoder().encode({
                 'contracts': [x.contract.id
                     for x in endorsement.contract_endorsements],

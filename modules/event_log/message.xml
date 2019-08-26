@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+        <record model="ir.message" id="msg_event_configuration_aggregate">
+            <field name="text">Use Event Aggregate Configuration</field>
+        </record>
+        <record model="ir.message" id="msg_log_aggregated">
+            <field name="text">Event Log aggregated</field>
+        </record>
+    </data>
+</tryton>

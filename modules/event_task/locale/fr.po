@@ -2,10 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:event.type.action:"
-msgid "Process Task"
-msgstr "Traitement de tâche en file d'attente"
-
 msgctxt "field:event.type.action,task_queues:"
 msgid "Task Queues"
 msgstr "Files d'attentes"
@@ -87,7 +83,7 @@ msgid "Definition"
 msgstr "Définition"
 
 msgctxt "field:task.queue.definition.parameter,genshi_evaluated_value:"
-msgid "Value Genshi Evaluated"
+msgid "Value"
 msgstr "Valeur evaluée en genshi"
 
 msgctxt "field:task.queue.definition.parameter,id:"
@@ -119,6 +115,10 @@ msgid "Genshi syntax is supported. Records are available as 'records'"
 msgstr ""
 "la syntax genshi est supportée. Les enregistrements sont disponibles via "
 "'records'"
+
+msgctxt "model:ir.message,text:msg_process_task"
+msgid "Process Task"
+msgstr "Traitement de tâche en file d'attente"
 
 msgctxt "model:task.queue.definition,name:"
 msgid "Task Queue Definition"

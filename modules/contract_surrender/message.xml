@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<tryton>
+    <data group="1">
+        <record model="ir.message" id="msg_invalid_date">
+            <field name="text">Impossible to surrender before the contract's start_date (%(start_date)s).</field>
+        </record>
+        <record model="ir.message" id="msg_no_selected_contract">
+            <field name="text">No selected contract.</field>
+        </record>
+        <record model="ir.message" id="msg_will_surrender">
+            <field name="text">Confirm contracts surrender.</field>
+        </record>
+        <record model="ir.message" id="msg_cannot_surrender">
+            <field name="text">Contract %(contract)s cannot be surrendered.</field>
+        </record>
+        <record model="ir.message" id="msg_no_surrenderable_options">
+            <field name="text">No options were found that can be surrendered for contract %(contract)s.</field>
+        </record>
+        <record model="ir.message" id="msg_surrender_invoice_description">
+            <field name="text">Surrender of %(contract)s.</field>
+        </record>
+        <record model="ir.message" id="msg_auto_surrendering">
+            <field name="text">Contracts will automatically be surrendered.</field>
+        </record>
+        <record model="ir.message" id="msg_plan_surrender">
+            <field name="text">Contracts surrender will be planned.</field>
+        </record>
+        <record model="ir.message" id="msg_will_cancel_surrender">
+            <field name="text">Contracts surrender will be cancelled.</field>
+        </record>
+        <record model="ir.message" id="msg_contract_not_surrendered">
+            <field name="text">Contract %(contract)s is not surrendered. Therefore, it cannot be reactivated.</field>
+        </record>
+        <record model="ir.message" id="msg_surrender_line_description">
+            <field name="text">Surrender of %(option)s</field>
+        </record>
+    </data>
+</tryton>

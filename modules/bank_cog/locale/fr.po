@@ -2,22 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:bank.account-party.party:"
-msgid "Bank account \"%(bank_account)s\" is used on \"%(object)s\""
-msgstr "Le compte bancaire \"%(bank_account)s\" est utilisé par \"%(object)s\""
-
-msgctxt "error:bank.account.number:"
-msgid "The number must be unique!"
-msgstr "Le numéro de compte doit être unique"
-
-msgctxt "error:bank:"
-msgid "Invalid BIC : %s"
-msgstr "BIC invalide : %s"
-
-msgctxt "error:bank:"
-msgid "The bic must be unique!"
-msgstr "Le BIC doit être unique!"
-
 msgctxt "field:bank,address:"
 msgid "Address"
 msgstr "Adresse"
@@ -169,6 +153,18 @@ msgstr "Banques"
 msgctxt "model:ir.action,name:bank_cog_data_set_wizard"
 msgid "Set Bank Data"
 msgstr "Mise à jour des banques"
+
+msgctxt "model:ir.message,text:msg_bank_account_used"
+msgid "Bank account \"%(bank_account)s\" is used on \"%(object)s\"."
+msgstr "Le compte bancaire \"%(bank_account)s\" est utilisé par \"%(object)s\"."
+
+msgctxt "model:ir.message,text:msg_bic_uniq"
+msgid "The bic must be unique."
+msgstr "Le BIC doit être unique!"
+
+msgctxt "model:ir.message,text:msg_invalid_bic"
+msgid "Invalid BIC: %(bic)s."
+msgstr "BIC invalide : %(bic)s"
 
 msgctxt "model:ir.test_case.instance,name:bank_account_test_case"
 msgid "Bank Account Test Case"

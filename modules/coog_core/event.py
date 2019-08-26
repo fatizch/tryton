@@ -1,8 +1,10 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+from trytond.i18n import gettext
 from trytond.pyson import Eval
 from trytond.pool import Pool
 from trytond.model import Model, Unique
+from trytond.model.exceptions import ValidationError
 from trytond.rpc import RPC
 from trytond.cache import Cache
 
@@ -30,11 +32,6 @@ class Event(Model):
     def __setup__(cls):
         super(Event, cls).__setup__()
         cls.__rpc__.update({'ws_notify_events': RPC(readonly=False)})
-        cls._error_messages.update({
-                'missing_information': 'Some informations %s are missing to '
-                'notify an event: %s',
-                'error_object_found': 'Found no object or more than one object'
-                ' with following information %s'})
 
     @classmethod
     @model.with_pre_commit_keyword_argument()
@@ -94,8 +91,11 @@ class Event(Model):
                 ['event_code', 'object_', 'date', 'description']
                 if x not in event]
             if missing:
-                cls.raise_user_error('missing_information', (missing,
-                    str(event)))
+                raise ValidationError(gettext(
+                        'coog_core.msg_missing_information',
+                        missing=', '.join(missing),
+                        event=event,
+                        ))
             Object = pool.get(event['object_']['__name__'])
             found_objects = Object.search_for_export_import(event['object_'])
             if len(found_objects) == 1:
@@ -103,8 +103,9 @@ class Event(Model):
                     event['description'], date=event['date'],
                     external_event=True)
             else:
-                cls.raise_user_error('error_object_found',
-                    str(event['object_']))
+                raise ValidationError(gettext(
+                        'coog_core.msg_error_object_found',
+                        object_=event['object_']))
         return {'return': True,
             'messages': 'All events treated'
             }

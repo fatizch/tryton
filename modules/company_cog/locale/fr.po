@@ -2,10 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:company.company:"
-msgid "The language must be configured on company %(party)s before going on"
-msgstr "La langue doit d'abord être configurée sur la société %(party)s"
-
 msgctxt "field:company.company,func_key:"
 msgid "Functional Key"
 msgstr "Clé fonctionnelle"
@@ -21,6 +17,10 @@ msgstr "Identifiant XML"
 msgctxt "field:ir.test_case,main_company_name:"
 msgid "Main Company Name"
 msgstr "Nom de la société principale"
+
+msgctxt "model:ir.message,text:msg_missing_lang"
+msgid "The language must be configured on company %(party)s before going on."
+msgstr "La langue doit d'abord être configurée sur la société %(party)s."
 
 msgctxt "model:ir.test_case.instance,name:main_company_test_case"
 msgid "Main Company Test Case"

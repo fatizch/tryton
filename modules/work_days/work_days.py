@@ -5,10 +5,12 @@ from dateutil import rrule
 from dateutil.easter import easter
 
 from trytond import backend
-from trytond.pyson import Eval
-
+from trytond.exceptions import UserError
+from trytond.i18n import gettext
 from trytond.model import ModelView, ModelSQL, fields, Model
+from trytond.model.exceptions import ValidationError
 from trytond.pool import Pool
+from trytond.pyson import Eval
 
 
 __all__ = [
@@ -33,13 +35,6 @@ class Configuration(ModelSQL, ModelView):
         'getter_void', setter='setter_void')
     shifted_day = fields.Function(fields.Date('Shifted Day'),
         'on_change_with_shifted_day')
-
-    @classmethod
-    def __setup__(cls):
-        super(Configuration, cls).__setup__()
-        cls._error_messages.update({
-                'duplicate_holiday': 'Some holidays have duplicates',
-                })
 
     @classmethod
     def validate(cls, configurations):
@@ -98,7 +93,8 @@ class Configuration(ModelSQL, ModelView):
             if (cls.is_duplicate_fixed(fixed_holidays)
                     or cls.is_duplicate_easter_holiday(easter_holidays)
                     or cls.is_duplicate_weekly(weekly_holidays)):
-                configuration.raise_user_error('duplicate_holiday')
+                raise ValidationError(gettext(
+                        'work_days.msg_duplicate_holiday'))
 
     def get_weekly_days_off(self):
         return [x.weekly_day for x in self.holidays
@@ -215,13 +211,6 @@ class Holiday(ModelSQL, ModelView):
             holiday_h.drop_column('holiday_date')
 
     @classmethod
-    def __setup__(cls):
-        super(Holiday, cls).__setup__()
-        cls._error_messages.update({
-                'invalid_day_month': 'Invalid month/day combination',
-                })
-
-    @classmethod
     def validate(cls, holidays):
         super(Holiday, cls).validate(holidays)
         cls.check_day(holidays)
@@ -233,7 +222,8 @@ class Holiday(ModelSQL, ModelView):
                 try:
                     datetime.date(1904, int(holiday.month), holiday.day)
                 except ValueError:
-                    holiday.raise_user_error('invalid_day_month')
+                    raise ValidationError(
+                        gettext('work_days.msg_invalid_day_month'))
 
     def on_change_holiday_type(self, name=None):
         self.day, self.month, self.easter_delta_days = None, None, None
@@ -261,20 +251,13 @@ class BatchParamsConfig(Model):
     __name__ = 'batch.params_config'
 
     @classmethod
-    def __setup__(cls):
-        super(BatchParamsConfig, cls).__setup__()
-        cls._error_messages.update({
-                'no_conf': 'No configuration given',
-                })
-
-    @classmethod
     def get_computed_params(cls, params):
         c_params = super(BatchParamsConfig, cls).get_computed_params(params)
         if not c_params.get('working_days') or c_params.get('treatment_date'):
             return c_params
         conf_code = c_params.get('conf_code', None)
         if conf_code is None:
-            cls.raise_user_error('no_conf')
+            raise UserError(gettext('working_days.msg_no_conf'))
         open_days = c_params.get('working_days', None)
         conn_date = c_params.get('connection_date', None)
         if type(conn_date) == str:

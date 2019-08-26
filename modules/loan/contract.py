@@ -9,6 +9,9 @@ from sql import Literal
 from sql.conditionals import Coalesce
 
 from trytond import backend
+from trytond.exceptions import UserWarning
+from trytond.i18n import gettext
+from trytond.model.exceptions import ValidationError
 from trytond.transaction import Transaction
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, Bool, If, Len, Not, In
@@ -83,16 +86,6 @@ class Contract(metaclass=PoolMeta):
                 'subscriber_loans': Eval('loans', [])})
         cls.options.depends.append('is_loan')
         cls.options.depends.append('loans')
-        cls._error_messages.update({
-                'no_loan_on_contract': 'There must be at least one loan',
-                'no_loan_on_option': 'At least one loan must be '
-                'selected for %s',
-                'loan_not_calculated': 'Loan %s must be calculated before'
-                ' proceeding',
-                'no_option_for_loan': 'Loan %s does not have an option',
-                'bad_loan_dates': 'Loans fund release dates should be synced '
-                'with the contract start date :\n\n\t%s',
-                })
 
     @classmethod
     def write(cls, contracts, values, *args):
@@ -166,34 +159,46 @@ class Contract(metaclass=PoolMeta):
 
     def check_contract_loans(self):
         if not self.loans:
-            self.append_functional_error('no_loan_on_contract')
+            self.append_functional_error(
+                ValidationError(gettext('loan.msg_no_loan_on_contract')))
         for loan in self.loans:
             if not loan.state == 'calculated':
-                self.append_functional_error('loan_not_calculated', (
-                        loan.rec_name))
+                self.append_functional_error(
+                    ValidationError(gettext(
+                            'loan.msg_loan_not_calculated',
+                            loan=loan.rec_name)))
 
     def check_no_option_without_loan(self):
         for covered in self.covered_elements:
             for option in covered.options:
                 if option.coverage.is_loan and not \
                         option.check_at_least_one_loan():
-                    self.append_functional_error('no_loan_on_option',
-                        (option.get_rec_name('')))
+                    self.append_functional_error(
+                        ValidationError(gettext(
+                                'loan.msg_no_loan_on_option',
+                                option=option.get_rec_name(''))))
 
     def check_no_loan_without_option(self):
         orphans = set(self.loans) - set(self.used_loans)
         if not orphans:
             return
         for orphan in orphans:
-            self.append_functional_error('no_option_for_loan',
-                (orphan.rec_name,))
+            self.append_functional_error(
+                ValidationError(gettext(
+                        'loan.msg_no_option_for_loan',
+                        loan=orphan.rec_name)))
 
     def check_loan_dates(self):
+        pool = Pool()
+        Warning = pool.get('res.user.warning')
         bad_loans = [x for x in self.loans
             if x.funds_release_date != self.initial_start_date]
         if bad_loans:
-            self.raise_user_warning(self.rec_name, 'bad_loan_dates',
-                ('\t\n'.join(x.rec_name for x in bad_loans),))
+            key = self.rec_name
+            if Warning.check(key):
+                raise UserWarning(key, gettext(
+                        'loan.msg_bad_loan_dates',
+                        loans='\t\n'.join(x.rec_name for x in bad_loans)))
 
     def get_summary_content(self, label, at_date=None, lang=None):
         res = super(Contract, self).get_summary_content(label, at_date, lang)
@@ -274,18 +279,12 @@ class ContractOption(metaclass=PoolMeta):
         depends=['coverage_family', 'contract_status'], readonly=True,
         delete_missing=True)
     latest_loan_shares = fields.Function(
-        fields.One2Many('loan.share', 'option', 'Loan Shares', states={
-            'invisible': Eval('coverage_family', '') != 'loan',
-            }, depends=['coverage_family']),
-        'get_latest_loan_shares')
+        fields.One2Many('loan.share', 'option', 'Loan Shares', readonly=True,
+            states={
+                'invisible': Eval('coverage_family', '') != 'loan',
+                }, depends=['coverage_family']),
+        'get_latest_loan_shares', setter='set_latest_loan_shares')
     multi_mixed_view = latest_loan_shares
-
-    @classmethod
-    def __setup__(cls):
-        super(ContractOption, cls).__setup__()
-        cls._error_messages.update({'loan_not_eligible':
-                'Loan %s is not eligible',
-                })
 
     @classmethod
     def _export_skips(cls):
@@ -312,6 +311,10 @@ class ContractOption(metaclass=PoolMeta):
                 continue
             shares.append(cur_shares[-1])
         return [x.id for x in self._sort_latest_loan_shares(shares)]
+
+    @classmethod
+    def set_latest_loan_shares(cls, options, name, value):
+        pass
 
     def _sort_latest_loan_shares(self, shares):
         return sorted(shares, key=lambda x: x.loan.number)
@@ -419,8 +422,9 @@ class ContractOption(metaclass=PoolMeta):
         for loan_share in self.loan_shares:
             loan_share.init_dict_for_rule_engine(exec_context)
             if not self.coverage.check_eligibility(exec_context):
-                self.append_functional_error('loan_not_eligible',
-                    (loan_share.rec_name))
+                self.append_functional_error(
+                    ValidationError(gettext('loan.msg_loan_not_eligible',
+                        loan_share=loan_share.rec_name)))
 
     def check_eligibility(self):
         super(ContractOption, self).check_eligibility()
@@ -441,14 +445,6 @@ class ExtraPremium(metaclass=PoolMeta):
     is_loan = fields.Function(
         fields.Boolean('Is Loan'),
         'on_change_with_is_loan')
-
-    @classmethod
-    def __setup__(cls):
-        super(ExtraPremium, cls).__setup__()
-        cls._error_messages.update({
-                'initial_capital_per_mil_label': 'Initial Capital Per Mil',
-                'remaining_capital_per_mil_label': 'Remaining Capital Per Mil',
-                })
 
     @classmethod
     def __register__(cls, module_name):
@@ -480,12 +476,12 @@ class ExtraPremium(metaclass=PoolMeta):
     def get_possible_extra_premiums_kind(self):
         result = super(ExtraPremium, self).get_possible_extra_premiums_kind()
         if self.is_loan:
-            result.append(('initial_capital_per_mil',
-                    self.raise_user_error('initial_capital_per_mil_label',
-                        raise_exception=False)))
-            result.append(('remaining_capital_per_mil',
-                    self.raise_user_error('remaining_capital_per_mil_label',
-                        raise_exception=False)))
+            result.append(
+                ('initial_capital_per_mil', gettext(
+                        'loan.msg_initial_capital_per_mil_label')))
+            result.append(
+                ('remaining_capital_per_mil', gettext(
+                        'loan.msg_remaining_capital_per_mil_label')))
         return result
 
     def calculate_premium_amount(self, args, base):

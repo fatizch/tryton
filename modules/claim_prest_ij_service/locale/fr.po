@@ -2,108 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:claim.ij.period.treat:"
-msgid "All periods are already treated, nothing to do"
-msgstr "Toutes les périodes sont traitées, plus rien à faire"
-
-msgctxt "error:claim.ij.period.treat:"
-msgid "Cannot treat periods for different services"
-msgstr ""
-"Il n'est pas possible de traiter simultanément des BPIJs portant sur des "
-"prestations différentes"
-
-msgctxt "error:claim.ij.period.treat:"
-msgid "Could not find a matching claim, one may have to be created"
-msgstr ""
-"Impossible de retrouver un sinistre, veuillez le déclarer avant de continuer"
-
-msgctxt "error:claim.ij.period.treat:"
-msgid "Daily amount is changing, going from %(prev)s to %(new)s"
-msgstr "Le montant journalier évolue, il passe de %(prev)s à %(new)s"
-
-msgctxt "error:claim.ij.period.treat:"
-msgid "Multiple types found when trying to treat: %(type1)s and %(type2)s"
-msgstr "Plusieurs types différents détectés : %(type1)s et %(type2)s"
-
-msgctxt "error:claim.ij.period.treat:"
-msgid "No indemnification found between %(last_end)s  and %(new_start)s"
-msgstr "Aucune indemnisation trouvée entre %(last_end)s et %(new_start)s"
-
-msgctxt "error:claim.ij.period.treat:"
-msgid "Selected periods have different daily amounts"
-msgstr "Les périodes sélectionnées ont des montants journaliers différents"
-
-msgctxt "error:claim.ij.period:"
-msgid ""
-"More than one IJ subscription found for SIREN %(siren)s and SSN %(ssn)s"
-msgstr ""
-"Plusieurs inscriptions Prest'IJ ont été trouvées pour le SIREN %(siren)s et "
-"le numéro de sécurité sociale %(ssn)s"
-
-msgctxt "error:claim.ij.period:"
-msgid "No IJ subscription found for SIREN %(siren)s and SSN %(ssn)s"
-msgstr ""
-"Aucune inscription Prest'IJ n'a été trouvée pour le SIREN %(siren)s et le "
-"numéro de sécurité sociale %(ssn)s"
-
-msgctxt "error:claim.ij.subscription:"
-msgid "%(number)s periods must be treated before going on"
-msgstr "Il reste %(number)s périodes à traiter avant de continuer"
-
-msgctxt "error:claim.ij.subscription:"
-msgid "Enter a value for field '%s' of '%s'"
-msgstr "Entrez une valeur pour le champ '%s' de '%s'"
-
-msgctxt "error:claim.ij.subscription:"
-msgid "Enter a value for field(s): %s"
-msgstr "Entrez une valeur pour le(s) champs(s) : %s"
-
-msgctxt "error:claim.ij.subscription:"
-msgid "Everything is good !"
-msgstr "Tout est bon!"
-
-msgctxt "error:claim.ij.subscription:"
-msgid "Select a date that is not in the future for field(s): %s"
-msgstr "Sélectionnez une date non à venir pour le(s) champ(s) : %s"
-
-msgctxt "error:claim.ij.subscription:"
-msgid "There must be only one IJ subscription per siren / ssn"
-msgstr "Il ne doit y avoir qu'une seule inscription Prest'IJ par siren / ssn"
-
-msgctxt "error:claim.ij.subscription_request.group:"
-msgid "The identification must be unique"
-msgstr "L'identification doit être unique"
-
-msgctxt "error:claim.ij.subscription_request:"
-msgid "The period identification must be unique"
-msgstr "L'iddentification de la période doit être unique"
-
-msgctxt "error:covered_person.subscription.create_request:"
-msgid ""
-"The chosen date is anterior to the end of the last short term disability "
-"which is: [%s]"
-msgstr ""
-"La date choisie est antérieure à la dernière date de fin d'arrêt de travail:"
-" [%s]"
-
-msgctxt "error:covered_person.subscription.create_request:"
-msgid "There are no IJ Subscription confirmed for this person's companies"
-msgstr ""
-"Il n'y a aucune inscription PREST IJ confirmée pour les entreprises de cette"
-" personne"
-
-msgctxt "error:covered_person.subscription.create_request:"
-msgid "There is already a manual period"
-msgstr "Il y a déjà une période manuelle"
-
-msgctxt "error:covered_person.subscription.create_request:"
-msgid "This person is not covered at this date"
-msgstr "Cette personne n'est pas couverte à cette date"
-
-msgctxt "error:party_subscription.find:"
-msgid "The selection does not have related subscription. %(selection)s"
-msgstr "La selection n'a pas de fiche de souscription liée. %(selection)s"
-
 msgctxt "field:benefit,prest_ij:"
 msgid "Handle Prest IJ System"
 msgstr "Gestion du système Prest'IJ"
@@ -946,6 +844,85 @@ msgstr "Relancer une inscription Prest'IJ"
 msgctxt "model:ir.action,name:act_start_period_treatment"
 msgid "Treat Prest IJ Periods"
 msgstr "Traiter les BPIJs"
+
+msgctxt "model:ir.message,text:msg_already_manual"
+msgid "There is already a manual period."
+msgstr "Il y a déjà une période manuelle."
+
+msgctxt "model:ir.message,text:msg_changing_daily_amount"
+msgid "Daily amount is changing, going from %(prev)s to %(new)s."
+msgstr "Le montant journalier évolue, il passe de %(prev)s à %(new)s."
+
+msgctxt "model:ir.message,text:msg_date_anterior_to_max_loss_end"
+msgid ""
+"The chosen date is anterior to the end of the last short term disability "
+"which is: [%(date)s]."
+msgstr ""
+"La date choisie est antérieure à la dernière date de fin d'arrêt de travail:"
+" [%(date)s]"
+
+msgctxt "model:ir.message,text:msg_inconsistent_daily_amount"
+msgid "Selected periods have different daily amounts."
+msgstr "Les périodes sélectionnées ont des montants journaliers différents."
+
+msgctxt "model:ir.message,text:msg_many_subscriptions"
+msgid ""
+"More than one IJ subscription found for SIREN %(siren)s and SSN %(ssn)s."
+msgstr ""
+"Plusieurs inscriptions Prest'IJ ont été trouvées pour le SIREN %(siren)s et "
+"le numéro de sécurité sociale %(ssn)s."
+
+msgctxt "model:ir.message,text:msg_no_claim_found"
+msgid "Could not find a matching claim, one may have to be created."
+msgstr ""
+"Impossible de retrouver un sinistre, veuillez le déclarer avant de "
+"continuer."
+
+msgctxt "model:ir.message,text:msg_no_company_confirmed"
+msgid "There are no IJ Subscription confirmed for this person'scompanies."
+msgstr ""
+"Il n'y a aucune inscription PREST IJ confirmée pour les entreprises de cette"
+" personne"
+
+msgctxt "model:ir.message,text:msg_no_prest_ij_subscription"
+msgid "The selection does not have related subscription. %(selection)s."
+msgstr "La selection n'a pas de fiche de souscription liée. %(selection)s."
+
+msgctxt "model:ir.message,text:msg_no_service_mixin"
+msgid "Cannot treat periods for different services."
+msgstr ""
+"Il n'est pas possible de traiter simultanément des BPIJs portant sur des "
+"prestations différentes."
+
+msgctxt "model:ir.message,text:msg_no_subscription_found"
+msgid "No IJ subscription found for SIREN %(siren)s and SSN %(ssn)s."
+msgstr ""
+"Aucune inscription Prest'IJ n'a été trouvée pour le SIREN %(siren)s et le "
+"numéro de sécurité sociale %(ssn)s."
+
+msgctxt "model:ir.message,text:msg_non_matching_types"
+msgid "Multiple types found when trying to treat: %(type1)s and %(type2)s."
+msgstr "Plusieurs types différents détectés : %(type1)s et %(type2)s."
+
+msgctxt "model:ir.message,text:msg_not_covered"
+msgid "This person is not covered at this date."
+msgstr "Cette personne n'est pas couverte à cette date."
+
+msgctxt "model:ir.message,text:msg_nothing_to_do"
+msgid "All periods are already treated, nothing to do."
+msgstr "Toutes les périodes sont traitées, plus rien à faire."
+
+msgctxt "model:ir.message,text:msg_period_hole"
+msgid "No indemnification found between %(last_end)s and %(new_start)s."
+msgstr "Aucune indemnisation trouvée entre %(last_end)s et %(new_start)s"
+
+msgctxt "model:ir.message,text:msg_periods_must_be_treated"
+msgid "%(number)s periods must be treated before going on."
+msgstr "Il reste %(number)s périodes à traiter avant de continuer."
+
+msgctxt "model:ir.message,text:msg_unique_subscription"
+msgid "There must be only one IJ subscription per SIREN / SSN."
+msgstr "Il ne doit y avoir qu'une seule inscription Prest'IJ par siren / ssn"
 
 msgctxt "model:ir.ui.menu,name:menu_erroneous_requests_prest_ij"
 msgid "Erroneous Requests"

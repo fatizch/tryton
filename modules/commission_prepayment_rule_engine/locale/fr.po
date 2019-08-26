@@ -2,26 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:commission.plan.line:"
-msgid "Linear"
-msgstr "Linéaire"
-
-msgctxt "error:commission.plan.line:"
-msgid "Prepayment"
-msgstr "Précompte"
-
-msgctxt "error:commission.plan.prepayment.payment_rule:"
-msgid "The code must be unique!"
-msgstr "Le code doit être unique !"
-
-msgctxt "error:commission.plan:"
-msgid ""
-"Prepayment payment rule result %s is not matching the expected format "
-"[(date, percentage)]"
-msgstr ""
-"Le résultat de la règle d'échéancier de versement du précompte ne correspond"
-" pas au format attendu [(date, pourcentage)]"
-
 msgctxt "field:commission.plan,prepayment_payment_rule:"
 msgid "Payment Date Rule for Prepayment"
 msgstr "Règle de calcul de la date de paiement du précompte"
@@ -98,6 +78,26 @@ msgstr "Règle de calcul de la date de paiement du précompte"
 msgctxt "model:ir.action,name:act_prepayment_payment_rule_form"
 msgid "Prepayment Payment Date Rules"
 msgstr "Règles de calcul de la date de paiement du précompte"
+
+msgctxt "model:ir.message,text:msg_code_unique"
+msgid "The code must be unique."
+msgstr "Le code doit être unique !"
+
+msgctxt "model:ir.message,text:msg_invalid_rule_result"
+msgid ""
+"Prepayment payment rule result %(schedule)s is not matching the expected "
+"format [(date, percentage)]."
+msgstr ""
+"Le résultat %(schedule)s de la règle d'échéancier de versement du précompte "
+"ne correspond pas au format attendu [(date, pourcentage)]"
+
+msgctxt "model:ir.message,text:msg_linear"
+msgid "Linear: %(line)s"
+msgstr "Linéaire: %(line)s"
+
+msgctxt "model:ir.message,text:msg_prepayment"
+msgid "Prepayment: %(rule)s"
+msgstr "Précompte: %(rule)s"
 
 msgctxt "model:ir.ui.menu,name:menu_prepayment_payment_rule_form"
 msgid "Prepayment Payment Date Rules"

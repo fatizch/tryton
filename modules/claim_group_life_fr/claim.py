@@ -2,6 +2,8 @@
 # this repository contains the full copyright notices and license terms.
 import datetime
 
+from trytond.i18n import gettext
+from trytond.model.exceptions import ValidationError
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, Equal, Not
 
@@ -25,13 +27,6 @@ class Loss(metaclass=PoolMeta):
             }, depends=['loss_desc_kind'])
 
     @classmethod
-    def __setup__(cls):
-        super(Loss, cls).__setup__()
-        cls._error_messages.update({
-                'period_overlap': 'There are overlapping periods',
-                })
-
-    @classmethod
     def validate(cls, losses_desc):
         super(Loss, cls).validate(losses_desc)
 
@@ -53,7 +48,8 @@ class Loss(metaclass=PoolMeta):
                             periods[idx + 1][1]) or is_date_between_or_after(
                                 period[1], periods[idx + 1][0],
                                 periods[idx + 1][1]):
-                        cls.raise_user_error('period_overlap')
+                        raise ValidationError(gettext(
+                                'claim_group_life_fr.msg_period_overlap'))
 
 
 class IndemnificationDetail(metaclass=PoolMeta):
@@ -93,13 +89,6 @@ class HospitalisationPeriod(model.CoogSQL, model.CoogView):
         required=True, select=True)
 
     @classmethod
-    def __setup__(cls):
-        super(HospitalisationPeriod, cls).__setup__()
-        cls._error_messages.update({
-                'invalid_period': 'The period is invalid',
-                })
-
-    @classmethod
     def validate(cls, periods):
         super(HospitalisationPeriod, cls).validate(periods)
         for period in periods:
@@ -108,4 +97,5 @@ class HospitalisationPeriod(model.CoogSQL, model.CoogView):
                         period.loss.start_date) or \
                     (period.end_date and period.loss.end_date and
                         period.end_date > period.loss.end_date):
-                cls.raise_user_error('invalid_period')
+                raise ValidationError(gettext(
+                        'claim_group_life_fr.msg_invalid_period'))

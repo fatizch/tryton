@@ -88,7 +88,6 @@ bank_clearing.name = 'Bank Clearing'
 bank_clearing.type = accounts['payable'].type
 bank_clearing.reconcile = True
 bank_clearing.deferral = True
-bank_clearing.kind = 'other'
 bank_clearing.save()
 
 
@@ -228,8 +227,8 @@ create_payment.form.free_motive = True
 create_payment.form.payment_date = until_date
 create_payment.form.journal = journal
 MoveLine = Model.get('account.move.line')
-for line in [x for x in invoice.invoice.move.lines if x.account.kind ==
-        'receivable']:
+for line in [x for x in invoice.invoice.move.lines
+        if x.account.type.receivable]:
     create_payment.form.lines_to_pay.append(MoveLine(line.id))
 create_payment.form.description = "test"
 
@@ -261,8 +260,8 @@ create_payment.form.free_motive = True
 create_payment.form.description = "test"
 create_payment.form.journal = journal
 MoveLine = Model.get('account.move.line')
-for line in [x for x in invoice.invoice.move.lines if x.account.kind ==
-        'receivable']:
+for line in [x for x in invoice.invoice.move.lines
+        if x.account.type.receivable]:
     create_payment.form.lines_to_pay.append(MoveLine(line.id))
 
 create_payment.form.description = "test"

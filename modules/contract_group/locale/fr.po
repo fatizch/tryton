@@ -2,42 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:contract.transfer_covered_elements.contracts:"
-msgid "%s (%i covered elements)"
-msgstr "%s (%i sous-éléments)"
-
-msgctxt "error:contract.transfer_covered_elements:"
-msgid ""
-"There is a non covered period, source contract ends on the %(source_end)s "
-"when target starts on %(target_start)s."
-msgstr ""
-"Il y a une période non couverte, le contrat d'origine se termine le "
-"%(source_end)s alors que le nouveau commence le %(target_start)s."
-
-msgctxt "error:party.hierarchy.contract.terminated:"
-msgid "Terminated Contracts"
-msgstr "Contrats résiliés"
-
-msgctxt "error:party.hierarchy.contract:"
-msgid "Contracts"
-msgstr "Contrats"
-
-msgctxt "error:party.hierarchy.contracts.terminated_covered:"
-msgid "Terminated Covereds"
-msgstr "Filiales résiliées"
-
-msgctxt "error:party.hierarchy.subsidiary.terminated:"
-msgid "Terminated"
-msgstr "Résiliés"
-
-msgctxt "error:party.hierarchy.subsidiary:"
-msgid "Subsidiaries"
-msgstr "Filiales"
-
-msgctxt "error:party.hierarchy.terminated_covered:"
-msgid "Terminated Covereds"
-msgstr "Filiales résiliées"
-
 msgctxt "field:contract,is_group:"
 msgid "Group Contract"
 msgstr "Contrat Collectif"
@@ -1281,6 +1245,18 @@ msgctxt ""
 "model:ir.action.act_window.domain,name:act_contract_domain_terminated"
 msgid "Terminated"
 msgstr "Résiliée"
+
+msgctxt "model:ir.message,text:msg_covered_element_displayer"
+msgid "%(element)s (%(number)i covered elements)"
+msgstr "%(element)s (%(number)i éléments couverts)"
+
+msgctxt "model:ir.message,text:msg_non_covered_period"
+msgid ""
+"There is a non covered period, source contract ends on the %(source_end)s "
+"when target starts on %(target_start)s."
+msgstr ""
+"Il y a une période non couverte, le contrat d'origine se termine le "
+"%(source_end)s alors que le nouveau commence le %(target_start)s."
 
 msgctxt "model:ir.ui.menu,name:"
 msgid "Group Contract"

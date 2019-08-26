@@ -23,6 +23,7 @@ this repository contains the full copyright notices and license terms. -->
         <!-- Rule access to handle partitioning by portfolio -->
         <!-- ######### Parties  -->
         <record model="ir.rule.group" id="rule_group_portfolio_party">
+            <field name="name">In user's portfolios</field>
             <field name="model" search="[('model', '=', 'party.party')]"/>
             <field name="perm_read" eval="True"/>
             <field name="perm_write" eval="True"/>
@@ -40,6 +41,7 @@ this repository contains the full copyright notices and license terms. -->
         </record>
         <!-- ######### Contact Mechanism  -->
         <record model="ir.rule.group" id="rule_group_portfolio_contact_mechanism">
+            <field name="name">In user's portfolios</field>
             <field name="model" search="[('model', '=', 'party.contact_mechanism')]"/>
             <field name="perm_read" eval="True"/>
             <field name="perm_write" eval="True"/>
@@ -57,6 +59,7 @@ this repository contains the full copyright notices and license terms. -->
         </record>
         <!-- ######### Relations  -->
         <record model="ir.rule.group" id="rule_group_portfolio_relation">
+            <field name="name">In user's portfolios</field>
             <field name="model" search="[('model', '=', 'party.relation.all')]"/>
             <field name="perm_read" eval="True"/>
             <field name="perm_write" eval="True"/>
@@ -74,6 +77,7 @@ this repository contains the full copyright notices and license terms. -->
         </record>
         <!-- ######### Contracts  -->
         <record model="ir.rule.group" id="rule_group_portfolio_contract">
+            <field name="name">In user's portfolios</field>
             <field name="model" search="[('model', '=', 'contract')]"/>
             <field name="perm_read" eval="True"/>
             <field name="perm_write" eval="True"/>

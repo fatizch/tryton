@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<tryton>
+    <data group="1">
+        <record model="ir.message" id="msg_missing_broker_analytic_account">
+            <field name="text">Broker analytic account to use is missing</field>
+        </record>
+    </data>
+</tryton>

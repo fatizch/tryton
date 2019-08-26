@@ -1,6 +1,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 from trytond import backend
+from trytond.i18n import gettext
 from trytond.model import Unique
 from trytond.transaction import Transaction
 
@@ -68,12 +69,6 @@ class Journal(export.ExportImportMixin):
     def __setup__(cls):
         super(Journal, cls).__setup__()
         cls.validation.selection.append(('manual', 'Manual'))
-        cls._error_messages.update({
-                'cancel_journal_mixin': 'You can not cancel two statements '
-                'with different statement journals',
-                'method_cheque': 'Cheque',
-                'method_other': 'Other',
-                })
 
     @classmethod
     def _export_light(cls):
@@ -81,10 +76,8 @@ class Journal(export.ExportImportMixin):
 
     @classmethod
     def get_process_methods(cls):
-        return [('cheque', cls.raise_user_error('method_cheque',
-                    raise_exception=False)),
-                ('other', cls.raise_user_error('method_other',
-                    raise_exception=False))]
+        return [('cheque', gettext('account_statement_cog.msg_method_cheque')),
+                ('other', gettext('account_statement_cog.msg_method_other'))]
 
     @staticmethod
     def default_auto_post():

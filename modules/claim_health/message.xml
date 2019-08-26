@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<tryton>
+    <data group="1">
+        <record model="ir.message" id="msg_check_party_bank_account">
+            <field name="text">The new subscriber must have a bank account in order to receive his benefits.</field>
+        </record>
+    </data>
+</tryton>

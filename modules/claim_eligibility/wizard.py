@@ -2,6 +2,9 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 
+from trytond.exceptions import UserWarning
+from trytond.i18n import gettext
+from trytond.model.exceptions import ValidationError
 from trytond.pool import Pool
 from trytond.wizard import Wizard, StateView, StateTransition, Button
 from trytond.transaction import Transaction
@@ -43,16 +46,6 @@ class ManualValidationEligibility(Wizard):
     check_result = StateTransition()
     finalize_validation = StateTransition()
 
-    @classmethod
-    def __setup__(cls):
-        super(ManualValidationEligibility, cls).__setup__()
-        cls._error_messages.update({
-                'validation_needs_decision':
-                'Validation cannot be processed without knowing the reason',
-                'eligibility_data_change': 'Eligibility information change. '
-                'It could be necessary to recalculate existing indemnification'
-                ' period.'})
-
     def transition_check_possibilities(self):
         pool = Pool()
         Service = pool.get('claim.service')
@@ -83,21 +76,25 @@ class ManualValidationEligibility(Wizard):
 
     def transition_check_result(self):
         if not self.display_service.eligibility_decision:
-            self.raise_user_error('validation_needs_decision')
+            raise ValidationError(gettext(
+                    'claim_eligibility.msg_validation_needs_decision'))
         return 'finalize_validation'
 
     def transition_finalize_validation(self):
         pool = Pool()
         Event = pool.get('event')
         Service = pool.get('claim.service')
+        Warning = pool.get('res.user.warning')
         active_id = Transaction().context.get('active_id')
         service = Service(active_id)
         if (self.display_service._default_values
                 and service.eligibility_status == 'accepted'
                 and service.eligibility_decision !=
                 self.display_service.eligibility_decision):
-            self.raise_user_warning('eligibility_data_change',
-                'eligibility_data_change')
+            key = 'eligibility_data_change'
+            if Warning.check(key):
+                raise UserWarning(key, gettext(
+                        'claim_eligibility.msg_eligibility_data_change'))
         Service.accept_eligibility(service, 'accepted',
             self.display_service._default_values.get(
                 'eligibility_decision', None))
@@ -118,16 +115,6 @@ class ManualRejectionEligibility(Wizard):
                 default=True)])
     check_selection = StateTransition()
     register_reason = StateTransition()
-
-    @classmethod
-    def __setup__(cls):
-        super(ManualRejectionEligibility, cls).__setup__()
-        cls._error_messages.update({
-                'rejection_needs_decision':
-                'Rejection cannot be processed without knowing the reason',
-                'eligibility_change': 'Eligibility information changed. It '
-                'may be necessary to recompute existing indemnification '
-                'periods.'})
 
     def transition_check_possibilities(self):
         pool = Pool()
@@ -158,17 +145,23 @@ class ManualRejectionEligibility(Wizard):
 
     def transition_check_selection(self):
         if not self.select_reason.eligibility_decision:
-            self.raise_user_error('rejection_needs_decision')
+            raise ValidationError(gettext(
+                    'claim_eligibility.msg_rejection_needs_decision'))
         return 'register_reason'
 
     def transition_register_reason(self):
-        Service = Pool().get('claim.service')
+        pool = Pool()
+        Service = pool.get('claim.service')
+        Warning = pool.get('res.user.warning')
         active_id = Transaction().context.get('active_id')
         service = Service(active_id)
         if (service.eligibility_status == 'refused' and
                 service.eligibility_decision !=
                 self.select_reason.eligibility_decision):
-            self.raise_user_warning('eligibility_change', 'eligibility_change')
+            key = 'eligibility_change'
+            if Warning.check(key):
+                raise UserWarning(key, gettext(
+                        'claim_eligibility.msg_eligibility_change'))
         Service.reject_eligibility(service,
             self.select_reason.eligibility_decision)
         return 'end'

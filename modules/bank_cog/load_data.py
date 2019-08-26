@@ -133,5 +133,5 @@ class BankDataSetWizard(Wizard):
             banks.append(bank)
             existing_banks[bank.bic] = bank
 
-        Bank.create([x._save_values for x in banks])
+        Bank.save(banks)
         return 'end'

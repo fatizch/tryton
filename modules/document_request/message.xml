@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<tryton>
+    <data group="1">
+        <record model="ir.message" id="msg_document_request_for">
+            <field name="text">Document Request For %(name)s</field>
+        </record>
+        <record model="ir.message" id="msg_wrong_documents_rule">
+            <field name="text">The return value of the document rule must be a dictionary with document description code as keys.</field>
+        </record>
+    </data>
+</tryton>

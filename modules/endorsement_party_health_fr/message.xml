@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<tryton>
+    <data group="1">
+        <record model="ir.message" id="msg_hc_modifications">
+            <field name="text">Health Complement Modifications:</field>
+        </record>
+        <record model="ir.message" id="msg_social_security_dependent">
+            <field name="text">The party %(full_name)s is social security dependent. You cannot change its health complement, change social security insured's main health complement instead.</field>
+        </record>
+    </data>
+</tryton>

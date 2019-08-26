@@ -2,6 +2,8 @@
 # this repository contains the full copyright notices and license terms.
 import datetime
 
+from trytond.i18n import gettext
+from trytond.model.exceptions import ValidationError
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, Or
 from trytond.modules.coog_core import fields, model
@@ -184,23 +186,16 @@ class ContractOption(metaclass=PoolMeta):
         'get_with_waiver_of_premium')
 
     @classmethod
-    def __setup__(cls):
-        super(ContractOption, cls).__setup__()
-        cls._error_messages.update({
-                'overlapping_waivers': 'The option %(option)s has overlapping '
-                'waivers',
-                'too_many_waivers': 'The option %(option)s has too many '
-                'waivers on the period [%(start)s - %(end)s]',
-                })
-
-    @classmethod
     def validate(cls, options):
         with model.error_manager():
             super(ContractOption, cls).validate(options)
             for option in options:
                 if option.has_overlapping_waivers():
-                    cls.append_functional_error('overlapping_waivers',
-                        {'option': option.rec_name})
+                    cls.append_functional_error(
+                        ValidationError(gettext(
+                                'contract_waiver_premium'
+                                '.msg_overlapping_waivers',
+                                option=option.rec_name)))
 
     def has_overlapping_waivers(self):
         previous_waiver = None
@@ -236,11 +231,12 @@ class ContractOption(metaclass=PoolMeta):
             return
         if len(matching_waivers) != 1:
             Date = Pool().get('ir.date')
-            self.append_functional_error('too_many_waivers', {
-                    'option': self.rec_name,
-                    'start': Date.date_as_string(from_date),
-                    'end': Date.date_as_string(to_date)
-                    })
+            self.append_functional_error(
+                ValidationError(gettext(
+                        'contract_waiver_premium.msg_too_many_waivers',
+                        option=self.rec_name,
+                        start=Date.date_as_string(from_date),
+                        end=Date.date_as_string(to_date))))
             return None
         waiver_option = matching_waivers[0]
         behaviour = \

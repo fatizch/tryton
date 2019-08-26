@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<tryton>
+    <data group="1">
+        <record model="ir.message" id="msg_wrong_products_rule">
+            <field name="text">The return value of the questionnaire rule must be a dictionary with products code as keys.</field>
+        </record>
+        <record model="ir.message" id="msg_code_uniq">
+            <field name="text">The code must be unique.</field>
+        </record>
+        <record model="ir.message" id="msg_invalid_rule_output">
+            <field name="text">Invalid output for rule %(rule)s</field>
+        </record>
+        <record model="ir.message" id="msg_mandatory_choice">
+            <field name="text">A choice must be made for part %(part)s</field>
+        </record>
+        <record model="ir.message" id="msg_nothing_selected">
+            <field name="text">A choice must be made before going on</field>
+        </record>
+        <record model="ir.message" id="msg_no_questionnaires">
+            <field name="text">No questionnaires configured</field>
+        </record>
+        <record model="ir.message" id="msg_score">
+            <field name="text">Score</field>
+        </record>
+        <record model="ir.message" id="msg_selected">
+            <field name="text">Selected</field>
+        </record>
+        <record model="ir.message" id="msg_not_selected">
+            <field name="text">Not Selected</field>
+        </record>
+        <record model="ir.message" id="msg_description">
+            <field name="text">Description</field>
+        </record>
+        <record model="ir.message" id="msg_product">
+            <field name="text">Product</field>
+        </record>
+        <record model="ir.message" id="msg_commercial_product">
+            <field name="text">Commercial Product</field>
+        </record>
+    </data>
+</tryton>

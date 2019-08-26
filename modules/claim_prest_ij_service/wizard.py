@@ -4,6 +4,9 @@ import datetime
 
 from collections import defaultdict
 
+from trytond.exceptions import UserWarning
+from trytond.i18n import gettext
+from trytond.model.exceptions import ValidationError
 from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval, Bool, PYSONEncoder
 from trytond.server_context import ServerContext
@@ -36,14 +39,6 @@ class FindPartySubscription(Wizard):
     start = StateAction(
         'claim_prest_ij_service.act_claim_ij_subscription_relate_form')
 
-    @classmethod
-    def __setup__(cls):
-        super(FindPartySubscription, cls).__setup__()
-        cls._error_messages.update({
-                'no_prest_ij_subscription': 'The selection does not have '
-                'related subscription. %(selection)s',
-                })
-
     def do_start(self, action):
         pool = Pool()
         model = Transaction().context.get('active_model')
@@ -65,9 +60,9 @@ class FindPartySubscription(Wizard):
                 domain.append(('siren', '=', covered.siren))
         elif model == 'claim':
             if not selection.losses or not selection.losses[0].services:
-                self.raise_user_error('no_prest_ij_subscription', {
-                        'selection': selection.rec_name
-                        })
+                raise ValidationError(gettext(
+                        'claim_prest_ij_service.msg_no_prest_ij_subscription',
+                        selection=selection.rec_name))
             covered = selection.losses[0].covered_person
             domain = [
                 ('ssn', '=', covered.ssn),
@@ -78,9 +73,9 @@ class FindPartySubscription(Wizard):
             assert False, 'Model must be a claim or a party'
         subscriptions = Subscription.search(domain)
         if not subscriptions:
-            self.raise_user_error('no_prest_ij_subscription', {
-                    'selection': selection.rec_name
-                    })
+            raise ValidationError(gettext(
+                    'claim_prest_ij_service.msg_no_prest_ij_subscription',
+                    selection=selection.rec_name))
         good_values = Action.get_action_values(
             'ir.action.act_window', [good_action.id])
         good_values[0]['views'] = [
@@ -123,20 +118,6 @@ class CreateCoveredPersonIjSubscription(Wizard):
             ])
     create_request = StateTransition()
 
-    @classmethod
-    def __setup__(cls):
-        super(CreateCoveredPersonIjSubscription, cls).__setup__()
-        cls._error_messages.update({
-                'already_manual':
-                'There is already a manual period',
-                'no_company_confirmed':
-                'There are no IJ Subscription confirmed for '
-                'this person\'s companies',
-                'not_covered': 'This person is not covered at this date',
-                'date_anterior_to_max_loss_end': 'The chosen date is anterior'
-                ' to the end of the last short term disability which is: [%s]',
-                })
-
     def default_select_date(self, name):
         context = Transaction().context
         assert context.get('active_model') == 'claim.ij.subscription'
@@ -153,11 +134,13 @@ class CreateCoveredPersonIjSubscription(Wizard):
         Contract = Pool().get('contract')
         Subscription = pool.get('claim.ij.subscription')
         CoveredElement = pool.get('contract.covered_element')
+        Warning = pool.get('res.user.warning')
 
         subscription = self.select_date.subscription
         if any([x.method == 'manual' and x.state == 'unprocessed'
                 for x in subscription.requests]):
-            self.raise_user_error('already_manual')
+            raise ValidationError(gettext(
+                    'claim_prest_ij_service.msg_already_manual'))
 
         person = subscription.parties[0]
 
@@ -168,7 +151,8 @@ class CreateCoveredPersonIjSubscription(Wizard):
                 ('activated', '=', True),
                 ])
         if not company_subs:
-            self.raise_user_error('no_company_confirmed')
+            raise ValidationError(gettext(
+                    'claim_prest_ij_service.msg_no_company_confirmed'))
 
         date = self.select_date.period_start
 
@@ -185,7 +169,8 @@ class CreateCoveredPersonIjSubscription(Wizard):
                 ('party', '=', person.id)])
 
         if not person_covered:
-            self.raise_user_error('not_covered')
+            raise ValidationError(gettext(
+                    'claim_prest_ij_service.msg_not_covered'))
 
         losses = [x for x in
             Loss.search([
@@ -196,9 +181,12 @@ class CreateCoveredPersonIjSubscription(Wizard):
             max_end = max(x.end_date or datetime.date.min for x in losses)
             if date < max_end:
                 Date = Pool().get('ir.date')
-                self.raise_user_warning('date_anterior_to_max_loss_end_%s'
-                    % str(subscription), 'date_anterior_to_max_loss_end',
-                    Date.date_as_string(max_end))
+                key = 'date_anterior_to_max_loss_end_%s' % str(subscription)
+                if Warning.check(key):
+                    raise UserWarning(key, gettext(
+                            'claim_prest_ij_service'
+                            '.msg_date_anterior_to_max_loss_end',
+                            date=Date.date_as_string(max_end)))
 
         Request.create([{
                     'date': utils.today(),
@@ -267,42 +255,26 @@ class TreatIjPeriod(Wizard):
         'claim_indemnification.act_create_indemnification_wizard')
     cancel = StateTransition()
 
-    @classmethod
-    def __setup__(cls):
-        super(TreatIjPeriod, cls).__setup__()
-        cls._error_messages.update({
-                'nothing_to_do': 'All periods are already treated, '
-                'nothing to do',
-                'inconsistent_daily_amount': 'Selected periods have different '
-                'daily amounts',
-                'changing_daily_amount': 'Daily amount is changing, going '
-                'from %(prev)s to %(new)s',
-                'no_claim_found': 'Could not find a matching claim, one may '
-                'have to be created',
-                'no_service_mixin': 'Cannot treat periods for different '
-                'services',
-                'period_hole': 'No indemnification found between %(last_end)s '
-                ' and %(new_start)s',
-                'non_matching_types': 'Multiple types found when trying to '
-                'treat: %(type1)s and %(type2)s',
-                })
-
     def transition_check_context(self):
         pool = Pool()
         context = Transaction().context
         if context.get('active_model') == 'claim.ij.subscription':
             instance = pool.get('claim.ij.subscription')(context['active_id'])
             if not instance.periods_to_treat:
-                self.raise_user_error('nothing_to_do')
+                raise ValidationError(gettext(
+                        'claim_prest_ij_service.msg_nothing_to_do'))
             if all(not x.claim for x in instance.periods_to_treat):
-                self.raise_user_error('no_claim_found')
+                raise ValidationError(gettext(
+                        'claim_prest_ij_service.msg_no_claim_found'))
         elif context.get('active_model') == 'claim.ij.period':
             instances = pool.get('claim.ij.period').browse(
                 context['active_ids'])
             if not any(x for x in instances if x.state != 'treated'):
-                self.raise_user_error('nothing_to_do')
+                raise ValidationError(gettext(
+                        'claim_prest_ij_service.msg_nothing_to_do'))
             if all(not x.claim for x in instances):
-                self.raise_user_error('no_claim_found')
+                raise ValidationError(gettext(
+                        'claim_prest_ij_service.msg_no_claim_found'))
         else:
             raise NotImplementedError
 
@@ -357,7 +329,9 @@ class TreatIjPeriod(Wizard):
 
     def do_automatic(self, action):
         assert self.to_treat.manual_treatment
-        Period = Pool().get('claim.ij.period')
+        pool = Pool()
+        Period = pool.get('claim.ij.period')
+        Warning = pool.get('res.user.warning')
         selected = Period.browse(
             [x.period_id for x in self.to_treat.values if x.selected])
 
@@ -365,22 +339,25 @@ class TreatIjPeriod(Wizard):
         amounts = {x.total_per_day_amount
             for x in selected if x.total_per_day_amount}
         if len(amounts) > 1:
-            self.raise_user_warning('inconsistent_daily_amount',
-                'inconsistent_daily_amount')
+            key = 'inconsistent_daily_amount'
+            if Warning.check(key):
+                raise UserWarning(key, gettext(
+                        'claim_prest_ij_service.msg_inconsistent_daily_amount'))
 
         if len({x.service.id for x in selected}) != 1:
-            self.raise_user_error('no_service_mixin')
+            raise ValidationError(gettext(
+                    'claim_prest_ij_service.msg_no_service_mixin'))
         service = selected[0].service
 
         date = min(x.start_date for x in selected)
         if (service.paid_until_date and
                 coog_date.add_day(service.paid_until_date, 1) < date):
-            self.raise_user_error('period_hole', {
-                    'last_end': coog_string.translate_value(service,
+            raise ValidationError(gettext(
+                    'claim_prest_ij_service.msg_period_hole',
+                    last_end=coog_string.translate_value(service,
                         'paid_until_date'),
-                    'new_start': coog_string.translate_value(selected[-1],
-                        'start_date'),
-                    })
+                    new_start=coog_string.translate_value(selected[-1],
+                        'start_date')))
         try:
             cur_ijss_value = service.find_extra_data_value('ijss', date=date)
         except KeyError:
@@ -389,23 +366,25 @@ class TreatIjPeriod(Wizard):
         new_ijss_value = max([x for x in amounts if x] or [None])
         if (new_ijss_value and cur_ijss_value and
                 cur_ijss_value != new_ijss_value):
-            self.raise_user_warning('changing_daily_amount_%s' % str(date),
-                'changing_daily_amount', {
-                    'prev': str(cur_ijss_value), 'new': str(new_ijss_value),
-                    })
+            key = 'changing_daily_amount_%s' % str(date)
+            if Warning.check(key):
+                raise UserWarning(key, gettext(
+                        'claim_prest_ij_service.msg_changing_daily_amount',
+                        prev=str(cur_ijss_value),
+                        new=str(new_ijss_value)))
 
         if service.loss.event_desc:
             event_desc = service.loss.event_desc
             types = {event_desc.prest_ij_type} | {
                 x.period_kind for x in selected}
             if len(types) > 1:
-                self.raise_user_error('non_matching_types', {
-                        'type1': coog_string.translate_value(event_desc,
+                raise ValidationError(gettext(
+                        'claim_prest_ij_service.msg_non_matching_types',
+                        type1=coog_string.translate_value(event_desc,
                             'prest_ij_type'),
-                        'type2': coog_string.translate_value(
+                        type2=coog_string.translate_value(
                             [x for x in selected if x.period_kind !=
-                                event_desc.prest_ij_type][0], 'period_kind'),
-                        })
+                                event_desc.prest_ij_type][0], 'period_kind')))
 
         prev_end = None
         for start, end in sorted(
@@ -416,14 +395,14 @@ class TreatIjPeriod(Wizard):
                 if start < prev_end:
                     continue
                 if start > coog_date.add_day(prev_end, 1):
-                    self.raise_user_error('period_hole', {
-                            'last_end': coog_string.translate_value(
+                    raise ValidationError(gettext(
+                            'claim_prest_ij_service.msg_period_hole',
+                            last_end=coog_string.translate_value(
                                 [x for x in selected if x.end_date ==
                                     prev_end][0], 'end_date'),
-                            'new_start': coog_string.translate_value(
+                            new_start=coog_string.translate_value(
                                 [x for x in selected if x.start_date ==
-                                    start][0], 'end_date'),
-                            })
+                                    start][0], 'end_date')))
                 prev_end = end if not prev_end else max(end, prev_end)
             else:
                 prev_end = end

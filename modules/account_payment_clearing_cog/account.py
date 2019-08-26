@@ -2,6 +2,7 @@
 # this repository contains the full copyright notices and license terms.
 from sql import Literal
 
+from trytond.i18n import gettext
 from trytond.pool import PoolMeta
 from trytond import backend
 from trytond.transaction import Transaction
@@ -14,13 +15,6 @@ __all__ = [
 
 class Journal(metaclass=PoolMeta):
     __name__ = 'account.journal'
-
-    @classmethod
-    def __setup__(cls):
-        super(Journal, cls).__setup__()
-        cls._error_messages.update({
-                'except_payment_cancel': 'Except Payment Cancel',
-                })
 
     @classmethod
     def __register__(cls, module_name):
@@ -44,6 +38,5 @@ class Journal(metaclass=PoolMeta):
     @classmethod
     def get_aggregate_posting_options(cls):
         options = super(Journal, cls).get_aggregate_posting_options()
-        return options + [('except_payment_cancel',
-                cls.raise_user_error('except_payment_cancel',
-                    raise_exception=False))]
+        return options + [('except_payment_cancel', gettext(
+                    'account_payment_clearing_cog.msg_except_payment_cancel'))]

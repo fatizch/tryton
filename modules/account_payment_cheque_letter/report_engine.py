@@ -1,5 +1,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+from trytond.i18n import gettext
+from trytond.model.exceptions import AccessError, ValidationError
 from trytond.pool import Pool, PoolMeta
 
 
@@ -30,7 +32,9 @@ class ReportGenerate(metaclass=PoolMeta):
             else:
                 other = True
         if cheque_letter and other:
-            Payment.raise_user_error('journal_mixin_not_allowed')
+            raise AccessError(gettext(
+                    'account_payment_cheque_letter'
+                    '.msg_journal_mixin_not_allowed'))
 
         if cheque_letter:
             # Sorting by cheque_number
@@ -39,8 +43,10 @@ class ReportGenerate(metaclass=PoolMeta):
             # Second & contiguous check (for cheque number only)
             for payment in sorted_payments:
                 if prev_number and (prev_number + 1 != int(payment.merged_id)):
-                    Payment.raise_user_error('cheque_number_sequence_broken',
-                        (prev_number, int(payment.merged_id)))
+                    raise ValidationError(gettext(
+                            'account_payment_cheque_letter'
+                            '.msg_cheque_number_sequence_broken',
+                            from_=prev_number, to=int(payment.merged_id)))
                 prev_number = int(payment.merged_id)
                 data['ids'] = [x.id for x in sorted_payments]
         else:

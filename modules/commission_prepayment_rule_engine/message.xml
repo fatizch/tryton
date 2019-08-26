@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<tryton>
+    <data group="1">
+        <record model="ir.message" id="msg_invalid_rule_result">
+            <field name="text">Prepayment payment rule result %(schedule)s is not matching the expected format [(date, percentage)].</field>
+        </record>
+        <record model="ir.message" id="msg_code_unique">
+            <field name="text">The code must be unique.</field>
+        </record>
+        <record model="ir.message" id="msg_linear">
+            <field name="text">Linear: %(line)s</field>
+        </record>
+        <record model="ir.message" id="msg_prepayment">
+            <field name="text">Prepayment: %(rule)s</field>
+        </record>
+    </data>
+</tryton>

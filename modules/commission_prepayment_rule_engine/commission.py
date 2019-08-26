@@ -3,8 +3,10 @@
 import datetime
 from decimal import Decimal
 
+from trytond.i18n import gettext
 from trytond.pool import PoolMeta
 from trytond.model import Unique
+from trytond.model.exceptions import ValidationError
 from trytond.pyson import Eval, Bool, Not, And
 
 from trytond.modules.coog_core import fields, model, coog_string
@@ -23,14 +25,6 @@ class Plan(metaclass=PoolMeta):
     prepayment_payment_rule = fields.Many2One(
         'commission.plan.prepayment.payment_rule',
         'Payment Date Rule for Prepayment', ondelete='RESTRICT')
-
-    @classmethod
-    def __setup__(cls):
-        super(Plan, cls).__setup__()
-        cls._error_messages.update({
-                'invalid_rule_result': 'Prepayment payment rule result %s is '
-                'not matching the expected format [(date, percentage)]',
-                })
 
     def getter_is_prepayment(self, name):
         if self.prepayment_payment_rule:
@@ -60,17 +54,20 @@ class Plan(metaclass=PoolMeta):
             option.init_dict_for_rule_engine(args)
             schedule = self.prepayment_payment_rule.calculate_rule(args)
             # check rule result
-            if not schedule or not isinstance(schedule, list):
-                self.raise_user_error('invalid_rule_result', schedule)
             try:
+                if not schedule or not isinstance(schedule, list):
+                    raise ValueError
                 for date, percentage in schedule:
                     if (not isinstance(date, datetime.date) or
                             not isinstance(percentage, float) and
                             not isinstance(percentage, int) and
                             not isinstance(percentage, Decimal)):
-                        self.raise_user_error('invalid_rule_result', schedule)
+                        raise ValueError
             except ValueError:
-                self.raise_user_error('invalid_rule_result', schedule)
+                raise ValidationError(gettext(
+                        'commission_prepayment_rule_engine'
+                        '.msg_invalid_rule_result',
+                        schedule=schedule))
 
             return schedule
         return super(Plan, self).compute_prepayment_schedule(option, agent)
@@ -103,7 +100,8 @@ class PrepaymentPaymentDateRule(
         super(PrepaymentPaymentDateRule, cls).__setup__()
         t = cls.__table__()
         cls._sql_constraints += [
-            ('code_uniq', Unique(t, t.code), 'The code must be unique!'),
+            ('code_uniq', Unique(t, t.code),
+                'commission_prepayment_rule_engine.msg_code_unique'),
             ]
         cls.rule.required = True
         cls.rule.domain = [('type_', '=', 'commission')]
@@ -136,21 +134,17 @@ class PlanLines(get_rule_mixin('prepayment_rule', 'Prepayment Rule'),
         cls.prepayment_formula.depends.append('use_rule_engine')
         cls.prepayment_rule.help = (
             'Returns a tuple with the prepayment commission amount and rate')
-        cls._error_messages.update({
-                'linear': 'Linear',
-                'prepayment': 'Prepayment',
-                })
 
     def get_formula_description(self, name):
         lines = [super(PlanLines, self).get_formula_description(name)]
         if self.prepayment_rule:
             if lines:
-                lines[0] = '%s : %s' % (
-                    self.raise_user_error('linear', raise_exception=False),
-                    lines[0])
-            lines.append('%s : %s' % (
-                    self.raise_user_error('prepayment', raise_exception=False),
-                    self.get_prepayment_rule_extract()))
+                lines[0] = gettext(
+                    'commission_prepayment_rule_engine.msg_linear',
+                    line=lines[0])
+            lines.append(gettext(
+                    'commission_prepayment_rule_engine.msg_prepayment',
+                    rule=self.get_prepayment_rule_extract()))
         return ' \n'.join(lines)
 
     def get_prepayment_amount(self, **context):

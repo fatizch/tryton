@@ -2,10 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:event.type.action:"
-msgid "Generate Invoice Commissions Document"
-msgstr "Générer les bordereaux de commission"
-
 msgctxt "field:invoice.report.definition,business_kind:"
 msgid "Business Kind"
 msgstr "Type métier"

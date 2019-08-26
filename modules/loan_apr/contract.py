@@ -4,6 +4,7 @@ import datetime
 from decimal import Decimal
 from collections import defaultdict
 
+from trytond.i18n import gettext
 from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
 from trytond.wizard import Wizard, StateView, Button
@@ -126,13 +127,6 @@ class DisplayLoanAveragePremium(Wizard):
         'loan_apr.display_average_premium_values_view_form', [
             Button('Cancel', 'end', 'tryton-cancel')])
 
-    @classmethod
-    def __setup__(cls):
-        super(DisplayLoanAveragePremium, cls).__setup__()
-        cls._error_messages.update({
-                'fee_label': 'Fee',
-                })
-
     def default_display_loans(self, name):
         if not Transaction().context.get('active_model') == 'contract':
             return {}
@@ -156,8 +150,7 @@ class DisplayLoanAveragePremium(Wizard):
                                 'current_loan_shares': [],
                                 } for y in contract.get_active_loan_share()
                                 if y.loan == x] + [{
-                                    'name': self.raise_user_error(
-                                        'fee_label', raise_exception=False),
+                                    'name': gettext('loan_apr.msg_fee_label'),
                                     'average_premium_rate': x.average_fee_rate,
                                     'base_premium_amount':
                                     x.base_fee_amount,

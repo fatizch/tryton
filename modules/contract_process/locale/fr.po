@@ -2,78 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:contract.notification:"
-msgid "Enter a value for field '%s' of '%s'"
-msgstr "Entrez  une valeur pour le champ '%s' de '%s'"
-
-msgctxt "error:contract.notification:"
-msgid "Enter a value for field(s): %s"
-msgstr "Entrez une valeur pour le(s) champs(s) : %s"
-
-msgctxt "error:contract.notification:"
-msgid "Everything is good !"
-msgstr "Tout est bon!"
-
-msgctxt "error:contract.notification:"
-msgid "Select a date that is not in the future for field(s): %s"
-msgstr "Sélectionnez une date non à venir pour le(s) champ(s) : %s"
-
-msgctxt "error:contract:"
-msgid "At least an option must be selected"
-msgstr "Saisir une garantie"
-
-msgctxt "error:contract:"
-msgid "At least one option must be selected for %s"
-msgstr "Saisir au moins une garantie pour %s"
-
-msgctxt "error:contract:"
-msgid "Enter a value for field '%s' of '%s'"
-msgstr "Entrez  une valeur pour le champ '%s' de '%s'"
-
-msgctxt "error:contract:"
-msgid "Enter a value for field(s): %s"
-msgstr "Entrez une valeur pour le(s) champs(s) : %s"
-
-msgctxt "error:contract:"
-msgid "Everything is good !"
-msgstr "Tout est bon!"
-
-msgctxt "error:contract:"
-msgid "Select a date that is not in the future for field(s): %s"
-msgstr "Sélectionnez une date non à venir pour le(s) champ(s) : %s"
-
-msgctxt "error:contract:"
-msgid "The selected subscriber does not have an address"
-msgstr "Le souscripteur sélectionné n'a pas d'adresse."
-
-msgctxt "error:contract:"
-msgid "There must be at least one covered element"
-msgstr "Saisir un risque couvert"
-
-msgctxt "error:import.process.select:"
-msgid "Loan Process (FR)"
-msgstr "Processus emprunteur (FR)"
-
-msgctxt "error:import.process.select:"
-msgid "Standard Insurance Subscription Process (FR)"
-msgstr "Processus standard de souscription d'assurance (FR)"
-
-msgctxt "error:import.process.select:"
-msgid ""
-"This process allows managers to launch a loan insurance subscription process"
-" depending on a product"
-msgstr ""
-"Ce processus permet aux gestionnaires de lancer un processus de souscription"
-" assurance emprunteur en fonction d'un produit"
-
-msgctxt "error:import.process.select:"
-msgid ""
-"This process allows managers to launch a standard insurance subscription "
-"process depending on a product"
-msgstr ""
-"Ce processus permet aux gestionnaires de lancer un processus standard de "
-"souscription d'assurance en fonction d'un produit"
-
 msgctxt "field:contract,current_log:"
 msgid "Current Log"
 msgstr "Trace Courante"
@@ -253,6 +181,42 @@ msgstr "Traces"
 msgctxt "model:ir.action,name:subscription_process_launcher"
 msgid "Start Subscription"
 msgstr "Démarrer la Souscription"
+
+msgctxt "model:ir.message,text:msg_loan_process"
+msgid "Loan Process (FR)"
+msgstr "Processus emprunteur (FR)"
+
+msgctxt "model:ir.message,text:msg_loan_process_description"
+msgid ""
+"This process allows managers to launch a loan insurance subscription process"
+" depending on a product."
+msgstr ""
+"Ce processus permet aux gestionnaires de lancer un processus de souscription"
+" assurance emprunteur en fonction d'un produit."
+
+msgctxt "model:ir.message,text:msg_no_option"
+msgid "At least an option must be selected."
+msgstr "Saisir une garantie."
+
+msgctxt "model:ir.message,text:msg_no_subscriber"
+msgid "No subscriber is selected."
+msgstr "Aucune souscripteur sélectionné."
+
+msgctxt "model:ir.message,text:msg_no_subscriber_address"
+msgid "The selected subscriber does not have an address."
+msgstr "Le souscripteur sélectionné n'a pas d'adresse."
+
+msgctxt "model:ir.message,text:msg_standard_process"
+msgid "Standard Insurance Subscription Process (FR)"
+msgstr "Processus standard de souscription d'assurance (FR)"
+
+msgctxt "model:ir.message,text:msg_standard_process_description"
+msgid ""
+"This process allows managers to launch a standard insurance subscription "
+"process depending on a product."
+msgstr ""
+"Ce processus permet aux gestionnaires de lancer un processus standard de "
+"souscription d'assurance en fonction d'un produit."
 
 msgctxt "model:ir.ui.menu,name:menu_start_subscription"
 msgid "Start Subscription"

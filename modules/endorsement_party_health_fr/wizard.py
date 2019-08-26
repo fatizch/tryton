@@ -1,5 +1,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+from trytond.i18n import gettext
+from trytond.model.exceptions import ValidationError
 from trytond.pool import PoolMeta, Pool
 
 from trytond.modules.coog_core import fields, model
@@ -21,16 +23,6 @@ class ChangePartyHealthComplement(EndorsementWizardStepMixin):
         None, 'Current Health Complement', size=1)
     new_health_complement = fields.One2Many('health.party_complement', None,
         'New Health Complement', size=1)
-
-    @classmethod
-    def __setup__(cls):
-        super(ChangePartyHealthComplement, cls).__setup__()
-        cls._error_messages.update({
-                'social_security_dependent': 'The party %(full_name)s is social'
-                ' security dependent. You cannot change its health complement, '
-                'change social security insured\'s main health complement '
-                'instead',
-                })
 
     @classmethod
     def is_multi_instance(cls):
@@ -172,9 +164,11 @@ class ChangePartyHealthComplement(EndorsementWizardStepMixin):
                 and select_screen.party.social_security_dependent):
             dependents.append(select_screen.party)
         if dependents:
-            cls.append_functional_error('social_security_dependent', {
-                    'full_name': [str(p.rec_name) for p in dependents],
-                    })
+            cls.append_functional_error(
+                ValidationError(gettext(
+                        'endorsement_party_health_fr'
+                        '.msg_social_security_dependent',
+                        full_name=[str(p.rec_name) for p in dependents])))
 
 
 class StartEndorsement(metaclass=PoolMeta):

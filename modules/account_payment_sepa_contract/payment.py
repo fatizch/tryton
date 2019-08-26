@@ -2,9 +2,11 @@
 # this repository contains the full copyright notices and license terms.
 from itertools import groupby
 
+from trytond.i18n import gettext
 from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
 from trytond.model import Workflow
+from trytond.model.exceptions import ValidationError
 
 from trytond.modules.coog_core import fields, utils, coog_string, model
 from trytond.modules.account_payment_sepa_cog.payment import \
@@ -215,16 +217,6 @@ class Mandate(metaclass=PoolMeta):
     __name__ = 'account.payment.sepa.mandate'
 
     @classmethod
-    def __setup__(cls):
-        super(Mandate, cls).__setup__()
-        cls._error_messages.update({
-                'billing_information_with_mandate': 'The sepa mandate cannot '
-                'be cancelled because the billing information '
-                '%(billing_info)s of the contract %(contract)s use it '
-                '%(date)s',
-                })
-
-    @classmethod
     @model.CoogView.button
     @Workflow.transition('approved')
     def cancel(cls, mandates):
@@ -244,12 +236,13 @@ class Mandate(metaclass=PoolMeta):
                 billings_using_sepa_mandate.append(billing_information)
         with model.error_manager():
             for billing in billings_using_sepa_mandate:
-                cls.append_functional_error('billing_information_with_mandate',
-                    {
-                        'contract': billing.contract.contract_number,
-                        'billing_info': billing.rec_name,
-                        'date': coog_string.translate_value(billing, 'date'),
-                    })
+                cls.append_functional_error(
+                    ValidationError(gettext(
+                            'account_payment_sepa_contract'
+                            '.msg_billing_information_with_mandate',
+                            contract=billing.contract.contract_number,
+                            billing_info=billing.rec_name,
+                            date=coog_string.translate_value(billing, 'date'))))
         super(Mandate, cls).cancel(mandates)
 
     def objects_using_me_for_party(self, party=None):

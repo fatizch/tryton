@@ -1,9 +1,11 @@
 # encoding: utf-8
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+from trytond.i18n import gettext
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, Bool, If
 from trytond.model import dualmethod
+from trytond.model.exceptions import ValidationError
 from trytond.rpc import RPC
 
 from trytond.modules.coog_core import fields, utils, model
@@ -77,15 +79,6 @@ class ContractUnderwriting(model.CoogSQL, model.CoogView,
         super(ContractUnderwriting, cls).__setup__()
         cls.extra_data.states['invisible'] = ~Eval('decision_with_extra_data')
         cls.extra_data.depends.append('decision_with_extra_data')
-        cls._error_messages.update({
-                'underwriting_still_in_progress': 'The underwriting '
-                'process is still in progress',
-                'refused_by_subscriber': 'The underwriting is refused '
-                'by the subscriber',
-                'underwriting_denied': 'The underwriting is denied by '
-                'the insurer',
-                'postponed': 'The underwriting decision is postponed',
-                })
 
     @classmethod
     def __post_setup__(cls):
@@ -236,19 +229,23 @@ class ContractUnderwriting(model.CoogSQL, model.CoogView,
         if not decision:
             in_progress = True
         elif decision.status == 'postponed':
-            self.raise_user_error('postponed')
+            raise ValidationError(gettext(
+                    'contract_underwriting.msg_postponed'))
         elif decision.status == 'pending':
             in_progress = True
         elif decision.status == 'denied':
-            self.raise_user_error('underwriting_denied')
+            raise ValidationError(gettext(
+                    'contract_underwriting.msg_underwriting_denied'))
         elif decision.status == 'accepted_with_conditions':
             in_progress = (not self.subscriber_decision or
                 self.subscriber_decision == 'pending')
             if not in_progress:
                 if self.subscriber_decision == 'refused':
-                    self.raise_user_error('refused_by_subscriber')
+                    raise ValidationError(gettext(
+                            'contract_underwriting.msg_refused_by_subscriber'))
         if in_progress:
-            self.raise_user_error('underwriting_still_in_progress')
+            raise ValidationError(gettext(
+                    'contract_underwriting.msg_underwriting_still_in_progress'))
 
     def init_dict_for_rule_engine(self, args):
         args['underwriting'] = self

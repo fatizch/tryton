@@ -2,31 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:endorsement.party.change_health_complement:"
-msgid ""
-"The party %(full_name)s is social security dependent. You cannot change its "
-"health complement, change social security insured's main health complement "
-"instead"
-msgstr ""
-"Le tiers %(full_name)s est ayant droit. Vous ne pouvez changer son "
-"Régime Obligatoire Santé, veuillez changer le Régime Obligatoire Santé de l'assuré social."
-
-msgctxt "error:endorsement.party.health_complement:"
-msgid "New version"
-msgstr "Nouvelle version"
-
-msgctxt "error:endorsement.party.health_complement:"
-msgid "Remove version of"
-msgstr "Suppression de la version"
-
-msgctxt "error:endorsement.party.health_complement:"
-msgid "Update %s"
-msgstr "Mise à jour de %s"
-
-msgctxt "error:endorsement.party:"
-msgid "Health Complement Modifications"
-msgstr "Modifications des informations santé"
-
 msgctxt "field:endorsement.party,health_complement:"
 msgid "health_complement"
 msgstr "Informations santé"
@@ -189,6 +164,20 @@ msgstr "Avenant de changement des informations de santé"
 msgctxt "model:endorsement.party.health_complement.field,name:"
 msgid "Endorsement Health Complement Field"
 msgstr "Champs de l'avenant de changement des informations de santé"
+
+msgctxt "model:ir.message,text:msg_hc_modifications"
+msgid "Health Complement Modifications:"
+msgstr "Modifications des informations santé"
+
+msgctxt "model:ir.message,text:msg_social_security_dependent"
+msgid ""
+"The party %(full_name)s is social security dependent. You cannot change its "
+"health complement, change social security insured's main health complement "
+"instead."
+msgstr ""
+"Le tiers %(full_name)s est ayant droit. Vous ne pouvez changer son Régime "
+"Obligatoire Santé, veuillez changer le Régime Obligatoire Santé de l'assuré "
+"social."
 
 msgctxt "selection:endorsement.party.health_complement,action:"
 msgid "Add"

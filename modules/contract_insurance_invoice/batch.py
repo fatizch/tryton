@@ -10,6 +10,8 @@ from sql.functions import ToChar, CurrentTimestamp
 from sql.operators import Not, Concat
 from itertools import groupby
 
+from trytond.i18n import gettext
+from trytond.model.exceptions import ValidationError
 from trytond.pool import Pool, PoolMeta
 from trytond.transaction import Transaction
 from trytond.server_context import ServerContext
@@ -360,9 +362,6 @@ class BulkSetNumberInvoiceContractBatch(batch.BatchRoot):
     @classmethod
     def __setup__(cls):
         super(BulkSetNumberInvoiceContractBatch, cls).__setup__()
-        cls._error_messages.update({
-                'no_period': 'No periods found for invoice date: %s',
-                })
         cls._default_config_items.update({'job_size': '1'})
 
     @classmethod
@@ -424,7 +423,9 @@ class BulkSetNumberInvoiceContractBatch(batch.BatchRoot):
             date=invoice.invoice_date, test_state=True)
         period = Period(period_id)
         if not period:
-            cls.raise_user_error('no_period', invoice.invoice_date)
+            raise ValidationError(gettext(
+                    'contract_insurance_invoice.msg_no_period',
+                    date=invoice.invoice_date))
         invoice_type = 'out_invoice'
         sequence = period.get_invoice_sequence(invoice_type)
 

@@ -2,10 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:benefit:"
-msgid "Subscriber then Covered"
-msgstr "Le souscripteur puis l'assuré"
-
 msgctxt "field:benefit,is_group:"
 msgid "Group Benefit"
 msgstr "Prestation collective"
@@ -67,6 +63,10 @@ msgstr ""
 msgctxt "model:ir.action,name:act_benefit_collective"
 msgid "Collective Benefits"
 msgstr "Prestations collectives"
+
+msgctxt "model:ir.message,text:msg_subscriber_then_covered_enum"
+msgid "Subscriber then Covered"
+msgstr "Le souscripteur puis l'assuré"
 
 msgctxt "model:ir.ui.menu,name:menu_benefit_collective"
 msgid "Collective Benefits"

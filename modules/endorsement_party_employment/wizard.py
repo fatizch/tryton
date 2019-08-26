@@ -3,6 +3,8 @@
 from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
 from trytond.pyson import Eval, Bool
+from trytond.exceptions import UserError
+from trytond.i18n import gettext
 
 from trytond.modules.coog_core import fields, model
 from trytond.modules.endorsement.wizard import (EndorsementWizardStepMixin,
@@ -39,19 +41,6 @@ class ManagePartyEmployment(EndorsementWizardStepMixin):
         None, 'Employment Endorsement')
     version_id = fields.Integer('Version ID')
 
-    @classmethod
-    def __setup__(cls):
-        super().__setup__()
-        cls._error_messages.update({
-            'invalid_model': 'This action should be started from a party',
-            'invalid_type': 'This action should be started '
-            'from physical person',
-            'invalid_op': 'This action is not valid because party has no '
-            'employment',
-            'invalid_active_ids': 'This action should be applied on one '
-            'physical person',
-        })
-
     def _get_parties(self):
         return {x.party.id: x
             for x in self.wizard.endorsement.party_endorsements}
@@ -62,15 +51,18 @@ class ManagePartyEmployment(EndorsementWizardStepMixin):
         defaults = super(ManagePartyEmployment, self).step_default()
 
         if len(Transaction().context.get('active_ids')) > 1:
-            self.raise_user_error('invalid_active_ids')
+            raise UserError(gettext(
+                    'endorsement_party_employment.msg_invalid_active_ids'))
 
         current_party_id = Transaction().context.get('active_id')
         current_party = Party(current_party_id)
         if not current_party.is_person:
-            self.raise_user_error('invalid_type')
+            raise UserError(gettext(
+                    'endorsement_party_employment.msg_invalid_type'))
         possible_employments = [x.id for x in current_party.employments]
         if not possible_employments:
-            self.raise_user_error('invalid_op')
+            raise UserError(gettext(
+                    'endorsement_party_employment.msg_invalid_op'))
         defaults['possible_employments'] = possible_employments
         defaults['employment'] = possible_employments[0]
         # reload objects from previous step

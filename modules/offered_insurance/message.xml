@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<tryton>
+    <data group="1">
+        <record model="ir.message" id="msg_missing_covered_element_extra_data">
+            <field name="text">The following covered element extra data should be set on the product: %(remaining)s</field>
+        </record>
+        <record model="ir.message" id="msg_missing_default_delegation">
+            <field name="text">There must be at least one "generic" delegation rule for %(party)s.</field>
+        </record>
+        <record model="ir.message" id="msg_possible_insurer_duplicate">
+            <field name="text">There are already existing insurer instances for parties:
+
+%(names)s</field>
+        </record>
+        <record model="ir.message" id="msg_wrong_extra_data_type">
+            <field name="text">Extra data "%(extra_data)s" set on package "%(package)s" is not compatible with package defined per covered option</field>
+        </record>
+    </data>
+</tryton>

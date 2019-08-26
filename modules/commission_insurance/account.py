@@ -2,6 +2,7 @@
 # this repository contains the full copyright notices and license terms.
 from collections import defaultdict
 
+from trytond.i18n import gettext
 from trytond.pool import PoolMeta, Pool
 
 from trytond.modules.coog_core import fields
@@ -35,13 +36,6 @@ class Fee(metaclass=PoolMeta):
     broker_fee = fields.Boolean('Broker Fee')
 
     @classmethod
-    def __setup__(cls):
-        super(Fee, cls).__setup__()
-        cls._error_messages.update({
-                'broker_fee': 'Broker Fee',
-                })
-
-    @classmethod
     def get_broker_fee_line_domain(cls, accounts, parties):
         return [
             ('account', 'in', accounts),
@@ -49,8 +43,8 @@ class Fee(metaclass=PoolMeta):
             ('broker_fee_invoice_line', '=', None),
             ('journal.type', '!=', 'commission'),
             ['OR',
-                [('origin.id', '!=', None, 'account.invoice')],
-                [('origin.id', '!=', None, 'account.move')]
+                [('move_origin.id', '!=', None, 'account.invoice')],
+                [('move_origin.id', '!=', None, 'account.move')]
             ]]
 
     @classmethod
@@ -72,13 +66,13 @@ class Fee(metaclass=PoolMeta):
         parties = [invoice.party.id for invoice in invoices]
         lines = Line.search(cls.get_broker_fee_line_domain(accounts, parties))
         for line in lines:
-            if isinstance(line.origin, Move):
-                if isinstance(line.origin.origin, Invoice):
-                    invoice = line.origin.origin
+            if isinstance(line.move_origin, Move):
+                if isinstance(line.move_origin.origin, Invoice):
+                    invoice = line.move_origin.origin
                 else:
                     continue
             else:
-                invoice = line.origin
+                invoice = line.move_origin
             if invoice.state != 'paid' and invoice.state != 'cancel':
                 continue
             selected[line.party][line.account].append(line)
@@ -93,8 +87,8 @@ class Fee(metaclass=PoolMeta):
                 invoice_line.quantity = 1
                 invoice_line.unit_price = amount
                 invoice_line.account = account
-                invoice_line.description = cls.raise_user_error(
-                    'broker_fee', raise_exception=False)
+                invoice_line.description = gettext(
+                    'commission_insurance.msg_broker_fee')
                 invoice_line.invoice = invoice
                 invoice_line.save()
                 Line.write(fee_lines, {

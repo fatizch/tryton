@@ -4,6 +4,8 @@ from decimal import Decimal, ROUND_HALF_UP
 from dateutil.relativedelta import relativedelta
 
 from trytond import backend
+from trytond.i18n import gettext
+from trytond.model.exceptions import ValidationError
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, Bool
 from trytond.cache import Cache
@@ -93,8 +95,10 @@ class Benefit(metaclass=PoolMeta):
                 accounts = list(
                     set(benefit.get_benefit_accounts()))
                 if len(accounts) > 1:
-                    cls.append_functional_error('different_product_accounts',
-                        {'benefit': benefit.rec_name})
+                    cls.append_functional_error(
+                        ValidationError(gettext(
+                                'claim.msg_different_product_accounts',
+                                benefit=benefit.rec_name)))
 
     def has_automatic_period_calculation(self):
         return self.automatic_period_calculation and \
@@ -183,28 +187,6 @@ class BenefitRule(
     @classmethod
     def __setup__(cls):
         super(BenefitRule, cls).__setup__()
-        cls._error_messages.update({
-                'msg_beneficiary_share': 'Share for current beneficiary : '
-                '%(share)s %%',
-                'msg_final_result': 'Total after share : %(amount).2f',
-                'no_indemnification_rule': 'No indemnification rule defined',
-                'period_description': 'Indemnification computed with forced '
-                'base amount %(forced_amount)s\nIndemnification amount is'
-                ' %(forced_amount)s * %(nb_of_unit)s = %(amount)s\n',
-                'capital_description': 'Capital forced amount '
-                '%(forced_amount)s\n',
-                'annuity_general_description': 'Annuities generated with forced'
-                ' base amount %(forced_amount)s on a %(frequency)s frequency'
-                '\nTherefore, annual annuity amount is '
-                '%(annual_forced_amount)s\n',
-                'annuity_description': 'The prorata for this period is '
-                '%(prorata)s / %(ratio)s = %(prorata_on_ratio)s\nThe '
-                'amount per day is %(annual_forced_amount)s / %(ratio)s = '
-                '%(amount_per_unit)s \nThe annuity amount is '
-                '%(amount_per_unit)s * %(prorata)s = %(annuity_amount)s \n',
-                'invalid_detail_deductible_rule': 'Detail %(detail_key) does '
-                'not exist in configuration for deductible rules',
-                })
         cls.indemnification_rule.domain = [('type_', '=', 'benefit')]
         cls.deductible_rule.domain = [('type_', '=', 'benefit_deductible')]
         cls.revaluation_rule.domain = [('type_', '=', 'benefit_revaluation')]
@@ -223,8 +205,7 @@ class BenefitRule(
     def get_rec_name(self, name):
         if self.indemnification_rule:
             return self.indemnification_rule.rec_name
-        return self.raise_user_error('no_indemnification_rule',
-            raise_exception=False)
+        return gettext('claim_indemnification.msg_no_indemnification_rule')
 
     @fields.depends('benefit', 'requires_frequency')
     def on_change_benefit(self):
@@ -309,10 +290,10 @@ class BenefitRule(
                         'claim.indemnification.detail')
                     for key, value in deductible_infos.items():
                         if key not in keys:
-                            self.raise_user_error(
-                                'invalid_detail_deductible_rule', {
-                                    'detail_key': key,
-                                    })
+                            raise ValidationError(gettext(
+                                    'claim_indemnification'
+                                    '.msg_invalid_detail_deductible_rule',
+                                    detail_key=key))
                         details[key] = value
                 res.append({
                         'kind': 'deductible',
@@ -396,13 +377,12 @@ class BenefitRule(
             for key in ('amount', 'base_amount', 'amount_per_unit'):
                 elem[key] = (args['indemnification'].share *
                     elem.get(key, 0)).quantize(elem.get(key, 0))
-            elem['description'] += '\n\n' + self.raise_user_error(
-                'msg_beneficiary_share', {
-                    'share': args['indemnification'].share * 100},
-                raise_exception=False).encode('utf-8')
-            elem['description'] += '\n\n' + self.raise_user_error(
-                'msg_final_result', {'amount': elem.get('amount')},
-                raise_exception=False).encode('utf-8')
+            elem['description'] += '\n\n' + gettext(
+                'claim_indemnification.msg_beneficiary_share',
+                share=args['indemnification'].share * 100).encode('utf-8')
+            elem['description'] += '\n\n' + gettext(
+                'claim_indemnification.msg_final_result',
+                amount=elem.get('amount')).encode('utf-8')
         return result
 
     def get_forced_amount_benefits(self, indemnification):
@@ -421,12 +401,11 @@ class BenefitRule(
             str_nb_of_unit = coog_string.format_number('%.2f', nb_of_unit)
             str_amount = coog_string.format_number('%.2f', amount)
 
-            description += self.raise_user_error('period_description', {
-                    'forced_amount': str_forced_base_amount,
-                    'nb_of_unit': str_nb_of_unit,
-                    'amount': str_amount
-                    },
-                raise_exception=False)
+            description += gettext(
+                'claim_indemnification.msg_period_description',
+                forced_amount=str_forced_base_amount,
+                nb_of_unit=str_nb_of_unit,
+                amount=str_amount)
 
             res.append({
                     'start_date': start_date,
@@ -445,9 +424,9 @@ class BenefitRule(
             nb_of_unit = 1
             end_date = None
 
-            description += self.raise_user_error('capital_description', {
-                    'forced_amount': str_forced_base_amount
-                    }, raise_exception=False)
+            description += gettext(
+                'claim_indemnification.msg_capital_description',
+                forced_amount=str_forced_base_amount)
 
             res.append({
                     'start_date': start_date,
@@ -466,12 +445,11 @@ class BenefitRule(
 
             str_annual_forced_amount = coog_string.format_number('%.2f',
                 annual_forced_base_amount)
-            description += self.raise_user_error('annuity_general_description',
-                {
-                    'forced_amount': str_forced_base_amount,
-                    'frequency': frequency,
-                    'annual_forced_amount': str_annual_forced_amount
-                }, raise_exception=False)
+            description += gettext(
+                'claim_indemnification.msg_annuity_general_description',
+                forced_amount=str_forced_base_amount,
+                frequency=frequency,
+                annual_forced_amount=str_annual_forced_amount)
 
             periods = indemnification.service.calculate_annuity_periods(
                 start_date, end_date)
@@ -511,14 +489,14 @@ class BenefitRule(
             str_annuity_amount = coog_string.format_number('%.2f',
                 annuity_amount)
 
-            description += self.raise_user_error('annuity_description', {
-                    'prorata': str_prorata,
-                    'ratio': str_ratio,
-                    'prorata_on_ratio': str_prorata_on_ratio,
-                    'annual_forced_amount': str_annual_forced_amount,
-                    'amount_per_unit': str_amount_per_unit,
-                    'annuity_amount': str_annuity_amount
-                    }, raise_exception=False)
+            description += gettext(
+                'claim_indemnification.msg_annuity_description',
+                prorata=str_prorata,
+                ratio=str_ratio,
+                prorata_on_ratio=str_prorata_on_ratio,
+                annual_forced_amount=str_annual_forced_amount,
+                amount_per_unit=str_amount_per_unit,
+                annuity_amount=str_annuity_amount)
 
             res.append({
                     'start_date': start_date,

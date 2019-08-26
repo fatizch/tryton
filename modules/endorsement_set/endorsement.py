@@ -10,6 +10,8 @@ from trytond.transaction import Transaction
 from trytond.model import Workflow, Unique
 from trytond.pyson import Eval, Bool, Equal
 from trytond.server_context import ServerContext
+from trytond.i18n import gettext
+from trytond.model.exceptions import ValidationError
 
 from trytond.modules.company.model import (CompanyValueMixin,
     CompanyMultiValueMixin)
@@ -116,10 +118,6 @@ class EndorsementSet(Printable, model.CoogSQL, model.CoogView):
                 'reset': {
                     "invisible": ~Eval('state').in_(['draft'])},
                 })
-        cls._error_messages.update({
-            'effective_date_already_set': 'The effective date is already set.',
-            'no_sequence_defined': 'No sequence defined in configuration',
-            })
 
     @classmethod
     def create(cls, vlist):
@@ -129,7 +127,8 @@ class EndorsementSet(Printable, model.CoogSQL, model.CoogView):
 
         config = Configuration(1)
         if not config.endorsement_set_sequence:
-            cls.raise_user_error('no_sequence_defined')
+            raise ValidationError(gettext(
+                    'endorsement.msg_no_sequence_defined'))
         vlist = [v.copy() for v in vlist]
         for values in vlist:
             if not values.get('number'):
@@ -233,7 +232,8 @@ class EndorsementSet(Printable, model.CoogSQL, model.CoogView):
                     endorsement.effective_date != value)
                 for endorsement_set in endorsement_sets
                 for endorsement in endorsement_set.endorsements]):
-            cls.append_functional_error('effective_date_already_set')
+            cls.append_functional_error(ValidationError(gettext(
+                    'endorsement_set.msg_effective_date_already_set')))
         to_write = []
         for endorsement_set in endorsement_sets:
             to_write += [[endorsement for endorsement in
@@ -262,16 +262,6 @@ class Endorsement(metaclass=PoolMeta):
         'get_generated_endorsement_sets',
         setter='setter_void')
 
-    @classmethod
-    def __setup__(cls):
-        super(Endorsement, cls).__setup__()
-        cls._error_messages.update({
-                'must_apply_all': 'All endorsements on endorsement set'
-                ' must be applied together',
-                'must_decline_all': 'All endorsements on endorsement set'
-                ' must be declined together',
-                })
-
     def get_contract_set(self, name):
         if self.endorsement_set:
             return self.endorsement_set.contract_set.id
@@ -296,7 +286,8 @@ class Endorsement(metaclass=PoolMeta):
             if endorsement.endorsement_set and \
                     not set(endorsement.endorsement_set.endorsements
                     ).issubset(to_apply):
-                cls.raise_user_error('must_apply_all')
+                raise ValidationError(gettext(
+                        'endorsement_set.msg_must_apply_all'))
         super(Endorsement, cls).apply(endorsements)
 
     @classmethod
@@ -318,7 +309,8 @@ class Endorsement(metaclass=PoolMeta):
             if endorsement.endorsement_set and \
                     not set(endorsement.endorsement_set.endorsements
                     ).issubset(to_decline):
-                cls.raise_user_error('must_decline_all')
+                raise ValidationError(gettext(
+                        'endorsement_set.msg_must_decline_all'))
         return super(Endorsement, cls).decline(endorsements, reason=reason)
 
     @classmethod

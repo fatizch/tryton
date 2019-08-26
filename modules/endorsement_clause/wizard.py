@@ -292,13 +292,14 @@ class ClauseDisplayer(model.CoogView):
             displayer.display_name = clause.rec_name
         else:
             displayer.display_name = 'New Clause (%s)' % (
-                clause.clause.rec_name if clause.clause else 'Custom')
+                clause.clause.rec_name if getattr(clause, 'clause', None)
+                else 'Custom')
             displayer.action = 'added'
             displayer.clause_id = None
         displayer.text = clause.text
-        displayer.clause = clause.clause
-        if clause.clause:
-            displayer.customizable = clause.clause.customizable
+        displayer.clause = getattr(clause, 'clause', None)
+        if displayer.clause:
+            displayer.customizable = displayer.clause.customizable
         else:
             displayer.customizable = True
         return displayer

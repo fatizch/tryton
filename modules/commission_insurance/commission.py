@@ -10,9 +10,11 @@ from sql.aggregate import Sum, Max, Min
 from sql.functions import ToChar
 
 from trytond import backend
+from trytond.i18n import gettext
 from trytond.config import config
 from trytond.pool import PoolMeta, Pool
 from trytond.model import Unique, ModelSingleton
+from trytond.model.exceptions import AccessError, ValidationError
 from trytond.pyson import Eval, Bool, PYSONEncoder
 from trytond.wizard import Wizard, StateView, Button, StateTransition
 from trytond.wizard import StateAction
@@ -134,10 +136,6 @@ class Commission(WithExtraDetails, metaclass=PoolMeta):
         cls.product.readonly = True
         cls.amount.readonly = True
         cls.extra_details.readonly = True
-        cls._error_messages.update({
-                'no_delete_invoiced_commission': 'Cannot delete an already '
-                'invoiced commission',
-                })
 
     @classmethod
     def __register__(cls, module_name):
@@ -210,7 +208,8 @@ class Commission(WithExtraDetails, metaclass=PoolMeta):
     def delete(cls, instances):
         for commission in instances:
             if commission.invoice_line:
-                cls.raise_user_error('no_delete_invoiced_commission')
+                raise AccessError(gettext(
+                        'commission_insurance'))
         super(Commission, cls).delete(instances)
 
     @classmethod
@@ -841,26 +840,20 @@ class PlanCalculationDate(model.CoogSQL, model.CoogView):
             (str(x), str(x)) for x in range(31)], 'Day')
 
     @classmethod
-    def __setup__(cls):
-        super(PlanCalculationDate, cls).__setup__()
-        cls._error_messages.update({
-                'need_date_field_set': 'Some date fields must be set',
-                'invalid_month_day_combination':
-                'Invalid Month (%s) Day (%s) Combination',
-                })
-
-    @classmethod
     def validate(cls, dates):
         for date in dates:
             if date.type_ == 'relative':
                 if not date.day and not date.month and not date.year:
-                    cls.raise_user_error('need_date_field_set')
+                    raise ValidationError(gettext(
+                            'commission_insurance.msg_need_date_field_set'))
             elif date.type_ == 'absolute':
                 try:
                     date = datetime.date(2000, int(date.month), int(date.day))
                 except ValueError:
-                    cls.raise_user_error('invalid_month_day_combination',
-                        (date.month, date.day))
+                    raise ValidationError(gettext(
+                            'commission_insurance'
+                            '.msg_invalid_month_day_combination',
+                            month=date.month, day=date.day))
 
     @classmethod
     def default_first_match_only(cls):
@@ -974,9 +967,6 @@ class Agent(export.ExportImportMixin, model.FunctionalErrorMixIn):
         cls.party.domain = ['OR', ('is_broker', '=', True),
                 ('is_insurer', '=', True),
                 ]
-        cls._error_messages.update({
-                'agent_not_found': 'Cannot find matching agent for %s :\n\n%s',
-                })
         t = cls.__table__()
         cls._sql_constraints += [
             ('code_unique', Unique(t, t.code), 'The code must be unique')]
@@ -1550,14 +1540,6 @@ class FilterCommissions(Wizard):
     aggregated_commissions = StateAction(
         'commission_insurance.act_commission_aggregated_form_relate')
 
-    @classmethod
-    def __setup__(cls):
-        super(FilterCommissions, cls).__setup__()
-        cls._error_messages.update({
-                'no_invoices': 'The selected contracts'
-                ' do not have any invoice.',
-                })
-
     def get_domain_from_invoice_business_kind(self, ids, kinds):
         in_domain = [('invoice_line.invoice', 'in', ids)]
         out_domain = [('origin.invoice', 'in', ids, 'account.invoice.line')]
@@ -1578,7 +1560,8 @@ class FilterCommissions(Wizard):
             invoices = Invoice.search([
                     ('contract', 'in', active_ids)])
             if not invoices:
-                self.raise_user_error('no_invoices')
+                raise ValidationError(gettext(
+                        'commission_insurance.msg_no_invoices'))
             return 'aggregated_commissions'
         ids = Transaction().context.get('active_ids')
         AccountInvoice = Pool().get('account.invoice')

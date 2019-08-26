@@ -256,13 +256,10 @@ return coverage_amount() < 1000
             'coverage_amount'] = '10000.00'
         self.assertEqual(ContractAPI.subscribe_contracts(data_dict, {}).data,
             {
-                'type': 'invalid_coverage_amount',
-                'data': {
-                    'coverage': 'Beta Coverage',
-                    'coverage_amount': '10000.00',
-                    'message': 'Coverage amount "10000.00" is invalid for '
-                    'coverage "Beta Coverage"',
-                    },
+                'code': 1,
+                'description': '',
+                'message': 'Coverage amount "10000.00" is invalid for coverage '
+                '"Beta Coverage".',
                 })
 
         data_dict = copy.deepcopy(data_ref)

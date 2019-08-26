@@ -4,8 +4,10 @@ from lxml import etree
 from dateutil.relativedelta import relativedelta
 from decimal import Decimal
 
+from trytond.i18n import gettext
 from trytond.pyson import Eval
 from trytond.model import Unique
+from trytond.model.exceptions import ValidationError
 from trytond.pool import Pool
 from trytond.server_context import ServerContext
 
@@ -56,13 +58,8 @@ class PartyCustomPasrauRate(model.CoogSQL, model.CoogView):
         t = cls.__table__()
         cls._sql_constraints += [
             ('party_date_unique', Unique(t, t.party, t.effective_date),
-                'The rate must be unique per party / date'),
+                'claim_pasrau.msg_party_date_unique'),
             ]
-        cls._error_messages.update({
-                'no_party_found': 'No party found for NIR %(ssn)s '
-                'and matricule %(matricule)s',
-                'no_rate_found': 'No pasrau rate found for NIR %(ssn)s',
-                })
 
     @classmethod
     def default_origin(cls):
@@ -106,10 +103,10 @@ class PartyCustomPasrauRate(model.CoogSQL, model.CoogView):
                                 ('ssn', 'like', ssn + '%'),
                                 ('is_person', '=', True)])
                         if not party:
-                            errors.append(cls.raise_user_error(
-                                    'no_party_found', {'ssn': ssn,
-                                        'matricule': matricule},
-                                    raise_exception=False))
+                            errors.append(gettext(
+                                    'claim_pasrau.msg_no_party_found',
+                                    ssn=ssn,
+                                    matricule=matricule))
                             continue
                         if party in treated_parties:
                             continue
@@ -117,8 +114,9 @@ class PartyCustomPasrauRate(model.CoogSQL, model.CoogView):
                         pasrau_tax_rate = node_func(salarie,
                             'taux_imposition_PAS', True)
                         if not pasrau_tax_rate:
-                            errors.append(cls.raise_user_error('no_rate_found',
-                                    {'ssn': ssn}, raise_exception=False))
+                            errors.append(gettext(
+                                    'claim_pasrau.msg_no_rate_found',
+                                    ssn=ssn))
                             continue
                         rate = party[0].update_pasrau_rate(effective_date,
                             Decimal(pasrau_tax_rate) / Decimal(100),
@@ -151,18 +149,6 @@ class DefaultPasrauRate(model.CoogSQL, model.CoogView):
         select=True)
 
     @classmethod
-    def __setup__(cls):
-        super(DefaultPasrauRate, cls).__setup__()
-        cls._error_messages.update({
-                'no_pasrau_region': 'Unable to find PASRAU region '
-                'for zip code %s',
-                'no_default_pasrau': 'Could not compute a default pasrau '
-                'value for parameters:\n\nZip: %(zip)s\nIncome: %(income)s\n'
-                'Start: %(start)s\nEnd: %(end)s\n'
-                'Invoice Date: %(invoice_date)s',
-                })
-
-    @classmethod
     def get_region(cls, zip_code):
         if 1 <= int(zip_code[:2]) <= 95:
             return 'metropolitan'
@@ -173,7 +159,9 @@ class DefaultPasrauRate(model.CoogSQL, model.CoogView):
         for key, prefixes in mapping.items():
             if any(zip_code.startswith(prefix) for prefix in prefixes):
                 return key
-        cls.raise_user_error('no_pasrau_region', zip_code)
+        raise ValidationError(gettext(
+                'claim_pasrau.msg_no_pasrau_region',
+                zip=zip_code))
 
     @classmethod
     def get_appliable_default_pasrau_rate(cls, zip_code, income, period_start,
@@ -216,13 +204,13 @@ class DefaultPasrauRate(model.CoogSQL, model.CoogView):
                     with ServerContext().set_context(pasrau_data=pasrau_dict):
                         return candidate.rate
                 return candidate.rate
-        cls.raise_user_error('no_default_pasrau', {
-                'zip': zip_code,
-                'income': '%.2f' % income,
-                'start': period_start,
-                'end': period_end,
-                'invoice_date': invoice_date
-                })
+        raise ValidationError(gettext(
+                    'claim_pasrau.msg_no_default_pasrau',
+                    zip=zip_code,
+                    income='%.2f' % income,
+                    start=period_start,
+                    end=period_end,
+                    invoice_date=invoice_date))
 
 
 class MoveLinePasrauRate(model.CoogSQL, model.CoogView):

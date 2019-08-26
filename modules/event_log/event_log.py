@@ -3,6 +3,7 @@
 import datetime
 from collections import defaultdict
 
+from trytond.i18n import gettext
 from trytond.transaction import Transaction
 from trytond.pool import Pool, PoolMeta
 from trytond.modules.coog_core import model, fields, utils
@@ -19,19 +20,10 @@ class EventTypeAction(metaclass=PoolMeta):
     __name__ = 'event.type.action'
 
     @classmethod
-    def __setup__(cls):
-        super(EventTypeAction, cls).__setup__()
-        cls._error_messages.update({
-                'event_configuration_aggregate':
-                'Use Event Aggregate Configuration',
-                'log_aggregated': 'Event Log aggregated',
-                })
-
-    @classmethod
     def get_action_types(cls):
         return super(EventTypeAction, cls).get_action_types() + [
-            ('event_configuration_aggregate', cls.raise_user_error(
-                    'event_configuration_aggregate', raise_exception=False))]
+            ('event_configuration_aggregate',
+                gettext('event_log.msg_event_configuration_aggregate'))]
 
     def execute(self, objects, event_code, description=None, **kwargs):
         pool = Pool()
@@ -62,8 +54,7 @@ class EventTypeAction(metaclass=PoolMeta):
                 if x.object_ in to_ignore and x.event_type.id == event_type_id]
             if logs_to_modify:
                 EventLog.write(logs_to_modify, {
-                    'description': self.raise_user_error('log_aggregated',
-                        raise_exception=False),
+                    'description': gettext('event_log.msg_log_aggregated'),
                     })
 
 

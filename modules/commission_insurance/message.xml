@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<tryton>
+    <data group="1">
+        <record model="ir.message" id="msg_no_delete_invoiced_commission">
+            <field name="text">Cannot delete an already invoiced commission.</field>
+        </record>
+        <record model="ir.message" id="msg_need_date_field_set">
+            <field name="text">Some date fields must be set.</field>
+        </record>
+        <record model="ir.message" id="msg_invalid_month_day_combination">
+            <field name="text">Invalid Month (%(month)s) Day (%(day)s) Combination.</field>
+        </record>
+        <record model="ir.message" id="msg_agent_not_found">
+            <field name="text">Cannot find matching agent for %(broker)s:
+
+%(agent)s</field>
+        </record>
+        <record model="ir.message" id="msg_no_invoices">
+            <field name="text">The selected contracts do not have any invoice.</field>
+        </record>
+        <record model="ir.message" id="msg_broker_fee">
+            <field name="text">Broker Fee</field>
+        </record>
+        <record model="ir.message" id="msg_no_broker_define_for_broker_fee">
+            <field name="text">No broker define on contract %(contract)s for broker fee %(fee)s.</field>
+        </record>
+    </data>
+</tryton>

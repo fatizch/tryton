@@ -2,22 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:commission:"
-msgid "Prepayment"
-msgstr "Précompte"
-
-msgctxt "error:commission:"
-msgid "Prepayment Amortization"
-msgstr "Amortissement du précompte"
-
-msgctxt "error:commission:"
-msgid "Redeemed prepayment: %(redeemed_amount)s\n"
-msgstr "Précompte amorti: %(redeemed_amount)s\n"
-
-msgctxt "error:contract.option:"
-msgid "An option must have either a contract or a covered element"
-msgstr "Une option doit avoir un contrat ou un élément couvert"
-
 msgctxt "field:commission,extra_details:"
 msgid "Extra Details"
 msgstr "Détails complémentaires"
@@ -330,6 +314,18 @@ msgstr "Somme des amortissements"
 msgctxt "model:ir.action,name:sync_prepayments_wizard"
 msgid "Synchronise Prepayments"
 msgstr "Synchroniser les précomptes"
+
+msgctxt "model:ir.message,text:msg_prepayment"
+msgid "Prepayment"
+msgstr "Précompte"
+
+msgctxt "model:ir.message,text:msg_prepayment_amortization"
+msgid "Prepayment Amortization"
+msgstr "Amortissement du précompte"
+
+msgctxt "model:ir.message,text:msg_redeemed_prepayment"
+msgid "Redeemed prepayment: %(redeemed_amount)s"
+msgstr "Précompte amorti: %(redeemed_amount)s\n"
 
 msgctxt "model:offered.configuration-contract.sub_status,name:"
 msgid "Configuration to Termination Reason"

@@ -1,5 +1,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+from trytond.i18n import gettext
+from trytond.model.exceptions import ValidationError
 from trytond.pool import PoolMeta
 from trytond.wizard import StateAction
 
@@ -25,17 +27,11 @@ class ReceiveDocument(metaclass=PoolMeta):
 
     start_endorsement = StateAction('endorsement.act_start_endorsement')
 
-    @classmethod
-    def __setup__(cls):
-        super(ReceiveDocument, cls).__setup__()
-        cls._error_messages.update({
-                'no_contract_selected': 'A contract must be set !',
-                })
-
     def do_start_endorsement(self, action):
         document = self.free_attach.document
         if not document.contract:
-            self.raise_user_error('no_contract_selected')
+            raise ValidationError(gettext(
+                    'endorsement.msg_no_contract_selected'))
         document.transfer(document.contract)
         return action, {
             'id': document.contract.id,

@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<tryton>
+    <data group="1">
+        <record model="ir.message" id="msg_sequence_max_number_exceeded">
+            <field name="text">Coog can't assign a new number for the sequence "%(sequence_name)s": The limit of %(number_max)s is reached. Please define a new sub-sequence period or increase limits.</field>
+        </record>
+        <record model="ir.message" id="msg_no_sequence_at_date">
+            <field name="text">Could not get a valid sub-sequence at date %(date)s for the sequence "%(sequence)s". Please define a new sub-sequence period on increase limits.</field>
+        </record>
+        <record model="ir.message" id="msg_period_invalid">
+            <field name="text">The sub-sequence period is invalid: %(start_date)s greater than %(end_date)s.</field>
+        </record>
+    </data>
+</tryton>

@@ -1,5 +1,8 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+from trytond.i18n import gettext
+from trytond.model import Unique
+from trytond.model.exceptions import ValidationError
 from sql import Literal
 
 from trytond import backend
@@ -110,9 +113,6 @@ class QuestionnairePart(model.CoogSQL, model.CoogView, model.SequenceMixin,
             '\n- product: the code of the suggested product'
             '\n- eligible: whether the product will be selectable or not for '
             'subscription')
-        cls._error_messages.update({
-                'invalid_rule_output': 'Invalid output for rule %(rule)s',
-                })
 
     @classmethod
     def __register__(cls, module):
@@ -170,8 +170,8 @@ class QuestionnairePart(model.CoogSQL, model.CoogView, model.SequenceMixin,
             assert all(x in requirements
                 for x in ['score', 'description', 'product', 'eligible'])
         except AssertionError:
-            self.raise_user_error('invalid_rule_output', {
-                    'rule': self.rule.rec_name})
+            raise ValidationError(gettext('questionnaire.msg_invalid_rule_output',
+                    rule=self.rule.rec_name))
 
     def _accept_result(self, result):
         # Returns whether or not this result should be considered, depending on

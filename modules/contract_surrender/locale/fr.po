@@ -2,65 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:contract.cancel.surrender:"
-msgid "No selected contract"
-msgstr "Aucun contrat sélectionné"
-
-msgctxt "error:contract.option:"
-msgid "Surrender of %(option)s"
-msgstr "Rachat de %(option)s"
-
-msgctxt "error:contract.plan.surrender:"
-msgid ""
-"Impossible to surrender before the contract's start_date (%(start_date)s)"
-msgstr ""
-"Impossible de rachter le contrat avant sa date de début (%(start_date)s)"
-
-msgctxt "error:contract:"
-msgid "Confirm contracts surrender"
-msgstr "Confirmer le rachat"
-
-msgctxt "error:contract:"
-msgid "Contract %(contract)s cannot be surrendered"
-msgstr "Le contrat %(contract)s ne peut pas être racheté"
-
-msgctxt "error:contract:"
-msgid ""
-"Contract %(contract)s is not surrendered. Therefore, it cannot be "
-"reactivated."
-msgstr ""
-"Le contrat %(contract)s n'est pas racheté, il ne peut donc pas être "
-"réactivé."
-
-msgctxt "error:contract:"
-msgid "Contracts surrender will be cancelled"
-msgstr "Le rachat du contrat sera annulé"
-
-msgctxt "error:contract:"
-msgid "Contracts surrender will be planned"
-msgstr "Le rachat sera plannifié"
-
-msgctxt "error:contract:"
-msgid "Contracts will automatically be surrendered"
-msgstr "Les contrats seront automatiquement rachetés"
-
-msgctxt "error:contract:"
-msgid ""
-"Deletion not allowed because the contracts %(contracts)s are not quote or "
-"declined."
-msgstr ""
-"La suppression n'est pas autorisée car les contrats %(contract)s ne sont pas"
-" des devis ou déclinés"
-
-msgctxt "error:contract:"
-msgid ""
-"No options were found that can be surrendered for contract %(contract)s"
-msgstr "Aucune garantie ne peut être rachetée sur le contrat %(contract)s"
-
-msgctxt "error:contract:"
-msgid "Surrender of %(contract)s"
-msgstr "Rachat du contrat %(contract)s"
-
 msgctxt "field:account.configuration,surrender_journal:"
 msgid "Surrender Journal"
 msgstr "Journal de rachat"
@@ -313,6 +254,57 @@ msgstr "Rachats planifiés"
 msgctxt "model:ir.action.act_window.domain,name:act_contract_domain_surrender"
 msgid "Validated Surrenders"
 msgstr "Rachats validés"
+
+msgctxt "model:ir.message,text:msg_auto_surrendering"
+msgid "Contracts will automatically be surrendered."
+msgstr "Les contrats seront automatiquement rachetés."
+
+msgctxt "model:ir.message,text:msg_cannot_surrender"
+msgid "Contract %(contract)s cannot be surrendered."
+msgstr "Le contrat %(contract)s ne peut pas être racheté."
+
+msgctxt "model:ir.message,text:msg_contract_not_surrendered"
+msgid ""
+"Contract %(contract)s is not surrendered. Therefore, it cannot be "
+"reactivated."
+msgstr ""
+"Le contrat %(contract)s n'est pas racheté, il ne peut donc pas être "
+"réactivé."
+
+msgctxt "model:ir.message,text:msg_invalid_date"
+msgid ""
+"Impossible to surrender before the contract's start_date (%(start_date)s)."
+msgstr ""
+"Impossible de rachter le contrat avant sa date de début (%(start_date)s)."
+
+msgctxt "model:ir.message,text:msg_no_selected_contract"
+msgid "No selected contract."
+msgstr "Aucun contrat sélectionné."
+
+msgctxt "model:ir.message,text:msg_no_surrenderable_options"
+msgid ""
+"No options were found that can be surrendered for contract %(contract)s."
+msgstr "Aucune garantie ne peut être rachetée sur le contrat %(contract)s."
+
+msgctxt "model:ir.message,text:msg_plan_surrender"
+msgid "Contracts surrender will be planned."
+msgstr "Le rachat sera plannifié."
+
+msgctxt "model:ir.message,text:msg_surrender_invoice_description"
+msgid "Surrender of %(contract)s."
+msgstr "Rachat du contrat %(contract)s."
+
+msgctxt "model:ir.message,text:msg_surrender_line_description"
+msgid "Surrender of %(option)s"
+msgstr "Rachat de %(option)s"
+
+msgctxt "model:ir.message,text:msg_will_cancel_surrender"
+msgid "Contracts surrender will be cancelled."
+msgstr "Le rachat du contrat sera annulé."
+
+msgctxt "model:ir.message,text:msg_will_surrender"
+msgid "Confirm contracts surrender."
+msgstr "Confirmer le rachat."
 
 msgctxt "model:ir.ui.menu,name:menu_surrender_contract_form"
 msgid "Surrender Contracts"

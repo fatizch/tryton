@@ -1,5 +1,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+from trytond.i18n import gettext
+from trytond.model.exceptions import ValidationError
 from trytond.pool import PoolMeta, Pool
 from trytond.modules.process_cog.process import CoogProcessFramework
 from trytond.modules.process import ClassAttr
@@ -75,9 +77,6 @@ class EndorsementSet(CoogProcessFramework, metaclass=ClassAttr):
     @classmethod
     def __setup__(cls):
         super(EndorsementSet, cls).__setup__()
-        cls._error_messages.update({
-                'no_effective_date': 'Effective date is not defined',
-                })
         cls._buttons.update({
                 'button_resume_process': {},
                 })
@@ -93,7 +92,9 @@ class EndorsementSet(CoogProcessFramework, metaclass=ClassAttr):
 
     def check_endorsements_effective_date(self):
         if not self.effective_date:
-            self.append_functional_error('no_effective_date')
+            self.append_functional_error(ValidationError(
+                    gettext(
+                        'endorsement_set_process.msg_no_effective_date')))
 
     def get_endorsements_parts_union(self, name):
         # See table_query method on EndorsementPartUnion

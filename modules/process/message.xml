@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<tryton>
+    <data group="1">
+        <record model="ir.message" id="msg_use_steps_only_once">
+            <field name="text">%(name)s: Step %(step)s cannot be used more than once.</field>
+        </record>
+        <record model="ir.message" id="msg_not_allowed_message">
+            <field name="text">The current record is in a state (%(name)s) that you are not allowed to view.</field>
+        </record>
+        <record model="ir.message" id="msg_process_completed">
+            <field name="text">The current record completed the current process, please go ahead.</field>
+        </record>
+        <record model="ir.message" id="msg_non_matching_method">
+            <field name="text">Method %(method)s does not exist on model %(model)s.</field>
+        </record>
+        <record model="ir.message" id="msg_source_code_unavailable">
+            <field name="text">Source Code Unavailable.</field>
+        </record>
+        <record model="ir.message" id="msg_complete_button_label">
+            <field name="text">Complete</field>
+        </record>
+        <record model="ir.message" id="msg_field_required">
+            <field name="text">Enter a value for field(s): %(fields)s.</field>
+        </record>
+        <record model="ir.message" id="msg_child_field_required">
+            <field name="text">Enter a value for field '%(field)s' of '%(parent)s'.</field>
+        </record>
+        <record model="ir.message" id="msg_date_in_future">
+            <field name="text">Select a date that is not in the future for field(s): %(fields)s.</field>
+        </record>
+    </data>
+</tryton>

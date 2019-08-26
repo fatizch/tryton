@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+        <record model="ir.message" id="msg_no_version_match">
+            <field name="text">No letter model found for date %(date)s and language %(language)s.</field>
+        </record>
+        <record model="ir.message" id="msg_libre_office">
+            <field name="text">Libre Office</field>
+        </record>
+        <record model="ir.message" id="msg_flat_document">
+            <field name="text">Flat Document</field>
+        </record>
+        <record model="ir.message" id="msg_libre_office_odt">
+            <field name="text">Libre Office Writer</field>
+        </record>
+        <record model="ir.message" id="msg_libre_office_ods">
+            <field name="text">Libre Office Calc</field>
+        </record>
+        <record model="ir.message" id="msg_format_original">
+            <field name="text">Original</field>
+        </record>
+        <record model="ir.message" id="msg_format_pdf">
+            <field name="text">PDF</field>
+        </record>
+        <record model="ir.message" id="msg_microsoft_office">
+            <field name="text">Microsoft Office</field>
+        </record>
+        <record model="ir.message" id="msg_shared_genshi_template">
+            <field name="text">Shared Genshi Template</field>
+        </record>
+        <record model="ir.message" id="msg_reports_produced">
+            <field name="text">Your reports have been produced:
+%(reports)s</field>
+        </record>
+        <record model="ir.message" id="msg_parsing_error">
+            <field name="text">Error while generating the letter:
+
+
+  Expression:
+%(expression)s
+
+
+  Error:
+%(error)s</field>
+        </record>
+        <record model="ir.message" id="msg_generate_documents">
+            <field name="text">Generate Documents</field>
+        </record>
+        <record model="ir.message" id="msg_search_for_none">
+            <field name="text">Nothing is set for search, are you sure you want to do this?</field>
+        </record>
+        <record model="ir.message" id="msg_convert_ok_message">
+            <field name="text">%(number)i occurences were converted</field>
+        </record>
+    </data>
+</tryton>

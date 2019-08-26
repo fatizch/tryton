@@ -2,22 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:contract.set:"
-msgid "Enter a value for field '%s' of '%s'"
-msgstr "Entrez  une valeur pour le champ '%s' de '%s'"
-
-msgctxt "error:contract.set:"
-msgid "Enter a value for field(s): %s"
-msgstr "Entrez une valeur pour le(s) champs(s) : %s"
-
-msgctxt "error:contract.set:"
-msgid "Everything is good !"
-msgstr "Tout est bon!"
-
-msgctxt "error:contract.set:"
-msgid "Select a date that is not in the future for field(s): %s"
-msgstr "Sélectionnez une date non à venir pour le(s) champ(s) : %s"
-
 msgctxt "field:contract.set,attachments:"
 msgid "Contracts Attachments"
 msgstr "Pièces jointes des contrats"

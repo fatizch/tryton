@@ -2,67 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:account.move:"
-msgid "The statement is already cancelled"
-msgstr "Le relevé est déja annulé"
-
-msgctxt "error:account.statement.create:"
-msgid "All selected records are not receivable"
-msgstr "Tous les enregistrements ne sont pas à recevoir"
-
-msgctxt "error:account.statement.create:"
-msgid "No company found"
-msgstr "Pas de société trouvée"
-
-msgctxt "error:account.statement.create:"
-msgid "No currency for company %s"
-msgstr "Pas de devise pour la société %s"
-
-msgctxt "error:account.statement.create:"
-msgid "No record selected"
-msgstr "Aucun enregistrement selectionné"
-
-msgctxt "error:account.statement.create:"
-msgid "The amount is insufficient"
-msgstr "Le montant est insuffisant"
-
-msgctxt "error:account.statement.create:"
-msgid "The cheque number is required"
-msgstr "Le numéro de chèque est requis"
-
-msgctxt "error:account.statement.create:"
-msgid "The statement amount differs from calculation: %s > %s (calculated)"
-msgstr "Le montant du relevé diffère des calculs: %s > %s (calculé)"
-
-msgctxt "error:account.statement.create:"
-msgid "Too many parties selected"
-msgstr "Trop de tiers selectionnés"
-
-msgctxt "error:account.statement.journal.cancel_motive:"
-msgid "The code must be unique"
-msgstr "Le code doit être unique"
-
-msgctxt "error:account.statement.journal:"
-msgid "Cheque"
-msgstr "Chèque"
-
-msgctxt "error:account.statement.journal:"
-msgid "Other"
-msgstr "Autre"
-
-msgctxt "error:account.statement.journal:"
-msgid "You can not cancel two statements with different statement journals"
-msgstr ""
-"Vous ne pouvez pas annuler deux relevés avec differents journaux de relevé"
-
-msgctxt "error:account.statement:"
-msgid "No lines associated to the statement(s) %s"
-msgstr "Pas de lignes associées au(x) relevé(s) %s"
-
-msgctxt "error:account.statement:"
-msgid "The name on statement must be unique per company"
-msgstr "Le nom d'un relevé est unique par société."
-
 msgctxt "field:account.statement,color:"
 msgid "Color"
 msgstr "Couleur"
@@ -150,6 +89,10 @@ msgstr "Identifiant XML"
 msgctxt "field:account.statement.line,in_bank_deposit_ticket:"
 msgid "In Bank Deposit Ticket"
 msgstr "Bordereau de chèque"
+
+msgctxt "field:account.statement.line,party:"
+msgid "Beneficiary"
+msgstr "Destinataire du paiement"
 
 msgctxt "field:account.statement.line,party_payer:"
 msgid "Payer"
@@ -348,6 +291,67 @@ msgctxt ""
 msgid "Validated"
 msgstr "Validé"
 
+msgctxt "model:ir.message,text:msg_already_cancelled"
+msgid "The statement is already cancelled."
+msgstr "Le relevé est déja annulé."
+
+msgctxt "model:ir.message,text:msg_amount_not_match"
+msgid ""
+"The statement amount differs from calculation: %(amount)s > "
+"%(calculated_amount)s (calculated)."
+msgstr ""
+"Le montant du relevé diffère des calculs: %(amount)s > %(calculated_amount)s"
+" (calculé)"
+
+msgctxt "model:ir.message,text:msg_cancel_journal_mixin"
+msgid "You can not cancel two statements with different statement journals."
+msgstr ""
+"Vous ne pouvez pas annuler deux relevés avec differents journaux de relevé."
+
+msgctxt "model:ir.message,text:msg_empty_lines"
+msgid "No lines associated to the statement(s) %(statements)s."
+msgstr "Pas de lignes associées au(x) relevé(s) %(statements)s"
+
+msgctxt "model:ir.message,text:msg_insufficient_amount"
+msgid "The amount is insufficient."
+msgstr "Le montant est insuffisant."
+
+msgctxt "model:ir.message,text:msg_method_cheque"
+msgid "Cheque"
+msgstr "Chèque"
+
+msgctxt "model:ir.message,text:msg_method_other"
+msgid "Other"
+msgstr "Autre"
+
+msgctxt "model:ir.message,text:msg_missing_cheque_number"
+msgid "The cheque number is required."
+msgstr "Le numéro de chèque est requis."
+
+msgctxt "model:ir.message,text:msg_no_company"
+msgid "No company found."
+msgstr "Pas de société trouvée."
+
+msgctxt "model:ir.message,text:msg_no_currency_for_company"
+msgid "No currency for company %(company)s."
+msgstr "Pas de devise pour la société %(company)s"
+
+msgctxt "model:ir.message,text:msg_no_record_selected"
+msgid "No record selected."
+msgstr "Aucun enregistrement selectionné."
+
+msgctxt "model:ir.message,text:msg_selection_not_receivable"
+msgid "All selected records are not receivable."
+msgstr "Tous les enregistrements ne sont pas à recevoir."
+
+msgctxt "model:ir.message,text:msg_too_many_parties"
+msgid "Too many parties selected."
+msgstr "Trop de tiers selectionnés."
+
+msgctxt "model:ir.message,text:msg_uniq_name"
+msgid "The name on statement must be unique per company."
+msgstr "Le nom d'un relevé est unique par société."
+
 msgctxt "model:ir.sequence.type,name:sequence_type_statement"
 msgid "Statement"
 msgstr "Relevé"
@@ -437,7 +441,7 @@ msgid "Invoice"
 msgstr "Quittance"
 
 msgctxt "field:account.statement.line,party:account_statement."
-msgid "Beneficiary"
+msgid "Party"
 msgstr "Bénéficiaire"
 
 msgctxt ""
@@ -448,7 +452,3 @@ msgstr "Emis"
 msgctxt "selection:account.statement,state:account_statement."
 msgid "Posted"
 msgstr "Emis"
-
-msgctxt "view:account.statement:account_statement."
-msgid "Post"
-msgstr "Emettre"

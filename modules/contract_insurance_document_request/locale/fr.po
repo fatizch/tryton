@@ -2,22 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:contract:"
-msgid "Some required documents are missing."
-msgstr "Des documents requis sont manquants."
-
-msgctxt "error:contract:"
-msgid "Some required documents are not conform."
-msgstr "Des documents requis ne sont pas conformes."
-
-msgctxt "error:document.rule:"
-msgid ""
-"The return value of the document rule must be a dictionnary with document "
-"description code as keys."
-msgstr ""
-"La valeur de retour de la règle de document doit être un dictionnaire dont "
-"les clés sont des codes de descripteur de document."
-
 msgctxt "field:contract,attachments:"
 msgid "Attachments"
 msgstr "Pièces jointes"
@@ -202,6 +186,14 @@ msgstr "Règles de gestion des documents"
 msgctxt "model:document.rule-document.description,name:"
 msgid "Rule to Document Description Relation"
 msgstr "Relation règles descripteur des documents"
+
+msgctxt "model:ir.message,text:msg_missing_required_document"
+msgid "Some required documents are missing."
+msgstr "Des documents requis sont manquants."
+
+msgctxt "model:ir.message,text:msg_non_conform_documents"
+msgid "Some required documents are not conform."
+msgstr "Des documents requis ne sont pas conformes."
 
 msgctxt "selection:document.request,needed_by:"
 msgid "Contract"

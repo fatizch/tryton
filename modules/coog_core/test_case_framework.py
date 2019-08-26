@@ -7,14 +7,16 @@ import logging
 import random
 import datetime
 
+from trytond.i18n import gettext
 from trytond.pool import Pool
 from trytond.pyson import Eval
 from trytond import backend
 from trytond.wizard import Button, StateView, StateTransition
 from trytond.model import ModelSingleton
+from trytond.model.exceptions import ValidationError
 from trytond.transaction import Transaction
 from trytond.cache import Cache
-from trytond.error import UserError
+from trytond.exceptions import UserError
 from . import model
 from . import fields
 from . import export
@@ -414,14 +416,6 @@ class TestCaseInstance(model.CoogSQL, model.CoogView):
         'get_executed')
 
     @classmethod
-    def __setup__(cls):
-        super(TestCaseInstance, cls).__setup__()
-        cls._error_messages.update({
-                'non_existing_test_case': 'Test Case %s uses the %s method, '
-                'which does not exist !',
-                })
-
-    @classmethod
     def default_config(cls):
         return 1
 
@@ -430,13 +424,19 @@ class TestCaseInstance(model.CoogSQL, model.CoogView):
         TestCaseModel = Pool().get('ir.test_case')
         for test in test_cases:
             if getattr(TestCaseModel, test.method_name, None) is None:
-                cls.raise_user_error('non_existing_test_case', (test.name,
-                        test.method_name))
+                raise ValidationError(gettext(
+                        'coog_core.msg_non_existing_test_case',
+                        test=test.name,
+                        method=test.method_name,
+                        ))
             if not test.test_method_name:
                 continue
             if getattr(TestCaseModel, test.test_method_name) is None:
-                cls.raise_user_error('non_existing_test_case', (test.name,
-                        test.test_method_name))
+                raise ValidationError(gettext(
+                        'coog_core.msg_non_existing_test_case',
+                        test=test.name,
+                        method=test.method_name,
+                        ))
 
     @classmethod
     def check_xml_record(cls, records, values):
@@ -550,13 +550,6 @@ class TestCaseWizard(model.CoogWizard):
     execute_test_cases = StateTransition()
     load_files = StateTransition()
 
-    @classmethod
-    def __setup__(cls):
-        super(TestCaseWizard, cls).__setup__()
-        cls._error_messages.update({
-                'bad_json': 'Cannot load test case file %s',
-                })
-
     def default_select_test_cases(self, name):
         # Look for files
         test_files = []
@@ -622,5 +615,4 @@ class TestCaseWizard(model.CoogWizard):
                     logging.getLogger('test_case').error('Failed to import %s'
                         % elem.filename)
                     raise
-                    self.raise_user_error('bad_json', (elem.filename))
         return 'select_test_cases'

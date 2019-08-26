@@ -1,5 +1,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+from trytond.exceptions import UserWarning
+from trytond.i18n import gettext
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, Not, Bool, If
 from trytond.transaction import Transaction
@@ -50,10 +52,6 @@ class ChangeBillingInformation(metaclass=PoolMeta):
                 cls.other_contracts.domain,
                 [('to_propagate', 'in', ('bank_account', 'everything'))])]
         cls.other_contracts.depends.append('amend_previous_mandate')
-        cls._error_messages.update({
-                'new_mandate_creation': 'A new mandate will be created, this '
-                'action cannot be cancelled',
-                })
 
     @classmethod
     def default_amend_previous_mandate(cls):
@@ -170,6 +168,7 @@ class ChangeBillingInformation(metaclass=PoolMeta):
         pool = Pool()
         Mandate = pool.get('account.payment.sepa.mandate')
         Billing_Information = pool.get('contract.billing_information')
+        Warning = pool.get('res.user.warning')
         if self.mandate_needed:
             new_info = self.new_billing_information[0]
             account = (new_info.direct_debit_account or
@@ -182,8 +181,11 @@ class ChangeBillingInformation(metaclass=PoolMeta):
             new_mandate.type = 'recurrent'
             new_mandate.scheme = 'CORE'
             if not self.amend_previous_mandate:
-                self.raise_user_warning('new_mandate_creation',
-                    'new_mandate_creation', {})
+                key = 'new_mandate_creation'
+                if Warning.check(key):
+                    raise UserWarning(key, gettext(
+                            'endorsement_insurance_invoice_sepa'
+                            '.msg_new_mandate_creation'))
                 new_mandate.signature_date = self.sepa_signature_date
                 new_mandate.state = 'validated'
                 Billing_Information.update_mandate_from_contract(

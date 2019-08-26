@@ -2,16 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:benefit.rule:"
-msgid "Share for current beneficiary : %(share)s %%"
-msgstr "Répartition pour le bénéficiaire courant : %(share)s %%"
-
-msgctxt "error:document.request.line:"
-msgid "Documents must be requested together for beneficiary %(beneficiary)s"
-msgstr ""
-"Les documents doivent être demandés simultanément pour le bénéficiaire "
-"%(beneficiary)s"
-
 msgctxt "field:benefit,is_eckert:"
 msgid "Apply Eckert Rules"
 msgstr "Appliquer la loi Eckert"
@@ -157,6 +147,12 @@ msgstr ""
 msgctxt "model:document.description,name:death_certificate_document"
 msgid "Death Certificate"
 msgstr "Certificat de décès"
+
+msgctxt "model:ir.message,text:msg_not_synced_beneficiary_requests"
+msgid "Documents must be requested together for beneficiary %(beneficiary)s."
+msgstr ""
+"Les documents doivent être demandés simultanément pour le bénéficiaire "
+"%(beneficiary)s."
 
 msgctxt "model:ir.note.type,name:"
 msgid "Eckert Related"

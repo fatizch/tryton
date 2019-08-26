@@ -3,6 +3,7 @@
 from sql.aggregate import Sum
 from sql.operators import Or, Not
 
+from trytond.i18n import gettext
 from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
 from trytond.model import Unique
@@ -78,13 +79,6 @@ class Commission(metaclass=PoolMeta):
     is_recovery = fields.Boolean('Is Recovery Commission', readonly=True)
 
     @classmethod
-    def __setup__(cls):
-        super(Commission, cls).__setup__()
-        cls._error_messages.update({
-                'recovery_commission': 'Recovery Commission',
-                })
-
-    @classmethod
     def _get_origin(cls):
         return super(Commission, cls)._get_origin() + ['contract.option']
 
@@ -97,8 +91,8 @@ class Commission(metaclass=PoolMeta):
         invoice_line = super(Commission, cls)._get_invoice_line(key, invoice,
             commissions)
         if invoice_line and key['is_recovery']:
-            invoice_line.description = cls.raise_user_error(
-                    'recovery_commission', raise_exception=False)
+            invoice_line.description = gettext(
+                'commission_insurance_recovery.msg_recovery_commission')
         return invoice_line
 
     def get_recovery_details(self, recovery_info, recovery_amount,

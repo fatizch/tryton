@@ -1,11 +1,14 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+from trytond.i18n import gettext
+from trytond.model.exceptions import ValidationError
 from trytond.pool import Pool, PoolMeta
-
 from trytond.pyson import Eval
 from trytond.transaction import Transaction
 from trytond.modules.coog_core import model, fields, utils
 from trytond.wizard import Wizard, StateView, Button, StateTransition
+
+from trytond.modules.party.exceptions import EraseError
 
 
 __all__ = [
@@ -60,14 +63,6 @@ class DeliverBenefits(Wizard):
             Button('Deliver', 'deliver', 'tryton-go-next')])
     deliver = StateTransition()
 
-    @classmethod
-    def __setup__(cls):
-        super(DeliverBenefits, cls).__setup__()
-        cls._error_messages.update({
-                'coverage_information': 'Coverage Information',
-                'benefit_information': 'Benefit Information',
-                })
-
     def default_benefits(self, name):
         pool = Pool()
         Claim = pool.get('claim')
@@ -81,16 +76,14 @@ class DeliverBenefits(Wizard):
                 for benefit, option in contract.get_possible_benefits(loss):
                     if not benefit.several_delivered and benefit in deliver:
                         continue
-                    description = '<div><b>%s</b></div>' % \
-                        self.raise_user_error('coverage_information',
-                            raise_exception=False)
+                    description = '<div><b>%s</b></div>' % (
+                        gettext('claim.msg_coverage_information'))
                     for data in option.current_version.\
                             extra_data_as_string.split('\n'):
                         description += '<div>%s</div>' % data
                     if benefit.description:
-                        description += '<div><b>%s</b></div>' % \
-                            self.raise_user_error('coverage_information',
-                                raise_exception=False)
+                        description += '<div><b>%s</b></div>' % (
+                            gettext('claim.msg_benefit_information'))
                         description += '<div>%s</div>' % benefit.description
                     benefits_to_deliver += [{
                             'to_deliver': True,
@@ -270,15 +263,6 @@ class PropagateLossExtraData(Wizard):
 class PartyErase(metaclass=PoolMeta):
     __name__ = 'party.erase'
 
-    @classmethod
-    def __setup__(cls):
-        super(PartyErase, cls).__setup__()
-        cls._error_messages.update({
-                'party_has_open_claim': 'The party %(party)s can not be '
-                'erased because it is a claimant on the following claims: \n'
-                '%(claims)s',
-                })
-
     def check_erase(self, party):
         super(PartyErase, self).check_erase(party)
         Claim = Pool().get('claim')
@@ -287,11 +271,11 @@ class PartyErase(metaclass=PoolMeta):
                 ('status', 'in', ['open', 'reopened'])
                 ])
         if open_claims:
-            self.raise_user_error('party_has_open_claim', {
-                    'party': party.rec_name,
-                    'claims': ', '.join(
-                        [c.rec_name for c in open_claims])
-                    })
+            raise EraseError(gettext(
+                    'claim.msg_party_has_open_claim',
+                    party=party.rec_name,
+                    claims=', '.join(
+                        c.rec_name for c in open_claims)))
 
     def claims_to_erase(self, party_id):
         Claim = Pool().get('claim')
@@ -326,20 +310,11 @@ class SetOriginService(Wizard):
             ])
     select = StateTransition()
 
-    @classmethod
-    def __setup__(cls):
-        super().__setup__()
-        cls._error_messages.update({
-                'only_one_service':
-                'This action must be run service by service',
-                'origin_required': 'The "origin" field is required to proceed',
-                })
-
     def default_select_origin(self, name):
         active_model, active_id, active_ids = utils.extract_context()
         assert active_model == 'claim.service'
         if len(active_ids) > 1:
-            self.raise_user_error('only_one_service')
+            raise ValidationError(gettext('claim.msg_only_one_service'))
 
         Service = Pool().get('claim.service')
         active = Service(active_id)
@@ -347,7 +322,7 @@ class SetOriginService(Wizard):
         possible_origins = Service.search(
             self._possible_origins_domain(active))
         if len(possible_origins) == 0:
-            self.raise_user_error('no_possible_origins')
+            raise ValidationError('no_possible_origins')
         return {
             'service': active_id,
             'possible_origins': [x.id for x in possible_origins],
@@ -364,7 +339,7 @@ class SetOriginService(Wizard):
 
     def transition_select(self):
         if not self.select_origin.origin:
-            self.raise_user_error('origin_required')
+            raise ValidationError(gettext('claim.msg_origin_required'))
         self.select_origin.service.set_origin_service(
             self.select_origin.origin)
         return 'end'

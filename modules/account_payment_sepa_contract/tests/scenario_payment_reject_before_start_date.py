@@ -249,7 +249,7 @@ payment.kind = 'receivable'
 payment.amount = first_invoice.invoice.total_amount
 payment.party = subscriber
 payment.line, = MoveLine.find([('party', '=', subscriber.id),
-        ('account.kind', '=', 'receivable')])
+        ('account.type.receivable', '=', True)])
 payment.date = payment.line.payment_date
 first_payment_date = payment.date
 cur_payment_date = payment.date
@@ -259,11 +259,15 @@ process_payment = Wizard('account.payment.process', [payment])
 process_payment.execute('pre_process')
 
 # #Comment# #Fail payment
-payment.sepa_return_reason_code = 'BE04'
-payment.save()
 config._context['client_defined_date'] = cur_payment_date + \
     relativedelta(days=10)
-payment.click('fail')
+be04, = RejectReason.find([
+        ('code', '=', 'BE04')])
+RejectPayment = Wizard('account.payment.manual_payment_fail',
+    [payment])
+RejectPayment.form.reject_reason = be04
+RejectPayment.execute('fail_payments')
+payment.reload()
 payment.line.payment_date
 payment.manual_fail_status == 'pending'
 # #Res# #True
@@ -296,8 +300,8 @@ payment.kind = 'receivable'
 payment.amount = second_invoice.invoice.total_amount
 payment.party = subscriber
 payment.line, = MoveLine.find([('party', '=', subscriber.id),
-        ('account.kind', '=', 'receivable'),
-        ('origin', '=', 'account.invoice,%s' % second_invoice.invoice.id)])
+        ('account.type.receivable', '=', True),
+        ('move.origin', '=', 'account.invoice,%s' % second_invoice.invoice.id)])
 payment.date = payment.line.payment_date
 cur_payment_date = payment.date
 payment.save()
@@ -306,11 +310,14 @@ process_payment = Wizard('account.payment.process', [payment])
 process_payment.execute('pre_process')
 
 # #Comment# #Fail payment
-payment.sepa_return_reason_code = 'AM04'
-payment.save()
 config._context['client_defined_date'] = cur_payment_date + \
     relativedelta(days=10)
-payment.click('fail')
+am04, = RejectReason.find([
+        ('code', '=', 'AM04')])
+RejectPayment = Wizard('account.payment.manual_payment_fail',
+    [payment])
+RejectPayment.form.reject_reason = am04
+RejectPayment.execute('fail_payments')
 payment.reload()
 assert payment.line.payment_date == cur_payment_date + relativedelta(
     months=1), (payment.line.payment_date, cur_payment_date)
@@ -343,8 +350,8 @@ payment_second_invoice.kind = 'receivable'
 payment_second_invoice.amount = second_invoice.invoice.total_amount
 payment_second_invoice.party = subscriber
 payment_second_invoice.line, = MoveLine.find([('party', '=', subscriber.id),
-        ('account.kind', '=', 'receivable'),
-        ('origin', '=', 'account.invoice,%s' % second_invoice.invoice.id)])
+        ('account.type.receivable', '=', True),
+        ('move.origin', '=', 'account.invoice,%s' % second_invoice.invoice.id)])
 payment_second_invoice.date = payment_second_invoice.line.payment_date
 cur_payment_date = payment_second_invoice.date
 payment_second_invoice.save()
@@ -357,8 +364,8 @@ payment_third_invoice.kind = 'receivable'
 payment_third_invoice.amount = third_invoice.invoice.total_amount
 payment_third_invoice.party = subscriber
 payment_third_invoice.line, = MoveLine.find([('party', '=', subscriber.id),
-        ('account.kind', '=', 'receivable'),
-        ('origin', '=', 'account.invoice,%s' % third_invoice.invoice.id)])
+        ('account.type.receivable', '=', True),
+        ('move.origin', '=', 'account.invoice,%s' % third_invoice.invoice.id)])
 payment_third_invoice.date = payment_third_invoice.line.payment_date
 cur_payment_date = payment.date
 payment_third_invoice.save()
@@ -374,15 +381,15 @@ contract.billing_informations[0].date is None
 # #Res# #True
 
 # #Comment# #Fail payments
-payment_second_invoice.sepa_return_reason_code = 'AM04'
-payment_second_invoice.merged_id = '123456'
-payment_second_invoice.save()
-payment_third_invoice.sepa_return_reason_code = 'AM04'
-payment_third_invoice.merged_id = '123456'
-payment_third_invoice.save()
 config._context['client_defined_date'] = contract.initial_start_date - \
     relativedelta(days=10)
-Payment.fail([p.id for p in payments], config._context)
+RejectPayment = Wizard('account.payment.manual_payment_fail',
+    payments)
+RejectPayment.form.reject_reason = am04
+RejectPayment.execute('fail_payments')
+payment_second_invoice.reload()
+payment_third_invoice.reload()
+
 payment_second_invoice.line.payment_date
 payment_third_invoice.line.payment_date
 payment_second_invoice.manual_fail_status

@@ -2,6 +2,9 @@
 # this repository contains the full copyright notices and license terms.
 import re
 
+from trytond.exceptions import UserWarning
+from trytond.i18n import gettext
+from trytond.model.exceptions import ValidationError
 from trytond.pyson import Eval
 from trytond.pool import PoolMeta, Pool
 
@@ -46,24 +49,18 @@ class Agency(model.CoogSQL, model.CoogView):
         'on_change_with_bank_party')
 
     @classmethod
-    def __setup__(cls):
-        super(Agency, cls).__setup__()
-        cls._error_messages.update({
-                'wrong_branch_code': 'The branch code %s must contain 5 '
-                'numeric chars.',
-                'wrong_bank_code': 'The bank code %s must contain 5 numeric '
-                'chars.',
-                })
-
-    @classmethod
     def validate(cls, instances):
         super(Agency, cls).validate(instances)
         for agency in instances:
             if agency.bank_code and not re.match('[0-9]{5}', agency.bank_code):
-                cls.raise_user_error('wrong_agency_code', agency.bank_code)
+                raise ValidationError(gettext(
+                        'bank_fr.msg_wrong_bank_code',
+                        code=agency.bank_code))
             if agency.branch_code and not re.match('[0-9]{5}',
                     agency.branch_code):
-                cls.raise_user_error('wrong_branch_code', agency.branch_code)
+                raise ValidationError(gettext(
+                        'bank_fr.msg_wrong_branch_code',
+                        code=agency.branch_code))
 
     @fields.depends('bank_code')
     def on_change_bank_code(self):
@@ -80,12 +77,6 @@ class Agency(model.CoogSQL, model.CoogView):
 
 class BankAccount(metaclass=PoolMeta):
     __name__ = 'bank.account'
-
-    @classmethod
-    def __setup__(cls):
-        super(BankAccount, cls).__setup__()
-        cls._error_messages.update({'iban_bank_mismatch':
-                'The IBAN and bank do not match'})
 
     @fields.depends('number', 'numbers', 'bank')
     def on_change_number(self):
@@ -116,9 +107,14 @@ class BankAccount(metaclass=PoolMeta):
         return agencies[0].bank if agencies else None
 
     def check_iban_matches_bank(self):
+        pool = Pool()
+        Warning = pool.get('res.user.warning')
         bank_from_iban = self.get_bank_from_number(self.number)
         if bank_from_iban and self.bank != bank_from_iban:
-            self.raise_user_warning('iban_bank_mismatch', 'iban_bank_mismatch')
+            key = 'iban_bank_mismatch,%s' % self
+            if Warning.check(key):
+                raise UserWarning(
+                    key, gettext('bank_fr.msg_iban_bank_mismatch'))
 
     @classmethod
     def validate(cls, accounts):

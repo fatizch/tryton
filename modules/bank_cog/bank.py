@@ -3,8 +3,10 @@
 from sql.conditionals import Coalesce
 from sql import Query
 
+from trytond.i18n import gettext
 from trytond.pool import Pool, PoolMeta
 from trytond.model import fields as tryton_fields, Unique
+from trytond.model.exceptions import ValidationError, ForeignKeyError
 from trytond.pyson import Eval
 
 from trytond.modules.coog_core import utils, fields, export
@@ -34,11 +36,8 @@ class Bank(export.ExportImportMixin):
         super(Bank, cls).__setup__()
         t = cls.__table__()
         cls._sql_constraints += [
-            ('bic_uniq', Unique(t, t.bic), 'The bic must be unique!'),
+            ('bic_uniq', Unique(t, t.bic), 'bank_cog.msg_bic_uniq'),
             ]
-        cls._error_messages.update({
-                'invalid_bic': ('Invalid BIC : %s'),
-                })
         cls.bic.select = True
         cls._order.insert(0, ('last_modification', 'DESC'))
         cls.party.domain += [('is_person', '=', False)]
@@ -64,7 +63,9 @@ class Bank(export.ExportImportMixin):
 
     def check_bic(self):
         if self.bic and not self.valid_BIC(self.bic):
-            self.raise_user_error('invalid_bic', (self.bic))
+            raise ValidationError(gettext(
+                    'bank_cog.msg_invalid_bic',
+                    bic=self.bic))
 
     def get_rec_name(self, name):
         res = '[%s] %s' % (self.bic, self.party.name if self.party else '')
@@ -286,14 +287,6 @@ class BankAccountParty(export.ExportImportMixin, metaclass=PoolMeta):
     'Bank Account - Party'
     __name__ = 'bank.account-party.party'
 
-    @classmethod
-    def __setup__(cls):
-        super(BankAccountParty, cls).__setup__()
-        cls._error_messages.update({
-                'bank_account_used': ('Bank account "%(bank_account)s" is '
-                    'used on "%(object)s"'),
-                })
-
     def get_synthesis_rec_name(self, name):
         if self.account:
             return self.account.get_synthesis_rec_name(name)
@@ -306,10 +299,11 @@ class BankAccountParty(export.ExportImportMixin, metaclass=PoolMeta):
         for r in records:
             objects = r.account.objects_using_me_for_party(r.owner)
             if objects:
-                cls.raise_user_error('bank_account_used', {
-                    'bank_account': r.account.rec_name,
-                    'object': ', '.join(['%s %s' % (
-                                o.__class__.__name__,
-                                o.rec_name)
-                            for o in objects]), })
+                raise ForeignKeyError(gettext(
+                        'bank_cog.msg_bank_account_used',
+                        bank_account=r.account.rec_name,
+                        object=', '.join(['%s %s' % (
+                                    o.__class__.__name__,
+                                    o.rec_name)
+                                for o in objects])))
         super(BankAccountParty, cls).delete(records)

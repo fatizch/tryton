@@ -2,19 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:claim.indemnification:"
-msgid "The document \"%s\" is required"
-msgstr "Le document \"%s\" est requis"
-
-msgctxt "error:claim.indemnification:"
-msgid "There are missing required documents that you are not allowed to view."
-msgstr ""
-"Il y a des documents requis manquants que vous n'etes pas autorisés à voir."
-
-msgctxt "error:report.template:"
-msgid "Claim Invoice"
-msgstr "Facture Fournisseur"
-
 msgctxt "field:claim,required_indemnification_docs:"
 msgid "Required Docs"
 msgstr "Documents requis"
@@ -39,3 +26,16 @@ msgctxt "field:document.rule,indemnification_doc_rule_extra_data:"
 msgid "Rule Extra Data"
 msgstr ""
 "Règle des documents requis sur une indemnisation - Données complémentaires"
+
+msgctxt "model:ir.message,text:msg_claim_invoice"
+msgid "Claim Invoice"
+msgstr "Remboursement Sinistre"
+
+msgctxt "model:ir.message,text:msg_required_confidential_documents"
+msgid "There are missing required documents that you are not allowed to view."
+msgstr ""
+"Il y a des documents requis manquants que vous n'etes pas autorisés à voir."
+
+msgctxt "model:ir.message,text:msg_required_document"
+msgid "The document \"%(document)s\" is required."
+msgstr "Le document \"%(document)s\" est requis"

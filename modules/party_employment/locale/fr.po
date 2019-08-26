@@ -2,18 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:party.employment_kind:"
-msgid "The code must be unique!"
-msgstr "Le code doit être unique !"
-
-msgctxt "error:party.employment_work_time_type:"
-msgid "The code must be unique!"
-msgstr "Le code doit être unique !"
-
-msgctxt "error:party.work_section:"
-msgid "The code must be unique!"
-msgstr "Le code doit être unique !"
-
 msgctxt "field:party.employment,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
@@ -335,7 +323,7 @@ msgid "Employment Work Time Type"
 msgstr "Type de la durée du travail"
 
 msgctxt "model:party.work_section,name:"
-msgid "Party Work Section "
+msgid "Party Work Section"
 msgstr "Section gestionnaire"
 
 msgctxt "view:party.employment.version:"

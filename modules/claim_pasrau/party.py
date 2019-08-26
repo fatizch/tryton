@@ -16,14 +16,6 @@ class Party(metaclass=PoolMeta):
 
     _history = True
 
-    @classmethod
-    def __setup__(cls):
-        super(Party, cls).__setup__()
-        cls._error_messages.update({
-                'no_zip_for_pasrau': 'A zip is required to compute the '
-                'default pasrau rate',
-                })
-
     def update_pasrau_rate(self, at_date, rate, business_id=None):
         business_id = business_id or None
         PartyCustomPasrauRate = Pool().get('party.pasrau.rate')
@@ -71,7 +63,8 @@ class Party(metaclass=PoolMeta):
         if rate is None:
             zip_code = self.main_address.zip
             if not zip_code:
-                self.raise_user_error('no_zip_for_pasrau')
+                raise ValidationError(gettext(
+                        'claim_pasrau.msg_no_zip_for_pasrau'))
             rate = DefaultPasrauRate.get_appliable_default_pasrau_rate(zip_code,
                 income, period_start, period_end, invoice_date)
         return rate

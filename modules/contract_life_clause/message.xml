@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<tryton>
+    <data group="1">
+        <record model="ir.message" id="msg_invalid_beneficiary_shares">
+            <field name="text">Total share for clause %(name)s is invalid.</field>
+        </record>
+        <record model="ir.message" id="msg_mix_share_and_none">
+            <field name="text">Either all share must be completed or none.</field>
+        </record>
+    </data>
+</tryton>

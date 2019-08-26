@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<tryton>
+    <data group="1">
+        <record model="ir.message" id="msg_validation_needs_decision">
+            <field name="text">Validation cannot be processed without knowing the reason.</field>
+        </record>
+        <record model="ir.message" id="msg_eligibility_data_change">
+            <field name="text">Eligibility information change. It could be necessary to recalculate existing indemnification period.</field>
+        </record>
+        <record model="ir.message" id="msg_rejection_needs_decision">
+            <field name="text">Rejection cannot be processed without knowing the reason.</field>
+        </record>
+        <record model="ir.message" id="msg_eligibility_change">
+            <field name="text">Eligibility information changed. It may be necessary to recompute existing indemnification periods.</field>
+        </record>
+        <record model="ir.message" id="msg_ineligible">
+            <field name="text">The claim service is not eligible.</field>
+        </record>
+    </data>
+</tryton>

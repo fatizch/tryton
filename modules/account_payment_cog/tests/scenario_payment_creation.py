@@ -129,8 +129,7 @@ def set_payment_date(line):
 
 
 def delete_payment(payment):
-    payment.state = 'draft'
-    payment.save()
+    payment.click('draft')
     Payment.delete([payment])
 
 

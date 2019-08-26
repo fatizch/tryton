@@ -163,36 +163,7 @@ this repository contains the full copyright notices and license terms. -->
             <field name="type">form</field>
             <field name="name">export_summary_form</field>
         </record>
-        <!-- ######################## -->
-        <!-- # Export Translation   # -->
-        <!-- ######################## -->
-        <record model="ir.translation" id="translation_not_found">
-            <field name="name">export_not_found</field>
-            <field name="lang">en</field>
-            <field name="type">error</field>
-            <field name="src">Cannot import : no object %s with functionnal key : "%s" were found.</field>
-            <field name="value">Cannot import : no object %s with functionnal key : "%s" were found.</field>
-            <field name="module">coog_core</field>
-            <field name="fuzzy" eval="False"/>
-        </record>
-        <record model="ir.translation" id="translation_not_unique">
-            <field name="name">export_not_unique</field>
-            <field name="lang">en</field>
-            <field name="type">error</field>
-            <field name="src">Cannot import : the following objects:\n%s\n share the same functional key:\n"%s".</field>
-            <field name="value">Cannot import : the following objects:\n%s\n share the same functional key:\n"%s".</field>
-            <field name="module">coog_core</field>
-            <field name="fuzzy" eval="False"/>
-        </record>
-        <record model="ir.translation" id="translation_missing_export_configuration">
-            <field name="name">missing_export_configuration</field>
-            <field name="lang">en</field>
-            <field name="type">error</field>
-            <field name="src">Can't find configuration for code %s.</field>
-            <field name="value">Can't find configuration for code %s.</field>
-            <field name="module">coog_core</field>
-            <field name="fuzzy" eval="False"/>
-        </record>
+
         <record model="ir.model.button" id="button_ir_export_configuration_model_button_select_fields">
             <field name="name">button_select_fields</field>
             <field name="model" search="[('model', '=', 'ir.export.configuration.model')]"/>

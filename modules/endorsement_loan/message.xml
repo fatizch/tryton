@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<tryton>
+    <data group="1">
+        <record model="ir.message" id="msg_contract_loan_changes">
+            <field name="text">Contract Loans Changes:</field>
+        </record>
+        <record model="ir.message" id="msg_not_latest_applied">
+            <field name="text">Endorsement "%(endorsement)s" is not the latest applied.</field>
+        </record>
+        <record model="ir.message" id="msg_only_one_endorsement_in_progress">
+            <field name="text">There may only be one endorsement in_progress at a given time per loan.</field>
+        </record>
+        <record model="ir.message" id="msg_increment_modifications">
+            <field name="text">Increments Modifications:</field>
+        </record>
+        <record model="ir.message" id="msg_loan_modifications">
+            <field name="text">Loan Modifications:</field>
+        </record>
+        <record model="ir.message" id="msg_loan_share_modifications">
+            <field name="text">Loan Share Modifications:</field>
+        </record>
+        <record model="ir.message" id="msg_at_least_one_loan">
+            <field name="text">There must be at least one loan for contract %(contract)s.</field>
+        </record>
+        <record model="ir.message" id="msg_bad_loan_dates">
+            <field name="text">Bad dates for loans: %(loans)s.</field>
+        </record>
+        <record model="ir.message" id="msg_incomplete_loan_data">
+            <field name="text">There may be insufficiant data to properly compute the loan payments, please double-check.</field>
+        </record>
+        <record model="ir.message" id="msg_no_loan_share_on_new_coverage">
+            <field name="text">The following coverages have no loan share:
+	%(coverage)s</field>
+        </record>
+        <record model="ir.message" id="msg_loan_share_modifications">
+            <field name="text">Loan Share Modifications:</field>
+        </record>
+    </data>
+</tryton>

@@ -2,14 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:party.administrative_situation_sub_status:"
-msgid "The code must be unique!"
-msgstr "Le code doit être unique !"
-
-msgctxt "error:party.public_employment_index:"
-msgid "The combination date, gross_index must be unique!"
-msgstr "La combinaison date, indice brut doit être unique"
-
 msgctxt "field:party.administrative_situation_sub_status,code:"
 msgid "Code"
 msgstr "Code"
@@ -57,6 +49,10 @@ msgstr "XML Id"
 msgctxt "field:party.employment,is_civil_service_employment:"
 msgid "Civil Service Employment"
 msgstr "Emploi dans la Fonction Publique"
+
+msgctxt "field:party.employment,is_retired:"
+msgid "Is retired"
+msgstr ""
 
 msgctxt "field:party.employment,retirement_pension_identifier:"
 msgid "Retirement Pension Identifier"
@@ -163,6 +159,10 @@ msgstr "Le pays où l'employé travaille"
 msgctxt "help:party.employment.version,work_subdivision:"
 msgid "Subdivision where the employee works"
 msgstr "Département du lieu de travail de l'employé"
+
+msgctxt "help:party.employment_kind,is_civil_service_employment:"
+msgid "Is Civil Service Employment"
+msgstr ""
 
 msgctxt "help:party.public_employment_index,effective_date:"
 msgid "Date used to versionned the index"

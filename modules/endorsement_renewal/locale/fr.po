@@ -2,14 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:endorsement.contract.renew:"
-msgid "The contract %s is already renewed "
-msgstr "Le contrat %s est déjà renouvellé"
-
-msgctxt "error:endorsement.contract.renew:"
-msgid "The contract %s is not renewable "
-msgstr "Le contrat %s n'est pas renouvelable"
-
 msgctxt "field:endorsement.contract.renew,current_end_date:"
 msgid "Current End Date"
 msgstr "Date de fin actuelle"
@@ -57,6 +49,14 @@ msgstr "Renouveler le contrat"
 msgctxt "model:endorsement.part,name:renew_contract_part"
 msgid "Renew Contract"
 msgstr "Renouveler le contrat"
+
+msgctxt "model:ir.message,text:msg_already_renewed"
+msgid "The contract %(contract)s is already renewed."
+msgstr "Le contrat %(contract)s est déjà renouvellé"
+
+msgctxt "model:ir.message,text:msg_not_renewable"
+msgid "The contract %(contract)s is not renewable."
+msgstr "Le contrat %(contract)s n'est pas renouvelable"
 
 msgctxt "view:endorsement.contract.renew:"
 msgid "Renew Contract"

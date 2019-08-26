@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<tryton>
+    <data group="1">
+        <record model="ir.message" id="msg_generate_planned_event">
+            <field name="text">Generate Planned Event</field>
+        </record>
+    </data>
+</tryton>

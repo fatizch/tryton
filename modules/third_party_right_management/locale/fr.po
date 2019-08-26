@@ -2,18 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:contract.option.third_party_period:"
-msgid "Third Party Period overlaps"
-msgstr "Les périodes de délégation se chevauchent"
-
-msgctxt "error:third_party_manager.protocol:"
-msgid "The code must be unique"
-msgstr "Le code doit être unique"
-
-msgctxt "error:third_party_manager.protocol:"
-msgid "The code must be unique!"
-msgstr "Le code doit être unique !"
-
 msgctxt "field:contract.option,third_party_periods:"
 msgid "Third Party Periods"
 msgstr "Périodes de délégation"
@@ -345,6 +333,10 @@ msgstr "Périodes de délégation"
 msgctxt "model:ir.action,name:wizard_recompute_period"
 msgid "Recompute Period"
 msgstr "Re-calcul des périodes de délégation"
+
+msgctxt "model:ir.message,text:msg_tpp_overlap_error"
+msgid "Third Party Period overlaps."
+msgstr "Les périodes de délégation se chevauchent."
 
 msgctxt "model:ir.ui.menu,name:menu_configuration"
 msgid "Configuration"

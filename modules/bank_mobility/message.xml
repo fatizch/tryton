@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<tryton>
+    <data group="1">
+        <record model="ir.message" id="msg_bic_not_found">
+            <field name="text">No bank found for BIC %(bic)s.</field>
+        </record>
+        <record model="ir.message" id="msg_bank_account_not_found">
+            <field name="text">No account number found for IBAN: %(iban)s, BIC: %(bic)s.</field>
+        </record>
+        <record model="ir.message" id="msg_mandate_not_found">
+            <field name="text">No valid mandate found for identification:%(identification)s.</field>
+        </record>
+        <record model="ir.message" id="msg_mandate_signature_date_in_future">
+            <field name="text">Mandate with identification: %(identification)s has been signed on %(mandate_signature_date)s, after mobility signature date on %(mobility_signature_date)s.</field>
+        </record>
+        <record model="ir.message" id="msg_mandate_amendment_date_in_future">
+            <field name="text">Mandate with identification:%(identification)s has been amended on %(amendment_date)s, after mobility signature date on %(mobility_signature_date)s.</field>
+        </record>
+    </data>
+</tryton>

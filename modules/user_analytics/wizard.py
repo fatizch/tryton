@@ -3,6 +3,8 @@
 import datetime
 import calendar
 
+from trytond.i18n import gettext
+from trytond.model.exceptions import ValidationError
 from trytond.pool import Pool
 from trytond.wizard import StateAction, StateView, Button
 from trytond.pyson import Eval, Bool, Not
@@ -28,13 +30,6 @@ class WizardConnection(model.CoogWizard):
             Button('Generate', 'generate', 'tryton-go-next', default=True)])
     generate = StateAction('report_engine.letter_generation_wizard')
 
-    @classmethod
-    def __setup__(cls):
-        super(WizardConnection, cls).__setup__()
-        cls._error_messages.update({
-                'no_connections': 'Date range specified have no connections',
-                })
-
     def do_generate(self, action):
         UserConnection = Pool().get('res.user.connection')
         view = self.start
@@ -45,7 +40,8 @@ class WizardConnection(model.CoogWizard):
                 ('date', '<=', end_date)],
             order=[('date', 'ASC'), ('user_id', 'ASC')])
         if not len(connections):
-            self.raise_user_error('no_connection')
+            raise ValidationError(gettext(
+                    'user_analytics.msg_no_connection'))
         return action, {'model': 'res.user.connection',
             'ids': [x.id for x in connections]}
 

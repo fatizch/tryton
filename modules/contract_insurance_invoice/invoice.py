@@ -5,6 +5,9 @@ import datetime
 
 from sql import Null, Literal, Query
 from sql.aggregate import Sum, Min
+
+from trytond.exceptions import UserWarning
+from trytond.i18n import gettext
 from trytond.transaction import Transaction
 from trytond.server_context import ServerContext
 from trytond.tools import grouped_slice
@@ -13,6 +16,7 @@ from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval, Bool, Not
 from trytond.wizard import Wizard, StateView, Button
 from trytond.model import Workflow
+from trytond.model.exceptions import AccessError
 
 from trytond.modules.coog_core import utils, model, fields, coog_string
 from trytond.modules.coog_core import coog_date
@@ -67,20 +71,6 @@ class Invoice(metaclass=PoolMeta):
     @classmethod
     def __setup__(cls):
         super(Invoice, cls).__setup__()
-        cls._error_messages.update({
-                'post_on_non_active_contract': 'Impossible to post invoice '
-                '"%(invoice)s" on contract "%(contract)s" which is '
-                '"%(status)s"',
-                'previous_invoices_not_posted': 'There are %s invoices with '
-                'a start date before %s on contract %s. Proceeding further '
-                'will post those as well.\n\n\t%s',
-                'future_invoices_existing': 'You cannot cancel this invoice.\n'
-                'There are %(number_invoices)s invoice(s) with a start date '
-                'after %(start_date)s on contract %(contract)s.'
-                '\n\n\t%(invoices)s',
-                'no_copy_periodic_invoices': 'The copy of periodic invoices '
-                'is forbidden.',
-                })
         cls.untaxed_amount.states = {
             'invisible': Bool(Eval('contract_invoice')),
             }
@@ -120,7 +110,8 @@ class Invoice(metaclass=PoolMeta):
         pool = Pool()
         ContractInvoice = pool.get('contract.invoice')
         if any(x.start for x in invoices):
-            cls.raise_user_error('no_copy_periodic_invoices')
+            raise AccessError(gettext(
+                    'contract_insurance_invoice.msg_no_copy_periodic_invoices'))
         copies = super(Invoice, cls).copy(invoices, default=default)
         for new_invoice, old_invoice in zip(copies, invoices):
             if not old_invoice.contract:
@@ -395,17 +386,24 @@ class Invoice(metaclass=PoolMeta):
             }
 
     def check_previous_invoices_posted(self):
+        pool = Pool()
+        Warning = pool.get('res.user.warning')
         old_invoices = self.__class__.search([
                 ('contract', '=', self.contract.id),
                 ('start', '<', self.start),
                 ('state', 'in', ('draft', 'validated'))],
             order=[('start', 'ASC')])
         if old_invoices:
-            self.raise_user_warning('%s_%s' % (self.contract.rec_name,
-                    self.start),
-                'previous_invoices_not_posted', (str(len(old_invoices)),
-                    str(self.start), self.contract.rec_name,
-                    '\n\t'.join([x.description or '' for x in old_invoices])))
+            key = '%s_%s' % (self.contract.rec_name, self.start)
+            if Warning.check(key):
+                raise UserWarning(key, gettext(
+                        'contract_insurance_invoice'
+                        '.msg_previous_invoices_not_posted',
+                        count=str(len(old_invoices)),
+                        start=str(self.start),
+                        contract=self.contract.rec_name,
+                        invoices='\n\t'.join(
+                            x.description or '' for x in old_invoices)))
             return old_invoices
         return []
 
@@ -418,15 +416,14 @@ class Invoice(metaclass=PoolMeta):
         if future_invoices and (
                 must_raise or any([x.state not in ('draft', 'validated')
                         for x in future_invoices])):
-            self.raise_user_error(
-                'future_invoices_existing',
-                {
-                    'number_invoices': str(len(future_invoices)),
-                    'start_date': str(self.start),
-                    'contract': self.contract.rec_name,
-                    'invoices': '\n\t'.join([x.description
-                        for x in future_invoices]),
-                })
+            raise AccessError(gettext(
+                    'contract_insurance_invoice'
+                    '.msg_future_invoices_existing',
+                    count=str(len(future_invoices)),
+                    date=str(self.start),
+                    contract=self.contract.rec_name,
+                    invoices='\n\t'.join(
+                        x.description for x in future_invoices)))
         return future_invoices
 
     @classmethod
@@ -482,12 +479,12 @@ class Invoice(metaclass=PoolMeta):
         invoices = sorted(invoices, key=lambda o: o.start or datetime.date.min)
         for invoice in invoices:
             if not cls._can_post_invoice(invoice):
-                cls.raise_user_error(
-                    'post_on_non_active_contract', {
-                        'invoice': invoice.rec_name,
-                        'contract': invoice.contract.rec_name,
-                        'status': invoice.contract.status_string,
-                        })
+                raise AccessError(gettext(
+                        'contract_insurance_invoice'
+                        '.msg_post_on_non_active_contract',
+                        invoice=invoice.rec_name,
+                        contract=invoice.contract.rec_name,
+                        status=invoice.contract.status_string))
         updated_invoices = []
         for invoice in invoices:
             if (invoice.state not in ('validated', 'draft') or

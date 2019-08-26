@@ -10,7 +10,7 @@ from trytond.modules.coog_core import utils, model
 from trytond.modules.rule_engine import check_args
 
 from trytond.modules.api import APIMixin, date_from_api, APIInputError
-from trytond.modules.api import APIUserError
+from trytond.modules.api import APIUserError, APIServerError
 from trytond.modules.api import DATE_SCHEMA
 from trytond.modules.coog_core.api import CODED_OBJECT_SCHEMA, OBJECT_ID_SCHEMA
 from trytond.modules.party_cog.api import PARTY_RELATION_SCHEMA
@@ -166,17 +166,14 @@ class APIContract(APIMixin):
                 else:
                     for contract in contracts:
                         method_obj(contract, *(method_data['params'] or []))
-            except APIInputError:
-                raise
-            except APIUserError:
-                raise
             except Exception as e:
-                if logger.isEnabledFor(logging.DEBUG):
-                    logger.debug(e, exc_info=True)
-                raise APIInputError([{
-                            'type': method_data['error_type'],
-                            'data': {},
-                            }])
+                error = Pool().get('api').handle_error(e)
+                if isinstance(error, APIServerError):
+                    raise APIInputError([{
+                                'type': method_data['error_type'],
+                                'data': {},
+                                }])
+                raise error
 
     @classmethod
     def _subscribe_contracts_execute_methods(cls, options):

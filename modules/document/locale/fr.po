@@ -2,20 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:document.description:"
-msgid "The document description code must be unique"
-msgstr "Le code du modèle de document doit être unique"
-
-msgctxt "error:document.reception:"
-msgid "A reception date must be set on %(document_name)s before going on."
-msgstr ""
-"Une date de réception doit être renseignée pour %(document_name)s avant de "
-"continuer."
-
-msgctxt "error:document.reception:"
-msgid "The document will not be attached to anything !"
-msgstr "Le document ne sera rattaché à rien !"
-
 msgctxt "field:document.description,code:"
 msgid "Code"
 msgstr "Code"
@@ -219,6 +205,20 @@ msgstr "Réceptions de documents"
 msgctxt "model:ir.action,name:act_receive_document"
 msgid "Receive Document"
 msgstr "Réception d'un document"
+
+msgctxt "model:ir.message,text:msg_no_reception_date"
+msgid "A reception date must be set on %(document_name)s before going on."
+msgstr ""
+"Une date de réception doit être renseignée pour %(document_name)s avant de "
+"continuer."
+
+msgctxt "model:ir.message,text:msg_not_attached"
+msgid "The document will not be attached to anything."
+msgstr "Le document ne sera rattaché à rien !"
+
+msgctxt "model:ir.rule.group,name:rule_group_attachment"
+msgid "User in document description"
+msgstr ""
 
 msgctxt "model:ir.ui.menu,name:menu_document"
 msgid "Document"

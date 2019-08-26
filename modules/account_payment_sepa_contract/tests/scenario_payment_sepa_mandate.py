@@ -121,7 +121,6 @@ bank_clearing.name = 'Bank Clearing'
 bank_clearing.type = accounts['payable'].type
 bank_clearing.reconcile = True
 bank_clearing.deferral = True
-bank_clearing.kind = 'other'
 bank_clearing.save()
 
 
@@ -413,7 +412,7 @@ create_payment.form.journal = journal
 
 MoveLine = Model.get('account.move.line')
 for line in [x for x in contract_invoice_2.invoice.move.lines
-        if x.account.kind == 'receivable']:
+        if x.account.type.receivable]:
     create_payment.form.lines_to_pay.append(MoveLine(line.id))
 
 create_payment.form.description = "test"
@@ -449,7 +448,7 @@ billing_information_no_sepa.save()
 # #Comment# Process payment
 
 # The payment state is draft as no mandate was found on creation
-payment.state = 'approved'
+payment.click('approve')
 payment.save()
 process_payment = Wizard('account.payment.process', [payment])
 process_payment.execute('pre_process')
@@ -458,6 +457,7 @@ process_payment.execute('pre_process')
 # #Comment# #But there is a payment with the previous sepa mandate.
 # #Comment# #So the sepa_mandate on both the invoice and the line_to_pay will
 # #Comment# #not be None but the same mandate of the payment
+
 payment.sepa_mandate.id == contract_invoice_2.invoice.sepa_mandate.id == \
     contract_invoice_2.invoice.lines_to_pay[0].sepa_mandate.id == mandate.id
 # #Res# #True

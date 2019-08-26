@@ -5,6 +5,8 @@ from trytond import backend
 from sql.conditionals import Coalesce
 from sql import Null
 
+from trytond.i18n import gettext
+from trytond.model.exceptions import ValidationError
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval
 from trytond.transaction import Transaction
@@ -86,8 +88,9 @@ class Contract(metaclass=PoolMeta):
 
     def check_existence_dist_network(self):
         if not getattr(self, 'dist_network', None):
-            self.raise_user_error('no_dist_network', {
-                    'contract': self.rec_name})
+            raise ValidationError(gettext(
+                    'contract_distribution.msg_no_dist_network',
+                    contract=self.rec_name))
 
     @classmethod
     def _calculate_methods(cls, product):

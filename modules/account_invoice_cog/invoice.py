@@ -1,5 +1,6 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+import datetime
 from itertools import groupby
 from decimal import Decimal
 from collections import defaultdict
@@ -8,13 +9,16 @@ from sql import Cast
 from sql.aggregate import Max
 from sql.operators import Concat
 from trytond import backend
+from trytond.i18n import gettext
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, If
 from trytond.model import Workflow
+from trytond.model.exceptions import ValidationError
 from trytond.tools import grouped_slice
 from trytond.transaction import Transaction
 from trytond.server_context import ServerContext
 
+from trytond.modules.account_invoice.exceptions import InvoiceNumberError
 from trytond.modules.coog_core import export, fields, model, utils, coog_sql
 from trytond.modules.report_engine import Printable
 
@@ -78,9 +82,10 @@ class InvoiceLine(metaclass=PoolMeta):
     def _account_domain(cls, type_):
         # Allow to use 'other' type for invoice line accounts
         result = super(InvoiceLine, cls)._account_domain(type_)
-        if 'other' not in result:
-            result.append('other')
-        return result
+        or_, clause = result
+        clause = ['OR', clause]
+        clause.append(('type.other', '=', True))
+        return [or_, clause]
 
     def getter_invoice_business_kind(self, name=None):
         return self.invoice.business_kind
@@ -131,11 +136,6 @@ class Invoice(Printable, model.CoogSQL, export.ExportImportMixin):
                     'invisible': (If(Eval('state') == 'cancel', True,
                             cls._buttons['draft']['invisible'])),
                     },
-                })
-        cls._error_messages.update({
-                'bad_taxes_included_config': 'A given invoice '
-                '(%(invoice_name)s) must have a uniform tax management method '
-                'across products.',
                 })
 
     @classmethod
@@ -222,10 +222,10 @@ class Invoice(Printable, model.CoogSQL, export.ExportImportMixin):
                         invoice_sequence, '%s_sequence' % invoice_type)
                     break
             else:
-                invoice.raise_user_error('no_invoice_sequence', {
-                        'invoice': invoice.rec_name,
-                        'fiscalyear': fiscalyear.rec_name,
-                        })
+                raise InvoiceNumberError(
+                    gettext('account_invoice.msg_invoice_no_sequence',
+                        invoice=invoice.rec_name,
+                        fiscalyear=fiscalyear.rec_name))
             # sub_transaction given as parameter will be popped from
             # arguments by the decorator. This last will use it as main
             # transaction for it's code execution if valid otherwise it
@@ -297,6 +297,9 @@ class Invoice(Printable, model.CoogSQL, export.ExportImportMixin):
                 group_by=[invoice_table.id]))
 
             for k, v in cursor.fetchall():
+                if backend.name() == 'sqlite':
+                    v = datetime.datetime.strptime(v,
+                        '%Y-%m-%d %H:%M:%S.%f')
                 result[k] = v.date()
         return result
 
@@ -305,9 +308,12 @@ class Invoice(Printable, model.CoogSQL, export.ExportImportMixin):
         with model.error_manager():
             for invoice in invoices:
                 if len({bool(x.product.taxes_included) for x in invoice.lines
-                            if x.product and x.taxes}) > 1:
-                    cls.append_functional_error('bad_taxes_included_config',
-                        {'invoice_name': invoice.rec_name})
+                        if x.product and x.taxes}) > 1:
+                    cls.append_functional_error(
+                        ValidationError(gettext(
+                                'account_invoice_cog'
+                                '.msg_bad_taxes_included_config',
+                                invoice_name=invoice.rec_name)))
 
     @classmethod
     def check_modify(cls, invoices):
@@ -456,6 +462,26 @@ class Invoice(Printable, model.CoogSQL, export.ExportImportMixin):
     def cancel(cls, invoices):
         pool = Pool()
         Event = pool.get('event')
+        Move = pool.get('account.move')
+
+        # Allow to cancel out invoice
+        # until https://bugs.tryton.org/issue8445
+        cancel_moves = []
+        to_save = []
+        for invoice in invoices:
+            if (invoice.move
+                    and invoice.state != 'draft'
+                    and not invoice.cancel_move
+                    and invoice.type == 'out'):
+                invoice.cancel_move = invoice.move.cancel()
+                to_save.append(invoice)
+                cancel_moves.append(invoice.cancel_move)
+        if cancel_moves:
+            Move.save(cancel_moves)
+        cls.save(to_save)
+        if cancel_moves:
+            Move.post(cancel_moves)
+
         super(Invoice, cls).cancel(invoices)
         if not Transaction().context.get('deleting_invoice', None):
             Event.notify_events(invoices, 'cancel_invoice')

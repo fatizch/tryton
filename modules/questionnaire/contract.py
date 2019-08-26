@@ -2,6 +2,7 @@
 # this repository contains the full copyright notices and license terms.
 import json
 
+from trytond.i18n import gettext
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Len, Eval
 
@@ -117,17 +118,6 @@ class ContractQuestionnaireResult(model.CoogSQL, model.CoogView):
             'readable text'),
         'getter_results_summary')
 
-    @classmethod
-    def __setup__(cls):
-        super().__setup__()
-        cls._error_messages.update({
-                'score_msg': 'Score',
-                'selected_msg': 'Selected',
-                'not_selected_msg': 'Not Selected',
-                'description_msg': 'Description',
-                'product_msg': 'Product',
-                })
-
     def getter_title(self, name):
         return self.part.rec_name
 
@@ -139,15 +129,14 @@ class ContractQuestionnaireResult(model.CoogSQL, model.CoogView):
             result['product'])
         return '\r'.join(
             [
-                '%s: %s' % (self.raise_user_error('score_msg',
-                        raise_exception=False), result['score']),
-                '%s: %s' % (self.raise_user_error('product_msg',
-                        raise_exception=False), product.rec_name),
-                '%s: %s' % (self.raise_user_error('description_msg',
-                        raise_exception=False), result['description']),
-                self.raise_user_error('selected_msg'
-                    if result.get('selected', False)
-                    else 'not_selected_msg', raise_exception=False),
+                '%s: %s' % (gettext('questionnaire.msg_score'),
+                    result['score']),
+                '%s: %s' % (gettext('questionnaire.msg_product'),
+                    product.rec_name),
+                '%s: %s' % (gettext('questionnaire.msg_description'),
+                    result['description']),
+                gettext('msg_selected') if result.get('selected', False)
+                else gettext('msg_not_selected'),
                 ])
 
     @property
@@ -158,13 +147,6 @@ class ContractQuestionnaireResult(model.CoogSQL, model.CoogView):
 class ContractQuestionnaireResultDistribution(metaclass=PoolMeta):
     __name__ = 'contract.questionnaire.result'
 
-    @classmethod
-    def __setup__(cls):
-        super().__setup__()
-        cls._error_messages.update({
-                'commercial_product_msg': 'Commercial Product',
-                })
-
     def _format_result(self, result):
         CommercialProduct = Pool().get('distribution.commercial_product')
 
@@ -173,5 +155,5 @@ class ContractQuestionnaireResultDistribution(metaclass=PoolMeta):
         commercial_product = CommercialProduct.get_instance_from_code(
             result['commercial_product'])
         return '%s\r%s: %s' % (formatted,
-            self.raise_user_error('commercial_product_msg',
-            raise_exception=False), commercial_product.rec_name)
+            gettext('msg_commercial_product'),
+            commercial_product.rec_name)

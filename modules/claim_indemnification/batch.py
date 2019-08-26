@@ -5,7 +5,7 @@ import logging
 from collections import defaultdict
 
 from trytond.pool import Pool
-from trytond.error import UserError
+from trytond.exceptions import UserError
 from trytond.transaction import Transaction
 
 from trytond.modules.coog_core import batch, utils

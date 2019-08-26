@@ -6,6 +6,7 @@ this repository contains the full copyright notices and license terms. -->
         <!-- Rule access to handle partitioning by portfolio -->
         <!-- ######### Commissions  -->
         <record model="ir.rule.group" id="rule_group_portfolio_commission">
+            <field name="name">In the user's portfolios</field>
             <field name="model" search="[('model', '=', 'commission')]"/>
             <field name="perm_read" eval="True"/>
             <field name="perm_write" eval="True"/>
@@ -23,6 +24,7 @@ this repository contains the full copyright notices and license terms. -->
         </record>
         <!-- ######### Aggregated Commissions  -->
         <record model="ir.rule.group" id="rule_group_portfolio_commission_aggregated">
+            <field name="name">In the user's portfolios</field>
             <field name="model" search="[('model', '=', 'commission.aggregated')]"/>
             <field name="perm_read" eval="True"/>
             <field name="perm_write" eval="True"/>

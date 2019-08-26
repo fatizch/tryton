@@ -1,3 +1,200 @@
 #
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:account.invoice.line,almerys_canceled_services:"
+msgid "Almerys Canceled Services"
+msgstr ""
+
+msgctxt "field:account.invoice.line,almerys_services:"
+msgid "Almerys Services"
+msgstr ""
+
+msgctxt "field:benefit,delegation:"
+msgid "Delegation"
+msgstr ""
+
+msgctxt "field:claim,almerys_file:"
+msgid "Almerys File"
+msgstr ""
+
+msgctxt "field:claim,is_almerys:"
+msgid "Is Almerys"
+msgstr ""
+
+msgctxt "field:claim,third_party_payment:"
+msgid "Third Party Payment"
+msgstr ""
+
+msgctxt "field:claim.almerys.claim_indemnification,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:claim.almerys.statement_creation,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:claim.loss,almerys_sequence:"
+msgid "Almerys Sequence"
+msgstr ""
+
+msgctxt "field:claim.loss,code:"
+msgid "Code"
+msgstr "Code"
+
+msgctxt "field:claim.loss.health,almerys_accident_date:"
+msgid "Almerys Accident Date"
+msgstr ""
+
+msgctxt "field:claim.loss.health,almerys_depassement_amount:"
+msgid "Almerys Depassement Amount"
+msgstr ""
+
+msgctxt "field:claim.loss.health,almerys_num_dents:"
+msgid "Almerys Num Dents"
+msgstr ""
+
+msgctxt "field:claim.loss.health,almerys_other_insurer_delivered_amount:"
+msgid "Almerys Other Insurer Delivered Amount"
+msgstr ""
+
+msgctxt "field:claim.loss.health,almerys_prescription_date:"
+msgid "Almerys Prescription Date"
+msgstr ""
+
+msgctxt "field:claim.loss.health,almerys_top_depassement:"
+msgid "Almerys Top Depassement"
+msgstr ""
+
+msgctxt "field:claim.service,third_party_invoice_line:"
+msgid "Third Party Invoice Line"
+msgstr ""
+
+msgctxt "field:claim.service,third_party_invoice_line_cancel:"
+msgid "Third Party Invoice Line Cancel"
+msgstr ""
+
+msgctxt "field:ir.test_case,almerys_benefit_start_date:"
+msgid "Almerys Benefit Start Date"
+msgstr ""
+
+msgctxt "field:ir.test_case,almerys_insurers:"
+msgid "Almerys Insurers"
+msgstr ""
+
+msgctxt "field:offered.option.description,almerys_benefit_htp:"
+msgid "Standard Benefit"
+msgstr ""
+
+msgctxt "field:offered.option.description,almerys_benefit_tp:"
+msgid "Third Party Payment Benefit"
+msgstr ""
+
+msgctxt "field:offered.option.description,almerys_management:"
+msgid "Almerys Management"
+msgstr ""
+
+msgctxt "field:test_case-almerys.insurer,case:"
+msgid "Case"
+msgstr ""
+
+msgctxt "field:test_case-almerys.insurer,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:test_case-almerys.insurer,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:test_case-almerys.insurer,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:test_case-almerys.insurer,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:test_case-almerys.insurer,insurer:"
+msgid "Insurer"
+msgstr "Assureur"
+
+msgctxt "field:test_case-almerys.insurer,rec_name:"
+msgid "Record Name"
+msgstr "Numéro"
+
+msgctxt "field:test_case-almerys.insurer,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:test_case-almerys.insurer,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:test_case-almerys.insurer,xml_id:"
+msgid "XML Id"
+msgstr "XML Id"
+
+msgctxt "field:third_party_protocol.almerys.configuration,account_statement:"
+msgid "Account used in Statement"
+msgstr ""
+
+msgctxt "field:third_party_protocol.almerys.configuration,claim_journal:"
+msgid "Claim Journal"
+msgstr ""
+
+msgctxt ""
+"field:third_party_protocol.almerys.configuration,claim_statement_journal:"
+msgid "Statement Journal"
+msgstr "Journal de relevés"
+
+msgctxt "field:third_party_protocol.almerys.configuration,invoiced_party:"
+msgid "Invoiced Party"
+msgstr ""
+
+msgctxt "model:claim.almerys.claim_indemnification,name:"
+msgid "Almerys Claim Indemnification"
+msgstr ""
+
+msgctxt "model:claim.almerys.statement_creation,name:"
+msgid "Almerys Statement Creation"
+msgstr "Création d'un relevé Almerys"
+
+msgctxt "model:claim.sub_status,name:claim_sub_status_almerys"
+msgid "Import Almerys"
+msgstr ""
+
+msgctxt "model:ir.action,name:act_claim_service_relate"
+msgid "Claim Services"
+msgstr "Prestations Fournies"
+
+msgctxt "model:ir.test_case.instance,name:almerys_descriptions_test_case"
+msgid "Almerys Descriptions Test Case"
+msgstr ""
+
+msgctxt "model:test_case-almerys.insurer,name:"
+msgid "Test Case - Almerys Insurer"
+msgstr ""
+
+msgctxt "selection:account.invoice,business_kind:"
+msgid "Third Party Management"
+msgstr "Gestion des Délégataires"
+
+msgctxt "selection:benefit,delegation:"
+msgid "None"
+msgstr "Aucun"
+
+msgctxt "selection:benefit,delegation:"
+msgid "Prestation"
+msgstr "Prestation"
+
+msgctxt "selection:benefit,delegation:"
+msgid "Prestation & Reimbursement"
+msgstr "Prestation et remboursement"
+
+msgctxt "view:account.invoice.line:"
+msgid "Almerys Services"
+msgstr "Services Almerys"
+
+msgctxt "view:claim.loss.health:"
+msgid "Almerys"
+msgstr "Almerys"

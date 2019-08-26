@@ -13,11 +13,13 @@ from sql.functions import CurrentTimestamp
 
 from trytond.cache import Cache
 from trytond import backend
-from trytond.error import UserError
+from trytond.exceptions import UserError, UserWarning
+from trytond.i18n import gettext
 from trytond.rpc import RPC
 from trytond.pool import PoolMeta
 from trytond.model import Workflow, Model, fields as tryton_fields, \
     ModelSingleton, Unique
+from trytond.model.exceptions import ValidationError, AccessError
 from trytond.pyson import Eval, PYSONEncoder, PYSON, Bool, Len, Or, If
 from trytond.pool import Pool
 from trytond.transaction import Transaction
@@ -672,11 +674,6 @@ def relation_mixin(value_model, field, model, name):
                 'invisible': Eval('action') == 'remove',
                 }
             cls.values.depends = ['action']
-            cls._error_messages.update({
-                    'mes_remove_version': 'Remove version of',
-                    'mes_new_version': 'New version',
-                    'mes_update_version': 'Update %s',
-                    })
 
         def is_null(self):
             return super(Mixin, self).is_null() and self.action != 'remove'
@@ -786,19 +783,17 @@ def relation_mixin(value_model, field, model, name):
 
         def get_diff(self, model, base_object=None):
             if self.action == 'remove':
-                label = '%s: ' % self.raise_user_error(
-                    'mes_remove_version', raise_exception=False)
+                label = gettext('endorsement.msg_remove_version')
                 value = self.base_instance.rec_name
                 return (label, value)
             elif self.action == 'add':
-                result = ['%s:' % self.raise_user_error(
-                    'mes_new_version', raise_exception=False)]
+                result = [gettext('endorsement.msg_new_version')]
                 result += [super(Mixin, self).get_diff(model, base_object)]
                 return result
             elif self.action == 'update':
-                label = '%s: ' % self.raise_user_error(
-                    'mes_update_version', (base_object.rec_name),
-                    raise_exception=False)
+                label = gettext(
+                    'endorsement.msg_update_version',
+                    name=base_object.rec_name)
                 value = super(Mixin, self).get_diff(model, base_object)
                 return [label, value]
             return super(Mixin, self).get_diff(model, base_object)
@@ -976,7 +971,8 @@ class Contract(metaclass=PoolMeta):
                 ('contracts', 'in', [x.id for x in contracts]),
                 ('state', '=', 'in_progress')])
         if not endorsements:
-            cls.raise_user_error('no_in_progress_endorsements')
+            raise ValidationError(gettext(
+                    'endorsement.msg_no_in_progress_endorsements'))
         Endorsement.apply(endorsements)
 
     def update_start_date(self, caller=None):
@@ -1264,24 +1260,10 @@ class Endorsement(QueueMixin, Workflow, Printable, model.CoogSQL,
                 })
         cls._order.insert(0, ('last_modification', 'DESC'))
         cls.__rpc__.update({'ws_create_endorsements': RPC(readonly=False)})
-        cls._error_messages.update({
-                'active_contract_required': 'You cannot start this endorsement'
-                ' on a non-active contract !',
-                'effective_date_before_start_date':
-                'The endorsement\'s effective date must be posterior to '
-                'the contracts\' start date',
-                'invalid_format': 'Invalid file format',
-                'no_sequence_defined': 'No sequence defined in configuration',
-                'delete_not_draft_endorsement': 'Impossible to delete the '
-                'endorsement %(number)s because it is not in draft '
-                'but in %(status)s',
-                'no_cancel_endorsement': 'Cancellation of this endorsement is '
-                'not allowed in order to preserve the data integrity',
-                })
         t = cls.__table__()
         cls._sql_constraints = [
             ('number_uniq', Unique(t, t.number),
-                'The endorsement number must be unique.')
+                'endorsement.msg_number_unique')
         ]
         cls._async_methods.append(
             ('apply', 'async_apply_condition'),
@@ -1305,7 +1287,8 @@ class Endorsement(QueueMixin, Workflow, Printable, model.CoogSQL,
 
         config = Configuration(1)
         if not config.endorsement_number_sequence:
-            cls.raise_user_error('no_sequence_defined')
+            raise ValidationError(gettext(
+                    'endorsement.msg_no_sequence_defined'))
         vlist = [v.copy() for v in vlist]
         for values in vlist:
             if not values.get('number', None):
@@ -1318,9 +1301,10 @@ class Endorsement(QueueMixin, Workflow, Printable, model.CoogSQL,
         with model.error_manager():
             for endorsement in records:
                 if endorsement.state != 'draft':
-                    cls.append_functional_error('delete_not_draft_endorsement',
-                        {'number': endorsement.number,
-                        'status': endorsement.state_string})
+                    raise AccessError(gettext(
+                            'endorsement.msg_delete_not_draft_endorsement',
+                            number=endorsement.number,
+                            status=endorsement.state_string))
         super(Endorsement, cls).delete(records)
 
     @staticmethod
@@ -1535,7 +1519,8 @@ class Endorsement(QueueMixin, Workflow, Printable, model.CoogSQL,
         except DatabaseIntegrityError:
             transaction = Transaction()
             transaction.rollback()
-            cls.raise_user_error('no_cancel_endorsement')
+            raise AccessError(gettext(
+                    'endorsement.msg_no_cancel_endorsement'))
         cls.write(endorsements, {
                 'rollback_date': None,
                 'state': 'canceled',
@@ -1814,7 +1799,8 @@ class Endorsement(QueueMixin, Workflow, Printable, model.CoogSQL,
                             'number': endorsement.number
                             })
                     else:
-                        cls.raise_user_error('invalid_format')
+                        raise ValidationError(gettext(
+                                'endorsement.msg_invalid_format'))
             except UserError as exc:
                 Transaction().rollback()
                 message.append({'error': exc.message})
@@ -1912,23 +1898,6 @@ class EndorsementContract(values_mixin('endorsement.contract.field'),
     @classmethod
     def __setup__(cls):
         super(EndorsementContract, cls).__setup__()
-        cls._error_messages.update({
-                'not_latest_applied': ('Endorsement "%s" is not the latest '
-                    'applied.'),
-                'process_in_progress': ('Contract %s is currently locked in '
-                    'process %s.'),
-                'only_one_endorsement_in_progress': 'There may only be one '
-                'endorsement in_progress at a given time per contract',
-                'mes_option_modifications':
-                'Options Modifications',
-                'mes_activation_history_modifications':
-                'Activation History Modifications',
-                'mes_extra_data_modifications':
-                'Extra Datas Modifications',
-                'mes_contact_modifications': 'Contacts Modifications',
-                'status_incompatible': 'The status %s of contract %s does not '
-                'allow endorsements.',
-                })
         cls.values.states = {
             'readonly': Eval('state') == 'applied',
             }
@@ -1976,32 +1945,31 @@ class EndorsementContract(values_mixin('endorsement.contract.field'),
         option_summary = [x.get_diff('contract.option', x.option)
             for x in self.options]
         if option_summary:
-            result[1].append(['%s :' % self.raise_user_error(
-                    'mes_option_modifications', raise_exception=False),
-                option_summary])
+            result[1].append([
+                    gettext('endorsement.msg_option_modifications'),
+                    option_summary])
 
         activation_summary = [x.get_diff(
                 'contract.activation_history', x.activation_history)
             for x in self.activation_history]
         if activation_summary:
-            result[1].append(['%s :' % self.raise_user_error(
-                    'mes_activation_history_modifications',
-                    raise_exception=False),
-                activation_summary])
+            result[1].append([
+                    gettext('endorsement.msg_activation_history_modifications'),
+                    activation_summary])
 
         extra_data_summary = [x.get_diff('contract.extra_data',
                 x.extra_data) for x in self.extra_datas]
         if extra_data_summary:
-            result[1].append(['%s :' % self.raise_user_error(
-                    'mes_extra_data_modifications', raise_exception=False),
-                extra_data_summary])
+            result[1].append([
+                    gettext('endorsement.msg_extra_data_modifications'),
+                    extra_data_summary])
 
         contact_summary = [x.get_diff('contract.contact', x.contact)
             for x in self.contacts]
         if contact_summary:
-            result[1].append(['%s :' % self.raise_user_error(
-                    'mes_contact_modifications', raise_exception=False),
-                contact_summary])
+            result[1].append([
+                    gettext('endorsement.msg_contact_modifications'),
+                    contact_summary])
         return result
 
     def get_state(self, name):
@@ -2046,22 +2014,28 @@ class EndorsementContract(values_mixin('endorsement.contract.field'),
 
     @classmethod
     def draft(cls, contract_endorsements):
+        pool = Pool()
+        Warning = pool.get('res.user.warning')
         for contract_endorsement in contract_endorsements:
             latest_applied, = cls.search([
                     ('contract', '=', contract_endorsement.contract.id),
                     ('state', 'in', ('applied', 'in_progress')),
                     ], order=[('applied_on', 'DESC')], limit=1)
             if latest_applied != contract_endorsement:
-                cls.raise_user_error('not_latest_applied',
-                    contract_endorsement.rec_name)
+                raise AccessError(gettext(
+                        'endorsement.msg_not_latest_applied',
+                        endorsement=contract_endorsement.rec_name))
 
             contract = contract_endorsement.contract
             if contract.current_state and (
                     contract_endorsement.endorsement.state != 'in_progress'):
-                cls.raise_user_warning('process_in_progress_%s_%s'
-                    % (str(contract.id), str(contract_endorsement.id)),
-                    'process_in_progress', (contract.rec_name,
-                        contract.current_state.process.fancy_name))
+                key = 'process_in_progress_%s_%s' % (
+                    str(contract.id), str(contract_endorsement.id))
+                if Warning.check(key):
+                    raise UserWarning(gettext(
+                            'endorsement.msg_process_in_progress',
+                            contract=contract.rec_name,
+                            process=contract.current_state.process.fancy_name))
 
             contract_endorsement.do_restore_history()
             contract_endorsement.set_applied_on(None)
@@ -2072,17 +2046,23 @@ class EndorsementContract(values_mixin('endorsement.contract.field'),
     def apply(cls, contract_endorsements):
         pool = Pool()
         Contract = pool.get('contract')
+        Warning = pool.get('res.user.warning')
         for contract_endorsement in contract_endorsements:
             contract = contract_endorsement.contract
             if contract.status in STATUS_INCOMPATIBLE_WITH_ENDORSEMENTS:
-                cls.raise_user_error('status_incompatible',
-                    (contract.status, contract.rec_name))
+                raise ValidationError(gettext(
+                        'endorsement.msg_status_incompatible',
+                        status=contract.status, contract=contract.rec_name))
             if contract.current_state and (
                     contract_endorsement.endorsement.state != 'in_progress'):
-                cls.raise_user_warning('process_in_progress_%s_%s'
-                    % (str(contract.id), str(contract_endorsement.id)),
-                    'process_in_progress', (contract.rec_name,
-                        contract.current_state.process.fancy_name))
+                key = 'process_in_progress_%s_%s' % (
+                    str(contract.id), str(contract_endorsement.id))
+                if Warning.check(key):
+                    raise UserWarning(gettext(
+                            'endorsement.msg_process_in_progress',
+                            contract=contract.rec_name,
+                            process=contract.current_state.process.fancy_name))
+
             if contract_endorsement.endorsement.rollback_date:
                 contract_endorsement.set_applied_on(
                     contract_endorsement.endorsement.rollback_date)
@@ -2127,7 +2107,8 @@ class EndorsementContract(values_mixin('endorsement.contract.field'),
                         contract_endorsements]),
                 ('state', '=', 'in_progress')])
         if count:
-            cls.raise_user_error('only_one_endorsement_in_progress')
+            raise ValidationError(gettext(
+                    'endorsement.msg_only_one_endorsement_in_progress'))
 
     def apply_values(self):
         values = super(EndorsementContract, self).apply_values()
@@ -2257,8 +2238,11 @@ class EndorsementContract(values_mixin('endorsement.contract.field'),
         with model.error_manager():
             for contract in contracts:
                 if contract.status in STATUS_INCOMPATIBLE_WITH_ENDORSEMENTS:
-                    cls.append_functional_error('status_incompatible',
-                        (contract.status_string, contract.rec_name))
+                    cls.append_functional_error(
+                        ValidationError(gettext(
+                                'endorsement.msg_status_incompatible',
+                                status=contract.status_string,
+                                contract=contract.rec_name)))
 
     def clean_up(self, instance=None):
         if instance is None:
@@ -2315,10 +2299,6 @@ class EndorsementOption(relation_mixin(
         super(EndorsementOption, cls).__setup__()
         cls.values.domain = [('definition', '=', Eval('definition'))]
         cls.values.depends = ['definition']
-        cls._error_messages.update({
-                'new_coverage': 'New Coverage: %s',
-                'mes_versions_modification': 'Versions Modifications',
-                })
 
     @classmethod
     def default_definition(cls):
@@ -2338,8 +2318,8 @@ class EndorsementOption(relation_mixin(
     def get_rec_name(self, name):
         if self.option:
             return self.option.rec_name
-        return '%s : %s' % (self.raise_user_error('new_coverage',
-                raise_exception=False), self.coverage.rec_name)
+        return gettext(
+            'endorsement.msg_new_coverage', name=self.coverage.rec_name)
 
     def apply_values(self):
         values = super(EndorsementOption, self).apply_values()
@@ -2361,9 +2341,8 @@ class EndorsementOption(relation_mixin(
         option_summary = [x.get_diff('contract.option.version', x.version)
             for x in self.versions]
         if option_summary:
-            result += ['%s :' % (self.raise_user_error(
-                        'mes_option_modifications',
-                        raise_exception=False)), option_summary]
+            result += [
+                gettext('endorsement.msg_option_modifications'), option_summary]
         return result
 
     @classmethod
@@ -2398,9 +2377,6 @@ class EndorsementOptionVersion(relation_mixin(
         super(EndorsementOptionVersion, cls).__setup__()
         cls.values.domain = [('definition', '=', Eval('definition'))]
         cls.values.depends = ['definition']
-        cls._error_messages.update({
-                'new_option_version': 'New Option Version',
-                })
         cls._endorsed_dicts = {'extra_data': 'extra_data'}
 
     @classmethod
@@ -2411,8 +2387,7 @@ class EndorsementOptionVersion(relation_mixin(
         return self.option_endorsement.definition.id
 
     def get_rec_name(self, name):
-        return '%s' % (self.raise_user_error('new_option_version',
-                raise_exception=False))
+        return gettext('endorsement.msg_new_option_version')
 
     @classmethod
     def _ignore_fields_for_matching(cls):
@@ -2486,13 +2461,6 @@ class EndorsementExtraData(relation_mixin(
     _extra_data_def_cache = Cache('extra_data_defs')
 
     @classmethod
-    def __setup__(cls):
-        super(EndorsementExtraData, cls).__setup__()
-        cls._error_messages.update({
-                'new_extra_data': 'New Extra Data',
-                })
-
-    @classmethod
     def get_extra_data_def_cache(cls, name):
         pool = Pool()
         ExtraData = pool.get('extra_data')
@@ -2524,8 +2492,7 @@ class EndorsementExtraData(relation_mixin(
                 return Date.date_as_string(self.extra_data.date, lang)
             return ''
         else:
-            return self.raise_user_error('new_extra_data',
-                raise_exception=False)
+            return gettext('endorsement.msg_new_extra_data')
 
     @classmethod
     def updated_struct(cls, extra_data):

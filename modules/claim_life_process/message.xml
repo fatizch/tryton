@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<tryton>
+    <data group="1">
+        <record model="ir.message" id="msg_std_declaration_process">
+            <field name="text">STD Declaration Process (FR)</field>
+        </record>
+        <record model="ir.message" id="msg_std_declaration_process_description">
+            <field name="text">This process allows managers to make a STD declaration.</field>
+        </record>
+        <record model="ir.message" id="msg_relapse_declaration_process">
+            <field name="text">Relapse Declaration Process (FR)</field>
+        </record>
+        <record model="ir.message" id="msg_relapse_declaration_process_description">
+            <field name="text">This process allows managers to make a relapse declaration.</field>
+        </record>
+        <record model="ir.message" id="msg_death_declaration_process">
+            <field name="text">Death Declaration Process (FR)</field>
+        </record>
+        <record model="ir.message" id="msg_death_declaration_process_description">
+            <field name="text">This process allows managers to make a death declaration.</field>
+        </record>
+        <record model="ir.message" id="msg_ltd_declaration_process">
+            <field name="text">LTD Declaration Process (FR)</field>
+        </record>
+        <record model="ir.message" id="msg_ltd_declaration_process_description">
+            <field name="text">This process allows managers to make a LTD declaration.</field>
+        </record>
+        <record model="ir.message" id="msg_death_std_declaration_process">
+            <field name="text">STD/Death Declaration Process (FR)</field>
+        </record>
+        <record model="ir.message" id="msg_death_std_declaration_process_description">
+            <field name="text">This process allows managers to reopen a std claim to make a death declaration.</field>
+        </record>
+        <record model="ir.message" id="msg_std_continue_new_period_process">
+            <field name="text">STD Continue/New Period Process (FR)</field>
+        </record>
+        <record model="ir.message" id="msg_std_continue_new_period_process_description">
+            <field name="text">This process allows managers to continue a terminated STD declaration and add new scheduling periods.</field>
+        </record>
+        <record model="ir.message" id="msg_ltd_after_std_process">
+            <field name="text">LTD After STD Declaration Process (FR)</field>
+        </record>
+        <record model="ir.message" id="msg_ltd_after_std_process_description">
+            <field name="text">This process allows managers to make an LTD declaration after an STD declaration.</field>
+        </record>
+    </data>
+</tryton>

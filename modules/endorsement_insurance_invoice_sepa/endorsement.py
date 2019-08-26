@@ -1,6 +1,9 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 import datetime
+
+from trytond.i18n import gettext
+from trytond.model.exceptions import ValidationError
 from trytond.pool import PoolMeta, Pool
 
 from trytond.modules.coog_core import utils
@@ -42,14 +45,6 @@ class Endorsement(metaclass=PoolMeta):
 class Contract(metaclass=PoolMeta):
     __name__ = 'contract'
 
-    @classmethod
-    def __setup__(cls):
-        super(Contract, cls).__setup__()
-        cls._error_messages.update({'amended_mandates':
-                'Mandates with identification %s are amended. '
-                'Please use the newer version or generate '
-                'a new mandate for this contract.'})
-
     def before_activate(self):
         super(Contract, self).before_activate()
         # Checking that there are no amended mandates should only be done when
@@ -68,12 +63,15 @@ class Contract(metaclass=PoolMeta):
             if x.date else datetime.date.min, reverse=True)
         for b in billing_infos:
             if b.sepa_mandate:
-                mandates.append(b.sepa_mandate.id)
+                mandates.append(b.sepa_mandate)
             if not b.date or b.date <= today:
                 break
         if not mandates:
             return
-        amendments = Mandate.search([('amendment_of', 'in', mandates)])
+        amendments = Mandate.search([('amendment_of', 'in',
+                [x.id for x in mandates])])
         if amendments:
-            self.raise_user_error('amended_mandates', ', '.join(
-                    set(x.identification for x in mandates)))
+            raise ValidationError(gettext(
+                    'endorsement_insurance_invoice_sepa.msg_amended_mandates',
+                    identification=', '.join(
+                        set(x.identification for x in mandates))))

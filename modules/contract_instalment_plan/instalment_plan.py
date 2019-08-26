@@ -2,7 +2,9 @@
 # this repository contains the full copyright notices and license terms.
 from dateutil.relativedelta import relativedelta
 
+from trytond.i18n import gettext
 from trytond.model import Workflow
+from trytond.model.exceptions import AccessError, ValidationError
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval
 from trytond.transaction import Transaction
@@ -28,7 +30,8 @@ PAYMENT_FREQUENCY = [
     ]
 
 
-class ContractInstalmentPlan(Workflow, model.CoogSQL, model.CoogView, metaclass=PoolMeta):
+class ContractInstalmentPlan(
+        Workflow, model.CoogSQL, model.CoogView, metaclass=PoolMeta):
     'Contract Instalment Plan'
     __name__ = 'contract.instalment_plan'
     _func_key = 'rec_name'
@@ -68,28 +71,6 @@ class ContractInstalmentPlan(Workflow, model.CoogSQL, model.CoogView, metaclass=
     @classmethod
     def __setup__(cls):
         super(ContractInstalmentPlan, cls).__setup__()
-        cls._error_messages.update({
-                'delete_draft': ('Instalment Plan "%(instalment)s" must be in '
-                    'draft before deletion.'),
-                'missing_period_data': ('Contract and invoice period dates are '
-                    'required.'),
-                'invoice_period_inconsistent': ('Invoice period end '
-                    '%(end_date)s should be greater than invoices period start'
-                    ' %(start_date)s.'),
-                'start_date_is_not_invoicing_date': ('Invoices period start is '
-                    'not valid.'),
-                'end_date_is_not_invoicing_date': ('Invoice period end is '
-                    'not valid.'),
-                'duplicate_instalments': ('Existing instalment(s) for this '
-                    'period: %(existing_instalment)s'),
-                'unknown_calculation_method': ('Unknown calculation method: '
-                    '%(calculation_method)s'),
-                'invalid_total_amounts': ('Total amount %(total_amount)s should'
-                    ' be equal to the sum of scheduled payments '
-                    '%(scheduled_amount)s'),
-                'paid_invoices': ('Some invoices are already paid in the '
-                    'period: %(paid_invoices)s'),
-                })
         cls._transitions |= set((
                 ('draft', 'validated'),
                 ('draft', 'cancel'),
@@ -334,8 +315,9 @@ class ContractInstalmentPlan(Workflow, model.CoogSQL, model.CoogView, metaclass=
     def delete(cls, instalments):
         for instalment in instalments:
             if instalment.state != 'draft':
-                cls.raise_user_error('delete_draft', {
-                        'instalment': instalment.rec_name})
+                raise AccessError(gettext(
+                        'contract_instalment_plan.msg_delete_draft',
+                        instalment=instalment.rec_name))
         super(ContractInstalmentPlan, cls).delete(instalments)
 
     @classmethod
@@ -428,25 +410,32 @@ class ContractInstalmentPlan(Workflow, model.CoogSQL, model.CoogView, metaclass=
             instalment=None, raise_error=True):
         if not all([contract, invoice_period_end, invoice_period_start]):
             if raise_error:
-                cls.raise_user_error('missing_period_data')
+                raise ValidationError(gettext(
+                        'contract_instalment_plan.msg_missing_period_data'))
             return False
         if invoice_period_start > invoice_period_end:
             if raise_error:
-                cls.raise_user_error('invoice_period_inconsistent', {
-                        'start_date': invoice_period_start,
-                        'end_date': invoice_period_end})
+                raise ValidationError(gettext(
+                        'contract_instalment_plan'
+                        '.msg_invoice_period_inconsistent',
+                        start_date=invoice_period_start,
+                        end_date=invoice_period_end))
             return False
         start_period = contract.get_invoice_periods(invoice_period_start, None,
             True)
         if not start_period or (start_period[-1][0] != invoice_period_start):
             if raise_error:
-                cls.raise_user_error('start_date_is_not_invoicing_date')
+                raise ValidationError(gettext(
+                        'contract_instalment_plan'
+                        '.msg_start_date_is_not_invoicing_date'))
             return False
         end_period = contract.get_invoice_periods(invoice_period_end,
             invoice_period_end, True)
         if not end_period or (end_period[-1][1] != invoice_period_end):
             if raise_error:
-                cls.raise_user_error('end_date_is_not_invoicing_date')
+                raise ValidationError(gettext(
+                        'contract_instalment_plan'
+                        '.msg_end_date_is_not_invoicing_date'))
             return False
         InstalmentPlan = Pool().get('contract.instalment_plan')
         clause = [
@@ -460,36 +449,40 @@ class ContractInstalmentPlan(Workflow, model.CoogSQL, model.CoogView, metaclass=
         duplicate_instalments = InstalmentPlan.search(clause)
         if duplicate_instalments:
             if raise_error:
-                cls.raise_user_error('duplicate_instalments',
-                    {'existing_instalment': ', '.join([x.rec_name for x
-                                in duplicate_instalments])})
+                raise ValidationError(gettext(
+                        'contract_instalment_plan.msg_duplicate_instalments',
+                        existing_instalment=', '.join(
+                            x.rec_name for x in duplicate_instalments)))
             return False
         paid_invoices = cls.get_invoices(contract, invoice_period_start,
             invoice_period_end, ['paid'])
         if paid_invoices:
             if raise_error:
-                cls.raise_user_error('paid_invoices',
-                    {'paid_invoices': ', '.join(
-                            [x.rec_name for x in paid_invoices])})
+                raise ValidationError(gettext(
+                        'contract_instalment_plan.msg_paid_invoices',
+                        paid_invoices=', '.join(
+                            x.rec_name for x in paid_invoices)))
             return False
         return True
 
     def check_amounts(self):
         sum_amount = sum([x.amount for x in self.scheduled_payments])
         if not self.total_amount or (self.total_amount != sum_amount):
-            self.raise_user_error('invalid_total_amounts', {
-                    'total_amount': self.total_amount,
-                    'scheduled_amount': sum_amount
-                    })
+            raise ValidationError(gettext(
+                    'contract_instalment_plan.msg_invalid_total_amounts',
+                    total_amount=self.total_amount,
+                    scheduled_amount=sum_amount))
 
     @classmethod
     def do_calculate(cls, contract, invoice_period_start, invoice_period_end,
             method='manual', **kwargs):
         if method not in [x[0] for x in CALCULATION_METHOD]:
-            cls.raise_user_error('unknown_calculation_method', {
-                    'calculation_method': method})
+            raise ValidationError(gettext(
+                    'contract_instalment_plan.msg_unknown_calculation_method',
+                    calculation_method=method))
         if not all([contract, invoice_period_end, invoice_period_start]):
-            cls.raise_user_error('missing_period_data')
+            raise ValidationError(gettext(
+                    'contract_instalment_plan.msg_missing_period_data'))
         pool = Pool()
         InstalmentPayment = pool.get('contract.instalment_plan.payment')
         payments = []
@@ -562,7 +555,8 @@ class ContractInstalmentPlan(Workflow, model.CoogSQL, model.CoogView, metaclass=
         return Invoice.browse([x[0] for x in cursor.fetchall()])
 
 
-class ContractInstalmentPlanPayment(model.CoogSQL, model.CoogView, metaclass=PoolMeta):
+class ContractInstalmentPlanPayment(
+        model.CoogSQL, model.CoogView, metaclass=PoolMeta):
     'Scheduled Payment'
     __name__ = 'contract.instalment_plan.payment'
 

@@ -2,14 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:event.type.action:"
-msgid "Event Log aggregated"
-msgstr "Log d'événement agrégé"
-
-msgctxt "error:event.type.action:"
-msgid "Use Event Aggregate Configuration"
-msgstr "Utiliser la configuration d'agrégation d'événement"
-
 msgctxt "field:event.aggregate.description,create_date:"
 msgid "Create Date"
 msgstr "Date de Création"
@@ -161,6 +153,14 @@ msgstr "Description d'événement agrégé"
 msgctxt "model:ir.action,name:act_event_log_form"
 msgid "Event Logs"
 msgstr "Logs d'événements"
+
+msgctxt "model:ir.message,text:msg_event_configuration_aggregate"
+msgid "Use Event Aggregate Configuration"
+msgstr "Utiliser la configuration d'agrégation d'événement"
+
+msgctxt "model:ir.message,text:msg_log_aggregated"
+msgid "Event Log aggregated"
+msgstr "Log d'événement agrégé"
 
 msgctxt "model:ir.ui.menu,name:menu_configuration_event_aggregate"
 msgid "Event Aggregate Description"

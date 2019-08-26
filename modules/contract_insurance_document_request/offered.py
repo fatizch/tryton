@@ -1,6 +1,8 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 from trytond import backend
+from trytond.i18n import gettext
+from trytond.model.exceptions import ValidationError
 from trytond.pool import PoolMeta
 from trytond.transaction import Transaction
 from trytond.pyson import Bool, Eval
@@ -66,11 +68,6 @@ class DocumentRule(
     @classmethod
     def __setup__(cls):
         super(DocumentRule, cls).__setup__()
-        cls._error_messages.update({
-                'wrong_documents_rule': 'The return value of the document '
-                'rule must be a dictionnary with document description code '
-                'as keys.',
-                })
         cls.rule.domain = [('type_', '=', 'doc_request')]
         cls.rule.help = ('The rule must return a dictionnary '
         'with document description codes as keys, and dictionnaries as values.'
@@ -89,7 +86,8 @@ class DocumentRule(
             return self.format_as_rule_result()
         result = self.calculate_rule(args)
         if type(result) is not dict:
-            self.raise_user_error('wrong_documents_rule')
+            raise ValidationError(gettext(
+                    'document_request.msg_wrong_documents_rule'))
         result.update(self.format_as_rule_result())
         return result
 

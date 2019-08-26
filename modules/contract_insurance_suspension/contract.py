@@ -5,6 +5,8 @@ import datetime
 from dateutil.relativedelta import relativedelta
 from itertools import groupby
 
+from trytond.i18n import gettext
+from trytond.model.exceptions import ValidationError
 from trytond.pool import PoolMeta, Pool
 from trytond.server_context import ServerContext
 from trytond.pyson import Eval, Bool
@@ -176,9 +178,6 @@ class ContractRightSuspension(model.CoogSQL, model.CoogView):
     @classmethod
     def __setup__(cls):
         super(ContractRightSuspension, cls).__setup__()
-        cls._error_messages.update({
-                'invalid_dates': 'Start date greater than end date (%s > %s)',
-                })
         cls._buttons.update({
             'button_activate': {'invisible': Bool(Eval('active'))},
                 })
@@ -198,8 +197,11 @@ class ContractRightSuspension(model.CoogSQL, model.CoogView):
         with model.error_manager():
             for record in records:
                 if record.start_date > (record.end_date or datetime.date.max):
-                    cls.append_functional_error('invalid_dates',
-                        (record.start_date, record.end_date))
+                    cls.append_functional_error(
+                        ValidationError(gettext(
+                                'contract_insurance_suspension'
+                                '.msg_invalid_dates',
+                                start=record.start_date, end=record.end_date)))
 
     @classmethod
     def _export_light(cls):

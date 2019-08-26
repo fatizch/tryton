@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<tryton>
+    <data group="1">
+        <record model="ir.message" id="msg_overpayment_substraction">
+            <field name="text">Overpayment Substraction</field>
+        </record>
+        <record model="ir.message" id="msg_scheduled_term_of">
+            <field name="text">Scheduled Term Of</field>
+        </record>
+    </data>
+</tryton>

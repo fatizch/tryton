@@ -1,8 +1,10 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+from trytond.i18n import gettext
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, If
 from trytond.model import Workflow
+from trytond.model.exceptions import ValidationError
 
 from trytond.modules.coog_core import fields, utils, model
 
@@ -66,7 +68,7 @@ class Invoice(metaclass=PoolMeta):
         cls.account.domain = [
             If(Eval('business_kind') == 'in_invoice_insurance',
                 [('company', '=', Eval('company', -1)),
-                    ('kind', '=', 'receivable')],
+                    ('type.receivable', '=', True)],
                 cls.account.domain,
                 )]
         cls.account.depends += ['business_kind']
@@ -151,14 +153,6 @@ class Invoice(metaclass=PoolMeta):
 class InvoiceLine(metaclass=PoolMeta):
     __name__ = 'account.invoice.line'
 
-    @classmethod
-    def __setup__(cls):
-        super(InvoiceLine, cls).__setup__()
-        cls._error_messages.update({
-                'too_big_amount': ('Amount exceeds %s which is the maximum '
-                    "allowed for product '%s'."),
-                })
-
     @staticmethod
     def default_quantity():
         return 1
@@ -168,5 +162,7 @@ class InvoiceLine(metaclass=PoolMeta):
         super(InvoiceLine, self).pre_validate()
         if self.product and self.product.capped_amount and (self.unit_price >
                 self.product.capped_amount):
-            self.raise_user_error('too_big_amount',
-                (self.product.capped_amount, self.product.code))
+            raise ValidationError(gettext(
+                    'supplier_invoice_insurance.msg_too_big_amount',
+                    capped_amount=self.product.capped_amount,
+                    product=self.product.code))

@@ -71,11 +71,12 @@ class ModuleTestCase(test_framework.CoogTestCase):
         account_kind, = self.AccountKind.create([{
                     'name': 'Product',
                     'company': company.id,
+                    'statement': 'income',
+                    'revenue': True,
                     }])
         account, = self.Account.create([{
                     'name': 'Account for Product',
                     'code': 'account_product',
-                    'kind': 'revenue',
                     'company': company.id,
                     'type': account_kind.id,
                     }])
@@ -233,11 +234,12 @@ class ModuleTestCase(test_framework.CoogTestCase):
         account_kind, = self.AccountKind.create([{
                     'name': 'Product',
                     'company': company.id,
+                    'statement': 'income',
+                    'revenue': True,
                     }])
         account, = self.Account.create([{
                     'name': 'Account for Product',
                     'code': 'Account for Product',
-                    'kind': 'revenue',
                     'company': company.id,
                     'type': account_kind.id,
                     }])
@@ -473,11 +475,11 @@ class ModuleTestCase(test_framework.CoogTestCase):
         tax_account_kind = self.AccountKind()
         tax_account_kind.name = 'Tax Account Kind'
         tax_account_kind.company = company
+        tax_account_kind.statement = 'balance'
         tax_account_kind.save()
         tax_account = self.Account()
         tax_account.name = 'Main tax'
         tax_account.code = 'main_tax'
-        tax_account.kind = 'revenue'
         tax_account.company = company
         tax_account.type = tax_account_kind
         tax_account.save()

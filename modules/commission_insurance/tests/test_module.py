@@ -70,24 +70,30 @@ class ModuleTestCase(test_framework.CoogTestCase):
 
         # Create accounting configuration
         with Transaction().set_context(company=company.id):
-            com_account_kind, = AccountKind.create([{
+            com_account_kind_expense, = AccountKind.create([{
                         'name': 'Commission',
                         'company': company.id,
+                        'expense': True,
+                        'statement': 'income',
+                        }])
+            com_account_kind_revenue, = AccountKind.create([{
+                        'name': 'Commission',
+                        'company': company.id,
+                        'revenue': True,
+                        'statement': 'income',
                         }])
             com_expense_account, com_revenue_account = Account.create([
                     {
                         'name': 'Expense for Commissions',
                         'code': 'account_expense_commission',
-                        'kind': 'expense',
                         'company': company.id,
-                        'type': com_account_kind.id,
+                        'type': com_account_kind_expense.id,
                         },
                     {
                         'name': 'Revenue for Commissions',
                         'code': 'account_revenue_commission',
-                        'kind': 'revenue',
                         'company': company.id,
-                        'type': com_account_kind.id,
+                        'type': com_account_kind_revenue.id,
                         },
                     ])
 

@@ -4,6 +4,7 @@ from sql import Cast, Literal
 from sql.functions import Substring, Position
 
 from trytond import backend
+from trytond.i18n import gettext
 from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
 
@@ -70,24 +71,17 @@ class EventTypeAction(metaclass=PoolMeta):
     __name__ = 'event.type.action'
 
     @classmethod
-    def __setup__(cls):
-        super(EventTypeAction, cls).__setup__()
-        cls._error_messages.update({
-                'cancel_or_delete_non_periodic_invoices':
-                'Cancel or Delete Non Periodic Invoices',
-                'create_non_periodic_invoices':
-                'Create Non Periodic Invoices',
-                })
-
-    @classmethod
     def get_action_types(cls):
         return super(EventTypeAction, cls).get_action_types() + [
-            ('cancel_or_delete_non_periodic_invoices', cls.raise_user_error(
-                    'cancel_or_delete_non_periodic_invoices',
-                    raise_exception=False)),
-            ('create_non_periodic_invoices', cls.raise_user_error(
-                    'create_non_periodic_invoices',
-                    raise_exception=False))]
+            ('cancel_or_delete_non_periodic_invoices',
+                gettext(
+                    'contract_insurance_invoice'
+                    '.msg_cancel_or_delete_non_periodic_invoices')),
+            ('create_non_periodic_invoices',
+                gettext(
+                    'contract_insurance_invoice'
+                    '.msg_create_non_periodic_invoices')),
+            ]
 
     def filter_objects(self, objects):
         if self.action != 'cancel_or_delete_non_periodic_invoices':

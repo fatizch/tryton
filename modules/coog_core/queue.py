@@ -4,6 +4,8 @@ import logging
 from functools import wraps
 from celery.result import AsyncResult
 
+from trytond.exceptions import UserWarning, UserError
+from trytond.i18n import gettext
 from trytond.pyson import Eval
 from trytond.pool import Pool
 
@@ -86,19 +88,6 @@ class QueueMixin(object):
     @classmethod
     def __setup__(cls):
         super(QueueMixin, cls).__setup__()
-        cls._error_messages.update({
-                'async_job': ('This task will be applied in the backgound. '
-                    'You can come back later and refresh the record to check '
-                    'the result.'),
-                'pending_task': ('This record has a pending background task '
-                    '(technical id: %(id)s ).\nPlease wait for this task to '
-                    'complete.'),
-                'pending_tasks': ('The records below have pending background '
-                    'tasks:\n\n%(names)s\n\nPlease wait for the tasks to '
-                    'complete.'),
-                'failed_task': ('The last background task failed. See below '
-                    'for technical details:\n%(details)s'),
-                })
         cls._async_methods = []
 
     @classmethod
@@ -108,8 +97,10 @@ class QueueMixin(object):
         if not from_async_worker:
             pendings = [x for x in records if x.has_pending_task]
             if pendings:
-                cls.raise_user_error('pending_tasks',
-                    {'names': '\n'.join(x.rec_name for x in pendings)})
+                raise UserError(gettext(
+                        'coog_core.msg_pending_tasks',
+                        names='\n'.join(x.rec_name for x in pendings),
+                        ))
 
     @classmethod
     def write(cls, *args, **kwargs):
@@ -148,12 +139,10 @@ class QueueMixin(object):
             return state
         elif name == 'async_task_message':
             if state == 'PENDING':
-                return self.raise_user_error('pending_task',
-                    {'id': async_res.id}, raise_exception=False)
+                return gettext('coog_core.msg_pending_task', id=async_res.id)
             elif state == 'FAILURE':
-                return self.raise_user_error('failed_task',
-                    {'details': async_res.traceback},
-                    raise_exception=False)
+                return gettext(
+                    'coog_core.msg_failed_task', details=async_res.traceback)
             return ''
         return ''
 
@@ -203,8 +192,9 @@ class QueueMixin(object):
                     AsyncTask.delete_from_records(instances)
                     return res
 
-                cls.raise_user_warning('async_job_%s' % [str(x)
-                            for x in instances], 'async_job')
+                key = 'async_job_%s' % [str(x) for x in instances]
+                if Warning.check(key):
+                    raise UserWarning(gettext('coog_core.msg_async_job'))
 
                 ids = [x.id for x in instances]
                 enqueue_args = (ids, ) + args

@@ -2,20 +2,16 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:report.template:"
-msgid "Text Message"
-msgstr "SMS"
-
 msgctxt "field:report.template,genshi_evaluated_message:"
-msgid "Message Genshi Evaluated"
+msgid "Message"
 msgstr "Message genshi évalué"
 
 msgctxt "field:report.template,genshi_evaluated_message_sender:"
-msgid "Message Sender Genshi Evaluated"
+msgid "Message Sender"
 msgstr "Libellé de l'envoyeur genshi évalué"
 
 msgctxt "field:report.template,genshi_evaluated_phone_number:"
-msgid "Phone Number Genshi Evaluated"
+msgid "Phone Number"
 msgstr "Numéro de téléphone genshi évalué"
 
 msgctxt "field:report.template,message:"
@@ -48,3 +44,7 @@ msgid ""
 msgstr ""
 "Numéro de téléphone du destinataire (0XXXXXXXXX ou +33XXXXXXXXXX ou "
 "expression dynamique)"
+
+msgctxt "model:ir.message,text:msg_input_text_message"
+msgid "Text Message"
+msgstr "SMS"

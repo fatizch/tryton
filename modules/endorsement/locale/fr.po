@@ -2,285 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:contract.manage_options.option_displayer:"
-msgid "New Option (%s)"
-msgstr "Nouvelle garantie (%s)"
-
-msgctxt "error:contract:"
-msgid "Enter a value for field '%s' of '%s'"
-msgstr "Entrez  une valeur pour le champ '%s' de '%s'"
-
-msgctxt "error:contract:"
-msgid "Enter a value for field(s): %s"
-msgstr "Entrez une valeur pour le(s) champs(s) : %s"
-
-msgctxt "error:contract:"
-msgid "Everything is good !"
-msgstr "Tout est bon!"
-
-msgctxt "error:contract:"
-msgid "Select a date that is not in the future for field(s): %s"
-msgstr "Sélectionnez une date non à venir pour le(s) champ(s) : %s"
-
-msgctxt "error:document.receive:"
-msgid "A contract must be set !"
-msgstr "Un contrat doit être renseigné !"
-
-msgctxt "error:endorsement.contract.activation_history:"
-msgid "New version"
-msgstr "Nouvelle version"
-
-msgctxt "error:endorsement.contract.activation_history:"
-msgid "Remove version of"
-msgstr "Suppression de la version"
-
-msgctxt "error:endorsement.contract.activation_history:"
-msgid "Update %s"
-msgstr "Mise à jour de %s"
-
-msgctxt "error:endorsement.contract.contact:"
-msgid "New version"
-msgstr "Nouvelle version"
-
-msgctxt "error:endorsement.contract.contact:"
-msgid "Remove version of"
-msgstr "Suppression de la version"
-
-msgctxt "error:endorsement.contract.contact:"
-msgid "Update %s"
-msgstr "Mise à jour de %s"
-
-msgctxt "error:endorsement.contract.extra_data:"
-msgid "New Extra Data"
-msgstr "Nouvelles données complémentaires"
-
-msgctxt "error:endorsement.contract.extra_data:"
-msgid "New version"
-msgstr "Nouvelle version"
-
-msgctxt "error:endorsement.contract.extra_data:"
-msgid "Remove version of"
-msgstr "Suppression de la version"
-
-msgctxt "error:endorsement.contract.extra_data:"
-msgid "Update %s"
-msgstr "Mise à jour de %s"
-
-msgctxt "error:endorsement.contract.open:"
-msgid "Endorsement is not yet applied"
-msgstr "L'avenant n'est pas encore appliqué"
-
-msgctxt "error:endorsement.contract.option.version:"
-msgid "New Option Version"
-msgstr "Nouvelle version de la garantie"
-
-msgctxt "error:endorsement.contract.option.version:"
-msgid "New version"
-msgstr "Nouvelle version"
-
-msgctxt "error:endorsement.contract.option.version:"
-msgid "Remove version of"
-msgstr "Suppression de la version"
-
-msgctxt "error:endorsement.contract.option.version:"
-msgid "Update %s"
-msgstr "Mise à jour de %s"
-
-msgctxt "error:endorsement.contract.option:"
-msgid "New Coverage: %s"
-msgstr "Nouvelle garantie : %s"
-
-msgctxt "error:endorsement.contract.option:"
-msgid "New version"
-msgstr "Nouvelle version"
-
-msgctxt "error:endorsement.contract.option:"
-msgid "Remove version of"
-msgstr "Suppression de la version"
-
-msgctxt "error:endorsement.contract.option:"
-msgid "Update %s"
-msgstr "Mise à jour de %s"
-
-msgctxt "error:endorsement.contract.option:"
-msgid "Versions Modifications"
-msgstr "Modification des versions"
-
-msgctxt "error:endorsement.contract.terminate:"
-msgid ""
-"The termination date must be anterior to the end date of the modified "
-"period: %s"
-msgstr ""
-"La date de résiliation doit être antérieure à la date de fin de la période "
-"modifiée: %s"
-
-msgctxt "error:endorsement.contract.terminate:"
-msgid "The termination date must be posterior to the contract start date: %s"
-msgstr ""
-"La date de résiliation doit être postérieure à la date de début du contrat: "
-"%s"
-
-msgctxt "error:endorsement.contract.terminate:"
-msgid "You are trying to terminate the contract before its active start date"
-msgstr "Vous essayez de résiliser le contrat avant sa date d'effet courante"
-
-msgctxt "error:endorsement.contract.terminate:"
-msgid ""
-"You cannot terminate the contracts %(contracts)s because they are terminated"
-" or void."
-msgstr ""
-"Vous ne pouvez pas résilier les contrats %(contracts)s parce qu'ils sont "
-"résiliés ou résiliés sans effet."
-
-msgctxt "error:endorsement.contract.void:"
-msgid "You are trying to void a renewed contract"
-msgstr "Vous essayez d'annuler un contrat qui a été renouvelé"
-
-msgctxt "error:endorsement.contract:"
-msgid "Activation History Modifications"
-msgstr "Modifications des historiques d'activation"
-
-msgctxt "error:endorsement.contract:"
-msgid "Contacts Modifications"
-msgstr "Modifications des contacts"
-
-msgctxt "error:endorsement.contract:"
-msgid "Contract %s is currently locked in process %s."
-msgstr "Le contrat %s est actuellement verrouillé par le processus %s."
-
-msgctxt "error:endorsement.contract:"
-msgid "Endorsement \"%s\" is not the latest applied."
-msgstr "L'avenant \"%s\" n'est pas le plus récent appliqué"
-
-msgctxt "error:endorsement.contract:"
-msgid "Extra Datas Modifications"
-msgstr "Modifications des données complémentaires"
-
-msgctxt "error:endorsement.contract:"
-msgid "Options Modifications"
-msgstr "Modifications des options"
-
-msgctxt "error:endorsement.contract:"
-msgid "The status %s of contract %s does not allow endorsements."
-msgstr "Le statut %s du contrat %s n'autorise pas les avenants."
-
-msgctxt "error:endorsement.contract:"
-msgid ""
-"There may only be one endorsement in_progress at a given time per contract"
-msgstr ""
-"Il ne peut y avoir qu'un seul avenant en cours de saisie sur un contrat "
-"donné."
-
-msgctxt "error:endorsement.start:"
-msgid "Going on will erase all data on the endorsement."
-msgstr "Toutes les données saisies sur l'avenant seront perdues."
-
-msgctxt "error:endorsement.start:"
-msgid "It is not possible to resume an already applied endorsement"
-msgstr "Il est impossible de reprendre un avenant déjà appliqué"
-
-msgctxt "error:endorsement.start:"
-msgid "No preview state is defined on the endorsement definition"
-msgstr "Aucun aperçu à utiliser n'est défini sur la définition d'avenant"
-
-msgctxt "error:endorsement.start:"
-msgid ""
-"The rule %s defined on endorsement %s does not allow you to create an "
-"endorsement with these parameters."
-msgstr ""
-"La règle %s définie sur l'avenant %s ne vous permet pas de créer un avenant "
-"avec ces paramètres."
-
-msgctxt "error:endorsement.start:"
-msgid "You are not allowed to apply endorsements"
-msgstr "Vous n'êtes pas autorisé à appliquer des avenants"
-
-msgctxt "error:endorsement.sub_state:"
-msgid "The code must be unique!"
-msgstr "Le code doit être unique !"
-
-msgctxt "error:endorsement:"
-msgid ""
-"Cancellation of this endorsement is not allowed in order to preserve the "
-"data integrity"
-msgstr ""
-"L'annulation de cet avenant est impossible afin de préserver l'intégrité des"
-" données"
-
-msgctxt "error:endorsement:"
-msgid ""
-"Impossible to delete the endorsement %(number)s because it is not in draft "
-"but in %(status)s"
-msgstr ""
-"Impossible de supprimer l'avenant %(number)s car il n'est pas au statut "
-"brouillon mais plutôt %(status)s"
-
-msgctxt "error:endorsement:"
-msgid "Invalid file format"
-msgstr "Format de fichier non valide"
-
-msgctxt "error:endorsement:"
-msgid "No sequence defined in configuration"
-msgstr "Pas de séquence définie dans la configuration"
-
-msgctxt "error:endorsement:"
-msgid "The endorsement number must be unique."
-msgstr "Le numéro d'avenant doit être unique"
-
-msgctxt "error:endorsement:"
-msgid ""
-"The endorsement's effective date must be posterior to the contracts' start "
-"date"
-msgstr ""
-"La date d'effet de l'avenant doit être postérieure à la date d'effet des "
-"contrats"
-
-msgctxt "error:endorsement:"
-msgid ""
-"The last background task failed. See below for technical details:\n"
-"%(details)s"
-msgstr ""
-"La dernière tâche de fond a échoué. Détails techniques ci-dessous:\n"
-"%(details)s"
-
-msgctxt "error:endorsement:"
-msgid ""
-"The records below have pending background tasks:\n"
-"\n"
-"%(names)s\n"
-"\n"
-"Please wait for the tasks to complete."
-msgstr ""
-"Les enregistrements ci-dessous ont des tâches de fond en attente:\n"
-"\n"
-"%(names)s\n"
-"\n"
-"Veuillez attendre que ces tâches soit terminées."
-
-msgctxt "error:endorsement:"
-msgid ""
-"This record has a pending background task (technical id: %(id)s ).\n"
-"Please wait for this task to complete."
-msgstr ""
-"Cet enregistrement a une tâche de fond en attente (identifiant technique: %(id)s ).\n"
-"Veuillez attendre que cette tâche se termine."
-
-msgctxt "error:endorsement:"
-msgid ""
-"This task will be applied in the backgound. You can come back later and "
-"refresh the record to check the result."
-msgstr ""
-"Cette tâche sera appliqué en tant que tâche de fond. Vous pouvez revenir "
-"plus tard pour voir le résultat."
-
-msgctxt "error:endorsement:"
-msgid "You cannot start this endorsement on a non-active contract !"
-msgstr "Vous ne pouvez démarrer cet avenant sur un contrat non actif!"
-
-msgctxt "error:event.type.action:"
-msgid "Create Contract Notification"
-msgstr "Créer une notification"
-
 msgctxt "field:contract,current_log:"
 msgid "Current Log"
 msgstr "Trace Courante"
@@ -2539,6 +2260,181 @@ msgctxt ""
 "model:ir.action.act_window.domain,name:act_endorsement_domain_started"
 msgid "Started"
 msgstr "Démarré"
+
+msgctxt "model:ir.message,text:msg_activation_history_modifications"
+msgid "Activation History Modifications:"
+msgstr "Modifications des historiques d'activation"
+
+msgctxt "model:ir.message,text:msg_active_contract_required"
+msgid "You cannot start this endorsement on a non-active contract."
+msgstr "Vous ne pouvez démarrer cet avenant sur un contrat non actif!"
+
+msgctxt "model:ir.message,text:msg_apply_button_access_right"
+msgid "You are not allowed to apply endorsements."
+msgstr "Vous n'êtes pas autorisé à appliquer des avenants."
+
+msgctxt "model:ir.message,text:msg_cannot_resume_applied"
+msgid "It is not possible to resume an already applied endorsement."
+msgstr "Il est impossible de reprendre un avenant déjà appliqué."
+
+msgctxt "model:ir.message,text:msg_contact_modifications"
+msgid "Contacts Modifications:"
+msgstr "Modifications des contacts"
+
+msgctxt "model:ir.message,text:msg_creation_not_allowed"
+msgid ""
+"The rule %(rule)s defined on endorsement %(endorsement)s does not allow you "
+"to create an endorsement with these parameters."
+msgstr ""
+"La règle %(rule)s définie sur l'avenant %(endorsement)s ne vous permet pas "
+"de créer un avenant avec ces paramètres."
+
+msgctxt "model:ir.message,text:msg_delete_not_draft_endorsement"
+msgid ""
+"Impossible to delete the endorsement %(number)s because it is not in draft "
+"but in %(status)s."
+msgstr ""
+"Impossible de supprimer l'avenant %(number)s car il n'est pas au statut "
+"brouillon mais plutôt %(status)s."
+
+msgctxt "model:ir.message,text:msg_effective_date_before_start_date"
+msgid ""
+"The endorsement's effective date must be posterior to the contracts' start "
+"date."
+msgstr ""
+"La date d'effet de l'avenant doit être postérieure à la date d'effet des "
+"contrats."
+
+msgctxt "model:ir.message,text:msg_endorsement_not_applied"
+msgid "Endorsement is not yet applied."
+msgstr "L'avenant n'est pas encore appliqué."
+
+msgctxt "model:ir.message,text:msg_erase_endorsement"
+msgid "Going on will erase all data on the endorsement."
+msgstr "Toutes les données saisies sur l'avenant seront perdues."
+
+msgctxt "model:ir.message,text:msg_extra_data_modifications"
+msgid "Extra Datas Modifications:"
+msgstr "Modifications des données complémentaires"
+
+msgctxt "model:ir.message,text:msg_invalid_format"
+msgid "Invalid file format."
+msgstr "Format de fichier non valide."
+
+msgctxt "model:ir.message,text:msg_new_coverage"
+msgid "New Coverage: %(name)s"
+msgstr "Nouvelle garantie : %(name)s"
+
+msgctxt "model:ir.message,text:msg_new_extra_data"
+msgid "New Extra Data"
+msgstr "Nouvelles données complémentaires"
+
+msgctxt "model:ir.message,text:msg_new_option"
+msgid "New Option (%(option)s)"
+msgstr "Nouvelle garantie (%(option)s)"
+
+msgctxt "model:ir.message,text:msg_new_option_version"
+msgid "New Option Version"
+msgstr "Nouvelle version de la garantie"
+
+msgctxt "model:ir.message,text:msg_new_version"
+msgid "New version:"
+msgstr "Nouvelle version"
+
+msgctxt "model:ir.message,text:msg_no_cancel_endorsement"
+msgid ""
+"Cancellation of this endorsement is not allowed in order to preserve the "
+"data integrity."
+msgstr ""
+"L'annulation de cet avenant est impossible afin de préserver l'intégrité des"
+" données."
+
+msgctxt "model:ir.message,text:msg_no_contract_selected"
+msgid "A contract must be set."
+msgstr "Un contrat doit être renseigné !"
+
+msgctxt "model:ir.message,text:msg_no_in_progress_endorsements"
+msgid "No in progress endorsements."
+msgstr "Pas d'avenants en cours."
+
+msgctxt "model:ir.message,text:msg_no_preview_defined"
+msgid "No preview state is defined on the endorsement definition."
+msgstr "Aucun aperçu à utiliser n'est défini sur la définition d'avenant."
+
+msgctxt "model:ir.message,text:msg_no_sequence_defined"
+msgid "No sequence defined in configuration."
+msgstr "Pas de séquence définie dans la configuration."
+
+msgctxt "model:ir.message,text:msg_not_latest_applied"
+msgid "Endorsement \"%(endorsement)s\" is not the latest applied."
+msgstr "L'avenant \"%(endorsement)s\" n'est pas le plus récent appliqué"
+
+msgctxt "model:ir.message,text:msg_number_unique"
+msgid "The endorsement number must be unique."
+msgstr "Le numéro d'avenant doit être unique."
+
+msgctxt "model:ir.message,text:msg_only_one_endorsement_in_progress"
+msgid ""
+"There may only be one endorsement in_progress at a given time per contract."
+msgstr ""
+"Il ne peut y avoir qu'un seul avenant en cours de saisie sur un contrat "
+"donné."
+
+msgctxt "model:ir.message,text:msg_option_modifications"
+msgid "Options Modifications:"
+msgstr "Modifications des options"
+
+msgctxt "model:ir.message,text:msg_process_in_progress"
+msgid "Contract %(contract)s is currently locked in process %(process)s."
+msgstr ""
+"Le contrat %(contract)s est actuellement verrouillé par le processus "
+"%(process)s."
+
+msgctxt "model:ir.message,text:msg_remove_version"
+msgid "Remove version of:"
+msgstr "Suppression de la version"
+
+msgctxt "model:ir.message,text:msg_status_incompatible"
+msgid ""
+"The status %(status)s of contract %(contract)s does not allow endorsements."
+msgstr ""
+"Le statut %(status)s du contrat %(contract)s n'autorise pas les avenants."
+
+msgctxt "model:ir.message,text:msg_termination_before_active_start_date"
+msgid "You are trying to terminate the contract before its active start date."
+msgstr "Vous essayez de résiliser le contrat avant sa date d'effet courante."
+
+msgctxt "model:ir.message,text:msg_termination_date_must_be_anterior"
+msgid ""
+"The termination date must be anterior to the end date of the modified "
+"period: %(end_date)s."
+msgstr ""
+"La date de résiliation doit être antérieure à la date de fin de la période "
+"modifiée: %(end_date)s"
+
+msgctxt "model:ir.message,text:msg_termination_date_must_be_posterior"
+msgid ""
+"The termination date must be posterior to the contract start date: "
+"%(start_date)s."
+msgstr ""
+"La date de résiliation doit être postérieure à la date de début du contrat: "
+"%(start_date)s"
+
+msgctxt "model:ir.message,text:msg_termination_on_terminate_or_void_contract"
+msgid ""
+"You cannot terminate the contracts %(contracts)s because they are terminated"
+" or void."
+msgstr ""
+"Vous ne pouvez pas résilier les contrats %(contracts)s parce qu'ils sont "
+"résiliés ou résiliés sans effet."
+
+msgctxt "model:ir.message,text:msg_update_version"
+msgid "Update %(name)s:"
+msgstr "Mise à jour de %(name)s"
+
+msgctxt "model:ir.message,text:msg_void_renewed_contract"
+msgid "You are trying to void a renewed contract."
+msgstr "Vous essayez d'annuler un contrat qui a été renouvelé."
 
 msgctxt "model:ir.sequence,name:sequence_number"
 msgid "Endorsement Number Sequence"

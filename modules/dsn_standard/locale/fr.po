@@ -2,16 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:dsn.message:"
-msgid "Dsn configuration is not done, message generation will be disabled"
-msgstr ""
-"La configuration dsn n'est pas faite, la génération automatique des messages "
-"est désactivée"
-
-msgctxt "error:dsn.message:"
-msgid "Message \"%s\" must be in draft before deletion."
-msgstr "Le message \"%s\" doit être à l'état brouillon pour être supprimé"
-
 msgctxt "field:dsn.message,create_date:"
 msgid "Create Date"
 msgstr "Date de Création"
@@ -108,6 +98,17 @@ msgctxt ""
 "model:ir.action.act_window.domain,name:act_dsn_message_form_domain_waiting"
 msgid "Waiting"
 msgstr "En attente"
+
+msgctxt "model:ir.message,text:msg_delete_draft_msg"
+msgid "Message \"%(message)s\" must be in draft before deletion."
+msgstr ""
+"Le message \"%(message)s\" doit être à l'état brouillon pour être supprimé"
+
+msgctxt "model:ir.message,text:msg_undefined_dsn_section"
+msgid "Dsn configuration is not done, message generation will be disabled."
+msgstr ""
+"La configuration dsn n'est pas faite, la génération automatique des messages"
+" est désactivée."
 
 msgctxt "model:ir.model.button,string:dsn_message_cancel_button"
 msgid "Cancel"

@@ -2,14 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:commission.plan.recovery_rule:"
-msgid "The code must be unique!"
-msgstr "Le code doit être unique !"
-
-msgctxt "error:commission:"
-msgid "Recovery Commission"
-msgstr "Reprise de commissions"
-
 msgctxt "field:commission,is_recovery:"
 msgid "Is Recovery Commission"
 msgstr "Est une commission de reprise"
@@ -95,6 +87,10 @@ msgstr "Montant de la reprise"
 msgctxt "model:ir.action,name:act_recovery_rule_form"
 msgid "Recovery Rules"
 msgstr "Règles de reprise de commissions"
+
+msgctxt "model:ir.message,text:msg_recovery_commission"
+msgid "Recovery Commission"
+msgstr "Reprise de commissions"
 
 msgctxt "model:ir.ui.menu,name:menu_recovery_rule_form"
 msgid "Recovery Rules"

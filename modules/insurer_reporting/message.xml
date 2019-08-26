@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<tryton>
+    <data group="1">
+        <record model="ir.message" id="msg_insurer_report_contract">
+            <field name="text">Insurer Report Contract</field>
+        </record>
+        <record model="ir.message" id="msg_insurer_report_covered">
+            <field name="text">Insurer Report Covered</field>
+        </record>
+    </data>
+</tryton>

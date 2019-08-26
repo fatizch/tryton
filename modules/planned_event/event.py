@@ -1,6 +1,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 
+from trytond.i18n import gettext
 from trytond.pyson import Eval
 from trytond.pool import PoolMeta, Pool
 from trytond.modules.coog_core import fields, model, coog_date, utils
@@ -46,17 +47,10 @@ class EventTypeAction(metaclass=PoolMeta):
         depends=['action'])
 
     @classmethod
-    def __setup__(cls):
-        super(EventTypeAction, cls).__setup__()
-        cls._error_messages.update({
-                'generate_planned_event': 'Generate Planned Event'
-                })
-
-    @classmethod
     def get_action_types(cls):
         return super(EventTypeAction, cls).get_action_types() + [
-            ('generate_planned_event', cls.raise_user_error(
-                'generate_planned_event', raise_exception=False))]
+            ('generate_planned_event',
+                gettext('planned_event.msg_generate_planned_event'))]
 
     def on_change_action(self):
         super(EventTypeAction, self).on_change_action()

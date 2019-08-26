@@ -18,6 +18,8 @@ from sql.conditionals import Coalesce
 from contextlib import contextmanager
 
 from trytond import backend
+from trytond.exceptions import UserWarning
+from trytond.i18n import gettext
 from trytond.model import Model, ModelView, ModelSQL, fields as tryton_fields
 from trytond.model import UnionMixin as TrytonUnionMixin, Unique, ModelStorage
 from trytond.model import DictSchemaMixin
@@ -393,31 +395,28 @@ class ErrorManager(object):
     'them together'
     def __init__(self):
         self._errors = []
-        self._error_messages = []
 
-    def add_error(self, error_message, error=None, error_args=None, fail=True):
+    def add_error(self, exception, fail=True):
         'Add a new error to the current error list. If fail is set, the error'
         'will trigger the error raising when exiting the manager.'
-        self._errors.append((error or error_message, error_args or (), fail))
-        self._error_messages.append(error_message)
+        self._errors.append((exception, fail))
 
-    def pop_error(self, error_code):
+    def pop_error(self, exception_class):
         for idx, cur_error in enumerate(self._errors):
-            if cur_error[0] == error_code:
+            if isinstance(cur_error[0], exception_class):
                 break
         else:
             return False
         value = self._errors[idx]
         del self._errors[idx]
-        del self._error_messages[idx]
         return value
 
     def format_errors(self):
-        return '\n'.join(self._error_messages)
+        return '\n'.join((e.message for e, f in self._errors))
 
     @property
     def _do_raise(self):
-        return any([x[2] for x in self._errors])
+        return any(f for e, f in self._errors)
 
     def raise_errors(self):
         if self._do_raise:
@@ -425,7 +424,6 @@ class ErrorManager(object):
 
     def clear_errors(self):
         self._errors = []
-        self._error_messages = []
 
     @property
     def has_errors(self):
@@ -439,27 +437,25 @@ def error_manager():
         try:
             yield
         except UserError as exc:
-            manager.add_error(exc.message)
+            manager.add_error(exc)
         finally:
             manager.raise_errors()
 
 
 class FunctionalErrorMixIn(object):
     @classmethod
-    def append_functional_error(cls, error, error_args=None, fail=True):
+    def append_functional_error(cls, exception, fail=True):
         error_manager = ServerContext().get('error_manager', None)
         if error_manager is None:
-            return cls.raise_user_error(error, error_args)
-        error_message = cls.raise_user_error(error, error_args,
-            raise_exception=False)
-        error_manager.add_error(error_message, error, error_args, fail)
+            raise exception
+        error_manager.add_error(exception, fail)
 
     @classmethod
-    def pop_functional_error(cls, error_code):
+    def pop_functional_error(cls, exception_class):
         manager = ServerContext().get('error_manager', None)
         if not manager:
             return False
-        return manager.pop_error(error_code)
+        return manager.pop_error(exception_class)
 
     @property
     def _error_manager(self):
@@ -749,7 +745,7 @@ class CoogView(ModelView, FunctionalErrorMixIn):
                 assert func(*args, **kwargs) is None
 
                 view_id = View.get_view_from_xml_id(xml_view_id)
-                return 'toggle_view:%s' % str(view_id)
+                return 'switch form %s' % str(view_id)
             return wrapper
         return decorator
 
@@ -769,20 +765,11 @@ class CoogView(ModelView, FunctionalErrorMixIn):
 
 
 class CoogDictSchema(DictSchemaMixin):
-    @classmethod
-    def __setup__(cls):
-        super(CoogDictSchema, cls).__setup__()
-        cls._error_messages.update({
-                'rename_dict_codes': 'The following keys will be renamed in '
-                'all existing data in the database, this may take some time:'
-                '\n%(codes)s',
-                'remove_dict_codes': 'The following keys will be removed from '
-                'all existing data in the database, this may take some time:'
-                '\n%(codes)s',
-                })
 
     @classmethod
     def write(cls, *args):
+        pool = Pool()
+        Warning = pool.get('res.user.warning')
         actions = iter(args)
 
         schema_data = []
@@ -799,9 +786,14 @@ class CoogDictSchema(DictSchemaMixin):
         if schema_data:
             codes_for_error = [(x['old_code'], x['new_code'])
                     for x in schema_data][:10]
-            cls.raise_user_warning('rename_dict_codes_%s' %
-                '_'.join((x[0] for x in codes_for_error)), 'rename_dict_codes',
-                {'codes': '\n'.join(' -> '.join(x) for x in codes_for_error)})
+            key = 'rename_dict_codes_%s' % '_'.join(
+                (x[0] for x in codes_for_error))
+            if Warning.check(key):
+                raise UserWarning(gettext(
+                        'coog_core.msg_rename_dict_codes',
+                        codes='\n'.join(
+                            ' -> '.join(x) for x in codes_for_error),
+                        ))
 
             models = set()
             for model_name, table_name, field_name in cls._fields_to_update():
@@ -815,15 +807,20 @@ class CoogDictSchema(DictSchemaMixin):
 
     @classmethod
     def delete(cls, schemas):
+        pool = Pool()
+        Warning = pool.get('res.user.warning')
         schema_data = cls._delete_schema_data(schemas)
 
         super(CoogDictSchema, cls).delete(schemas)
 
         if schema_data:
             codes_for_error = [x['code_to_remove'] for x in schema_data][:10]
-            cls.raise_user_warning('remove_dict_codes_%s' %
-                '_'.join(codes_for_error), 'remove_dict_codes',
-                {'codes': ' - '.join(codes_for_error)})
+            key = 'remove_dict_codes_%s' % '_'.join(codes_for_error)
+            if Warning.check(key):
+                raise UserWarning(gettext(
+                        'coog_core.msg_remove_dict_codes',
+                        codes=' - '.join(codes_for_error),
+                        ))
             models = set()
             for model_name, table_name, field_name in cls._fields_to_update():
                 models.add(model_name)

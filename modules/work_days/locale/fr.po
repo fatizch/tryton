@@ -2,18 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:batch.params_config:"
-msgid "No configuration given"
-msgstr "Configuration absente"
-
-msgctxt "error:work_days.configuration:"
-msgid "Some holidays have duplicates"
-msgstr "Certains jours fériés sont en double"
-
-msgctxt "error:work_days.holiday:"
-msgid "Invalid month/day combination"
-msgstr "Combinaison jour/mois invalide"
-
 msgctxt "field:batch.params_config,id:"
 msgid "ID"
 msgstr "Identifiant"
@@ -129,6 +117,18 @@ msgstr "Configuration des paramètres de batch"
 msgctxt "model:ir.action,name:act_configuration_window"
 msgid "Configuration"
 msgstr "Configuration"
+
+msgctxt "model:ir.message,text:msg_duplicate_holiday"
+msgid "Some holidays have duplicates."
+msgstr "Certains jours fériés sont en double."
+
+msgctxt "model:ir.message,text:msg_invalid_day_month"
+msgid "Invalid month/day combination."
+msgstr "Combinaison jour/mois invalide."
+
+msgctxt "model:ir.message,text:msg_no_conf"
+msgid "No configuration given."
+msgstr "Configuration absente."
 
 msgctxt "model:ir.ui.menu,name:menu_configuration"
 msgid "Configuration"

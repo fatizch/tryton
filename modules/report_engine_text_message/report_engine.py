@@ -1,5 +1,6 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+from trytond.i18n import gettext
 from trytond.pool import PoolMeta, Pool
 from trytond.modules.coog_core import fields, model
 from trytond.pyson import Or, Eval
@@ -121,15 +122,13 @@ class ReportTemplate(metaclass=PoolMeta):
             field.states['invisible'] = Or(Eval('input_kind') ==
                 'text_message', field.states.get('invisible', False))
             field.depends.append('input_kind')
-        cls._error_messages.update({
-                'input_text_message': 'Text Message',
-                })
 
     @classmethod
     def get_possible_input_kinds(cls):
         return super(ReportTemplate, cls).get_possible_input_kinds() + \
-            [('text_message', cls.raise_user_error('input_text_message',
-                        raise_exception=False))]
+            [('text_message', gettext(
+                        'report_engine_text_message'
+                        '.msg_input_text_message'))]
 
     @fields.depends('input_kind')
     def get_possible_process_methods(self):

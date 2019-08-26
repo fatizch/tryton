@@ -1,6 +1,8 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 
+from trytond.i18n import gettext
+from trytond.model.exceptions import AccessError
 from trytond.pool import Pool
 from trytond.transaction import Transaction
 from trytond.wizard import StateAction
@@ -43,16 +45,6 @@ class CreatePayboxPayment(model.CoogWizard):
     start = StateAction(
         'account_payment_paybox_cog.act_process_paybox_payment')
 
-    @classmethod
-    def __setup__(cls):
-        super(CreatePayboxPayment, cls).__setup__()
-        cls._error_messages.update({
-                'paybox_payment_creation':
-                'Could not create paybox payments. There is at least one '
-                'another validated or processing payment with the same line '
-                'for the selection (%(selection)s)',
-                })
-
     def create_payments(self, failed_payments):
         pool = Pool()
         CreatePaymentWiz = pool.get('account.payment.creation', type='wizard')
@@ -69,8 +61,9 @@ class CreatePayboxPayment(model.CoogWizard):
                     Transaction().context.get('active_ids'))]
             selection = ['%s - %s' % (x.description, x.party.rec_name)
                 for x in selection]
-            self.raise_user_error('paybox_payment_creation',
-                {'selection': ', '.join(selection)})
+            raise AccessError(gettext(
+                    'account_payment_paybox_cog.msg_paybox_payment_creation',
+                    selection=', '.join(selection)))
         return created_payments
 
     def do_start(self, action):

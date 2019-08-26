@@ -2,10 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:clause:"
-msgid "The code must be unique!"
-msgstr "Le code doit être unique !"
-
 msgctxt "field:clause,code:"
 msgid "Code"
 msgstr "Code"
@@ -57,6 +53,19 @@ msgstr "Mis à jour par"
 msgctxt "field:clause,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
+
+msgctxt "help:clause,code:"
+msgid ""
+"The string that will be used to identify this record across the "
+"configuration. It should not be modified without checking first if it is "
+"used somewhere"
+msgstr ""
+"L'identifiant pour cet enregistrement dans la configuration. Il ne doit pas "
+"être modifié sans s'assurer au préalable des endroits y faisant référence"
+
+msgctxt "help:clause,name:"
+msgid "The name that will be displayed to the end user"
+msgstr "Nom qui sera affiché à l'utilisateur"
 
 msgctxt "model:clause,name:"
 msgid "Clause"

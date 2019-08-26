@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<tryton>
+    <data group="1">
+        <record model="ir.message" id="msg_period_overlap">
+            <field name="text">There are overlapping periods.</field>
+        </record>
+        <record model="ir.message" id="msg_invalid_period">
+            <field name="text">The period is invalid.</field>
+        </record>
+    </data>
+</tryton>

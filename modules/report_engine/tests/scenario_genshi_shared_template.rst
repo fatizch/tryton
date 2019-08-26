@@ -43,8 +43,8 @@ Get Models::
     >>> shared_template.name = 'Test genshi'
     >>> shared_template.code = 'test_genshi'
     >>> file_path = os.path.join(module_folder, 'tests_imports/') + 'test.xml'
-    >>> file = open(file_path, 'rb')
-    >>> shared_template.data = file.read()
+    >>> with open(file_path, 'rb') as f:
+    ...     shared_template.data = f.read()
     >>> shared_template.save()
     >>> version = ReportTemplateVersion()
     >>> version.is_shared_template = True

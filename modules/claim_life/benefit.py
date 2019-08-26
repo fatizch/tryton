@@ -1,5 +1,6 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+from trytond.i18n import gettext
 from trytond.pool import PoolMeta
 from trytond.pyson import Eval, Bool, Or, In, If
 
@@ -40,20 +41,12 @@ class Benefit(metaclass=PoolMeta):
         depends=['beneficiary_kind', 'ignore_shares'])
 
     @classmethod
-    def __setup__(cls):
-        super(Benefit, cls).__setup__()
-        cls._error_messages.update({
-                'covered_party_enum': 'Covered Party',
-                'manual_list_enum': 'Manual List',
-                })
-
-    @classmethod
     def get_beneficiary_kind(cls):
         res = super(Benefit, cls).get_beneficiary_kind()
-        res.append(['covered_party', cls.raise_user_error(
-                    'covered_party_enum', raise_exception=False)])
-        res.append(['manual_list', cls.raise_user_error(
-                    'manual_list_enum', raise_exception=False)])
+        res.append(['covered_party', gettext(
+                    'claim_life.msg_covered_party_enum')])
+        res.append(['manual_list', gettext(
+                    'claim_life.msg_manual_list_enum')])
         return res
 
     @fields.depends('beneficiary_kind')

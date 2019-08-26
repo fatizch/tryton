@@ -10,11 +10,13 @@ from sql.conditionals import Coalesce, Case
 from sql.aggregate import Max, Min, Count
 
 from trytond import backend
+from trytond.i18n import gettext
 from trytond.pool import Pool, PoolMeta
 from trytond.tools import grouped_slice
 from trytond.pyson import Eval, If, Or, Bool, Len
 from trytond.transaction import Transaction
 from trytond.model import ModelView
+from trytond.model.exceptions import ValidationError
 
 from trytond.modules.coog_core import model, fields
 from trytond.modules.coog_core import utils, coog_date
@@ -67,8 +69,8 @@ class Contract(Printable):
         fields.Many2Many('offered.item.description', None, None,
             'Possible Item Desc', states={'invisible': True}),
         'on_change_with_possible_item_desc')
-    covered_element_options = fields.Function(
-        fields.One2Many('contract.option', None, 'Covered Element Options'),
+    covered_element_options = fields.Function(fields.Many2Many(
+            'contract.option', None, None, 'Covered Element Options'),
         'get_covered_element_options')
     initial_number_of_sub_covered_elements = fields.Function(
         fields.Integer('Initial Number of sub covered elements'),
@@ -83,11 +85,6 @@ class Contract(Printable):
                 'create_extra_premium': {},
                 'generic_send_letter': {},
                 'propagate_exclusions': {},
-                })
-        cls._error_messages.update({
-                'error_in_renewal_date_calculation': 'Errors occured during '
-                'renewal date calculation : %s',
-                'need_option': 'Select at least one option for %s',
                 })
 
     @classmethod
@@ -225,8 +222,10 @@ class Contract(Printable):
     def check_at_least_one_covered(self):
         for covered in self.covered_elements:
             if not covered.check_at_least_one_covered():
-                self.append_functional_error('need_option',
-                    (covered.get_rec_name('')))
+                self.append_functional_error(
+                    ValidationError(gettext(
+                            'contract_insurance.msg_need_option',
+                            covered=covered.get_rec_name(''))))
 
     def notify_end_date_change(self, value):
         super(Contract, self).notify_end_date_change(value)
@@ -543,12 +542,6 @@ class ContractOption(Printable):
         cls.exclusions.states['invisible'] = cls.exclusions.states.get(
             'invisible', False) | ~Eval('exclusions_allowed')
         cls.exclusions.depends.append('exclusions_allowed')
-        cls._error_messages.update({
-                'option_start_anterior_to_covered_start': 'Manual option start '
-                'date %(manual_start_date)s is anterior to covered element '
-                'manual start date %(covered_start_date)s for option '
-                '%(option)s in contract %(contract)s'
-                })
 
     @classmethod
     def validate(cls, options):
@@ -808,14 +801,15 @@ class ContractOption(Printable):
                     option.manual_start_date and
                     option.covered_element.manual_start_date >
                     option.manual_start_date):
-                cls.raise_user_error('option_start_anterior_to_covered_start',
-                        {
-                            'manual_start_date': Date.date_as_string(
-                                option.manual_start_date),
-                            'covered_start_date': Date.date_as_string(
-                                option.covered_element.manual_start_date),
-                            'option': option.rec_name,
-                            'contract': option.parent_contract.rec_name})
+                raise ValidationError(gettext(
+                        'contract_insurance'
+                        '.msg_option_start_anterior_to_covered_start',
+                        manual_start_date=Date.date_as_string(
+                            option.manual_start_date),
+                        covered_start_date=Date.date_as_string(
+                            option.covered_element.manual_start_date),
+                        option=option.rec_name,
+                        contract=option.parent_contract.rec_name))
 
     def get_sister_option(self, coverage_code):
         options = []
@@ -1021,16 +1015,6 @@ class CoveredElement(model.with_local_mptt('contract'), model.CoogView,
         cls.current_extra_data.states['readonly'] = COVERED_READ_ONLY
         cls.current_extra_data.depends += ['contract_status', 'versions',
             'parent']
-        cls._error_messages.update({
-                'duplicate_covered': 'You are trying to create duplicate '
-                'covered elements on contract: %s',
-                'bad_option_start': 'Covered %(covered)s has an option that '
-                'starts before its start date',
-                'bad_option_end': 'Covered %(covered)s has an option that '
-                'ends after its end date',
-                'overlapped_elements': 'You are trying to create a covered '
-                'element that overlaps with an old covered element',
-                    })
 
     @classmethod
     def __register__(cls, module_name):
@@ -1108,7 +1092,8 @@ class CoveredElement(model.with_local_mptt('contract'), model.CoogView,
         elif len(parties) == 1:
             values['_func_key'] = parties[0].code
         else:
-            cls.raise_user_error('too_many_party')
+            raise ValidationError(
+                gettext('contract_insurance.msg_too_many_party'))
 
     def get_synthesis_status(self):
         return '[%s]' % coog_string.translate_value(
@@ -1175,7 +1160,9 @@ class CoveredElement(model.with_local_mptt('contract'), model.CoogView,
 
         res = [x for x in cursor.fetchall()]
         if res:
-            self.append_functional_error('overlapped_elements',)
+            self.append_functional_error(
+                ValidationError(gettext(
+                        'contract_insurance.msg_overlapped_elements')))
 
     def check_overlapping_where_clause(self, tables):
         covered_1 = tables['covered_1']
@@ -1228,13 +1215,17 @@ class CoveredElement(model.with_local_mptt('contract'), model.CoogView,
         if self.manual_start_date and any(
                 x.manual_start_date < self.manual_start_date
                 for x in self.options if x.manual_start_date):
-            self.append_functional_error('bad_option_start',
-                {'covered': self.rec_name})
+            self.append_functional_error(
+                ValidationError(gettext(
+                        'contract_insurance.msg_bad_option_start',
+                        covered=self.rec_name)))
         if self.manual_end_date and any(
                 x.manual_end_date > self.manual_end_date
                 for x in self.options if x.manual_end_date):
-            self.append_functional_error('bad_option_end',
-                {'covered': self.rec_name})
+            self.append_functional_error(
+                ValidationError(gettext(
+                        'contract_insurance.msg_bad_option_end',
+                        covered=self.rec_name)))
 
     @classmethod
     def _check_covereds_overlap(cls, contract, sub_covereds):
@@ -1254,8 +1245,10 @@ class CoveredElement(model.with_local_mptt('contract'), model.CoogView,
                 if coog_date.period_overlap(covered.initial_start_date,
                         covered.end_date, next_covered.initial_start_date,
                         next_covered.end_date or datetime.date.max):
-                    cls.append_functional_error('duplicate_covered',
-                        contract.rec_name)
+                    cls.append_functional_error(
+                        ValidationError(gettext(
+                                'contract_insurance.msg_duplicate_covered',
+                                contract=contract.rec_name)))
 
     @classmethod
     def default_versions(cls):
@@ -2158,9 +2151,6 @@ class ExtraPremium(model.CoogSQL, model.CoogView, ModelCurrency):
     @classmethod
     def __setup__(cls):
         super(ExtraPremium, cls).__setup__()
-        cls._error_messages.update({
-                'bad_start_date': 'Extra premium %s start date (%s) should be '
-                'greater than the coverage\'s (%s)'})
         cls._buttons.update({'propagate': {
                     'readonly': Eval('contract_status') != 'quote'}})
 
@@ -2312,8 +2302,11 @@ class ExtraPremium(model.CoogSQL, model.CoogView, ModelCurrency):
         for extra in extra_premiums:
             if (extra.manual_start_date and extra.manual_start_date <
                     extra.option.start_date):
-                extra.raise_user_error('bad_start_date', (extra.motive.name,
-                        extra.start_date, extra.option.start_date))
+                raise ValidationError(gettext(
+                            'contract_insurance.msg_bad_start_date',
+                            motive=extra.motive.name,
+                            start_date=extra.start_date,
+                            option_start_date=extra.option.start_date))
 
     @classmethod
     @ModelView.button_action('contract_insurance.act_manage_extra_premium')

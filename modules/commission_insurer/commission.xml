@@ -3,15 +3,6 @@
 this repository contains the full copyright notices and license terms. -->
 <tryton>
     <data>
-        <record model="ir.translation" id="translation_invoice_line_description">
-            <field name="name">received_premiums</field>
-            <field name="lang">en</field>
-            <field name="type">error</field>
-            <field name="src">Received Premium</field>
-            <field name="value">Received Premium</field>
-            <field name="module">commission_insurer</field>
-            <field name="fuzzy" eval="False"/>
-        </record>
         <record model="ir.ui.view" id="agent_view_form">
             <field name="model">commission.agent</field>
             <field name="inherit" ref="commission.agent_view_form"/>

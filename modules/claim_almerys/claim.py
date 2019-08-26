@@ -53,7 +53,8 @@ class AlmerysConfig(metaclass=PoolMeta):
     account_statement = fields.Many2One(
         'account.account', "Account used in Statement", required=True,
         domain=[
-            ('kind', '!=', 'view'),
+            ('type', '!=', None),
+            ('closed', '!=', True),
             ],
         ondelete='RESTRICT')
 

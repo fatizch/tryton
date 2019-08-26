@@ -6,9 +6,11 @@ from sql import Null, Literal
 from sql.aggregate import Count
 from sql.operators import NotIn
 
+from trytond.i18n import gettext
 from trytond.pool import Pool, PoolMeta
 from trytond.transaction import Transaction
 from trytond.model import ModelView
+from trytond.model.exceptions import RequiredValidationError, AccessError
 
 from trytond.modules.coog_core import fields
 
@@ -53,15 +55,6 @@ class ClaimIndemnification(metaclass=PoolMeta):
     hidden_waiting_requests = fields.Function(
         fields.Boolean('Hidden waiting requests'),
         'get_hidden_waiting_requests')
-
-    @classmethod
-    def __setup__(cls):
-        super(ClaimIndemnification, cls).__setup__()
-        cls._error_messages.update({
-                'required_document': 'The document "%s" is required',
-                'required_confidential_documents': 'There are missing required'
-                ' documents that you are not allowed to view.',
-                })
 
     @classmethod
     def get_hidden_waiting_requests(cls, indemnifications, name):
@@ -125,9 +118,14 @@ class ClaimIndemnification(metaclass=PoolMeta):
         missing_documents = cls.get_missing_documents(indemnifications)
         for doc in missing_documents:
             cls.append_functional_error(
-                'required_document', doc.document_desc.name)
+                RequiredValidationError(gettext(
+                        'claim_indemnification_document.msg_required_document',
+                        document=doc.document_desc.name)))
         if any((x.hidden_waiting_requests for x in indemnifications)):
-            cls.append_functional_error('required_confidential_documents')
+            cls.append_functional_error(
+                AccessError(gettext(
+                        'claim_indemnification_document'
+                        '.msg_required_confidential_documents')))
 
     def create_required_documents(self, required_documents):
         pool = Pool()

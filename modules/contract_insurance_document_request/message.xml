@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<tryton>
+    <data group="1">
+        <record model="ir.message" id="msg_missing_required_document">
+            <field name="text">Some required documents are missing.</field>
+        </record>
+        <record model="ir.message" id="msg_non_conform_documents">
+            <field name="text">Some required documents are not conform.</field>
+        </record>
+    </data>
+</tryton>

@@ -2,6 +2,8 @@
 # this repository contains the full copyright notices and license terms.
 import datetime
 
+from trytond.exceptions import UserError
+from trytond.i18n import gettext
 from trytond.pool import Pool
 from trytond.transaction import Transaction
 from trytond.wizard import Wizard, StateView, StateTransition, Button
@@ -28,13 +30,6 @@ class DisplayContractPremium(Wizard):
             # Button('Calculate Prices', 'calculate_prices', 'tryton-refresh'),
             Button('Exit', 'end', 'tryton-cancel', default=True)])
     calculate_prices = StateTransition()
-
-    @classmethod
-    def __setup__(cls):
-        super(DisplayContractPremium, cls).__setup__()
-        cls._error_messages.update({
-                'no_contract_found': 'No contract found in context',
-                })
 
     @classmethod
     def get_children_fields(cls):
@@ -83,7 +78,8 @@ class DisplayContractPremium(Wizard):
             contracts = Pool().get('contract').browse(
                 Transaction().context.get('active_ids'))
         except Exception:
-            self.raise_user_error('no_contract_found')
+            raise UserError(gettext(
+                    'premium.msg_no_contract_found'))
         lines = []
         for contract in contracts:
             contract_line = self.new_line(contract.rec_name)

@@ -3,10 +3,13 @@
 import datetime
 from collections import defaultdict
 
+from trytond.exceptions import UserWarning
+from trytond.i18n import gettext
 from trytond.pool import PoolMeta, Pool
 from trytond.wizard import StateView, StateTransition, Button
 from trytond.pyson import Eval, Len, Bool, If, Equal
 from trytond.model import Model
+from trytond.model.exceptions import ValidationError
 
 from trytond.modules.coog_core import model, fields, utils, coog_date
 from trytond.modules.contract_insurance.contract import IS_PARTY
@@ -106,23 +109,6 @@ class RemoveOption(EndorsementWizardStepMixin):
 
     __name__ = 'contract.covered_element.option.remove'
 
-    @classmethod
-    def __setup__(cls):
-        super(RemoveOption, cls).__setup__()
-        cls._error_messages.update({
-                'must_end_all_options': 'All options on a covered element must'
-                ' be removed if a mandatory option is removed',
-                'cannot_end_all_covered_elements': 'You cannot remove all'
-                ' options on all covered elements of a contract. You may want'
-                ' to end the contract instead.',
-                'end_date_anterior_to_start_date': 'You are setting an end'
-                ' date anterior to start date for option : "%s"',
-                'voiding': 'You are voiding an option.',
-                'at_start_date_no_void': 'You are ending an option the day'
-                ' it starts. Are you sure you want to have an option lasting'
-                ' only one day and not void it ?',
-                })
-
     options = fields.One2Many(
         'contract.covered_element.option.remove.option_selector', None,
         'Options To Remove')
@@ -221,6 +207,7 @@ class RemoveOption(EndorsementWizardStepMixin):
             'endorsement.contract.covered_element.option')
         CoveredElementEndorsement = pool.get(
             'endorsement.contract.covered_element')
+        Warning = pool.get('res.user.warning')
         endorsed_cov_options_per_contract = defaultdict(list)
         for endorsement in list(all_endorsements.values()):
             op_endorsement_to_delete = []
@@ -283,7 +270,6 @@ class RemoveOption(EndorsementWizardStepMixin):
                     'covered_element_endorsement': ce_endorsements[
                         x.covered_element.id],
                     'relation': x.option.id,
-                    'definition': self.endorsement_definition,
                     'values': {'manual_end_date': effective_date,
                         'sub_status': x.sub_status.id if x.sub_status
                         else None,
@@ -294,7 +280,6 @@ class RemoveOption(EndorsementWizardStepMixin):
                     x.covered_element)]
             vlist_opt = [{
                     'relation': x.option.id,
-                    'definition': self.endorsement_definition,
                     'contract_endorsement': endorsement,
                     'values': {'manual_end_date': effective_date,
                         'sub_status': x.sub_status.id if x.sub_status
@@ -318,7 +303,9 @@ class RemoveOption(EndorsementWizardStepMixin):
                             'mandatory')]:
                     if (set([x.option for x in ce_endorsement.options]) !=
                             set(CoveredElement(ce_id).options)):
-                        self.raise_user_error('must_end_all_options')
+                        raise ValidationError(gettext(
+                                'endorsement_insurance'
+                                '.msg_must_end_all_options'))
                 if ce_endorsement.options:
                     endorsed_cov_options_per_contract[
                         ce_endorsement.contract_endorsement.contract].extend(
@@ -332,19 +319,28 @@ class RemoveOption(EndorsementWizardStepMixin):
 
         for contract, options in endorsed_cov_options_per_contract.items():
             if set(cov_options_per_contract[contract]) == set(options):
-                self.raise_user_error('cannot_end_all_covered_elements')
+                raise ValidationError(gettext(
+                        'endorsement_insurance'
+                        '.msg_cannot_end_all_covered_elements'))
             for option in options:
                 if option.initial_start_date > effective_date:
-                    self.raise_user_error('end_date_anterior_to_start_date',
-                        (option.rec_name))
+                    raise ValidationError(gettext(
+                            'endorsement_insurance'
+                            '.msg_end_date_anterior_to_start_date',
+                            option=option.rec_name))
 
         if any(option.action == 'void' for option in self.options):
-            self.raise_user_warning('Voiding', 'voiding')
+            key = 'Voiding'
+            if Warning.check(key):
+                raise UserWarning(key, gettext(
+                        'endorsement_insurance.msg_voiding'))
         if any(option.start_date == effective_date and
                 option.action and option.action != 'void' for
                 option in self.options):
-            self.raise_user_warning('at_start_date_no_void',
-                'at_start_date_no_void')
+            key = 'at_start_date_no_void'
+            if Warning.check(key):
+                raise UserWarning(key, gettext(
+                        'endorsement_insurance.msg_at_start_date_no_void'))
 
         for cov in base_endorsement.covered_elements:
             for opt in cov.options:
@@ -1936,13 +1932,6 @@ class StartEndorsement(metaclass=PoolMeta):
     remove_option_next = StateTransition()
     remove_option_suspend = StateTransition()
 
-    @classmethod
-    def __setup__(cls):
-        super(StartEndorsement, cls).__setup__()
-        cls._error_messages.update({
-                'no_option_selected': 'No option was selected!',
-                })
-
     def set_main_object(self, endorsement):
         super(StartEndorsement, self).set_main_object(endorsement)
         endorsement.covered_elements = []
@@ -2100,8 +2089,13 @@ class StartEndorsement(metaclass=PoolMeta):
         return default_values
 
     def transition_add_extra_premium(self):
+        pool = Pool()
+        Warning = pool.get('res.user.warning')
         if not any(x.selected for x in self.new_extra_premium.options):
-            self.raise_user_warning('no_option_selected', 'no_option_selected')
+            key = 'no_option_selected'
+            if Warning.check(key):
+                raise UserWarning(key, gettext(
+                        'endorsement_insurance.msg_no_option_selected'))
         self.new_extra_premium.update_endorsement(self)
         return 'manage_extra_premium'
 

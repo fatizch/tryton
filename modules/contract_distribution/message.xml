@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<tryton>
+    <data group="1">
+        <record model="ir.message" id="msg_no_dist_network">
+            <field name="text">Contract %(contracts)s must have a distributor, please enter it.</field>
+        </record>
+    </data>
+</tryton>

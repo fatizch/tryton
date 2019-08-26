@@ -2,35 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:account.invoice.create.slip:"
-msgid "A configuration is required to generate a slip"
-msgstr "La configuration est requise pour générer le bordereau"
-
-msgctxt "error:account.invoice.create.slip:"
-msgid "All fields must be set before proceeding"
-msgstr "Tous les champs doivent être saisis avant de poursuivre"
-
-msgctxt "error:account.invoice.slip.configuration:"
-msgid "More than one draft slip with domain %s"
-msgstr "Il y a plus d'un bordereau brouillon correspondant au domaine %s"
-
-msgctxt "error:account.invoice:"
-msgid "Principal line reset following unreconciliation of invoice %s"
-msgstr "Ligne de bordereau suite à la dé-réconciliation de la quittance %s"
-
-msgctxt "error:insurer:"
-msgid "Notice kind does not match insurer configuration"
-msgstr ""
-"Le type de bordereau ne correspond pas à la configuration de l'assureur"
-
-msgctxt "error:insurer:"
-msgid ""
-"You cannot generate invoices simultaneously for insurers whose group invoice"
-" configuration is different"
-msgstr ""
-"Vous ne pouvez pas générer simultanément les bordereaux d'assureurs ayant "
-"une configuration différente de regroupement des bordereaux"
-
 msgctxt "field:account.insurer_invoice.create_empty,id:"
 msgid "ID"
 msgstr "Identifiant"
@@ -302,6 +273,38 @@ msgstr "Configuration de bordereau"
 msgctxt "model:ir.action,name:act_window_slip"
 msgid "Slips"
 msgstr "Bordereaux"
+
+msgctxt "model:ir.message,text:msg_bad_insurer_configuration"
+msgid "Notice kind does not match insurer configuration."
+msgstr ""
+"Le type de bordereau ne correspond pas à la configuration de l'assureur."
+
+msgctxt "model:ir.message,text:msg_duplicate_slip"
+msgid "More than one draft slip with domain %(domain)s."
+msgstr ""
+"Il y a plus d'un bordereau brouillon correspondant au domaine %(domain)s"
+
+msgctxt "model:ir.message,text:msg_missing_configuration"
+msgid "A configuration is required to generate a slip."
+msgstr "La configuration est requise pour générer le bordereau."
+
+msgctxt "model:ir.message,text:msg_missing_required_inputs"
+msgid "All fields must be set before proceeding."
+msgstr "Tous les champs doivent être saisis avant de poursuivre."
+
+msgctxt "model:ir.message,text:msg_mixed_insurer_configuration"
+msgid ""
+"You cannot generate invoices simultaneously for insurers whose group invoice"
+" configuration is different."
+msgstr ""
+"Vous ne pouvez pas générer simultanément les bordereaux d'assureurs ayant "
+"une configuration différente de regroupement des bordereaux."
+
+msgctxt "model:ir.message,text:msg_reset_principal_line_description"
+msgid ""
+"Principal line reset following unreconciliation of invoice %(invoice)s."
+msgstr ""
+"Ligne de bordereau suite à la dé-réconciliation de la quittance %(invoice)s."
 
 msgctxt "model:ir.ui.menu,name:menu_create_insurer_slip"
 msgid "Create Insurer Slip"

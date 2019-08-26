@@ -2,6 +2,7 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import PoolMeta
 from trytond.transaction import Transaction
+from trytond.i18n import gettext
 
 from trytond.modules.coog_core import model, fields
 from trytond.modules.endorsement.endorsement import relation_mixin
@@ -32,11 +33,6 @@ class EndorsementPartyEmployment(relation_mixin('endorsement.party.'
         'get_definition')
 
     @classmethod
-    def __setup__(cls):
-        super(EndorsementPartyEmployment, cls).__setup__()
-        cls._error_messages.update({'new_employment': 'New Employment'})
-
-    @classmethod
     def default_definition(cls):
         return Transaction().context.get('definition', None)
 
@@ -46,8 +42,7 @@ class EndorsementPartyEmployment(relation_mixin('endorsement.party.'
     def get_rec_name(self, name):
         if self.employment:
             return self.employment.rec_name
-        return self.raise_user_error('new_employment',
-            raise_exception=False)
+        return gettext('endorsement_party_employment.msg_new_employment')
 
     @classmethod
     def updated_struct(cls, employment):

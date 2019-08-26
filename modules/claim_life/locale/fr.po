@@ -2,81 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:benefit:"
-msgid "Covered Party"
-msgstr "Assuré"
-
-msgctxt "error:benefit:"
-msgid "Manual List"
-msgstr "Liste manuelle de bénéficiaires"
-
-msgctxt "error:claim.loss:"
-msgid "End Date is smaller than start date"
-msgstr "La date de fin est antérieure à la date de début"
-
-msgctxt "error:claim.loss:"
-msgid "End Date:"
-msgstr "Date de fin :"
-
-msgctxt "error:claim.loss:"
-msgid "LTD End Date:"
-msgstr "Date de fin de l'invalidité :"
-
-msgctxt "error:claim.loss:"
-msgid "LTD Start Date:"
-msgstr "Date de début de l'invalidité :"
-
-msgctxt "error:claim.loss:"
-msgid "Loss Date:"
-msgstr "Date de survenance :"
-
-msgctxt "error:claim.loss:"
-msgid "One day is required between the relapse and the previous std"
-msgstr ""
-"Il doit y avoir au moins un jour d'écart entre la date de fin de l'arrêt "
-"précédent et la rechute"
-
-msgctxt "error:claim.loss:"
-msgid "Relapse"
-msgstr "Rechute"
-
-msgctxt "error:claim.loss:"
-msgid "STD End Date:"
-msgstr "Date de fin d'arrêt de travail :"
-
-msgctxt "error:claim.loss:"
-msgid "STD Start Date:"
-msgstr "Date d'arrêt de travail :"
-
-msgctxt "error:claim.loss:"
-msgid "Start Date:"
-msgstr "Date de début :"
-
-msgctxt "error:claim.loss:"
-msgid "The initial loss is missing on the relapse: %(loss)s"
-msgstr "Le préjudice initial n'est pas renseigné pour la rechute : %(loss)s"
-
-msgctxt "error:claim.loss:"
-msgid "The previous std doesn't have an end date defined"
-msgstr ""
-"La date de fin d'arrêt de travail du précédent arrêt n'est pas définie"
-
-msgctxt "error:claim.service:"
-msgid ""
-"More than one covered element have "
-"been found for the claim %(claim)s at %(date)s for %(rec_name)s."
-msgstr ""
-"Plus d'un élément couvert ont été "
-"trouvés pour le sinistre %(claim)s au %(date)s pour %(rec_name)s."
-
-msgctxt "error:party.erase:"
-msgid ""
-"The party %(party)s can not be erased because it is covered on the following open claims: \n"
-"%(claims)s"
-msgstr ""
-"Le tiers %(party)s ne peut être supprimé car il est couvert par les sinistres ouverts suivants: \n"
-"%(claims)s"
-
 msgctxt "field:beneficiary-extra_data,benefit:"
 msgid "Benefit"
 msgstr "Prestation"
@@ -291,6 +216,10 @@ msgctxt "field:claim.loss,end_date_string:"
 msgid "End Date String"
 msgstr "Date de fin"
 
+msgctxt "field:claim.loss,has_end_date:"
+msgid "With End Date"
+msgstr "Avec Date de Fin"
+
 msgctxt "field:claim.loss,initial_std_start_date:"
 msgid "Initial STD Start Date"
 msgstr "Date de début de l'arrêt de travail"
@@ -322,10 +251,6 @@ msgstr "Reprise d'activité"
 msgctxt "field:claim.loss,start_date_string:"
 msgid "Start Date String"
 msgstr "Date de début"
-
-msgctxt "field:claim.loss,has_end_date:"
-msgid "With End Date"
-msgstr "Avec Date de Fin"
 
 msgctxt "field:claim.select_service,covered_person:"
 msgid "Covered Person"
@@ -427,6 +352,73 @@ msgstr "Bénéficiaire"
 msgctxt "model:ir.action,name:"
 msgid "Create Indemnification"
 msgstr "Créer une période"
+
+msgctxt "model:ir.message,text:msg_covered_party_enum"
+msgid "Covered Party"
+msgstr "Assuré"
+
+msgctxt "model:ir.message,text:msg_end_date"
+msgid "End Date:"
+msgstr "Date de fin :"
+
+msgctxt "model:ir.message,text:msg_ltd_end_date"
+msgid "LTD End Date:"
+msgstr "Date de fin de l'invalidité :"
+
+msgctxt "model:ir.message,text:msg_ltd_start_date"
+msgid "LTD Start Date:"
+msgstr "Date de début de l'invalidité :"
+
+msgctxt "model:ir.message,text:msg_manual_list_enum"
+msgid "Manual List"
+msgstr "Liste manuelle de bénéficiaires"
+
+msgctxt "model:ir.message,text:msg_missing_relapse_initial_loss"
+msgid "The initial loss is missing on the relapse: %(loss)s."
+msgstr "Le préjudice initial n'est pas renseigné pour la rechute : %(loss)s."
+
+msgctxt "model:ir.message,text:msg_multiple_covered_found"
+msgid ""
+"More than one covered element have been found for the claim %(claim)s at "
+"%(date)s for %(rec_name)s."
+msgstr ""
+"Plus d'un élément couvert ont été trouvés pour le sinistre %(claim)s au "
+"%(date)s pour %(rec_name)s."
+
+msgctxt "model:ir.message,text:msg_one_day_between_relapse_and_previous_loss"
+msgid "One day is required between the relapse and the previous std."
+msgstr ""
+"Il doit y avoir au moins un jour d'écart entre la date de fin de l'arrêt "
+"précédent et la rechute."
+
+msgctxt "model:ir.message,text:msg_party_is_on_claim"
+msgid ""
+"The party %(party)s can not be erased because it is covered on the following open claims:\n"
+"%(claims)s"
+msgstr ""
+"Le tiers %(party)s ne peut être supprimé car il est couvert par les sinistres ouverts suivants: \n"
+"%(claims)s"
+
+msgctxt "model:ir.message,text:msg_previous_loss_end_date_missing"
+msgid "The previous std doesn't have an end date defined."
+msgstr ""
+"La date de fin d'arrêt de travail du précédent arrêt n'est pas définie."
+
+msgctxt "model:ir.message,text:msg_relapse"
+msgid "Relapse"
+msgstr "Rechute"
+
+msgctxt "model:ir.message,text:msg_start_date"
+msgid "Start Date:"
+msgstr "Date de début :"
+
+msgctxt "model:ir.message,text:msg_std_end_date"
+msgid "STD End Date:"
+msgstr "Date de fin d'arrêt de travail :"
+
+msgctxt "model:ir.message,text:msg_std_start_date"
+msgid "STD Start Date:"
+msgstr "Date d'arrêt de travail :"
 
 msgctxt "selection:benefit.loss.description,item_kind:"
 msgid "Person"

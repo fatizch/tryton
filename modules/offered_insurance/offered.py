@@ -5,6 +5,8 @@ from sql import Null
 from sql.operators import NotIn
 
 from trytond import backend
+from trytond.i18n import gettext
+from trytond.model.exceptions import ValidationError
 from trytond.pool import Pool, PoolMeta
 from trytond.transaction import Transaction
 from trytond.pyson import Eval
@@ -48,13 +50,6 @@ class Product(metaclass=PoolMeta):
         super(Product, cls).__setup__()
         cls.extra_data_def.domain = [
             ('kind', 'in', cls.kind_list_for_extra_data_domain())]
-        cls._error_messages.update({
-                'missing_covered_element_extra_data': 'The following covered '
-                'element extra data should be set on the product: %s',
-                'wrong_extra_data_type': 'Extra data "%(extra_data)s" set on '
-                'package "%(package)s" is not compatible with package defined '
-                'per covered option'
-                })
 
     @classmethod
     def validate(cls, instances):
@@ -72,8 +67,9 @@ class Product(metaclass=PoolMeta):
                             product.packages_defined_per_covered or
                             extra_data_struct['kind'] == 'covered_element' and
                             not product.packages_defined_per_covered):
-                        cls.raise_user_error('wrong_extra_data_type',
-                            {'package': package.name, 'extra_data': key})
+                        raise ValidationError(gettext(
+                                'offered_insurance.msg_wrong_extra_data_type',
+                                package=package.name, extra_data=key))
 
     @staticmethod
     def default_packages_defined_per_covered():
@@ -87,9 +83,11 @@ class Product(metaclass=PoolMeta):
                 if extra_data.kind == 'covered_element')
             remaining = from_option - set(instance.extra_data_def)
             if remaining:
-                instance.raise_user_error('missing_covered_element_extra_data',
-                    (', '.join((extra_data.string
-                                for extra_data in remaining))))
+                raise ValidationError(gettext(
+                        'offered_insurance'
+                        '.msg_missing_covered_element_extra_data',
+                        remaining=', '.join(
+                            extra_data.string for extra_data in remaining)))
 
     @fields.depends('coverages')
     def on_change_with_item_descriptors(self, name=None):

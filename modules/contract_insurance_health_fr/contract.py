@@ -3,6 +3,8 @@
 import datetime
 
 from trytond import backend
+from trytond.i18n import gettext
+from trytond.model.exceptions import RequiredValidationError
 from trytond.pool import PoolMeta
 
 from trytond.modules.coog_core import coog_date
@@ -32,13 +34,6 @@ class Contract(metaclass=PoolMeta):
     __name__ = 'contract'
 
     @classmethod
-    def __setup__(cls):
-        super(Contract, cls).__setup__()
-        cls._error_messages.update({
-                'ssn_required': ('SSN is required for covered element %s'),
-                })
-
-    @classmethod
     def validate(cls, contracts):
         super(Contract, cls).validate(contracts)
         cls.check_ssn_on_covered_elements(contracts)
@@ -49,7 +44,10 @@ class Contract(metaclass=PoolMeta):
             for covered in contract.covered_elements:
                 if (covered.party and covered.party.get_SSN_required(None)
                         and not covered.party.ssn):
-                    cls.raise_user_error('ssn_required', covered.rec_name)
+                    raise RequiredValidationError(gettext(
+                            'contract_insurance_health_fr'
+                            '.msg_ssn_required_covered',
+                            covered=covered.rec_name))
 
 
 class ContractWithInvoice(metaclass=PoolMeta):

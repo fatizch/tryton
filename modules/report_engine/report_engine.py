@@ -26,6 +26,7 @@ from dateutil.relativedelta import relativedelta
 from genshi.template import MarkupTemplate
 
 from trytond import backend
+from trytond.i18n import gettext
 from trytond.pool import Pool, PoolMeta
 from trytond.config import config
 from trytond.model import Unique, ModelSQL
@@ -196,20 +197,6 @@ class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
             ('code_unique', Unique(t, t.code),
                 'The document template code must be unique'),
             ]
-        cls._error_messages.update({
-                'no_version_match': 'No letter model found for date %s '
-                'and language %s',
-                'libre_office': 'Libre Office',
-                'flat_document': 'Flat Document',
-                'libre_office_odt': 'Libre Office Writer',
-                'libre_office_ods': 'Libre Office Calc',
-                'format_original': 'Original',
-                'format_pdf': 'Pdf',
-                'microsoft_office': 'Microsoft Office',
-                'reports_produced': ('Your reports have been produced:'
-                    '\n%(reports)s'),
-                'shared_genshi_template': 'Shared Genshi Template',
-                })
 
     @classmethod
     def __register__(cls, module_name):
@@ -318,15 +305,15 @@ class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
     @fields.depends('input_kind')
     def get_possible_process_methods(self):
         if self.input_kind and self.input_kind.startswith('libre_office'):
-            return [('libre_office',
-                self.raise_user_error('libre_office', raise_exception=False))]
+            return [
+                ('libre_office', gettext('report_engine.msg_libre_office'))]
         elif self.input_kind == 'flat_document':
-            return [('flat_document',
-                self.raise_user_error('flat_document', raise_exception=False))]
+            return [
+                ('flat_document', gettext('report_engine.msg_flat_document'))]
         elif self.input_kind == 'shared_genshi_template':
-            return [('shared_genshi_template',
-                self.raise_user_error('shared_genshi_template',
-                    raise_exception=False))]
+            return [
+                ('shared_genshi_template',
+                    gettext('report_engine.msg_shared_genshi_template'))]
         return [('', '')]
 
     @classmethod
@@ -346,16 +333,13 @@ class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
             ]
         if self.process_method == 'libre_office':
             available_format += [
-                ('original', self.__class__.raise_user_error(
-                        'format_original', raise_exception=False)),
-                ('microsoft_office', self.__class__.raise_user_error(
-                        'microsoft_office', raise_exception=False)),
-                ('pdf', self.__class__.raise_user_error(
-                        'format_pdf', raise_exception=False))]
+                ('original', gettext('report_engine.msg_format_original')),
+                ('microsoft_office',
+                    gettext('report_engine.msg_microsoft_office')),
+                ('pdf', gettext('report_engine.msg_format_pdf'))]
         elif self.process_method == 'flat_document':
             available_format += [
-                ('original', self.__class__.raise_user_error(
-                        'format_original', raise_exception=False)),
+                ('original', gettext('report_engine.msg_format_original')),
                 ]
         return available_format
 
@@ -396,14 +380,11 @@ class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
     @classmethod
     def get_possible_input_kinds(cls):
         return [
-            ('libre_office_odt', cls.raise_user_error('libre_office_odt',
-                    raise_exception=False)),
-            ('libre_office_ods', cls.raise_user_error('libre_office_ods',
-                    raise_exception=False)),
-            ('flat_document', cls.raise_user_error('flat_document',
-                    raise_exception=False)),
-            ('shared_genshi_template', cls.raise_user_error(
-                'shared_genshi_template', raise_exception=False)),
+            ('libre_office_odt', gettext('report_engine.msg_libre_office_odt')),
+            ('libre_office_ods', gettext('report_engine.msg_libre_office_ods')),
+            ('flat_document', gettext('report_engine.msg_flat_document')),
+            ('shared_genshi_template',
+                gettext('report_engine.msg_shared_genshi_template')),
             ]
 
     @classmethod
@@ -437,7 +418,9 @@ class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
                 return version_lang[0]
         if versions:
             return versions[0]
-        self.raise_user_error('no_version_match', (date, language))
+        raise UserError(gettext(
+                'report_engine.msg_no_version_match',
+                date=date, language=language))
 
     @fields.depends('input_kind', 'possible_process_methods', 'versions')
     def on_change_input_kind(self):
@@ -634,9 +617,8 @@ class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
             attachments = self.save_reports_in_edm(reports)
         to_notify = ServerContext().get('user_to_notify')
         if to_notify:
-            message = self.raise_user_error('reports_produced',
-                {'reports': '\n'.join([x['report_name'] for x in reports])},
-                raise_exception=False),
+            message = gettext('report_engine.msg_reports_produced',
+                reports='\n'.join([x['report_name'] for x in reports]))
             notify("Coog", message, user=to_notify)
         return reports, attachments
 
@@ -1295,8 +1277,6 @@ class ReportGenerate(CoogReport):
 
     @classmethod
     def render(cls, report, report_context):
-
-        pool = Pool()
         selected_obj = report_context['objects'][0]
         selected_letter = Pool().get('report.template')(
             report_context['data']['doc_template'][0])
@@ -1323,9 +1303,10 @@ class ReportGenerate(CoogReport):
                     if (frame[0] != '<string>' and not
                             frame[0].endswith('.odt')):
                         continue
-                    ReportCreate = pool.get('report.create', type='wizard')
-                    ReportCreate.raise_user_error('parsing_error', (
-                            frame[2][14:-2], str(exc)))
+                    raise UserError(gettext(
+                            'report_engine.msg_parsing_error',
+                            expression=frame[2][14:-2],
+                            error=str(exc)))
                 else:
                     raise
             except UserError:
@@ -1510,16 +1491,6 @@ class ReportCreate(wizard_context.PersistentContextWizard):
     open_document = StateAction('report_engine.generate_file_report')
     post_generation = StateTransition()
     attach_to_contact = StateTransition()
-
-    @classmethod
-    def __setup__(cls):
-        super(ReportCreate, cls).__setup__()
-        cls._error_messages.update({
-                'parsing_error': 'Error while generating the letter:\n\n'
-                '  Expression:\n%s\n\n  Error:\n%s',
-                'contact_not_provided': 'Report is impossible: '
-                'No contact available.',
-                })
 
     @property
     def multi_objects(self):

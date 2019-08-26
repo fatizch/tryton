@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<tryton>
+    <data group="1">
+        <record model="ir.message" id="msg_must_renew_all">
+            <field name="text">All contracts on contract set %(contract_set)s must be renewed together</field>
+        </record>
+        <record model="ir.message" id="msg_should_renew_all ">
+            <field name="text">All contracts on contract set %(contract_set)s should be renewed together, ensure you want to perform this action</field>
+        </record>
+        <record model="ir.message" id="msg_no_contract_set_found ">
+            <field name="text">No contract set found in context</field>
+        </record>
+    </data>
+</tryton>

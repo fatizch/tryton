@@ -53,13 +53,13 @@ AccountKind = Model.get('account.account.type')
 waiting_account_kind = AccountKind()
 waiting_account_kind.name = 'Waiting Account Insurer Kind'
 waiting_account_kind.company = company
+waiting_account_kind.statement = 'income'
+waiting_account_kind.revenue = True
 waiting_account_kind.save()
 Account = Model.get('account.account')
 company_waiting_account = Account()
 company_waiting_account.name = 'Company Waiting Account'
 company_waiting_account.code = 'company_wiating_account'
-company_waiting_account.kind = 'revenue'
-company_waiting_account.party_required = True
 company_waiting_account.type = waiting_account_kind
 company_waiting_account.company = company
 company_waiting_account.save()

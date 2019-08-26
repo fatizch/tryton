@@ -111,8 +111,10 @@ subscriber.save()
 start_date = datetime.date(2020, 5, 12)
 contract = Contract(product=product, subscriber=subscriber,
     company=company, start_date=start_date, contract_number='123')
-contract.status = 'active'
 contract.save()
+Contract.write([contract], {
+        'status': 'active',
+        }, config.context)
 
 # #Comment# #Test Endorsement
 new_endorsement = Wizard('endorsement.start')

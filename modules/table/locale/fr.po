@@ -2,30 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:table.2d:"
-msgid "The table is not 2D"
-msgstr "La table n'est pas 2D"
-
-msgctxt "error:table.cell:"
-msgid "Too few dimension value \"%s\" for \"%s\""
-msgstr "Trop peu de valeur de dimension \"%s\" pour \"%s\""
-
-msgctxt "error:table.cell:"
-msgid "Too many dimension values \"%s\" for \"%s\""
-msgstr "Trop de valeur de dimension \"%s\" pour \"%s\\"
-
-msgctxt "error:table:"
-msgid "A clone record already exists : %s(%s)"
-msgstr "Une copie existe déjà : %s(%s)"
-
-msgctxt "error:table:"
-msgid "Multiple tables found"
-msgstr "Plusieurs table trouvées"
-
-msgctxt "error:table:"
-msgid "The code of \"Table Definition\" must be unique"
-msgstr "Le code de la table doit être unique"
-
 msgctxt "field:table,cells:"
 msgid "Cells"
 msgstr "Cellules"
@@ -595,7 +571,7 @@ msgid "Type"
 msgstr "Type"
 
 msgctxt "help:table,tags:"
-msgid "Configuration object tags list. Allows searching for all configuration objects related to a tag."
+msgid "Add and search all related configuration objects based on a tag"
 msgstr ""
 "Liste des labels sur l'objet de configuration. Permet ensuite de rechercher "
 "l'ensemble des objets de configuration liés à un même label."
@@ -655,6 +631,26 @@ msgstr "Table 2D"
 msgctxt "model:ir.action,name:act_table_definition_form"
 msgid "Tables"
 msgstr "Tables"
+
+msgctxt "model:ir.message,text:msg_existing_clone"
+msgid "A clone record already exists: %(name)s (%(code)s)."
+msgstr "Une copie existe déjà : %(name)s(%(code)s)"
+
+msgctxt "model:ir.message,text:msg_multiple_tables"
+msgid "Multiple tables found."
+msgstr "Plusieurs table trouvées."
+
+msgctxt "model:ir.message,text:msg_not_2d"
+msgid "The table is not 2D."
+msgstr "La table n'est pas 2D."
+
+msgctxt "model:ir.message,text:msg_too_few_dimension_value"
+msgid "Too few dimension values \"%(dimension)s\" for \"%(field)s\"."
+msgstr "Trop peu de valeur de dimension \"%(dimension)s\" pour \"%(field)s\""
+
+msgctxt "model:ir.message,text:msg_too_many_dimension_value"
+msgid "Too many dimension values \"%(dimension)s\" for \"%(field)s\"."
+msgstr "Trop de valeur de dimension \"%(dimension)s\" pour \"%(field)s\\"
 
 msgctxt "model:ir.test_case.instance,name:table_test_case"
 msgid "Table Test Case"

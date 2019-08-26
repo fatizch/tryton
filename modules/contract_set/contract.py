@@ -8,6 +8,8 @@ from trytond.tools.multivalue import migrate_property
 from trytond.model import Unique
 from trytond.transaction import Transaction
 from trytond.pyson import Eval, Bool, Equal
+from trytond.i18n import gettext
+from trytond.model.exceptions import ValidationError
 
 from trytond.modules.coog_core import model, fields
 from trytond.modules.company.model import (CompanyValueMixin,
@@ -116,18 +118,6 @@ class ContractSet(Printable, model.CoogSQL, model.CoogView):
                 'button_decline_set': {
                     "invisible": Bool(Equal(Eval('status'), 'declined'))},
                 })
-        cls._error_messages.update({
-            'no_sequence_defined': 'No sequence defined in configuration '
-            'for contracts set number',
-            'same_contract_in_set': 'the contract %s is already defined in the'
-            ' contract set %s',
-            'activate_with_non_quote': ('You are activating a contract set'
-                    ' with non quote contracts. The following contracts'
-                    ' will not be activated : \n%s'),
-            'decline_with_non_quote': ('You are declining a contract set'
-                    ' with non quote contracts. The following contracts'
-                    ' will not be declined : \n%s'),
-            })
 
     @classmethod
     def create(cls, vlist):
@@ -136,7 +126,8 @@ class ContractSet(Printable, model.CoogSQL, model.CoogView):
         Configuration = pool.get('offered.configuration')
         config = Configuration(1)
         if not config.contract_set_number_sequence:
-            cls.raise_user_error('no_sequence_defined')
+            raise ValidationError(
+                gettext('contract_set.msg_no_sequence_defined'))
         vlist = [v.copy() for v in vlist]
         for values in vlist:
             if not values.get('number'):
@@ -191,11 +182,14 @@ class ContractSet(Printable, model.CoogSQL, model.CoogView):
     def activate_set(self):
         pool = Pool()
         Event = pool.get('event')
+        Warning = pool.get('res.user.warning')
         quote, non_quote = self.get_quote_non_quote_contracts()
         if non_quote:
-            message = ', '.join([x.rec_name for x in non_quote])
-            self.raise_user_warning(message, 'activate_with_non_quote',
-                message)
+            key = ', '.join([x.rec_name for x in non_quote])
+            if Warning.check(key):
+                raise UserWarning(key,
+                    gettext('contract_set.msg_activate_with_non_quote',
+                        contracts=key))
         for contract in quote:
             contract.activate_contract()
         Event.notify_events([self], 'activate_contract_set')
@@ -204,9 +198,11 @@ class ContractSet(Printable, model.CoogSQL, model.CoogView):
         Contract = Pool().get('contract')
         quote, non_quote = self.get_quote_non_quote_contracts()
         if non_quote:
-            message = ', '.join([x.rec_name for x in non_quote])
-            self.raise_user_warning(message, 'decline_with_non_quote',
-                message)
+            key = ', '.join([x.rec_name for x in non_quote])
+            if Warning.check(key):
+                raise UserWarning(key,
+                    gettext('contract_set.msg_decline_with_non_quote',
+                        contracts=key))
         Contract.decline_contract(quote, reason)
 
     def get_contact(self):
@@ -244,8 +240,10 @@ class ContractSet(Printable, model.CoogSQL, model.CoogView):
                 key = (contract.subscriber, contract.product,
                     contract.start_date)
                 if key in contract_keys:
-                    cls.raise_user_error('same_contract_in_set', (
-                            contract.rec_name, contract_set.number))
+                    raise ValidationError(
+                        gettext('contract_set.msg_same_contract_in_set',
+                            contract=contract.rec_name,
+                            contract_set=contract_set.number))
                 contract_keys.append(key)
 
     @classmethod

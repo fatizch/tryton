@@ -3,6 +3,8 @@
 from trytond.pool import Pool, PoolMeta
 
 from trytond.modules.coog_core import fields
+from trytond.i18n import gettext
+from trytond.model.exceptions import ValidationError
 
 
 __all__ = [
@@ -63,21 +65,14 @@ class EndorsementFindProcess(metaclass=PoolMeta):
 class EndorsementStartProcess(metaclass=PoolMeta):
     __name__ = 'endorsement.start_process'
 
-    @classmethod
-    def __setup__(cls):
-        super(EndorsementStartProcess, cls).__setup__()
-        cls._error_messages.update({
-                'same_set_for_all': 'The selected contracts must belong to '
-                'the same contract set.',
-                })
-
     def init_main_object_from_process(self, obj, process_param):
         pool = Pool()
         Endorsement = pool.get('endorsement')
         ContractEndorsement = pool.get('endorsement.contract')
         if obj.__name__ == 'endorsement.set':
             if len(set(x.contract_set for x in process_param.contracts)) != 1:
-                self.raise_user_error('same_set_for_all')
+                raise ValidationError(gettext('endorsement_set_process'
+                        '.msg_same_set_for_all'))
             obj.endorsements = [Endorsement(
                     effective_date=process_param.effective_date,
                     definition=process_param.definition,

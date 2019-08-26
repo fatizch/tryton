@@ -1,5 +1,6 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+from trytond.i18n import gettext
 from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
 from trytond.pyson import Eval
@@ -52,13 +53,6 @@ class EndorsementCoveredElementOption(metaclass=PoolMeta):
         'covered_option_endorsement', 'Beneficiary Endorsement',
         delete_missing=True)
 
-    @classmethod
-    def __setup__(cls):
-        super(EndorsementCoveredElementOption, cls).__setup__()
-        cls._error_messages.update({
-                'msg_beneficiary_modifications': 'Beneficiaries Modification',
-                })
-
     def get_diff(self, model, base_object=None):
         result = super(EndorsementCoveredElementOption, self).get_diff(
             model, base_object)
@@ -67,10 +61,9 @@ class EndorsementCoveredElementOption(metaclass=PoolMeta):
         beneficiary_summary = [x.get_diff('contract.option.beneficiary',
                 x.beneficiary) for x in self.beneficiaries]
         if beneficiary_summary:
-            result[1].append(['%s :' % (self.raise_user_error(
-                        'msg_beneficiary_modifications',
-                        raise_exception=False)),
-                beneficiary_summary])
+            result[1].append([
+                    gettext('endorsement_life.msg_beneficiary_modifications'),
+                    beneficiary_summary])
         return result
 
     def apply_values(self):
@@ -137,9 +130,6 @@ class EndorsementBeneficiary(relation_mixin(
         super(EndorsementBeneficiary, cls).__setup__()
         cls.values.domain = [('definition', '=', Eval('definition'))]
         cls.values.depends = ['definition']
-        cls._error_messages.update({
-                'new_beneficiary': 'New Beneficiary: %s',
-                })
 
     @classmethod
     def default_definition(cls):
@@ -152,9 +142,9 @@ class EndorsementBeneficiary(relation_mixin(
         if self.extra_premium:
             return self.extra_premium.rec_name
         Beneficiary = Pool().get('contract.option.beneficiary')
-        return self.raise_user_error('new_beneficiary',
-            Beneficiary(**self.values).get_rec_name(None),
-            raise_exception=False)
+        return gettext(
+            'endorsement_life.msg_new_beneficiary',
+            name=Beneficiary(**self.values).get_rec_name(None))
 
     @classmethod
     def updated_struct(cls, beneficiary):

@@ -4,10 +4,13 @@
 from itertools import groupby
 import datetime
 
-from sql import Null
+from sql import Null, Literal
 from sql.operators import Like
 from decimal import Decimal
 
+from trytond.exceptions import UserWarning
+from trytond.i18n import gettext
+from trytond.model.exceptions import ValidationError
 from trytond.pool import Pool, PoolMeta
 from trytond.transaction import Transaction
 from trytond.wizard import Wizard, StateView, StateTransition, Button
@@ -105,30 +108,15 @@ class CreateStatement(Wizard):
         'account_statement.act_statement_form')
 
     @classmethod
-    def __setup__(cls):
-        super(CreateStatement, cls).__setup__()
-        cls._error_messages.update({
-                'no_record_selected': 'No record selected',
-                'too_many_parties': 'Too many parties selected',
-                'no_company': 'No company found',
-                'no_currency_for_company': 'No currency for company %s',
-                'selection_not_receivable': 'All selected records are not '
-                'receivable',
-                'amount_not_match': 'The statement amount differs from '
-                'calculation: %s > %s (calculated)',
-                'missing_cheque_number': 'The cheque number is required',
-                'insufficient_amount': 'The amount is insufficient',
-                })
-
-    @classmethod
     def get_where_clause_from_context(cls, tables, active_model, instances,
             company, date=None):
         MoveLine = Pool().get('account.move.line')
         line = tables['line']
         account = tables['account']
         move = tables['move']
+        account_type = tables['type']
         line_query, _ = MoveLine.query_get(tables['line'])
-        where_clause = ((account.kind == 'receivable')
+        where_clause = ((account_type.receivable == Literal(True))
             & (line.reconciliation == Null)
             & (account.company == company.id)
             & (Like(move.origin, 'account.invoice,%'))
@@ -151,19 +139,23 @@ class CreateStatement(Wizard):
             date=None):
         pool = Pool()
         Account = pool.get('account.account')
+        Type = pool.get('account.account.type')
         MoveLine = pool.get('account.move.line')
         Move = pool.get('account.move')
         cursor = Transaction().connection.cursor()
         t, expression = Account.search_domain([('active', '=', True), ])
         tables = {
             'line': MoveLine.__table__(),
+            'account': Account.__table__(),
             'account': t[None][0],
+            'type': Type.__table__(),
             'move': Move.__table__(),
             }
         query_table = tables['line'].join(tables['account'],
             condition=tables['account'].id == tables['line'].account).join(
                 tables['move'], condition=tables['line'].move ==
-                tables['move'].id)
+                tables['move'].id).join(
+                    tables['account'].type == tables['type'].id)
         cursor.execute(*query_table.select(tables['line'].id,
                 where=cls.get_where_clause_from_context(tables, active_model,
                     instances, company, date) & expression))
@@ -201,19 +193,24 @@ class CreateStatement(Wizard):
 
         if active_model == 'party.party':
             if len(instances) > 1:
-                self.raise_user_error('too_many_parties')
+                raise ValidationError(gettext(
+                        'account_statement_cog.msg_too_many_parties'))
             values['party'] = instances[0].id
         elif active_model == 'account.move.line':
             if len(list({x.party.id for x in instances})) > 1:
-                self.raise_user_error('too_many_parties')
-            if any((x.account.kind != 'receivable' for x in instances)):
-                self.raise_user_error('selection_not_receivable')
+                raise ValidationError(gettext(
+                        'account_statement_cog.msg_too_many_parties'))
+            if any((x.account.type.receivable is not True for x in instances)):
+                raise ValidationError(gettext(
+                        'account_statement_cog.msg_selection_not_receivable'))
             values['party'] = instances[0].party.id
         elif active_model == 'account.invoice':
             if len(list({x.party.id for x in instances})) > 1:
-                self.raise_user_error('too_many_parties')
+                raise ValidationError(gettext(
+                        'account_statement_cog.msg_too_many_parties'))
             if any((x.type != 'out' for x in instances)):
-                self.raise_user_error('selection_not_receivable')
+                raise ValidationError(gettext(
+                        'account_statement_cog.msg_selection_not_receivable'))
             values['party'] = instances[0].party.id
         values['available_lines'] = [x.id
             for x in self.get_lines_from_context(
@@ -227,13 +224,16 @@ class CreateStatement(Wizard):
         active_ids = context_.get('active_ids')
         active_model = context_.get('active_model')
         if len(active_ids) == 0:
-            self.raise_user_error('no_record_selected')
+            raise ValidationError(
+                gettext('account_statement_cog.msg_no_record_selected'))
         if not company:
-            self.raise_user_error('no_company')
+            raise ValidationError(
+                gettext('account_statement_cog.msg_no_company'))
         company = pool.get('company.company')(company)
         if not company.currency:
-            self.raise_user_error('no_currency_for_company',
-                company.rec_name)
+            raise ValidationError(gettext(
+                    'account_statement_cog.msg_no_currency_for_company',
+                    company=company.rec_name))
         instances = pool.get(active_model).browse(active_ids)
         return self.get_default_values_from_context(active_model, instances,
             company)
@@ -251,13 +251,19 @@ class CreateStatement(Wizard):
             }
 
     def transition_check_inputs(self):
+        pool = Pool()
+        Warning = pool.get('res.user.warning')
         calculated_amount = sum(x.amount for x in self.start.lines)
         if self.start.amount > calculated_amount:
-            self.raise_user_warning('amount_not_match_%s' %
-                str([x.id for x in self.start.lines]), 'amount_not_match', (
-                    self.start.amount, calculated_amount))
+            key = 'amount_not_match_%s' % str([x.id for x in self.start.lines])
+            if Warning.check(key):
+                raise UserWarning(key, gettext(
+                        'account_statement_cog.msg_amount_not_match',
+                        amount=self.start.amount,
+                        calculated_amount=calculated_amount))
         if self.start.amount < calculated_amount or not self.start.amount:
-            self.raise_user_error('insufficient_amount')
+            raise ValidationError(gettext(
+                    'account_statement_cog.msg_insufficient_amount'))
         return 'payment_informations'
 
     @classmethod
@@ -268,8 +274,8 @@ class CreateStatement(Wizard):
         errors = errors or ''
         if self.payment_informations.process_method == 'cheque':
             if not self.payment_informations.number:
-                errors += self.raise_user_error(
-                    'missing_cheque_number', raise_exception=False)
+                errors += gettext(
+                    'account_statement_cog.msg_missing_cheque_number')
         return errors
 
     def process_other(self):

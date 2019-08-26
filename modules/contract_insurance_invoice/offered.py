@@ -3,6 +3,8 @@
 import datetime
 
 from decimal import Decimal, InvalidOperation
+from trytond.i18n import gettext
+from trytond.model.exceptions import ValidationError
 from sql import Literal
 
 from dateutil.rrule import rrule, YEARLY, MONTHLY
@@ -487,10 +489,6 @@ class ProductBillingRule(
     @classmethod
     def __setup__(cls):
         super(ProductBillingRule, cls).__setup__()
-        cls._error_messages.update({
-            'wrong_rule_format':
-                'The return value of the rule must be a dictionnary.',
-        })
         cls.rule.domain = [('type_', '=', 'billing_mode')]
         cls.rule.help = ('The rule must return a list with billing mode codes.')
         cls.rule.string = 'Billing Rule'
@@ -538,7 +536,8 @@ class ProductBillingRule(
             return self.format_as_rule_result()
         result = self.calculate_rule(args, crash_on_missing_arguments=False)
         if type(result) not in (list, type(None)):
-            self.raise_user_error('wrong_rule_format')
+            raise ValidationError(gettext(
+                    'contract_insurance_invoice.msg_wrong_rule_format'))
         if result:
             return [x for x in self.billing_modes if x.code in result]
         else:
@@ -633,8 +632,13 @@ class OptionDescription(metaclass=PoolMeta):
     account_for_billing = fields.Many2One('account.account',
         'Account for billing', help='Account used to credit premium amount',
         depends=['company'], states={'required': True},
-        domain=[['OR', [('kind', '=', 'revenue')], [('kind', '=', 'other')]],
-            ('company', '=', Eval('company'))],
+        domain=[
+            ['OR',
+                [('type.revenue', '=', True)],
+                [('type.other', '=', True)]
+            ],
+            ('company', '=', Eval('company')),
+            ],
         ondelete='RESTRICT')
     taxes_included_in_premium = fields.Boolean('Taxes Included',
         help='Taxes Included In Premium',

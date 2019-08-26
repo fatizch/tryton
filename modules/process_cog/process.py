@@ -10,7 +10,10 @@ from sql.conditionals import Coalesce
 
 from trytond import backend
 from trytond.cache import Cache
+from trytond.exceptions import UserError
+from trytond.i18n import gettext
 from trytond.model import fields as tryton_fields, Unique
+from trytond.model.exceptions import ValidationError, AccessError
 from trytond.model.modelstorage import without_check_access
 from trytond.pool import PoolMeta, Pool
 from trytond.rpc import RPC
@@ -102,12 +105,6 @@ class ProcessTransition(model.CoogSQL):
                 ('main_model', '=', Eval('_parent_on_process', {}).get(
                     'on_model'))])
 
-        cls._error_messages.update({
-                'missing_pyson': 'Pyson expression and description is '
-                'mandatory',
-                'missing_choice': 'Both choices must be filled !',
-                })
-
     @classmethod
     def view_attributes(cls):
         return super(ProcessTransition, cls).view_attributes() + [
@@ -176,13 +173,15 @@ class ProcessTransition(model.CoogSQL):
         if self.kind != 'choice':
             return
         if not self.pyson_choice or not self.pyson_description:
-            self.append_functional_error('missing_pyson')
+            self.append_functional_error(
+                ValidationError(gettext('process_cog.msg_missing_pyson')))
 
     def check_choices(self):
         if self.kind != 'choice':
             return
         if not self.choice_if_true or not self.choice_if_false:
-            self.append_functional_error('missing_choice')
+            self.append_functional_error(
+                ValidationError(gettext('process_cog.msg_missing_choice')))
 
     def get_pyson_readonly(self):
         result = super(ProcessTransition, self).get_pyson_readonly()
@@ -223,10 +222,6 @@ class ProcessLog(model.CoogSQL, model.CoogView):
     @classmethod
     def __setup__(cls):
         super(ProcessLog, cls).__setup__()
-        cls._error_messages.update({
-                'cannot_copy_logs': 'Copying logs is not allowed !',
-                'cannot_delete_logs': 'Deleting logs is not allowed !',
-                })
         cls._task_models = None
 
     @classmethod
@@ -258,13 +253,13 @@ class ProcessLog(model.CoogSQL, model.CoogView):
     @classmethod
     def delete(cls, *args, **kwargs):
         if not ServerContext().get('allow_delete_logs', None):
-            cls.raise_user_error('cannot_delete_logs')
+            raise AccessError(gettext('process_cog.msg_cannot_copy_logs'))
         return super(ProcessLog, cls).delete(*args, **kwargs)
 
     @classmethod
     def copy(cls, *args, **kwargs):
         if not ServerContext().get('allow_copy_logs', None):
-            cls.raise_user_error('cannot_copy_logs')
+            raise AccessError(gettext('process_cog.msg_cannot_copy_logs'))
         return super(ProcessLog, cls).copy(*args, **kwargs)
 
     def get_latest(self, name):
@@ -667,12 +662,6 @@ class Process(model.CoogSQL, model.TaggedMixin):
         cls._order.insert(0, ('sequence', 'ASC'))
         cls.transitions.states['invisible'] = ~Eval('custom_transitions')
         cls.transitions.depends.append('custom_transitions')
-        cls._error_messages.update({
-                'button_delete_confirm': 'The current record (%s) will be '
-                'deleted, are you sure you want to proceed ?',
-                'previous_button_label': 'Previous',
-                'next_button_label': 'Next',
-                })
 
     @classmethod
     def _export_skips(cls):
@@ -832,9 +821,10 @@ class Process(model.CoogSQL, model.TaggedMixin):
         if self.delete_button:
             middle_buttons.append(
                 '<button string="%s" name="button_delete_task" '
-                'icon="tryton-delete" confirm="%s"/>' % (self.delete_button,
-                    self.raise_user_error('button_delete_confirm',
-                        (self.on_model.rec_name,), raise_exception=False)))
+                'icon="tryton-delete" confirm="%s"/>' % (
+                    self.delete_button, gettext(
+                        'process_cog.msg_button_delete_confirm',
+                        name=self.on_model.rec_name)))
         if self.hold_button:
             middle_buttons.append(
                 '<button string="%s" name="button_hold_task" '
@@ -851,8 +841,8 @@ class Process(model.CoogSQL, model.TaggedMixin):
         xml += '<group id="group_prevnext" colspan="4" col="%s">' % (
             8 + len(middle_buttons))
         if self.with_prev_next:
-            xml += '<button string="%s"' % self.raise_user_error(
-                'previous_button_label', raise_exception=False)
+            xml += '<button string="%s"' % (
+                gettext('process_cog.msg_previous_button_label'))
             xml += ' name="_button_previous_%s"/>' % self.id
         if middle_buttons:
             xml += '<group id="void_l" colspan="3"/>'
@@ -861,8 +851,8 @@ class Process(model.CoogSQL, model.TaggedMixin):
         else:
             xml += '<group id="void" colspan="6"/>'
         if self.with_prev_next:
-            xml += '<button string="%s" ' % self.raise_user_error(
-                'next_button_label', raise_exception=False)
+            xml += '<button string="%s" ' % (
+                gettext('process_cog.msg_next_button_label'))
             xml += 'name="_button_next_%s"/>' % self.id
         xml += '</group>'
         xml += '<newline/>'
@@ -1448,13 +1438,6 @@ class ProcessResume(Wizard):
     start_state = 'resume'
     resume = model.VoidStateAction()
 
-    @classmethod
-    def __setup__(cls):
-        super(ProcessResume, cls).__setup__()
-        cls._error_messages.update({
-                'no_process_found': 'No active process found',
-                })
-
     def do_resume(self, action):
         return self._resume()
 
@@ -1465,7 +1448,7 @@ class ProcessResume(Wizard):
         active_model = Transaction().context.get('active_model')
         instance = pool.get(active_model)(active_id)
         if not instance.current_state:
-            cls.raise_user_error('no_process_found')
+            raise UserError(gettext('process_cog.msg_no_process_found'))
 
         Log = pool.get('process.log')
         active_log = None

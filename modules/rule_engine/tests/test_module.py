@@ -8,7 +8,7 @@ from decimal import Decimal
 import trytond.tests.test_tryton
 
 from trytond.transaction import Transaction
-from trytond.error import UserError
+from trytond.exceptions import UserError
 from trytond.pool import Pool
 
 from trytond.modules.coog_core import test_framework
@@ -104,11 +104,11 @@ class ModuleTestCase(test_framework.CoogTestCase):
         te.namespace = 'rule_engine_tests'
         te.language = 1
 
-        self.assertRaises(trytond.error.UserError, te.save)
+        self.assertRaises(UserError, te.save)
         te.translated_technical_name = 'values_test'
         te.save()
         te.fct_args = 'Test, Qsdé'
-        self.assertRaises(trytond.error.UserError, te.save)
+        self.assertRaises(UserError, te.save)
 
     def test0012_createRuleToolsRuleFunction(self):
         english = self.Language.search([('code', '=', 'en')])

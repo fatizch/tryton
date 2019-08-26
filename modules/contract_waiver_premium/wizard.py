@@ -2,7 +2,9 @@
 # this repository contains the full copyright notices and license terms.
 import datetime
 
+from trytond.i18n import gettext
 from trytond.pool import Pool
+from trytond.model.exceptions import ValidationError
 from trytond.modules.coog_core import model, fields
 from trytond.wizard import Wizard, StateView, Button, StateAction
 from trytond.transaction import Transaction
@@ -57,14 +59,6 @@ class CreateWaiver(Wizard):
     reinvoice = StateAction(
         'contract_insurance_invoice.act_premium_notice_form')
 
-    @classmethod
-    def __setup__(cls):
-        super(CreateWaiver, cls).__setup__()
-        cls._error_messages.update({
-                'waiver_overlaps':
-                'You are trying to create overlapping waivers',
-                })
-
     def default_choice(self, name):
         pool = Pool()
         active_model = Transaction().context['active_model']
@@ -98,7 +92,8 @@ class CreateWaiver(Wizard):
                 for x in option.waivers])
         if any([x.start_date <= self.choice.start_date <= (x.end_date
                         or datetime.date.max) for x in existing_waivers]):
-            self.raise_user_error('waiver_overlaps')
+            raise ValidationError(gettext(
+                    'contract_waiver_premium.msg_waiver_overlaps'))
 
     @staticmethod
     def _reinvoice(to_reinvoice):

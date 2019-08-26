@@ -6,6 +6,9 @@ from collections import defaultdict
 from decimal import Decimal
 
 from sql.operators import Concat
+
+from trytond.i18n import gettext
+from trytond.model.exceptions import ValidationError
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, If, Bool
 from trytond.cache import Cache, freeze
@@ -185,9 +188,11 @@ class Contract(metaclass=PoolMeta):
                 if dest_agent:
                     continue
                 if not create_missing:
-                    Agent.append_functional_error('agent_not_found', (
-                            new_broker.rec_name,
-                            Agent.format_hash(dict(src_agent.get_hash()))))
+                    raise ValidationError(gettext(
+                            'commission_insurance.msg_agent_not_found',
+                            broker=new_broker.rec_name,
+                            agent=Agent.format_hash(
+                                dict(src_agent.get_hash()))))
                     continue
                 to_create.append(src_agent)
         if to_create:

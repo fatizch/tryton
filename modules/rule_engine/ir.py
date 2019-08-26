@@ -21,7 +21,7 @@ class View(metaclass=PoolMeta):
         if type_ == 'form':
             widgets = rng.xpath(
                 '//ns:define/ns:optional/ns:attribute'
-                '[@name="widget"]/ns:choice',
+                '/ns:name[.="widget"]/following-sibling::ns:choice',
                 namespaces={'ns': 'http://relaxng.org/ns/structure/1.0'})[0]
             subelem = etree.SubElement(widgets,
                 '{http://relaxng.org/ns/structure/1.0}value')

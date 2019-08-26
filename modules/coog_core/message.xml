@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+<tryton>
+    <data group="1">
+        <record model="ir.message" id="msg_force_set_warning">
+            <field name="text">This will forcefully set the history for this model, a full database update will be required.</field>
+        </record>
+        <record model="ir.message" id="msg_force_unset_warning">
+            <field name="text">This will deactivate the history for this model, the history table will be kept in the database until it is manually removed.</field>
+        </record>
+        <record model="ir.message" id="msg_rename_dict_codes">
+            <field name="text">The following keys will be renamed in all existing data in the database, this may take some time:
+%(codes)s</field>
+        </record>
+        <record model="ir.message" id="msg_remove_dict_codes">
+            <field name="text">The following keys will be removed from all existing data in the database, this may take some time:
+%(codes)s</field>
+        </record>
+        <record model="ir.message" id="msg_no_language">
+            <field name="text">No language is selected, users won't have a language.</field>
+        </record>
+        <record model="ir.message" id="msg_missing_information">
+            <field name="text">Some informations %(missing)s are missing to notify an event: %(event)s.</field>
+        </record>
+        <record model="ir.message" id="msg_error_object_found">
+            <field name="text">Found no object or more than one object with following information %(object_)s.</field>
+        </record>
+        <record model="ir.message" id="msg_active_model_no_history">
+            <field name="text">The model %(model)s has no revisions.</field>
+        </record>
+        <record model="ir.message" id="msg_non_existing_test_case">
+            <field name="text">Test Case %(test)s uses the %(method)s method, which does not exist.</field>
+        </record>
+        <record model="ir.message" id="msg_async_job">
+            <field name="text">This task will be applied in the backgound. You can come back later and refresh the record to check the result.</field>
+        </record>
+        <record model="ir.message" id="msg_pending_task">
+            <field name="text">This record has a pending background task (technical id: %(id)s ).
+Please wait for this task to complete.</field>
+        </record>
+        <record model="ir.message" id="msg_pending_tasks">
+            <field name="text">The records below have pending background tasks:
+
+%(names)s
+
+Please wait for the tasks to complete.</field>
+        </record>
+        <record model="ir.message" id="msg_failed_task">
+            <field name="text">The last background task failed. See below for technical details:
+%(details)s</field>
+        </record>
+        <record model="ir.message" id="msg_export_not_found">
+            <field name="text">Cannot import : no object %(name)s with functionnal key : "%(key)s" were found.</field>
+        </record>
+        <record model="ir.message" id="msg_export_not_unique">
+            <field name="text">Cannot import : the following objects:
+%(names)s
+share the same functional key:
+"%(key)s".</field>
+        </record>
+        <record model="ir.message" id="msg_missing_export_configuration">
+            <field name="text">Can't find configuration for code %(code)s.</field>
+        </record>
+        <record model="ir.message" id="msg_no_object_found">
+            <field name="text">No object found.</field>
+        </record>
+        <record model="ir.message" id="msg_too_many_objects">
+            <field name="text">Too many possibles objects.</field>
+        </record>
+        <record model="ir.message" id="msg_no_file_selected">
+            <field name="text">No file selected.</field>
+        </record>
+    </data>
+</tryton>

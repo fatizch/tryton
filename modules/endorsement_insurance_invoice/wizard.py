@@ -1,6 +1,10 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 import datetime
+
+from trytond.exceptions import UserWarning
+from trytond.i18n import gettext
+from trytond.model.exceptions import ValidationError
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, Len, If
 from trytond.transaction import Transaction
@@ -120,22 +124,6 @@ class ChangeBillingInformation(EndorsementWizardStepMixin):
         'contract.billing_information.change.contract_displayer', None,
         'Other Contracts', states={
             'invisible': Len(Eval('other_contracts', [])) == 0})
-
-    @classmethod
-    def __setup__(cls):
-        super(ChangeBillingInformation, cls).__setup__()
-        cls._error_messages.update({
-                'no_matching_invoice_date': 'The contract %s does not have '
-                'an invoice starting on the %s. Select another date.',
-                'unauthorized_date': 'The date %s is not compatible with '
-                'the billing mode %s.',
-                'direct_debit_account_required': 'Please set a  new direct '
-                'debit account !',
-                'billing_mode_existing': 'Be careful, posterior billing mode '
-                'will be erased %s',
-                'payer_not_account_owner': 'Payer does not own this '
-                'account, do you want it to change ?',
-                })
 
     def get_other_contracts_party_clause(self):
         return ('subscriber', '=', self.subscriber.id)
@@ -292,6 +280,8 @@ class ChangeBillingInformation(EndorsementWizardStepMixin):
         return defaults
 
     def step_update(self):
+        pool = Pool()
+        Warning = pool.get('res.user.warning')
         endorsement = self.wizard.select_endorsement.endorsement
         self.set_account_owner()
         self.do_update_endorsement(endorsement)
@@ -304,12 +294,22 @@ class ChangeBillingInformation(EndorsementWizardStepMixin):
                         coog_string.translate_value(
                             billing_information, 'date')))
         if len(dates):
-            self.raise_user_warning(str(self),
-                'billing_mode_existing', '\n' + '\n'.join(dates))
+            key = str(self)
+            if Warning.check(key):
+                raise UserWarning(key, gettext(
+                        'endorsement_insurance_invoice'
+                        '.msg_billing_mode_existing',
+                        dates='\n' + '\n'.join(dates)))
         endorsement.save()
 
     def add_owner_to_account(self, account, owner):
-        self.raise_user_warning(account.number, 'payer_not_account_owner')
+        pool = Pool()
+        Warning = pool.get('res.user.warning')
+        key = account.number
+        if Warning.check(key):
+            raise UserWarning(key, gettext(
+                    'endorsement_insurance_invoice'
+                    '.msg_payer_not_account_owner'))
         account.owners = list(account.owners) + [owner.id]
         account.save()
 
@@ -348,7 +348,9 @@ class ChangeBillingInformation(EndorsementWizardStepMixin):
 
         if (not new_info.direct_debit_account and
                 new_info.billing_mode.direct_debit):
-            self.raise_user_error('direct_debit_account_required')
+            raise ValidationError(gettext(
+                    'endorsement_insurance_invoice'
+                    '.msg_direct_debit_account_required'))
 
         values = new_info._save_values
         values.pop('contract', None)
@@ -451,9 +453,11 @@ class ChangeBillingInformation(EndorsementWizardStepMixin):
             if not ContractInvoice.search([
                         ('contract', '=', select_screen.contract.id),
                         ('start', '=', select_screen.effective_date)]):
-                cls.append_functional_error('no_matching_invoice_date',
-                    (select_screen.contract.rec_name,
-                        select_screen.effective_date))
+                raise ValidationError(gettext(
+                        'endorsement_insurance_invoice'
+                        '.msg_no_matching_invoice_date',
+                        contract=select_screen.contract.rec_name,
+                        effective_date=select_screen.effective_date))
         rrule, until = billing_mode.get_rrule(last_modified_parameter.date
             or select_screen.contract.start_date
             or select_screen.contract.initial_start_date,
@@ -462,8 +466,12 @@ class ChangeBillingInformation(EndorsementWizardStepMixin):
                 datetime.datetime.min.time()) not in rrule:
             if select_screen.effective_date != (last_modified_parameter.date or
                     select_screen.contract.start_date):
-                cls.append_functional_error('unauthorized_date', (
-                        select_screen.effective_date, billing_mode.rec_name))
+                cls.append_functional_error(
+                    ValidationError(gettext(
+                            'endorsement_insurance_invoice'
+                            '.msg_unauthorized_date',
+                            date=select_screen.effective_date,
+                            mode=billing_mode.rec_name)))
 
 
 class ChangeDirectDebitAccount(ChangeBillingInformation):
@@ -476,12 +484,6 @@ class ChangeDirectDebitAccount(ChangeBillingInformation):
         super(ChangeDirectDebitAccount, cls).__setup__()
         cls.other_contracts.domain = [
             ('to_propagate', 'in', ('nothing', 'bank_account'))]
-        cls._error_messages.update({
-                'not_direct_debit': 'The selected contract is not paid '
-                'through direct debit !',
-                'no_past_date': 'The selected endorsement cannot take place '
-                'in the past !',
-                })
 
     @classmethod
     def state_view_name(cls):
@@ -510,15 +512,18 @@ class ChangeDirectDebitAccount(ChangeBillingInformation):
     @classmethod
     def check_before_start(cls, select_screen):
         super(ChangeDirectDebitAccount, cls).check_before_start(select_screen)
-        cls.pop_functional_error('no_matching_invoice_date')
-        cls.pop_functional_error('unauthorized_date')
+        cls.pop_functional_error(ValidationError)
         if not utils.get_good_version_at_date(
                 select_screen.contract, 'billing_informations',
                 select_screen.effective_date,
                 'date').direct_debit:
-            cls.append_functional_error('not_direct_debit')
+            cls.append_functional_error(
+                ValidationError(gettext(
+                        'endorsement_insurance_invoice.msg_not_direct_debit')))
         if select_screen.effective_date < utils.today():
-            cls.append_functional_error('no_past_date')
+            cls.append_functional_error(
+                ValidationError(gettext(
+                        'endorsement_insurance_invoice.msg_no_past_date')))
 
     @classmethod
     def must_skip_step(cls, data_dict):

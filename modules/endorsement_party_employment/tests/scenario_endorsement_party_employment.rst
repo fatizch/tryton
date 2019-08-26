@@ -20,9 +20,10 @@ Get Models::
     >>> EndorsementPartyEmployment = Model.get('endorsement.party.employment')
     >>> EndorsementPartyEmploymentVersion = Model.get('endorsement.party.employment.'
     ...     'version')
-    >>> EndorsementPartyEmploymentField = Model.get('endorsement.party.employment.field')
-    >>> EndorsementPartyEmploymentVersionField = Model.get('endorsement.party.employment'
-    ...     '.version.field')
+    >>> EndorsementPartyEmploymentField = Model.get('endorsement.party.'
+    ...     'employment.field')
+    >>> EndorsementPartyEmploymentVersionField = Model.get('endorsement.party.'
+    ...     'employment.version.field')
     >>> EndorsementDefinition = Model.get('endorsement.definition')
     >>> EndorsementDefinitionPartRelation = Model.get('endorsement.definition'
     ...     '-endorsement.part')

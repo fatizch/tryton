@@ -6,10 +6,12 @@ from sql.aggregate import Max
 from sql.functions import RowNumber
 
 from trytond import backend
+from trytond.i18n import gettext
 from trytond.pool import Pool
 from trytond.cache import Cache
 from trytond.rpc import RPC
 from trytond.model import Unique, Model
+from trytond.model.exceptions import ValidationError
 from trytond.model.fields.dict import TranslatedDict
 from trytond.pyson import Eval, Bool, In
 from trytond.transaction import Transaction
@@ -86,21 +88,10 @@ class ExtraData(model.CoogDictSchema, model.CoogSQL, model.CoogView,
             " [\"my_code\", \"<\", 12]]"
         t = cls.__table__()
         cls._sql_constraints += [
-            ('code_uniq', Unique(t, t.name), 'The code must be unique!'),
+            ('code_uniq', Unique(t, t.name), 'offered.msg_code_uniq'),
             ]
         cls.__rpc__.update({'get_default_value_selection': RPC(instantiate=0)})
-        cls._error_messages.update({
-                'invalid_value': 'Invalid value for key %s in field %s of %s',
-                'expected_value': 'Expected key %s to be set in field %s of '
-                '%s',
-                'too_many_recursion_levels': 'Too many recursion levels in "'
-                'sub data definition',
-                'missing_sub_data_def': 'Data %(sub_data)s is missing from '
-                'the configuration',
-                'multiple_parents_matches': 'Data %(data)s has multiple '
-                'parents with the current configuration',
-                })
-        cls._order = [('kind', 'ASC'), ('sequence_order', 'ASC')]
+        cls._order = [('kind', 'ASC'), ('string', 'ASC')]
         cls._extra_data_providers = getattr(cls, '_extra_data_providers', {})
 
     @classmethod
@@ -289,15 +280,20 @@ class ExtraData(model.CoogDictSchema, model.CoogSQL, model.CoogView,
                     continue
             key, = cls.search([('name', '=', k)])
             if not key.validate_value(v):
-                cls.append_functional_error('invalid_value', (trans_keys[k],
-                        coog_string.translate_label(instance, field_name),
-                        instance.get_rec_name(None)))
+                raise ValidationError(gettext(
+                        'offered.msg_invalid_value',
+                        key=trans_keys[k],
+                        field=coog_string.translate_label(instance, field_name),
+                        name=instance.get_rec_name(None)))
         if expected_values is not None:
             for k, v in expected_values.items():
                 # This is a serious error, as the user should have no way to
                 # manage it on his own
-                cls.raise_user_error('expected_value', (k, field_name,
-                        instance.get_rec_name(None)))
+                raise ValidationError(gettext(
+                        'offered.msg_expected_value',
+                        key=k,
+                        field=field_name,
+                        name=instance.get_rec_name(None)))
 
     @classmethod
     def get_extra_data_per_instances(cls, instances, var_name, lang=None):
@@ -352,13 +348,16 @@ class ExtraData(model.CoogDictSchema, model.CoogSQL, model.CoogView,
     def _check_extra_data_def_consistency(cls, given_set):
         def check_children(parent, found, depth):
             if depth == 0:
-                cls.raise_user_error('too_many_recursion_levels')
+                raise ValidationError(gettext(
+                        'offered.msg_too_many_recursion_levels'))
             if parent.name not in found:
-                cls.raise_user_error('missing_sub_data_def',
-                    {'sub_data': parent.string})
+                raise ValidationError(gettext(
+                        'offered.msg_missing_sub_data_def',
+                        sub_data=parent.string))
             if len({x.name for x in parent.parents} & found) > 1:
-                cls.raise_user_error('multiple_parents_matches',
-                    {'data': parent.string})
+                raise ValidationError(gettext(
+                        'offered.msg_multiple_parents_matches',
+                        data=parent.string))
             for key in parent.sub_datas:
                 check_children(key.child, found, depth - 1)
 
@@ -717,7 +716,8 @@ def with_extra_data(kinds, schema=None, field_name='extra_data',
             # Make sure the extra data are consistent
             value = value.copy()
             getattr(self, '_refresh_%s' % field_name)()
-            assert value == getattr(self, field_name, {})
+            assert value == getattr(self, field_name, {}), (value,
+                getattr(self, field_name, {}))
 
     setattr(WithExtraDataMixin, 'validate', validate_extra_data)
     setattr(WithExtraDataMixin, '_validate_%s' % field_name,

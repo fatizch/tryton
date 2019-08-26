@@ -6,6 +6,7 @@ this repository contains the full copyright notices and license terms. -->
         <!-- Rule access to handle partitioning by portfolio -->
         <!-- ######### Move Lines  -->
         <record model="ir.rule.group" id="rule_group_portfolio_move_line">
+            <field name="name">In user's portfolios</field>
             <field name="model" search="[('model', '=', 'account.move.line')]"/>
             <field name="perm_read" eval="True"/>
             <field name="perm_write" eval="True"/>

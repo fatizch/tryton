@@ -69,6 +69,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
         self.assertTrue(utils.get_module_path('coog_core'))
         self.assertTrue(utils.get_module_path('dfsfsfsdf') is None)
 
+    @unittest.skipIf(backend.name() == 'sqlite', "Does not work on SQLite")
     def test0025_clear_history(self):
         transaction = Transaction()
         cursor = transaction.connection.cursor()
@@ -277,15 +278,11 @@ class ModuleTestCase(test_framework.CoogTestCase):
         class PatchedView(self.View, model.FunctionalErrorMixIn):
             @classmethod
             def test_functional_error(cls):
-                cls.append_functional_error('error_1')
+                cls.append_functional_error(UserError('error_1'))
 
             @classmethod
             def test_blocking_error(cls):
-                cls.raise_user_error('error_2')
-
-            @classmethod
-            def test_registered_error(cls):
-                cls.append_functional_error('invalid_xml', ('dummy_view',))
+                raise UserError('error_2')
 
         def test_method(method_names):
             try:
@@ -304,8 +301,6 @@ class ModuleTestCase(test_framework.CoogTestCase):
                     'test_functional_error']), 'error_2')
         self.assertEqual(test_method(['test_functional_error',
                     'test_blocking_error']), 'error_1\nerror_2')
-        self.assertEqual(test_method(['test_registered_error']),
-            'Invalid XML for view "dummy_view".')
 
     def test0040revision_mixin(self):
         'Test RevisionMixin'
@@ -884,6 +879,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
         self.assertEqual('honey', test_instance.updater_field)
         self.assertEqual('honey', test_instance.real_field)
 
+    @unittest.skipIf(backend.name() == 'sqlite', "Does not work on SQLite")
     def test_0110_history_table(self):
         cursor = Transaction().connection.cursor()
 
@@ -1584,6 +1580,8 @@ class ModuleTestCase(test_framework.CoogTestCase):
             (child_3.left, child_3.right, child_3.master, child_3.parent),
             (1, 4, master_2, None))
 
+    @unittest.skipIf(
+        backend.name() == 'sqlite', "SQLite does not support JSONB")
     def test0400_dict_schema_updates(self):
         schema_1 = self.TestDictSchema(type_='char', name='test_1',
             string='Test 1')

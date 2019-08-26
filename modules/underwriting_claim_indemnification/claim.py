@@ -1,5 +1,8 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+from trytond.exceptions import UserWarning
+from trytond.i18n import gettext
+from trytond.model.exceptions import ValidationError
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval
 
@@ -14,16 +17,12 @@ __all__ = [
     ]
 
 
+class BlockedIndemnification(ValidationError):
+    pass
+
+
 class BenefitRule(metaclass=PoolMeta):
     __name__ = 'benefit.rule'
-
-    @classmethod
-    def __setup__(cls):
-        super(BenefitRule, cls).__setup__()
-        cls._error_messages.update({
-                'applied_reduction_decision': 'Applied %(reduction)s %% '
-                'reduction after underwriting',
-                })
 
     @classmethod
     def calculation_dates(cls, indemnification, start_date, end_date):
@@ -55,27 +54,18 @@ class BenefitRule(metaclass=PoolMeta):
                         continue
                     period[data] = service.currency.round(period[data]
                         * (1 - decision.reduction_percentage))
-                period['description'] = period.get('description', '') + \
-                    '\n' + self.raise_user_error('applied_reduction_decision',
-                        {'reduction': decision.reduction_percentage * 100},
-                        raise_exception=False).encode('utf-8') + '\n'
+                period['description'] = (period.get('description', '')
+                    + '\n' + gettext(
+                        'underwriting_claim_indemnification'
+                        '.msg_applied_reduction_decision',
+                        reduction=decision.reduction_percentage * 100
+                        ).encode('utf-8')
+                    + '\n')
         return periods
 
 
 class Service(metaclass=PoolMeta):
     __name__ = 'claim.service'
-
-    @classmethod
-    def __setup__(cls):
-        super(Service, cls).__setup__()
-        cls._error_messages.update({
-                'blocked_indemnifications': 'An underwriting decision '
-                'blocks indemnifications for this service starting '
-                '%(decision_date)s.',
-                'blocked_indemnifications_split': 'An underwriting decision '
-                'blocks indemnifications for this service starting '
-                '%(decision_date)s. The period you entered will be split.',
-                })
 
     def underwritings_at_date(self, start, end):
         for elem in self.underwritings:
@@ -102,9 +92,12 @@ class Service(metaclass=PoolMeta):
     def check_underwritings(self, start, end):
         blocking_decision = self.get_underwriting_blocking_decision(start, end)
         if blocking_decision is not None:
-            self.append_functional_error('blocked_indemnifications',
-                {'decision_date': coog_string.translate_value(
-                        blocking_decision, 'effective_decision_date')})
+            self.append_functional_error(
+                BlockedIndemnification(gettext(
+                        'underwriting_claim_indemnification'
+                        '.msg_blocked_indemnifications',
+                        decision_date=coog_string.translate_value(
+                            blocking_decision, 'effective_decision_date'))))
 
     def get_underwriting_blocking_decision(self, start, end):
         for elem in self.underwritings_at_date(start, end):
@@ -185,6 +178,8 @@ class CreateIndemnification(model.FunctionalErrorMixIn, metaclass=PoolMeta):
     __name__ = 'claim.create_indemnification'
 
     def check_input(self):
+        pool = Pool()
+        Warning = pool.get('res.user.warning')
         result = super(CreateIndemnification, self).check_input()
         input_start_date = self.definition.start_date
         input_end_date = self.definition.end_date
@@ -193,16 +188,18 @@ class CreateIndemnification(model.FunctionalErrorMixIn, metaclass=PoolMeta):
         with model.error_manager():
             service.check_underwritings(input_start_date,
                 input_end_date)
-            if self.pop_functional_error('blocked_indemnifications'):
+            if self.pop_functional_error(BlockedIndemnification):
                 to_warn = service.get_underwriting_blocking_decision(
                     input_start_date, input_end_date)
         # Exit the manager to raise other errors
         if to_warn:
-            service.raise_user_warning(
-                'blocked_indemnification_split_warning_%s' %
-                str(service.id), 'blocked_indemnifications_split', (
-                    {'decision_date': coog_string.translate_value(to_warn,
-                            'effective_decision_date')}))
+            key = 'blocked_indemnification_split_warning_%s' % str(service.id)
+            if Warning.check(key):
+                raise UserWarning(key, gettext(
+                        'underwriting_claim_indemnification'
+                        '.msg_blocked_indemnifications_split',
+                        decision_date=coog_string.translate_value(
+                            to_warn, 'effective_decision_date')))
         return result
 
     def update_indemnification(self, indemnification):

@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<tryton>
+    <data group="1">
+        <record model="ir.message" id="msg_social_security_dependent_party">
+            <field name="text">This party is social security dependent:
+%(dependent_party)s
+You cannot modify its health complement, change social security insured's main health complement.</field>
+        </record>
+        <record model="ir.message" id="msg_invalid_social_security_relation">
+            <field name="text">%(relation)s can't be both a social security insured and dependent.</field>
+        </record>
+        <record model="ir.message" id="msg_wrong_insurance_fund_number">
+            <field name="text">Wrong Insurance Fund Number: %(number)s.</field>
+        </record>
+        <record model="ir.message" id="msg_hc_system_not_defined">
+            <field name="text">HC system must be defined.</field>
+        </record>
+        <record model="ir.message" id="msg_ssn_required_covered">
+            <field name="text">SSN is required for covered element %(covered)s.</field>
+        </record>
+        <record model="ir.message" id="msg_ssn_required_relation">
+            <field name="text">SSN is required for relation %(relation_to)s.</field>
+        </record>
+    </data>
+</tryton>

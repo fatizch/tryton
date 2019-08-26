@@ -2,50 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:contract.questionnaire.result:"
-msgid "Commercial Product"
-msgstr "Produit commercial"
-
-msgctxt "error:contract.questionnaire.result:"
-msgid "Description"
-msgstr "Description"
-
-msgctxt "error:contract.questionnaire.result:"
-msgid "Not Selected"
-msgstr "Non Sélectionné"
-
-msgctxt "error:contract.questionnaire.result:"
-msgid "Product"
-msgstr "Produit"
-
-msgctxt "error:contract.questionnaire.result:"
-msgid "Score"
-msgstr "Score"
-
-msgctxt "error:contract.questionnaire.result:"
-msgid "Selected"
-msgstr "Sélectionné"
-
-msgctxt "error:questionnaire.part:"
-msgid "Invalid output for rule %(rule)s"
-msgstr "Format de retour invalide pour la règle %(rule)s"
-
-msgctxt "error:questionnaire.run:"
-msgid "A choice must be made before going on"
-msgstr "Un choix doit être fait pour pouvoir continuer"
-
-msgctxt "error:questionnaire.run:"
-msgid "A choice must be made for part %(part)s"
-msgstr "Un choix est obligatoire pour l'élément %(part)s"
-
-msgctxt "error:questionnaire.run:"
-msgid "No questionnaires configured"
-msgstr "Aucun questionnaire n'a été paramétré"
-
-msgctxt "error:questionnaire:"
-msgid "The code must be unique!"
-msgstr "Le code doit être unique !"
-
 msgctxt "field:contract,questionnaires:"
 msgid "Questionnaires"
 msgstr "Questionnaires"
@@ -700,6 +656,58 @@ msgstr "Remplir un questionnaire"
 msgctxt "model:ir.action,name:act_relate_contract_questionnaire"
 msgid "Questionnaires"
 msgstr "Questionnaires"
+
+msgctxt "model:ir.message,text:msg_code_uniq"
+msgid "The code must be unique."
+msgstr "Le code doit être unique !"
+
+msgctxt "model:ir.message,text:msg_commercial_product"
+msgid "Commercial Product"
+msgstr "Produit commercial"
+
+msgctxt "model:ir.message,text:msg_description"
+msgid "Description"
+msgstr "Description"
+
+msgctxt "model:ir.message,text:msg_invalid_rule_output"
+msgid "Invalid output for rule %(rule)s"
+msgstr "Format de retour invalide pour la règle %(rule)s"
+
+msgctxt "model:ir.message,text:msg_mandatory_choice"
+msgid "A choice must be made for part %(part)s"
+msgstr "Un choix est obligatoire pour l'élément %(part)s"
+
+msgctxt "model:ir.message,text:msg_no_questionnaires"
+msgid "No questionnaires configured"
+msgstr "Aucun questionnaire n'a été paramétré"
+
+msgctxt "model:ir.message,text:msg_not_selected"
+msgid "Not Selected"
+msgstr "Non Sélectionné"
+
+msgctxt "model:ir.message,text:msg_nothing_selected"
+msgid "A choice must be made before going on"
+msgstr "Un choix doit être fait pour pouvoir continuer"
+
+msgctxt "model:ir.message,text:msg_product"
+msgid "Product"
+msgstr "Produit"
+
+msgctxt "model:ir.message,text:msg_score"
+msgid "Score"
+msgstr "Score"
+
+msgctxt "model:ir.message,text:msg_selected"
+msgid "Selected"
+msgstr "Sélectionné"
+
+msgctxt "model:ir.message,text:msg_wrong_products_rule"
+msgid ""
+"The return value of the questionnaire rule must be a dictionary with "
+"products code as keys."
+msgstr ""
+"La valeur retournée de la règle de questionnaire doit être un dictionnaire "
+"avec les code des produits comme clés."
 
 msgctxt "model:ir.ui.menu,name:menu_contract_questionnaire"
 msgid "Start Questionnaire"

@@ -5,7 +5,10 @@ from sql.aggregate import Min
 from sql.conditionals import Coalesce
 from sql.functions import RowNumber
 
+from trytond.i18n import gettext
 from trytond.pool import Pool
+from trytond.model import Unique
+from trytond.model.exceptions import ValidationError
 from trytond.pyson import Eval
 from trytond.transaction import Transaction
 from trytond import backend
@@ -99,10 +102,10 @@ class Product(model.CodedMixin, model.CoogView, Printable,
     def __setup__(cls):
         super(Product, cls).__setup__()
         cls._export_binary_fields.add('report_style_template')
-        cls._error_messages.update({
-                'missing_contract_extra_data': 'The following contract extra'
-                'data should be set on the product: %s',
-                })
+        t = cls.__table__()
+        cls._sql_constraints += [
+            ('code_uniq', Unique(t, t.code), 'offered.msg_code_uniq'),
+            ]
         cls.extra_data.help = 'Extra data to characterize product. These '\
             'extra data are available in rule engine'
         cls.extra_data_def.help = 'List of extra data that will be requested '\
@@ -147,8 +150,9 @@ class Product(model.CodedMixin, model.CoogView, Printable,
                 if extra_data.kind == 'contract')
             remaining = from_option - set(instance.extra_data_def)
             if remaining:
-                instance.raise_user_error('missing_contract_extra_data',
-                    (', '.join((extra_data.string
+                raise ValidationError(gettext(
+                        'offered.msg_missing_contract_extra_data',
+                        product=', '.join((extra_data.string
                                 for extra_data in remaining))))
 
     def getter_icon_name(self, name):

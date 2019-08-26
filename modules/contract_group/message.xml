@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<tryton>
+    <data group="1">
+        <record model="ir.message" id="msg_non_covered_period">
+            <field name="text">There is a non covered period, source contract ends on the %(source_end)s when target starts on %(target_start)s.</field>
+        </record>
+        <record model="ir.message" id="msg_covered_element_displayer">
+            <field name="text">%(element)s (%(number)i covered elements)</field>
+        </record>
+    </data>
+</tryton>

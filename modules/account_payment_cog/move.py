@@ -8,6 +8,9 @@ from sql.operators import Not
 from sql.functions import Abs
 from decimal import Decimal
 
+from trytond.exceptions import UserWarning
+from trytond.i18n import gettext
+from trytond.model.exceptions import ValidationError
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, Bool, PYSONEncoder, Date, If
 from trytond.wizard import StateView, Button, StateTransition, StateAction
@@ -82,9 +85,9 @@ class MoveLine(metaclass=PoolMeta):
     __name__ = 'account.move.line'
 
     payment_date = fields.Date('Payment Date',
-        states={'invisible': (Eval('account_kind') != 'receivable') &
-            (Eval('account_kind') != 'payable')},
-        depends=['account_kind'])
+        states={'invisible': (~Eval('account.type.receivable')) &
+            (~Eval('account.type.payable'))},
+        depends=['account'])
 
     @classmethod
     def __setup__(cls):
@@ -106,11 +109,12 @@ class MoveLine(metaclass=PoolMeta):
         amount_expr = cls._search_payment_amount_amount(tables)
 
         move_line = tables['move_line']
-        account = tables['account']
+        account_type = tables['account_type']
 
         result = {x.id: Decimal(0) for x in instances}
         cursor.execute(*join.select(move_line.id, amount_expr,
-                where=account.kind.in_(['payable', 'receivable'])
+                where=((account_type.payable == True)
+                    | (account_type.receivable == True))
                 & move_line.id.in_([x.id for x in instances]),
                 group_by=group_expr))
 
@@ -133,9 +137,10 @@ class MoveLine(metaclass=PoolMeta):
         amount_expr = cls._search_payment_amount_amount(tables)
 
         move_line = tables['move_line']
-        account = tables['account']
+        account_type = tables['account_type']
         query = join.select(move_line.id,
-            where=account.kind.in_(['payable', 'receivable']),
+            where=((account_type.payable == True)
+                | (account_type.receivable == True)),
             group_by=group_expr,
             having=Operator(amount_expr, value))
         return [('id', 'in', query)]
@@ -147,6 +152,7 @@ class MoveLine(metaclass=PoolMeta):
             'move_line': cls.__table__(),
             'payment': pool.get('account.payment').__table__(),
             'account': pool.get('account.account').__table__(),
+            'account_type': pool.get('account.account.type').__table__(),
             }
 
     @classmethod
@@ -154,11 +160,13 @@ class MoveLine(metaclass=PoolMeta):
         move_line = tables['move_line']
         payment = tables['payment']
         account = tables['account']
+        account_type = tables['account_type']
 
         return move_line.join(payment, type_='LEFT',
             condition=((move_line.id == payment.line)
                 & (payment.state != 'failed'))
-            ).join(account, condition=move_line.account == account.id)
+            ).join(account, condition=move_line.account == account.id
+                ).join(account_type, condition=account.type == account_type.id)
 
     @classmethod
     def _search_payment_amount_group_by(cls, tables):
@@ -242,7 +250,8 @@ class MoveLine(metaclass=PoolMeta):
     @classmethod
     def calculate_amount(cls, lines, ignore_unpaid_lines=False):
         if len({l.account for l in lines}) > 1:
-            cls.raise_user_error('incompatible_lines')
+            raise ValidationError(gettext(
+                    'account_payment_cog.msg_incompatible_lines'))
         unpaid_amount = 0
         if not ignore_unpaid_lines:
             _, unpaid_amount = cls.outstanding_amount(lines)
@@ -314,7 +323,7 @@ class MoveLine(metaclass=PoolMeta):
     @classmethod
     def _process_payment_key(cls, line):
         return (line.party or -1, line.get_payment_journal() or -1,
-            line.account.kind or '')
+            line.account)
 
     @classmethod
     def create_payments(cls, lines):
@@ -463,7 +472,10 @@ class PaymentCreationStart(model.CoogView, ModelCurrency):
         if not self.party:
             return []
         accounts = [x.id for x in Account.search(
-                [('kind', 'in', ('receivable', 'payable'))])]
+                ['OR',
+                    ('type.receivable', '=', True),
+                    ('type.payable', '=', True),
+                    ])]
         if self.kind == 'receivable':
             sign_clause = ['OR',
                     [('credit', '<', 0)],
@@ -491,7 +503,8 @@ class PaymentCreationStart(model.CoogView, ModelCurrency):
     def refresh_total_amount(self):
         Line = Pool().get('account.move.line')
         if len({l.account for l in self.lines_to_pay}) > 1:
-            self.raise_user_error('incompatible_lines')
+            raise ValidationError(gettext(
+                    'account_payment_cog.msg_incompatible_lines'))
         self.unpaid_outstanding_lines, outstanding_1 = \
             Line.outstanding_amount(self.lines_to_pay)
         if self.ignore_unpaid_lines:
@@ -541,22 +554,6 @@ class PaymentCreation(model.CoogWizard):
     created_payments = StateAction('account_payment.act_payment_form')
 
     @classmethod
-    def __setup__(cls):
-        super(PaymentCreation, cls).__setup__()
-        cls._error_messages.update({
-                'incompatible_lines': 'Selected lines are incompatible. Some '
-                'are payable lines some are receivable.',
-                'incompatible_lines_with_kind': 'Selected lines are '
-                'incompatible with selected kind',
-                'updating_payment_date': 'The payment date for all payments '
-                'will be updated to %(date)s',
-                'different_payment_journal': 'The allowed payment journals '
-                'for the selected lines are different and do not allow '
-                'them to be processed at the same time.',
-                'nothing_to_pay': 'Nothing to pay',
-                })
-
-    @classmethod
     def get_possible_journals(cls, lines, kind=None):
         '''
         There is no payment journal restriction from any configuration
@@ -576,7 +573,10 @@ class PaymentCreation(model.CoogWizard):
         elif model == 'party.party':
             active_id = Transaction().context.get('active_id', None)
             accounts = [x.id for x in Account.search(
-                    [('kind', 'in', ('receivable', 'payable'))])]
+                    ['OR',
+                        ('type.receivable', '=', True),
+                        ('type.payable', '=', True),
+                        ])]
             return Line.search([
                     ('account', 'in', accounts),
                     ('party', '=', active_id),
@@ -595,7 +595,8 @@ class PaymentCreation(model.CoogWizard):
         Line = Pool().get('account.move.line')
         payment_journals = Line.get_configuration_journals_from_lines(lines)
         if cls.any_journal_not_allowed(lines, payment_journals):
-            cls.raise_user_error('different_payment_journal')
+            raise ValidationError(gettext(
+                    'account_payment_cog.msg_different_payment_journal'))
         return payment_journals
 
     @classmethod
@@ -613,7 +614,8 @@ class PaymentCreation(model.CoogWizard):
         lines = self.get_move_lines_from_active_model()
         if not lines:
             if model in ('account.invoice', 'party.party') and not lines:
-                self.raise_user_error('nothing_to_pay')
+                raise ValidationError(gettext(
+                        'account_payment_cog.msg_nothing_to_pay'))
             return {}
         possible_journals = self.get_possible_journals(lines)
         Line = Pool().get('account.move.line')
@@ -642,15 +644,18 @@ class PaymentCreation(model.CoogWizard):
         pool = Pool()
         MoveLine = pool.get('account.move.line')
         Payment = pool.get('account.payment')
+        Warning = pool.get('res.user.warning')
 
         payment_journals = MoveLine.get_configuration_journals_from_lines(
             self.start.lines_to_pay)
         if self.any_journal_not_allowed(self.start.lines_to_pay,
                 payment_journals):
-            self.raise_user_error('different_payment_journal')
+            raise ValidationError(gettext(
+                    'account_payment_cog.msg_different_payment_journal'))
         kind = MoveLine.get_kind(self.start.lines_to_pay)
         if kind != self.start.kind:
-            self.raise_user_error('incompatible_lines_with_kind')
+            raise ValidationError(gettext(
+                    'account_payment_cog.msg_incompatible_lines_with_kind'))
         payment_date = self.start.payment_date or utils.today()
 
         # In the case we mix lines from different kind, we should not update
@@ -658,9 +663,11 @@ class PaymentCreation(model.CoogWizard):
         lines_to_update = [l for l in self.start.lines_to_pay
             if MoveLine.get_kind([l]) == kind]
         if any(x.payment_date != payment_date for x in lines_to_update):
-            self.raise_user_warning('updating_payment_date_%s' %
-                str(lines_to_update[0]), 'updating_payment_date',
-                {'date': str(payment_date)})
+            key = 'updating_payment_date_%s' % str(lines_to_update[0])
+            if Warning.check(key):
+                raise UserWarning(key, gettext(
+                        'account_payment_cog.msg_updating_payment_date',
+                        date=str(payment_date)))
             MoveLine.write(lines_to_update, {'payment_date': payment_date})
 
         payments = MoveLine.init_payments(self.start.lines_to_pay,

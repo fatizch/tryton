@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<tryton>
+    <data group="1">
+        <record model="ir.message" id="msg_already_renewed">
+            <field name="text">Contract %(contract_number)s has already been renewed, with new start date at %(start_date)s . Are you sure you want to prevent renewal after %(end_date)s?</field>
+        </record>
+        <record model="ir.message" id="msg_renew_impossible">
+            <field name="text">Contract %(contract_number)s has already a planned termination. It can't be renewed.</field>
+        </record>
+        <record model="ir.message" id="msg_deferment_after_renew">
+            <field name="text">The contract %(contract)s has been renewed, the deferment will override the contract start date.</field>
+        </record>
+    </data>
+</tryton>

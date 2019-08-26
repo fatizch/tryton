@@ -2,10 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "selection:account.journal,type:"
-msgid "Claim Insurer Slip"
-msgstr "Bordereau assureur de prestation"
-
 msgctxt "field:account.invoice.line,invoice_business_kind:"
 msgid "Invoice Business Kind"
 msgstr "Type métier de la quittance"
@@ -18,6 +14,10 @@ msgctxt "model:ir.action,name:act_invoice_claim_insurer_invoice_form"
 msgid "Claim Insurer Invoices"
 msgstr "Bordereaux assureur prestation"
 
+msgctxt "model:ir.message,text:msg_claim_insurer_invoice"
+msgid "Claim Insurer Invoice"
+msgstr "Bordereau assureur prestation"
+
 msgctxt "model:ir.ui.menu,name:menu_invoice_claim_insurer_invoice"
 msgid "Claim Insurer Invoices"
 msgstr "Bordereaux assureur prestation"
@@ -29,6 +29,10 @@ msgstr "Bordereau assureur prestation"
 msgctxt "selection:account.invoice.create.insurer_slip.ask,notice_kind:"
 msgid "Benefit"
 msgstr "Prestation"
+
+msgctxt "selection:account.journal,type:"
+msgid "Claim Insurer Slip"
+msgstr "Bordereau assureur de prestation"
 
 msgctxt "view:account.invoice.line:"
 msgid "Benefits"

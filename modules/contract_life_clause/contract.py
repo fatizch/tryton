@@ -2,6 +2,8 @@
 # this repository contains the full copyright notices and license terms.
 from decimal import Decimal
 
+from trytond.i18n import gettext
+from trytond.model.exceptions import ValidationError
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, Bool, Or
 
@@ -86,16 +88,6 @@ class ContractOption(metaclass=PoolMeta):
         depends=['has_beneficiary_clause', 'contract_status'])
 
     @classmethod
-    def __setup__(cls):
-        super(ContractOption, cls).__setup__()
-        cls._error_messages.update({
-                'invalid_beneficiary_shares': 'Total share for clause %s is '
-                'invalid',
-                'mix_share_and_none': 'Either all share must be completed or '
-                'none',
-                })
-
-    @classmethod
     def view_attributes(cls):
         return super(ContractOption, cls).view_attributes() + [(
                 '/form/notebook/page[@name="beneficiary_clause"]',
@@ -152,12 +144,14 @@ class ContractOption(metaclass=PoolMeta):
         if any(getattr(x, 'share', None) is None for x in self.beneficiaries):
             if [x.share for x in self.beneficiaries
                     if getattr(x, 'share', None)]:
-                self.raise_user_error('mix_share_and_none')
+                raise ValidationError(gettext(
+                        'contract_life_clause.msg_mix_share_and_none'))
             else:
                 return
         if sum(x.share for x in self.beneficiaries) != Decimal(1):
-            self.raise_user_error('invalid_beneficiary_shares',
-                (self.rec_name))
+            raise ValidationError(gettext(
+                    'contract_life_clause.msg_invalid_beneficiary_shares',
+                    name=self.rec_name))
 
     @fields.depends('beneficiary_clause')
     def on_change_with_customized_beneficiary_clause(self):

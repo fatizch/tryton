@@ -1,6 +1,9 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 from os.path import join as pjoin
+
+from trytond.i18n import gettext
+from trytond.model.exceptions import ValidationError
 from trytond.pool import Pool, PoolMeta
 from trytond.wizard import Wizard, StateView, StateTransition, Button
 
@@ -28,16 +31,9 @@ class ClaimPasrauUploadWizard(Wizard):
         'claim_pasrau.import_file_summary_form_view', [
             Button('OK', 'end', 'tryton-ok', default=True)])
 
-    @classmethod
-    def __setup__(cls):
-        super(ClaimPasrauUploadWizard, cls).__setup__()
-        cls._error_messages.update({
-                'invalid_file': 'The file is not valid',
-                })
-
     def transition_process_pasrau_file(self):
         if not self.file_selection.file:
-            self.raise_user_error('invalid_file')
+            raise ValidationError(gettext('claim_pasrau.msg_invalid_file'))
         filepath = pjoin('/tmp', self.file_selection.file_name)
         tmp_file = open(filepath, 'w')
         tmp_file.write(self.file_selection.file.decode('utf-8'))

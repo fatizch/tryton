@@ -2,44 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:contract:"
-msgid "SSN is required for covered element %s"
-msgstr "Le NIR est requis pour les personnes couvertes %s"
-
-msgctxt "error:health.care_system:"
-msgid "The code must be unique!"
-msgstr "Le code doit être unique !"
-
-msgctxt "error:health.insurance_fund:"
-msgid "The code must be unique!"
-msgstr "Le code doit être unique !"
-
-msgctxt "error:health.party_complement:"
-msgid "HC system must be defined"
-msgstr "Le régime doit être renseigné"
-
-msgctxt "error:health.party_complement:"
-msgid "Wrong Insurance Fund Number: %s"
-msgstr "Numéro de fond invalide : %s"
-
-msgctxt "error:party.party:"
-msgid ""
-"This party is social security dependent:\n"
-"%(dependent_party)s\n"
-"You cannot modify its health complement, change social security insured's main health complement"
-msgstr ""
-"Ce tiers est ayant droit:\n"
-"%(dependent_party)s\n"
-"Vous ne pouvez changer son Régime Obligatoire Santé, veuillez changer le Régime Obligatoire Santé de l'assuré social"
-
-msgctxt "error:party.relation:"
-msgid "%s can't be both a social security insured and dependent"
-msgstr "%s ne peut être à la fois assuré social et ayant droit"
-
-msgctxt "error:party.relation:"
-msgid "The SSN is required for %s"
-msgstr "Le numéro NIR est requis pour %s"
-
 msgctxt "field:health.care_system,code:"
 msgid "Code"
 msgstr "Code"
@@ -229,6 +191,36 @@ msgstr "Régimes"
 msgctxt "model:ir.action,name:act_insurance_fund_form"
 msgid "Insurance Funds"
 msgstr "Caisses d'Affiliation"
+
+msgctxt "model:ir.message,text:msg_hc_system_not_defined"
+msgid "HC system must be defined."
+msgstr "Le régime doit être renseigné."
+
+msgctxt "model:ir.message,text:msg_invalid_social_security_relation"
+msgid "%(relation)s can't be both a social security insured and dependent."
+msgstr "%(relation)s ne peut être à la fois assuré social et ayant droit"
+
+msgctxt "model:ir.message,text:msg_social_security_dependent_party"
+msgid ""
+"This party is social security dependent:\n"
+"%(dependent_party)s\n"
+"You cannot modify its health complement, change social security insured's main health complement."
+msgstr ""
+"Ce tiers est ayant droit:\n"
+"%(dependent_party)s\n"
+"Vous ne pouvez changer son Régime Obligatoire Santé, veuillez changer le Régime Obligatoire Santé de l'assuré social."
+
+msgctxt "model:ir.message,text:msg_ssn_required_covered"
+msgid "SSN is required for covered element %(covered)s."
+msgstr "Le NIR est requis pour les personnes couvertes %(covered)s"
+
+msgctxt "model:ir.message,text:msg_ssn_required_relation"
+msgid "SSN is required for relation %(relation_to)s."
+msgstr "Le NIR est requis pour la relation %(relation_to)s."
+
+msgctxt "model:ir.message,text:msg_wrong_insurance_fund_number"
+msgid "Wrong Insurance Fund Number: %(number)s."
+msgstr "Numéro de fond invalide : %(number)s"
 
 msgctxt "model:ir.test_case.instance,name:fund_test_case"
 msgid "Fund Test Case"

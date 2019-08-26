@@ -1,5 +1,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+from trytond.i18n import gettext
+from trytond.model.exceptions import ValidationError
 from trytond.pyson import Eval, Bool
 from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
@@ -68,15 +70,6 @@ class Product(CompanyMultiValueMixin, metaclass=PoolMeta):
             table.drop_column('quote_number_sequence', exception=True)
 
     @classmethod
-    def __setup__(cls):
-        super(Product, cls).__setup__()
-        cls._error_messages.update({
-                'data_rule_misconfigured': 'The field %(field)s on contracts '
-                'cannot be set by a data rule. Please fix the contract data '
-                'rule on product %(product)s',
-                })
-
-    @classmethod
     def _export_light(cls):
         return (super(Product, cls)._export_light() |
             set(['quote_number_sequences']))
@@ -101,8 +94,9 @@ class Product(CompanyMultiValueMixin, metaclass=PoolMeta):
         auth_fields = rule._get_authorized_fields()
         for k, v in list(result.items()):
             if k not in auth_fields:
-                self.raise_user_error('data_rule_misconfigured',
-                    {'field': k, 'product': self.name})
+                raise ValidationError(gettext(
+                        'contract.msg_data_rule_misconfigured',
+                        field=k, product=self.name))
             setattr(contract, k, v)
         return res
 

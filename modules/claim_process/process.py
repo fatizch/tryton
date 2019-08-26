@@ -1,5 +1,8 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+from trytond.exceptions import UserWarning
+from trytond.i18n import gettext
+from trytond.model.exceptions import RequiredValidationError, ValidationError
 from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval, If, Bool
 from trytond.transaction import Transaction
@@ -217,15 +220,6 @@ class ClaimDeclare(ProcessFinder):
                 cls.process_parameters.buttons]:
             cls.process_parameters.buttons.insert(
                 1, Button('Close Claims', 'close_claim', 'tryton-delete'))
-        cls._error_messages.update({
-                'no_claim_selected':
-                'You must select at least one open claim.',
-                'open_claims':
-                'There are claim\'s still open.',
-                'declare_multiple_selected':
-                'You can only reopen one claim at a time.',
-                'missing_loss_desc': 'Missing Loss Description',
-                })
 
     @classmethod
     def get_parameters_model(cls):
@@ -260,6 +254,8 @@ class ClaimDeclare(ProcessFinder):
         return {}
 
     def transition_confirm_declaration(self):
+        pool = Pool()
+        Warning = pool.get('res.user.warning')
         open_claims = []
         selected_claims = []
         for claim in self.process_parameters.claims:
@@ -268,9 +264,13 @@ class ClaimDeclare(ProcessFinder):
             if claim.select is True:
                 selected_claims.append(claim)
         if len(selected_claims) > 1:
-            self.raise_user_error('declare_multiple_selected')
+            raise ValidationError(gettext(
+                    'claim_process.msg_declare_multiple_selected'))
         if open_claims and len(open_claims) != len(selected_claims):
-            self.raise_user_warning(str(open_claims), 'open_claims')
+            key = str(open_claims)
+            if Warning.check(key):
+                raise UserWarning(key, gettext(
+                        'claim_process.msg_open_claims'))
         return 'action'
 
     def do_close_claim(self, action):
@@ -279,7 +279,8 @@ class ClaimDeclare(ProcessFinder):
             if claim.select and claim.claim.status in ('open', 'reopened'):
                 selected_claims.append(claim)
         if not selected_claims:
-            self.raise_user_error('no_claim_selected')
+            raise RequiredValidationError(gettext(
+                    'claim_process.msg_no_claim_selected'))
         return action, {
             'extra_context': {
                 'last_party': self.process_parameters.party.id,

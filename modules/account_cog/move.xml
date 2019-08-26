@@ -35,7 +35,7 @@ this repository contains the full copyright notices and license terms. -->
         <record model="ir.action.act_window" id="act_move_line_party_balance">
             <field name="name">Party Balance</field>
             <field name="res_model">account.move.line</field>
-            <field name="domain" eval="[('party', '=', Eval('active_id')), ('account.kind', 'in', ['payable', 'receivable'])]" pyson="1"/>
+            <field name="domain" eval="[('party', '=', Eval('active_id')), ['OR', ('account.type.payable', '=', True), ('account.type.receivable', '=', True)]]" pyson="1"/>
             <field name="search_value" eval="[('is_reconciled', '=', False)]" pyson="1"/>
             <field name="order" eval="[('post_date', 'DESC'), ('create_date', 'DESC'),
                 ('date', 'DESC')]" pyson="1"/>
@@ -97,7 +97,7 @@ this repository contains the full copyright notices and license terms. -->
         <!-- ######################################## -->
         <!-- Filter out draft lines -->
         <record model="ir.action.act_window" id="account.act_move_line_payable_receivable">
-            <field name="domain" eval="[('state', '!=', 'draft'), ('party', 'in', Eval('active_ids')), ('account.kind', 'in', ['payable', 'receivable'])]" pyson="1"/>
+            <field name="domain" eval="[('state', '!=', 'draft'), ('party', 'in', Eval('active_ids')), ['OR', ('accounttype.payable', '=', True), ('account.type.receivable', '=', True)]]" pyson="1"/>
         </record>
         <!-- ######################################## -->
         <!-- # Reconcile Wizard# -->

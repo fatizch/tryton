@@ -2,14 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:task.select:"
-msgid "No task found"
-msgstr "Pas de tâche trouvée"
-
-msgctxt "error:task.select:"
-msgid "No task has been selected."
-msgstr "Pas de Tâche Sélectionnée"
-
 msgctxt "field:process-process.step,teams:"
 msgid "Teams"
 msgstr "Equipes"
@@ -306,6 +298,10 @@ msgctxt ""
 "model:ir.action.act_window.domain,name:act_process_log_domain_my_teams"
 msgid "My Teams"
 msgstr "Mes équipes"
+
+msgctxt "model:ir.message,text:msg_no_task_selected"
+msgid "No task has been selected."
+msgstr "Pas de Tâche Sélectionnée."
 
 msgctxt "model:ir.ui.menu,name:menu_launch_existing_tasks"
 msgid "Waiting Tasks"

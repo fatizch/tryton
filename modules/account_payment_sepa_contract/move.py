@@ -31,10 +31,10 @@ class MoveLine(metaclass=PoolMeta):
                 billing_info = self.contract.billing_information \
                     if self.contract else None
                 mandate = billing_info.sepa_mandate if billing_info else None
-        if (not mandate and self.origin and
-                isinstance(self.origin, Invoice) and
-                self.origin.sepa_mandate):
-            mandate = self.origin.sepa_mandate
+        if (not mandate and self.move_origin and
+                isinstance(self.move_origin, Invoice) and
+                self.move_origin.sepa_mandate):
+            mandate = self.move_origin.sepa_mandate
         if mandate:
             payment['sepa_mandate'] = mandate.id
             payment['bank_account'] = mandate.account_number.account.id

@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<tryton>
+    <data group="1">
+        <record model="ir.message" id="msg_bad_place_holders">
+            <field name="text">Bad placeholders in SEPA Sequence. The following fields do not exist on Party model:
+	%(names)s
+Please check the sequence's prefix and suffix.</field>
+        </record>
+        <record model="ir.message" id="msg_origin_must_be_same">
+            <field name="text">All SEPA mandates with identification "%(identification)s" must have the same origin.</field>
+        </record>
+        <record model="ir.message" id="msg_payment_with_mandate">
+            <field name="text">Cancelling mandate is not allowed because there is the payment %(payment)s which needs it.</field>
+        </record>
+        <record model="ir.message" id="msg_direct_debit_payment">
+            <field name="text">Direct Debit Payment of</field>
+        </record>
+        <record model="ir.message" id="msg_direct_debit_disbursement">
+            <field name="text">Direct Debit Disbursement of</field>
+        </record>
+        <record model="ir.message" id="msg_missing_bank_acount">
+            <field name="text">Missing bank account for "%(party)s" at "%(date)s".</field>
+        </record>
+        <record model="ir.message" id="msg_bad_bank_account">
+            <field name="text">The selected bank account %(bank_account)s is different than that of the SEPA mandate %(sepa_bank_account)s.</field>
+        </record>
+    </data>
+</tryton>

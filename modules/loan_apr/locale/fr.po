@@ -2,10 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:loan.average_premium_rate.display:"
-msgid "Fee"
-msgstr "Frais"
-
 msgctxt "field:loan,average_fee_rate:"
 msgid "Average Fee Rate"
 msgstr "Taux moyen des frais"
@@ -181,6 +177,10 @@ msgstr "Règle de taux moyen prêt"
 msgctxt "model:ir.action,name:act_loan_average_premium_display"
 msgid "Show Loan Average Premium"
 msgstr "Afficher le taux moyen prêt"
+
+msgctxt "model:ir.message,text:msg_fee_label"
+msgid "Fee"
+msgstr "Frais"
 
 msgctxt "model:ir.ui.menu,name:menu_average_premium_rule"
 msgid "Loan Average Premium Rule"

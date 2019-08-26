@@ -2,42 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:claim.net_calculation_rule:"
-msgid "The name must be unique!"
-msgstr "Le nom doit être unique!"
-
-msgctxt "error:claim.salaries_computation:"
-msgid "A rate is missing"
-msgstr "Les taux ne sont pas définis pour une ou plusieurs périodes"
-
-msgctxt "error:claim.salaries_computation:"
-msgid "No net salary computation rule has been defined"
-msgstr "Aucune règle de calcul de salaire net n'a été définie"
-
-msgctxt "error:claim.salaries_computation:"
-msgid "No service can be delivered for this claim"
-msgstr "Aucune garantie pour ce sinistre"
-
-msgctxt "error:claim.salaries_computation:"
-msgid "The computation date must be equal to salary periods dates"
-msgstr "Les dates de calcul doivent être égales aux périodes des salaires"
-
-msgctxt "error:claim.salaries_computation:"
-msgid "The computation start set date is is after the computation end date!"
-msgstr "La date de début de calcul doit être antérieure à la date de fin!"
-
-msgctxt "error:claim.salaries_computation:"
-msgid ""
-"This claim has indemnification periods, you may have to cancel them or "
-"recompute if salaries are modifed"
-msgstr ""
-"Ce sinistre a des périodes d'indemnisation, il faudra peut être les annuler "
-"ou les recalculer si les salaires sont modifiés"
-
-msgctxt "error:table:"
-msgid "You cannnot modify the content of tables from the configuration"
-msgstr "Vous ne pouvez pas modifier le contenu des tables fournies par défaut"
-
 msgctxt "field:benefit.rule,force_revaluation_on_basic_salary:"
 msgid "Force revaluation on basic salary"
 msgstr "Forcer le paramétrage de la revalorisation sur le traitement de base"
@@ -250,6 +214,10 @@ msgctxt "field:claim.service,salary_mode:"
 msgid "Salary Mode"
 msgstr "Mode de salaire"
 
+msgctxt "field:claim.service,specific_salary_mode:"
+msgid "Specified Salary Mode"
+msgstr "Mode de salaire spécifique"
+
 msgctxt "field:claim.service,ta_gross_salary:"
 msgid "TA Gross Salary"
 msgstr "Tranche TA brute"
@@ -261,10 +229,6 @@ msgstr "Tranche TB brute"
 msgctxt "field:claim.service,tc_gross_salary:"
 msgid "TC Gross Salary"
 msgstr "Tranche TC brute"
-
-msgctxt "field:claim.service,specific_salary_mode:"
-msgid "Specified Salary Mode"
-msgstr "Mode de salaire spécifique"
 
 msgctxt "field:claim.start_set_contributions,fixed_amounts:"
 msgid "Fixed Amounts"
@@ -536,6 +500,39 @@ msgctxt "model:ir.action,name:salaries_wizard"
 msgid "Salaries Computation Wizard"
 msgstr "Assistant de saisie des salaires"
 
+msgctxt "model:ir.message,text:msg_indemnifications"
+msgid ""
+"This claim has indemnification periods, you may have to cancel them or "
+"recompute if salaries are modifed."
+msgstr ""
+"Ce sinistre a des périodes d'indemnisation, il faudra peut être les annuler "
+"ou les recalculer si les salaires sont modifiés."
+
+msgctxt "model:ir.message,text:msg_missing_rates"
+msgid "A rate is missing."
+msgstr "Les taux ne sont pas définis pour une ou plusieurs périodes."
+
+msgctxt "model:ir.message,text:msg_modify_configuration_table"
+msgid "You cannnot modify the content of tables from the configuration."
+msgstr ""
+"Vous ne pouvez pas modifier le contenu des tables fournies par défaut."
+
+msgctxt "model:ir.message,text:msg_no_delivered_services"
+msgid "No service can be delivered for this claim."
+msgstr "Aucune garantie pour ce sinistre."
+
+msgctxt "model:ir.message,text:msg_no_rule"
+msgid "No net salary computation rule has been defined."
+msgstr "Aucune règle de calcul de salaire net n'a été définie."
+
+msgctxt "model:ir.message,text:msg_wrong_computation_date_1"
+msgid "The computation date must be equal to salary periods dates."
+msgstr "Les dates de calcul doivent être égales aux périodes des salaires."
+
+msgctxt "model:ir.message,text:msg_wrong_computation_date_2"
+msgid "The computation start set date is is after the computation end date."
+msgstr "La date de début de calcul doit être antérieure à la date de fin!"
+
 msgctxt "model:ir.ui.menu,name:menu_net_calculation_rule"
 msgid "Net Calculation Rules"
 msgstr "Règles de calcul pour le net"
@@ -657,6 +654,10 @@ msgctxt "model:table.dimension.value,name:agirc_dimension_value_2018"
 msgid "[01/01/2018 - 01/01/2019["
 msgstr "[01/01/2018 - 01/01/2019["
 
+msgctxt "model:table.dimension.value,name:agirc_dimension_value_2019"
+msgid "[01/01/2019 - 01/01/2020["
+msgstr ""
+
 msgctxt "model:table.dimension.value,name:arrco_dimension_value_2016"
 msgid "[01/01/2016 - 01/01/2017["
 msgstr "[01/01/2016 - 01/01/2017["
@@ -668,6 +669,10 @@ msgstr "[01/01/2017 - 01/01/2018["
 msgctxt "model:table.dimension.value,name:arrco_dimension_value_2018"
 msgid "[01/01/2018 - 01/01/2019["
 msgstr "[01/01/2018 - 01/01/2019["
+
+msgctxt "model:table.dimension.value,name:arrco_dimension_value_2019"
+msgid "[01/01/2019 - 01/01/2020["
+msgstr ""
 
 msgctxt "model:table.dimension.value,name:pmss_dimension_value_2000"
 msgid "[01/01/2000 - 01/01/2001["
@@ -744,6 +749,42 @@ msgstr "[01/01/2017 - 01/01/2018["
 msgctxt "model:table.dimension.value,name:pmss_dimension_value_2018"
 msgid "[01/01/2018 - 01/01/2019["
 msgstr "[01/01/2018 - 01/01/2019["
+
+msgctxt "model:table.dimension.value,name:pmss_dimension_value_2019"
+msgid "[01/01/2019 - 01/01/2020["
+msgstr ""
+
+msgctxt "selection:claim.service,specific_salary_mode:"
+msgid "Last 12 months"
+msgstr "Les 12 derniers mois"
+
+msgctxt "selection:claim.service,specific_salary_mode:"
+msgid "Last 12 months on last year"
+msgstr "Les 12 derniers mois de la dernière annnée"
+
+msgctxt "selection:claim.service,specific_salary_mode:"
+msgid "Last 3 months"
+msgstr "Les trois derniers mois"
+
+msgctxt "selection:claim.service,specific_salary_mode:"
+msgid "Last 3 months on last year"
+msgstr "Les 3 derniers mois de la dernière annnée"
+
+msgctxt "selection:claim.service,specific_salary_mode:"
+msgid "Last 4 quarters"
+msgstr "Les 4 derniers trimestres"
+
+msgctxt "selection:claim.service,specific_salary_mode:"
+msgid "Last Year"
+msgstr "La dernière année"
+
+msgctxt "selection:claim.service,specific_salary_mode:"
+msgid "Last month"
+msgstr "Dernier mois"
+
+msgctxt "selection:claim.service,specific_salary_mode:"
+msgid "Last month on last year"
+msgstr "Dernier mois de la dernière année"
 
 msgctxt "selection:contract.option.benefit,salary_mode:"
 msgid "Last 12 months"

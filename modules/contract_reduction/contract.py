@@ -2,6 +2,9 @@
 # this repository contains the full copyright notices and license terms.
 import datetime
 
+from trytond.exceptions import UserWarning
+from trytond.i18n import gettext
+from trytond.model.exceptions import AccessError, ValidationError
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval
 from trytond.server_context import ServerContext
@@ -32,20 +35,6 @@ class Contract(metaclass=PoolMeta):
                     'readonly': ~Eval('can_reduce', False)},
                 'button_cancel_reduction': {
                     'readonly': ~Eval('reduction_date')},
-                })
-        cls._error_messages.update({
-                'will_reduce': 'Contracts will be reduced',
-                'cannot_reduce': 'Contract %(contract)s cannot be '
-                'reduced',
-                'no_reductionable_options': 'No options were found that can '
-                'be reduced for contract %(contract)s',
-                'auto_reducing': 'Contracts will automatically be reduced',
-                'cannot_reduce_surrendered': 'A contract that was surrendered '
-                'cannot be reduced',
-                'will_cancel_reduction': 'Contracts reduction will be '
-                'cancelled',
-                'contract_not_reduced': 'Contract %(contract)s is not reduced.'
-                'Therefore, it cannot be reactivated.',
                 })
 
     def get_icon(self, name=None):
@@ -87,9 +76,13 @@ class Contract(metaclass=PoolMeta):
 
     @classmethod
     def do_reduce(cls, contracts, reduction_date):
-        Event = Pool().get('event')
-        cls.raise_user_warning('will_reduce_%s' % str([x.id for x in
-                    contracts[:10]]), 'will_reduce')
+        pool = Pool()
+        Event = pool.get('event')
+        Warning = pool.get('res.user.warning')
+        key = 'will_reduce_%s' % str([x.id for x in contracts[:10]])
+        if Warning.check(key):
+            raise UserWarning(key, gettext(
+                    'contract_reduction.msg_will_reduce'))
         with model.error_manager():
             cls.check_for_reduction(contracts, reduction_date)
         for contract in contracts:
@@ -108,17 +101,22 @@ class Contract(metaclass=PoolMeta):
             if utils.is_module_installed('contract_surrender'):
                 if contract.surrender_invoice:
                     contract.append_functional_error(
-                        'cannot_reduce_surrendered')
+                        ValidationError(gettext(
+                                'contract_reduction'
+                                '.msg_cannot_reduce_surrendered')))
             if not contract.can_reduce:
-                contract.append_functional_error('cannot_reduce',
-                    {'contract': contract.rec_name})
+                contract.append_functional_error(
+                    AccessError(gettext(
+                            'contract_reduction.msg_cannot_reduce',
+                            contract=contract.rec_name)))
             options = [x for x in (contract.options +
                     contract.covered_element_options)
                 if x.reduction_allowed(reduction_date, raise_errors=True)]
             if not options:
                 contract.append_functional_error(
-                    'no_reductionable_options', {
-                        'contract': contract.rec_name})
+                    ValidationError(gettext(
+                            'contract_reduction.msg_no_reductionable_options',
+                            contract=contract.rec_name)))
 
     def apply_reduction(self, reduction_date):
         SubStatus = Pool().get('contract.sub_status')
@@ -171,6 +169,8 @@ class Contract(metaclass=PoolMeta):
 
     @classmethod
     def terminate(cls, contracts, at_date, termination_reason):
+        pool = Pool()
+        Warning = pool.get('res.user.warning')
         to_reduce, to_terminate = [], []
         for contract in contracts:
             if contract.auto_reduce(at_date):
@@ -179,8 +179,10 @@ class Contract(metaclass=PoolMeta):
                 to_terminate.append(contract)
         if to_reduce:
             # When reducing, contracts should not be terminated
-            cls.raise_user_warning('auto_reducing_%s' % ','.join(
-                    [str(x.id) for x in to_reduce]), 'auto_reducing')
+            key = 'auto_reducing_%s' % ','.join(str(x.id) for x in to_reduce)
+            if Warning.check(key):
+                raise UserWarning(key, gettext(
+                        'contract_reduction.msg_auto_reducing'))
             cls.reduce(to_reduce, at_date)
         if to_terminate:
             super(Contract, cls).terminate(to_terminate, at_date,
@@ -198,8 +200,12 @@ class Contract(metaclass=PoolMeta):
 
     @classmethod
     def cancel_reduction(cls, contracts):
-        cls.raise_user_warning('will_cancel_reduction_%s' % str([x.id for x in
-                    contracts[:10]]), 'will_cancel_reduction')
+        pool = Pool()
+        Warning = pool.get('res.user.warning')
+        key = 'will_cancel_reduction_%s' % str([x.id for x in contracts[:10]])
+        if Warning.check(key):
+            raise UserWarning(key, gettext(
+                    'contract_reduction.msg_will_cancel_reduction'))
         pool = Pool()
         Event = pool.get('event')
         SubStatus = pool.get('contract.sub_status')
@@ -207,8 +213,10 @@ class Contract(metaclass=PoolMeta):
         with model.error_manager():
             for contract in contracts:
                 if not contract.reduction_date:
-                    cls.append_functional_error('contract_not_reduced', {
-                        'contract': contract.rec_name})
+                    cls.append_functional_error(
+                        ValidationError(gettext(
+                                'contract_reduction.msg_contract_not_reduced',
+                                contract=contract.rec_name)))
                 reduction_date = contract.reduction_date
                 contract._cancel_reduction_remove_date()
                 contract._cancel_options_reduction()

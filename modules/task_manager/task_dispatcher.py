@@ -3,6 +3,8 @@
 from sql import Window
 from sql.aggregate import Min
 
+from trytond.exceptions import UserError
+from trytond.i18n import gettext
 from trytond.pyson import Eval, Bool, If
 from trytond.wizard import Wizard, StateAction, StateTransition
 from trytond.transaction import Transaction
@@ -143,14 +145,6 @@ class TaskDispatcher(Wizard):
     start_state = 'calculate_action'
     calculate_action = StateAction('process_cog.act_resume_process')
 
-    @classmethod
-    def __setup__(cls):
-        super(TaskDispatcher, cls).__setup__()
-        cls._error_messages.update({
-                'no_task_selected': 'No task has been selected.',
-                'no_task_found': 'No task found'
-                })
-
     def do_calculate_action(self, action):
         User = Pool().get('res.user')
         user = User(Transaction().user)
@@ -159,7 +153,7 @@ class TaskDispatcher(Wizard):
             good_id = task.task.id
             good_model = task.task.__name__
         else:
-            self.raise_user_error('no_task_selected')
+            raise UserError(gettext('task_manager.msg_no_task_selected'))
 
         return (action, {
                 'id': good_id,

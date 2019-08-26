@@ -2,48 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:process.action:"
-msgid "Method %s does not exist on model %s"
-msgstr "La méthode %s n'existe pas sur le modèle %s"
-
-msgctxt "error:process.action:"
-msgid "Source Code Unavailable"
-msgstr "La source n'est pas disponible"
-
-msgctxt "error:process.step:"
-msgid "The technical name must be unique"
-msgstr "Le nom technique doit être unique"
-
-msgctxt "error:process.transition:"
-msgid "Both choices must be filled !"
-msgstr "Saisir les deux choix"
-
-msgctxt "error:process.transition:"
-msgid "Complete"
-msgstr "Terminer"
-
-msgctxt "error:process.transition:"
-msgid "Pyson expression and description is mandatory"
-msgstr "Expression Pyson et la description sont obligatoires"
-
-msgctxt "error:process:"
-msgid "%s: Step %s cannot be used more than once"
-msgstr "%s: L'étape %s ne peut être utilisée qu'une seule fois"
-
-msgctxt "error:process:"
-msgid "The current record completed the current process, please go ahead"
-msgstr "Processus Terminé. Commencez une nouvelle tâche"
-
-msgctxt "error:process:"
-msgid "The current record is in a state (%s) that you are not allowed to view"
-msgstr ""
-"L'enregistrement actuel (%s) est sur une étape que vous n'êtes pas autorisé "
-"à visualiser."
-
-msgctxt "error:process:"
-msgid "The technical name must be unique"
-msgstr "Le nom technique doit être unique"
-
 msgctxt "field:ir.model,is_workflow:"
 msgid "Is Workflow"
 msgstr "Processus"
@@ -529,7 +487,7 @@ msgid "Write User"
 msgstr "Mis à jour par"
 
 msgctxt "help:process,tags:"
-msgid "Configuration object tags list. Allows searching for all configuration objects related to a tag."
+msgid "Add and search all related configuration objects based on a tag"
 msgstr ""
 "Liste des labels sur l'objet de configuration. Permet ensuite de rechercher "
 "l'ensemble des objets de configuration liés à un même label."
@@ -539,7 +497,7 @@ msgid "Write parameters separated by \",\""
 msgstr "Ecrire les paramètres séparés par des \",\""
 
 msgctxt "help:process.step,tags:"
-msgid "Configuration object tags list. Allows searching for all configuration objects related to a tag."
+msgid "Add and search all related configuration objects based on a tag"
 msgstr ""
 "Liste des labels sur l'objet de configuration. Permet ensuite de rechercher "
 "l'ensemble des objets de configuration liés à un même label."
@@ -567,6 +525,46 @@ msgstr "Graphique"
 msgctxt "model:ir.action,name:report_generate_graph"
 msgid "Graph"
 msgstr "Graphique"
+
+msgctxt "model:ir.message,text:msg_child_field_required"
+msgid "Enter a value for field '%(field)s' of '%(parent)s'."
+msgstr "La méthode %(field)s n'existe pas sur le modèle %(parent)s"
+
+msgctxt "model:ir.message,text:msg_complete_button_label"
+msgid "Complete"
+msgstr "Terminer"
+
+msgctxt "model:ir.message,text:msg_date_in_future"
+msgid "Select a date that is not in the future for field(s): %(fields)s."
+msgstr "Sélectionnez une date non à venir pour le(s) champ(s) :  %(fields)s."
+
+msgctxt "model:ir.message,text:msg_field_required"
+msgid "Enter a value for field(s): %(fields)s."
+msgstr "\"Entrez une valeur pour le(s) champs(s) : %(fields)s."
+
+msgctxt "model:ir.message,text:msg_non_matching_method"
+msgid "Method %(method)s does not exist on model %(model)s."
+msgstr "La méthode %(method)s n'existe pas sur le modèle %(model)s"
+
+msgctxt "model:ir.message,text:msg_not_allowed_message"
+msgid ""
+"The current record is in a state (%(name)s) that you are not allowed to "
+"view."
+msgstr ""
+"L'enregistrement actuel (%(name)s) est sur une étape que vous n'êtes pas "
+"autorisé à visualiser."
+
+msgctxt "model:ir.message,text:msg_process_completed"
+msgid "The current record completed the current process, please go ahead."
+msgstr "Processus Terminé. Commencez une nouvelle tâche."
+
+msgctxt "model:ir.message,text:msg_source_code_unavailable"
+msgid "Source Code Unavailable."
+msgstr "La source n'est pas disponible."
+
+msgctxt "model:ir.message,text:msg_use_steps_only_once"
+msgid "%(name)s: Step %(step)s cannot be used more than once."
+msgstr "%(name)s: L'étape %(step)s ne peut être utilisée qu'une seule fois"
 
 msgctxt "model:ir.ui.menu,name:"
 msgid "Processes"

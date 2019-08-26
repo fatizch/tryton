@@ -1,5 +1,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+from trytond.i18n import gettext
+from trytond.model.exceptions import ValidationError
 from trytond.pool import PoolMeta
 from trytond.server_context import ServerContext
 
@@ -17,7 +19,9 @@ class RuleEngineRuntime(metaclass=PoolMeta):
     def get_master_indemnification(cls):
         master = ServerContext().get('master_indemnification', None)
         if master is None:
-            cls.raise_user_error('missing_master_indemnification')
+            raise ValidationError(gettext(
+                    'claim_indemnification_sync'
+                    '.msg_missing_master_indemnification'))
         return master
 
     @classmethod

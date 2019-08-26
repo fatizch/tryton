@@ -2,32 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:report.create:"
-msgid ""
-"Report flow generation had succeeded! You generated a "
-"%(report_template_name)s report."
-msgstr ""
-"L'impression a réussi! Vous avez imprimé un courrier "
-"%(report_template_name)s"
-
-msgctxt "error:report.flow.variable:"
-msgid "The description must be unique."
-msgstr "La description doit être unique."
-
-msgctxt "error:report.template:"
-msgid "Default Flux"
-msgstr "Flux par défaut"
-
-msgctxt "error:report.template:"
-msgid "From Flow Variable"
-msgstr "Variable de flux"
-
-msgctxt "error:report.template:"
-msgid "You cannot print a flow and a model at the same time"
-msgstr ""
-"Vous ne pouvez pas lancer l'impression d'un modèle et générer un flux en "
-"même temps"
-
 msgctxt "field:report.create.flow_succeed_generated,id:"
 msgid "ID"
 msgstr "Identifiant"
@@ -226,6 +200,22 @@ msgstr "Relation modèle de lettre - Variable de flux"
 msgctxt "model:ir.action,name:act_flow_variable"
 msgid "Flow Variables"
 msgstr "Variable de flux"
+
+msgctxt "model:ir.message,text:msg_input_flow_variable"
+msgid "From Flow Variable"
+msgstr "Variable de flux"
+
+msgctxt "model:ir.message,text:msg_process_method_default_flux"
+msgid "Default Flux"
+msgstr "Flux par défaut"
+
+msgctxt "model:ir.message,text:msg_report_template_message"
+msgid ""
+"Report flow generation had succeeded. You generated a "
+"%(report_template_name)s report."
+msgstr ""
+"L'impression a réussi! Vous avez imprimé un courrier "
+"%(report_template_name)s"
 
 msgctxt "model:ir.ui.menu,name:menu_flow_variables"
 msgid "Flow Variables"

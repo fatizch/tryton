@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<tryton>
+    <data group="1">
+        <record model="ir.message" id="msg_journal_mixin_not_allowed">
+            <field name="text">You can not print cheque letters with other payments types.</field>
+        </record>
+        <record model="ir.message" id="msg_cheque_number_sequence_broken">
+            <field name="text">You must select sequential cheque letters numbers: jump from %(from_)s to %(to)s.</field>
+        </record>
+        <record model="ir.message" id="msg_cheque_process_exceed">
+            <field name="text">The amount of processed payments exceed the given number of available cheques: %(total)s/%(maximum)s (%(ignored)s ignored).</field>
+        </record>
+        <record model="ir.message" id="msg_no_cheque_processed">
+            <field name="text">No cheque has been processed.</field>
+        </record>
+        <record model="ir.message" id="msg_missing_begin_cheque_number">
+            <field name="text">Missing begin cheque number.</field>
+        </record>
+        <record model="ir.message" id="msg_missing_available_cheque_number">
+            <field name="text">Missing max available cheque number.</field>
+        </record>
+    </data>
+</tryton>

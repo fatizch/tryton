@@ -23,14 +23,19 @@ class RuleEngineRuntime(metaclass=PoolMeta):
     def re_commission_sum_for_option(cls, args):
         pool = Pool()
         cursor = Transaction().connection.cursor()
-        commission = pool.get('commission').__table__()
+        Commission = pool.get('commission')
+        commission = Commission.__table__()
 
         cursor.execute(*commission.select(Sum(commission.amount),
             where=((commission.commissioned_option == args['option'].id) &
                 (commission.agent == args['agent'].id) &
                 (commission.is_recovery == Literal(False)))))
         res = cursor.fetchall()
-        return res[0][0] or Decimal(0)
+        value = res[0][0] or Decimal(0)
+        if not isinstance(value, Decimal):
+            value = Decimal(str(value)).quantize(
+                Decimal(str(10.0 ** -Commission.amount.digits[1])))
+        return value
 
     @classmethod
     @check_args('option')

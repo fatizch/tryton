@@ -1,5 +1,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+from trytond.i18n import gettext
+from trytond.model.exceptions import ValidationError
 from trytond.transaction import Transaction
 from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Bool, Eval
@@ -57,14 +59,6 @@ class EndorsementStartProcess(ProcessFinder):
     __name__ = 'endorsement.start_process'
 
     @classmethod
-    def __setup__(cls):
-        super(EndorsementStartProcess, cls).__setup__()
-        cls._error_messages.update({
-                'single_contract_definition': 'The chosen endorsement '
-                'definition cannot be applied on several contracts.',
-                })
-
-    @classmethod
     def get_parameters_model(cls):
         return 'endorsement.start.find_process'
 
@@ -78,7 +72,8 @@ class EndorsementStartProcess(ProcessFinder):
         ContractEndorsement = pool.get('endorsement.contract')
         if (not process_param.definition.is_multi_instance and
                 len(process_param.contracts) > 1):
-            self.raise_user_error('single_contract_definition')
+            raise ValidationError(gettext(
+                    'endorsement_process.msg_single_contract_definition'))
         res, errs = super(EndorsementStartProcess,
             self).init_main_object_from_process(obj, process_param)
         obj.effective_date = process_param.effective_date
@@ -169,7 +164,8 @@ class StartEndorsement(metaclass=PoolMeta):
             else:
                 return super(StartEndorsement, self).transition_start()
             if endorsement.state == 'applied':
-                self.raise_user_error('cannot_resume_applied')
+                raise ValidationError(
+                    gettext('endorsement.msg_cannot_resume_applied'))
             self.select_endorsement.endorsement = endorsement
             if endorsement.contracts:
                 self.select_endorsement.contract = endorsement.contracts[0].id
@@ -219,14 +215,6 @@ class AskNextEndorsement(model.CoogWizard):
     apply_without_generate = StateTransition()
     apply_with_generate = StateAction('endorsement.act_open_generated')
 
-    @classmethod
-    def __setup__(cls):
-        super().__setup__()
-        cls._error_messages.update({
-                'ask_next_endorsement': 'Do you want to execute the endorsement'
-                ' \"%(next_endorsement)s\" too?',
-                })
-
     def get_endorsement(self):
         active_model = Transaction().context.get('active_model', None)
         if active_model != 'endorsement':
@@ -246,12 +234,11 @@ class AskNextEndorsement(model.CoogWizard):
 
     def default_choice(self, name):
         endorsement = self.get_endorsement()
-        question = self.raise_user_error('ask_next_endorsement', {
-                'next_endorsement':
-                endorsement.definition.next_endorsement.rec_name
-                }, raise_exception=False)
+        next_endorsement = endorsement.definition.next_endorsement.rec_name
         return {
-            'question': question,
+            'question': gettext(
+                'endorsement_process.msg_ask_next_endorsement',
+                next_endorsement=next_endorsement),
             }
 
     def transition_apply_without_generate(self):

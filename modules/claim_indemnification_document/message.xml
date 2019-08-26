@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<tryton>
+    <data group="1">
+        <record model="ir.message" id="msg_claim_invoice">
+            <field name="text">Claim Invoice</field>
+        </record>
+        <record model="ir.message" id="msg_required_document">
+            <field name="text">The document "%(document)s" is required.</field>
+        </record>
+        <record model="ir.message" id="msg_required_confidential_documents">
+            <field name="text">There are missing required documents that you are not allowed to view.</field>
+        </record>
+    </data>
+</tryton>

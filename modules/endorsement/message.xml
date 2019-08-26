@@ -1,0 +1,110 @@
+<?xml version="1.0"?>
+<tryton>
+    <data group="1">
+        <record model="ir.message" id="msg_remove_version">
+            <field name="text">Remove version of:</field>
+        </record>
+        <record model="ir.message" id="msg_new_version">
+            <field name="text">New version:</field>
+        </record>
+        <record model="ir.message" id="msg_update_version">
+            <field name="text">Update %(name)s:</field>
+        </record>
+        <record model="ir.message" id="msg_active_contract_required">
+            <field name="text">You cannot start this endorsement on a non-active contract.</field>
+        </record>
+        <record model="ir.message" id="msg_effective_date_before_start_date">
+            <field name="text">The endorsement's effective date must be posterior to the contracts' start date.</field>
+        </record>
+        <record model="ir.message" id="msg_invalid_format">
+            <field name="text">Invalid file format.</field>
+        </record>
+        <record model="ir.message" id="msg_no_sequence_defined">
+            <field name="text">No sequence defined in configuration.</field>
+        </record>
+        <record model="ir.message" id="msg_no_in_progress_endorsements">
+            <field name="text">No in progress endorsements.</field>
+        </record>
+        <record model="ir.message" id="msg_delete_not_draft_endorsement">
+            <field name="text">Impossible to delete the endorsement %(number)s because it is not in draft but in %(status)s.</field>
+        </record>
+        <record model="ir.message" id="msg_no_cancel_endorsement">
+            <field name="text">Cancellation of this endorsement is not allowed in order to preserve the data integrity.</field>
+        </record>
+        <record model="ir.message" id="msg_number_unique">
+            <field name="text">The endorsement number must be unique.</field>
+        </record>
+        <record model="ir.message" id="msg_not_latest_applied">
+            <field name="text">Endorsement "%(endorsement)s" is not the latest applied.</field>
+        </record>
+        <record model="ir.message" id="msg_process_in_progress">
+            <field name="text">Contract %(contract)s is currently locked in process %(process)s.</field>
+        </record>
+        <record model="ir.message" id="msg_only_one_endorsement_in_progress">
+            <field name="text">There may only be one endorsement in_progress at a given time per contract.</field>
+        </record>
+        <record model="ir.message" id="msg_option_modifications">
+            <field name="text">Options Modifications:</field>
+        </record>
+        <record model="ir.message" id="msg_activation_history_modifications">
+            <field name="text">Activation History Modifications:</field>
+        </record>
+        <record model="ir.message" id="msg_extra_data_modifications">
+            <field name="text">Extra Datas Modifications:</field>
+        </record>
+        <record model="ir.message" id="msg_contact_modifications">
+            <field name="text">Contacts Modifications:</field>
+        </record>
+        <record model="ir.message" id="msg_status_incompatible">
+            <field name="text">The status %(status)s of contract %(contract)s does not allow endorsements.</field>
+        </record>
+        <record model="ir.message" id="msg_new_coverage">
+            <field name="text">New Coverage: %(name)s</field>
+        </record>
+        <record model="ir.message" id="msg_new_option_version">
+            <field name="text">New Option Version</field>
+        </record>
+        <record model="ir.message" id="msg_new_extra_data">
+            <field name="text">New Extra Data</field>
+        </record>
+        <record model="ir.message" id="msg_new_option">
+            <field name="text">New Option (%(option)s)</field>
+        </record>
+        <record model="ir.message" id="msg_termination_date_must_be_anterior">
+            <field name="text">The termination date must be anterior to the end date of the modified period: %(end_date)s.</field>
+        </record>
+        <record model="ir.message" id="msg_termination_date_must_be_posterior">
+            <field name="text">The termination date must be posterior to the contract start date: %(start_date)s.</field>
+        </record>
+        <record model="ir.message" id="msg_termination_before_active_start_date">
+            <field name="text">You are trying to terminate the contract before its active start date.</field>
+        </record>
+        <record model="ir.message" id="msg_termination_on_terminate_or_void_contract">
+            <field name="text">You cannot terminate the contracts %(contracts)s because they are terminated or void.</field>
+        </record>
+        <record model="ir.message" id="msg_void_renewed_contract">
+            <field name="text">You are trying to void a renewed contract.</field>
+        </record>
+        <record model="ir.message" id="msg_cannot_resume_applied">
+            <field name="text">It is not possible to resume an already applied endorsement.</field>
+        </record>
+        <record model="ir.message" id="msg_erase_endorsement">
+            <field name="text">Going on will erase all data on the endorsement.</field>
+        </record>
+        <record model="ir.message" id="msg_no_preview_defined">
+            <field name="text">No preview state is defined on the endorsement definition.</field>
+        </record>
+        <record model="ir.message" id="msg_creation_not_allowed">
+            <field name="text">The rule %(rule)s defined on endorsement %(endorsement)s does not allow you to create an endorsement with these parameters.</field>
+        </record>
+        <record model="ir.message" id="msg_apply_button_access_right">
+            <field name="text">You are not allowed to apply endorsements.</field>
+        </record>
+        <record model="ir.message" id="msg_endorsement_not_applied">
+            <field name="text">Endorsement is not yet applied.</field>
+        </record>
+        <record model="ir.message" id="msg_no_contract_selected">
+            <field name="text">A contract must be set.</field>
+        </record>
+    </data>
+</tryton>

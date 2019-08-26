@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<tryton>
+    <data group="1">
+        <record model="ir.message" id="msg_multiple_parties_not_supported">
+            <field name="text">Multiple parties is not supported.</field>
+        </record>
+        <record model="ir.message" id="msg_email_required">
+            <field name="text">The email is required on the party %(party)s.</field>
+        </record>
+        <record model="ir.message" id="msg_invalid_paybox_payment_date">
+            <field name="text">The paybox payment must have a payment date less or equal than today (payment date: %(payment_date)s).</field>
+        </record>
+        <record model="ir.message" id="msg_paybox_payment_creation">
+            <field name="text">Could not create paybox payments. There is at least one another validated or processing payment with the same line for the selection (%(selection)s).</field>
+        </record>
+        <record model="ir.message" id="msg_invalid_nb_invoices">
+            <field name="text">Invoices number should be positive</field>
+        </record>
+        <record model="ir.message" id="msg_invalid_nb_lines_to_pay">
+            <field name="text">Lines to pay number should be strictly positive</field>
+        </record>
+    </data>
+</tryton>

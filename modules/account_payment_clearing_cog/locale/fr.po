@@ -2,14 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:account.journal:"
-msgid "Except Payment Cancel"
-msgstr "Sauf annulation de paiement"
-
-msgctxt "error:account.payment:"
-msgid "Reject of %s"
-msgstr "Rejet du %s"
-
 msgctxt "field:account.payment.journal,always_create_clearing_move:"
 msgid "Always Create Clearing Move"
 msgstr "Toujours créer le mouvement de compensation"
@@ -29,3 +21,11 @@ msgstr ""
 "rejet technique) un mouvement de compensation sera créé quand le paiement "
 "est échoué. Le résultat final est similaire à ce qui ce serait passé si le "
 "paiement avait été réussi puis échoué."
+
+msgctxt "model:ir.message,text:msg_except_payment_cancel"
+msgid "Except Payment Cancel"
+msgstr "Sauf annulation de paiement"
+
+msgctxt "model:ir.message,text:msg_reject_of"
+msgid "Reject of %(description)s"
+msgstr "Rejet du %(description)s"

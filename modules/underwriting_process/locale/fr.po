@@ -2,39 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:import.process.select:"
-msgid "This process allows managers to request an underwriting"
-msgstr ""
-"Ce processus permet aux gestionnaires d'effectuer des analyses médicales"
-
-msgctxt "error:import.process.select:"
-msgid "Underwriting Process (FR)"
-msgstr "Processus d'analyse médicale (FR)"
-
-msgctxt "error:underwriting:"
-msgid "Cannot draft completed results"
-msgstr "Impossible de passer des décisions validées en brouillon"
-
-msgctxt "error:underwriting:"
-msgid "Cannot draft completed underwritings"
-msgstr "Impossible de passer des demandes terminées en brouillon"
-
-msgctxt "error:underwriting:"
-msgid "Enter a value for field '%s' of '%s'"
-msgstr "Entrez une valeur pour le champ '%s' de '%s'"
-
-msgctxt "error:underwriting:"
-msgid "Enter a value for field(s): %s"
-msgstr "Entrez une valeur pour le(s) champs(s) : %s"
-
-msgctxt "error:underwriting:"
-msgid "Everything is good !"
-msgstr "Tout est bon!"
-
-msgctxt "error:underwriting:"
-msgid "Select a date that is not in the future for field(s): %s"
-msgstr "Sélectionnez une date non à venir pour le(s) champ(s) : %s"
-
 msgctxt "field:event.type.action,step_to_start:"
 msgid "Step to start"
 msgstr "État de départ"
@@ -83,6 +50,10 @@ msgctxt "field:process-underwriting.type,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:underwriting,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
 msgctxt "field:underwriting,current_log:"
 msgid "Current Log"
 msgstr "Trace Courante"
@@ -110,6 +81,10 @@ msgstr "Nom de la tâche"
 msgctxt "field:underwriting,task_status:"
 msgid "Task Status"
 msgstr "Statut du processus"
+
+msgctxt "field:underwriting,xml_id:"
+msgid "XML Id"
+msgstr "XML Id"
 
 msgctxt "field:underwriting.start.find_process,effective_date:"
 msgid "Effective Date"
@@ -162,6 +137,15 @@ msgstr "Cible"
 msgctxt "model:ir.action,name:act_underwriting_start"
 msgid "Start Underwriting"
 msgstr "Démarrer une demande de décisions"
+
+msgctxt "model:ir.message,text:msg_underwriting_std_process"
+msgid "Underwriting Process (FR)"
+msgstr "Processus d'analyse médicale (FR)"
+
+msgctxt "model:ir.message,text:msg_underwriting_std_process_description"
+msgid "This process allows managers to request an underwriting."
+msgstr ""
+"Ce processus permet aux gestionnaires d'effectuer des analyses médicales."
 
 msgctxt "model:ir.ui.menu,name:menu_start_underwriting"
 msgid "Start Underwriting"

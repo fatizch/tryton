@@ -2,6 +2,8 @@
 # this repository contains the full copyright notices and license terms.
 from dateutil.relativedelta import relativedelta
 
+from trytond.i18n import gettext
+from trytond.model.exceptions import AccessError
 from trytond.pool import PoolMeta, Pool
 from trytond.wizard import StateView, StateTransition, Button
 from trytond.transaction import Transaction
@@ -47,14 +49,6 @@ class CreateInstalmentPlan(model.CoogWizard, metaclass=PoolMeta):
                 ])
     validate_instalment = StateTransition()
     suspend = StateTransition()
-
-    @classmethod
-    def __setup__(cls):
-        super(CreateInstalmentPlan, cls).__setup__()
-        cls._error_messages.update({
-                'already_validated': 'It is not possible to resume an '
-                'already validated instalment plan.',
-                })
 
     @property
     def contract(self):
@@ -147,7 +141,8 @@ class CreateInstalmentPlan(model.CoogWizard, metaclass=PoolMeta):
             InstalmentPlan = pool.get(active_model)
             instalment = InstalmentPlan(Transaction().context.get('active_id'))
             if instalment.state != 'draft':
-                self.raise_user_error('already_validated')
+                raise AccessError(gettext(
+                        'contract_instalment_plan.msg_already_validated'))
             self.select_period.contract = instalment.contract
             self.select_period.invoice_period_start = \
                 instalment.invoice_period_start

@@ -71,12 +71,13 @@ Create Fee::
     >>> dunning_fee_kind = AccountKind()
     >>> dunning_fee_kind.name = 'Dunning Fee Account Kind'
     >>> dunning_fee_kind.company = company
+    >>> dunning_fee_kind.other = True
+    >>> dunning_fee_kind.statement = 'off-balance'
     >>> dunning_fee_kind.save()
     >>> Account = Model.get('account.account')
     >>> dunning_fee_account = Account()
     >>> dunning_fee_account.name = 'Dunning Fee Account'
     >>> dunning_fee_account.code = 'dunning_fee_account'
-    >>> dunning_fee_account.kind = 'revenue'
     >>> dunning_fee_account.party_required = True
     >>> dunning_fee_account.type = dunning_fee_kind
     >>> dunning_fee_account.company = company
@@ -243,7 +244,7 @@ Create Contract::
     >>> contract.contract_number = '123456789'
     >>> contract.save()
     >>> Wizard('contract.activate', models=[contract]).execute('apply')
-    >>> contract.billing_information.direct_debit is False
+    >>> bool(contract.billing_information.direct_debit) is False
     True
 
 Create first invoice::
@@ -344,8 +345,8 @@ Create payment for the first due contract invoice::
     >>> payment_invoice.amount = due_invoice.invoice.total_amount
     >>> payment_invoice.party = subscriber
     >>> payment_invoice.line, = MoveLine.find([('party', '=', subscriber.id),
-    ...         ('account.kind', '=', 'receivable'),
-    ...         ('origin', '=', 'account.invoice,%s' % due_invoice.invoice.id)])
+    ...         ('account.type.receivable', '=', True),
+    ...         ('move_origin', '=', 'account.invoice,%s' % due_invoice.invoice.id)])
     >>> payment_invoice.date = due_invoice.invoice.invoice_date
     >>> payment_invoice.save()
     >>> payment_invoice.click('approve')

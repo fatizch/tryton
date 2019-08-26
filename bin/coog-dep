@@ -46,5 +46,6 @@ coog_dep_main() { # install base deps
                 "uwsgi" \
                 "vobject" \
                 "werkzeug<0.15" \
-                "wrapt"
+                "wrapt" \
+                "sqlitebck" # for tests
 }

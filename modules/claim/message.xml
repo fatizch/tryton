@@ -1,0 +1,70 @@
+<?xml version="1.0"?>
+<tryton>
+    <data group="1">
+        <record model="ir.message" id="msg_missing_new_account">
+            <field name="text">Please enter the new bank account to use.</field>
+        </record>
+        <record model="ir.message" id="msg_coverage_information">
+            <field name="text">Coverage Information</field>
+        </record>
+        <record model="ir.message" id="msg_benefit_information">
+            <field name="text">Benefit Information</field>
+        </record>
+        <record model="ir.message" id="msg_party_has_open_claim">
+            <field name="text">The party %(party)s can not be erased because it is a claimant on the following claims:
+%(claims)s</field>
+        </record>
+        <record model="ir.message" id="msg_only_one_service">
+            <field name="text">This action must be run service by service.</field>
+        </record>
+        <record model="ir.message" id="msg_origin_required">
+            <field name="text">The "origin" field is required to proceed.</field>
+        </record>
+        <record model="ir.message" id="msg_clearing_empty_origin">
+            <field name="text">Clearing empty origin.</field>
+        </record>
+        <record model="ir.message" id="msg_clearing_origin">
+            <field name="text">Clearing origin!</field>
+        </record>
+        <record model="ir.message" id="msg_invalid_declaration_date">
+            <field name="text">Declaration date cannot be in the future, or posterior to the claim's creation date.</field>
+        </record>
+        <record model="ir.message" id="msg_contract_will_be_held">
+            <field name="text">The contract %(contract)s will be held with the sub-status %(substatus)s for the payer %(payer)s.</field>
+        </record>
+        <record model="ir.message" id="msg_number_unique">
+            <field name="text">The number must be unique.</field>
+        </record>
+        <record model="ir.message" id="msg_end_date_smaller_than_start_date">
+            <field name="text">End Date is smaller than start date.</field>
+        </record>
+        <record model="ir.message" id="msg_duplicate_loss">
+            <field name="text">The loss %(loss)s could be a duplicate of:
+
+%(losses)s</field>
+        </record>
+        <record model="ir.message" id="msg_prior_declaration_date">
+            <field name="text">Declaration date %(declaration_date)s is prior to start date %(start_date)s.</field>
+        </record>
+        <record model="ir.message" id="msg_no_end_date">
+            <field name="text">Missing end date for loss
+%(loss)s,
+</field>
+        </record>
+        <record model="ir.message" id="msg_no_sub_status_found">
+            <field name="text">No sub status has been found with the code %(code)s.</field>
+        </record>
+        <record model="ir.message" id="msg_code_unique">
+            <field name="text">The number must be unique.</field>
+        </record>
+        <record model="ir.message" id="msg_other_enum">
+            <field name="text">Other</field>
+        </record>
+        <record model="ir.message" id="msg_subscriber_enum">
+            <field name="text">Subscriber</field>
+        </record>
+        <record model="ir.message" id="msg_different_product_accounts">
+            <field name="text">There are different expense accounts on products of the benefit %(benefit)s, ensure all the products have the same account before saving.</field>
+        </record>
+    </data>
+</tryton>

@@ -4,6 +4,7 @@ from collections import defaultdict
 from sql import Null
 
 from trytond import backend
+from trytond.i18n import gettext
 from trytond.pool import Pool, PoolMeta
 from trytond.model import ModelView, Workflow
 from trytond.transaction import Transaction
@@ -47,10 +48,6 @@ class Invoice(metaclass=PoolMeta):
     @classmethod
     def __setup__(cls):
         super(Invoice, cls).__setup__()
-        cls._error_messages.update({
-                'reset_principal_line_description': 'Principal line reset '
-                'following unreconciliation of invoice %s'
-                })
         cls.business_kind.selection.append(('slip', 'Slip'))
         cls._slip_kinds = {'slip'}
 
@@ -156,9 +153,9 @@ class Invoice(metaclass=PoolMeta):
 
         moves = []
         for invoice, line_group in lines_per_invoice.items():
-            description = cls.raise_user_error(
-                'reset_principal_line_description', (invoice.rec_name,),
-                raise_exception=False)
+            description = gettext(
+                'account_invoice_slip.msg_reset_principal_line_description',
+                invoice=invoice.rec_name)
             move = Move(journal=journal, company=line_group[0].move.company,
                 date=utils.today(), origin=invoice, description=description)
             lines = []

@@ -5,6 +5,8 @@ from genshi.template import NewTextTemplate
 from sql.conditionals import Coalesce
 import datetime
 
+from trytond.i18n import gettext
+from trytond.model.exceptions import ValidationError
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, Bool, Or, And, If
 from trytond.exceptions import UserError
@@ -54,17 +56,6 @@ class Sequence(model.CoogSQL, metaclass=PoolMeta):
     @classmethod
     def __setup__(cls):
         super(Sequence, cls).__setup__()
-        cls._error_messages.update({
-                'sequence_max_number_exceeded': 'Coog can\'t assign a new'
-                ' number for the sequence "%(sequence_name)s": The limit is'
-                ' of %(number_max)s is reached. Please define a new sub-'
-                'sequence period or increase limits',
-                'no_sequence_at_date': 'Could not get a valid sub-sequence'
-                ' at date %(date)s for the sequence "%(sequence)s".'
-                ' Please define a new sub-sequence period on increase limits',
-                'period_invalid': 'The sub-sequence period is invalid:'
-                ' %(start_date)s greater than %(end_date)s',
-                })
         for field_ in ('prefix', 'suffix', 'type', 'padding',
                 'timestamp_rounding', 'number_increment'):
             field_ = getattr(cls, field_)
@@ -104,10 +95,10 @@ class Sequence(model.CoogSQL, metaclass=PoolMeta):
                 start_date = record.start_date or datetime.date.min
                 end_date = record.end_date or datetime.date.max
                 if start_date > end_date:
-                    cls.append_functional_error('period_invalid', {
-                            'start_date': start_date,
-                            'end_date:': end_date,
-                            })
+                    raise ValidationError(gettext(
+                            'sequence_coog.msg_period_invalid',
+                            start_date=start_date,
+                            end_date=end_date))
 
     def update_sql_sequence(self, number_next=None):
         if not number_next and not self.number_next:
@@ -128,10 +119,11 @@ class Sequence(model.CoogSQL, metaclass=PoolMeta):
                 if (sequence.max_number is not None
                         and value > sequence.max_number):
                     cls.append_functional_error(
-                        'sequence_max_number_exceeded', {
-                            'sequence_name': sequence.name,
-                            'number_max': sequence.max_number,
-                            })
+                        UserError(gettext(
+                                'sequence_coog'
+                                '.msg_sequence_max_number_exceeded',
+                                sequence_name=sequence.name,
+                                number_max=sequence.max_number)))
         super(Sequence, cls).set_number_next(sequences, name, value)
 
     @staticmethod
@@ -169,10 +161,10 @@ class Sequence(model.CoogSQL, metaclass=PoolMeta):
                         or sequence.number_next <= sequence.max_number):
                     return sequence
 
-        self.raise_user_error('no_sequence_at_date', {
-                'date': at_date,
-                'sequence': self.name,
-                })
+        raise ValidationError(gettext(
+                'sequence_coog.msg_no_sequence_at_date',
+                date=at_date,
+                sequence=self.name))
 
     @classmethod
     def _get_sequence(cls, sequence):
@@ -181,10 +173,10 @@ class Sequence(model.CoogSQL, metaclass=PoolMeta):
         if not sequence.sub_sequences:
             value = super(Sequence, cls)._get_sequence(sequence)
             if sequence.max_number and int(value) > sequence.max_number:
-                cls.raise_user_error('sequence_max_number_exceeded', {
-                        'sequence_name': sequence.name,
-                        'number_max': sequence.max_number,
-                        })
+                raise UserError(gettext(
+                        'sequence_coog.msg_sequence_max_number_exceeded',
+                        sequence_name=sequence.name,
+                        number_max=sequence.max_number))
         else:
             valid_sequence = sequence.get_valid_sequence_at_date()
             value = valid_sequence._get_sequence(valid_sequence)

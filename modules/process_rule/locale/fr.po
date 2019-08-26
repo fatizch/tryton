@@ -2,20 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:process.action:"
-msgid "Invalid field \"%(field_name)s\" for model %(model_name)s"
-msgstr "Le champ \"%(field_name)s\" n'existe pas sur le modèle %(model_name)s"
-
-msgctxt "error:process.action:"
-msgid "Invalid field type \"%(field_type)s\" for node \"%(node)s\""
-msgstr ""
-"Le type de champ  \"%(field_type)s\" n'est pas valide pour l'élément "
-"\"%(node)s\""
-
-msgctxt "error:process.action:"
-msgid "Target path \"%s\" must start with \"object.\""
-msgstr "Le chemin \"%s\" doit commencer par \"object.\""
-
 msgctxt "field:process.action,rule:"
 msgid "Rule Engine"
 msgstr "Règle"
@@ -37,6 +23,20 @@ msgstr ""
 "Un chemin permettant de retrouver les données sur lesquelles exécuter la règle à partir de l'objet du processus.\n"
 "\n"
 "Exemple : pour un contrat, \"object.options\" permettra d'exécuter la règle sur les garanties du contrat."
+
+msgctxt "model:ir.message,text:msg_bad_target_path"
+msgid "Target path \"%(path)s\" must start with \"object\"."
+msgstr "Le chemin \"%(path)s\" doit commencer par \"object.\""
+
+msgctxt "model:ir.message,text:msg_invalid_path_field"
+msgid "Invalid field \"%(field_name)s\" for model %(model_name)s."
+msgstr "Le champ \"%(field_name)s\" n'existe pas sur le modèle %(model_name)s."
+
+msgctxt "model:ir.message,text:msg_invalid_path_field_type"
+msgid "Invalid field type \"%(field_type)s\" for node \"%(node)s\"."
+msgstr ""
+"Le type de champ  \"%(field_type)s\" n'est pas valide pour l'élément "
+"\"%(node)s\"."
 
 msgctxt "selection:process.action,content:"
 msgid "Rule"

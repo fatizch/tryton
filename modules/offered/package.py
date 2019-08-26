@@ -2,6 +2,8 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
 
+from trytond.i18n import gettext
+from trytond.model.exceptions import ValidationError
 from trytond.modules.coog_core import model, fields
 from trytond.modules.offered.extra_data import with_extra_data
 
@@ -25,14 +27,6 @@ class Package(model.CodedMixin, model.CoogView, with_extra_data([
         'package', 'option', 'Options')
     option_relations = fields.One2Many('offered.package-option.description',
         'package', 'Option Relations', delete_missing=True)
-
-    @classmethod
-    def __setup__(cls):
-        super(Package, cls).__setup__()
-        cls._error_messages.update({
-                'package_only_on_subscription': 'Subscribe by package is only '
-                'available on quote',
-                })
 
     @classmethod
     def _export_skips(cls):
@@ -86,7 +80,8 @@ class Package(model.CodedMixin, model.CoogView, with_extra_data([
 
     def apply_package_on_contract(self, contract):
         if contract.status != 'quote':
-            self.raise_user_error('package_only_on_subscription')
+            raise ValidationError(gettext(
+                    'offered.msg_package_only_on_subscription'))
         contract = self.update_contract_options(contract)
         contract = self.update_contract_extra_datas(contract)
         contract = self.update_options_extra_datas(contract)

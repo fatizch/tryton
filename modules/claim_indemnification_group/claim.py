@@ -3,9 +3,12 @@
 from itertools import groupby
 import datetime
 
+from trytond.exceptions import UserWarning
+from trytond.i18n import gettext
 from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
 from trytond.model import ModelView
+from trytond.model.exceptions import ValidationError, RequiredValidationError
 from trytond.pyson import Eval, Bool
 
 from trytond.modules.coog_core import fields, utils
@@ -95,25 +98,6 @@ class ClaimService(metaclass=PoolMeta):
 class Indemnification(metaclass=PoolMeta):
     __name__ = 'claim.indemnification'
 
-    @classmethod
-    def __setup__(cls):
-        super(Indemnification, cls).__setup__()
-        cls._error_messages.update({
-                'bad_dates': 'The indemnification period (%(indemn_start)s - '
-                "%(indemn_end)s) is not compatible with the contract's end "
-                'date (%(contract_end)s).',
-                'covered_element_rupture': 'The covered element '
-                '%(party_rec_name)s is in rupture for the contract '
-                '%(contract)s at %(date)s and the beneficiary should be the '
-                'covered element itself, not %(benef_rec_name)s',
-                'dates_not_in_management': 'The indemnification period '
-                '(%(indemn_start)s - %(indemn_end)s) is not compatible with '
-                'the claim\'s management period (%(management_start)s - '
-                '%(management_end)s).',
-                'missing_origin_service': 'The origin service must be set '
-                'prior to calculation for %(service)s',
-                })
-
     def get_possible_products(self):
         if not self.beneficiary or self.beneficiary.is_person:
             return super(Indemnification, self).get_possible_products()
@@ -181,12 +165,15 @@ class Indemnification(metaclass=PoolMeta):
             if option.previous_claims_management_rule in (
                     'in_complement', 'in_complement_previous_rule'):
                 if indemn.start_date < option.start_date:
-                    cls.raise_user_error('before_option_start_date', {
-                            'indemnification': indemn.rec_name,
-                            })
+                    raise ValidationError(gettext(
+                            'claim_indemnification_group'
+                            '.msg_before_option_start_date',
+                            indemnification=indemn.rec_name))
 
     @classmethod
     def check_calculable(cls, indemnifications):
+        pool = Pool()
+        Warning = pool.get('res.user.warning')
         super(Indemnification, cls).check_calculable(indemnifications)
         covered_elements = cls.covered_elements_per_party_contract(
             indemnifications)
@@ -203,22 +190,28 @@ class Indemnification(metaclass=PoolMeta):
                         covered_element.contract_exit_date and
                         (indemnification.end_date or datetime.date.min) >
                         covered_element.contract_exit_date)):
-                cls.append_functional_error('covered_element_rupture', {
-                        'party_rec_name': key[1].rec_name,
-                        'contract': key[0].contract_number,
-                        'date': Date.date_as_string(
-                            covered_element.contract_exit_date, lang),
-                        'benef_rec_name': indemnification.beneficiary.rec_name})
+                cls.append_functional_error(
+                    ValidationError(gettext(
+                            'claim_indemnification_group'
+                            '.msg_covered_element_rupture',
+                            party_rec_name=key[1].rec_name,
+                            contract=key[0].contract_number,
+                            date=Date.date_as_string(
+                                covered_element.contract_exit_date, lang),
+                            benef_rec_name=indemnification.beneficiary.rec_name)
+                        ))
             if indemnification.service and indemnification.service.contract:
                 contract = indemnification.service.contract
                 if (contract.status == 'terminated' and
                         contract.post_termination_claim_behaviour ==
                         'stop_indemnisations' and
                         contract.final_end_date < indemnification.end_date):
-                    cls.append_functional_error('bad_dates', {
-                            'indemn_start': indemnification.start_date,
-                            'indemn_end': indemnification.end_date,
-                            'contract_end': contract.end_date})
+                    cls.append_functional_error(
+                        ValidationError(gettext(
+                                'claim_indemnification_group.msg_bad_dates',
+                                indemn_start=indemnification.start_date,
+                                indemn_end=indemnification.end_date,
+                                contract_end=contract.end_date)))
             if indemnification.service and indemnification.service.claim \
                     and indemnification.service.contract:
                 management_start = indemnification.service. \
@@ -230,12 +223,15 @@ class Indemnification(metaclass=PoolMeta):
                 management_end_statement = management_end and \
                     indemnification.end_date > management_end
                 if management_start_statement or management_end_statement:
-                    cls.raise_user_warning('dates_not_in_management',
-                        'dates_not_in_management', {
-                            'indemn_start': indemnification.start_date,
-                            'indemn_end': indemnification.end_date,
-                            'management_start': management_start,
-                            'management_end': management_end})
+                    key = 'dates_not_in_management'
+                    if Warning.check(key):
+                        raise UserWarning(key, gettext(
+                                'claim_indemnification_group'
+                                '.msg_dates_not_in_management',
+                                indemn_start=indemnification.start_date,
+                                indemn_end=indemnification.end_date,
+                                management_start=management_start,
+                                management_end=management_end))
         cls._check_origin_service(indemnifications)
 
     @classmethod
@@ -249,8 +245,10 @@ class Indemnification(metaclass=PoolMeta):
             # If a service is a complement, and if it can have an origin, it
             # should have one in order to be properly calculated
             if not service.origin_service:
-                cls.raise_user_error('missing_origin_service',
-                    {'service': service.rec_name})
+                raise RequiredValidationError(gettext(
+                        'claim_indemnification_group'
+                        '.msg_missing_origin_service',
+                        service=service.rec_name))
 
     @classmethod
     @ModelView.button
@@ -260,9 +258,10 @@ class Indemnification(metaclass=PoolMeta):
             if (option.previous_claims_management_rule in (
                         'in_complement', 'in_complement_previous_rule')
                     and indemn.start_date < option.start_date):
-                cls.raise_user_error('before_option_start_date', {
-                        'indemnification': indemn.rec_name,
-                        })
+                raise ValidationError(gettext(
+                        'claim_indemnification_group'
+                        '.msg_before_option_start_date',
+                        indemnification=indemn.rec_name))
         super(Indemnification, cls).validate_indemnification(indemnifications)
 
 

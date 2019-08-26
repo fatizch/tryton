@@ -13,10 +13,13 @@ from sql.conditionals import Coalesce
 from dateutil.rrule import rruleset
 from dateutil.relativedelta import relativedelta
 
+from trytond.config import config
+from trytond.i18n import gettext
 from trytond.pool import Pool, PoolMeta
 from trytond.model import dualmethod
+from trytond.model.exceptions import RequiredValidationError, ValidationError
 from trytond.pyson import Eval, And, Len, If, Bool, Or, PYSONEncoder
-from trytond.error import UserError
+from trytond.exceptions import UserError
 from trytond.transaction import Transaction
 from trytond.tools import reduce_ids, grouped_slice
 from trytond.wizard import Wizard, StateView, Button, StateAction
@@ -64,7 +67,7 @@ class Contract(metaclass=PoolMeta):
     invoices = fields.One2Many('contract.invoice', 'contract', 'Invoices',
         delete_missing=True)
     due_invoices = fields.Function(
-        fields.One2Many('contract.invoice', None, 'Due Invoices'),
+        fields.Many2Many('contract.invoice', None, None, 'Due Invoices'),
         'get_due_invoices')
     receivable_today = fields.Function(
         fields.Numeric('Receivable Today',
@@ -108,8 +111,8 @@ class Contract(metaclass=PoolMeta):
         'get_last_invoice')
     account_invoices = fields.Many2Many('contract.invoice', 'contract',
         'invoice', 'Invoices', order=[('start', 'ASC')], readonly=True)
-    current_term_invoices = fields.Function(
-        fields.One2Many('contract.invoice', None, 'Current Term Invoices'),
+    current_term_invoices = fields.Function(fields.Many2Many(
+            'contract.invoice', None, None, 'Current Term Invoices'),
         'get_current_term_invoices')
     balance = fields.Function(
         fields.Numeric('Balance', digits=(16, Eval('currency_digits', 2)),
@@ -146,13 +149,6 @@ class Contract(metaclass=PoolMeta):
         cls._buttons.update({
                 'first_invoice': {},
                 'rebill_contracts': {},
-                })
-        cls._error_messages.update({
-                'no_payer': 'A payer must be specified',
-                'missing_invoices': 'This contract can not be renewed because '
-                'there are missing invoices on the current term ',
-                'no_address': 'No address available for contract: %(contract)s '
-                'at period [%(start)s, %(end)s]'
                 })
 
     def get_color_from_balance_today(self):
@@ -225,11 +221,13 @@ class Contract(metaclass=PoolMeta):
         pool = Pool()
         MoveLine = pool.get('account.move.line')
         Account = pool.get('account.account')
+        AccountType = pool.get('account.account.type')
         User = pool.get('res.user')
         cursor = Transaction().connection.cursor()
 
         line = MoveLine.__table__()
         account = Account.__table__()
+        account_type = AccountType.__table__()
 
         result = dict((c.id, Decimal('0.0')) for c in contracts)
 
@@ -252,9 +250,11 @@ class Contract(metaclass=PoolMeta):
             contract_where = reduce_ids(line.contract, sub_ids)
             cursor.execute(*line.join(account,
                     condition=account.id == line.account
+                    ).join(account_type,
+                    condition=account.type == account_type.id
                     ).select(line.contract, balance,
                     where=(
-                        (account.kind == 'receivable')
+                        (account_type.receivable == True)
                         & (line.reconciliation == Null)
                         & (account.company == company_id)
                         & line_query
@@ -550,10 +550,15 @@ class Contract(metaclass=PoolMeta):
                     self, 'billing_information')
                 field = coog_string.translate_label(billing,
                     'direct_debit_account')
-                self.append_functional_error('child_field_required',
-                    (field, parent))
+                self.append_functional_error(
+                    RequiredValidationError(gettext(
+                            'process.msg_child_field_required',
+                            field=field,
+                            parent=parent)))
             if not billing.payer and billing.direct_debit:
-                self.append_functional_error('no_payer')
+                self.append_functional_error(
+                    RequiredValidationError(gettext(
+                            'contract_insurance_invoice.msg_no_payer')))
 
     @classmethod
     def get_billing_information(cls, contracts, names):
@@ -984,14 +989,16 @@ class Contract(metaclass=PoolMeta):
                         invoice_address.party != invoice.party):
                     invoice_address = invoice.party.main_address
                 if not invoice_address:
-                    cls.append_functional_error('no_address', {
-                            'contract':
-                            contract_invoice.contract.contract_number,
-                            'start': coog_string.translate_value(
-                                contract_invoice, 'start'),
-                            'end': coog_string.translate_value(
-                                contract_invoice, 'end')
-                            })
+                    cls.append_functional_error(
+                        RequiredValidationError(gettext(
+                                'contract_insurance_invoice.msg_no_address',
+                                contract=(
+                                    contract_invoice.contract.contract_number),
+                                start=coog_string.translate_value(
+                                    contract_invoice, 'start'),
+                                end=coog_string.translate_value(
+                                    contract_invoice, 'end')
+                                )))
                 invoice.invoice_address = invoice_address
 
     @classmethod
@@ -1035,8 +1042,9 @@ class Contract(metaclass=PoolMeta):
         Invoice = pool.get('account.invoice')
         lang = self.company.party.lang
         if not lang:
-            self.company.raise_user_error('missing_lang',
-                {'party': self.company.rec_name})
+            raise UserError(gettext(
+                    'company_cog.msg_missing_lang',
+                    party=self.company.rec_name))
         payment_term = ServerContext().get('payment_term', None)
         if not payment_term:
             cancelled = self.get_cancelled_invoice_in_rebill(start)
@@ -1368,7 +1376,8 @@ class Contract(metaclass=PoolMeta):
             if getattr(contract, 'last_posted_invoice_end', None) is not None:
                 if not (contract.last_posted_invoice_end ==
                         contract.activation_history[-1].end_date):
-                    cls.raise_user_error('missing_invoices')
+                    raise ValidationError(gettext(
+                            'contract_insurance_invoice.msg_missing_invoices'))
 
     @classmethod
     def do_decline(cls, contracts, reason):
@@ -1670,7 +1679,7 @@ class ContractBillingInformation(model._RevisionMixin, model.CoogSQL,
         depends=_CONTRACT_STATUS_DEPENDS + ['possible_billing_modes'])
     possible_billing_modes = fields.Function(
         fields.One2Many('offered.billing_mode', None, 'Possible Billing Modes'),
-        'getter_possible_billing_modes')
+        'getter_possible_billing_modes', 'setter_void')
     payment_term = fields.Many2One('account.invoice.payment_term',
         'Payment Term', ondelete='RESTRICT', states={
             'required': And(Eval('direct_debit', False),
@@ -1708,9 +1717,10 @@ class ContractBillingInformation(model._RevisionMixin, model.CoogSQL,
                 Eval('contract_status') != 'quote'),
             }, depends=['direct_debit', 'contract_status'],
         ondelete='RESTRICT')
-    possible_payment_terms = fields.Function(fields.One2Many(
-            'account.invoice.payment_term', None, 'Possible Payment Term'),
-            'on_change_with_possible_payment_terms')
+    possible_payment_terms = fields.Function(fields.Many2Many(
+            'account.invoice.payment_term', None, None,
+            'Possible Payment Term'),
+        'on_change_with_possible_payment_terms')
     is_once_per_contract = fields.Function(
         fields.Boolean('Once Per Contract?'),
         'on_change_with_is_once_per_contract')
@@ -2051,9 +2061,10 @@ class Premium(metaclass=PoolMeta):
     account = fields.Many2One('account.account', 'Account', required=True,
         domain=[
             ('company', '=', Eval('context', {}).get('company', -1)),
-            ['OR', [('kind', '=', 'revenue')], [('kind', '=', 'other')]]
+            ['OR', [('type.revenue', '=', True)], [('type.other', '=', True)]]
             ],
-        ondelete='RESTRICT', readonly=True)
+        ondelete='RESTRICT',
+        readonly=not config.getboolean('env', 'testing'))
 
     @classmethod
     def _export_light(cls):

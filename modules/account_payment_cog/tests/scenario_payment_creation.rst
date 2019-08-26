@@ -125,8 +125,7 @@ Create Payment Journal::
     ...     line.payment_date = datetime.date.today()
     ...     line.save()
     >>> def delete_payment(payment):
-    ...     payment.state = 'draft'
-    ...     payment.save()
+    ...     payment.click('draft')
     ...     Payment.delete([payment])
     >>> debit = Decimal(42)
     >>> debit_line = create_move_line(debit)

@@ -2,12 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:endorsement.start:"
-msgid "Cannot start full contract revision, no matching process available"
-msgstr ""
-"Impossible de démarrer la reprise intégrale de contrat, aucun processus "
-"défini."
-
 msgctxt "field:endorsement.contract.full_revision_start,current_start_date:"
 msgid "Current Start Date"
 msgstr "Date de début actuelle"
@@ -60,6 +54,12 @@ msgstr "Reprise intégrale de contrat"
 msgctxt "model:endorsement.part,name:full_contract_revision_part"
 msgid "Full Contract Revision"
 msgstr "Reprise intégrale de contrat"
+
+msgctxt "model:ir.message,text:msg_no_process_found"
+msgid "Cannot start full contract revision, no matching process available."
+msgstr ""
+"Impossible de démarrer la reprise intégrale de contrat, aucun processus "
+"défini."
 
 msgctxt "selection:process,kind:"
 msgid "Full Contract Revision"

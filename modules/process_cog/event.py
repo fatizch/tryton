@@ -2,6 +2,7 @@
 # this repository contains the full copyright notices and license terms.
 from itertools import groupby
 
+from trytond.i18n import gettext
 from trytond.pyson import Eval, Or, If
 from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
@@ -36,12 +37,6 @@ class EventTypeAction(metaclass=PoolMeta):
                 Eval('action') != 'initiate_process')},
         depends=['pyson_condition', 'action'])
 
-    @classmethod
-    def __setup__(cls):
-        super(EventTypeAction, cls).__setup__()
-        cls._error_messages.update({'initiate_process': 'Initiate Process'})
-        cls._error_messages.update({'clear_process': 'Clear Process'})
-
     @fields.depends('process_to_initiate', 'step_to_start')
     def on_change_process_to_initiate(self):
         if not self.process_to_initiate:
@@ -50,10 +45,8 @@ class EventTypeAction(metaclass=PoolMeta):
     @classmethod
     def get_action_types(cls):
         return super(EventTypeAction, cls).get_action_types() + [
-            ('initiate_process', cls.raise_user_error(
-                    'initiate_process', raise_exception=False)),
-            ('clear_process', cls.raise_user_error(
-                    'clear_process', raise_exception=False))]
+            ('initiate_process', gettext('process_cog.msg_initiate_process')),
+            ('clear_process', gettext('process_cog.msg_clear_process'))]
 
     @classmethod
     def _export_light(cls):

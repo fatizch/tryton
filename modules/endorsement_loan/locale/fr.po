@@ -2,87 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:contract.covered_element.add_option.loan_shares:"
-msgid ""
-"The following coverages have no loan share :\n"
-"\t%s"
-msgstr ""
-"Les garanties suivantes n'ont pas de quotité :\n"
-"\t%s"
-
-msgctxt "error:endorsement.contract.covered_element.option:"
-msgid "Loan Share Modifications"
-msgstr "Modifications des quotités"
-
-msgctxt "error:endorsement.contract.loan:"
-msgid "New version"
-msgstr "Nouvelle version"
-
-msgctxt "error:endorsement.contract.loan:"
-msgid "Remove version of"
-msgstr "Suppression de la version"
-
-msgctxt "error:endorsement.contract.loan:"
-msgid "Update %s"
-msgstr "Mise à jour de %s"
-
-msgctxt "error:endorsement.contract:"
-msgid "Contract Loans Changes"
-msgstr "Modifications des prêts"
-
-msgctxt "error:endorsement.loan.add_remove:"
-msgid "There must be at least one loan for contract %s"
-msgstr "Il doit y avoir au moins un prêt pour le contrat %s"
-
-msgctxt "error:endorsement.loan.change_any_date:"
-msgid ""
-"There may be insufficiant data to properly compute the loan payments, please"
-" double-check"
-msgstr ""
-"Il est possible que les informations saisies soient insuffisantes pour "
-"pouvoir correctement calculer l'échéancier"
-
-msgctxt "error:endorsement.loan.increment:"
-msgid "New version"
-msgstr "Nouvelle version"
-
-msgctxt "error:endorsement.loan.increment:"
-msgid "Remove version of"
-msgstr "Suppression de la version"
-
-msgctxt "error:endorsement.loan.increment:"
-msgid "Update %s"
-msgstr "Mise à jour de %s"
-
-msgctxt "error:endorsement.loan.share:"
-msgid "New version"
-msgstr "Nouvelle version"
-
-msgctxt "error:endorsement.loan.share:"
-msgid "Remove version of"
-msgstr "Suppression de la version"
-
-msgctxt "error:endorsement.loan.share:"
-msgid "Update %s"
-msgstr "Mise à jour de %s"
-
-msgctxt "error:endorsement.loan:"
-msgid "Endorsement \"%s\" is not the latest applied."
-msgstr "L'avenant \"%s\" n'est pas le plus récent appliqué"
-
-msgctxt "error:endorsement.loan:"
-msgid "Increments Modifications"
-msgstr "Modification des paliers"
-
-msgctxt "error:endorsement.loan:"
-msgid "Loan Modifications"
-msgstr "Modification du prêt"
-
-msgctxt "error:endorsement.loan:"
-msgid "There may only be one endorsement in_progress at a given time per loan"
-msgstr ""
-"Il ne peut y avoir qu'un seul avenant en cours de saisie sur un prêt donné."
-
 msgctxt ""
 "field:contract.covered_element.add_option.loan_share_selector,contract_endorsement:"
 msgid "Contract"
@@ -1113,6 +1032,56 @@ msgctxt "model:ir.action,name:act_endorsement"
 msgid "Endorsement"
 msgstr "Avenants"
 
+msgctxt "model:ir.message,text:msg_at_least_one_loan"
+msgid "There must be at least one loan for contract %(contract)s."
+msgstr "Il doit y avoir au moins un prêt pour le contrat %(contract)s"
+
+msgctxt "model:ir.message,text:msg_bad_loan_dates"
+msgid "Bad dates for loans: %(loans)s."
+msgstr "Mauvaises dates pour les prêts: %(loans)s"
+
+msgctxt "model:ir.message,text:msg_contract_loan_changes"
+msgid "Contract Loans Changes:"
+msgstr "Modifications des prêts"
+
+msgctxt "model:ir.message,text:msg_incomplete_loan_data"
+msgid ""
+"There may be insufficiant data to properly compute the loan payments, please"
+" double-check."
+msgstr ""
+"Il est possible que les informations saisies soient insuffisantes pour "
+"pouvoir correctement calculer l'échéancier."
+
+msgctxt "model:ir.message,text:msg_increment_modifications"
+msgid "Increments Modifications:"
+msgstr "Modification des paliers"
+
+msgctxt "model:ir.message,text:msg_loan_modifications"
+msgid "Loan Modifications:"
+msgstr "Modification du prêt"
+
+msgctxt "model:ir.message,text:msg_loan_share_modifications"
+msgid "Loan Share Modifications:"
+msgstr "Modifications des quotités"
+
+msgctxt "model:ir.message,text:msg_no_loan_share_on_new_coverage"
+msgid ""
+"The following coverages have no loan share:\n"
+"\t%(coverage)s"
+msgstr ""
+"Les garanties suivantes n'ont pas de quotité :\n"
+"\t%(coverage)s"
+
+msgctxt "model:ir.message,text:msg_not_latest_applied"
+msgid "Endorsement \"%(endorsement)s\" is not the latest applied."
+msgstr "L'avenant \"%(endorsement)s\" n'est pas le plus récent appliqué"
+
+msgctxt "model:ir.message,text:msg_only_one_endorsement_in_progress"
+msgid ""
+"There may only be one endorsement in_progress at a given time per loan."
+msgstr ""
+"Il ne peut y avoir qu'un seul avenant en cours de saisie sur un prêt donné."
+
 msgctxt "selection:endorsement.contract.loan,action:"
 msgid "Add"
 msgstr "Ajouter"
@@ -1395,3 +1364,36 @@ msgctxt ""
 "wizard_button:endorsement.start,loan_share_update,loan_share_update_suspend:"
 msgid "Suspend"
 msgstr "Suspendre"
+
+msgctxt ""
+"wizard_button:endorsement.start,preview_contract_payments,apply_endorsement:"
+msgid "Apply"
+msgstr "Appliquer"
+
+msgctxt "wizard_button:endorsement.start,preview_contract_payments,cancel:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt "wizard_button:endorsement.start,preview_contract_payments,end:"
+msgid "Ok"
+msgstr "Ok"
+
+msgctxt "wizard_button:endorsement.start,preview_contract_payments,summary:"
+msgid "Summary"
+msgstr "Synthèse"
+
+msgctxt "wizard_button:endorsement.start,preview_loan,apply_endorsement:"
+msgid "Apply"
+msgstr "Appliquer"
+
+msgctxt "wizard_button:endorsement.start,preview_loan,cancel:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt "wizard_button:endorsement.start,preview_loan,end:"
+msgid "Ok"
+msgstr "Ok"
+
+msgctxt "wizard_button:endorsement.start,preview_loan,summary:"
+msgid "Summary"
+msgstr "Synthèse"

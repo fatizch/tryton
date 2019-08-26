@@ -1,8 +1,10 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+from trytond.i18n import gettext
 from trytond.pool import Pool, PoolMeta
 from trytond.transaction import Transaction
 from trytond.model import ModelView
+from trytond.model.exceptions import ValidationError
 from trytond.wizard import Wizard, StateView, StateAction, Button
 from trytond.pyson import PYSONEncoder
 
@@ -22,17 +24,6 @@ class Insurer(metaclass=PoolMeta):
     group_insurer_invoices = fields.Boolean('Group Insurer Invoices',
         help='If True, all insurer related invoices (premiums / claims / etc) '
         'will be grouped in one')
-
-    @classmethod
-    def __setup__(cls):
-        super(Insurer, cls).__setup__()
-        cls._error_messages.update({
-                'mixed_insurer_configuration': 'You cannot generate invoices '
-                'simultaneously for insurers whose group invoice '
-                'configuration is different',
-                'bad_insurer_configuration': 'Notice kind does not match '
-                'insurer configuration',
-                })
 
     @classmethod
     def generate_slip_parameters(cls, notice_kind, parties=None):
@@ -55,9 +46,11 @@ class Insurer(metaclass=PoolMeta):
             return []
         grouped = {bool(x.group_insurer_invoices) for x in insurers}
         if len(grouped) != 1:
-            cls.raise_user_error('mixed_insurer_configuration')
+            raise ValidationError(gettext(
+                    'account_invoice_slip.msg_mixed_insurer_configuration'))
         if bool(grouped.pop()) != (notice_kind == 'all'):
-            cls.raise_user_error('bad_insurer_configuration')
+            raise ValidationError(gettext(
+                    'account_invoice_slip.msg_bad_insurer_configuration'))
         return insurers
 
     @classmethod

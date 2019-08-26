@@ -19,9 +19,6 @@ class ReportTemplate(metaclass=PoolMeta):
     @classmethod
     def __setup__(cls):
         super(ReportTemplate, cls).__setup__()
-        cls._error_messages.update({
-            'bdoc': 'BDOC '
-            })
         cls.format_for_internal_edm.states = {
             'invisible': (Eval('input_kind') == 'bdoc') |
                          (Eval('input_kind') == 'shared_genshi_template')}
@@ -34,7 +31,7 @@ class ReportTemplate(metaclass=PoolMeta):
     @classmethod
     def get_possible_input_kinds(cls):
         return super().get_possible_input_kinds() + [
-            ('bdoc', cls.raise_user_error('bdoc', raise_exception=False)),
+            ('bdoc', 'BDOC'),
         ]
 
     @fields.depends('input_kind', 'possible_process_methods', 'versions')
@@ -53,8 +50,7 @@ class ReportTemplate(metaclass=PoolMeta):
     @fields.depends('input_kind')
     def get_possible_process_methods(self):
         if self.input_kind == 'bdoc':
-            return [('bdoc', self.raise_user_error('bdoc',
-                raise_exception=False))]
+            return [('bdoc', 'BDOC')]
         else:
             return super().get_possible_process_methods()
 

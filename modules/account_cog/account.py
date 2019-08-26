@@ -7,6 +7,7 @@ from trytond import backend
 from trytond.pool import PoolMeta, Pool
 from trytond.cache import Cache
 from trytond.transaction import Transaction
+from trytond.pyson import Eval, If
 
 from trytond.modules.coog_core import export, fields, utils, model
 
@@ -14,8 +15,8 @@ from trytond.modules.coog_core import export, fields, utils, model
 __all__ = [
     'Account',
     'AccountTemplate',
-    'AccountKind',
-    'AccountTypeTemplate',
+    'Type',
+    'TypeTemplate',
     'Journal',
     'FiscalYear',
     'Period',
@@ -29,21 +30,37 @@ __all__ = [
     ]
 
 
-class AccountKind(export.ExportImportMixin):
+class Type(export.ExportImportMixin):
     __name__ = 'account.account.type'
     _func_key = 'name'
 
+    other = fields.Boolean(
+        "Other",
+        domain=[
+            If(Eval('statement') != 'off-balance',
+                ('other', '=', False), ()),
+            ],
+        depends=['statement'])
+
     @classmethod
     def _export_light(cls):
-        return super(AccountKind, cls)._export_light() | {'company'}
+        return super(Type, cls)._export_light() | {'company'}
 
 
-class AccountTypeTemplate(export.ExportImportMixin):
+class TypeTemplate(export.ExportImportMixin):
     __name__ = 'account.account.type.template'
 
+    other = fields.Boolean(
+        "Other",
+        domain=[
+            If(Eval('statement') != 'off-balance',
+                ('other', '=', False), ()),
+            ],
+        depends=['statement'])
+
     @classmethod
     def _export_light(cls):
-        return super(AccountTypeTemplate, cls)._export_light() | {'parent'}
+        return super(TypeTemplate, cls)._export_light() | {'parent'}
 
     @classmethod
     def search_rec_name(cls, name, clause):
@@ -60,10 +77,109 @@ class AccountTypeTemplate(export.ExportImportMixin):
         else:
             return [('name',) + tuple(clause[1:])]
 
+    def _get_type_value(self, type=None):
+        res = super()._get_type_value(type)
+        if not type or type.other != self.other:
+            res['other'] = self.other
+        return res
+
 
 class Account(export.ExportImportMixin, model.TaggedMixin):
     __name__ = 'account.account'
     _func_key = 'code'
+
+    @classmethod
+    def __register__(cls, module_name):
+        pool = Pool()
+        Type = pool.get('account.account.type')
+
+        type_table = Type.__table__()
+        account_table = cls.__table__()
+
+        super(Account, cls).__register__(module_name)
+        cursor = Transaction().connection.cursor()
+        table = cls.__table_handler__(module_name)
+
+        # Migration from 2.4:
+        # move other kind to account.account.type
+        if table.column_exist('kind'):
+
+            # Migrate 'other' accounts
+            query = account_table.join(type_table, condition=(
+                    type_table.id == account_table.type)
+                ).select(type_table.id,
+                    where=account_table.kind == 'other',
+                    group_by=type_table.id)
+            cursor.execute(*query)
+            ids = [x for x, in cursor.fetchall()]
+            cursor.execute(*type_table.update(
+                    columns=[type_table.other, type_table.statement,
+                        type_table.template_override],
+                    values=[True, 'off-balance', True],
+                    where=type_table.id.in_(ids)))
+
+            # Migrate 'payable' accounts
+            query = account_table.join(type_table, condition=(
+                    type_table.id == account_table.type)
+                ).select(type_table.id,
+                    where=account_table.kind == 'payable',
+                    group_by=type_table.id)
+            cursor.execute(*query)
+            ids = [x for x, in cursor.fetchall()]
+
+            cursor.execute(*type_table.update(
+                    columns=[type_table.payable, type_table.statement,
+                        type_table.template_override, type_table.assets],
+                    values=[True, 'balance', True, False],
+                    where=type_table.id.in_(ids)))
+
+            # Migrate 'receivable' accounts
+            query = account_table.join(type_table, condition=(
+                    type_table.id == account_table.type)
+                ).select(type_table.id,
+                    where=account_table.kind == 'receivable',
+                    group_by=type_table.id)
+            cursor.execute(*query)
+            ids = [x for x, in cursor.fetchall()]
+
+            cursor.execute(*type_table.update(
+                    columns=[type_table.receivable, type_table.statement,
+                        type_table.template_override, type_table.assets],
+                    values=[True, 'balance', True, True],
+                    where=type_table.id.in_(ids)))
+
+            # Migrate 'revenue' accounts
+            query = account_table.join(type_table, condition=(
+                    type_table.id == account_table.type)
+                ).select(type_table.id,
+                    where=account_table.kind == 'revenue',
+                    group_by=type_table.id)
+            cursor.execute(*query)
+            ids = [x for x, in cursor.fetchall()]
+
+            cursor.execute(*type_table.update(
+                    columns=[type_table.revenue, type_table.statement,
+                        type_table.template_override],
+                    values=[True, 'income', True],
+                    where=type_table.id.in_(ids)))
+
+            # Migrate 'expense' accounts
+            query = account_table.join(type_table, condition=(
+                    type_table.id == account_table.type)
+                ).select(type_table.id,
+                    where=account_table.kind == 'expense',
+                    group_by=type_table.id)
+            cursor.execute(*query)
+            ids = [x for x, in cursor.fetchall()]
+
+            cursor.execute(*type_table.update(
+                    columns=[type_table.expense, type_table.statement,
+                        type_table.template_override],
+                    values=[True, 'income', True],
+                    where=type_table.id.in_(ids)))
+
+            # JMO: keep it to be able to track history
+            # table.drop_column('kind')
 
     @classmethod
     def is_master_object(cls):

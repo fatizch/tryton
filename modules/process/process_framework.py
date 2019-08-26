@@ -1,10 +1,12 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+from trytond.i18n import gettext
 from trytond.pool import PoolMeta, Pool
 from trytond.rpc import RPC
 from trytond.transaction import Transaction
 from trytond.exceptions import UserError
 from trytond.model import ModelView, ModelSQL, model
+from trytond.model.exceptions import RequiredValidationError, ValidationError
 from trytond.pyson import Eval
 
 from trytond.modules.coog_core import coog_string, utils, fields
@@ -124,13 +126,6 @@ class ProcessFramework(ModelSQL, ModelView, metaclass=ClassAttr):
         # thsoe buttons
         cls._buttons = DynamicButtonDict(cls.__allowed_buttons__,
             cls._buttons, cls)
-        cls._error_messages.update({
-                'everything_ok': 'Everything is good !',
-                'field_required': "Enter a value for field(s): %s",
-                'child_field_required': "Enter a value for field '%s' of '%s'",
-                'date_in_future': 'Select a date that is not in the future '
-                'for field(s): %s',
-                })
         if issubclass(cls, ModelSQL):
             cls.order_task_status = cls._order_task_status
 
@@ -233,7 +228,7 @@ class ProcessFramework(ModelSQL, ModelView, metaclass=ClassAttr):
                     str(instance.current_state.id), language)
             view, = View.search([('name', '=', view_name)])
 
-            return [result, 'toggle_view:%s' % str(view.id)]
+            return [result, 'switch form %s' % str(view.id)]
         return toggle_process_view_wrapper
 
     def set_state(self, value, process_name=None):
@@ -254,44 +249,6 @@ class ProcessFramework(ModelSQL, ModelView, metaclass=ClassAttr):
             if process_desc.on_model.model != self.__name__:
                 return
         self.current_state = process_desc.get_step_relation(value)
-
-    @classmethod
-    def raise_user_error(cls, errors, error_args=None, error_description='',
-            error_description_args=None, raise_exception=True):
-        if (error_args or error_description or error_description_args or not
-                raise_exception or not isinstance(errors, (list, tuple))):
-            return super(ProcessFramework, cls).raise_user_error(
-                errors, error_args, error_description, error_description_args,
-                raise_exception)
-
-        # We need a custom user error management as the displaying of errors
-        # will be delayed in order to display several errors at one time.
-        Translation = Pool().get('ir.translation')
-        result = []
-        # One error looks like : (error_code, (error_arg1, error_arg2))
-        for the_error in errors:
-            # TODO : Remove this cast which exists only for backward
-            # compatibility
-            if isinstance(the_error, str):
-                error = the_error
-                error_args = error_args
-            else:
-                error, error_args = the_error
-            error = cls._error_messages.get(error, error)
-            language = Transaction().language
-            res = Translation.get_source(
-                cls.__name__, 'error', language, error)
-            if not res:
-                res = Translation.get_source(error, 'error', language)
-            if res:
-                error = res
-            try:
-                error = error % error_args
-            except TypeError:
-                pass
-            result.append(error)
-        # We display the resulting list of strings
-        raise UserError('\n'.join(result))
 
     def get_task_name(self, name=None):
         if hasattr(self, 'synthesis_rec_name'):
@@ -372,8 +329,10 @@ class ProcessFramework(ModelSQL, ModelView, metaclass=ClassAttr):
             if not getattr(self, field):
                 labels.append(coog_string.translate_label(self, field))
         if labels:
-            self.append_functional_error('field_required',
-                ', '.join(["'%s'" % l for l in labels]))
+            self.append_functional_error(
+                RequiredValidationError(gettext(
+                        'process.msg_field_required',
+                        fields=', '.join(["'%s'" % l for l in labels]))))
 
     def check_not_future(self, *args):
         labels = []
@@ -382,8 +341,10 @@ class ProcessFramework(ModelSQL, ModelView, metaclass=ClassAttr):
             if date and date > utils.today():
                 labels.append(coog_string.translate_label(self, field))
         if labels:
-            self.append_functional_error('date_in_future',
-                ', '.join(["'%s'" % l for l in labels]))
+            self.append_functional_error(
+                ValidationError(gettext(
+                        'process.msg_date_in_future',
+                        fields=', '.join(["'%s'" % l for l in labels]))))
 
     @classmethod
     def button_transition_states(cls, process, transition_data):

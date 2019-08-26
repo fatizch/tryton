@@ -1,6 +1,8 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 import os
+from trytond.i18n import gettext
+from trytond.model.exceptions import ValidationError
 from trytond.pool import Pool
 from trytond.pyson import Eval, Bool
 from trytond.wizard import Wizard, StateTransition, StateView, Button
@@ -46,13 +48,6 @@ class HexaPostSet(model.CoogView):
             'readonly': True,
             'invisible': True,
             })
-
-    @classmethod
-    def __setup__(cls):
-        super(HexaPostSet, cls).__setup__()
-        cls._error_messages.update({
-                'cant_find_subdivision': "Can't find subdivision for %s"
-                })
 
     @staticmethod
     def default_data_file():
@@ -144,7 +139,6 @@ class HexaPostLoader(object):
         pool = Pool()
         SubDivision = pool.get('country.subdivision')
         Country = pool.get('country.country')
-        UpdateCreationView = pool.get('country.hexapost.set')
 
         france = Country.search([('code', '=', 'FR')])[0]
 
@@ -180,8 +174,9 @@ class HexaPostLoader(object):
                     line['post_code'][:3]]
             elif line['post_code'][:2] not in ('00', '98'):
                 if not is_testing:
-                    UpdateCreationView.raise_user_error('cant_find_subdivision',
-                        line['post_code'])
+                    raise ValidationError(gettext(
+                            'country_hexaposte.msg_cant_find_subdivision',
+                            post_code=line['post_code']))
             res.append(new_line)
         return res
 

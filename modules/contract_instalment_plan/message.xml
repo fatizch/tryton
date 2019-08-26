@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<tryton>
+    <data group="1">
+        <record model="ir.message" id="msg_delete_draft">
+            <field name="text">Instalment Plan "%(instalment)s" must be in draft before deletion.</field>
+        </record>
+        <record model="ir.message" id="msg_missing_period_data">
+            <field name="text">Contract and invoice period dates are required.</field>
+        </record>
+        <record model="ir.message" id="msg_invoice_period_inconsistent">
+            <field name="text">Invoice period end %(end_date)s should be greater than invoices period start %(start_date)s.</field>
+        </record>
+        <record model="ir.message" id="msg_start_date_is_not_invoicing_date">
+            <field name="text">Invoices period start is not valid.</field>
+        </record>
+        <record model="ir.message" id="msg_end_date_is_not_invoicing_date">
+            <field name="text">Invoice period end is not valid.</field>
+        </record>
+        <record model="ir.message" id="msg_duplicate_instalments">
+            <field name="text">Existing instalment(s) for this period: %(existing_instalment)s.</field>
+        </record>
+        <record model="ir.message" id="msg_unknown_calculation_method">
+            <field name="text">Unknown calculation method: %(calculation_method)s.</field>
+        </record>
+        <record model="ir.message" id="msg_invalid_total_amounts">
+            <field name="text">Total amount %(total_amount)s should be equal to the sum of scheduled payments %(scheduled_amount)s.</field>
+        </record>
+        <record model="ir.message" id="msg_paid_invoices">
+            <field name="text">Some invoices are already paid in the period: %(paid_invoices)s.</field>
+        </record>
+        <record model="ir.message" id="msg_no_invoice_provided">
+            <field name="text">A contract invoice with an instalment is required to compute terms based on instalment.</field>
+        </record>
+        <record model="ir.message" id="msg_already_validated">
+            <field name="text">It is not possible to resume an already validated instalment plan.</field>
+        </record>
+    </data>
+</tryton>

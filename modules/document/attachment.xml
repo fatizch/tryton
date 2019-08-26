@@ -18,6 +18,7 @@ this repository contains the full copyright notices and license terms. -->
         </record>
         <!-- Rules -->
         <record model="ir.rule.group" id="rule_group_attachment">
+            <field name="name">User in document description</field>
             <field name="model" search="[('model', '=', 'ir.attachment')]"/>
             <field name="global_p" eval="True"/>
             <field name="perm_read" eval="True"/>

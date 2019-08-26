@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<tryton>
+    <data group="1">
+        <record model="ir.message" id="msg_cancel_or_delete_non_periodic_invoices">
+            <field name="text">Cancel or Delete Non Periodic Invoices</field>
+        </record>
+        <record model="ir.message" id="msg_create_non_periodic_invoices">
+            <field name="text">Create Non Periodic Invoices</field>
+        </record>
+        <record model="ir.message" id="msg_rounding_document_method_error">
+            <field name="text">Following products or coverages: %(name)s have tax included option which is not allowed with document rounding method.</field>
+        </record>
+        <record model="ir.message" id="msg_no_period">
+            <field name="text">No periods found for invoice date: %(date)s.</field>
+        </record>
+        <record model="ir.message" id="msg_no_payer">
+            <field name="text">A payer must be specified.</field>
+        </record>
+        <record model="ir.message" id="msg_missing_invoices">
+            <field name="text">This contract can not be renewed because there are missing invoices on the current term.</field>
+        </record>
+        <record model="ir.message" id="msg_no_address">
+            <field name="text">No address available for contract: %(contract)s at period [%(start)s, %(end)s].</field>
+        </record>
+        <record model="ir.message" id="msg_post_on_non_active_contract">
+            <field name="text">Impossible to post invoice "%(invoice)s" on contract "%(contract)s" which is "%(status)s".</field>
+        </record>
+        <record model="ir.message" id="msg_previous_invoices_not_posted">
+            <field name="text">There are %(count)s invoices with a start date before %(start)s on contract %(contract)s. Proceeding further will post those as well.
+
+	%(invoices)s</field>
+        </record>
+        <record model="ir.message" id="msg_future_invoices_existing">
+            <field name="text">You cannot cancel this invoice.
+There are %(count)s invoice(s) with a start date after %(date)s on contract %(contract)s.
+
+	%(invoices)s</field>
+        </record>
+        <record model="ir.message" id="msg_no_copy_periodic_invoices">
+            <field name="text">The copy of periodic invoices is forbidden.</field>
+        </record>
+        <record model="ir.message" id="msg_wrong_rule_format">
+            <field name="text">The return value of the rule must be a dictionnary.</field>
+        </record>
+    </data>
+</tryton>

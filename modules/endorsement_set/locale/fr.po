@@ -2,26 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:endorsement.set:"
-msgid "No sequence defined in configuration"
-msgstr "Pas de séquence définie dans la configuration"
-
-msgctxt "error:endorsement.set:"
-msgid "The effective date is already set."
-msgstr "La date d'effet est déjà définie"
-
-msgctxt "error:endorsement.set:"
-msgid "The endorsement set number must be unique."
-msgstr "Le numéro d'ensemble d'avenant doit être unique"
-
-msgctxt "error:endorsement:"
-msgid "All endorsements on endorsement set must be applied together"
-msgstr "Tous les avenants de l'ensemble doivent être appliqués ensemble"
-
-msgctxt "error:endorsement:"
-msgid "All endorsements on endorsement set must be declined together"
-msgstr "Tous les avenants de l'ensemble doivent être déclinés ensemble"
-
 msgctxt "field:endorsement,attachments:"
 msgid "Attachments"
 msgstr "Pièces jointes"
@@ -209,6 +189,18 @@ msgstr "Décliner l'ensemble d'avenants"
 msgctxt "model:ir.action,name:act_endorsement_set_form"
 msgid "Endorsements Sets"
 msgstr "Ensembles d'avenants"
+
+msgctxt "model:ir.message,text:msg_effective_date_already_set"
+msgid "The effective date is already set."
+msgstr "La date d'effet est déjà définie."
+
+msgctxt "model:ir.message,text:msg_must_apply_all"
+msgid "All endorsements on endorsement set must be applied together."
+msgstr "Tous les avenants de l'ensemble doivent être appliqués ensemble."
+
+msgctxt "model:ir.message,text:msg_must_decline_all"
+msgid "All endorsements on endorsement set must be declined together."
+msgstr "Tous les avenants de l'ensemble doivent être déclinés ensemble."
 
 msgctxt "model:ir.sequence,name:sequence_number"
 msgid "Endorsement Set Number Sequence"

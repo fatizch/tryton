@@ -1,5 +1,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+from trytond.i18n import gettext
+from trytond.model.exceptions import ValidationError
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval
 
@@ -118,19 +120,10 @@ class CoveredElementDisplayer(metaclass=PoolMeta):
 class ChangeContractSubscriber(metaclass=PoolMeta):
     __name__ = 'endorsement.contract.subscriber_change'
 
-    @classmethod
-    def __setup__(cls):
-        super(ChangeContractSubscriber, cls).__setup__()
-        cls._error_messages.update({
-                'check_party_bank_account': 'The new subscriber must have a '
-                'bank account in order to receive his benefits',
-                })
-
     def step_update(self):
         for endorsement_contract in list(self._get_contracts().values()):
             if endorsement_contract.contract.is_health and \
                     not self.new_subscriber.bank_accounts:
-                self.raise_user_warning('check_party_bank_account',
-                'check_party_bank_account')
-                break
+                raise ValidationError(gettext(
+                        'claim_health.msg_check_party_bank_account'))
         super(ChangeContractSubscriber, self).step_update()

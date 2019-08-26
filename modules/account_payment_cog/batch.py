@@ -389,6 +389,7 @@ class PaymentCreationBatch(batch.BatchRoot):
         payment = pool.get('account.payment').__table__()
         move_line = pool.get('account.move.line').__table__()
         account = pool.get('account.account').__table__()
+        account_type = pool.get('account.account.type').__table__()
         party = pool.get('party.party').__table__()
         if payment_kind and payment_kind not in PAYMENT_KINDS:
             msg = "ignore payment_kind: '%s' not in %s" % (payment_kind,
@@ -399,12 +400,10 @@ class PaymentCreationBatch(batch.BatchRoot):
             'move_line': move_line,
             'party': party,
             'account': account,
+            'type': account_type,
             }
         join_acc_cond = (
             (move_line.account == account.id)
-            & ((account.kind == 'receivable') |
-                ((account.kind == 'payable') &
-                    (party.block_payable_payments == Literal(False))))
             & (move_line.reconciliation == Null)
             & (move_line.payment_date <= treatment_date)
             & (move_line.payment_blocked == Literal(False))
@@ -415,7 +414,12 @@ class PaymentCreationBatch(batch.BatchRoot):
             join_acc_cond &= (move_line.debit < 0) | (move_line.credit > 0)
         query_table = move_line.join(party,
             condition=(move_line.party == party.id)
-        ).join(account, condition=join_acc_cond)
+        ).join(account, condition=join_acc_cond).join(account_type,
+            condition=(
+                (account.type == account_type.id)
+                & ((account_type.receivable == Literal(True)) |
+                    ((account_type.payable == Literal(True)) &
+                        (party.block_payable_payments == Literal(False))))))
         where_clause = Equal(payment.select(Count(payment.id),
                 where=((payment.state != 'failed')
                     & (payment.line == move_line.id))), 0)

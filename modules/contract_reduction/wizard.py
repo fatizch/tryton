@@ -2,6 +2,8 @@
 # this repository contains the full copyright notices and license terms.
 from decimal import Decimal
 
+from trytond.i18n import gettext
+from trytond.model.exceptions import ValidationError
 from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval
 from trytond.transaction import Transaction
@@ -40,16 +42,6 @@ class Reduce(Wizard):
             ])
     reduce = StateTransition()
 
-    @classmethod
-    def __setup__(cls):
-        super(Reduce, cls).__setup__()
-        cls._error_messages.update({
-                'no_reduction_rule': 'No reduction rule was found on product '
-                '%(product)s',
-                'invalid_date': 'Impossible to reduce the contract before the '
-                'contract\'s start_date (%(start_date)s)',
-                })
-
     def default_parameters(self, name):
         if self.parameters._default_values:
             return self.parameters._default_values
@@ -57,8 +49,9 @@ class Reduce(Wizard):
         contract = Pool().get('contract')(
             Transaction().context.get('active_id'))
         if not contract.can_reduce:
-            contract.raise_user_error('cannot_reduce', {
-                    'contract': contract.rec_name})
+            raise ValidationError(gettext(
+                    'contract_reduction.msg_cannot_reduce',
+                    contract=contract.rec_name))
         return {
             'contract': contract.id,
             }
@@ -71,8 +64,9 @@ class Reduce(Wizard):
     def check_parameters(self):
         if (self.parameters.contract.start_date >=
                 self.parameters.reduction_date):
-            self.raise_user_error('invalid_date', {
-                    'start_date': self.parameters.contract.start_date})
+            raise ValidationError(gettext(
+                    'contract_reduction.msg_invalid_date',
+                    start_date=self.parameters.contract.start_date))
 
     def calculate_reduction(self):
         contract = self.parameters.contract

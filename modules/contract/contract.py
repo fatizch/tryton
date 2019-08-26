@@ -9,15 +9,18 @@ from sql.aggregate import Max, Min
 from sql.operators import Not
 
 from trytond import backend
+from trytond.exceptions import UserWarning
+from trytond.i18n import gettext
 from trytond.tools import grouped_slice, cursor_dict
 from trytond.rpc import RPC
 from trytond.cache import Cache
-from trytond.error import UserError
+from trytond.exceptions import UserError
 from trytond.transaction import Transaction
 from trytond.pyson import Eval, If, Bool, And, Or
 from trytond.protocols.jsonrpc import JSONDecoder
 from trytond.pool import Pool
 from trytond.model import dualmethod, Unique
+from trytond.model.exceptions import ValidationError, AccessError
 from trytond.wizard import Wizard, StateView, StateTransition, Button
 from trytond.server_context import ServerContext
 
@@ -348,39 +351,6 @@ class Contract(model.CoogSQL, model.CoogView, with_extra_data(['contract'],
                     'invisible': Eval('status') != 'active',
                     }
                 })
-        cls._error_messages.update({
-                'activation_period_overlaps': 'Activation Periods "%(first)s"'
-                ' and "%(second)s" overlap.',
-                'no_quote_sequence': 'No quote sequence defined',
-                'start_date_multiple_activation_history': 'Cannot change '
-                'start date, multiple activation period detected',
-                'end_date_anterior_to_start_date': 'Cannot set end date '
-                'anterior to start date',
-                'missing_values': 'Cannot add functional key : both quote'
-                'number and contract_number are missing from values',
-                'invalid_format': 'Invalid file format',
-                'cannot_reactivate_end_reached': 'Cannot reactivate contract, '
-                'end reached',
-                'cannot_reactivate_max_end_date': 'Cannot reactivate contract,'
-                ' max end date reached',
-                'cannot_reactivate_non_terminated': 'Cannot reactivate a not '
-                'yet terminated contract',
-                'no_contacts_of_type': 'No contact defined for %s',
-                'bad_first_contact_start_date': 'Invalid start date for '
-                'first %s contact',
-                'bad_last_contact_end_date': 'Invalid end date for last '
-                '%s contact',
-                'invalid_contact_start_date': 'Contact start date (%s) '
-                'incompatible with associated address (%s) start (%s)',
-                'invalid_contact_end_date': 'Contact end date (%s) '
-                'incompatible with associated address (%s) end (%s)',
-                'bad_contact_follow_up': 'There are dates for which no '
-                '%s address is defined',
-                'delete_not_allowed': 'Deletion not allowed because the '
-                'contracts %(contracts)s are not quote or declined.',
-                'no_dist_network': 'Contract %(contracts)s must have a '
-                'distributor, please enter it',
-                })
         cls._order.insert(0, ('last_modification', 'DESC'))
         # if issue with following code, apply SQL script from Github PR #815
         t = cls.__table__()
@@ -637,7 +607,8 @@ class Contract(model.CoogSQL, model.CoogView, with_extra_data(['contract'],
                 sequence = product_dict[
                     vals.get('product')].quote_number_sequence
                 if not sequence:
-                    cls.raise_user_error('no_quote_sequence')
+                    raise ValidationError(gettext(
+                            'contract.msg_no_quote_sequence'))
                 vals['quote_number'] = Sequence.get_id(sequence.id)
 
     def get_icon(self, name=None):
@@ -879,7 +850,8 @@ class Contract(model.CoogSQL, model.CoogView, with_extra_data(['contract'],
         if self.activation_history and \
                 len(self.activation_history) > 1:
             self.append_functional_error(
-                'start_date_multiple_activation_history')
+                AccessError(gettext(
+                        'contract.msg_start_date_multiple_activation_history')))
             return False
         return True
 
@@ -930,8 +902,9 @@ class Contract(model.CoogSQL, model.CoogView, with_extra_data(['contract'],
                     good_activation_history = [x for x in existing
                         if x.start_date <= (value or datetime.date.max)]
                     if not good_activation_history:
-                        cls.raise_user_error(
-                            'end_date_anterior_to_start_date')
+                        raise ValidationError(gettext(
+                                'contract'
+                                '.msg_set_end_date_anterior_to_start_date'))
                     if good_activation_history[-1].end_date != value:
                         good_activation_history[-1].end_date = value
                     contract.activation_history = good_activation_history
@@ -1040,10 +1013,10 @@ class Contract(model.CoogSQL, model.CoogView, with_extra_data(['contract'],
                 continue
             if not previous_period.end_date or (
                     period.start_date <= previous_period.end_date):
-                self.raise_user_error('activation_period_overlaps', {
-                        'first': period.rec_name,
-                        'second': previous_period.rec_name,
-                        })
+                raise ValidationError(gettext(
+                        'contract.msg_activation_period_overlaps',
+                        first=period.rec_name,
+                        second=previous_period.rec_name))
             previous_period = period
 
     def get_maximum_end_date(self):
@@ -1191,7 +1164,7 @@ class Contract(model.CoogSQL, model.CoogView, with_extra_data(['contract'],
             contract.save()
             contract.calculate()
         else:
-            cls.raise_user_error('invalid_format')
+            raise ValidationError(gettext('contract.msg_invalid_format'))
         return return_values
 
     def update_from_data_rule(self, no_rule_errors=False, **kwargs):
@@ -1630,10 +1603,14 @@ class Contract(model.CoogSQL, model.CoogView, with_extra_data(['contract'],
 
     def get_reactivation_end_date(self):
         if self.status not in ['terminated', 'void']:
-            self.append_functional_error('cannot_reactivate_non_terminated')
+            self.append_functional_error(
+                AccessError(gettext(
+                        'contract.msg_cannot_reactivate_non_terminated')))
             return None
         if self.sub_status.code == 'reached_end_date':
-            self.append_functional_error('cannot_reactivate_end_reached')
+            self.append_functional_error(
+                AccessError(gettext(
+                        'contract.msg_cannot_reactivate_end_reached')))
             return None
         # Get new end_date
         with Transaction().new_transaction() as transaction:
@@ -1649,7 +1626,9 @@ class Contract(model.CoogSQL, model.CoogView, with_extra_data(['contract'],
                 transaction.rollback()
         if self.status == 'terminated':
             if new_end_date is not None and new_end_date <= previous_end_date:
-                self.append_functional_error('cannot_reactivate_max_end_date')
+                self.append_functional_error(
+                    AccessError(gettext(
+                            'contract.msg_cannot_reactivate_max_end_date')))
                 return None
         return new_end_date
 
@@ -1694,39 +1673,53 @@ class Contract(model.CoogSQL, model.CoogView, with_extra_data(['contract'],
                 ('code', '=', type_code)])[0]
         contacts = [x for x in self.contacts if x.type.code == type_code]
         if not contacts:
-            self.append_functional_error('no_contacts_of_type',
-                (contact_type.rec_name,))
+            self.append_functional_error(
+                ValidationError(gettext(
+                        'contract.msg_no_contacts_of_type',
+                        type=contact_type.rec_name)))
             return
         contacts.sort(key=lambda x: x.date or datetime.date.min)
 
         # Check boundaries
         if (contacts[0].date
                 and contacts[0].date > self.initial_start_date):
-            self.append_functional_error('bad_first_contact_start_date',
-                (contact_type.rec_name,))
+            self.append_functional_error(
+                ValidationError(gettext(
+                        'contract.msg_bad_first_contact_start_date',
+                        type=contact_type.rec_name)))
         if (contacts[-1].end_date
                 and contacts[-1].end_date < self.end_date):
-            self.append_functional_error('bad_last_contact_end_date',
-                (contact_type.rec_name,))
+            self.append_functional_error(
+                ValidationError(gettext(
+                        'contract.msg_bad_last_contact_end_date',
+                        type=contact_type.rec_name)))
 
         # Check for holes
         for idx, contact in enumerate(contacts):
             if (contact.address.start_date or datetime.date.min) > (
                     contact.date or datetime.date.min):
-                self.append_functional_error('invalid_contact_start_date',
-                    (contact.date, contact.address.rec_name,
-                        contact.address.start_date))
+                self.append_functional_error(
+                    ValidationError(gettext(
+                            'contract.msg_invalid_contact_start_date',
+                            date=contact.date,
+                            address=contact.address.rec_name,
+                            address_date=contact.address.start_date)))
             if (contact.address.end_date or datetime.date.max) < (
                     contact.end_date or datetime.date.max):
-                self.append_functional_error('invalid_contact_end_date',
-                    (contact.end_date, contact.address.rec_name,
-                        contact.address.end_date))
+                self.append_functional_error(
+                    ValidationError(gettext(
+                            'contact.msg_invalid_contact_end_date',
+                            date=contact.end_date,
+                            address=contact.address.rec_name,
+                            address_date=contact.address.end_date)))
             if idx == 0 or not contacts[idx - 1].end_date or not contact.date:
                 continue
             if (coog_date.add_day(contacts[idx - 1].end_date, 1)
                     != contact.date):
-                self.append_functional_error('bad_contact_follow_up',
-                    (contact_type.rec_name,))
+                self.append_functional_error(
+                    ValidationError(gettext(
+                            'contract.msg_bad_contact_follow_up',
+                            type=contact_type.rec_name)))
 
     def check_subscriber_contacts(self):
         self.check_contacts(self.subscriber, 'subscriber')
@@ -1741,9 +1734,9 @@ class Contract(model.CoogSQL, model.CoogView, with_extra_data(['contract'],
         active_contracts = [x.contract_number for x in contracts
             if x.contract_number or x.status not in ['quote', 'declined']]
         if active_contracts:
-            cls.raise_user_error('delete_not_allowed', {
-                    'contracts': ', '.join(active_contracts),
-                    })
+            raise AccessError(gettext(
+                    'contract.msg_delete_not_allowed',
+                    contracts=', '.join(active_contracts)))
         super(Contract, cls).delete(contracts)
 
     def get_gdpr_data(self):
@@ -1862,29 +1855,6 @@ class ContractOption(model.CoogSQL, model.CoogView, with_extra_data(['option'],
         cls.current_extra_data.states['readonly'] = (
             Eval('contract_status') != 'quote')
         cls.current_extra_data.depends.append('contract_status')
-        cls._error_messages.update({
-                'inactive_coverage_at_date':
-                'Coverage %s is inactive at date %s',
-                'end_date_none': 'No end date defined',
-                'end_date_anterior_to_start_date': 'End date should be '
-                'posterior to start date: %(start_date)s for option '
-                '%(option)s in contract %(contract)s',
-                'end_date_posterior_to_contract': 'End date should be '
-                'anterior to end date of contract: %(end_date)s for option '
-                '%(option)s in contract %(contract)s',
-                'end_date_posterior_to_automatic_end_date': 'End date should '
-                'be anterior to option automatic end date : %(end_date)s for '
-                'option %(option)s in contract %(contract)s',
-                'manual_start_date_anterior_to_contract_initial_start_date':
-                'Option %(option)s manual start date %(manual_start_date)s is '
-                'anterior to contract initial start date %(start_date)s in '
-                'contract %(contract)s',
-                'bad_dates': 'The computed end date for option %(option)s is '
-                'less than its start date, it will be automatically '
-                'declined',
-                'coverage_overlap': 'There are overlapping coverages for '
-                '%(parent)s',
-                })
 
     @classmethod
     def __post_setup__(cls):
@@ -1945,8 +1915,10 @@ class ContractOption(model.CoogSQL, model.CoogView, with_extra_data(['option'],
                     continue
                 start = line.manual_start_date or datetime.date.min
                 if start <= prev_end:
-                    cls.append_functional_error('coverage_overlap',
-                        {'parent': parent_string})
+                    cls.append_functional_error(
+                        ValidationError(gettext(
+                                'contract.msg_coverage_overlap',
+                                parent=parent_string)))
                     continue
                 prev_end = line.manual_end_date or datetime.date.max
 
@@ -2224,15 +2196,15 @@ class ContractOption(model.CoogSQL, model.CoogView, with_extra_data(['option'],
                 continue
             if (option.manual_start_date and option.manual_start_date <
                     option.parent_contract.initial_start_date):
-                cls.raise_user_error(
-                    'manual_start_date_anterior_to_contract_initial_start_date',
-                    ({
-                        'option': option.rec_name,
-                        'manual_start_date': Date.date_as_string(
+                raise ValidationError(gettext(
+                        'contract.msg_manual_start_date_anterior_'
+                        'to_contract_initial_start_date',
+                        option=option.rec_name,
+                        manual_start_date=Date.date_as_string(
                             option.manual_start_date),
-                        'start_date': Date.date_as_string(
+                        start_date=Date.date_as_string(
                             option.parent_contract.initial_start_date),
-                        'contract': option.parent_contract.rec_name}))
+                        contract=option.parent_contract.rec_name))
             if end_date >= option.start_date:
                 if not option.parent_contract:
                     continue
@@ -2240,24 +2212,27 @@ class ContractOption(model.CoogSQL, model.CoogView, with_extra_data(['option'],
                         or end_date <= option.parent_contract.final_end_date):
                     if (end_date and option.automatic_end_date and
                             option.automatic_end_date < end_date):
-                        cls.raise_user_error(
-                            'end_date_posterior_to_automatic_end_date', {
-                                'end_date': Date.date_as_string(
+                        raise ValidationError(gettext(
+                                'contract'
+                                '.msg_end_date_posterior_to_automatic_end_date',
+                                end_date=Date.date_as_string(
                                     option.automatic_end_date),
-                                'option': option.rec_name,
-                                'contract': option.parent_contract.rec_name})
+                                option=option.rec_name,
+                                contract=option.parent_contract.rec_name))
                 else:
-                    cls.raise_user_error('end_date_posterior_to_contract',
-                        {'end_date': Date.date_as_string(
-                            option.parent_contract.final_end_date),
-                        'option': option.rec_name,
-                        'contract': option.parent_contract.rec_name})
+                    raise ValidationError(gettext(
+                            'contract.msg_end_date_posterior_to_contract',
+                            end_date=Date.date_as_string(
+                                option.parent_contract.final_end_date),
+                            option=option.rec_name,
+                            contract=option.parent_contract.rec_name))
 
             else:
-                cls.raise_user_error('end_date_anterior_to_start_date',
-                    {'start_date': Date.date_as_string(option.start_date),
-                    'option': option.rec_name,
-                    'contract': option.parent_contract.rec_name})
+                raise ValidationError(gettext(
+                        'contract.msg_end_date_anterior_to_start_date',
+                        start_date=Date.date_as_string(option.start_date),
+                        option=option.rec_name,
+                        contract=option.parent_contract.rec_name))
 
     def clean_up_versions(self, contract):
         pass
@@ -2266,8 +2241,10 @@ class ContractOption(model.CoogSQL, model.CoogView, with_extra_data(['option'],
     def new_option_from_coverage(cls, coverage, product, start_date, **kwargs):
         assert start_date
         if not utils.is_effective_at_date(coverage, start_date):
-            cls.raise_user_error('inactive_coverage_at_date', (coverage.name,
-                    start_date))
+            raise AccessError(gettext(
+                    'contract.msg_inactive_coverage_at_date',
+                    coverage=coverage.name,
+                    date=start_date))
         new_option = cls()
         new_option.coverage = coverage.id
         new_option.product = product.id
@@ -2357,6 +2334,8 @@ class ContractOption(model.CoogSQL, model.CoogView, with_extra_data(['option'],
                 at_date <= (self.final_end_date or datetime.date.max))
 
     def activate(self):
+        pool = Pool()
+        Warning = pool.get('res.user.warning')
         if self.status == 'declined':
             return
         if self.status == 'void' or not self.final_end_date:
@@ -2372,11 +2351,14 @@ class ContractOption(model.CoogSQL, model.CoogView, with_extra_data(['option'],
                 # call check_eligibility on options, which will already raise
                 # the warning
                 Date = Pool().get('ir.date')
-                self.raise_user_warning('bad_dates_%s' %
+                key = ('bad_dates_%s' %
                     ' - '.join([
                             self.rec_name,
-                            Date.date_as_string(self.initial_start_date)]),
-                    'bad_dates', {'option': self.rec_name})
+                            Date.date_as_string(self.initial_start_date)]))
+                if Warning.check(key):
+                    raise UserWarning(key, gettext(
+                            'contract.msg_bad_dates',
+                            option=self.rec_name))
             self.status = 'declined'
 
     @classmethod

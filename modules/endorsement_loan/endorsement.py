@@ -8,6 +8,8 @@ from sql.conditionals import Coalesce
 from sql.aggregate import Max
 
 from trytond import backend
+from trytond.i18n import gettext
+from trytond.model.exceptions import ValidationError
 from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
 from trytond.pyson import Eval
@@ -350,13 +352,6 @@ class EndorsementContract(metaclass=PoolMeta):
         context={'definition': Eval('definition')})
 
     @classmethod
-    def __setup__(cls):
-        super(EndorsementContract, cls).__setup__()
-        cls._error_messages.update({
-                'msg_contract_loan_changes': 'Contract Loans Changes',
-                })
-
-    @classmethod
     def _get_restore_history_order(cls):
         order = super(EndorsementContract, cls)._get_restore_history_order()
         order.insert(order.index('contract'), 'contract-loan')
@@ -378,8 +373,8 @@ class EndorsementContract(metaclass=PoolMeta):
         contract_loans_summary = [x.get_diff('contract-loan',
                 x.contract_loan) for x in self.ordered_loans]
         if contract_loans_summary:
-            result[1].append(['%s :' % self.raise_user_error(
-                        'msg_contract_loan_changes', raise_exception=False),
+            result[1].append([
+                    gettext('endorsement_loan.msg_contract_loan_changes'),
                     contract_loans_summary])
         return result
 
@@ -423,14 +418,6 @@ class EndorsementLoan(values_mixin('endorsement.loan.field'),
     @classmethod
     def __setup__(cls):
         super(EndorsementLoan, cls).__setup__()
-        cls._error_messages.update({
-                'not_latest_applied': ('Endorsement "%s" is not the latest '
-                    'applied.'),
-                'only_one_endorsement_in_progress': 'There may only be one '
-                'endorsement in_progress at a given time per loan',
-                'msg_increment_modifications': 'Increments Modifications',
-                'msg_loan_modifications': 'Loan Modifications',
-                })
         cls._endorsed_dicts = {'extra_data': 'extra_data'}
         cls.values.states = {
             'readonly': Eval('state') == 'applied',
@@ -460,15 +447,15 @@ class EndorsementLoan(values_mixin('endorsement.loan.field'),
         result = [self.definition.name, []]
         loan_summary = self.get_diff('loan', self.base_instance)
         if loan_summary:
-            result[1].append(['%s :' % self.raise_user_error(
-                        'msg_loan_modifications', raise_exception=False),
+            result[1].append([
+                    gettext('endorsement_loan.msg_loan_modifications'),
                     loan_summary])
 
         increment_summary = [x.get_diff('loan.increment', x.increment)
             for x in self.increments]
         if increment_summary:
-            result[1].append(['%s :' % self.raise_user_error(
-                        'msg_increment_modifications', raise_exception=False),
+            result[1].append([
+                    gettext('endorsement_loan.msg_increment_modifications'),
                     increment_summary])
         return result
 
@@ -512,8 +499,9 @@ class EndorsementLoan(values_mixin('endorsement.loan.field'),
                     ('state', 'not in', ['draft', 'canceled', 'declined']),
                     ], order=[('applied_on', 'DESC')], limit=1)
             if latest_applied != loan_endorsement:
-                cls.raise_user_error('not_latest_applied',
-                    loan_endorsement.rec_name)
+                raise ValidationError(gettext(
+                        'endorsement_loan.msg_not_latest_applied',
+                        endorsement=loan_endorsement.rec_name))
 
             loan_endorsement.do_restore_history()
             loan_endorsement.set_applied_on(None)
@@ -530,7 +518,8 @@ class EndorsementLoan(values_mixin('endorsement.loan.field'),
                 ('loans', 'in', [x.loan.id for x in loan_endorsements]),
                 ('state', '=', 'in_progress')])
         if count:
-            cls.raise_user_error('only_one_endorsement_in_progress')
+            raise ValidationError(gettext(
+                    'endorsement_loan.msg_only_one_endorsement_in_progress'))
 
     @classmethod
     def apply(cls, loan_endorsements):
@@ -570,13 +559,6 @@ class EndorsementCoveredElementOption(metaclass=PoolMeta):
     loan_shares = fields.One2Many('endorsement.loan.share',
         'option_endorsement', 'Loan Shares', delete_missing=True)
 
-    @classmethod
-    def __setup__(cls):
-        super(EndorsementCoveredElementOption, cls).__setup__()
-        cls._error_messages.update({
-                'mes_loan_share_modifications': 'Loan Share Modifications',
-                })
-
     def get_diff(self, model, base_object=None):
         result = super(EndorsementCoveredElementOption, self).get_diff(
             model, base_object)
@@ -585,9 +567,9 @@ class EndorsementCoveredElementOption(metaclass=PoolMeta):
         loan_shares_summary = [x.get_diff('loan.share', x.loan_share)
             for x in self.loan_shares]
         if loan_shares_summary:
-            result[1].append(['%s :' % (self.raise_user_error(
-                            'mes_loan_share_modifications',
-                            raise_exception=False)), loan_shares_summary])
+            result[1].append([
+                    gettext('endorsement_loan.msg_loan_modifications'),
+                    loan_shares_summary])
         return result
 
     @property

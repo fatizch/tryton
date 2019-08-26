@@ -3,6 +3,7 @@
 import datetime
 from collections import defaultdict
 
+from trytond.model.exceptions import ValidationError
 from trytond.pool import PoolMeta
 from trytond.server_context import ServerContext
 
@@ -71,7 +72,7 @@ class Indemnification(metaclass=PoolMeta):
                 val_start = value.start_date or datetime.date.min
                 val_end = value.end_date or datetime.date.max
                 if (subs[counter].start_date or datetime.date.min) < val_start:
-                    cls.raise_user_error('bad_subs')
+                    raise ValidationError('bad_subs')
                 while counter < len(subs) and (
                         (subs[counter].start_date or datetime.date.min)
                         >= val_start) and (
@@ -84,10 +85,10 @@ class Indemnification(metaclass=PoolMeta):
                         <= val_end) and (
                         (subs[counter].end_date or datetime.date.max)
                         <= val_end):
-                    cls.raise_user_error('bad_subs')
+                    raise ValidationError('bad_subs')
                 master_slave[value] = cur_subs
             if counter != len(values):
-                cls.raise_user_error('bad_subs')
+                raise ValidationError('bad_subs')
 
         result = []
         for master, slaves in master_slave.items():

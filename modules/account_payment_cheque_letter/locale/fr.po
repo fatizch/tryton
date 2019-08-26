@@ -2,41 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:account.payment.group:"
-msgid "Missing begin cheque number"
-msgstr "Le numéro de chèque de départ est manquant"
-
-msgctxt "error:account.payment.group:"
-msgid "Missing max available cheque number"
-msgstr "Nombre maximum de chèque manquant"
-
-msgctxt "error:account.payment.group:"
-msgid "No cheque has been processed"
-msgstr "Aucune lèttre chèque n'a été traitée"
-
-msgctxt "error:account.payment.group:"
-msgid ""
-"The amount of processed payments exceed the given number of available "
-"cheques: %s/%s (%s ignored)"
-msgstr ""
-"Le nombre de paiement traité (lettre chèque) excède le nombre maximum de "
-"chèque à disposition: %s/%s (%s ignoré)"
-
-msgctxt "error:account.payment:"
-msgid "You can not print cheque letters with other payments types"
-msgstr ""
-"Vous ne pouvez pas lancer l'impression de lèttres chèques avec d'autres "
-"types de paiment"
-
-msgctxt "error:account.payment:"
-msgid "You must select sequencial cheque letters numbers: jump from %s to %s"
-msgstr ""
-"Vous devez sélectionner des lèttres cheques qui se suivent: saut de %s à %s"
-
-msgctxt "error:currency.currency:"
-msgid "and"
-msgstr "et"
-
 msgctxt "field:account.payment,is_cheque_letter:"
 msgid "Is Cheque Letter"
 msgstr "Est une lettre chèque"
@@ -68,6 +33,40 @@ msgstr "Nombre de chèques disponibles"
 msgctxt "help:account.payment.journal,validate_process:"
 msgid "Automatically validate payment on processing"
 msgstr "Valider automatiquement lors du traitement"
+
+msgctxt "model:ir.message,text:msg_cheque_number_sequence_broken"
+msgid ""
+"You must select sequential cheque letters numbers: jump from %(from_)s to "
+"%(to)s."
+msgstr ""
+"Vous devez sélectionner des lèttres cheques qui se suivent: saut de "
+"%(from_)s à %(to)s"
+
+msgctxt "model:ir.message,text:msg_cheque_process_exceed"
+msgid ""
+"The amount of processed payments exceed the given number of available "
+"cheques: %(total)s/%(maximum)s (%(ignored)s ignored)."
+msgstr ""
+"Le nombre de paiement traité (lettre chèque) excède le nombre maximum de "
+"chèque à disposition: %(total)s/%(maximum)s (%(ignored)s ignoré)"
+
+msgctxt "model:ir.message,text:msg_journal_mixin_not_allowed"
+msgid "You can not print cheque letters with other payments types."
+msgstr ""
+"Vous ne pouvez pas lancer l'impression de lèttres chèques avec d'autres "
+"types de paiment."
+
+msgctxt "model:ir.message,text:msg_missing_available_cheque_number"
+msgid "Missing max available cheque number."
+msgstr "Nombre maximum de chèque manquant."
+
+msgctxt "model:ir.message,text:msg_missing_begin_cheque_number"
+msgid "Missing begin cheque number."
+msgstr "Le numéro de chèque de départ est manquant."
+
+msgctxt "model:ir.message,text:msg_no_cheque_processed"
+msgid "No cheque has been processed."
+msgstr "Aucune lèttre chèque n'a été traitée."
 
 msgctxt "selection:account.payment.journal,process_method:"
 msgid "Cheque Letter"

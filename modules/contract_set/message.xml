@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<tryton>
+    <data group="1">
+        <record model="ir.message" id="msg_no_sequence_defined">
+            <field name="text">No sequence defined in configuration for contracts set number</field>
+        </record>
+        <record model="ir.message" id="msg_same_contract_in_set">
+            <field name="text">the contract %(contract)s is already defined in the contract set %(contract_set)s</field>
+        </record>
+        <record model="ir.message" id="msg_activate_with_non_quote">
+            <field name="text">You are activating a contract set with non quote contracts. The following contracts will not be activated : \n%(contracts)s</field>
+        </record>
+        <record model="ir.message" id="msg_decline_with_non_quote">
+            <field name="text">You are declining a contract set with non quote contracts. The following contracts will not be declined : \n%(contracts)s</field>
+        </record>
+    </data>
+</tryton>
+
+

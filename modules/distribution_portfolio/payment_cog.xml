@@ -6,6 +6,7 @@ this repository contains the full copyright notices and license terms. -->
         <!-- Rule access to handle partitioning by portfolio -->
         <!-- ######### Payments  -->
         <record model="ir.rule.group" id="rule_group_portfolio_merged_payment">
+            <field name="name">In user's portfolios</field>
             <field name="model" search="[('model', '=', 'account.payment.merged')]"/>
             <field name="perm_read" eval="True"/>
             <field name="perm_write" eval="True"/>

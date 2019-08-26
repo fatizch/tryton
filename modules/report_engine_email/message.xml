@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<tryton>
+    <data group="1">
+        <record model="ir.message" id="msg_email_not_sent">
+            <field name="text">The email could not be sent.</field>
+        </record>
+        <record model="ir.message" id="msg_manual_send">
+            <field name="text">The template does not allow email editing.</field>
+        </record>
+        <record model="ir.message" id="msg_input_email">
+            <field name="text">Email</field>
+        </record>
+        <record model="ir.message" id="msg_split_email">
+            <field name="text">Split reports on email templates is recommended, you must be sure of your genshi fields.</field>
+        </record>
+        <record model="ir.message" id="msg_configuration_mismatch">
+            <field name="text">It seems that there is a configuration mismatch regarding attachments. Therefore, the email will be sent without attachments. Do you want to continue?</field>
+        </record>
+    </data>
+</tryton>

@@ -7,6 +7,8 @@ from sql import Null
 from sql.aggregate import Count, Sum
 from sql.conditionals import Case
 
+from trytond.i18n import gettext
+from trytond.model.exceptions import ValidationError
 from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval, Bool
 from trytond import backend
@@ -520,9 +522,6 @@ class DocumentRequest(Printable, model.CoogSQL, model.CoogView):
     def __setup__(cls):
         super(DocumentRequest, cls).__setup__()
         cls._buttons.update({'generic_send_letter': {}})
-        cls._error_messages.update({
-                'document_request_for': 'Document Request For',
-                })
 
     def get_request_date(self):
         return utils.today()
@@ -530,8 +529,9 @@ class DocumentRequest(Printable, model.CoogSQL, model.CoogView):
     @fields.depends('needed_by')
     def on_change_with_request_description(self, name=None):
         if self.needed_by:
-            return '%s %s' % (self.raise_user_error('document_request_for',
-                    raise_exception=False), self.needed_by.get_rec_name(name))
+            return gettext(
+                'document_request.msg_document_request_for',
+                name=self.needed_by.get_rec_name(name))
         return ''
 
     def get_contact(self, name=None):
@@ -904,7 +904,8 @@ class DocumentRuleMixin(
             return {}
         rule_result = self.calculate_rule(data_dict)
         if type(rule_result) is not dict:
-            self.raise_user_error('wrong_documents_rule')
+            raise ValidationError(gettext(
+                    'document_request.msg_wrong_documents_rule'))
         return rule_result
 
     @classmethod

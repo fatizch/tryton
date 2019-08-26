@@ -2,10 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:res.user.connection.date_display:"
-msgid "Date range specified have no connections"
-msgstr "La plage de date spécifiée ne possède pas de connexions"
-
 msgctxt "field:res.user.analytics.configuration,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
@@ -357,6 +353,10 @@ msgstr "Configuration de connexion"
 msgctxt "model:ir.action,name:user_connection_date_wizard"
 msgid "User Connection Date"
 msgstr "Date de connexion utilisateur"
+
+msgctxt "model:ir.message,text:msg_no_connection"
+msgid "Date range specified have no connections."
+msgstr "La plage de date spécifiée ne possède pas de connexions."
 
 msgctxt "model:ir.ui.menu,name:menu_connection"
 msgid "Connection"

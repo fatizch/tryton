@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<tryton>
+    <data group="1">
+        <record model="ir.message" id="msg_invalid_type">
+            <field name="text">This action should be started from physical person</field>
+        </record>
+        <record model="ir.message" id="msg_invalid_op">
+            <field name="text">This action is not valid because party has no employment</field>
+        </record>
+        <record model="ir.message" id="msg_invalid_active_ids">
+            <field name="text">This action should be applied on one physical person</field>
+        </record>
+        <record model="ir.message" id="msg_new_employment">
+            <field name="text">New Employment</field>
+        </record>
+    </data>
+</tryton>

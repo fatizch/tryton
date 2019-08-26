@@ -13,6 +13,9 @@ from sql.conditionals import Coalesce
 from sql.functions import Function
 
 from trytond import backend
+from trytond.exceptions import UserWarning, UserError
+from trytond.i18n import gettext
+from trytond.model.exceptions import AccessError
 from trytond.pyson import Eval, Bool, Or
 from trytond.pool import PoolMeta, Pool
 from trytond.tools import grouped_slice, cursor_dict
@@ -24,6 +27,8 @@ from trytond.protocols.jsonrpc import JSONEncoder
 from trytond.wizard import Wizard, StateAction, StateTransition, StateView
 from trytond.wizard import Button
 from trytond.pyson import PYSONEncoder
+
+from trytond.modules.party.exceptions import SimilarityWarning
 from trytond.modules.coog_core import utils, fields, model, export, summary
 from trytond.modules.coog_core import coog_string, UnionMixin
 
@@ -168,11 +173,6 @@ class Party(export.ExportImportMixin, summary.SummaryMixin):
     def __setup__(cls):
         super(Party, cls).__setup__()
         cls.name.required = True
-        cls._error_messages.update({
-                'duplicate_party': ('Duplicate(s) already exist(s) : %s'),
-                'invalid_birth_date': ('Birth date can\'t be in the future :'
-                    '\n%(name)s - %(birthdate)s'),
-                })
         cls.__rpc__.update({'ws_create_person': RPC(readonly=False)})
         cls.__rpc__.update({'anonymize': RPC(readonly=False)})
         cls._buttons.update({
@@ -235,9 +235,8 @@ class Party(export.ExportImportMixin, summary.SummaryMixin):
 
     def _change_value(self, value, type_):
         Contact = Pool().get('party.contact_mechanism')
-        value = Contact.add_prefix_to_phone_number(value)
         setattr(self, type_,
-                Contact.format_value(value=value, type_=type_))
+                Contact().format_value(value=value, type_=type_))
 
     @fields.depends('phone')
     def on_change_phone(self):
@@ -319,6 +318,8 @@ class Party(export.ExportImportMixin, summary.SummaryMixin):
 
     @classmethod
     def check_duplicates(cls, parties):
+        pool = Pool()
+        Warning = pool.get('res.user.warning')
         in_max = Transaction().database.IN_MAX
         for i in range(0, len(parties), in_max):
             sub_parties = [p for p in parties[i:i + in_max]]
@@ -341,9 +342,11 @@ class Party(export.ExportImportMixin, summary.SummaryMixin):
                 else:
                     messages.append('%s %s\n' % (party.name,
                         party.commercial_name))
-            if messages:
-                cls.raise_user_warning('Duplicate Party', 'duplicate_party',
-                    ','.join(messages))
+            if messages and Warning.check('Duplicate Party'):
+                raise UserWarning(
+                    'Duplicate Party',
+                    gettext(
+                        'party_cog.msg_duplicate_party', ','.join(messages)))
 
     @classmethod
     def validate(cls, parties):
@@ -352,9 +355,11 @@ class Party(export.ExportImportMixin, summary.SummaryMixin):
         with model.error_manager():
             for party in parties:
                 if party.birth_date and party.birth_date > utils.today():
-                    cls.append_functional_error('invalid_birth_date', {
-                            'name': party.rec_name,
-                            'birthdate': party.birth_date})
+                    cls.append_functional_error(
+                        UserError(gettext('party_cog.msg_invalid_birth_date',
+                                name=party.rec_name,
+                                birthdate=party.birth_date,
+                                )))
 
     @classmethod
     def copy(cls, parties, default=None):
@@ -806,13 +811,6 @@ class PartyIdentifierType(model.CoogSQL, model.CoogView):
     code = fields.Char('Code', required=True)
     name = fields.Char('Name', required=True, translate=True)
 
-    @classmethod
-    def __setup__(cls):
-        super(PartyIdentifierType, cls).__setup__()
-        cls._error_messages.update({
-                'type_is_used': 'Identifier type is used. Deletion impossible',
-                })
-
     @fields.depends('code', 'name')
     def on_change_with_code(self):
         return (coog_string.slugify(self.name)
@@ -824,7 +822,7 @@ class PartyIdentifierType(model.CoogSQL, model.CoogView):
         Party = pool.get('party.party')
         if Party.search(
                 [('identifiers.type', 'in', [x.code for x in instances])]):
-            cls.raise_user_error('type_is_used')
+            raise AccessError(gettext('party_cog.msg_type_is_used'))
         Pool().get('party.identifier')._identifier_type_cache.clear()
         super(PartyIdentifierType, cls).delete(instances)
 
@@ -1365,14 +1363,6 @@ class PartyReplace(metaclass=PoolMeta):
     __name__ = 'party.replace'
 
     @classmethod
-    def __setup__(cls):
-        super(PartyReplace, cls).__setup__()
-        cls._error_messages.update({
-                'different_first_name': ("Parties have different first names: "
-                    "%(source_name)s vs %(destination_name)s."),
-                })
-
-    @classmethod
     def fields_to_replace(cls):
         return super(PartyReplace, cls).fields_to_replace() + [
             ('party.interaction', 'party'),
@@ -1381,16 +1371,20 @@ class PartyReplace(metaclass=PoolMeta):
             ]
 
     def check_similarity(self):
+        pool = Pool()
+        Warning = pool.get('res.user.warning')
         super(PartyReplace, self).check_similarity()
         source = self.ask.source
         destination = self.ask.destination
         if source.first_name != destination.first_name:
             key = 'party.replace first_name %s %s' % (source.id, destination.id)
-            self.raise_user_warning(key, 'different_first_name', {
-                    'source_name': '%s %s' % (source.name, source.first_name),
-                    'destination_name': '%s %s' % (destination.name,
-                        destination.first_name),
-                    })
+            if Warning.check(key):
+                raise SimilarityWarning(gettext(
+                        'party_cog.msg_different_first_name',
+                        source_name='%s %s' % (source.name, source.first_name),
+                        destination_name='%s %s' % (
+                            destination.name, destination.first_name),
+                        ))
 
 
 class PartyReplaceAsk(metaclass=PoolMeta):

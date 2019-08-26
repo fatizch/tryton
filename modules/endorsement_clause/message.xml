@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<tryton>
+    <data group="1">
+        <record model="ir.message" id="msg_clause_modifications">
+            <field name="text">Clauses Modification:</field>
+        </record>
+        <record model="ir.message" id="msg_new_clause">
+            <field name="text">New Clause: %(name)s</field>
+        </record>
+    </data>
+</tryton>

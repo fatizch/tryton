@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<tryton>
+    <data group="1">
+        <record model="ir.message" id="msg_billing_modifications">
+            <field name="text">Billing Modifications:</field>
+        </record>
+        <record model="ir.message" id="msg_no_matching_invoice_date">
+            <field name="text">The contract %(contract)s does not have an invoice starting on the %(effective_date)s. Select another date.</field>
+        </record>
+        <record model="ir.message" id="msg_unauthorized_date">
+            <field name="text">The date %(date)s is not compatible with the billing mode %(mode)s.</field>
+        </record>
+        <record model="ir.message" id="msg_direct_debit_account_required">
+            <field name="text">Please set a  new direct debit account.</field>
+        </record>
+        <record model="ir.message" id="msg_billing_mode_existing">
+            <field name="text">Be careful, posterior billing mode will be erased %(dates)s.</field>
+        </record>
+        <record model="ir.message" id="msg_payer_not_account_owner">
+            <field name="text">Payer does not own this account, do you want it to change?</field>
+        </record>
+        <record model="ir.message" id="msg_not_direct_debit">
+            <field name="text">The selected contract is not paid through direct debit.</field>
+        </record>
+        <record model="ir.message" id="msg_no_past_date">
+            <field name="text">The selected endorsement cannot take place in the past.</field>
+        </record>
+    </data>
+</tryton>

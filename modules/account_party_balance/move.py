@@ -2,6 +2,7 @@
 # this repository contains the full copyright notices and license terms.
 import datetime
 
+from trytond.i18n import gettext
 from trytond.pool import Pool
 from trytond.pyson import Bool, Eval
 from trytond.wizard import Wizard, StateView, Button
@@ -45,14 +46,6 @@ class PartyBalanceLine(model.CoogView):
         readonly=True)
 
     @classmethod
-    def __setup__(cls):
-        super(PartyBalanceLine, cls).__setup__()
-        cls._error_messages.update({
-                'overpayment_substraction': 'Overpayment Substraction',
-                'scheduled_term_of': 'Scheduled Term Of',
-                })
-
-    @classmethod
     def view_attributes(cls):
         return super(PartyBalanceLine, cls).view_attributes() + [(
                 '/tree',
@@ -65,7 +58,7 @@ class PartyBalanceLine(model.CoogView):
         self.icon = line.icon
         self.color = line.color if not scheduled else 'blue'
         self.amount = line.amount
-        if line.account.kind == 'payable':
+        if line.account.type.payable:
             self.amount *= -1
         self.party = line.party.rec_name
         if not scheduled:
@@ -77,7 +70,7 @@ class PartyBalanceLine(model.CoogView):
             self.reconciled_with = [x for x in line.reconciliation.lines
                 if x != line]
         self.contract = line.contract.rec_name if line.contract else None
-        self.origin = line.origin
+        self.origin = line.move_origin
 
     def add_childs_to_scheduled_term_line(self, components):
         Line = Pool().get('account.party_balance.line')
@@ -96,7 +89,7 @@ class PartyBalanceLine(model.CoogView):
     def get_scheduled_term_parent_description(self, components):
         Date = Pool().get('ir.date')
         return '%s %s' % (
-            self.raise_user_error('scheduled_term_of', raise_exception=False),
+            gettext('account_party_balance.msg_scheduled_term_of'),
             Date.date_as_string(self.date)
             )
 
@@ -106,8 +99,8 @@ class PartyBalanceLine(model.CoogView):
             description = component['line'].synthesis_rec_name
             term = component['term']
         elif component['kind'] == 'overpayment_substraction':
-            description = self.raise_user_error(
-                'overpayment_substraction', raise_exception=False)
+            description = gettext(
+                'account_party_balance.msg_overpayment_substraction')
         else:
             description = component['invoice'].invoice.get_synthesis_rec_name(
                 None)
@@ -332,7 +325,10 @@ class OpenPartyBalance(Wizard):
         lines = MoveLine.search([
                 ('party', '=', party),
                 ('move_state', '!=', 'draft'),
-                ('account.kind', 'in', ['payable', 'receivable']),
+                ['OR',
+                    ('account.type.receivable', '=', True),
+                    ('account.type.payable', '=', True),
+                ],
                 ('move_state', '!=', 'draft'),
                 ],
                 order=[

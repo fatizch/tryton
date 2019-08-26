@@ -3,6 +3,9 @@
 from dateutil.relativedelta import relativedelta
 from itertools import groupby
 
+from trytond.exceptions import UserWarning
+from trytond.i18n import gettext
+from trytond.model.exceptions import ValidationError
 from trytond.pool import PoolMeta, Pool
 from trytond.wizard import StateView, StateTransition, Button
 from trytond.pyson import Eval, And, Or
@@ -18,6 +21,10 @@ __all__ = [
     'Renew',
     'ConfirmRenew',
     ]
+
+
+class MultipleHistoryError(ValidationError):
+    pass
 
 
 class ActivationHistory(metaclass=PoolMeta):
@@ -56,25 +63,20 @@ class Contract(metaclass=PoolMeta):
                         ~Eval('is_renewable'),
                         )},
                 })
-        cls._error_messages.update({
-                'already_renewed': 'Contract %(contract_number)s has already'
-                ' been renewed, with new start date at %(start_date)s . Are '
-                'you sure you want to prevent renewal after %(end_date)s ?',
-                'renew_impossible': 'Contract %(contract_number)s has already '
-                'a planned termination. It can\'t be renewed',
-                'deferment_after_renew': 'The contract %(contract)s has been '
-                'renewed, the deferment will override the contract start date',
-                })
 
     def update_start_date(self, caller=None):
+        pool = Pool()
+        Warning = pool.get('res.user.warning')
         with model.error_manager():
             res = self.can_change_start_date()
         if res:
             if len(self.activation_history) > 1 and \
                     self.product.term_renewal_rule:
-                self.raise_user_warning('deferment_after_renew_%s' %
-                    str(self.contract_number),
-                    'deferment_after_renew', {'contract': self.contract_number})
+                key = 'deferment_after_renew_%s' % str(self.contract_number)
+                if Warning.check(key):
+                    raise UserWarning(key, gettext(
+                            'contract_term_renewal.msg_deferment_after_renew',
+                            contract=self.contract_number))
             super(Contract, self).update_start_date(caller)
 
     def finally_renewed(self):
@@ -131,14 +133,15 @@ class Contract(metaclass=PoolMeta):
         if not self._error_manager:
             return res
         multiple_history = self.pop_functional_error(
-            'start_date_multiple_activation_history')
+            MultipleHistoryError)
         if not multiple_history:
             return res
         elif multiple_history and self.product.term_renewal_rule:
             res = not self._error_manager.has_errors
         else:
-            self.append_functional_error(
-                'start_date_multiple_activation_history')
+            self.append_functional_error(MultipleHistoryError(
+                    gettext('contract'
+                        '.msg_start_date_multiple_activation_history')))
             res = False
         return res
 
@@ -210,9 +213,10 @@ class Contract(metaclass=PoolMeta):
     def check_contracts_renewable(cls, contracts, new_start_date):
         for contract in contracts:
             if contract.activation_history[-1].final_renewal:
-                cls.append_functional_error('renew_impossible', {
-                        'contract_number': contract.contract_number,
-                        })
+                cls.append_functional_error(
+                    ValidationError(gettext(
+                            'contract_term_renewal.msg_renew_impossible',
+                            contract_number=contract.contract_number)))
 
     @classmethod
     def before_renew(cls, contracts, new_start_date):
@@ -251,6 +255,7 @@ class Contract(metaclass=PoolMeta):
         pool = Pool()
         Event = pool.get('event')
         Date = pool.get('ir.date')
+        Warning = pool.get('res.user.warning')
         lang = pool.get('res.user')(Transaction().user).language
         today = utils.today()
         ActivationHistory = pool.get('contract.activation_history')
@@ -258,14 +263,16 @@ class Contract(metaclass=PoolMeta):
             in contracts]
         for activation_history in activation_histories:
             if activation_history.start_date >= today:
-                cls.raise_user_warning(activation_history.contract.rec_name,
-                    'already_renewed', {
-                        'contract_number':
-                        activation_history.contract.contract_number,
-                        'start_date': Date.date_as_string(
-                            activation_history.start_date, lang),
-                        'end_date': Date.date_as_string(
-                            activation_history.end_date, lang)})
+                key = activation_history.contract.rec_name
+                if Warning.check(key):
+                    raise UserWarning(key, gettext(
+                            'contract_term_renewal.msg_already_renewed',
+                            contract_number=(
+                                activation_history.contract.contract_number),
+                            start_date=Date.date_as_string(
+                                activation_history.start_date, lang),
+                            end_date=Date.date_as_string(
+                                activation_history.end_date, lang)))
         ActivationHistory.write(activation_histories,
             {'termination_reason': reason, 'final_renewal': True})
         Event.notify_events(contracts, 'decline_contract_renewal')

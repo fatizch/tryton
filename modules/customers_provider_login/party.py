@@ -16,16 +16,6 @@ class Party(metaclass=PoolMeta):
     connection_url = fields.Function(fields.Char('Connection Url'),
         'get_connection_url')
 
-    @classmethod
-    def __setup__(cls):
-        super(Party, cls).__setup__()
-        cls._error_messages.update({
-                'no_token': 'No token for this party: %s',
-                'no_request_hash': 'No request hash or expired hash for this'
-                ' token: %s',
-                'no_app_conf': 'App url not configurated',
-                })
-
     def create_validation_hash(self):
         pool = Pool()
         Token = pool.get('api.token')

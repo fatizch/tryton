@@ -2,14 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:contract.option:"
-msgid "Either all share must be completed or none"
-msgstr "Soit toutes les quotités doivent être saisies soit aucune"
-
-msgctxt "error:contract.option:"
-msgid "Total share for clause %s is invalid"
-msgstr "La quotité totale pour la clause % est invalide"
-
 msgctxt "field:contract.option,beneficiaries:"
 msgid "Beneficiaries"
 msgstr "Bénéficiaires"
@@ -41,6 +33,10 @@ msgstr "Acceptant"
 msgctxt "field:contract.option.beneficiary,address:"
 msgid "Address"
 msgstr "Adresse"
+
+msgctxt "field:contract.option.beneficiary,contract_status:"
+msgid "Contract Status"
+msgstr "Statut du contrat"
 
 msgctxt "field:contract.option.beneficiary,create_date:"
 msgid "Create Date"
@@ -93,6 +89,14 @@ msgstr "Identifiant XML"
 msgctxt "model:contract.option.beneficiary,name:"
 msgid "Contract Beneficiary"
 msgstr "Bénéficiaire"
+
+msgctxt "model:ir.message,text:msg_invalid_beneficiary_shares"
+msgid "Total share for clause %(name)s is invalid."
+msgstr "La quotité totale pour la clause %(name)s est invalide"
+
+msgctxt "model:ir.message,text:msg_mix_share_and_none"
+msgid "Either all share must be completed or none."
+msgstr "Soit toutes les quotités doivent être saisies soit aucune."
 
 msgctxt "view:contract.option.beneficiary:"
 msgid "%"

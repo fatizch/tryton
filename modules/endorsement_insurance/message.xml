@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<tryton>
+    <data group="1">
+        <record model="ir.message" id="msg_covered_element_modifications">
+            <field name="text">Covered Elements Modification:</field>
+        </record>
+        <record model="ir.message" id="msg_new_covered_element">
+            <field name="text">New Covered Element</field>
+        </record>
+        <record model="ir.message" id="msg_option_modifications">
+            <field name="text">Option Modification:</field>
+        </record>
+        <record model="ir.message" id="msg_version_modifications">
+            <field name="text">Version Modification:</field>
+        </record>
+        <record model="ir.message" id="msg_new_covered_element_version">
+            <field name="text">New Covered Element Version</field>
+        </record>
+        <record model="ir.message" id="msg_new_coverage">
+            <field name="text">New Coverage: %(name)s</field>
+        </record>
+        <record model="ir.message" id="msg_extra_premium_modifications">
+            <field name="text">Extra Premium Modification:</field>
+        </record>
+        <record model="ir.message" id="msg_exclusion_modifications">
+            <field name="text">Exclusion Modifications:</field>
+        </record>
+        <record model="ir.message" id="msg_new_option_version">
+            <field name="text">New Option Version</field>
+        </record>
+        <record model="ir.message" id="msg_new_extra_premium">
+            <field name="text">New Extra Premium: %(name)s</field>
+        </record>
+        <record model="ir.message" id="msg_must_end_all_options">
+            <field name="text">All options on a covered element must be removed if a mandatory option is removed.</field>
+        </record>
+        <record model="ir.message" id="msg_cannot_end_all_covered_elements">
+            <field name="text">You cannot remove all options on all covered elements of a contract. You may want to end the contract instead.</field>
+        </record>
+        <record model="ir.message" id="msg_end_date_anterior_to_start_date">
+            <field name="text">You are setting an end date anterior to start date for option: "%(option)s".</field>
+        </record>
+        <record model="ir.message" id="msg_voiding">
+            <field name="text">You are voiding an option.</field>
+        </record>
+        <record model="ir.message" id="msg_at_start_date_no_void">
+            <field name="text">You are ending an option the day it starts. Are you sure you want to have an option lasting only one day and not void it?</field>
+        </record>
+        <record model="ir.message" id="msg_no_option_selected">
+            <field name="text">No option was selected.</field>
+        </record>
+    </data>
+</tryton>

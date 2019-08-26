@@ -9,10 +9,12 @@ import logging
 
 from sql.operators import Concat
 
+from trytond.i18n import gettext
 from trytond.pyson import Eval
 from trytond.protocols.jsonrpc import JSONEncoder, JSONDecoder
 from trytond.model import ModelSQL, ModelView, fields as tryton_fields
 from trytond.model import Unique
+from trytond.model.exceptions import ValidationError
 from trytond.wizard import Wizard, StateView, StateTransition, Button
 from trytond.pool import Pool
 from trytond.rpc import RPC
@@ -302,10 +304,13 @@ class ExportImportMixin(Historizable):
             ValueModel = pool.get(value['__name__'])
             existing = ValueModel.search_for_export_import(value)
             if len(existing) > 1:
-                cls.raise_user_error('export_not_unique',
-                    ('\n'.join([(x.__name__ + ' with id ' + str(x.id))
-                                for x in existing]),
-                        value['_func_key']))
+                raise UserError(gettext(
+                        'coog_core.msg_export_not_unique',
+                        names='\n'.join(
+                            (x.__name__ + ' with id ' + str(x.id))
+                            for x in existing),
+                        key=value['_func_key'],
+                        ))
             import_data[(value['__name__'], value['_func_key'])] = {
                 'imported': False,
                 'record': existing[0] if existing else None,
@@ -334,8 +339,11 @@ class ExportImportMixin(Historizable):
             if record:
                 return record
             else:
-                cls.raise_user_error('export_not_found', (cls.__name__,
-                        value['data']['_func_key']))
+                raise UserError(gettext(
+                        'coog_core.msg_export_not_found',
+                        name=cls.__name__,
+                        key=value['data']['_func_key'],
+                        ))
 
         if record:
             cls.write([record], new_values)
@@ -499,16 +507,16 @@ class ExportImportMixin(Historizable):
             if configurations:
                 conf = configurations[0]
             else:
-                cls.raise_user_error('missing_export_configuration',
-                    configuration_code,
-                    error_description='missing_export_configuration')
+                raise UserError(gettext(
+                        'coog_core.msg_missing_export_configuration',
+                        code=configuration_code))
         for ext_id, values in objects.items():
             try:
                 possible_objects = cls.search_for_export_import(values)
                 if not possible_objects:
-                    cls.raise_user_error('No object found')
+                    raise UserError(gettext('coog_core.msg_no_object_found'))
                 elif len(possible_objects) >= 2:
-                    cls.raise_user_error('Too many possibles objects')
+                    raise UserError(gettext('coog_core.msg_too_many_objects'))
                 object_values = []
                 if conf:
                     possible_objects[0].export_json(output=object_values,
@@ -615,7 +623,8 @@ class ImportWizard(Wizard):
     def transition_file_import(self):
         if not (hasattr(self.file_selector, 'selected_file') and
                 self.file_selector.selected_file):
-            self.raise_user_error('no_file_selected')
+            raise ValidationError(gettext(
+                    'coog_core.msg_no_file_selected'))
         file_buffer = self.file_selector.selected_file
         values = str(file_buffer)
         ExportImportMixin.import_json(values)
@@ -833,13 +842,6 @@ class ExportFieldConfiguration(ExportImportMixin, ModelView):
     export_light_strategy = fields.Boolean('Export Light',
         depends=['is_relation_field', 'field_model'],
         states={'invisible': ~Eval('is_relation_field')})
-
-    @classmethod
-    def __setup__(cls):
-        super(ExportFieldConfiguration, cls).__setup__()
-        cls._error_messages.update({
-                'wrong_field_name': 'Field %s is not defined in model %s'
-                })
 
     def get_field_model(self, name):
         pool = Pool()

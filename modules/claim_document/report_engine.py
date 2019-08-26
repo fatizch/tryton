@@ -1,3 +1,5 @@
+from trytond.i18n import gettext
+from trytond.model.exceptions import RequiredValidationError
 from trytond.pool import PoolMeta, Pool
 from trytond.wizard import Wizard, StateAction, StateTransition
 from trytond.transaction import Transaction
@@ -31,14 +33,6 @@ class DocumentRequestReport(Wizard):
     generate_requests = StateTransition()
     launch_report = StateAction('report_engine.letter_generation_wizard')
 
-    @classmethod
-    def __setup__(cls):
-        super(DocumentRequestReport, cls).__setup__()
-        cls._error_messages.update({
-                'no_documents_required': 'No documents are required.',
-                'document_request_sent': 'Document requests sent:\n %s'
-                })
-
     def transition_generate_requests(self):
         pool = Pool()
         transaction_ctx = Transaction().context
@@ -51,11 +45,12 @@ class DocumentRequestReport(Wizard):
         documents = [doc for doc in instance.document_request_lines
             if not doc.received]
         if not documents:
-            self.raise_user_error('no_documents_required')
-        documents_str = '\n'.join(
-            ['- %s' % doc.document_desc.code for doc in documents])
-        description = self.raise_user_error(
-            'document_request_sent', documents_str, raise_exception=False)
+            raise RequiredValidationError(gettext(
+                    'claim_document.msg_no_documents_required'))
+        description = gettext(
+            'claim_document.msg_document_request_sent',
+            documents='\n'.join(
+                '- %s' % doc.document_desc.code for doc in documents))
         DocumentRequest.write(documents, {'send_date': utils.today()})
         Event.notify_events([instance], 'sent_document_requests',
             description=description)

@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<tryton>
+    <data group="1">
+        <record model="ir.message" id="msg_invalid_coverage_amount">
+            <field name="text">Coverage amount "%(coverage_amount)s" is invalid for coverage "%(coverage)s".</field>
+        </record>
+    </data>
+</tryton>

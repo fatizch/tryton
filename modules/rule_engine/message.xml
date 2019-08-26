@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<tryton>
+    <data group="1">
+        <record model="ir.message" id="msg_key_not_available">
+            <field name="text">Key '%(key)s' is not available in execution context.</field>
+        </record>
+        <record model="ir.message" id="msg_field_not_iterable">
+            <field name="text">Field '%(field)s' of model '%(model)s' is not iterable.</field>
+        </record>
+        <record model="ir.message" id="msg_cannot_return_models">
+            <field name="text">You must return raw value fields (bool, string, integer, etc).</field>
+        </record>
+        <record model="ir.message" id="msg_invalid_code">
+            <field name="text">Your algorithm has errors.</field>
+        </record>
+        <record model="ir.message" id="msg_bad_rule_computation">
+            <field name="text">An error occured in rule %(rule)s.
+For more information, activate debug mode and see the logs
+
+Error info:
+%(error)s</field>
+        </record>
+        <record model="ir.message" id="msg_execute_draft_rule">
+            <field name="text">The rule %(rule)s is a draft. Update the rule status to "Validated".</field>
+        </record>
+        <record model="ir.message" id="msg_kwarg_expected">
+            <field name="text">Expected %(param)s as a parameter.</field>
+        </record>
+        <record model="ir.message" id="msg_readonly_rule">
+            <field name="text">Data modification is not allowed during rule execution.</field>
+        </record>
+        <record model="ir.message" id="msg_duplicate_name">
+            <field name="text">You have defined twice the same name %(name)s in %(path1)s and %(path2)s.</field>
+        </record>
+        <record model="ir.message" id="msg_argument_accent_error">
+            <field name="text">Function arguments must only use ascii.</field>
+        </record>
+        <record model="ir.message" id="msg_name_accent_error">
+            <field name="text">Technical name must only use ascii.</field>
+        </record>
+        <record model="ir.message" id="msg_arg_number_error">
+            <field name="text">Number of arguments does not match string content.</field>
+        </record>
+        <record model="ir.message" id="msg_rule_engine_log_expected">
+            <field name="text">This wizard should be run from a rule engine execution log selected.</field>
+        </record>
+    </data>
+</tryton>

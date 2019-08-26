@@ -2,10 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:batch.launcher.select_batchs:"
-msgid "Required parameter: %(param)s"
-msgstr "Paramètre de batch requis: %s(param)s"
-
 msgctxt "field:batch.launcher.parameter,code:"
 msgid "Code"
 msgstr "Code"
@@ -61,6 +57,10 @@ msgstr "Sélection batch"
 msgctxt "model:ir.action,name:act_launch_batches"
 msgid "Launch Batches"
 msgstr "Exécuter des batchs"
+
+msgctxt "model:ir.message,text:msg_required_parameter"
+msgid "Required parameter: %(param)s"
+msgstr "Paramètre de batch requis: %s(param)s"
 
 msgctxt "model:ir.ui.menu,name:menu_batches"
 msgid "Batches"

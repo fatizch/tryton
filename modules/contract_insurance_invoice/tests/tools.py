@@ -56,6 +56,6 @@ def add_invoice_configuration(product, accounts, user_context=False):
     product.billing_rules[-1].billing_modes.append(freq_quarterly)
     product.billing_rules[-1].billing_modes.append(freq_monthly_direct_debit)
     for coverage in product.coverages:
-        coverage.account_for_billing = Model.get('account.account')(
-            accounts['revenue'].id)
+        coverage.account_for_billing, = Model.get('account.account').find(
+            [('name', '=', 'Main Revenue')])
     return product

@@ -7,8 +7,10 @@ from sql.aggregate import Sum, Max, Min
 from sql import Literal, Null
 
 from trytond import backend
+from trytond.i18n import gettext
 from trytond.transaction import Transaction
 from trytond.model import Workflow, ModelView, Unique
+from trytond.model.exceptions import ValidationError, AccessError
 from trytond.wizard import StateView, Button, StateTransition, Wizard
 from trytond.wizard import StateAction
 from trytond.pool import Pool, PoolMeta
@@ -59,16 +61,6 @@ class Journal(export.ExportImportMixin, model.TaggedMixin):
     allow_group_deletion = fields.Boolean('Allow Group Deletion')
 
     @classmethod
-    def __setup__(cls):
-        super(Journal, cls).__setup__()
-        cls._error_messages.update({
-                'fail_payment_kind': 'Trying to fail different kind of'
-                ' payments at the same time',
-                'fail_journal': 'Trying to fail payments from different'
-                ' journals at the same time',
-                })
-
-    @classmethod
     def is_master_object(cls):
         return True
 
@@ -87,13 +79,15 @@ class Journal(export.ExportImportMixin, model.TaggedMixin):
             return []
         journals = list(set([p.journal for p in payments]))
         if len(journals) != 1:
-            self.raise_user_error('fail_journal')
+            raise ValidationError(gettext(
+                    'account_payment_cog.msg_fail_journal'))
         journal = journals[0]
         reject_code = payments[0].fail_code
         payment_reject_number = max(len([p for p in payment.line.payments
                     if p.journal == journal]) for payment in payments)
         if len(set([p.kind for p in payments])) != 1:
-            self.raise_user_error('fail_payment_kind')
+            raise ValidationError(gettext(
+                    'account_payment_cog.msg_fail_payment_kind'))
         kind = payments[0].kind
         possible_actions = [action for action in self.failure_actions
             if action.reject_reason.code == reject_code
@@ -172,9 +166,6 @@ class JournalFailureAction(model.CoogSQL, model.CoogView):
     @classmethod
     def __setup__(cls):
         super(JournalFailureAction, cls).__setup__()
-        cls._error_messages.update({
-                'unknown_reject_reason_code': 'Unknown reject code : %s',
-                })
         cls._fail_actions_order = ['manual', 'retry', 'print']
 
     @classmethod
@@ -525,16 +516,6 @@ class Payment(export.ExportImportMixin, Printable,
         super(Payment, cls).__setup__()
         cls.line.select = True
         cls.group.select = True
-        cls._error_messages.update({
-                'payments_blocked_for_party': 'Payments blocked for party %s',
-                'missing_payments': 'Payments with same merged_id must '
-                'be failed at the same time.',
-                'transition_approve_refused': 'The transition to the approved '
-                'state is not allowed on the payment with the merged id '
-                '%(merged_id)s',
-                'update_payment_date': 'Payment dates will automatically be '
-                'updated to %(date)s for consistency:\n\n%(dates)s',
-                })
         cls._buttons.update({
                 'button_fail_payments': {
                     'invisible': Not(In(Eval('state'),
@@ -781,12 +762,17 @@ class Payment(export.ExportImportMixin, Printable,
                 if (payment.kind == 'payable'
                         and payment.party.block_payable_payments):
                     cls.append_functional_error(
-                        'payments_blocked_for_party', payment.party.rec_name)
+                        AccessError(gettext(
+                                'account_payment_cog'
+                                '.msg_payments_blocked_for_party',
+                                party=payment.party.rec_name)))
                 if not payment.can_approve:
                     cls.append_functional_error(
-                        'transition_approve_refused', {
-                            'merged_id': payment.merged_id,
-                            })
+                        AccessError(gettext(
+                                'account_payment_cog'
+                                '.msg_transition_approve_refused',
+                                merged_id=payment.merged_id,
+                                )))
         super(Payment, cls).approve(payments)
 
     @classmethod
@@ -826,14 +812,18 @@ class Payment(export.ExportImportMixin, Printable,
         if not update:
             return
         pool = Pool()
+        Warning = pool.get('res.user.warning')
         MoveLine = pool.get('account.move.line')
         date = max(max(expected_payment_dates), utils.today())
         if not Transaction().context.get('_batch_treatment_date', None):
             # By pass warning when in a batch
-            cls.raise_user_warning('update_payment_date_%i' % payments[0].id,
-                'update_payment_date', {'date': str(date),
-                    'dates': '\n'.join(str(x)
-                        for x in expected_payment_dates)})
+            key = 'update_payment_date_%i' % payments[0].id
+            if Warning.check(key):
+                raise UserWarning(key, gettext(
+                        'account_payment_cog.msg_update_payment_date',
+                        date=str(date),
+                        dates='\n'.join(
+                            str(x) for x in expected_payment_dates)))
         cls.write(payments, {'date': date})
         lines = [x.line for x in payments]
         if lines:
@@ -905,7 +895,8 @@ class Payment(export.ExportImportMixin, Printable,
                     ('merged_id', 'in', merged_ids)])
             if len(all_payments) != len(
                     [x for x in payments if x.merged_id]):
-                cls.raise_user_error('missing_payments')
+                raise ValidationError(gettext(
+                        'account_payment_cog.msg_missing_payments'))
         fields = cls.payments_fields_to_update_after_fail(reject_reason)
         cls.write(payments, fields)
 
@@ -1098,16 +1089,6 @@ class Group(Workflow, ModelCurrency, export.ExportImportMixin, Printable,
                     (Eval('state') == 'to_acknowledge'),
                     },
                 })
-        cls._error_messages.update({
-                'reject_reason_not_found': 'The reason code on journal %s '
-                'is not found',
-                'prematurely_ack_group': 'The payment group %(number)s '
-                'should not be acknowledged: %(date)s < %(payment_date)s',
-                'non_deletable': 'The payment group %(number)s is not '
-                'deletable',
-                'group_with_invalid_payments': 'The payment group %(number)s '
-                'has payment(s) which does not allow the deletion',
-                })
 
     @classmethod
     def __register__(cls, module_name):
@@ -1194,11 +1175,13 @@ class Group(Workflow, ModelCurrency, export.ExportImportMixin, Printable,
         with model.error_manager():
             for group in groups:
                 if group.payment_date_min > utils.today():
-                    cls.append_functional_error('prematurely_ack_group', {
-                            'number': group.number,
-                            'payment_date': group.payment_date_min,
-                            'date': utils.today(),
-                            })
+                    cls.append_functional_error(
+                        ValidationError(gettext(
+                                'account_payment_cog.msg_prematurely_ack_group',
+                                number=group.number,
+                                payment_date=group.payment_date_min,
+                                date=utils.today(),
+                                )))
                 payments.extend(group.processing_payments)
         if payments:
             Payment.succeed(payments)
@@ -1224,12 +1207,16 @@ class Group(Workflow, ModelCurrency, export.ExportImportMixin, Printable,
 
     def check_deletable(self):
         if not self.is_deletable():
-            self.append_functional_error('non_deletable',
-                {'number': self.number})
+            self.append_functional_error(
+                AccessError(gettext(
+                        'account_payment_cog.msg_non_deletable',
+                        number=self.number)))
         if any(x.state in ('succeeded', 'failed')
                 for x in self.payments):
-            self.append_functional_error('group_with_invalid_payments',
-                {'number': self.number})
+            self.append_functional_error(
+                AccessError(gettext(
+                        'account_payment_cog.msg_group_with_invalid_payments',
+                        number=self.number)))
 
     @classmethod
     def update_payments(cls, groups, method_name, state=None):
@@ -1259,7 +1246,9 @@ class Group(Workflow, ModelCurrency, export.ExportImportMixin, Printable,
                     ('failure_actions.journal', '=', journal.id)
                     ])
             if not reject_reasons:
-                cls.raise_user_error('reject_reason_not_found', journal.name)
+                raise ValidationError(gettext(
+                        'account_payment_cog.msg_reject_reason_not_found',
+                        journal=journal.name))
             reject_reason, = reject_reasons
             payments = sum(
                 [list(g.processing_payments) for g in sub_groups], [])
@@ -1400,16 +1389,6 @@ class PaymentFailInformation(model.CoogView):
     process_method = fields.Char('Process Method')
     payment_kind = fields.Char('Payment Kind')
 
-    @classmethod
-    def __setup__(cls):
-        super(PaymentFailInformation, cls).__setup__()
-        cls._error_messages.update({
-                'mixing_payment_methods': 'Trying to fail different payment'
-                ' methods at the same time',
-                'mixing_payment_kinds': 'Trying to fail different payment'
-                ' kinds at the same time',
-                })
-
     @fields.depends('payments')
     def on_change_payments(self):
         if not self.payments:
@@ -1418,12 +1397,14 @@ class PaymentFailInformation(model.CoogView):
         if len(methods) == 1:
             self.process_method = list(methods)[0]
         else:
-            self.raise_user_error('mixing_payment_methods')
+            raise ValidationError(gettext(
+                    'account_payment_cog.msg_mixing_payment_methods'))
         kinds = set([p.kind for p in self.payments])
         if len(kinds) == 1:
             self.payment_kind = list(kinds)[0]
         else:
-            self.raise_user_error('mixing_payment_kinds')
+            raise ValidationError(gettext(
+                    'account_payment_cog.msg_mixing_payment_kinds'))
 
 
 class ManualPaymentFail(model.CoogWizard):
@@ -1440,22 +1421,11 @@ class ManualPaymentFail(model.CoogWizard):
     fail_payments = StateTransition()
     fail_nothing = StateTransition()
 
-    @classmethod
-    def __setup__(cls):
-        super(ManualPaymentFail, cls).__setup__()
-        cls._error_messages.update({
-                'not_same_payment_method': 'Selected payments must have the '
-                'same payment method.',
-                'payment_must_be_succeed_processing': 'Selected payments '
-                'status must be succeeded or processing',
-                'multiple_journal_fail': 'You cannot fail payments with '
-                'differents journal process methods at the same time',
-                })
-
     def transition_init_payments(self):
         payments = self.get_payments()
         if any(x.state not in ('succeeded', 'processing') for x in payments):
-            self.raise_user_error('payment_must_be_succeed_processing')
+            raise ValidationError(gettext(
+                    'msg_payment_must_be_succeed_processing'))
         elif not payments:
             return 'fail_nothing'
         return 'fail_information'
@@ -1486,7 +1456,8 @@ class ManualPaymentFail(model.CoogWizard):
         active_model = Transaction().context.get('active_model')
         Payment = pool.get('account.payment')
         if not self.fail_information.process_method:
-            self.raise_user_error('not_same_payment_method')
+            raise ValidationError(gettext(
+                    'account_payment_cog.msg_not_same_payment_method'))
         Payment.manual_set_reject_reason(list(self.fail_information.payments),
             self.fail_information.reject_reason)
         Payment.fail(list(self.fail_information.payments))

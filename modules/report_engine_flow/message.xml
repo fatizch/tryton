@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<tryton>
+    <data group="1">
+        <record model="ir.message" id="msg_input_flow_variable">
+            <field name="text">From Flow Variable</field>
+        </record>
+        <record model="ir.message" id="msg_process_method_default_flux">
+            <field name="text">Default Flux</field>
+        </record>
+        <record model="ir.message" id="msg_report_template_message">
+            <field name="text">Report flow generation had succeeded. You generated a %(report_template_name)s report.</field>
+        </record>
+    </data>
+</tryton>

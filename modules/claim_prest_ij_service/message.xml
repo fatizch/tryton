@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<tryton>
+    <data group="1">
+        <record model="ir.message" id="msg_periods_must_be_treated">
+            <field name="text">%(number)s periods must be treated before going on.</field>
+        </record>
+        <record model="ir.message" id="msg_unique_subscription">
+            <field name="text">There must be only one IJ subscription per SIREN / SSN.</field>
+        </record>
+        <record model="ir.message" id="msg_no_subscription_found">
+            <field name="text">No IJ subscription found for SIREN %(siren)s and SSN %(ssn)s.</field>
+        </record>
+        <record model="ir.message" id="msg_many_subscriptions">
+            <field name="text">More than one IJ subscription found for SIREN %(siren)s and SSN %(ssn)s.</field>
+        </record>
+        <record model="ir.message" id="msg_no_prest_ij_subscription">
+            <field name="text">The selection does not have related subscription. %(selection)s.</field>
+        </record>
+        <record model="ir.message" id="msg_already_manual">
+            <field name="text">There is already a manual period.</field>
+        </record>
+        <record model="ir.message" id="msg_no_company_confirmed">
+            <field name="text">There are no IJ Subscription confirmed for this person'scompanies.</field>
+        </record>
+        <record model="ir.message" id="msg_not_covered">
+            <field name="text">This person is not covered at this date.</field>
+        </record>
+        <record model="ir.message" id="msg_date_anterior_to_max_loss_end">
+            <field name="text">The chosen date is anterior to the end of the last short term disability which is: [%(date)s].</field>
+        </record>
+        <record model="ir.message" id="msg_nothing_to_do">
+            <field name="text">All periods are already treated, nothing to do.</field>
+        </record>
+        <record model="ir.message" id="msg_inconsistent_daily_amount">
+            <field name="text">Selected periods have different daily amounts.</field>
+        </record>
+        <record model="ir.message" id="msg_changing_daily_amount">
+            <field name="text">Daily amount is changing, going from %(prev)s to %(new)s.</field>
+        </record>
+        <record model="ir.message" id="msg_no_claim_found">
+            <field name="text">Could not find a matching claim, one may have to be created.</field>
+        </record>
+        <record model="ir.message" id="msg_no_service_mixin">
+            <field name="text">Cannot treat periods for different services.</field>
+        </record>
+        <record model="ir.message" id="msg_period_hole">
+            <field name="text">No indemnification found between %(last_end)s and %(new_start)s.</field>
+        </record>
+        <record model="ir.message" id="msg_non_matching_types">
+            <field name="text">Multiple types found when trying to treat: %(type1)s and %(type2)s.</field>
+        </record>
+    </data>
+</tryton>

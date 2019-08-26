@@ -2,23 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:account.payment.sepa.mandate:"
-msgid ""
-"The sepa mandate cannot be cancelled because the billing information "
-"%(billing_info)s of the contract %(contract)s use it %(date)s"
-msgstr ""
-"Le mandat SEPA ne peut pas être annulé car le moyen de quittancement "
-"%(billing_info)s du contrat %(contract)s l'utilise %(date)s"
-
-msgctxt "error:contract:"
-msgid "A payer must be specified"
-msgstr "Un payeur doit être spécifié"
-
-msgctxt "error:contract:"
-msgid "Contract %(contracts)s must have a distributor, please enter it"
-msgstr ""
-"Le contrat %(contracts)s doit avoir un distributeur, merci de le saisir"
-
 msgctxt "field:account.invoice,bank_account:"
 msgid "Bank Account"
 msgstr "Compte bancaire"
@@ -54,6 +37,14 @@ msgstr "Séquence de mandat SEPA"
 msgctxt "help:offered.product,sepa_mandate_sequence:"
 msgid "Sequence used to generate the sepa mandate identification number"
 msgstr "Générateur de référence unique de mandat (RUM)"
+
+msgctxt "model:ir.message,text:msg_billing_information_with_mandate"
+msgid ""
+"The sepa mandate cannot be cancelled because the billing information "
+"%(billing_info)s of the contract %(contract)s use it %(date)s."
+msgstr ""
+"Le mandat SEPA ne peut pas être annulé car le moyen de quittancement "
+"%(billing_info)s du contrat %(contract)s l'utilise %(date)s."
 
 msgctxt "model:report.template,name:default_mandat_sepa_template"
 msgid "Letter of sepa mandat"

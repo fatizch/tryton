@@ -4,8 +4,10 @@ from sql import Null
 from itertools import groupby
 
 from trytond import backend
+from trytond.i18n import gettext
 from trytond.pool import PoolMeta, Pool
 from trytond.model import sequence_ordered, Unique
+from trytond.model.exceptions import AccessError
 from trytond.pyson import Eval
 from trytond.transaction import Transaction
 from trytond.cache import Cache
@@ -163,13 +165,6 @@ class ContractIdentifier(sequence_ordered(), model.CoogSQL, model.CoogView,
         context=False)
 
     @classmethod
-    def __setup__(cls):
-        super(ContractIdentifier, cls).__setup__()
-        cls._error_messages.update({
-                'external_number_label': 'External Number',
-                })
-
-    @classmethod
     def __register__(cls, module_name):
         pool = Pool()
         Contract = pool.get('contract')
@@ -202,8 +197,7 @@ class ContractIdentifier(sequence_ordered(), model.CoogSQL, model.CoogView,
     @classmethod
     def _get_base_identifier_types(cls):
         return [('external_number',
-                cls.raise_user_error('external_number_label',
-                    raise_exception=False))]
+                gettext('contract_identifiers.msg_external_number_label'))]
 
     @classmethod
     def get_identifier_types(cls):
@@ -239,11 +233,8 @@ class ContractIdentifierType(model.CoogSQL, model.CoogView, metaclass=PoolMeta):
         t = cls.__table__()
         cls._sql_constraints += [
             ('contract_identifier_type_code_unique', Unique(t, t.code),
-                'The code must be unique'),
+                'contract_identifiers.msg_code_unique'),
             ]
-        cls._error_messages.update({
-                'type_is_used': 'Identifier type is used. Deletion impossible',
-                })
 
     @fields.depends('code', 'name')
     def on_change_with_code(self):
@@ -256,7 +247,8 @@ class ContractIdentifierType(model.CoogSQL, model.CoogView, metaclass=PoolMeta):
         ContractIdentifier = pool.get('contract.identifier')
         if ContractIdentifier.search(
                 [('identifier_type', 'in', [x.code for x in instances])]):
-            cls.raise_user_error('type_is_used')
+            raise AccessError(gettext(
+                    'contract_identifiers.msg_type_is_used'))
         Pool().get('contract.identifier')._identifier_type_cache.clear()
         super(ContractIdentifierType, cls).delete(instances)
 

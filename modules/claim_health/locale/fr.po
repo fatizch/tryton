@@ -2,21 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:benefit.act.description:"
-msgid "The code must be unique"
-msgstr "Le code doit être unique"
-
-msgctxt "error:benefit.act.family:"
-msgid "The code must be unique"
-msgstr "Le code doit être unique"
-
-msgctxt "error:endorsement.contract.subscriber_change:"
-msgid ""
-"The new subscriber must have a bank account in order to receive his benefits"
-msgstr ""
-"Le nouveau souscripteur doit avoir un compte banquaire afin de recevoir ses "
-"prestations"
-
 msgctxt "field:benefit.act.description,code:"
 msgid "Code"
 msgstr "Code"
@@ -236,6 +221,14 @@ msgstr "Actes médicaux"
 msgctxt "model:ir.action,name:act_medical_act_family_form"
 msgid "Medical Act Families"
 msgstr "Familles d'actes médicaux"
+
+msgctxt "model:ir.message,text:msg_check_party_bank_account"
+msgid ""
+"The new subscriber must have a bank account in order to receive his "
+"benefits."
+msgstr ""
+"Le nouveau souscripteur doit avoir un compte banquaire afin de recevoir ses "
+"prestations."
 
 msgctxt "model:ir.ui.menu,name:menu_medical_act"
 msgid "Medical Act Descriptions"

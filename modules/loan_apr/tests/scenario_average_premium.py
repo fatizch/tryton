@@ -85,57 +85,58 @@ FiscalYear.create_period([fiscalyear.id], config.context)
 product_account_kind = AccountKind()
 product_account_kind.name = 'Product Account Kind'
 product_account_kind.company = company
+product_account_kind.statement = 'income'
+product_account_kind.revenue = True
 product_account_kind.save()
 receivable_account_kind = AccountKind()
 receivable_account_kind.name = 'Receivable Account Kind'
 receivable_account_kind.company = company
+receivable_account_kind.statement = 'balance'
+receivable_account_kind.receivable = True
 receivable_account_kind.save()
 payable_account_kind = AccountKind()
 payable_account_kind.name = 'Payable Account Kind'
 payable_account_kind.company = company
+payable_account_kind.statement = 'balance'
+payable_account_kind.payable = True
 payable_account_kind.save()
 
 # #Comment# #Create Account
 product_account = Account()
 product_account.name = 'Product Account'
 product_account.code = 'product_account'
-product_account.kind = 'revenue'
 product_account.type = product_account_kind
 product_account.company = company
 product_account.save()
 receivable_account = Account()
 receivable_account.name = 'Account Receivable'
 receivable_account.code = 'account_receivable'
-receivable_account.kind = 'receivable'
+receivable_account.type = receivable_account_kind
 receivable_account.party_required = True
 receivable_account.reconcile = True
-receivable_account.type = receivable_account_kind
 receivable_account.company = company
 receivable_account.save()
 payable_account = Account()
 payable_account.name = 'Account Payable'
 payable_account.code = 'account_payable'
-payable_account.kind = 'payable'
-payable_account.party_required = True
 payable_account.type = payable_account_kind
+payable_account.party_required = True
 payable_account.company = company
 payable_account.save()
 
 receivable_account2 = Account()
 receivable_account2.name = 'Account Receivable 2'
 receivable_account2.code = 'account_receivable 2'
-receivable_account2.kind = 'receivable'
+receivable_account2.type = AccountKind(receivable_account_kind.id)
 receivable_account2.party_required = True
 receivable_account2.reconcile = True
-receivable_account2.type = AccountKind(receivable_account_kind.id)
 receivable_account2.company = company
 receivable_account2.save()
 payable_account2 = Account()
 payable_account2.name = 'Account Payable 2'
 payable_account2.code = 'account_payable 2'
-payable_account2.kind = 'payable'
-payable_account2.party_required = True
 payable_account2.type = AccountKind(payable_account_kind.id)
+payable_account2.party_required = True
 payable_account2.company = company
 payable_account2.save()
 
@@ -406,9 +407,11 @@ option_premium_2.rated_entity = coverage
 option_premium_2.loan = loan_2
 contract.billing_informations.append(BillingInformation(date=None,
         billing_mode=freq_yearly, payment_term=payment_term))
-contract.contract_number = '123456789'
-contract.status = 'active'
 contract.save()
+Contract.write([contract.id], {
+        'status': 'active',
+        'contract_number': '123456789',
+        }, config.context)
 
 # #Comment# #Test loan_share end_date calculation
 LoanShare = Model.get('loan.share')

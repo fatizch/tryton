@@ -587,6 +587,7 @@ if LOAD_ACCOUNTING:  # {{{
     tax_account_kind = AccountKind()
     tax_account_kind.name = 'Taxes'
     tax_account_kind.company = company
+    tax_account_kind.statement = 'balance'
     tax_account_kind.save()
     # }}}
 
@@ -614,7 +615,6 @@ if LOAD_ACCOUNTING:  # {{{
         account.template = tax_root.template
         account.parent = tax_root
         account.type = tax_root.type
-        account.kind = 'other'
         account.save()
         return account
 
@@ -2291,7 +2291,6 @@ if CREATE_PRODUCTS:  # {{{
         account.template = coverage_root.template
         account.type = coverage_root.type
         account.parent = coverage_root
-        account.kind = 'other'
         account.party_required = True
         account.save()
         return account
@@ -5741,7 +5740,11 @@ if GENERATE_REPORTINGS:  # {{{
 
     # Ideally we would use the payment wizard on invoices, but we cannot force
     # the date in the past because it compares to Date()
-    lines = MoveLine.find([('account.kind', 'in', ['receivable', 'payable']),
+    lines = MoveLine.find([
+            ['OR',
+                ('account.type.receivable', '=', True),
+                ('account.type.payable', '=', True),
+            ],
             ('party', '!=', None), ('reconciliation', '=', None),
             ('payment_amount', '!=', 0), ('move_state', '=', 'posted'),
             ['OR', ('debit', '>', 0), ('credit', '<', 0)]])
@@ -5789,7 +5792,11 @@ if GENERATE_REPORTINGS:  # {{{
 
     # Ideally we would use the payment wizard on invoices, but we cannot force
     # the date in the past because it compares to Date()
-    lines = MoveLine.find([('account.kind', 'in', ['receivable', 'payable']),
+    lines = MoveLine.find([
+            ['OR',
+                ('account.type.receivable', '=', True),
+                ('account.type.payable', '=', True),
+            ],
             ('party', '!=', None), ('reconciliation', '=', None),
             ('payment_amount', '!=', 0), ('move_state', '=', 'posted'),
             ['OR', ('debit', '<', 0), ('credit', '>', 0)]])

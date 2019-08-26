@@ -2,6 +2,8 @@
 # this repository contains the full copyright notices and license terms.
 import math
 
+from trytond.exceptions import UserError
+from trytond.i18n import gettext
 from trytond.pool import Pool
 from trytond.transaction import Transaction
 from trytond.wizard import Wizard, StateView, Button
@@ -377,16 +379,9 @@ class RevisionBlameWizard(Wizard):
         [Button('Done', 'end', 'tryton-ok')]
     )
 
-    @classmethod
-    def __setup__(cls):
-        super(RevisionBlameWizard, cls).__setup__()
-        cls._error_messages.update({
-                'active_model_no_history': 'The model %s has no revisions.'
-                })
-
     def has_history(self, instance):
-        if bool(instance._history) is False:
-            self.raise_user_error('active_model_no_history')
+        if not instance._history:
+            raise UserError(gettext('coog_core.msg_active_model_no_history'))
 
     def get_total_pages(self, instance, model_id, per_page=10):
         cursor = Transaction().connection.cursor()

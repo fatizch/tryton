@@ -2,6 +2,8 @@
 # this repository contains the full copyright notices and license terms.
 from collections import defaultdict
 
+from trytond.exceptions import UserWarning
+from trytond.i18n import gettext
 from trytond.pool import Pool
 from trytond.wizard import Wizard, StateView, StateTransition, Button
 from trytond.transaction import Transaction
@@ -34,15 +36,6 @@ class TransferCoveredElements(Wizard):
             Button('Transfer', 'transfer', 'tryton-go-next', default=True)])
     transfer = StateTransition()
 
-    @classmethod
-    def __setup__(cls):
-        super(TransferCoveredElements, cls).__setup__()
-        cls._error_messages.update({
-                'non_covered_period': 'There is a non covered period, source '
-                'contract ends on the %(source_end)s when target starts on '
-                '%(target_start)s.',
-                })
-
     def default_select_contracts(self, name):
         if Transaction().context.get('active_model', '') != 'contract':
             return {}
@@ -51,13 +44,17 @@ class TransferCoveredElements(Wizard):
             }
 
     def check_input(self):
+        pool = Pool()
+        Warning = pool.get('res.user.warning')
         source = self.select_contracts.source_contract
         target = self.select_contracts.target_contract
         if coog_date.add_day(source.end_date, 1) != target.start_date:
-            self.raise_user_warning('non_covered_period_%i' % source.id,
-                'non_covered_period', {
-                    'source_end': str(source.end_date),
-                    'target_start': str(target.start_date)})
+            key = 'non_covered_period_%i' % source.id
+            if Warning.check(key):
+                raise UserWarning(key, gettext(
+                        'contract_group.msg_non_covered_period',
+                        source_end=str(source.end_date),
+                        target_start=str(target.start_date)))
 
     def default_item_descs(self, name):
         self.check_input()
@@ -117,13 +114,6 @@ class TransferCoveredElementsContracts(model.CoogView):
     source_item_descs = fields.Text('Source Item Descs', readonly=True)
     target_item_descs = fields.Text('Target Item Descs', readonly=True)
 
-    @classmethod
-    def __setup__(cls):
-        super(TransferCoveredElementsContracts, cls).__setup__()
-        cls._error_messages.update({
-                'covered_element_displayer': '%s (%i covered elements)',
-                })
-
     @fields.depends('source_contract', 'source_item_descs', 'source_product')
     def on_change_source_contract(self):
         if not self.source_contract:
@@ -133,9 +123,10 @@ class TransferCoveredElementsContracts(model.CoogView):
         self.source_product = self.source_contract.product
         descs = []
         for elem in self.source_contract.covered_elements:
-            descs.append(self.raise_user_error('covered_element_displayer',
-                    (elem.rec_name, len(elem.sub_covered_elements)),
-                    raise_exception=False))
+            descs.append(gettext(
+                    'contract_group.msg_covered_element_displayer',
+                    element=elem.rec_name,
+                    number=len(elem.sub_covered_elements)))
         self.source_item_descs = '\n'.join(descs)
 
     @fields.depends('target_contract', 'target_item_descs', 'target_product')
@@ -147,9 +138,10 @@ class TransferCoveredElementsContracts(model.CoogView):
         self.target_product = self.target_contract.product
         descs = []
         for elem in self.target_contract.covered_elements:
-            descs.append(self.raise_user_error('covered_element_displayer',
-                    (elem.rec_name, len(elem.sub_covered_elements)),
-                    raise_exception=False))
+            descs.append(gettext(
+                    'contract_group.msg_covered_element_displayer',
+                    element=elem.rec_name,
+                    number=len(elem.sub_covered_elements)))
         self.target_item_descs = '\n'.join(descs)
 
 

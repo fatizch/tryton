@@ -2,51 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:endorsement.party.address:"
-msgid "New version"
-msgstr "Nouvelle version"
-
-msgctxt "error:endorsement.party.address:"
-msgid "Remove version of"
-msgstr "Suppression de la version"
-
-msgctxt "error:endorsement.party.address:"
-msgid "Update %s"
-msgstr "Mise à jour de %s"
-
-msgctxt "error:endorsement.party.change_address:"
-msgid "Only one new address can be added"
-msgstr "Seulement une seule nouvelle adresse peut être ajoutée"
-
-msgctxt "error:endorsement.party.relation:"
-msgid "New version"
-msgstr "Nouvelle version"
-
-msgctxt "error:endorsement.party.relation:"
-msgid "Remove version of"
-msgstr "Suppression de la version"
-
-msgctxt "error:endorsement.party.relation:"
-msgid "Update %s"
-msgstr "Mise à jour de %s"
-
-msgctxt "error:endorsement.party:"
-msgid "Addresses Modifications"
-msgstr "Modifications des adresses"
-
-msgctxt "error:endorsement.party:"
-msgid "Endorsement \"%s\" is not the latest applied."
-msgstr "L'avenant \"%s\" n'est pas le plus récent appliqué"
-
-msgctxt "error:endorsement.party:"
-msgid "Relations Modifications"
-msgstr "Modifications des relations"
-
-msgctxt "error:endorsement.party:"
-msgid ""
-"There may only be one endorsement in_progress at a given time per party"
-msgstr "Il ne peut y avoir qu'un seul avenant en cours de saisie sur un tiers"
-
 msgctxt "field:endorsement,parties:"
 msgid "Parties"
 msgstr "Tiers"
@@ -816,6 +771,36 @@ msgstr "Champs de l'avenant"
 msgctxt "model:ir.action,name:act_endorsement"
 msgid "Endorsements"
 msgstr "Avenants"
+
+msgctxt "model:ir.message,text:msg_address_modifications"
+msgid "Addresses Modifications:"
+msgstr "Modifications des adresses"
+
+msgctxt "model:ir.message,text:msg_new_address"
+msgid "New Address"
+msgstr "Nouvelle adresse"
+
+msgctxt "model:ir.message,text:msg_new_relation"
+msgid "New Relation"
+msgstr "Nouvelle relation"
+
+msgctxt "model:ir.message,text:msg_not_latest_applied"
+msgid "Endorsement \"%(endorsement)s\" is not the latest applied."
+msgstr "L'avenant \"%(endorsement)s\" n'est pas le plus récent appliqué"
+
+msgctxt "model:ir.message,text:msg_only_add_one"
+msgid "Only one new address can be added."
+msgstr "Seulement une seule nouvelle adresse peut être ajoutée."
+
+msgctxt "model:ir.message,text:msg_only_one_endorsement_in_progress"
+msgid ""
+"There may only be one endorsement in_progress at a given time per party."
+msgstr ""
+"Il ne peut y avoir qu'un seul avenant en cours de saisie sur un tiers."
+
+msgctxt "model:ir.message,text:msg_relations_modifications"
+msgid "Relations Modifications:"
+msgstr "Modifications des relations"
 
 msgctxt "selection:endorsement.part,kind:"
 msgid "Party"

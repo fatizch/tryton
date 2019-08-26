@@ -5,6 +5,8 @@ from sql.aggregate import Max
 from collections import defaultdict
 
 from trytond import backend
+from trytond.i18n import gettext
+from trytond.model.exceptions import ValidationError, RequiredValidationError
 from trytond.pyson import Eval, Bool, Or
 from trytond.transaction import Transaction
 from trytond.pool import PoolMeta, Pool
@@ -24,11 +26,11 @@ class Party(metaclass=PoolMeta):
     social_security_dependent = fields.Function(
         fields.One2Many('party.party', None, 'Social Security Dependent',
             depends=['relations']),
-        'get_relations')
+        'get_relations', setter='setter_void')
     social_security_insured = fields.Function(
         fields.One2Many('party.party', None, 'Social Security Insured',
             depends=['relations']),
-        'get_relations')
+        'get_relations', setter='setter_void')
     main_insured_ssn = fields.Function(fields.Char('Main Insured SSN'),
         'get_main_insured_ssn', searcher='search_main_insured_ssn')
     main_health_complement = fields.Function(
@@ -46,12 +48,6 @@ class Party(metaclass=PoolMeta):
         cls.health_complement.states['invisible'] = Or(
             cls.health_complement.states.get('invisible', False),
             Bool(Eval('social_security_dependent')))
-        cls._error_messages.update({
-                'social_security_dependent_party': 'This party is social '
-                'security dependent:\n%(dependent_party)s\nYou cannot modify '
-                'its health complement, change social security insured\'s main '
-                'health complement'
-                })
 
     def get_main_health_complement(self, name):
         complement = self.get_health_complement_at_date()
@@ -192,15 +188,6 @@ class PartyRelation(metaclass=PoolMeta):
     __name__ = 'party.relation'
 
     @classmethod
-    def __setup__(cls):
-        super(PartyRelation, cls).__setup__()
-        cls._error_messages.update({
-                'invalid_social_security_relation': "%s can't be both a "
-                "social security insured and dependent",
-                'SSN_required': 'The SSN is required for %s',
-                })
-
-    @classmethod
     def validate(cls, relations):
         pool = Pool()
         RelationType = pool.get('party.relation.type')
@@ -218,14 +205,18 @@ class PartyRelation(metaclass=PoolMeta):
                     and relation.to.social_security_dependent
                     or relation.type == social_security_insured_relation
                     and relation.to.social_security_insured):
-                cls.raise_user_error('invalid_social_security_relation',
-                    relation.to.rec_name)
+                raise ValidationError(gettext(
+                        'contract_insurance_health_fr'
+                        '.msg_invalid_social_security_relation',
+                        relation=relation.to.rec_name))
             if (relation.type == social_security_dependent_relation
                     and relation.from_.social_security_insured
                     or relation.type == social_security_insured_relation
                     and relation.from_.social_security_dependent):
-                cls.raise_user_error('invalid_social_security_relation',
-                    relation.from_.rec_name)
+                raise ValidationError(gettext(
+                        'contract_insurance_health_fr'
+                        '.msg_invalid_social_security_relation',
+                        relation=relation.from_.rec_name))
 
     @classmethod
     def delete(cls, relations):
@@ -243,7 +234,10 @@ class PartyRelation(metaclass=PoolMeta):
             if (relation.type == social_security_insured_relation and
                     len(relation.to.social_security_dependent) == 1
                     and not relation.to.ssn):
-                cls.raise_user_error('SSN_required', relation.to.rec_name)
+                raise RequiredValidationError(gettext(
+                        'contract_insurance_health_fr',
+                        '.msg_ssn_required_relation',
+                        relation_to=relation.to.rec_name))
         super(PartyRelation, cls).delete(relations)
 
 
@@ -262,14 +256,6 @@ class HealthPartyComplement(metaclass=PoolMeta):
     birth_order = fields.Function(
         fields.Integer('Birth Order'),
         'get_birth_order')
-
-    @classmethod
-    def __setup__(cls):
-        super(HealthPartyComplement, cls).__setup__()
-        cls._error_messages.update({
-            'wrong_insurance_fund_number': 'Wrong Insurance Fund Number: %s',
-            'hc_system_not_defined': 'HC system must be defined'
-            })
 
     @classmethod
     def __register__(cls, module):
@@ -349,11 +335,14 @@ class HealthPartyComplement(metaclass=PoolMeta):
         if not self.insurance_fund_number:
             return
         if not self.hc_system and self.insurance_fund_number:
-            self.raise_user_error('hc_system_not_defined')
+            raise ValidationError(gettext(
+                    'contract_insurance_health_fr.msg_hc_system_not_defined'))
         if (not re.match('%s[0-9]{7}' % self.hc_system.code,
                 self.insurance_fund_number) or not self.insurance_fund):
-            self.raise_user_error('wrong_insurance_fund_number',
-                self.insurance_fund_number)
+            raise ValidationError(gettext(
+                    'contract_insurance_health_fr'
+                    '.msg_wrong_insurance_fund_number',
+                    number=self.insurance_fund_number))
 
     @fields.depends('hc_system', 'insurance_fund_number')
     def pre_validate(self):

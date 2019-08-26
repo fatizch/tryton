@@ -1,5 +1,8 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+from trytond.exceptions import UserError, UserWarning
+from trytond.i18n import gettext
+from trytond.model.exceptions import ValidationError, AccessError
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, Or, In
 from trytond.server_context import ServerContext
@@ -45,21 +48,6 @@ class Contract(metaclass=PoolMeta):
                             ['posted', 'paid']))},
                 'button_cancel_surrender': {
                     'readonly': ~Eval('surrender_invoice', False)},
-                })
-        cls._error_messages.update({
-                'will_surrender': 'Confirm contracts surrender',
-                'cannot_surrender': 'Contract %(contract)s cannot be '
-                'surrendered',
-                'no_surrenderable_options': 'No options were found that can '
-                'be surrendered for contract %(contract)s',
-                'surrender_invoice_description': 'Surrender of %(contract)s',
-                'auto_surrendering': 'Contracts will automatically be '
-                'surrendered',
-                'plan_surrender': 'Contracts surrender will be planned',
-                'will_cancel_surrender': 'Contracts surrender will be '
-                'cancelled',
-                'contract_not_surrendered': 'Contract %(contract)s is not '
-                'surrendered. Therefore, it cannot be reactivated.',
                 })
 
     @classmethod
@@ -115,11 +103,14 @@ class Contract(metaclass=PoolMeta):
 
     @classmethod
     def validate_surrender(cls, contracts, surrender_date):
-        cls.raise_user_warning('will_surrender_%s' % str([x.id for x in
-                    contracts[:10]]), 'will_surrender')
         pool = Pool()
         SubStatus = pool.get('contract.sub_status')
         Event = pool.get('event')
+        Warning = pool.get('res.user.warning')
+        key = 'will_surrender_%s' % str([x.id for x in contracts[:10]])
+        if Warning.check(key):
+            raise UserWarning(key, gettext(
+                    'contract_surrender.msg_will_surrender'))
         surrender_reason = SubStatus.get_sub_status('surrendered')
         cls.post_surrender_invoices(contracts)
         cls.terminate(contracts, surrender_date, surrender_reason)
@@ -144,8 +135,12 @@ class Contract(metaclass=PoolMeta):
         Invoice = pool.get('account.invoice')
         ContractInvoice = pool.get('contract.invoice')
         Event = pool.get('event')
-        cls.raise_user_warning('plan_surrender_%s' % str([x.id for x in
-                    contracts[:10]]), 'plan_surrender')
+        Warning = pool.get('res.user.warning')
+        key = 'plan_surrender_%s' % str(
+            x.id for x in contracts[:10])
+        if Warning.check(key):
+            raise UserWarning(key, gettext(
+                    'contract_surrender.msg_plan_surrender'))
         with model.error_manager():
             cls.check_for_surrender(contracts, surrender_date)
         contract_invoices = cls.generate_surrender_invoices(contracts,
@@ -159,16 +154,19 @@ class Contract(metaclass=PoolMeta):
     def check_for_surrender(cls, contracts, surrender_date):
         for contract in contracts:
             if not contract.can_surrender:
-                contract.append_functional_error('cannot_surrender',
-                    {'contract': contract.rec_name})
+                contract.append_functional_error(
+                    ValidationError(gettext(
+                            'contract_surrender.msg_cannot_surrender',
+                            contract=contract.rec_name)))
                 continue
             options = [x for x in (contract.options +
                     contract.covered_element_options)
                 if x.surrender_allowed(surrender_date)]
             if not options:
                 contract.append_functional_error(
-                    'no_surrenderable_options', {
-                        'contract': contract.rec_name})
+                    ValidationError(gettext(
+                            'contract_surrender.msg_no_surrenderable_options',
+                            contract=contract.rec_name)))
 
     @classmethod
     def generate_surrender_invoices(cls, contracts, surrender_date):
@@ -192,8 +190,9 @@ class Contract(metaclass=PoolMeta):
         config = pool.get('account.configuration').get_singleton()
         lang = self.company.party.lang
         if not lang:
-            self.company.raise_user_error('missing_lang',
-                {'party': self.company.rec_name})
+            raise UserError(gettext(
+                    'company_cog.msg_missing_lang',
+                    party=self.company.rec_name))
         invoice = Invoice(
             invoice_address=self.get_contract_address(utils.today()),
             contract=self,
@@ -217,8 +216,9 @@ class Contract(metaclass=PoolMeta):
         return contract_invoice
 
     def _surrender_invoice_description(self, surrender_date):
-        return self.raise_user_error('surrender_invoice_description',
-            {'contract': self.rec_name}, raise_exception=False)
+        return gettext(
+            'contract_surrender.msg_surrender_invoice_description',
+            contract=self.rec_name)
 
     def calculate_surrenders(self, surrender_date):
         surrenders = []
@@ -235,6 +235,8 @@ class Contract(metaclass=PoolMeta):
 
     @classmethod
     def terminate(cls, contracts, at_date, termination_reason):
+        pool = Pool()
+        Warning = pool.get('res.user.warning')
         to_surrender, to_terminate = [], []
         for contract in contracts:
             if contract.auto_surrender(at_date):
@@ -243,8 +245,11 @@ class Contract(metaclass=PoolMeta):
                 to_terminate.append(contract)
         if to_surrender:
             # Surrendering will also terminate the contracts
-            cls.raise_user_warning('auto_surrendering_%s' % ','.join(
-                    [str(x.id) for x in to_surrender]), 'auto_surrendering')
+            key = 'auto_surrendering_%s' % ','.join(
+                str(x.id) for x in to_surrender)
+            if Warning.check(key):
+                raise UserWarning(key, gettext(
+                        'contract_surrender.msg_auto_surrendering'))
             # We still want a control, so only planning
             cls.plan_surrender(to_surrender, at_date)
         if to_terminate:
@@ -261,15 +266,22 @@ class Contract(metaclass=PoolMeta):
 
     @classmethod
     def cancel_surrender(cls, contracts):
-        cls.raise_user_warning('will_cancel_surrender_%s' % str([x.id for x in
-                    contracts[:10]]), 'will_cancel_surrender')
         pool = Pool()
         Event = pool.get('event')
+        Warning = pool.get('res.user.warning')
+        key = 'will_cancel_surrender_%s' % str(
+            x.id for x in contracts[:10])
+        if Warning.check(key):
+            raise UserWarning(key, gettext(
+                    'contract_surrender.msg_will_cancel_surrender'))
         with model.error_manager():
             for contract in contracts:
                 if not contract.surrender_invoice:
-                    cls.append_functional_error('contract_not_surrendered', {
-                            'contract': contract.rec_name})
+                    cls.append_functional_error(
+                        AccessError(gettext(
+                                'contract_surrender'
+                                '.msg_contract_not_surrendered',
+                                contract=contract.rec_name)))
         if contracts:
             surrender_dates = {x.id: x.final_end_date or
                 x.surrender_invoice.invoice_date for x in contracts}
@@ -326,13 +338,6 @@ class Contract(metaclass=PoolMeta):
 class Option(metaclass=PoolMeta):
     __name__ = 'contract.option'
 
-    @classmethod
-    def __setup__(cls):
-        super(Option, cls).__setup__()
-        cls._error_messages.update({
-                'surrender_line_description': 'Surrender of %(option)s',
-                })
-
     def surrender_allowed(self, surrender_date):
         if not self.parent_contract.can_surrender:
             return False
@@ -368,5 +373,6 @@ class Option(metaclass=PoolMeta):
         return line
 
     def _surrender_line_description(self):
-        return self.raise_user_error('surrender_line_description',
-            {'option': self.rec_name}, raise_exception=False)
+        return gettext(
+            'contract_surrender.msg_surrender_invoice_description',
+            option=self.rec_name)

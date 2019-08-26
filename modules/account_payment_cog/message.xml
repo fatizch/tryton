@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<tryton>
+    <data group="1">
+        <record model="ir.message" id="msg_fail_payment_kind">
+            <field name="text">Trying to fail different kind of payments at the same time.</field>
+        </record>
+        <record model="ir.message" id="msg_fail_journal">
+            <field name="text">Trying to fail payments from different journals at the same time.</field>
+        </record>
+        <record model="ir.message" id="msg_payments_blocked_for_party">
+            <field name="text">Payments blocked for party %(party)s.</field>
+        </record>
+        <record model="ir.message" id="msg_missing_payments">
+            <field name="text">Payments with same merged_id must be failed at the same time.</field>
+        </record>
+        <record model="ir.message" id="msg_transition_approve_refused">
+            <field name="text">The transition to the approved state is not allowed on the payment with the merged id %(merged_id)s.</field>
+        </record>
+        <record model="ir.message" id="msg_update_payment_date">
+            <field name="text">Payment dates will automatically be updated to %(date)s for consistency:
+
+%(dates)s</field>
+        </record>
+        <record model="ir.message" id="msg_reject_reason_not_found">
+            <field name="text">The reason code on journal %(journal)s is not found.</field>
+        </record>
+        <record model="ir.message" id="msg_prematurely_ack_group">
+            <field name="text">The payment group %(number)s should not be acknowledged: %(date)s &lt; %(payment_date)s.</field>
+        </record>
+        <record model="ir.message" id="msg_non_deletable">
+            <field name="text">The payment group %(number)s is not deletable.</field>
+        </record>
+        <record model="ir.message" id="msg_group_with_invalid_payments">
+            <field name="text">The payment group %(number)s has payment(s) which does not allow the deletion.</field>
+        </record>
+        <record model="ir.message" id="msg_mixing_payment_methods">
+            <field name="text">Trying to fail different payment methods at the same time.</field>
+        </record>
+        <record model="ir.message" id="msg_mixing_payment_kinds">
+            <field name="text">Trying to fail different payment kinds at the same time.</field>
+        </record>
+        <record model="ir.message" id="msg_not_same_payment_method">
+            <field name="text">Selected payments must have the same payment method.</field>
+        </record>
+        <record model="ir.message" id="msg_payment_must_be_succeed_processing">
+            <field name="text">Selected payments status must be succeeded or processing.</field>
+        </record>
+        <record model="ir.message" id="msg_incompatible_lines">
+            <field name="text">Selected lines are incompatible. Some are payable lines some are receivable.</field>
+        </record>
+        <record model="ir.message" id="msg_incompatible_lines_with_kind">
+            <field name="text">Selected lines are incompatible with selected kind.</field>
+        </record>
+        <record model="ir.message" id="msg_updating_payment_date">
+            <field name="text">The payment date for all payments will be updated to %(date)s.</field>
+        </record>
+        <record model="ir.message" id="msg_different_payment_journal">
+            <field name="text">The allowed payment journals for the selected lines are different and do not allow them to be processed at the same time.</field>
+        </record>
+        <record model="ir.message" id="msg_nothing_to_pay">
+            <field name="text">Nothing to pay.</field>
+        </record>
+    </data>
+</tryton>

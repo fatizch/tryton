@@ -2,31 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:account.move.line:"
-msgid "Automatic Split Move"
-msgstr "Découpage automatique"
-
-msgctxt "error:insurer:"
-msgid "Notice kind does not match insurer configuration"
-msgstr ""
-"Le type de bordereau ne correspond pas à la configuration de l'assureur"
-
-msgctxt "error:insurer:"
-msgid ""
-"You cannot generate invoices simultaneously for insurers whose group invoice"
-" configuration is different"
-msgstr ""
-"Vous ne pouvez pas générer simultanément les bordereaux d'assureurs ayant "
-"une configuration différente de regroupement des bordereaux"
-
-msgctxt "error:received_premiums:"
-msgid "Received Premium"
-msgstr ""
-
-msgctxt "error:report.template:"
-msgid "All Insurer Invoice"
-msgstr "Bordereau Assureur Complet"
-
 msgctxt "field:account.configuration,insurer_invoice_payment_term:"
 msgid "Insurer Invoice Payment Term"
 msgstr "Conditions de paiement pour les borderaux de commissions"
@@ -100,6 +75,18 @@ msgstr "Journal de reprise de prime suite à délettrage"
 msgctxt "model:ir.action,name:"
 msgid "Related Lines"
 msgstr "Lignes associées"
+
+msgctxt "model:ir.message,text:msg_all_insurer_invoices"
+msgid "All Insurer Invoice"
+msgstr "Bordereau Assureur Complet"
+
+msgctxt "model:ir.message,text:msg_broker_invoice"
+msgid "Broker Invoice Report"
+msgstr "Bordereau apporteur"
+
+msgctxt "model:ir.message,text:msg_insurer_invoice"
+msgid "Insurer Invoice Report"
+msgstr "Bordereau assureur"
 
 msgctxt "model:report.template,name:default_commission_reporting_template"
 msgid "Commission Reporting"

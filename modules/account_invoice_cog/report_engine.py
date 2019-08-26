@@ -1,5 +1,6 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+from trytond.i18n import gettext
 from trytond.pool import PoolMeta
 from trytond.transaction import Transaction
 
@@ -22,19 +23,12 @@ class ReportTemplate(metaclass=PoolMeta):
                 where=table.kind == 'base_invoice_report',
                 ))
 
-    @classmethod
-    def __setup__(cls):
-        super(ReportTemplate, cls).__setup__()
-        cls._error_messages.update({
-                'contract_invoice': 'Contract Invoice',
-                })
-
     def get_possible_kinds(self):
         result = super(ReportTemplate, self).get_possible_kinds()
         if not self.on_model:
             return result
         if self.on_model.model == 'account.invoice':
             result.append(
-                ('contract_invoice', self.raise_user_error(
-                    'contract_invoice', raise_exception=False)))
+                ('contract_invoice',
+                    gettext('account_invoice_cog.msg_contract_invoice')))
         return result

@@ -2,26 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:contract.option:"
-msgid "The option %(option)s has overlapping waivers"
-msgstr "La garantie %(option)s a des exonérations qui se chevauchent"
-
-msgctxt "error:contract.option:"
-msgid ""
-"The option %(option)s has too many waivers on the period [%(start)s - "
-"%(end)s]"
-msgstr ""
-"La garantie %(option)s a trop d'exonérations sur la période [%(start)s - "
-"%(end)s]"
-
-msgctxt "error:contract.waiver_premium.create:"
-msgid "You are trying to create overlapping waivers"
-msgstr "Vous essayez de créer des exonérations qui se chevauchent."
-
-msgctxt "error:waiver_premium.rule:"
-msgid "Waiver of Premium"
-msgstr "Exonération de prime"
-
 msgctxt "field:account.invoice.line.detail,waiver:"
 msgid "Waiver Of Premium"
 msgstr "Exonération de prime"
@@ -373,6 +353,26 @@ msgstr "Définir la date de fin"
 msgctxt "model:ir.action,name:act_show_waivers_of_premium"
 msgid "Waivers Of Premiums"
 msgstr "Exonérations de prime"
+
+msgctxt "model:ir.message,text:msg_overlapping_waivers"
+msgid "The option %(option)s has overlapping waivers."
+msgstr "La garantie %(option)s a des exonérations qui se chevauchent."
+
+msgctxt "model:ir.message,text:msg_too_many_waivers"
+msgid ""
+"The option %(option)s has too many waivers on the period [%(start)s - "
+"%(end)s]."
+msgstr ""
+"La garantie %(option)s a trop d'exonérations sur la période [%(start)s - "
+"%(end)s]."
+
+msgctxt "model:ir.message,text:msg_waiver_line"
+msgid "Waiver of Premium"
+msgstr "Exonération de prime"
+
+msgctxt "model:ir.message,text:msg_waiver_overlaps"
+msgid "You are trying to create overlapping waivers."
+msgstr "Vous essayez de créer des exonérations qui se chevauchent."
 
 msgctxt ""
 "model:rule_engine,name:waiver_of_premium_for_first_n_months_from_initial_start_date"

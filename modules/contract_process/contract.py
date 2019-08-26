@@ -28,13 +28,6 @@ class Contract(CoogProcessFramework, metaclass=ClassAttr):
     @classmethod
     def __setup__(cls):
         super(Contract, cls).__setup__()
-        cls._error_messages.update({
-                'no_option': 'At least an option must be selected',
-                'need_option': 'At least one option must be selected for %s',
-                'need_covered': 'There must be at least one covered element',
-                'no_subscriber_address': 'The selected subscriber does not '
-                'have an address',
-                })
         cls._buttons['button_activate']['invisible'] = Or(
             cls._buttons['button_activate']['invisible'],
             Bool(Eval('current_state', False)))
@@ -88,16 +81,16 @@ class Contract(CoogProcessFramework, metaclass=ClassAttr):
 
     def check_subscriber_address(self):
         if not self.subscriber:
-            return False, (('no_subscriber', ()),)
+            return False, (('contract_process.msg_no_subscriber', ()),)
         if not self.subscriber.addresses:
-            return False, (('no_subscriber_address', ()),)
+            return False, (('contract_process.msg_no_subscriber_address', ()),)
         return True, ()
 
     def check_option_selected(self):
         for option in self.options:
             if option.status == 'active':
                 return True, ()
-        return False, (('no_option', ()),)
+        return False, (('contract_process.msg_no_option', ()),)
 
     @classmethod
     def subscribe_contract(cls, *args, **kwargs):

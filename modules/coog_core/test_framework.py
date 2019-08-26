@@ -100,15 +100,24 @@ class CoogTestCase(ModuleTestCase):
     def run(self, result=None):
         test_function = getattr(self, self._testMethodName)
         if not (hasattr(test_function, '_is_ready') and
-                test_function._is_ready) and self._testMethodName not in (
-                'test_view', 'test_depends', 'test_menu_action',
-                'test_model_access', 'test9999_launch_test_cases',
-                'test_rec_name', 'test_workflow_transitions',
-                'test_field_methods', 'test_rpc_callable',
-                'test_ir_action_window', 'test_selection_fields',
-                'test_wizards', 'test_modelsingleton_inherit_order',
-                'test_function_fields', 'test_depends_parent',
-                'test_buttons_registered'):
+                test_function._is_ready) and self._testMethodName not in {
+                    'test_rec_name',
+                    'test_view',
+                    'test_rpc_callable',
+                    'test_depends',
+                    'test_depends_parent',
+                    'test_field_methods',
+                    'test_menu_action',
+                    'test_model_access',
+                    'test_workflow_transitions',
+                    'test_wizards',
+                    'test_selection_fields',
+                    'test_function_fields',
+                    'test_ir_action_window',
+                    'test_modelsingleton_inherit_order',
+                    'test_buttons_registered',
+                    'test_buttons_states',
+                    'test9999_launch_test_cases'}:
             good_function = functools.partial(
                 prepare_test()(test_function, True), self)
             setattr(self, self._testMethodName, good_function)

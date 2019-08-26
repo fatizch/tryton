@@ -53,6 +53,8 @@ WaitingAccountKind = Model.get('account.account.type')
 waiting_account_kind = WaitingAccountKind()
 waiting_account_kind.name = 'Waiting Account Kind'
 waiting_account_kind.company = company
+waiting_account_kind.other = True
+waiting_account_kind.statement = 'off-balance'
 waiting_account_kind.save()
 waiting_account = WaitingAccount()
 waiting_account.name = 'Waiting Account'
@@ -69,12 +71,13 @@ BaseAccountKind = Model.get('account.account.type')
 base_account_kind = BaseAccountKind()
 base_account_kind.name = 'Base Account Kind'
 base_account_kind.company = company
+base_account_kind.other = True
+base_account_kind.statement = 'off-balance'
 base_account_kind.save()
 base_account = BaseAccount()
 base_account.name = 'Base Account'
 base_account.company = company
 base_account.code = 'base_account'
-base_account.kind = 'other'
 base_account.type = base_account_kind
 base_account.save()
 

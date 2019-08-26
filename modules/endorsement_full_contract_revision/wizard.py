@@ -1,5 +1,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+from trytond.i18n import gettext
+from trytond.model.exceptions import ValidationError
 from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
 
@@ -50,7 +52,7 @@ class StartFullContractRevision(EndorsementWizardStepMixin):
         defaults = super(StartFullContractRevision, self).step_default()
         contracts = self._get_contracts()
         if len(contracts) != 1:
-            self.raise_user_error('only_one_contract')
+            raise ValidationError('only_one_contract')
         endorsement = list(contracts.values())[0]
         defaults['current_start_date'] = endorsement.contract.start_date
         defaults['start_date'] = self.effective_date
@@ -95,14 +97,6 @@ class StartEndorsement(metaclass=PoolMeta):
     resume_contract_process = model.StateAction(
         'process_cog.act_resume_process')
 
-    @classmethod
-    def __setup__(cls):
-        super(StartEndorsement, cls).__setup__()
-        cls._error_messages.update({
-                'no_process_found': 'Cannot start full contract revision, '
-                'no matching process available',
-                })
-
     def transition_start(self):
         if Transaction().context.get('active_model') == 'endorsement':
             active_id = Transaction().context.get('active_id')
@@ -135,7 +129,8 @@ class StartEndorsement(metaclass=PoolMeta):
                     ('kind', '=', 'full_contract_revision'),
                     ])
         if not candidates:
-            self.raise_user_error('no_process_found')
+            raise ValidationError(gettext(
+                    'endorsement_full_contract_revision.msg_no_process_found'))
 
         # Update contract state
         process = candidates[0]

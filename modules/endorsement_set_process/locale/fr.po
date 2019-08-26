@@ -2,31 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:endorsement.set:"
-msgid "Effective date is not defined"
-msgstr "La date d'effet n'est pas définie"
-
-msgctxt "error:endorsement.set:"
-msgid "Enter a value for field '%s' of '%s'"
-msgstr "Entrez  une valeur pour le champ '%s' de '%s'"
-
-msgctxt "error:endorsement.set:"
-msgid "Enter a value for field(s): %s"
-msgstr "Entrez une valeur pour le(s) champs(s) : %s"
-
-msgctxt "error:endorsement.set:"
-msgid "Everything is good !"
-msgstr "Tout est bon!"
-
-msgctxt "error:endorsement.set:"
-msgid "Select a date that is not in the future for field(s): %s"
-msgstr "Sélectionnez une date non à venir pour le(s) champ(s) : %s"
-
-msgctxt "error:endorsement.start_process:"
-msgid "The selected contracts must belong to the same contract set."
-msgstr ""
-"Les contrats sélectionnées doivent appartenir au même ensemble de contrat."
-
 msgctxt "field:endorsement,contracts_name:"
 msgid "Contracts Name"
 msgstr "Numéros des contrats"
@@ -79,6 +54,15 @@ msgstr "Statut du processus"
 msgctxt "model:ir.action,name:"
 msgid "Endorsement Set Application"
 msgstr "Appliquer l'ensemble d'avenants"
+
+msgctxt "model:ir.message,text:msg_no_effective_date"
+msgid "Effective date is not defined"
+msgstr "La date d'effet n'est pas définie"
+
+msgctxt "model:ir.message,text:msg_same_set_for_all"
+msgid "The selected contracts must belong to the same contract set."
+msgstr ""
+"Les contrats sélectionnées doivent appartenir au même ensemble de contrat."
 
 msgctxt "model:ir.ui.menu,name:"
 msgid "Endorsement Set Application"

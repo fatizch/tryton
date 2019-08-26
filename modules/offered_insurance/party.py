@@ -3,8 +3,11 @@
 from sql import Literal
 
 from trytond import backend
+from trytond.exceptions import UserWarning
+from trytond.i18n import gettext
 from trytond.pool import PoolMeta, Pool
 from trytond.model import Unique
+from trytond.model.exceptions import ValidationError
 from trytond.transaction import Transaction
 from trytond.pyson import Eval, Not, Bool
 
@@ -106,25 +109,20 @@ class Insurer(model.CoogView, model.CoogSQL):
         target_not_required=True)
 
     @classmethod
-    def __setup__(cls):
-        super(Insurer, cls).__setup__()
-        cls._error_messages.update({
-                'missing_default_delegation': 'There must be at least one '
-                '"generic" delegation rule for %s.',
-                'possible_insurer_duplicate': 'There are already existing '
-                'insurer instances for parties:\n\n%(names)s',
-                })
-
-    @classmethod
     def create(cls, values):
+        pool = Pool()
+        Warning = pool.get('res.user.warning')
         # party is required, so it has to be in there
         parties = [x['party'] for x in values]
         existing = cls.search([('party', 'in', parties)])
         if existing and cls._should_raise_warning_if_possible_duplicate():
-            cls.raise_user_warning('possible_insurer_duplicate_%s' % '_'.join(
-                    str(x.id) for x in existing[:10]),
-                'possible_insurer_duplicate', {
-                    'names': '\n'.join({x.party.name for x in existing[:10]})})
+            key = 'possible_insurer_duplicate_%s' % '_'.join(
+                str(x.id) for x in existing[:10])
+            if Warning.check(key):
+                raise UserWarning(key, gettext(
+                        'offered_insurance.msg_possible_insurer_duplicate',
+                        names='\n'.join(
+                            {x.party.name for x in existing[:10]})))
         return super(Insurer, cls).create(values)
 
     @classmethod
@@ -145,8 +143,10 @@ class Insurer(model.CoogView, model.CoogSQL):
     def check_delegations(cls, insurers):
         for insurer in insurers:
             if not any(x.insurance_kind == '' for x in insurer.delegations):
-                insurer.append_functional_error('missing_default_delegation',
-                    (insurer.party.rec_name,))
+                insurer.append_functional_error(
+                    ValidationError(gettext(
+                            'offered_insurance.msg_missing_default_delegation',
+                            party=insurer.party.rec_name)))
 
     @classmethod
     def default_delegations(cls):

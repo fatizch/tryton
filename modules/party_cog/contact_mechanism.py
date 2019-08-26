@@ -9,12 +9,13 @@ try:
 except ImportError:
     phonenumbers = None
 
+from trytond.exceptions import UserError
+from trytond.i18n import gettext
 from trytond.pool import Pool
 from trytond.pyson import Eval
 from trytond.transaction import Transaction
-from trytond.config import config
 
-from trytond.modules.party.contact_mechanism import _TYPES, _PHONE_TYPES
+from trytond.modules.party.contact_mechanism import _TYPES
 from trytond.modules.coog_core import model, utils, fields, export
 
 MEDIA = _TYPES + [
@@ -42,8 +43,6 @@ class ContactMechanism(export.ExportImportMixin, model.FunctionalErrorMixIn):
         forbidden_types = {'skype', 'sip', 'irc', 'jabber'}
         cls.type.selection = [x for x in cls.type.selection
             if x[0] not in forbidden_types]
-        cls._error_messages.update({
-                'invalid_email': 'Invalid Email !'})
 
     @classmethod
     def validate(cls, mechanisms):
@@ -61,7 +60,8 @@ class ContactMechanism(export.ExportImportMixin, model.FunctionalErrorMixIn):
         if hasattr(self, 'email') and self.email:
             import re
             if not re.match(VALID_EMAIL_REGEX, self.email):
-                self.append_functional_error('invalid_email')
+                self.append_functional_error(
+                    UserError(gettext('coog_core.msg_invalid_email')))
         return
 
     def get_icon(self):
@@ -74,57 +74,9 @@ class ContactMechanism(export.ExportImportMixin, model.FunctionalErrorMixIn):
     def add_func_key(cls, values):
         values['_func_key'] = values['value']
 
-    @classmethod
-    def add_prefix_to_phone_number(cls, value):
-        if value and not value.startswith('+'):
-            phone_prefix = config.get('options',
-                'phone_prefix', default='+33')
-            value = phone_prefix + value[1:]
-        return value
-
-    @classmethod
-    def create(cls, vlist):
-        for data in vlist:
-            if data.get('type', None) in _PHONE_TYPES:
-                if 'value' not in data:
-                    continue
-                data['value'] = \
-                    cls.add_prefix_to_phone_number(data.get('value', ''))
-        return super(ContactMechanism, cls).create(vlist)
-
-    @classmethod
-    def write(cls, *args):
-        params = iter(args)
-        for parties, data in zip(params, params):
-            if data.get('type', parties[0].type) in _PHONE_TYPES:
-                if 'value' not in data:
-                    continue
-                data['value'] = \
-                    cls.add_prefix_to_phone_number(data.get('value', ''))
-        super(ContactMechanism, cls).write(*args)
-
-    @fields.depends('party', 'other_value', 'type', 'value')
-    def on_change_other_value(self):
-        super(ContactMechanism, self).on_change_other_value()
-        self.check_valid_phonenumber()
-
-    @classmethod
-    def format_value(cls, value=None, type_=None):
-        if phonenumbers and type_ in _PHONE_TYPES:
-            value = cls.add_prefix_to_phone_number(value)
-        return super(ContactMechanism, cls).format_value(value, type_)
-
-    @classmethod
-    def format_value_compact(cls, value=None, type_=None):
-        if phonenumbers and type_ in _PHONE_TYPES:
-            value = cls.add_prefix_to_phone_number(value)
-        super(ContactMechanism, cls).format_value_compact(value, type_)
-
-    def _change_value(self, value, type_):
-        if type_ in _PHONE_TYPES:
-            value = self.add_prefix_to_phone_number(value)
-        super(ContactMechanism, self)._change_value(value, type_)
-        self.other_value = self.value
+    def _phone_country_codes(self):
+        yield 'FR'
+        yield from super()._phone_country_codes()
 
     def get_summary_content(self, label, at_date=None, lang=None):
         return (self.type_string, self.value) if self.value else None

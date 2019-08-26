@@ -2,6 +2,8 @@
 # this repository contains the full copyright notices and license terms.
 from collections import defaultdict
 
+from trytond.exceptions import UserWarning
+from trytond.i18n import gettext
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval
 
@@ -53,15 +55,6 @@ class Claim(metaclass=PoolMeta):
     underwritings = fields.Function(
         fields.Many2Many('underwriting', None, None, 'Underwritings'),
         'get_underwritings')
-
-    @classmethod
-    def __setup__(cls):
-        super(Claim, cls).__setup__()
-        cls._error_messages.update({
-                'must_activate_underwritings': 'It is necessary to activate '
-                'underwritings for the following claims before going on:\n\n'
-                '%(claims)s',
-                })
 
     @classmethod
     def delete(cls, claims):
@@ -187,16 +180,19 @@ class Claim(metaclass=PoolMeta):
         pool = Pool()
         Underwriting = pool.get('underwriting')
         Result = pool.get('underwriting.result')
+        Warning = pool.get('res.user.warning')
         domain = [('underwriting.on_object', 'in', [str(x) for x in claims]),
             ('underwriting.state', '=', 'draft')]
         if date:
             domain += [('effective_decision_date', '<=', date)]
         draft_underwritings = Result.search(domain)
         if draft_underwritings:
-            cls.raise_user_warning('must_activate_underwritings_%s' %
-                claims[0].id, 'must_activate_underwritings',
-                {'claims': '\n'.join({x.claim.rec_name
-                            for x in draft_underwritings})})
+            key = 'must_activate_underwritings_%s' % claims[0].id
+            if Warning.check(key):
+                raise UserWarning(key, gettext(
+                        'underwriting_claim.msg_must_activate_underwritings',
+                        claims='\n'.join(
+                            {x.claim.rec_name for x in draft_underwritings})))
             processed = list({x.underwriting for x in draft_underwritings})
             Underwriting.process(processed)
             return processed

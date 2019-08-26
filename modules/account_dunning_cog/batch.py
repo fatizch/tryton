@@ -69,7 +69,8 @@ class DunningCreationBatch(batch.BatchRoot):
     def get_select_ids_query_table(cls, tables):
         Account = Pool().get('account.account')
         move_line = tables['account.move.line']
-        accounts = [x.id for x in Account.search([('kind', '=', 'receivable')])]
+        accounts = [x.id for x in
+            Account.search([('type.receivable', '=', True)])]
         dunning = tables['account.dunning']
         return move_line.join(dunning, 'LEFT OUTER', condition=(
                 (move_line.id == dunning.line) &

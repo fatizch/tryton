@@ -2,26 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:endorsement.contract.clause:"
-msgid "New Clause: %s"
-msgstr "Nouvelle clause : %s"
-
-msgctxt "error:endorsement.contract.clause:"
-msgid "New version"
-msgstr "Nouvelle version"
-
-msgctxt "error:endorsement.contract.clause:"
-msgid "Remove version of"
-msgstr "Suppression de la version"
-
-msgctxt "error:endorsement.contract.clause:"
-msgid "Update %s"
-msgstr "Mise à jour de %s"
-
-msgctxt "error:endorsement.contract:"
-msgid "Clauses Modification"
-msgstr "Modification des clauses"
-
 msgctxt "field:contract.manage_clauses,all_clauses:"
 msgid "All Clauses"
 msgstr "Toutes les clauses"
@@ -245,6 +225,14 @@ msgstr "Champ d'avenant de clause"
 msgctxt "model:endorsement.part,name:change_clause_revision_part"
 msgid "Change Clauses"
 msgstr "Modifier les clauses"
+
+msgctxt "model:ir.message,text:msg_clause_modifications"
+msgid "Clauses Modification:"
+msgstr "Modification des clauses"
+
+msgctxt "model:ir.message,text:msg_new_clause"
+msgid "New Clause: %(name)s"
+msgstr "Nouvelle clause : %(name)s"
 
 msgctxt "selection:contract.manage_clauses.clause,action:"
 msgid ""

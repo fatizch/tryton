@@ -1,0 +1,101 @@
+<?xml version="1.0"?>
+<tryton>
+    <data group="1">
+        <record model="ir.message" id="msg_data_rule_misconfigured">
+            <field name="text">The field %(field)s on contracts cannot be set by a data rule. Please fix the contract data rule on product %(product)s.</field>
+        </record>
+        <record model="ir.message" id="msg_not_quote_hold">
+            <field name="text">You cannot activate a contract that is not in quote or hold status.</field>
+        </record>
+        <record model="ir.message" id="msg_need_contract">
+            <field name="text">No contract found.</field>
+        </record>
+        <record model="ir.message" id="msg_no_selected_contract">
+            <field name="text">No contract selected.</field>
+        </record>
+        <record model="ir.message" id="msg_party_has_contract">
+            <field name="text">The party %(party)s can not be erased because it is on the following active contracts:
+%(contracts)s</field>
+        </record>
+        <record model="ir.message" id="msg_party_has_quote">
+            <field name="text">The party %(party)s can not be erased because it is on the following quotes:
+%(quotes)s</field>
+        </record>
+        <record model="ir.message" id="msg_party_unreached_shelf_life">
+            <field name="text">The party %(party)s can not be erased because its following terminated contracts have not exceeded their shelf life:
+%(contracts)s</field>
+        </record>
+        <record model="ir.message" id="msg_create_contract_notification">
+            <field name="text">Create Contract Notification</field>
+        </record>
+        <record model="ir.message" id="msg_notification_descriptor">
+            <field name="text">WARNING: The PYSON Condition is applied on contract.</field>
+        </record>
+        <record model="ir.message" id="msg_activation_period_overlaps">
+            <field name="text">Activation Periods "%(first)s" and "%(second)s" overlap.</field>
+        </record>
+        <record model="ir.message" id="msg_no_quote_sequence">
+            <field name="text">No quote sequence defined.</field>
+        </record>
+        <record model="ir.message" id="msg_start_date_multiple_activation_history">
+            <field name="text">Cannot change start date, multiple activation period detected.</field>
+        </record>
+        <record model="ir.message" id="msg_set_end_date_anterior_to_start_date">
+            <field name="text">Cannot set end date anterior to start date.</field>
+        </record>
+        <record model="ir.message" id="msg_invalid_format">
+            <field name="text">Invalid file format.</field>
+        </record>
+        <record model="ir.message" id="msg_cannot_reactivate_end_reached">
+            <field name="text">Cannot reactivate contract, end reached.</field>
+        </record>
+        <record model="ir.message" id="msg_cannot_reactivate_max_end_date">
+            <field name="text">Cannot reactivate contract, max end date reached.</field>
+        </record>
+        <record model="ir.message" id="msg_cannot_reactivate_non_terminated">
+            <field name="text">Cannot reactivate a not yet terminated contract.</field>
+        </record>
+        <record model="ir.message" id="msg_no_contacts_of_type">
+            <field name="text">No contact defined for %(type)s.</field>
+        </record>
+        <record model="ir.message" id="msg_bad_first_contact_start_date">
+            <field name="text">Invalid start date for first %(type)s contact.</field>
+        </record>
+        <record model="ir.message" id="msg_bad_last_contact_end_date">
+            <field name="text">Invalid end date for last %(type)s contact.</field>
+        </record>
+        <record model="ir.message" id="msg_invalid_contact_start_date">
+            <field name="text">Contact start date (%(date)s) incompatible with associated address (%(address)s) start (%(address_date)s).</field>
+        </record>
+        <record model="ir.message" id="msg_invalid_contact_end_date">
+            <field name="text">Contact end date (%(date)s) incompatible with associated address (%(address)s) end (%(address_date)s).</field>
+        </record>
+        <record model="ir.message" id="msg_bad_contact_follow_up">
+            <field name="text">There are dates for which no %(type)s address is defined.</field>
+        </record>
+        <record model="ir.message" id="msg_delete_not_allowed">
+            <field name="text">Deletion not allowed because the contracts %(contracts)s are not quote or declined.</field>
+        </record>
+        <record model="ir.message" id="msg_inactive_coverage_at_date">
+            <field name="text">Coverage %(coverage)s is inactive at date %(date)s.</field>
+        </record>
+        <record model="ir.message" id="msg_end_date_anterior_to_start_date">
+            <field name="text">End date should be posterior to start date: %(start_date)s for option %(option)s in contract %(contract)s</field>
+        </record>
+        <record model="ir.message" id="msg_end_date_posterior_to_contract">
+            <field name="text">End date should be anterior to end date of contract: %(end_date)s for option %(option)s in contract %(contract)s.</field>
+        </record>
+        <record model="ir.message" id="msg_end_date_posterior_to_automatic_end_date">
+            <field name="text">End date should be anterior to option automatic end date : %(end_date)s for option %(option)s in contract %(contract)s.</field>
+        </record>
+        <record model="ir.message" id="msg_manual_start_date_anterior_to_contract_initial_start_date">
+            <field name="text">Option %(option)s manual start date %(manual_start_date)s is anterior to contract initial start date %(start_date)s in contract %(contract)s.</field>
+        </record>
+        <record model="ir.message" id="msg_bad_dates">
+            <field name="text">The computed end date for option %(option)s is less than its start date, it will be automatically declined.</field>
+        </record>
+        <record model="ir.message" id="msg_coverage_overlap">
+            <field name="text">There are overlapping coverages for %(parent)s.</field>
+        </record>
+    </data>
+</tryton>

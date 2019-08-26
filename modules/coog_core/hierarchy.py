@@ -237,9 +237,6 @@ def generate_hierarchy(config, classes=None, counter=0):
                 super(Node, cls).__setup__()
                 cls.parent.model_name = cls._parent_model_name
                 cls.main_field.model_name = cls._main_field_model_name
-                cls._error_messages.update({
-                        'node_name': config['name'],
-                        })
 
             @classmethod
             def table_query(cls):
@@ -274,8 +271,7 @@ def generate_hierarchy(config, classes=None, counter=0):
                 return config['icon']
 
             def get_rec_name(self, name):
-                return self.raise_user_error('node_name',
-                    raise_exception=False)
+                return config['name']
 
         classes.append((config, Node))
 

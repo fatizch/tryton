@@ -14,7 +14,9 @@ from itertools import groupby
 from lxml import etree
 from io import BytesIO
 
+from trytond.i18n import gettext
 from trytond.model import Unique
+from trytond.model.exceptions import ValidationError
 from trytond.config import config
 from trytond.server_context import ServerContext
 from trytond.pyson import Eval, Bool, Equal, Or, In
@@ -643,8 +645,8 @@ class ClaimIjSubscription(CoogProcessFramework, model.CoogView):
         super(ClaimIjSubscription, cls).__setup__()
         t = cls.__table__()
         cls._sql_constraints += [('unique_subscription',
-                Unique(t, t.siren, t.ssn), 'There must be only one IJ '
-                'subscription per siren / ssn')]
+                Unique(t, t.siren, t.ssn),
+                'claim_prest_ij_service.msg_unique_subscription')]
         cls._buttons.update({
                 'button_relaunch_process': {
                     'readonly': (Eval('state') != 'in_error')},
@@ -652,10 +654,6 @@ class ClaimIjSubscription(CoogProcessFramework, model.CoogView):
                     'invisible': ~Eval('ssn') | ~In(Eval('state'),
                         ['undeclared', 'deletion_confirmed'])},
                 'button_start_period_treatment': {},
-                })
-        cls._error_messages.update({
-                'periods_must_be_treated': '%(number)s periods must be '
-                'treated before going on',
                 })
 
     @classmethod
@@ -845,8 +843,11 @@ class ClaimIjSubscription(CoogProcessFramework, model.CoogView):
     def end_process(cls, instances):
         for instance in instances:
             if instance.periods_to_treat:
-                cls.append_functional_error('periods_must_be_treated',
-                    {'number': str(len(instance.periods_to_treat))})
+                cls.append_functional_error(
+                    ValidationError(gettext(
+                            'claim_prest_ij_service'
+                            '.msg_periods_must_be_treated',
+                            number=str(len(instance.periods_to_treat)))))
 
     @classmethod
     def finalize_add_periods(cls, instances):
@@ -993,12 +994,6 @@ class ClaimIjPeriod(model.CoogSQL, model.CoogView, ModelCurrency):
         super(ClaimIjPeriod, cls).__setup__()
         cls._order = [('accounting_date', 'ASC'), ('sign', 'ASC'),
             ('start_date', 'ASC'), ('id', 'ASC')]
-        cls._error_messages.update({
-                'no_subscription_found': ('No IJ subscription found for SIREN '
-                    '%(siren)s and SSN %(ssn)s'),
-                'many_subscriptions': ('More than one IJ subscription found for'
-                    ' SIREN %(siren)s and SSN %(ssn)s'),
-                })
 
     @classmethod
     def default_state(cls):
@@ -1307,13 +1302,17 @@ class ClaimIjPeriod(model.CoogSQL, model.CoogView, ModelCurrency):
                             domain.append(('siren', '=', siren))
                         subscriptions = Subscription.search(domain)
                         if not subscriptions:
-                            cls.raise_user_error('no_subscription_found', {
-                                    'siren': siren,
-                                    'ssn': ssn})
+                            raise ValidationError(gettext(
+                                    'claim_prest_ij_service'
+                                    '.msg_no_subscription_found',
+                                    siren=siren,
+                                    ssn=ssn))
                         elif len(subscriptions) > 1:
-                            cls.raise_user_error('many_subscriptions', {
-                                'siren': siren,
-                                'ssn': ssn})
+                            raise ValidationError(gettext(
+                                    'claim_prest_ij_service'
+                                    '.msg_many_subscriptions',
+                                    siren=siren,
+                                    ssn=ssn))
                         subscription, = subscriptions
                         periods, total = cls._process_periods(subscription,
                             party, node_func)

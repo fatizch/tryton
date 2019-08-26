@@ -2,26 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:endorsement.contract.benefit:"
-msgid "Benefit Endorsement: %s"
-msgstr "Avenant de modification du paramétrage des prestations"
-
-msgctxt "error:endorsement.contract.benefit:"
-msgid "New version"
-msgstr "Nouvelle version"
-
-msgctxt "error:endorsement.contract.benefit:"
-msgid "Remove version of"
-msgstr "Suppression de la version"
-
-msgctxt "error:endorsement.contract.benefit:"
-msgid "Update %s"
-msgstr "Mise à jour de %s"
-
-msgctxt "error:endorsement.contract.covered_element.option.version:"
-msgid "Benefit Modification"
-msgstr "Modifications des prestations"
-
 msgctxt "field:contract.manage_option_benefits,all_options:"
 msgid "Options"
 msgstr "Options"
@@ -241,6 +221,10 @@ msgstr "Champs de prestations d'avanent"
 msgctxt "model:endorsement.part,name:manage_option_benefits_endorsement_part"
 msgid "Handle Option Benefits"
 msgstr "Gérer les options de prestation"
+
+msgctxt "model:ir.message,text:msg_benefit_modifications"
+msgid "Benefit Modification:"
+msgstr "Modifications des prestations"
 
 msgctxt "selection:endorsement.contract.benefit,action:"
 msgid "Add"

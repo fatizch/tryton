@@ -2,34 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:account.move.line:"
-msgid "Automatic Split Move"
-msgstr "Découpage automatique"
-
-msgctxt "error:account.move.reconciliation:"
-msgid "You cannot unreconcile lines which are part of a cancelled move"
-msgstr "Vous ne pouvez pas dé-réconcilier une ligne d'un mouvement annulé"
-
-msgctxt "error:account.move:"
-msgid "You cannot cancel the move %(move)s more than once"
-msgstr "Vous ne pouvez pas annuler le mouvement %(move)s plusieurs fois"
-
-msgctxt "error:account.reconcile:"
-msgid "Date and motive are required to continue"
-msgstr "La date et le motif sont requis pour continuer"
-
-msgctxt "error:fiscal_year.set.wizard:"
-msgid "Fiscal Year"
-msgstr "Année fiscale"
-
-msgctxt "error:fiscal_year.set.wizard:"
-msgid "Post Move Sequence"
-msgstr "Séquence d'émission de mouvement"
-
-msgctxt "error:party.party:"
-msgid "There is already a reconciliation postponement on the party %(party)s"
-msgstr "Il y a déja un report de lettrage sur le tiers %(party)s"
-
 msgctxt "field:account.account,tags:"
 msgid "Tags"
 msgstr "Labels"
@@ -50,9 +22,17 @@ msgctxt "field:account.account.template,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:account.account.type,other:"
+msgid "Other"
+msgstr "Autre"
+
 msgctxt "field:account.account.type,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
+
+msgctxt "field:account.account.type.template,other:"
+msgid "Other"
+msgstr "Autre"
 
 msgctxt "field:account.account.type.template,xml_id:"
 msgid "XML Id"
@@ -73,6 +53,10 @@ msgstr "Identifiant XML"
 msgctxt "field:account.journal,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
+
+msgctxt "field:account.journal.sequence,xml_id:"
+msgid "XML Id"
+msgstr "XML Id"
 
 msgctxt "field:account.move,cancel_move:"
 msgid "Cancel Move"
@@ -101,10 +85,6 @@ msgstr "Information"
 msgctxt "field:account.move,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
-
-msgctxt "field:account.move.line,account_kind:"
-msgid "Account Kind"
-msgstr "Type de compte"
 
 msgctxt "field:account.move.line,color:"
 msgid "Color"
@@ -452,7 +432,7 @@ msgid "XML Id"
 msgstr "Identifiant XML"
 
 msgctxt "help:account.account,tags:"
-msgid "Configuration object tags list. Allows searching for all configuration objects related to a tag."
+msgid "Add and search all related configuration objects based on a tag"
 msgstr ""
 "Liste des labels sur l'objet de configuration. Permet ensuite de rechercher "
 "l'ensemble des objets de configuration liés à un même label."
@@ -501,6 +481,34 @@ msgstr "Création des années fiscales"
 msgctxt "model:ir.action,name:report_aged_balance_ods"
 msgid "Aged Balance Spreadsheet"
 msgstr "Balance âgée"
+
+msgctxt "model:ir.message,text:msg_cannot_cancel_twice"
+msgid "You cannot cancel the move %(move)s more than once."
+msgstr "Vous ne pouvez pas annuler le mouvement %(move)s plusieurs fois."
+
+msgctxt "model:ir.message,text:msg_fiscal_year"
+msgid "Fiscal Year"
+msgstr "Année fiscale"
+
+msgctxt "model:ir.message,text:msg_post_move_sequence"
+msgid "Post Move Sequence"
+msgstr "Séquence des mouvements postés"
+
+msgctxt "model:ir.message,text:msg_postpone_date_or_motive"
+msgid "Date and motive are required to continue."
+msgstr "La date et le motif sont requis pour continuer."
+
+msgctxt "model:ir.message,text:msg_split_move_description"
+msgid "Automatic Split Move"
+msgstr "Découpage automatique"
+
+msgctxt "model:ir.message,text:msg_too_many_postponements"
+msgid "There is already a reconciliation postponement on the party %(party)s."
+msgstr "Il y a déja un report de lettrage sur le tiers %(party)s."
+
+msgctxt "model:ir.message,text:msg_unreconcile_cancel_move"
+msgid "You cannot unreconcile lines which are part of a cancelled move."
+msgstr "Vous ne pouvez pas dé-réconcilier une ligne d'un mouvement annulé."
 
 msgctxt "model:ir.test_case.instance,name:account_kind_test_case"
 msgid "Account Kind Test Case"
@@ -847,9 +855,7 @@ msgstr "Mise à jour"
 # Custom translations below
 
 msgctxt "help:account.account,reconcile:account."
-msgid ""
-"Allow move lines of this account \n"
-"to be reconciled."
+msgid "Allow move lines of this account to be reconciled."
 msgstr "Autoriser le lettrage des ligne de mouvement de ce compte."
 
 msgctxt ""
@@ -897,40 +903,6 @@ msgctxt "field:party.party,account_receivable:account."
 msgid "Account Receivable"
 msgstr "Compte à recevoir"
 
-msgctxt "error:account.move.line:account."
-msgid "Line \"%s\" (%d) already reconciled."
-msgstr "La ligne \"%s\" (%d) est déjà  lettrée."
-
-msgctxt "error:account.move.line:account."
-msgid "You can not modify line \"%s\" because it is reconciled."
-msgstr "Vous ne pouvez modifier la ligne « %s » car elle est lettrée."
-
-msgctxt "error:account.move.reconciliation:account."
-msgid "You can not modify a reconciliation."
-msgstr "Vous ne pouvez modifier un lettrage."
-
-msgctxt "error:account.move.reconciliation:account."
-msgid ""
-"You can not create a reconciliation where debit \"%(debit)s\" and credit "
-"\"%(credit)s\" differ."
-msgstr ""
-"Vous ne pouvez créer un lettrage où le débit « %(debit)s » et le crédit "
-"« %(credit)s » diffèrent."
-
-msgctxt "error:account.move.reconciliation:account."
-msgid "You can not reconcile line \"%s\" because it is not in valid state."
-msgstr ""
-"Vous ne pouvez lettrer la ligne « %s » car elle n'est pas dans un état "
-"valide."
-
-msgctxt "error:account.period:account."
-msgid ""
-"You can not change the post move sequence of period \"%s\" because there are"
-" already posted moves in the period."
-msgstr ""
-"Vous ne pouvez changer la séquence des mouvements émis de la période « %s » "
-"car elle contient déjà des mouvements émis."
-
 msgctxt "model:account.move.reconcile_lines.writeoff,name:account."
 msgid "Reconcile Lines Write-Off"
 msgstr "Lettrer les lignes de pertes et profits"
@@ -975,22 +947,6 @@ msgstr "Lettrer les comptes"
 msgctxt "report:account.move.general_journal:account."
 msgid "Posted"
 msgstr "Emis"
-
-msgctxt "selection:account.account,kind:account."
-msgid "Payable"
-msgstr "À payer"
-
-msgctxt "selection:account.account,kind:account."
-msgid "Receivable"
-msgstr "À recevoir"
-
-msgctxt "selection:account.account.template,kind:account."
-msgid "Payable"
-msgstr "À payer"
-
-msgctxt "selection:account.account.template,kind:account."
-msgid "Receivable"
-msgstr "À recevoir"
 
 msgctxt "selection:account.move.line,move_state:account."
 msgid "Posted"

@@ -2,14 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:account.party_balance.line:"
-msgid "Overpayment Substraction"
-msgstr "Utilisation d'un trop perçu"
-
-msgctxt "error:account.party_balance.line:"
-msgid "Scheduled Term Of"
-msgstr "Échéance planifiée du"
-
 msgctxt "field:account.party_balance,all_lines:"
 msgid "Lines"
 msgstr "Lignes"
@@ -145,6 +137,14 @@ msgstr "Compte contrat"
 msgctxt "model:ir.action,name:act_open_party_balance"
 msgid "Party Balance"
 msgstr "Compte tiers"
+
+msgctxt "model:ir.message,text:msg_overpayment_substraction"
+msgid "Overpayment Substraction"
+msgstr "Utilisation d'un trop perçu"
+
+msgctxt "model:ir.message,text:msg_scheduled_term_of"
+msgid "Scheduled Term Of"
+msgstr "Échéance planifiée du"
 
 msgctxt "view:account.move.line:"
 msgid "Balance"

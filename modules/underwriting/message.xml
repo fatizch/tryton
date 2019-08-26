@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<tryton>
+    <data group="1">
+        <record model="ir.message" id="msg_cannot_draft">
+            <field name="text">Cannot draft completed underwritings.</field>
+        </record>
+        <record model="ir.message" id="msg_cannot_draft_result">
+            <field name="text">Cannot draft completed results.</field>
+        </record>
+        <record model="ir.message" id="msg_non_completed_result">
+            <field name="text">Results must be finalized first.</field>
+        </record>
+        <record model="ir.message" id="msg_document_received_string">
+            <field name="text">Received</field>
+        </record>
+        <record model="ir.message" id="msg_document_not_received_string">
+            <field name="text">Not Received</field>
+        </record>
+        <record model="ir.message" id="msg_result_wait_expected">
+            <field name="text">The underwriting result "%(name)s" should be in "waiting" state instead of "%(state)".</field>
+        </record>
+        <record model="ir.message" id="msg_ask_open_generated">
+            <field name="text">Do you want to open the generated underwriting?</field>
+        </record>
+    </data>
+</tryton>

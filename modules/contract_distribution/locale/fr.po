@@ -2,10 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:distribution.commercial_product:"
-msgid "The code must be unique!"
-msgstr "Le code doit être unique !"
-
 msgctxt "field:contract,allowed_portfolios:"
 msgid "Allowed Portfolios"
 msgstr "Portefeuilles autorisés"
@@ -199,6 +195,15 @@ msgstr "Relation réseau de distribution - produit commercial"
 msgctxt "model:ir.action,name:act_commercial_product_form"
 msgid "Commercial Products"
 msgstr "Produits Commerciaux"
+
+msgctxt "model:ir.message,text:msg_no_dist_network"
+msgid "Contract %(contracts)s must have a distributor, please enter it."
+msgstr ""
+"Le contrat %(contracts)s doit avoir un distributeur, veuillez le renseigner."
+
+msgctxt "model:ir.rule.group,name:rule_group_commercial_product"
+msgid "User in company"
+msgstr "Utilisateur dans le société"
 
 msgctxt "model:ir.ui.menu,name:menu_commercial_product_form"
 msgid "Commercial Products"

@@ -2,41 +2,13 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:claim.declare:"
-msgid "Missing Loss Description"
-msgstr "Le descripteur de préjudice est manquant"
-
-msgctxt "error:claim.declare:"
-msgid "There are claim's still open."
-msgstr "Des sinistres sont encore ouverts."
-
-msgctxt "error:claim.declare:"
-msgid "You can only reopen one claim at a time."
-msgstr "Vous ne pouvez rouvrir qu'un sinistres à la fois."
-
-msgctxt "error:claim.declare:"
-msgid "You must select at least one open claim."
-msgstr "Vous devez sélectionner au moins un sinistre."
-
-msgctxt "error:claim:"
-msgid "Enter a value for field '%s' of '%s'"
-msgstr "Entrez  une valeur pour le champ '%s' de '%s'"
-
-msgctxt "error:claim:"
-msgid "Enter a value for field(s): %s"
-msgstr "Entrez une valeur pour le(s) champs(s) : %s"
-
-msgctxt "error:claim:"
-msgid "Everything is good !"
-msgstr "Tout est bon!"
-
-msgctxt "error:claim:"
-msgid "Select a date that is not in the future for field(s): %s"
-msgstr "Sélectionnez une date non à venir pour le(s) champ(s) : %s"
-
 msgctxt "field:claim,contact_history:"
 msgid "History"
 msgstr "Historique"
+
+msgctxt "field:claim,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
 
 msgctxt "field:claim,current_log:"
 msgid "Current Log"
@@ -85,6 +57,10 @@ msgstr "Date de Fin"
 msgctxt "field:claim.declare.element,id:"
 msgid "ID"
 msgstr "ID"
+
+msgctxt "field:claim.declare.element,loss:"
+msgid "Loss"
+msgstr "Préjudice"
 
 msgctxt "field:claim.declare.element,losses_summary:"
 msgid "Losses Summary"
@@ -201,6 +177,18 @@ msgstr "Clore les sinistres"
 msgctxt "model:ir.action,name:declaration_process_launcher"
 msgid "Start Declaration"
 msgstr "Déclaration/Instruction de sinistre"
+
+msgctxt "model:ir.message,text:msg_declare_multiple_selected"
+msgid "You can only reopen one claim at a time."
+msgstr "Vous ne pouvez rouvrir qu'un sinistres à la fois."
+
+msgctxt "model:ir.message,text:msg_no_claim_selected"
+msgid "You must select at least one open claim."
+msgstr "Vous devez sélectionner au moins un sinistre."
+
+msgctxt "model:ir.message,text:msg_open_claims"
+msgid "There are claim's still open."
+msgstr "Des sinistres sont encore ouverts."
 
 msgctxt "model:ir.ui.menu,name:menu_start_declaration"
 msgid "Start Declaration"

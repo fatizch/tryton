@@ -3,8 +3,13 @@
 import datetime as dt
 
 from dateutil.relativedelta import relativedelta
+from sql import Null
+
+from trytond.i18n import gettext
+from trytond.model.exceptions import ValidationError
 from trytond.pool import PoolMeta
 from trytond.pyson import Eval
+from trytond.transaction import Transaction
 
 from trytond.modules.coog_core import model, fields
 from trytond.modules.coog_core.extra_details import WithExtraDetails
@@ -61,9 +66,39 @@ class ThirdPartyPeriod(WithExtraDetails, model.CoogView, model.CoogSQL):
     def __setup__(cls):
         super().__setup__()
         cls.extra_details.readonly = True
-        cls._error_messages.update({
-                'tpp_overlap_error': "Third Party Period overlaps",
-                })
+
+    @classmethod
+    def validate(cls, periods):
+        super().validate(periods)
+        for period in periods:
+            period.check_dates()
+
+    def check_dates(self):
+        transaction = Transaction()
+        connection = transaction.connection
+        transaction.database.lock(connection, self._table)
+
+        table = self.__table__()
+        if self.end_date is None:
+            overlap_query = ((table.end_date == Null)
+                | (table.end_date >= self.start_date))
+        else:
+            overlap_query = (
+                ((table.end_date == Null)
+                    & (table.start_date <= self.end_date))
+                | ((table.end_date >= self.start_date)
+                    & (table.start_date <= self.end_date)))
+        cursor = connection.cursor()
+        cursor.execute(*table.select(table.id,
+                where=(overlap_query
+                    & (table.protocol == self.protocol.id)
+                    & (table.option == self.option.id)
+                    & (table.id != self.id)
+                    & (table.start_date <= table.end_date))))
+        overlap_id = cursor.fetchone()
+        if overlap_id:
+            raise ValidationError(gettext(
+                    'third_party_right_management.msg_tpp_overlap_error'))
 
     @classmethod
     def view_attributes(cls):

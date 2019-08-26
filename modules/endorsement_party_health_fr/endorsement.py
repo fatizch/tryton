@@ -1,5 +1,6 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+from trytond.i18n import gettext
 from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
 from trytond.pyson import Eval
@@ -67,14 +68,6 @@ class EndorsementPartyHealthComplement(relation_mixin(
 class EndorsementParty(metaclass=PoolMeta):
     __name__ = 'endorsement.party'
 
-    @classmethod
-    def __setup__(cls):
-        super(EndorsementParty, cls).__setup__()
-        cls._error_messages.update({
-                'msg_hc_modifications':
-                'Health Complement Modifications',
-                })
-
     health_complement = fields.One2Many('endorsement.party.health_complement',
         'party_endorsement', 'health_complement', states={
             'readonly': Eval('state') == 'applied',
@@ -100,9 +93,8 @@ class EndorsementParty(metaclass=PoolMeta):
             'health.party_complement', health_complement.health_complement)
                 for health_complement in self.health_complement]
         if health_complement_summary:
-            result[1].append(['%s :' % self.raise_user_error(
-                        'msg_hc_modifications',
-                        raise_exception=False),
+            result[1].append([
+                    gettext('endorsement_party_health_fr.msg_hc_modifications'),
                     health_complement_summary])
         return result
 

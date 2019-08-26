@@ -6,6 +6,7 @@ from sql.conditionals import Coalesce
 from sql.aggregate import Max
 
 from trytond import backend
+from trytond.i18n import gettext
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval
 from trytond.transaction import Transaction
@@ -164,14 +165,6 @@ class EndorsementContract(metaclass=PoolMeta):
         context={'definition': Eval('definition')})
 
     @classmethod
-    def __setup__(cls):
-        super(EndorsementContract, cls).__setup__()
-        cls._error_messages.update({
-                'mes_covered_element_modifications':
-                'Covered Elements Modification',
-                })
-
-    @classmethod
     def _get_restore_history_order(cls):
         order = super(EndorsementContract, cls)._get_restore_history_order()
         contract_idx = order.index('contract')
@@ -204,9 +197,10 @@ class EndorsementContract(metaclass=PoolMeta):
         covered_element_summary = [x.get_diff('contract.covered_element',
                 x.covered_element) for x in self.covered_elements]
         if covered_element_summary:
-            result[1].append(['%s :' % self.raise_user_error(
-                            'mes_covered_element_modifications',
-                            raise_exception=False),
+            result[1].append([
+                    gettext(
+                        'endorsement_insurance'
+                        '.msg_covered_element_modifications'),
                     covered_element_summary])
         return result
 
@@ -275,11 +269,6 @@ class EndorsementCoveredElement(relation_mixin(
         super(EndorsementCoveredElement, cls).__setup__()
         cls.values.domain = [('definition', '=', Eval('definition'))]
         cls.values.depends = ['definition']
-        cls._error_messages.update({
-                'new_covered_element': 'New Covered Element',
-                'mes_option_modifications': 'Option Modification',
-                'mes_version_modifications': 'Version Modification',
-                })
 
     @classmethod
     def default_definition(cls):
@@ -291,8 +280,7 @@ class EndorsementCoveredElement(relation_mixin(
     def get_rec_name(self, name):
         if self.covered_element:
             return self.covered_element.rec_name
-        return self.raise_user_error('new_covered_element',
-            raise_exception=False)
+        return gettext('endorsement_insurance.msg_new_covered_element')
 
     def get_diff(self, model, base_object=None):
         result = super(EndorsementCoveredElement, self).get_diff(model,
@@ -303,17 +291,15 @@ class EndorsementCoveredElement(relation_mixin(
                 x.version)
             for x in self.versions]
         if version_summary:
-            result[1].append(['%s :' % (self.raise_user_error(
-                        'mes_version_modifications',
-                        raise_exception=False)),
-                version_summary])
+            result[1].append([
+                    gettext('endorsement_insurance.msg_version_modifications'),
+                    version_summary])
         option_summary = [x.get_diff('contract.option', x.option)
             for x in self.options]
         if option_summary:
-            result[1].append(['%s :' % (self.raise_user_error(
-                        'mes_option_modifications',
-                        raise_exception=False)),
-                option_summary])
+            result[1].append([
+                    gettext('endorsement_insurance.msg_option_modifications'),
+                    option_summary])
         return result
 
     def apply_values(self):
@@ -404,9 +390,6 @@ class EndorsementCoveredElementVersion(relation_mixin(
         super(EndorsementCoveredElementVersion, cls).__setup__()
         cls.values.domain = [('definition', '=', Eval('definition'))]
         cls.values.depends = ['definition']
-        cls._error_messages.update({
-                'new_covered_element_version': 'New Covered Element Version',
-                })
         cls._endorsed_dicts = {'extra_data': 'extra_data'}
 
     @classmethod
@@ -417,8 +400,7 @@ class EndorsementCoveredElementVersion(relation_mixin(
         return self.covered_element_endorsement.definition.id
 
     def get_rec_name(self, name):
-        return '%s' % (self.raise_user_error('new_covered_element_version',
-                raise_exception=False))
+        return gettext('endorsement_insurance.msg_new_covered_element_version')
 
     @classmethod
     def _ignore_fields_for_matching(cls):
@@ -462,14 +444,6 @@ class EndorsementCoveredElementOption(relation_mixin(
         super(EndorsementCoveredElementOption, cls).__setup__()
         cls.values.domain = [('definition', '=', Eval('definition'))]
         cls.values.depends = ['definition']
-        cls._error_messages.update({
-                'new_coverage': 'New Coverage: %s',
-                'mes_versions_modification': 'Versions Modifications',
-                'mes_extra_premium_modifications':
-                'Extra Premium Modification',
-                'mes_exclusion_modifications':
-                'Exclusion Modifications',
-                })
 
     @classmethod
     def default_definition(cls):
@@ -489,8 +463,9 @@ class EndorsementCoveredElementOption(relation_mixin(
     def get_rec_name(self, name):
         if self.option:
             return self.option.rec_name
-        return self.raise_user_error('new_coverage', (self.coverage.rec_name),
-            raise_exception=False)
+        return gettext(
+            'endorsement_insurance.msg_new_coverage',
+            name=self.coverage.rec_name)
 
     def get_diff(self, model, base_object=None):
         result = super(EndorsementCoveredElementOption, self).get_diff(
@@ -500,25 +475,25 @@ class EndorsementCoveredElementOption(relation_mixin(
         option_summary = [x.get_diff('contract.option.version', x.version)
             for x in self.versions]
         if option_summary:
-            result[1].append(['%s :' % (self.raise_user_error(
-                        'mes_option_modifications',
-                        raise_exception=False)),
-                option_summary])
+            result[1].append([
+                    gettext('endorsement_insurance.msg_option_modifications'),
+                    option_summary])
         extra_premium_summary = [x.get_diff('contract.option.extra_premium',
                 x.extra_premium) for x in self.extra_premiums]
         if extra_premium_summary:
-            result[1].append(['%s :' % (self.raise_user_error(
-                        'mes_extra_premium_modifications',
-                        raise_exception=False)),
-                extra_premium_summary])
+            result[1].append([
+                    gettext(
+                        'endorsement_insurance'
+                        '.msg_extra_premium_modifications'),
+                    extra_premium_summary])
         exclusion_summary = [x.get_diff('contract.option-exclusion.kind',
                 x.option_exclusion)
             for x in self.exclusion_list]
         if exclusion_summary:
-            result[1].append(['%s :' % (self.raise_user_error(
-                        'mes_exclusion_modifications',
-                        raise_exception=False)),
-                exclusion_summary])
+            result[1].append([
+                    gettext(
+                        'endorsement_insurance.msg_exclusion_modifications'),
+                    exclusion_summary])
         return result
 
     def apply_values(self):
@@ -605,9 +580,6 @@ class EndorsementCoveredElementOptionVersion(relation_mixin(
         super(EndorsementCoveredElementOptionVersion, cls).__setup__()
         cls.values.domain = [('definition', '=', Eval('definition'))]
         cls.values.depends = ['definition']
-        cls._error_messages.update({
-                'new_option_version': 'New Option Version',
-                })
         cls._endorsed_dicts = {'extra_data': 'extra_data'}
 
     @classmethod
@@ -618,8 +590,7 @@ class EndorsementCoveredElementOptionVersion(relation_mixin(
         return self.option_definition.definition.id
 
     def get_rec_name(self, name):
-        return '%s' % (self.raise_user_error('new_option_version',
-                raise_exception=False))
+        return gettext('endorsement_insurance.msg_new_option_version')
 
     @classmethod
     def _ignore_fields_for_matching(cls):
@@ -646,9 +617,6 @@ class EndorsementExtraPremium(relation_mixin(
         super(EndorsementExtraPremium, cls).__setup__()
         cls.values.domain = [('definition', '=', Eval('definition'))]
         cls.values.depends = ['definition']
-        cls._error_messages.update({
-                'new_extra_premium': 'New Extra Premium: %s',
-                })
 
     @classmethod
     def default_definition(cls):
@@ -661,9 +629,9 @@ class EndorsementExtraPremium(relation_mixin(
         if self.extra_premium:
             return self.extra_premium.rec_name
         ExtraPremium = Pool().get('contract.option.extra_premium')
-        return self.raise_user_error('new_extra_premium',
-            ExtraPremium(**self.values).get_rec_name(None),
-            raise_exception=False)
+        return gettext(
+            'endorsement_insurance.msg_new_extra_premium',
+            name=ExtraPremium(**self.values).get_rec_name(None))
 
     @classmethod
     def updated_struct(cls, option):
@@ -697,9 +665,6 @@ class EndorsementExclusion(relation_mixin(
         super(EndorsementExclusion, cls).__setup__()
         cls.values.domain = [('definition', '=', Eval('definition'))]
         cls.values.depends = ['definition']
-        cls._error_messages.update({
-                'new_exclusion': 'New Exclusion: %s',
-                })
 
     @classmethod
     def default_definition(cls):

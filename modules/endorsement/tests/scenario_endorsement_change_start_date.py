@@ -155,8 +155,10 @@ contract.company = company
 contract.start_date = contract_start_date
 contract.product = product
 contract.contract_number = '1111'
-contract.status = 'active'
 contract.save()
+Contract.write([contract], {
+        'status': 'active',
+        }, config.context)
 
 # #Comment# #New Endorsement
 EndorsementDefinition = Model.get('endorsement.definition')
@@ -197,8 +199,9 @@ contract.options[0].start_date == contract_start_date
 # #Res# #True
 
 # #Comment# #Test options restauration
-good_endorsement.state = 'draft'
-good_endorsement.save()
+Endorsement.write([good_endorsement], {
+        'state': 'draft',
+        }, config.context)
 _ = Endorsement.apply_synchronous([good_endorsement.id], config._context)
 
 config = switch_user('admin')

@@ -9,9 +9,11 @@ from itertools import groupby
 
 from trytond.pool import PoolMeta, Pool
 from trytond import backend
+from trytond.i18n import gettext
 from trytond.pyson import Eval, Or, In, Not
 from trytond.transaction import Transaction
 from trytond.model import ModelView, Workflow
+from trytond.model.exceptions import ValidationError
 from trytond.server_context import ServerContext
 from trytond.tools import grouped_slice
 from trytond.cache import Cache
@@ -42,10 +44,6 @@ class InvoiceLine(metaclass=PoolMeta):
         cls.unit.states['invisible'] = ~Eval('unit')
         cls.principal.readonly = True
         cls.account.domain.pop(1)
-        cls._error_messages.update({
-                'no_broker_define_for_broker_fee': 'No broker define on '
-                'contract %s for broker fee %s'
-                })
 
     @classmethod
     def __register__(cls, module_name):
@@ -184,8 +182,10 @@ class InvoiceLine(metaclass=PoolMeta):
                 not self.detail.fee.broker_fee):
             return lines
         if not self.invoice.contract.agent:
-            self.raise_user_error('no_broker_define_for_broker_fee',
-                self.invoice.contract, self.details.fee.rec_name)
+            raise ValidationError(gettext(
+                    'commission_insurance.msg_no_broker_define_for_broker_fee',
+                    contract=self.invoice.contract,
+                    fee=self.details.fee.rec_name))
         # Update party to broker for broker fee line
         for line in lines:
             line.party = self.invoice.contract.agent.party

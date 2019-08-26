@@ -9,6 +9,9 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.image import MIMEImage
 
 
+from trytond.exceptions import UserError, UserWarning
+from trytond.i18n import gettext
+from trytond.model.exceptions import AccessError
 from trytond.pool import Pool, PoolMeta
 from trytond.transaction import Transaction
 from trytond.server_context import ServerContext
@@ -84,6 +87,8 @@ class ReportGenerate(metaclass=PoolMeta):
 
     @classmethod
     def generate_email(cls, selected_letter, cur_objects, report_context):
+        pool = Pool()
+        Warning = pool.get('res.user.warning')
         attachments = []
         msg = None
         if selected_letter.attachments or selected_letter.images:
@@ -97,9 +102,11 @@ class ReportGenerate(metaclass=PoolMeta):
                     tmpl.save_reports_in_edm(generated_reports)
                 attachments += generated_reports
             if selected_letter.attachments and not attachments:
-                selected_letter.raise_user_warning('configuration_mismatch_%s' %
-                    ','.join([str(x.id) for x in selected_letter.attachments]),
-                    'configuration_mismatch')
+                key = ('configuration_mismatch_%s' %
+                    ','.join([str(x.id) for x in selected_letter.attachments]))
+                if Warning.check(key):
+                    raise UserWarning(key, gettext(
+                            'report_engine_email.msg_configuration_mismatch'))
                 if selected_letter.html_body:
                     msg = MIMEMultipart('mixed')
                     msg.attach(MIMEText(
@@ -180,7 +187,8 @@ class ReportGenerate(metaclass=PoolMeta):
                 logging.getLogger('report.generate').error(
                     'Could not send email for template %s. Error : %s' %
                     (str(selected_letter), str(e)))
-                selected_letter.raise_user_error('email_not_sent')
+                raise UserError(
+                    gettext('report_engine_email.msg_email_not_sent'))
         else:
             sendmail_transactional(
                 selected_letter.genshi_evaluated_email_sender,
@@ -247,24 +255,17 @@ class ReportTemplate(metaclass=PoolMeta):
             field.states['invisible'] = Or(Eval('input_kind') == 'email',
                 field.states.get('invisible', False))
             field.depends.append('input_kind')
-        cls._error_messages.update({'email_not_sent':
-                'The email could not be sent',
-                'manual_send': 'The template does not allow email editing',
-                'input_email': 'Email',
-                'split_email': 'Split reports on email templates is'
-                ' recommended, you must be sure of your genshi fields',
-                'configuration_mismatch': 'It seems that there is a '
-                'configuration mismatch regarding attachments. Therefore, '
-                'the email will be sent without attachments. Do you want to '
-                'continue?'
-                })
 
     @classmethod
     def validate(cls, records):
+        pool = Pool()
+        Warning = pool.get('res.user.warning')
         super(ReportTemplate, cls).validate(records)
         for record in records:
             if record.input_kind == 'email' and not record.split_reports:
-                cls.raise_user_warning(str(record), 'split_email')
+                if Warning.check(str(record)):
+                    raise UserWarning(
+                        gettext('report_engine_email.msg_split_email'))
 
     @classmethod
     def view_attributes(cls):
@@ -283,8 +284,7 @@ class ReportTemplate(metaclass=PoolMeta):
     @classmethod
     def get_possible_input_kinds(cls):
         return super(ReportTemplate, cls).get_possible_input_kinds() + \
-            [('email', cls.raise_user_error('input_email',
-                        raise_exception=False))]
+            [('email', gettext('report_engine_email.msg_input_email'))]
 
     @fields.depends('input_kind', 'email_subject',
         'email_body', 'email_blocking,' 'split_reports', 'email_dest',
@@ -308,8 +308,7 @@ class ReportTemplate(metaclass=PoolMeta):
     @fields.depends('input_kind')
     def get_possible_process_methods(self):
         if self.input_kind == 'email':
-            return [('email', self.raise_user_error('input_email',
-                        raise_exception=False))]
+            return [('email', gettext('report_engine_email.msg_input_email'))]
         return super(ReportTemplate, self).get_possible_process_methods()
 
     def print_reports(self, reports, context_):
@@ -401,7 +400,7 @@ class ReportCreate(metaclass=PoolMeta):
         if (not self.select_template.template or
                 self.select_template.template.input_kind != 'email' or
                 not self.select_template.template.allow_manual_sending):
-            self.select_template.template.raise_user_error('manual_send')
+            raise AccessError(gettext('report_engine_email.msg_manual_send'))
         ReportGenerate = Pool().get('report.generate', type='report')
         instances = self.get_instances()
         report_context = self.create_report_context(instances)

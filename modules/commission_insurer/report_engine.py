@@ -1,5 +1,6 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+from trytond.i18n import gettext
 from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
 
@@ -53,27 +54,15 @@ class ReportTemplate(metaclass=PoolMeta):
                 where=table.kind == 'insurer_report_commission',
                 ))
 
-    @classmethod
-    def __setup__(cls):
-        super(ReportTemplate, cls).__setup__()
-        cls._error_messages.update({
-                'all_insurer_invoices': 'All Insurer Invoice',
-                'broker_invoice': 'Broker Invoice Report',
-                'insurer_invoice': 'Insurer Invoice Report',
-                })
-
     def get_possible_kinds(self):
         result = super(ReportTemplate, self).get_possible_kinds()
         if not self.on_model:
             return result
         if self.on_model.model == 'account.invoice':
-            result.append(('all_insurer_invoices',
-                    self.raise_user_error(
-                        'all_insurer_invoices', raise_exception=False)))
-            result.append(
-                ('broker_invoice', self.raise_user_error(
-                    'broker_invoice', raise_exception=False)))
-            result.append(
-                ('insurer_invoice', self.raise_user_error(
-                    'insurer_invoice', raise_exception=False)))
+            result.append(('all_insurer_invoices', gettext(
+                        'commission_insurer.msg_all_insurer_invoices')))
+            result.append(('broker_invoice', gettext(
+                        'commission_insurer.msg_broker_invoice')))
+            result.append(('insurer_invoice', gettext(
+                        'commission_insurer.msg_insurer_invoice')))
         return result

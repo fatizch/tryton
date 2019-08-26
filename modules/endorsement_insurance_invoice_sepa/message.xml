@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<tryton>
+    <data group="1">
+        <record model="ir.message" id="msg_amended_mandates">
+            <field name="text">Mandates with identification %(identification)s are amended. Please use the newer version or generate a new mandate for this contract.</field>
+        </record>
+        <record model="ir.message" id="msg_new_mandate_creation">
+            <field name="text">A new mandate will be created, this action cannot be cancelled.</field>
+        </record>
+    </data>
+</tryton>

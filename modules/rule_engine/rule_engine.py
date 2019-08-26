@@ -25,11 +25,14 @@ from sql.conditionals import Coalesce
 from sql.functions import RowNumber
 
 from trytond import backend
+from trytond.exceptions import UserError
+from trytond.i18n import gettext
 from trytond.rpc import RPC
 from trytond.cache import Cache
 from trytond.model.modelstorage import without_check_access
 from trytond.model import ModelView as TrytonModelView, Unique
 from trytond.model import fields as tryton_fields, Model
+from trytond.model.exceptions import AccessError, ValidationError
 from trytond.wizard import Wizard, StateView, Button, StateTransition
 from trytond.wizard import StateAction
 from trytond.pool import Pool
@@ -221,8 +224,9 @@ def get_rule_mixin(field_name, field_string, extra_name='', extra_string=''):
                     self.append_functional_error(error)
             if result.warnings:
                 msg = '\r\r'.join(result.print_warnings())
-                self.raise_user_warning(str((self.__name__, self.id, msg)),
-                    msg)
+                key = self.__name__ + str(self.id) + msg
+                if Warning.check(key):
+                    raise UserWarning(key, msg)
 
     if not extra_name:
         extra_name = field_name + '_extra_data'
@@ -423,18 +427,6 @@ class RuleTools(ModelView):
     __name__ = 'rule_engine.runtime'
 
     @classmethod
-    def __setup__(cls):
-        super(RuleTools, cls).__setup__()
-        cls._error_messages.update({
-                'key_not_available':
-                "Key '%s' is not available in execution context",
-                'field_not_iterable':
-                "Field '%s' of model '%s' is not iterable",
-                'cannot_return_models':
-                'You must return raw value fields (bool, string, integer, etc)'
-                })
-
-    @classmethod
     def get_result(cls, args):
         if '__result__' in args:
             return args['__result__']
@@ -479,8 +471,8 @@ class RuleTools(ModelView):
         master_key = parsed_string[0]
 
         if master_key not in args:
-            raise Exception(cls.raise_user_error('key_not_available',
-                    (master_key,), raise_exception=False))
+            raise Exception(gettext(
+                    'rule_engine.msg_key_not_available', key=master_key))
         data = args[master_key]
 
         def iterate(data, path):
@@ -517,8 +509,9 @@ class RuleTools(ModelView):
                         return_value = [None]
             else:
                 if operator is not None:
-                    raise Exception(cls.raise_user_error('field_not_iterable',
-                            (fname, data[0].__name__), raise_exception=False))
+                    raise Exception(gettext(
+                            'rule_engine.msg_field_not_iterable',
+                            field=fname, model=data[0].__name__))
                 return_value = [getattr(x, fname) if x is not None else None
                     for x in data]
             if not return_list:
@@ -529,8 +522,7 @@ class RuleTools(ModelView):
         if not res:
             return res
         if isinstance(res[0] if isinstance(res, list) else res, Model):
-            raise Exception(cls.raise_user_error('cannot_return_models',
-                    raise_exception=False))
+            raise Exception(gettext('rule_engine.msg_cannot_return_models'))
         return res
 
     @classmethod
@@ -934,17 +926,6 @@ class RuleEngine(model.CoogSQL, model.CoogView, model.TaggedMixin):
         cls.__rpc__.update({
                 'ws_execute': RPC(instantiate=0),
                 })
-        cls._error_messages.update({
-                'invalid_code': 'Your algorithm has errors!',
-                'bad_rule_computation': 'An error occured in rule %s.'
-                'For more information, activate debug mode and see the logs'
-                '\n\nError info :\n%s',
-                'execute_draft_rule': 'The rule %s is a draft.'
-                'Update the rule status to "Validated"',
-                'kwarg_expected': 'Expected %s as a parameter',
-                'readonly_rule': 'Data modification is not allowed during rule '
-                'execution'
-                })
         t = cls.__table__()
         cls._sql_constraints += [
             ('code_unique', Unique(t, t.short_name),
@@ -1166,7 +1147,7 @@ class RuleEngine(model.CoogSQL, model.CoogView, model.TaggedMixin):
             return True
         logging.getLogger('rule_engine').warning([
                 x.message_args for x in errors])
-        self.raise_user_error('invalid_code')
+        raise UserError(gettext('rule_engine.msg_invalid_code'))
 
     def get_extra_data_for_on_change(self, existing_values):
         if not getattr(self, 'parameters', None):
@@ -1207,7 +1188,9 @@ class RuleEngine(model.CoogSQL, model.CoogView, model.TaggedMixin):
         # evaluation_context is unused, but we need it so that all context
         # functions share the same prototype
         RuleParameter = Pool().get('rule_engine.rule_parameter')
-        cls.raise_user_error('kwarg_expected', RuleParameter(param_id).name)
+        raise UserError(gettext(
+                'rule_engine.msg_kwarg_expected',
+                param=RuleParameter(param_id).name))
 
     def as_context(self, elem, kind, base_context):
         technical_name = self.get_translated_name(elem, kind)
@@ -1444,8 +1427,9 @@ class RuleEngine(model.CoogSQL, model.CoogView, model.TaggedMixin):
                 raise
             else:
                 raise Exception(err_msg)
-        self.raise_user_error('bad_rule_computation', (self.name,
-                err_msg or str(exc.args)))
+        raise UserError(gettext(
+                'rule_engine.msg_bad_rule_computation',
+                rule=self.name, error=err_msg or str(exc.args)))
 
     def compute(self, evaluation_context, execution_kwargs,
             context_overrides=None):
@@ -1461,7 +1445,9 @@ class RuleEngine(model.CoogSQL, model.CoogView, model.TaggedMixin):
                 exec(comp, context, localcontext)
                 if (not ServerContext().get('rule_debug') and
                         self.status == 'draft'):
-                    self.raise_user_error('execute_draft_rule', (self.name))
+                    raise AccessError(gettext(
+                            'rule_engine.msg_execute_draft_rule',
+                            rule=self.name))
                 the_result.result = localcontext[
                     ('result_%s' % hash(self.name)).replace('-', '_')]
                 the_result.result_set = True
@@ -1471,8 +1457,7 @@ class RuleEngine(model.CoogSQL, model.CoogView, model.TaggedMixin):
             except CatchedRuleEngineError:
                 the_result.result = None
             except ReadOnlyException as exc:
-                err_msg = self.raise_user_error('readonly_rule',
-                    raise_exception=False)
+                err_msg = gettext('rule_engine.msg_readonly_rule')
                 if self.debug_mode:
                     raise ReadOnlyException(err_msg.encode('utf-8'))
                 self.rule_error(exc, the_result, evaluation_context,
@@ -1690,14 +1675,6 @@ class Context(ModelView, ModelSQL, model.TaggedMixin):
         'context', 'tree_element', 'Allowed tree elements')
 
     @classmethod
-    def __setup__(cls):
-        super(Context, cls).__setup__()
-        cls._error_messages.update({
-                'duplicate_name': ('You have defined twice the same name %s '
-                    'in %s and %s'),
-                })
-
-    @classmethod
     def validate(cls, contexts):
         super(Context, cls).validate(contexts)
         cls.check_duplicate_name(contexts)
@@ -1712,12 +1689,14 @@ class Context(ModelView, ModelSQL, model.TaggedMixin):
                 if element.type == 'folder':
                     pass
                 elif element.translated_technical_name in names:
+                    name = element.translated_technical_name
                     if element != names[element.translated_technical_name]:
-                        cls.raise_user_error('duplicate_name', (
-                            element.translated_technical_name,
-                            element.full_path,
-                            names[element.translated_technical_name].full_path,
-                            ))
+                        raise ValidationError(gettext(
+                                'rule_engine.msg_duplicate_name',
+                                name=name,
+                                path1=element.full_path,
+                                path2=names[name].full_path,
+                                ))
                 else:
                     names[element.translated_technical_name] = element
                 elements.extend(element.children)
@@ -1781,15 +1760,6 @@ class RuleFunction(ModelView, ModelSQL):
     _by_translated_name = Cache('rule_functions_by_name', context=False)
 
     @classmethod
-    def __setup__(cls):
-        super(RuleFunction, cls).__setup__()
-        cls._error_messages.update({
-                'argument_accent_error':
-                'Function arguments must only use ascii',
-                'name_accent_error': 'Technical name must only use ascii',
-                })
-
-    @classmethod
     def _export_skips(cls):
         return super(RuleFunction, cls)._export_skips() | {'rules'}
 
@@ -1823,7 +1793,8 @@ class RuleFunction(ModelView, ModelSQL):
         result = coog_string.is_ascii(self.fct_args)
         if result:
             return True
-        self.raise_user_error('argument_accent_error')
+        raise ValidationError(gettext(
+                'rule_engine.msg_argument_accent_error'))
 
     def check_name_accents(self):
         if not self.name:
@@ -1831,7 +1802,7 @@ class RuleFunction(ModelView, ModelSQL):
         result = coog_string.is_ascii(self.translated_technical_name)
         if result:
             return True
-        self.raise_user_error('name_accent_error')
+        raise ValidationError(gettext('rule_engine.msg_name_accent_error'))
 
     @classmethod
     def validate(cls, records):
@@ -2199,10 +2170,6 @@ class RuleError(model.CoogSQL, model.CoogView):
         cls._sql_constraints += [
             ('code_uniq', Unique(t, t.code), 'The code must be unique!'),
             ]
-        cls._error_messages.update({
-                'arg_number_error':
-                'Number of arguments does not match string content',
-                })
 
     def check_arguments(self):
         try:
@@ -2211,7 +2178,8 @@ class RuleError(model.CoogSQL, model.CoogView):
             else:
                 self.name % ()
         except TypeError:
-            self.raise_user_error('arg_number_error')
+            raise ValidationError(gettext(
+                    'rule_engine.msg_arg_number_error'))
 
     @classmethod
     def validate(cls, errors):
@@ -2249,14 +2217,6 @@ class InitTestCaseFromExecutionLog(Wizard):
     start_state = 'created_test_case'
     created_test_case = StateAction('rule_engine.act_create_test_case')
 
-    @classmethod
-    def __setup__(cls):
-        super(InitTestCaseFromExecutionLog, cls).__setup__()
-        cls._error_messages.update({
-                'rule_engine_log_expected': 'This wizard should be run from'
-                'a rule engine execution log selected',
-                })
-
     def filter_override(self, method_name):
         if method_name.startswith('table_'):
             return False
@@ -2274,7 +2234,8 @@ class InitTestCaseFromExecutionLog(Wizard):
         active_id = Transaction().context.get('active_id')
         active_model = Transaction().context.get('active_model')
         if active_model != 'rule_engine.log':
-            self.raise_user_error('rule_engine_log_expected')
+            raise AccessError(gettext(
+                    'rule_engine.msg_rule_engine_log_expected'))
         pool = Pool()
         log = pool.get(active_model)(active_id)
         calls = [x.split('|&|') for x in log.calls.splitlines()]

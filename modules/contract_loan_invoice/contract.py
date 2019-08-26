@@ -4,6 +4,7 @@ import datetime
 
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, And, Or, Not, In
+from trytond.config import config
 
 from trytond.modules.coog_core import fields, model, utils
 
@@ -103,7 +104,7 @@ class Premium(metaclass=PoolMeta):
     __name__ = 'contract.premium'
 
     loan = fields.Many2One('loan', 'Loan', select=True, ondelete='RESTRICT',
-        readonly=True)
+        readonly=not config.getboolean('env', 'testing'))
 
     @classmethod
     def __setup__(cls):

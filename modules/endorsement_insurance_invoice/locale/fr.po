@@ -2,80 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:contract.billing_information.change:"
-msgid "Be careful, posterior billing mode will be erased %s"
-msgstr "Faites attention, les futurs modes de quittancement seront effacés %s"
-
-msgctxt "error:contract.billing_information.change:"
-msgid "Payer does not own this account, do you want it to change ?"
-msgstr ""
-"Le payeur n'est pas propriétaire du compte, voulez-vous l'y rattacher ?"
-
-msgctxt "error:contract.billing_information.change:"
-msgid "Please set a  new direct debit account !"
-msgstr "Veuillez renseigner le nouveau compte bancaire !"
-
-msgctxt "error:contract.billing_information.change:"
-msgid ""
-"The contract %s does not have an invoice starting on the %s. Select another "
-"date."
-msgstr ""
-"Le contrat %s n'a pas de quittance commençant au %s. Veuillez choisir une "
-"autre date."
-
-msgctxt "error:contract.billing_information.change:"
-msgid "The date %s is not compatible with the billing mode %s."
-msgstr "La date %s n'est pas compatible avec le mode de quittancement %s."
-
-msgctxt "error:contract.direct_debit_account.change:"
-msgid "Be careful, posterior billing mode will be erased %s"
-msgstr "Faites attention, les futurs modes de quittancement seront effacés %s"
-
-msgctxt "error:contract.direct_debit_account.change:"
-msgid "Payer does not own this account, do you want it to change ?"
-msgstr ""
-"Le payeur n'est pas propriétaire du compte, voulez-vous l'y rattacher ?"
-
-msgctxt "error:contract.direct_debit_account.change:"
-msgid "Please set a  new direct debit account !"
-msgstr "Veuillez renseigner le nouveau compte bancaire !"
-
-msgctxt "error:contract.direct_debit_account.change:"
-msgid ""
-"The contract %s does not have an invoice starting on the %s. Select another "
-"date."
-msgstr ""
-"Le contrat %s n'a pas de quittance commençant au %s. Veuillez choisir une "
-"autre date."
-
-msgctxt "error:contract.direct_debit_account.change:"
-msgid "The date %s is not compatible with the billing mode %s."
-msgstr "La date %s n'est pas compatible avec le mode de quittancement %s."
-
-msgctxt "error:contract.direct_debit_account.change:"
-msgid "The selected contract is not paid through direct debit !"
-msgstr "Le contrat sélectionné n'est pas payé par prélèvement automatique !"
-
-msgctxt "error:contract.direct_debit_account.change:"
-msgid "The selected endorsement cannot take place in the past !"
-msgstr "L'avenant sélectionné ne peut avoir lieu dans le passé !"
-
-msgctxt "error:endorsement.contract.billing_information:"
-msgid "New version"
-msgstr "Nouvelle version"
-
-msgctxt "error:endorsement.contract.billing_information:"
-msgid "Remove version of"
-msgstr "Suppression de la version"
-
-msgctxt "error:endorsement.contract.billing_information:"
-msgid "Update %s"
-msgstr "Mise à jour de %s"
-
-msgctxt "error:endorsement.contract:"
-msgid "Billing Modifications"
-msgstr "Modifications du quittancement"
-
 msgctxt "field:contract.billing_information,direct_debit_account_selector:"
 msgid "Bank Account"
 msgstr "Compte Bancaire"
@@ -452,6 +378,46 @@ msgstr "Recalculer et requittancer le contrat"
 msgctxt "model:endorsement.recalculate.batch,name:"
 msgid "Recalculate Endorsement Batch"
 msgstr "Batch d'avenant de recalcul"
+
+msgctxt "model:ir.message,text:msg_billing_mode_existing"
+msgid "Be careful, posterior billing mode will be erased %(dates)s."
+msgstr ""
+"Faites attention, les futurs modes de quittancement seront effacés %(dates)s"
+
+msgctxt "model:ir.message,text:msg_billing_modifications"
+msgid "Billing Modifications:"
+msgstr "Modifications du quittancement"
+
+msgctxt "model:ir.message,text:msg_direct_debit_account_required"
+msgid "Please set a  new direct debit account."
+msgstr "Veuillez renseigner le nouveau compte bancaire !"
+
+msgctxt "model:ir.message,text:msg_no_matching_invoice_date"
+msgid ""
+"The contract %(contract)s does not have an invoice starting on the "
+"%(effective_date)s. Select another date."
+msgstr ""
+"Le contrat %(contract)s n'a pas de quittance commençant au "
+"%(effective_date)s. Veuillez choisir une autre date."
+
+msgctxt "model:ir.message,text:msg_no_past_date"
+msgid "The selected endorsement cannot take place in the past."
+msgstr "L'avenant sélectionné ne peut avoir lieu dans le passé !"
+
+msgctxt "model:ir.message,text:msg_not_direct_debit"
+msgid "The selected contract is not paid through direct debit."
+msgstr "Le contrat sélectionné n'est pas payé par prélèvement automatique !"
+
+msgctxt "model:ir.message,text:msg_payer_not_account_owner"
+msgid "Payer does not own this account, do you want it to change?"
+msgstr ""
+"Le payeur n'est pas propriétaire du compte, voulez-vous l'y rattacher ?"
+
+msgctxt "model:ir.message,text:msg_unauthorized_date"
+msgid "The date %(date)s is not compatible with the billing mode %(mode)s."
+msgstr ""
+"La date %(date)s n'est pas compatible avec le mode de quittancement "
+"%(mode)s."
 
 msgctxt ""
 "selection:contract.billing_information.change.contract_displayer,to_propagate:"

@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<tryton>
+    <data group="1">
+        <record model="ir.message" id="msg_missing_loan_sequence_config">
+            <field name="text">No sequence defined for loan numbers in offered configuration.</field>
+        </record>
+        <record model="ir.message" id="msg_used_on_non_project_contract">
+            <field name="text">The loan "%(loan)s" is used on the contract(s) "%(contract)s".</field>
+        </record>
+        <record model="ir.message" id="msg_bad_increment_start">
+            <field name="text">Increment start date cannot be before first payment date.</field>
+        </record>
+        <record model="ir.message" id="msg_invalid_nb_payments">
+            <field name="text">The number of payments (%(number_of_payments)s) on the increment number %(increment)s of the loan %(loan)s is invalid.</field>
+        </record>
+        <record model="ir.message" id="msg_invalid_increments">
+            <field name="text">All the increments on loan %(loan)s must have a start date and a end date.</field>
+        </record>
+        <record model="ir.message" id="msg_invalid_number_of_payments">
+            <field name="text">Number of payments must be > 0.</field>
+        </record>
+        <record model="ir.message" id="msg_incoherent_balances">
+            <field name="text">Incoherent begin balance (%(begin)s) and end balance (%(end)s) regarding payment amount (%(payment)s).</field>
+        </record>
+        <record model="ir.message" id="msg_no_loan_on_contract">
+            <field name="text">There must be at least one loan.</field>
+        </record>
+        <record model="ir.message" id="msg_no_loan_on_option">
+            <field name="text">At least one loan must be selected for %(option)s.</field>
+        </record>
+        <record model="ir.message" id="msg_loan_not_calculated">
+            <field name="text">Loan %(loan)s must be calculated before proceeding.</field>
+        </record>
+        <record model="ir.message" id="msg_loan_not_eligible">
+            <field name="text">Loan %(loan_share)s is not eligible</field>
+        </record>
+        <record model="ir.message" id="msg_no_option_for_loan">
+            <field name="text">Loan %(loan)s does not have an option.</field>
+        </record>
+        <record model="ir.message" id="msg_bad_loan_dates">
+            <field name="text">Loans fund release dates should be synced with the contract start date:
+
+	%(loans)s</field>
+        </record>
+        <record model="ir.message" id="msg_initial_capital_per_mil_label">
+            <field name="text">Initial Capital Per Mil</field>
+        </record>
+        <record model="ir.message" id="msg_remaining_capital_per_mil_label">
+            <field name="text">Remaining Capital Per Mil</field>
+        </record>
+    </data>
+</tryton>

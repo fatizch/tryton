@@ -2,6 +2,8 @@
 # this repository contains the full copyright notices and license terms.
 from decimal import Decimal
 
+from trytond.i18n import gettext
+from trytond.model.exceptions import ValidationError
 from trytond.pool import PoolMeta
 from trytond.pyson import Eval, Bool
 from trytond.rpc import RPC
@@ -77,10 +79,6 @@ class ContractOption(metaclass=PoolMeta):
     def __setup__(cls):
         super(ContractOption, cls).__setup__()
         cls.__rpc__.update({'get_possible_amounts': RPC(instantiate=0)})
-        cls._error_messages.update({
-                'invalid_coverage_amount': 'Coverage amount '
-                '"%(coverage_amount)s" is invalid for coverage "%(coverage)s"'
-                })
 
     @classmethod
     def get_field_map(cls):
@@ -122,10 +120,10 @@ class ContractOption(metaclass=PoolMeta):
             if (self.free_coverage_amount
                     and not rule_result or not self.free_coverage_amount
                     and version.coverage_amount not in rule_result):
-                self.raise_user_error('invalid_coverage_amount', {
-                        'coverage': self.coverage.rec_name,
-                        'coverage_amount': self.current_coverage_amount,
-                        })
+                raise ValidationError(gettext(
+                        'contract_coverage_amount.msg_invalid_coverage_amount',
+                        coverage=self.coverage.rec_name,
+                        coverage_amount=self.current_coverage_amount))
 
     @fields.depends('current_coverage_amount', 'start_date', 'versions')
     def on_change_current_coverage_amount(self):

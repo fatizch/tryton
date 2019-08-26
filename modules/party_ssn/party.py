@@ -2,9 +2,11 @@
 # this repository contains the full copyright notices and license terms.
 import re
 
+from trytond.i18n import gettext
 from trytond.pool import PoolMeta
 from trytond.pyson import Eval
 from trytond.model import Unique
+from trytond.model.exceptions import ValidationError
 
 from trytond.modules.coog_core import fields, coog_string, utils
 from trytond.modules.party_cog.party import STATES_PERSON, STATES_ACTIVE
@@ -44,10 +46,6 @@ class Party(metaclass=PoolMeta):
         cls._sql_constraints = [
             ('SSN_uniq', Unique(t, t.ssn),
              'The SSN of the party must be unique.')]
-        cls._error_messages.update({
-                'invalid_ssn': 'Invalid format for SSN',
-                'invalid_ssn_key': 'Invalid SSN Key',
-                })
 
     @classmethod
     def validate(cls, parties):
@@ -108,7 +106,7 @@ class Party(metaclass=PoolMeta):
                 [0-9]{2}$"""
             res = re.search(pattern, self.ssn, re.X)
         if not res:
-            self.raise_user_error('invalid_ssn')
+            raise ValidationError(gettext('party_ssn.msg_invalid_ssn'))
 
     def check_ssn_key(self):
         if not self.ssn:
@@ -116,7 +114,7 @@ class Party(metaclass=PoolMeta):
         else:
             res = self.calculate_ssn_key(self.ssn_no_key) == int(self.ssn_key)
         if not res:
-            self.raise_user_error('invalid_ssn_key')
+            raise ValidationError(gettext('party_ssn.msg_invalid_ssn_key'))
 
     def get_ssn(self, name):
         if not self.ssn:

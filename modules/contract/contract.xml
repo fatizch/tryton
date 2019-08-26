@@ -36,6 +36,7 @@ this repository contains the full copyright notices and license terms. -->
         </record>
         <!-- Read / Write rule -->
         <record model="ir.rule.group" id="rule_group_contract">
+            <field name="name">User in company</field>
             <field name="model" search="[('model', '=', 'contract')]"/>
             <field name="global_p" eval="True"/>
         </record>

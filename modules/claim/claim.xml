@@ -13,19 +13,11 @@ this repository contains the full copyright notices and license terms. -->
             <field name="user" ref="res.user_admin"/>
             <field name="group" ref="group_claim_admin"/>
         </record>
-        <record model="res.user-res.group" id="user_trigger_group_claim_admin">
-            <field name="user" ref="res.user_trigger"/>
-            <field name="group" ref="group_claim_admin"/>
-        </record>
         <record model="res.group" id="group_claim">
             <field name="name">Claim</field>
         </record>
         <record model="res.user-res.group" id="user_admin_group_claim">
             <field name="user" ref="res.user_admin"/>
-            <field name="group" ref="group_claim"/>
-        </record>
-        <record model="res.user-res.group" id="user_trigger_group_claim">
-            <field name="user" ref="res.user_trigger"/>
             <field name="group" ref="group_claim"/>
         </record>
         <menuitem name="Claim" id="menu_claim" sequence="15" icon="claim"/>
@@ -49,6 +41,7 @@ this repository contains the full copyright notices and license terms. -->
         </record>
         <!-- Read / Write rule -->
         <record model="ir.rule.group" id="rule_group_claim">
+            <field name="name">User in company</field>
             <field name="model" search="[('model', '=', 'claim')]"/>
             <field name="global_p" eval="True"/>
         </record>

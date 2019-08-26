@@ -4,11 +4,14 @@ import datetime
 from itertools import groupby
 from sql.conditionals import Coalesce
 
+from trytond.exceptions import UserWarning
+from trytond.i18n import gettext
 from trytond.rpc import RPC
 from trytond.pyson import Eval, Bool, Or, If
 from trytond.pool import Pool
 from trytond.transaction import Transaction
 from trytond.model import Unique
+from trytond.model.exceptions import ValidationError
 from trytond.cache import Cache
 from trytond.server_context import ServerContext
 from trytond.tools import grouped_slice
@@ -94,21 +97,10 @@ class Claim(export.ExportImportMixin, Printable, model.CoogView):
     @classmethod
     def __setup__(cls):
         super(Claim, cls).__setup__()
-        cls._error_messages.update({
-                'no_main_contract': 'Impossible to find a main contract, '
-                'please try again once it has been set',
-                'invalid_declaration_date': 'Declaration date cannot be '
-                'in the future, or posterior to the claim\'s creation date',
-                'loss_desc_mixin': 'You can not close multiple claims '
-                'with different loss descriptions at the same time',
-                'contract_will_be_held': 'The contract %(contract)s will be '
-                'held with the sub-status %(substatus)s for the payer '
-                '%(payer)s.'
-                })
         cls._order.insert(0, ('last_modification', 'DESC'))
         t = cls.__table__()
         cls._sql_constraints += [
-            ('code_uniq', Unique(t, t.name), 'The number must be unique!'),
+            ('code_uniq', Unique(t, t.name), 'claim.msg_number_unique'),
             ]
         cls._buttons.update({
                 'deliver': {},
@@ -195,7 +187,8 @@ class Claim(export.ExportImportMixin, Printable, model.CoogView):
         for claim in claims:
             if claim.declaration_date > min(claim.create_date.date(),
                     utils.today()):
-                claim.raise_user_error('invalid_declaration_date')
+                raise ValidationError(gettext(
+                        'claim.msg_invalid_declaration_date'))
 
     @fields.depends('status')
     def on_change_with_is_sub_status_required(self, name=None):
@@ -276,16 +269,17 @@ class Claim(export.ExportImportMixin, Printable, model.CoogView):
         pool = Pool()
         Contract = pool.get('contract')
         Party = pool.get('party.party')
+        Warning = pool.get('res.user.warning')
         to_suspend = Party.get_depending_contracts(payers)
         # Warn user that the contract will be held
         for contract in to_suspend:
-            cls.raise_user_warning(
-                'contract_will_be_held_%s' % str(contract),
-                'contract_will_be_held', {
-                    'contract': contract.rec_name,
-                    'payer': contract.payer.rec_name,
-                    'substatus': sub_status.rec_name,
-                    })
+            key = 'contract_will_be_held_%s' % str(contract)
+            if Warning.check(key):
+                raise UserWarning(key, gettext(
+                        'claim.msg_contract_will_be_held',
+                        contract=contract.rec_name,
+                        payer=contract.payer.rec_name,
+                        substatus=sub_status.rec_name))
         if to_suspend:
             Contract.hold(to_suspend, sub_status)
 
@@ -493,7 +487,7 @@ class Loss(model.CoogSQL, model.CoogView,
     func_key = fields.Function(fields.Char('Functional Key'),
         'get_func_key', searcher='search_func_key')
     available_closing_reasons = fields.Function(
-        fields.One2Many('claim.closing_reason', None,
+        fields.Many2Many('claim.closing_reason', None, None,
             'Available Closing Reason'),
         'on_change_with_available_closing_reasons')
     closing_reason = fields.Many2One('claim.closing_reason', 'Closing Reason',
@@ -507,20 +501,6 @@ class Loss(model.CoogSQL, model.CoogView,
     @classmethod
     def __setup__(cls):
         super(Loss, cls).__setup__()
-        cls._error_messages.update({
-                'end_date_smaller_than_start_date':
-                'End Date is smaller than start date',
-                'duplicate_loss': 'The loss %(loss)s could be a duplicate '
-                'of:\n\n%(losses)s',
-                'prior_declaration_date': 'Declaration date '
-                '%(declaration_date)s is prior to start date %(start_date)s',
-                'no_loss_desc_found': 'No loss description found with the '
-                'code "%(loss_desc_code)s" in the configuration',
-                'no_event_description_on_loss_desc': 'There is no event '
-                'description for the loss description "%(loss_desc)s" '
-                'in the configuration',
-                'no_end_date': 'Missing end date for loss\n%(loss)s,\n',
-                })
         cls._buttons.update({
                 'draft': {
                     'readonly': Or(
@@ -667,7 +647,8 @@ class Loss(model.CoogSQL, model.CoogView,
     def check_end_date(self):
         if (self.start_date and self.end_date
                 and self.end_date < self.start_date):
-            self.raise_user_error('end_date_smaller_than_start_date')
+            raise ValidationError(gettext(
+                    'claim.msg_end_date_smaller_than_start_date'))
 
     def init_service(self, option, benefit):
         service = Pool().get('claim.service')()
@@ -735,8 +716,10 @@ class Loss(model.CoogSQL, model.CoogView,
                 instance.check_end_date()
                 if instance.has_end_date and instance.end_date is None \
                         and instance.closing_reason:
-                    cls.append_functional_error('no_end_date',
-                        {'loss': instance.rec_name})
+                    cls.append_functional_error(
+                        ValidationError(gettext(
+                                'claim.msg_no_end_date',
+                                loss=instance.rec_name)))
 
     def get_possible_duplicates(self):
         if not self.do_check_duplicates():
@@ -784,8 +767,10 @@ class Loss(model.CoogSQL, model.CoogView,
             Pool().get('event').notify_events(to_write, 'draft_loss')
 
     def check_activation(self):
+        pool = Pool()
+        Lang = pool.get('ir.lang')
+        Warning = pool.get('res.user.warning')
         claim = self.claim
-        Lang = Pool().get('ir.lang')
         if claim.losses:
             start_dates = [x.start_date for x in claim.losses
                 if x.start_date]
@@ -794,20 +779,24 @@ class Loss(model.CoogSQL, model.CoogView,
                 lang = Transaction().context.get('language')
                 Lang = Pool().get('ir.lang')
                 lang = Lang.get(lang)
-                self.raise_user_warning('prior_declaration_date_%s' %
-                    str(self.id), 'prior_declaration_date', {
-                        'declaration_date': lang.strftime(
-                            claim.declaration_date,
-                            lang.date),
-                        'start_date': lang.strftime(start_dates[0],
-                            lang.date),
-                        })
+                key = 'prior_declaration_date_%s' % str(self.id)
+                if Warning.check(key):
+                    raise UserWarning(key, gettext(
+                            'claim.msg_prior_declaration_date',
+                            declaration_date=lang.strftime(
+                                claim.declaration_date,
+                                lang.date),
+                            start_date=lang.strftime(start_dates[0],
+                                lang.date)))
         duplicates = self.get_possible_duplicates()
         if not duplicates:
             return
-        self.raise_user_warning('possible_duplicates_%s' % str(self.id),
-            'duplicate_loss', {'loss': self.rec_name,
-                'losses': '\n'.join(x.rec_name for x in duplicates)})
+        key = 'possible_duplicates_%s' % str(self.id)
+        if Warning.check(key):
+            raise UserWarning(key, gettext(
+                    'claim.msg_duplicate_loss',
+                    loss=self.rec_name,
+                    losses='\n'.join(x.rec_name for x in duplicates)))
 
     @classmethod
     @model.CoogView.button
@@ -911,7 +900,7 @@ class ClaimService(model.CoogSQL, model.CoogView,
     insurer_delegations = fields.Function(
         fields.Char('Insurer Delefations', states={
                 'invisible': ~Eval('insurer_delegations'),
-                'field_color_red': True}),
+                }),
         'on_change_with_insurer_delegations')
     icon = fields.Function(
         fields.Char('Icon'),
@@ -1167,14 +1156,18 @@ class ClaimService(model.CoogSQL, model.CoogView,
     @classmethod
     @model.CoogView.button
     def clear_origin_service(cls, services):
+        Warning = Pool().get('res.user.warning')
         with model.error_manager():
             for service in services:
                 if not service.origin_service:
-                    cls.append_functional_error('clearing_empty_origin',
-                        {'service': service.rec_name})
-        cls.raise_user_warning('clearing_origin_%s' % ','.join(
-                str(x.id) for x in services[:10]),
-            'clearing_origin')
+                    cls.append_functional_error(
+                        ValidationError(gettext(
+                                'claim.msg_clearing_empty_origin',
+                                service=service.rec_name)))
+        key = 'clearing_origin_%s' % ','.join(
+                str(x.id) for x in services[:10])
+        if Warning.check(key):
+            raise UserWarning(key, gettext('claim.msg_clearing_origin'))
         for service in services:
             assert service.loss.claim.status != 'closed'
             service._clear_origin_service()
@@ -1203,12 +1196,8 @@ class ClaimSubStatus(model.CoogSQL, model.CoogView):
         super(ClaimSubStatus, cls).__setup__()
         t = cls.__table__()
         cls._sql_constraints += [
-            ('code_uniq', Unique(t, t.code), 'The code must be unique!'),
+            ('code_uniq', Unique(t, t.code), 'claim.msg_code_unique'),
             ]
-        cls._error_messages.update({
-                'no_sub_status_found': 'No sub status has been found with the '
-                'code %s.'
-                })
 
     @classmethod
     def create(cls, vlist):
@@ -1243,7 +1232,9 @@ class ClaimSubStatus(model.CoogSQL, model.CoogView):
             return cls(sub_status_id)
         instances = cls.search([('code', '=', code)])
         if len(instances) != 1:
-            cls.raise_user_error('no_sub_status_found', code)
+            raise ValidationError(gettext(
+                    'claim.msg_no_sub_status_found',
+                    code=code))
         cls._get_claim_sub_status_cache.set(code, instances[0].id)
         return instances[0]
 

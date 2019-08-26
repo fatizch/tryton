@@ -20,13 +20,6 @@ class Party(with_extra_data(['covered_element']), metaclass=PoolMeta):
         'Covered Elements')
 
     @classmethod
-    def __setup__(cls):
-        super(Party, cls).__setup__()
-        cls._error_messages.update({
-                'missing_extra_data': 'Missing extra data for : %s',
-                })
-
-    @classmethod
     def view_attributes(cls):
         return super(Party, cls).view_attributes() + [(
                 '/form/group[@id="party_extra_data"]',

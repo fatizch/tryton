@@ -46,9 +46,10 @@ Account = Model.get('account.account')
 AccountType = Model.get('account.account.type')
 _ = create_chart(company)
 accounts = get_accounts(company)
-account_statement = Account(name="Almerys Statement", kind='other')
-account_statement.type = AccountType(name="Statement", company=company)
-account_statement.type.save()
+account_statement = Account(name="Almerys Statement")
+account_type = AccountType(name="Statement", company=company)
+account_type.save()
+account_statement.type = account_type
 account_statement.save()
 
 Sequence = Model.get('ir.sequence')
@@ -223,10 +224,11 @@ covered_element.item_desc = item_description
 contract.save()
 Wizard('contract.activate', models=[contract]).execute('apply')
 
+TPPeriod = Model.get('contract.option.third_party_period')
 third_party_period, = (
     contract.covered_elements[0].options[0].third_party_periods)
-third_party_period.status = 'sent'
 third_party_period.save()
+TPPeriod.write([third_party_period.id], {'status': 'sent'}, config.context)
 
 IrModel = Model.get('ir.model')
 BatchParameter = Model.get('batch.launcher.parameter')

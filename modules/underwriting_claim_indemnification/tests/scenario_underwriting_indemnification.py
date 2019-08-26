@@ -322,10 +322,10 @@ service = Claim(claim.id).delivered_services[0]
 
 Action = Model.get('ir.action')
 action, = Action.find(['name', '=', 'Indemnification Validation Wizard'])
-validate_action = Action.read([action.id], config.context)[0]
+validate_action = Action.read([action.id], ['id'], config.context)[0]
 
 action, = Action.find(['name', '=', 'Indemnification Control Wizard'])
-control_action = Action.read([action.id], config.context)[0]
+control_action = Action.read([action.id], ['id'], config.context)[0]
 
 # #Comment# #Create indemnifications
 ClaimService = Model.get('claim.service')
@@ -469,10 +469,10 @@ service = Claim(claim.id).delivered_services[0]
 
 Action = Model.get('ir.action')
 action, = Action.find(['name', '=', 'Indemnification Validation Wizard'])
-validate_action = Action.read([action.id], config.context)[0]
+validate_action = Action.read([action.id], ['id'], config.context)[0]
 
 action, = Action.find(['name', '=', 'Indemnification Control Wizard'])
-control_action = Action.read([action.id], config.context)[0]
+control_action = Action.read([action.id], ['id'], config.context)[0]
 
 # #Comment# #Create indemnifications
 ClaimService = Model.get('claim.service')

@@ -2,6 +2,8 @@
 # this repository contains the full copyright notices and license terms.
 from collections import defaultdict
 
+from trytond.exceptions import UserWarning
+from trytond.i18n import gettext
 from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
 
@@ -16,14 +18,6 @@ class TestCaseModel(metaclass=PoolMeta):
     __name__ = 'ir.test_case'
 
     @classmethod
-    def __setup__(cls):
-        super(TestCaseModel, cls).__setup__()
-        cls._error_messages.update({
-                'no_language': 'No language is selected, users won\'t have '
-                'a language',
-                })
-
-    @classmethod
     def get_user_group_dict(cls):
         user_group_dict = defaultdict(list)
         user_group_dict['product'].append('coog_core.group_global_config')
@@ -32,6 +26,7 @@ class TestCaseModel(metaclass=PoolMeta):
     @classmethod
     def create_or_update_users_groups(cls):
         pool = Pool()
+        Warning = pool.get('res.user.warning')
         user_group_dict = cls.get_user_group_dict()
         dict_authorization_users = list(user_group_dict.keys())
         dict_authorization_groups = list(set(
@@ -48,8 +43,8 @@ class TestCaseModel(metaclass=PoolMeta):
         lang = Transaction().context.get('language')
         Lang = pool.get('ir.lang')
         lang, = Lang.search([('code', '=', lang)], limit=1)
-        if not lang:
-            cls.raise_user_warning('no_language', 'no_language')
+        if not lang and Warning.check('no_language'):
+            raise UserWarning(gettext('coog_core.msg_no_language'))
         authorization_users = User.search(
             [
                 ('login', 'in', [x + '_user'

@@ -1,5 +1,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+from trytond.i18n import gettext
+from trytond.model.exceptions import ValidationError
 from trytond.wizard import Wizard, StateView, StateAction, Button
 from trytond.pool import Pool
 from trytond.transaction import Transaction
@@ -24,22 +26,13 @@ class CreateSlip(Wizard):
             Button('Generate', 'open_slip', 'tryton-ok', default=True)])
     open_slip = StateAction('account_invoice.act_invoice_form')
 
-    @classmethod
-    def __setup__(cls):
-        super(CreateSlip, cls).__setup__()
-        cls._error_messages.update({
-                'missing_required_inputs': 'All fields must be set before '
-                'proceeding',
-                'missing_configuration': 'A configuration is required to '
-                'generate a slip',
-                })
-
     def default_start(self, name):
         active_model = Transaction().context.get('active_model', None)
         if active_model != 'account.invoice.slip.configuration':
             return {}
         if not Transaction().context.get('active_id'):
-            self.raise_user_error('missing_configuration')
+            raise ValidationError(gettext(
+                    'account_invoice_slip.msg_missing_configuration'))
         config = Pool().get(active_model)(
             Transaction().context.get('active_id'))
         return {
@@ -62,7 +55,8 @@ class CreateSlip(Wizard):
     def check_inputs(self):
         if not all(getattr(self.start, x, None)
                 for x in self._check_input_fields()):
-            self.raise_user_error('missing_required_inputs')
+            raise ValidationError(gettext(
+                    'account_invoice_slip.msg_missing_required_inputs'))
 
     def _check_input_fields(self):
         return {'party', 'accounts', 'slip_date', 'journal', 'slip_kind'}

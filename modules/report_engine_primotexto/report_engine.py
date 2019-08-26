@@ -4,6 +4,8 @@ import logging
 import requests
 import json
 
+from trytond.exceptions import UserError
+from trytond.i18n import gettext
 from trytond.pool import PoolMeta, Pool
 from trytond.config import config
 from trytond.pyson import Eval
@@ -58,25 +60,25 @@ class ReportGenerate(metaclass=PoolMeta):
             result = {}
         if process_method == 'primotexto' and not response.ok:
             if result.get('code'):
-                ReportTemplate.raise_user_error('primotexto_failed', {
-                        'code': result.get('code'),
-                        })
+                raise UserError(
+                    gettext('report_engine_primotexto.msg_primotexto_failed',
+                        code=result.get('code')))
             elif result.get('status'):
-                ReportTemplate.raise_user_error('primotexto_url_error', {
-                        'code': result.get('status'),
-                        'reason': result.get('error'),
-                        })
-            ReportTemplate.raise_user_error('primotexto_url_error', {
-                'code': response.status_code,
-                'reason': response.reason or '',
-                })
+                raise UserError(
+                    gettext('report_engine_primotexto.msg_primotexto_url_error',
+                        code=result.get('status'),
+                        reason=result.get('error')))
+            raise UserError(
+                gettext('report_engine_primotexto.msg_primotexto_url_error',
+                code=response.status_code,
+                reason=response.reason or ''))
         if (process_method == 'primotexto' and response.ok
                 and not result.get('snapshotId')):
-            ReportTemplate.raise_user_error('primotexto_url_error', {
-                'code': '200',
-                'reason': ReportTemplate.raise_user_error(
-                    'primotexto_no_return', raise_exception=False)
-                })
+            raise UserError(
+                gettext('report_engine_primotexto.msg_primotexto_url_error',
+                code='200',
+                reason=gettext(
+                        'report_engine_primotexto.msg_primotexto_no_return')))
 
         return super(ReportGenerate, cls).check_send_errors(response,
             process_method)
@@ -100,16 +102,6 @@ class ReportTemplate(metaclass=PoolMeta):
     @classmethod
     def __setup__(cls):
         super(ReportTemplate, cls).__setup__()
-        cls._error_messages.update({
-                'input_primotexto': 'Primo Texto',
-                'primotexto_failed': 'The Primo Texto service returns an '
-                'error (code: %(code)s). You may need to contact the '
-                'service provider to get more informations about this error.',
-                'primotexto_url_error': 'The given Primo Texto url seems to '
-                'be invalid: it resturns a "%(code)s %(reason)s"',
-                'primotexto_no_return': 'The primotexto request does not '
-                'returns the expected response. Your message may not be sent'
-                })
         for param in ('url', 'key'):
             required_param = config.get('primotexto', param)
             if not required_param:
@@ -121,6 +113,7 @@ class ReportTemplate(metaclass=PoolMeta):
     def get_possible_process_methods(self):
         if self.input_kind == 'text_message':
             return super(ReportTemplate, self).get_possible_process_methods(
-                ) + [('primotexto', self.raise_user_error('input_primotexto',
-                        raise_exception=False))]
+                ) + [('primotexto',
+                        gettext(
+                            'report_engine_primotexto.msg_input_primotexto'))]
         return super(ReportTemplate, self).get_possible_process_methods()

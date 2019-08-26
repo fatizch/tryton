@@ -1,5 +1,6 @@
-import gtk
 import gettext
+
+from gi.repository import Gtk
 
 from tryton.common import popup_menu
 import tryton.common as common
@@ -49,7 +50,7 @@ def new_populate(menu, model, record, title='', field=None, context=None):
 
         if edit:
             return
-        dev_edit_item = gtk.MenuItem('Dev Edit...')
+        dev_edit_item = Gtk.MenuItem('Dev Edit...')
         dev_edit_item.connect('activate', dev_edit)
         if notes is not None:
             menu.insert(dev_edit_item, notes + 1)
@@ -82,7 +83,7 @@ def new_popup(self, widget, menu):
                         'developper_view': True,
                         })
 
-        dev_edit_item = gtk.MenuItem('Dev Edit...')
+        dev_edit_item = Gtk.MenuItem('Dev Edit...')
         dev_edit_item.connect('activate', dev_edit)
         menu.append(dev_edit_item)
     return True
@@ -113,10 +114,10 @@ def new_create_toolbar(self, toolbars):
 
     toolbar = old_toolbar(self, toolbars)
     icon = 'tryton-settings'
-    qbutton = gtk.ToolButton()
+    qbutton = Gtk.ToolButton()
     qbutton.set_icon_widget(
         common.IconFactory.get_image(
-            icon, gtk.ICON_SIZE_LARGE_TOOLBAR))
+            icon, Gtk.IconSize.LARGE_TOOLBAR))
     qbutton.set_label('Dev Edit...')
     qbutton.connect('clicked', lambda b: dev_edit())
     toolbar.insert(qbutton, -1)

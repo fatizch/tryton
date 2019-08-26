@@ -7,8 +7,8 @@ from sql import Null, Table
 from trytond.pool import Pool, PoolMeta
 from trytond.model import Unique
 from trytond.transaction import Transaction
-from trytond.pyson import Eval
 from trytond import backend
+from trytond.pyson import Eval
 
 from trytond.modules.coog_core import export, fields, coog_string
 
@@ -121,18 +121,18 @@ class Category(export.ExportImportMixin):
         super(Category, cls).__setup__()
         account_revenue_original_domain = cls.account_revenue.domain
         assert account_revenue_original_domain == [
-                ('kind', '=', 'revenue'),
+                ('type.revenue', '=', True),
                 ('company', '=', Eval('context', {}).get('company', -1)),
                 ], account_revenue_original_domain
-        cls.account_revenue.domain = [['OR', ('kind', '=', 'other'),
+        cls.account_revenue.domain = [['OR', ('type.other', '=', True),
             account_revenue_original_domain[0]],
             account_revenue_original_domain[1]]
         account_expense_original_domain = cls.account_expense.domain
         assert account_expense_original_domain == [
-                ('kind', '=', 'expense'),
+                ('type.expense', '=', True),
                 ('company', '=', Eval('context', {}).get('company', -1)),
                 ], account_expense_original_domain
-        cls.account_expense.domain = [['OR', ('kind', '=', 'other'),
+        cls.account_expense.domain = [['OR', ('type.other', '=', True),
             account_expense_original_domain[0]],
             account_expense_original_domain[1]]
 
@@ -309,18 +309,18 @@ class CategoryAccount(export.ExportImportMixin, metaclass=PoolMeta):
         super(CategoryAccount, cls).__setup__()
         account_revenue_original_domain = cls.account_revenue.domain
         assert account_revenue_original_domain == [
-                ('kind', '=', 'revenue'),
+                ('type.revenue', '=', True),
                 ('company', '=', Eval('company', -1)),
                 ], account_revenue_original_domain
-        cls.account_revenue.domain = [['OR', ('kind', '=', 'other'),
+        cls.account_revenue.domain = [['OR', ('type.other', '=', True),
             account_revenue_original_domain[0]],
             account_revenue_original_domain[1]]
         account_expense_original_domain = cls.account_expense.domain
         assert account_expense_original_domain == [
-                ('kind', '=', 'expense'),
+                ('type.expense', '=', True),
                 ('company', '=', Eval('company', -1)),
                 ], account_expense_original_domain
-        cls.account_expense.domain = [['OR', ('kind', '=', 'other'),
+        cls.account_expense.domain = [['OR', ('type.other', '=', True),
             account_expense_original_domain[0]],
             account_expense_original_domain[1]]
 

@@ -60,14 +60,20 @@ Create Account Kind::
     >>> product_account_kind = AccountKind()
     >>> product_account_kind.name = 'Product Account Kind'
     >>> product_account_kind.company = company
+    >>> product_account_kind.statement = 'income'
+    >>> product_account_kind.revenue = True
     >>> product_account_kind.save()
     >>> receivable_account_kind = AccountKind()
     >>> receivable_account_kind.name = 'Receivable Account Kind'
     >>> receivable_account_kind.company = company
+    >>> receivable_account_kind.statement = 'balance'
+    >>> receivable_account_kind.receivable = True
     >>> receivable_account_kind.save()
     >>> payable_account_kind = AccountKind()
     >>> payable_account_kind.name = 'Payable Account Kind'
     >>> payable_account_kind.company = company
+    >>> payable_account_kind.statement = 'balance'
+    >>> payable_account_kind.payable = True
     >>> payable_account_kind.save()
 
 Create Account::
@@ -76,26 +82,23 @@ Create Account::
     >>> product_account = Account()
     >>> product_account.name = 'Product Account'
     >>> product_account.code = 'product_account'
-    >>> product_account.kind = 'revenue'
     >>> product_account.type = product_account_kind
     >>> product_account.company = company
     >>> product_account.save()
     >>> receivable_account = Account()
     >>> receivable_account.name = 'Account Receivable'
     >>> receivable_account.code = 'account_receivable'
-    >>> receivable_account.kind = 'receivable'
-    >>> receivable_account.party_required = True
-    >>> receivable_account.reconcile = True
     >>> receivable_account.type = receivable_account_kind
+    >>> receivable_account.reconcile = True
     >>> receivable_account.company = company
+    >>> receivable_account.party_required = True
     >>> receivable_account.save()
     >>> payable_account = Account()
     >>> payable_account.name = 'Account Payable'
     >>> payable_account.code = 'account_payable'
-    >>> payable_account.kind = 'payable'
-    >>> payable_account.party_required = True
     >>> payable_account.type = payable_account_kind
     >>> payable_account.company = company
+    >>> payable_account.party_required = True
     >>> payable_account.save()
 
 Create Insurer::
@@ -244,8 +247,8 @@ Create Contract::
 There is now one period::
 
     >>> contract.reload()
-    >>> option = contract.covered_elements[0].options[0]
-    >>> tpp = option.third_party_periods[0]
+    >>> option, = contract.covered_elements[0].options
+    >>> tpp, = option.third_party_periods
     >>> tpp.start_date - dt.date.today() == dt.timedelta(0)
     True
     >>> tpp.end_date is None

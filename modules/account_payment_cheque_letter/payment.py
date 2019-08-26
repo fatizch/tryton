@@ -2,8 +2,11 @@
 # this repository contains the full copyright notices and license terms.
 from itertools import groupby
 
+from trytond.exceptions import UserWarning
+from trytond.i18n import gettext
 from trytond.pool import Pool
 from trytond.model import fields
+from trytond.model.exceptions import ValidationError
 from trytond.pool import PoolMeta
 from trytond.transaction import Transaction
 from trytond.pyson import Eval, Equal, PYSONEncoder, Bool
@@ -54,16 +57,6 @@ class Payment(metaclass=PoolMeta):
         fields.Boolean('Is Cheque Letter',
             states={'invisible': True}),
         'on_change_with_is_cheque_letter')
-
-    @classmethod
-    def __setup__(cls):
-        super(Payment, cls).__setup__()
-        cls._error_messages.update({
-                'journal_mixin_not_allowed': 'You can not print cheque letters'
-                ' with other payments types',
-                'cheque_number_sequence_broken': 'You must select sequencial '
-                'cheque letters numbers: jump from %s to %s',
-                })
 
     @fields.depends('journal')
     def on_change_with_is_cheque_letter(self, name=None):
@@ -137,21 +130,10 @@ class Journal(metaclass=PoolMeta):
 class Group(metaclass=PoolMeta):
     __name__ = 'account.payment.group'
 
-    @classmethod
-    def __setup__(cls):
-        super(Group, cls).__setup__()
-        cls._error_messages.update({
-                'cheque_process_exceed': 'The amount of processed payments '
-                'exceed the given number of available cheques: '
-                '%s/%s (%s ignored)',
-                'no_cheque_processed': 'No cheque has been processed',
-                'missing_begin_cheque_number': 'Missing begin cheque number',
-                'missing_available_cheque_number':
-                'Missing max available cheque number',
-                })
-
     def process_cheque_letter(self):
-        Payment = Pool().get('account.payment')
+        pool = Pool()
+        Payment = pool.get('account.payment')
+        Warning = pool.get('res.user.warning')
         begin_number_string = Transaction().context.get(
             'first_cheque_number', None)
         max_cheque_available = Transaction().context.get(
@@ -161,10 +143,14 @@ class Group(metaclass=PoolMeta):
         to_write = []
 
         if begin_number_string is None or begin_number_string == '':
-            self.raise_user_error('missing_begin_cheque_number')
+            raise ValidationError(gettext(
+                    'account_payment_cheque_letter'
+                    '.msg_missing_begin_cheque_number'))
         begin_number = int(begin_number_string)
         if max_cheque_available is None or max_cheque_available == '':
-            self.raise_user_error('missing_available_cheque_number')
+            raise ValidationError(gettext(
+                    'account_payment_cheque_letter'
+                    '.msg_missing_available_cheque_number'))
         max_cheque_available = int(max_cheque_available)
         for key, merged_payments in self.cheque_letter_payments:
             payments = list(merged_payments)
@@ -177,14 +163,22 @@ class Group(metaclass=PoolMeta):
                 ignored += 1
 
         if ignored > 0:
-            self.raise_user_warning('Too few cheques', 'cheque_process_exceed',
-                (str(processed + ignored), str(max_cheque_available),
-                 str(ignored)))
+            key = 'Too few cheques'
+            if Warning.check(key):
+                raise UserWarning(key, gettext(
+                        'account_payment_cheque_letter',
+                        total=str(processed + ignored),
+                        maximum=str(max_cheque_available),
+                        ignored=str(ignored)))
 
         if to_write:
             Payment.write(*to_write)
         else:
-            self.raise_user_warning('Processing', 'no_cheque_processed')
+            key = 'Processing'
+            if Warning.check(key):
+                raise UserWarning(key, gettext(
+                        'account_payment_cheque_letter'
+                        '.msg_no_cheque_processed'))
 
     @classmethod
     def cheque_letter_payment_key(cls, payment):

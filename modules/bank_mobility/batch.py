@@ -6,6 +6,9 @@ import codecs
 from datetime import datetime, date
 from collections import defaultdict
 
+from trytond.exceptions import UserError
+from trytond.i18n import gettext
+from trytond.model.exceptions import ValidationError
 from trytond.pool import Pool
 
 from trytond.modules.coog_core import batch, utils
@@ -23,21 +26,6 @@ class BankMobilityBatch(batch.BatchRootNoSelect):
     @classmethod
     def __setup__(cls):
         super(BankMobilityBatch, cls).__setup__()
-        cls._error_messages.update({
-                'bic_not_found': 'No bank found for BIC %(bic)s',
-                'bank_account_not_found': 'No account number found for '
-                'IBAN:%(iban)s, BIC:%(bic)s',
-                'mandate_not_found': 'No valid mandate found for'
-                ' identification:%(identification)s',
-                'mandate_signature_date_in_future': 'Mandate with'
-                ' identification:%(identification)s has been signed on '
-                '%(mandate_signature_date)s, after mobility signature '
-                'date on %(mobility_signature_date)s',
-                'mandate_amendment_date_in_future': 'Mandate with '
-                'identification:%(identification)s has been amended on '
-                '%(amendment_date)s, after mobility signature date on '
-                '%(mobility_signature_date)s'
-                })
         cls._default_config_items.update({
                 'job_size': 1,
                 })
@@ -105,26 +93,30 @@ class BankMobilityBatch(batch.BatchRootNoSelect):
         # search original bank account
         orgl_bank_account = cls.find_bank_account(original_iban, original_bic)
         if not orgl_bank_account:
-            cls.raise_user_error('bank_account_not_found', {
-                    'iban': original_iban, 'bic': original_bic})
+            raise UserError(gettext(
+                    'bank_mobility.msg_bank_account_not_found',
+                    iban=original_iban, bic=original_bic))
 
         # search sepa mandates to amend
         sepa_mandates = cls.find_sepa_mandates(mandate_identification,
             orgl_bank_account)
         if not sepa_mandates and mandate_identification:
-            cls.raise_user_error('mandate_not_found',
-                {'identification': ', '.join(mandate_identification)})
+            raise ValidationError(gettext(
+                    'bank_mobility.msg_mandate_not_found',
+                    identification=', '.join(mandate_identification)))
         for mandate in sepa_mandates:
             if mandate.signature_date >= date_of_signature:
-                cls.raise_user_error('mandate_signature_date_in_future',
-                    {'identification': mandate.identification,
-                        'mandate_signature_date': mandate.signature_date,
-                        'mobility_signature_date': date_of_signature})
+                raise ValidationError(gettext(
+                        'bank_mobility.msg_mandate_signature_date_in_future',
+                        identification=mandate.identification,
+                        mandate_signature_date=mandate.signature_date,
+                        mobility_signature_date=date_of_signature))
             if mandate.start_date and mandate.start_date >= date_of_signature:
-                cls.raise_user_error('mandate_amendment_date_in_future',
-                    {'identification': mandate.identification,
-                        'amendment_date': mandate.start_date,
-                        'mobility_signature_date': date_of_signature})
+                raise ValidationError(gettext(
+                        'bank_mobility.msg_mandate_amendment_date_in_future',
+                        identification=mandate.identification,
+                        amendment_date=mandate.start_date,
+                        mobility_signature_date=date_of_signature))
         # update original bank account
         if (orgl_bank_account.end_date is None or
                 orgl_bank_account.end_date > date_of_signature):
@@ -252,7 +244,9 @@ class BankMobilityBatch(batch.BatchRootNoSelect):
         BankAccount = pool.get('bank.account')
         bank = Bank.search([('bic', '=', bic)])
         if not bank:
-            cls.raise_user_error('bic_not_found', {'bic': bic})
+            raise UserError(gettext(
+                    'bank_mobility.msg_bic_not_found',
+                    bic=bic))
         else:
             bank = bank[0]
         bank_account_number = BankAccountNumber.search([
@@ -282,7 +276,9 @@ class BankMobilityBatch(batch.BatchRootNoSelect):
             # Bank Account Creation
             bank = Bank.search([('bic', '=', bic)])
             if not bank:
-                cls.raise_user_error('bic_not_found', {'bic': bic})
+                raise UserError(gettext(
+                        'bank_mobility.msg_bic_not_found',
+                        bic=bic))
             else:
                 bank = bank[0]
             bank_account = BankAccount(

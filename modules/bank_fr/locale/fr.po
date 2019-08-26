@@ -2,18 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:bank.account:"
-msgid "The IBAN and bank do not match"
-msgstr "L'IBAN et la banque ne correspondent pas."
-
-msgctxt "error:bank.agency:"
-msgid "The bank code %s must contain 5 numeric chars."
-msgstr "Le code banque %s doit contenir 5 caractères numériques"
-
-msgctxt "error:bank.agency:"
-msgid "The branch code %s must contain 5 numeric chars."
-msgstr "Le code guichet %s doit contenir 5 caractères numériques"
-
 msgctxt "field:bank,agencies:"
 msgid "Agencies"
 msgstr "Agences"
@@ -81,6 +69,18 @@ msgstr "Agence"
 msgctxt "model:ir.action,name:act_agency_relate_form"
 msgid "Agencies"
 msgstr "Agences"
+
+msgctxt "model:ir.message,text:msg_iban_bank_mismatch"
+msgid "The IBAN and bank do not match."
+msgstr "L'IBAN et la banque ne correspondent pas."
+
+msgctxt "model:ir.message,text:msg_wrong_bank_code"
+msgid "The bank code %(code)s must contain 5 numeric chars."
+msgstr "Le code banque %(code)s doit contenir 5 caractères numériques"
+
+msgctxt "model:ir.message,text:msg_wrong_branch_code"
+msgid "The branch code %(code)s must contain 5 numeric chars."
+msgstr "Le code guichet %(code)s doit contenir 5 caractères numériques"
 
 msgctxt "model:ir.test_case.instance,name:agencies_test_case"
 msgid "Agencies Test Case"

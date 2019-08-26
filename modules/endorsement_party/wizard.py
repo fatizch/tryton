@@ -2,6 +2,8 @@
 # this repository contains the full copyright notices and license terms.
 from collections import OrderedDict
 
+from trytond.i18n import gettext
+from trytond.model.exceptions import ValidationError
 from trytond.transaction import Transaction
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, Bool, If
@@ -103,13 +105,6 @@ class ChangePartyAddress(EndorsementWizardStepMixin):
     @classmethod
     def is_multi_instance(cls):
         return False
-
-    @classmethod
-    def __setup__(cls):
-        super(ChangePartyAddress, cls).__setup__()
-        cls._error_messages.update({
-                'only_add_one': 'Only one new address can be added',
-                })
 
     @classmethod
     def state_view_name(cls):
@@ -253,7 +248,8 @@ class ChangePartyAddress(EndorsementWizardStepMixin):
                             address_endorsement.values = new_values
                     else:
                         if addresses_added:
-                            self.raise_user_error('only_add_one')
+                            raise ValidationError(gettext(
+                                    'endorsement_party.msg_only_add_one'))
                         new_values = model.dictionarize(address,
                             self._address_fields_to_extract())
                         new_values.pop('zip_and_city')
@@ -616,7 +612,8 @@ class ChangePartyRelationship(EndorsementWizardStepMixin):
                             relation_endorsement.values = new_values
                     else:
                         if relations_added:
-                            self.raise_user_error('only_add_one')
+                            raise ValidationError(gettext(
+                                    'endorsement_party.msg_only_add_one'))
                         new_values = model.dictionarize(displayer,
                             self._relation_fields_to_extract())
                         if not displayer.relation_endorsement:

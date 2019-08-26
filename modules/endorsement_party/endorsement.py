@@ -2,6 +2,8 @@
 # this repository contains the full copyright notices and license terms.
 import datetime
 
+from trytond.i18n import gettext
+from trytond.model.exceptions import ValidationError
 from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
 from trytond.pyson import Eval
@@ -52,8 +54,7 @@ class EndorsementPartyAddress(relation_mixin(
         if self.address:
             return self.address.rec_name
         else:
-            return self.raise_user_error('new_address',
-                raise_exception=False)
+            return gettext('endorsement_party.msg_new_address')
 
     @classmethod
     def updated_struct(cls, address):
@@ -88,7 +89,7 @@ class EndorsementPartyRelation(relation_mixin(
         if self.relationship:
             return self.relationship.rec_name
         else:
-            return self.raise_user_error('new_relation', raise_exception=False)
+            return gettext('endorsement_party.msg_new_relation')
 
     @classmethod
     def updated_struct(cls, relations):
@@ -231,18 +232,6 @@ class EndorsementParty(values_mixin('endorsement.party.field'),
         depends=['state', 'party', 'definition'],
         context={'definition': Eval('definition')}, delete_missing=True)
 
-    @classmethod
-    def __setup__(cls):
-        super(EndorsementParty, cls).__setup__()
-        cls._error_messages.update({
-                'not_latest_applied': 'Endorsement "%s" is not the latest '
-                'applied.',
-                'only_one_endorsement_in_progress': 'There may only be one '
-                'endorsement in_progress at a given time per party',
-                'msg_address_modifications': 'Addresses Modifications',
-                'msg_relations_modifications': 'Relations Modifications',
-                })
-
     def get_func_key(self, name):
         return getattr(self.party, self.party._func_key)
 
@@ -272,24 +261,21 @@ class EndorsementParty(values_mixin('endorsement.party.field'),
         address_summary = [address.get_diff('party.address',
                 address.address) for address in self.addresses]
         if address_summary:
-            result[1].append(['%s :' % self.raise_user_error(
-                        'msg_address_modifications',
-                        raise_exception=False),
+            result[1].append([
+                    gettext('endorsement_party.msg_address_modifications'),
                     address_summary])
 
         relation_summary = []
         for relation in self.relations:
             if relation.action == 'remove':
                 relation_summary.append(
-                    (relation.raise_user_error('mes_remove_version',
-                            raise_exception=False), ''))
+                    (gettext('endorsement.msg_remove_version'), ''))
             else:
                 relation_summary.append(relation.get_diff('party.relation',
                     relation.relationship))
         if relation_summary:
-            result[1].append(['%s :' % self.raise_user_error(
-                        'msg_relations_modifications',
-                        raise_exception=False),
+            result[1].append([
+                    gettext('endorsement_party.msg_relations_modifications'),
                     relation_summary])
 
         return [self.party.full_name, [result]]
@@ -338,8 +324,9 @@ class EndorsementParty(values_mixin('endorsement.party.field'),
                     ('state', 'not in', ['draft', 'canceled', 'declined']),
                     ], order=[('applied_on', 'DESC')], limit=1)
             if latest_applied != party_endorsement:
-                cls.raise_user_error('not_latest_applied',
-                    party_endorsement.rec_name)
+                raise ValidationError(gettext(
+                        'endorsement_party.msg_not_latest_applied',
+                        endorsement=party_endorsement.rec_name))
 
             party_endorsement.do_restore_history()
             party_endorsement.set_applied_on(None)
@@ -352,7 +339,8 @@ class EndorsementParty(values_mixin('endorsement.party.field'),
                 ('parties', 'in', [x.party.id for x in party_endorsements]),
                 ('state', '=', 'in_progress')])
         if count:
-            cls.raise_user_error('only_one_endorsement_in_progress')
+            raise ValidationError(gettext(
+                    'endorsement_party.msg_only_one_endorsement_in_progress'))
 
     @classmethod
     def apply(cls, party_endorsements):

@@ -2,57 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:document.receive:"
-msgid "No process was found for the selected element."
-msgstr "Aucun processus détecté pour l'élément sélectionné."
-
-msgctxt "error:event.type.action:"
-msgid "Clear Process"
-msgstr "Supprimer le processus en courant"
-
-msgctxt "error:event.type.action:"
-msgid "Initiate Process"
-msgstr "Initier un processus"
-
-msgctxt "error:ir.ui.view.description:"
-msgid "The functional id must be unique !"
-msgstr "L'identifiant fonctionnel doit être unique"
-
-msgctxt "error:process.log:"
-msgid "Copying logs is not allowed !"
-msgstr "La copie des tâches n'est pas autorisée !"
-
-msgctxt "error:process.log:"
-msgid "Deleting logs is not allowed !"
-msgstr "La suppression des tâches n'est pas autorisée !"
-
-msgctxt "error:process.resume:"
-msgid "No active process found"
-msgstr "Pas de processus actif trouvé"
-
-msgctxt "error:process.transition:"
-msgid "Both choices must be filled !"
-msgstr "Saisir les deux choix"
-
-msgctxt "error:process.transition:"
-msgid "Pyson expression and description is mandatory"
-msgstr "Expression Pyson et la description sont obligatoires"
-
-msgctxt "error:process:"
-msgid "Next"
-msgstr "Suivant"
-
-msgctxt "error:process:"
-msgid "Previous"
-msgstr "Précédent"
-
-msgctxt "error:process:"
-msgid ""
-"The current record (%s) will be deleted, are you sure you want to proceed ?"
-msgstr ""
-"L'enregistrement courant (%s) sera supprimé, êtes-vous certain de vouloir "
-"continuer ?"
-
 msgctxt "field:document.receive.reattach,current_process:"
 msgid "Current Process"
 msgstr "Processus en cours"
@@ -569,6 +518,54 @@ msgstr "Relancer le processus courant"
 msgctxt "model:ir.action,name:act_view_timings"
 msgid "View Process Timings"
 msgstr "Temps  d'exécution des processus"
+
+msgctxt "model:ir.message,text:msg_button_delete_confirm"
+msgid ""
+"The current record (%(name)s) will be deleted, are you sure you want to "
+"proceed?"
+msgstr ""
+"L'enregistrement courant (%(name)s) sera supprimé, êtes-vous certain de "
+"vouloir continuer ?"
+
+msgctxt "model:ir.message,text:msg_cannot_copy_logs"
+msgid "Copying logs is not allowed."
+msgstr "La copie des tâches n'est pas autorisée !"
+
+msgctxt "model:ir.message,text:msg_cannot_delete_logs"
+msgid "Deleting logs is not allowed."
+msgstr "La suppression des tâches n'est pas autorisée !"
+
+msgctxt "model:ir.message,text:msg_clear_process"
+msgid "Clear Process"
+msgstr "Supprimer le processus en courant"
+
+msgctxt "model:ir.message,text:msg_initiate_process"
+msgid "Initiate Process"
+msgstr "Initier un processus"
+
+msgctxt "model:ir.message,text:msg_missing_choice"
+msgid "Both choices must be filled."
+msgstr "Saisir les deux choix"
+
+msgctxt "model:ir.message,text:msg_missing_pyson"
+msgid "Pyson expression and description is mandatory."
+msgstr "Expression Pyson et la description sont obligatoires."
+
+msgctxt "model:ir.message,text:msg_next_button_label"
+msgid "Next"
+msgstr "Suivant"
+
+msgctxt "model:ir.message,text:msg_no_process"
+msgid "No process was found for the selected element"
+msgstr "Aucun processus détecté pour l'élément sélectionné."
+
+msgctxt "model:ir.message,text:msg_no_process_found"
+msgid "No active process found."
+msgstr "Pas de processus actif trouvé."
+
+msgctxt "model:ir.message,text:msg_previous_button_label"
+msgid "Previous"
+msgstr "Précédent"
 
 msgctxt "model:ir.ui.menu,name:menu_import_process"
 msgid "Import Processes"

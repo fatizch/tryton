@@ -8,10 +8,12 @@ from sql.operators import Concat
 from sql.conditionals import Coalesce, Case
 from sql.aggregate import Min, Max, Count
 
+from trytond.i18n import gettext
 from trytond.pool import Pool
 from trytond.wizard import Wizard, StateView, StateTransition, StateAction
 from trytond.wizard import Button
 from trytond.model import Unique
+from trytond.model.exceptions import AccessError, ValidationError
 from trytond.transaction import Transaction
 from trytond.pyson import Eval, If, Bool, In, Len
 from trytond.cache import Cache
@@ -292,13 +294,6 @@ class Underwriting(Printable, model.CoogView):
                     'invisible': Eval('state') != 'draft',
                     },
                 })
-        cls._error_messages.update({
-                'cannot_draft': 'Cannot draft completed underwritings',
-                'cannot_draft_result': 'Cannot draft completed results',
-                'non_completed_result': 'Results must be finalized first',
-                'document_received_string': 'Received',
-                'document_not_received_string': 'Not Received',
-                })
 
     @classmethod
     def view_attributes(cls):
@@ -412,9 +407,10 @@ class Underwriting(Printable, model.CoogView):
 
     def getter_document_request_descriptions(self, name):
         return '\n'.join(['%s (%s)' % (x.document_desc.name,
-                    self.raise_user_error('document_received_string'
-                        if x.received else 'document_not_received_string',
-                        raise_exception=False))
+                    gettext(
+                        'underwriting.msg_document_received_string'
+                        if x.received else
+                        'underwriting.msg_document_not_received_string'))
                 for x in self.requested_documents])
 
     @fields.depends('on_object', 'party', 'results')
@@ -599,11 +595,13 @@ class Underwriting(Printable, model.CoogView):
     @model.CoogView.button
     def draft(cls, underwritings):
         if any(x.state != 'processing' for x in underwritings):
-            cls.raise_user_error('cannot_draft')
+            raise AccessError(gettext(
+                    'underwriting.msg_cannot_draft'))
         for underwriting in underwritings:
             for result in underwriting.results:
                 if result.state == 'finalized':
-                    cls.raise_user_error('cannot_draft_result')
+                    raise AccessError(gettext(
+                            'underwriting.msg_cannot_draft_result'))
         cls.write(underwritings, {'state': 'draft'})
 
     @classmethod
@@ -678,8 +676,8 @@ class Underwriting(Printable, model.CoogView):
     def check_completable(self):
         for result in self.results:
             if result.state not in ('finalized', 'abandoned'):
-                self.append_functional_error('non_completed_result',
-                    {'target': result.target.rec_name})
+                raise ValidationError(
+                    gettext('underwriting.msg_non_completed_result'))
 
     @classmethod
     @model.CoogView.button_action('underwriting.act_plan_underwriting')
@@ -790,10 +788,6 @@ class UnderwritingResult(model.CoogSQL, model.CoogView):
                     'invisible': (Eval('underwriting_state') == 'draft')
                     | In(Eval('state'), ['abandoned', 'finalized']),
                     }})
-        cls._error_messages.update({
-                'result_wait_expected': 'The underwriting result \'%s\' should'
-                ' be in \'waiting\' state instead of \'%s\''
-                })
 
     @classmethod
     def __post_setup__(cls):
@@ -817,9 +811,11 @@ class UnderwritingResult(model.CoogSQL, model.CoogView):
                     for instance in instances:
                         if instance.state != 'waiting':
                             cls.append_functional_error(
-                                'result_wait_expected', (instance.rec_name,
-                                    coog_string.translate_value(
-                                        instance, 'state')))
+                                ValidationError(gettext(
+                                        'underwriting.msg_result_wait_expected',
+                                        name=instance.rec_name,
+                                        state=coog_string.translate_value(
+                                            instance, 'state'))))
                 if values['state'] == 'finalized':
                     finalized += instances
                 elif values['state'] == 'abandoned':
@@ -880,16 +876,20 @@ class UnderwritingResult(model.CoogSQL, model.CoogView):
     @model.CoogView.button_change('decision_date', 'final_decision', 'state')
     def finalize(self):
         if self.state != 'waiting':
-            self.__class__.raise_user_error('result_wait_expected',
-                (self.rec_name, coog_string.translate_value(self, 'state')))
+            raise AccessError(gettext(
+                    'underwriting.msg_result_wait_expected',
+                    name=self.rec_name,
+                    state=coog_string.translate_value(self, 'state')))
         self.decision_date = utils.today()
         self.state = 'finalized'
 
     @model.CoogView.button_change('decision_date', 'state')
     def abandon(self):
         if self.state != 'waiting':
-            self.__class__.raise_user_error('result_wait_expected',
-                (self.rec_name, coog_string.translate_value(self, 'state')))
+            raise AccessError(gettext(
+                    'underwriting.msg_result_wait_expected',
+                    name=self.rec_name,
+                    state=coog_string.translate_value(self, 'state')))
         self.decision_date = utils.today()
         self.state = 'abandoned'
 
@@ -934,14 +934,6 @@ class OpenGeneratedUnderwriting(Wizard):
                 default=True)])
     open_generated = StateAction('underwriting.act_generated_underwriting')
 
-    @classmethod
-    def __setup__(cls):
-        super(OpenGeneratedUnderwriting, cls).__setup__()
-        cls._error_messages.update({
-                'ask_open_generated':
-                'Do you want to open the generated underwriting?'
-                })
-
     def get_generated(self):
         current = Transaction().context.get('active_id')
         if not current:
@@ -962,11 +954,9 @@ class OpenGeneratedUnderwriting(Wizard):
 
     def default_choice(self, name):
         res = self.get_generated()
-        info = self.raise_user_error('ask_open_generated',
-            raise_exception=False)
         return {
             'generated_underwriting': res[0].id,
-            'info': info,
+            'info': gettext('underwriting.msg_ask_open_generated'),
             }
 
     def do_open_generated(self, action):

@@ -2,40 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:underwriting.document_rule:"
-msgid "There may be only one document rule per underwriting type"
-msgstr ""
-"Il ne doit y avoir qu'une règle de document par type de demande décision"
-
-msgctxt "error:underwriting.generated.open:"
-msgid "Do you want to open the generated underwriting?"
-msgstr "Voulez-vous ouvrir l'analyse de risque générée ?"
-
-msgctxt "error:underwriting.result:"
-msgid ""
-"The underwriting result '%s' should be in 'waiting' state instead of '%s'"
-msgstr "La décision assureur '%s' devrait être en 'attente' et non '%s'"
-
-msgctxt "error:underwriting:"
-msgid "Cannot draft completed results"
-msgstr "Impossible de passer des décisions validées en brouillon"
-
-msgctxt "error:underwriting:"
-msgid "Cannot draft completed underwritings"
-msgstr "Impossible de passer des demandes terminées en brouillon"
-
-msgctxt "error:underwriting:"
-msgid "Received"
-msgstr "Reçu"
-
-msgctxt "error:underwriting:"
-msgid "Not Received"
-msgstr "Non reçu"
-
-msgctxt "error:underwriting:"
-msgid "Results must be finalized first"
-msgstr "Les résultats doivent d'abord être finalisés"
-
 msgctxt "field:underwriting,create_date:"
 msgid "Create Date"
 msgstr "Date de Création"
@@ -48,13 +14,13 @@ msgctxt "field:underwriting,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:underwriting,documents_received:"
-msgid "Documents received"
-msgstr "Documents reçus"
-
 msgctxt "field:underwriting,document_request_descriptions:"
 msgid "Document Requests Descriptions"
 msgstr "Documents demandés"
+
+msgctxt "field:underwriting,documents_received:"
+msgid "Documents received"
+msgstr "Documents reçus"
 
 msgctxt "field:underwriting,effective_date:"
 msgid "Effective Date"
@@ -535,6 +501,36 @@ msgstr "Brouillon"
 msgctxt "model:ir.action.act_window.domain,name:act_pending_underwriting"
 msgid "Pending"
 msgstr "En cours"
+
+msgctxt "model:ir.message,text:msg_ask_open_generated"
+msgid "Do you want to open the generated underwriting?"
+msgstr "Voulez-vous ouvrir l'analyse de risque générée ?"
+
+msgctxt "model:ir.message,text:msg_cannot_draft"
+msgid "Cannot draft completed underwritings."
+msgstr "Impossible de passer des demandes terminées en brouillon."
+
+msgctxt "model:ir.message,text:msg_cannot_draft_result"
+msgid "Cannot draft completed results."
+msgstr "Impossible de passer des décisions validées en brouillon."
+
+msgctxt "model:ir.message,text:msg_document_not_received_string"
+msgid "Not Received"
+msgstr "Non reçu"
+
+msgctxt "model:ir.message,text:msg_document_received_string"
+msgid "Received"
+msgstr "Reçus"
+
+msgctxt "model:ir.message,text:msg_non_completed_result"
+msgid "Results must be finalized first."
+msgstr "Les résultats doivent d'abord être finalisés."
+
+msgctxt "model:ir.message,text:msg_result_wait_expected"
+msgid ""
+"The underwriting result \"%(name)s\" should be in \"waiting\" state instead "
+"of \"%(state)\"."
+msgstr "La décision assureur '%s' devrait être en 'attente' et non '%s'"
 
 msgctxt "model:ir.ui.menu,name:"
 msgid "Planned Underwritings"

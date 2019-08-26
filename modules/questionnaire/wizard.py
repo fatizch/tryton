@@ -2,6 +2,8 @@
 # this repository contains the full copyright notices and license terms.
 import json
 
+from trytond.i18n import gettext
+from trytond.model.exceptions import ValidationError
 from trytond.pool import PoolMeta, Pool
 from trytond.wizard import Wizard, StateView, StateTransition, Button
 from trytond.wizard import StateAction
@@ -57,22 +59,13 @@ class RunQuestionnaire(Wizard):
                 default=True)])
     questionnaire_results = StateTransition()
 
-    @classmethod
-    def __setup__(cls):
-        super().__setup__()
-        cls._error_messages.update({
-                'mandatory_choice': 'A choice must be made for part %(part)s',
-                'nothing_selected': 'A choice must be made before going on',
-                'no_questionnaires': 'No questionnaires configured',
-                })
-
     def transition_check_questionnaire(self):
         Questionnaire = Pool().get('questionnaire')
         questionnaires = Questionnaire.search([])
         if questionnaires:
             self.questionnaire.possible_questionnaires = questionnaires
             return 'questionnaire'
-        self.raise_user_error('no_questionnaires')
+        raise ValidationError(gettext('questionnaire.msg_no_questionnaires'))
 
     def default_questionnaire(self, name):
         ids = [x.id for x in self.questionnaire.possible_questionnaires]
@@ -144,7 +137,7 @@ class RunQuestionnaire(Wizard):
         # the first selected part if None is mandatory
         cur_choice = self._get_selected_choice()
         if cur_choice is None:
-            self.raise_user_error('nothing_selected')
+            raise ValidationError(gettext('questionnaire.msg_nothing_selected'))
 
         # Maybe there is something to do here if contract_process is not
         # installed
@@ -166,8 +159,8 @@ class RunQuestionnaire(Wizard):
         for result in self.proposition.results:
             if result.part.mandatory and all(not x.selected for x in
                     result.choices):
-                self.raise_user_error('mandatory_choice',
-                    {'part_name': result.part.rec_name})
+                raise ValidationError(gettext('questionnaire.msg_mandatory_choice',
+                    part=result.part.result))
 
 
 class RunQuestionnaireQuestions(model.CoogView):

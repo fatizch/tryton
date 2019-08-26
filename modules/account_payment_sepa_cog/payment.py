@@ -16,8 +16,12 @@ import genshi
 import genshi.template
 
 from trytond import backend
+from trytond.exceptions import UserError
+from trytond.i18n import gettext
 from trytond.model import Workflow
 from trytond.config import config
+from trytond.model.exceptions import (
+    ValidationError, AccessError, RequiredValidationError)
 from trytond.transaction import Transaction
 from trytond.pyson import Eval, Or, Bool, If
 from trytond.pool import PoolMeta, Pool
@@ -83,15 +87,6 @@ class Mandate(model.CoogSQL, model.CoogView):
     def __setup__(cls):
         super(Mandate, cls).__setup__()
         cls.identification.select = True
-        cls._error_messages.update({
-                'bad_place_holders': 'Bad placeholders in SEPA Sequence. '
-                "The following fields do not exist on Party model:\n\t%s\n"
-                "Please check the sequence's prefix and suffix.",
-                'origin_must_be_same': ('All SEPA mandates with identification '
-                    '"%(identification)s" must have the same origin'),
-                'payment_with_mandate': 'Cancelling mandate is not allowed '
-                'because there is the payment %(payment)s which needs it'
-                })
 
     @classmethod
     @model.CoogView.button
@@ -101,8 +96,11 @@ class Mandate(model.CoogSQL, model.CoogView):
             for payment in sum([list(mandate.payments)
                     for mandate in mandates], []):
                 if payment.state not in ('failed', 'succeeded'):
-                    cls.append_functional_error('payment_with_mandate', {
-                        'payment': payment.rec_name})
+                    cls.append_functional_error(
+                        AccessError(gettext(
+                                'account_payment_sepa_cog'
+                                '.msg_payment_with_mandate',
+                                payment=payment.rec_name)))
         super(Mandate, cls).cancel(mandates)
 
     @classmethod
@@ -133,8 +131,10 @@ class Mandate(model.CoogSQL, model.CoogView):
                 mandate)
         for identification, mandates in by_identification.items():
             if len(set([x._get_origin() for x in mandates])) != 1:
-                cls.append_functional_error('origin_must_be_same', {
-                        'identification': identification})
+                cls.append_functional_error(
+                    ValidationError(gettext(
+                            'account_payment_sepa_cog.msg_origin_must_be_same',
+                            identification=identification)))
 
     def get_rec_name(self, name):
         if self.identification is None or self.party is None:
@@ -214,7 +214,9 @@ class Mandate(model.CoogSQL, model.CoogView):
             return
         bad_names = [name for name in matches if name not in Party._fields]
         if bad_names:
-            cls.raise_user_error('bad_place_holders', ', '.join(bad_names))
+            raise ValidationError(gettext(
+                    'account_payment_sepa_cog.msg_bad_place_holders',
+                    names=', '.join(bad_names)))
         to_update = []
         for vals in vlist:
             identification = vals.get('identification', None)
@@ -390,8 +392,7 @@ class Group(metaclass=PoolMeta):
                 for payment in payments:
                     payment_mandate, = Payment.get_sepa_mandates([payment])
                     if not payment_mandate:
-                        cls.append_functional_error('no_mandate',
-                            payment.rec_name)
+                        cls.append_functional_error(UserError('no_mandate'))
                     else:
                         all_mandates.append(payment_mandate)
             mandate_type = Mandate.get_initial_sequence_type_per_mandates(
@@ -508,17 +509,6 @@ class Payment(metaclass=PoolMeta):
     @classmethod
     def __setup__(cls):
         super(Payment, cls).__setup__()
-        cls._error_messages.update({
-                'unknown_amount_invoice_line':
-                'Unknown amount invoice line : %s %s',
-                'direct_debit_payment': 'Direct Debit Payment of',
-                'direct_debit_disbursement': 'Direct Debit Disbursement of',
-                'missing_bank_acount': ('Missing bank account for "%(party)s" '
-                    'at "%(date)s"'),
-                'bad_bank_account': 'The selected bank account'
-                ' %(bank_account)s is different than that of the SEPA mandate'
-                ' %(sepa_bank_account)s',
-                })
         cls.sepa_mandate.select = True
         cls.sepa_mandate.states['invisible'] = Eval('kind') == 'payable'
         cls.sepa_mandate.states['readonly'] = Eval('state') != 'draft'
@@ -564,10 +554,10 @@ class Payment(metaclass=PoolMeta):
             if self.payer:
                 bank_account = self.payer.get_bank_account(self.date)
             if not bank_account:
-                self.raise_user_error('missing_bank_acount', {
-                        'party': self.party.rec_name,
-                        'date': self.date,
-                        })
+                raise RequiredValidationError(gettext(
+                        'account_payment_sepa_cog.msg_missing_bank_acount',
+                        party=self.party.rec_name,
+                        date=self.date))
             self.bank_account = bank_account
         for number in self.bank_account.numbers:
             if number.type == 'iban':
@@ -634,10 +624,10 @@ class Payment(metaclass=PoolMeta):
                 if (not sepa_bank_account or
                         payment.bank_account != sepa_bank_account.account):
                     cls.append_functional_error(
-                        'bad_bank_account', {
-                            'bank_account': payment.bank_account.number,
-                            'sepa_bank_account':
-                            sepa_bank_account.number})
+                        ValidationError(gettext(
+                                'account_payment_sepa_cog.msg_bad_bank_account',
+                                bank_account=payment.bank_account.number,
+                                sepa_bank_account=sepa_bank_account.number)))
         super(Payment, cls).approve(payments)
 
     @classmethod
@@ -660,15 +650,16 @@ class Payment(metaclass=PoolMeta):
         if not lang:
             lang = self.journal.company.party.lang
             if not lang:
-                self.journal.company.raise_user_error('missing_lang',
-                    {'party': self.journal.company.rec_name})
+                raise UserError(gettext(
+                        'company_cog.msg_missing_lang',
+                        party=self.journal.company.rec_name))
         descriptions = []
         if self.kind == 'payable':
-            descriptions.append(self.raise_user_error(
-                    'direct_debit_disbursement', raise_exception=False))
+            descriptions.append(gettext(
+                    'account_payment_sepa_cog.msg_direct_debit_disbursement'))
         elif self.kind == 'receivable':
-            descriptions.append(self.raise_user_error(
-                    'direct_debit_payment', raise_exception=False))
+            descriptions.append(
+                gettext('account_payment_sepa_cfonb.msg_direct_debit_payment'))
         descriptions.append(lang.strftime(self.date, lang.date)
             if self.date else '')
         return ' '.join(descriptions)

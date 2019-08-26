@@ -5,6 +5,8 @@ import zipfile
 from io import StringIO
 from collections import defaultdict
 
+from trytond.exceptions import UserWarning
+from trytond.i18n import gettext
 from trytond.pool import Pool
 from trytond.pyson import Eval
 from trytond.transaction import Transaction
@@ -37,15 +39,6 @@ class ConvertTemplate(Wizard):
                     'readonly': ~Eval('changes_calculated')})])
     convert_templates = StateTransition()
 
-    @classmethod
-    def __setup__(cls):
-        super(ConvertTemplate, cls).__setup__()
-        cls._error_messages.update({
-                'search_for_none': 'Nothing is set for search, are you sure'
-                ' you want to do this ?',
-                'convert_ok_message': '%i occurences were converted',
-                })
-
     def default_select_templates(self, name):
         defaults = {
             'search_for': '',
@@ -56,16 +49,21 @@ class ConvertTemplate(Wizard):
                 self.select_templates, 'templates', None):
             matches = sum([x.number_of_matches
                     for x in self.select_templates.templates])
-            defaults['message'] = self.raise_user_error('convert_ok_message',
-                (matches,), raise_exception=False)
+            defaults['message'] = gettext(
+                'report_engine.convert_ok_message', number=matches)
         if Transaction().context.get('active_model') == 'report.template':
             defaults['templates'] = Transaction().context.get('active_ids')
 
         return defaults
 
     def transition_convert_templates(self):
+        pool = Pool()
+        Warning = pool.get('res.user.warning')
         if not self.select_templates.search_for:
-            self.raise_user_warning('search_for_none', 'search_for_none')
+            if Warning.check('search_for_none'):
+                raise UserWarning(
+                    'search_for_none',
+                    gettext('report_engine.msg_search_for_none'))
         Version = Pool().get('report.template.version')
         to_save = []
         per_template = defaultdict(list)

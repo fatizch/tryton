@@ -1,7 +1,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 
-
+from trytond.i18n import gettext
 from trytond.pool import PoolMeta, Pool
 from trytond.modules.coog_core import fields
 from trytond.pyson import Eval, And
@@ -18,10 +18,6 @@ class EventTypeAction(metaclass=PoolMeta):
     @classmethod
     def __setup__(cls):
         super(EventTypeAction, cls).__setup__()
-        cls._error_messages.update({
-                'generate_invoice_commission_doc':
-                'Generate Invoice Commissions Document',
-                })
         initial_invisible_states = cls.report_templates.states['invisible']
         cls.report_templates.states['invisible'] = And(
             initial_invisible_states,
@@ -35,8 +31,9 @@ class EventTypeAction(metaclass=PoolMeta):
     @classmethod
     def get_action_types(cls):
         return super(EventTypeAction, cls).get_action_types() + [
-            ('generate_invoice_commission_doc', cls.raise_user_error(
-                    'generate_invoice_commission_doc', raise_exception=False))]
+            ('generate_invoice_commission_doc', gettext(
+                    'commission_report_engine'
+                    '.msg_generate_invoice_commission_doc'))]
 
     @fields.depends('report_templates')
     def on_change_action(self):

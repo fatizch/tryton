@@ -10,7 +10,9 @@ from unidecode import unidecode
 from sql import Literal, Table
 
 from trytond import backend
+from trytond.i18n import gettext
 from trytond.model import ModelView, ModelSQL, Unique
+from trytond.model.exceptions import ValidationError
 from trytond.wizard import Wizard, StateAction
 from trytond.report import Report
 from trytond.transaction import Transaction
@@ -189,14 +191,6 @@ class Process(ModelSQL, ModelView, model.TaggedMixin):
         cls._sql_constraints += [(
                 'unique_tech_name', Unique(t, t.technical_name),
                 'The technical name must be unique')]
-        cls._error_messages.update({
-                'use_steps_only_once':
-                '%s: Step %s cannot be used more than once',
-                'not_allowed_message': 'The current record is in a state '
-                '(%s) that you are not allowed to view',
-                'process_completed': 'The current record completed the '
-                'current process, please go ahead',
-                })
 
     @classmethod
     def __register__(cls, module_name):
@@ -238,8 +232,10 @@ class Process(ModelSQL, ModelView, model.TaggedMixin):
             used_steps = set()
             for relation in process.all_steps:
                 if relation.step.id in used_steps:
-                    cls.raise_user_error('use_steps_only_once', (
-                            process.fancy_name, relation.step.technical_name))
+                    raise ValidationError(gettext(
+                            'process.msg_use_steps_only_once',
+                            name=process.fancy_name,
+                            step=relation.step.technical_name))
                 used_steps.add(relation.step.id)
 
     @classmethod
@@ -376,8 +372,9 @@ class Process(ModelSQL, ModelView, model.TaggedMixin):
             xml += "&quot;invisible&quot;: %s" % invisible_def
             xml += '}">'
             xml += '<label id="noauth_text" string="%s"/>' % (
-                self.raise_user_error('not_allowed_message',
-                    (step.fancy_name,), raise_exception=False))
+                gettext(
+                    'process.msg_not_allowed_message',
+                    name=step.fancy_name))
             xml += '</group>'
         return xml
 
@@ -428,7 +425,7 @@ class Process(ModelSQL, ModelView, model.TaggedMixin):
         xml += "&quot;invisible&quot;: %s" % invisible_def
         xml += '}">'
         xml += '<label id="complete_text" string="%s"/>' % (
-            self.raise_user_error('process_completed', raise_exception=False))
+            gettext('process.msg_process_completed'))
         xml += '</group>'
         xml += '</form>'
 
@@ -685,14 +682,6 @@ class ProcessAction(ModelSQL, ModelView):
         'on_change_with_exec_parameters')
 
     @classmethod
-    def __setup__(cls):
-        super(ProcessAction, cls).__setup__()
-        cls._error_messages.update({
-                'non_matching_method': 'Method %s does not exist on model %s',
-                'source_code_unavailable': 'Source Code Unavailable',
-                })
-
-    @classmethod
     def default_content(cls):
         return 'method'
 
@@ -705,8 +694,10 @@ class ProcessAction(ModelSQL, ModelView):
         TargetModel = Pool().get(self.on_model.model)
         if not (self.method_name in dir(TargetModel) and callable(
                     getattr(TargetModel, self.method_name))):
-            self.raise_user_error('non_matching_method', (
-                    self.method_name, self.on_model.get_rec_name(None)))
+            raise ValidationError(gettext(
+                    'process.msg_non_matching_method',
+                    method=self.method_name,
+                    model=self.on_model.get_rec_name(None)))
 
     def execute(self, target):
         def call_method(method, target, parameters=None):
@@ -746,8 +737,7 @@ class ProcessAction(ModelSQL, ModelView):
             func = getattr(GoodModel, self.method_name)
             return ''.join(inspect.getsourcelines(func)[0])
         except Exception:
-            return self.raise_user_error('source_code_unavailable',
-                raise_exception=False)
+            return gettext('process.msg_source_code_unavailable')
 
     def get_on_model(self, name):
         if self.parent_step and self.parent_step.main_model:
@@ -803,9 +793,6 @@ class ProcessTransition(ModelSQL, ModelView):
     def __setup__(cls):
         super(ProcessTransition, cls).__setup__()
         cls._order = [('priority', 'ASC')]
-        cls._error_messages.update({
-                'complete_button_label': 'Complete',
-                })
 
     @classmethod
     def __register__(cls, module):
@@ -876,8 +863,7 @@ class ProcessTransition(ModelSQL, ModelView):
     def get_rec_name(self, name):
         if not (hasattr(self, 'to_step') and self.to_step):
             if self.kind == 'complete':
-                return self.raise_user_error('complete_button_label',
-                    raise_exception=False)
+                return gettext('process.msg_complete_button_label')
             return '...'
         return self.to_step.get_rec_name(name)
 

@@ -6,6 +6,8 @@ import traceback
 import datetime
 from dateutil.relativedelta import relativedelta
 
+from trytond.i18n import gettext
+from trytond.model.exceptions import ValidationError
 from trytond.pool import Pool
 from trytond.wizard import Wizard, StateView, StateTransition, Button
 from trytond.transaction import Transaction
@@ -229,16 +231,6 @@ class IndemnificationAssistant(Wizard, model.FunctionalErrorMixIn):
     validation_state = StateTransition()
     control_state = StateTransition()
 
-    @classmethod
-    def __setup__(cls):
-        super(IndemnificationAssistant, cls).__setup__()
-        cls._error_messages.update({
-                'cannot_refuse_cancel_indemnifications': "Cancelled "
-                "indemnification %(indemnification)s can't be refused",
-                'cannot_refuse_indemnifications_without_note': "Indemnification"
-                " %(indemnification)s must have a note to be canceled, "
-                "please write a note to motivate your refusal."})
-
     def transition_init_state(self):
         pool = Pool()
         # checks which entrypoint was called
@@ -268,12 +260,16 @@ class IndemnificationAssistant(Wizard, model.FunctionalErrorMixIn):
             if (element.action == 'refuse' and
                     'cancel' in element.indemnification.status):
                 self.append_functional_error(
-                    'cannot_refuse_cancel_indemnifications',
-                    {'indemnification': element.indemnification.rec_name})
+                    ValidationError(gettext(
+                            'claim_indemnification'
+                            '.msg_cannot_refuse_cancel_indemnifications',
+                            indemnification=element.indemnification.rec_name)))
             if (element.action == 'refuse' and not element.note):
                 self.append_functional_error(
-                    'cannot_refuse_indemnifications_without_note',
-                    {'indemnification': element.indemnification.rec_name})
+                    ValidationError(gettext(
+                            'claim_indemnification'
+                            '.msg_cannot_refuse_indemnifications_without_note',
+                            indemnification=element.indemnification.rec_name)))
 
     def check_control_state(self):
         # can't refuse cancel indemnification
@@ -281,8 +277,10 @@ class IndemnificationAssistant(Wizard, model.FunctionalErrorMixIn):
             if (element.action == 'refuse' and
                     'cancel' in element.indemnification.status):
                 self.append_functional_error(
-                    'cannot_refuse_cancel_indemnifications',
-                    {'indemnification': element.indemnification.rec_name})
+                    ValidationError(gettext(
+                            'claim_indemnification'
+                            '.msg_cannot_refuse_cancel_indemnifications',
+                            indemnification=element.indemnification.rec_name)))
 
     def transition_validation_state(self):
         Indemnification = Pool().get('claim.indemnification')
@@ -706,21 +704,6 @@ class CreateIndemnification(wizard_context.PersistentContextWizard):
                 default=True)])
     validate_scheduling = StateTransition()
 
-    @classmethod
-    def __setup__(cls):
-        super(CreateIndemnification, cls).__setup__()
-        cls._error_messages.update({
-                'wrong_date': 'End date must be greater than the start date',
-                'end_date_future': 'Indemnifications in '
-                'the future are not allowed',
-                'end_date_exceeds_loss': 'The end date must not exceed '
-                'the loss end date',
-                'end_date_required': 'End date is required',
-                'start_date_required': 'Start date is required',
-                'journal_required': 'The journal is required',
-                'beneficiary_required': 'The beneficiary is required',
-                })
-
     def possible_services(self, claim):
         res = []
         for delivered in claim.delivered_services:
@@ -914,24 +897,31 @@ class CreateIndemnification(wizard_context.PersistentContextWizard):
         input_end_date = self.definition.end_date
         service = self.definition.service
         if not self.definition.journal:
-            self.raise_user_error('journal_required')
+            raise ValidationError(gettext(
+                    'claim_indemnification.msg_journal_required'))
         if not self.definition.beneficiary:
-            self.raise_user_error('beneficiary_required')
+            raise ValidationError(gettext(
+                    'claim_indemnification.msg_beneficiary_required'))
         if self.definition.is_period:
             if not input_start_date:
-                self.raise_user_error('start_date_required')
+                raise ValidationError(gettext(
+                        'claim_indemnification.msg_start_date_required'))
             if not input_end_date:
-                self.raise_user_error('end_date_required')
+                raise ValidationError(gettext(
+                        'claim_indemnification.msg_end_date_required'))
         if (input_end_date and
                 input_end_date > utils.today()):
-            self.raise_user_error('end_date_future')
+            raise ValidationError(gettext(
+                    'claim_indemnification.msg_end_date_future'))
         if (input_end_date and service.loss.end_date and
                 input_end_date > service.loss.end_date):
-            self.raise_user_error('end_date_exceeds_loss')
+            raise ValidationError(gettext(
+                    'claim_indemnification.msg_end_date_exceeds_loss'))
         if input_end_date and input_start_date and (
                 input_end_date < input_start_date or
                 input_start_date < service.loss.start_date):
-            self.raise_user_error('wrong_date')
+            raise ValidationError(gettext(
+                    'claim_indemnification.msg_wrong_date'))
 
     def update_service_extra_data(self, values):
         service = self.definition.service
@@ -1213,24 +1203,6 @@ class SimulateIndemnification(Wizard):
             Button('Previous', 'start', 'tryton-go-previous'),
             Button('End', 'end', 'tryton-go-next', default=True)])
 
-    @classmethod
-    def __setup__(cls):
-        super(SimulateIndemnification, cls).__setup__()
-        cls._error_messages.update({
-                'no_salary': 'No salary defined on the claim %(claim)s',
-                'no_previous_indemn': 'No indemnifications on the claim to '
-                'compare with.',
-                'compute_crash': 'A crash occurs while computing the '
-                'indemnification, see stack trace for more informations.',
-                'amount_different': 'The computed amount is different from '
-                'the last indemnfication. We should have %(amount)s, got '
-                '%(computed)s instead.',
-                'no_computed_indemn': 'The indemnification rule returns no '
-                'indemnification.',
-                'no_ijss': 'No ijss defined in previous indemnification '
-                'details',
-                })
-
     def default_result(self, name):
         return {'displayers': [x._values for x in self.result.displayers]}
 
@@ -1272,8 +1244,7 @@ class SimulateIndemnification(Wizard):
             indemnifications = indemnification.do_calculate(
                 [indemnification])
             if not indemnifications:
-                msg = self.raise_user_error('no_computed_indemn',
-                    raise_exception=False)
+                msg = gettext('claim_indemnification.msg_no_previous_indemn')
                 state = KO
             else:
                 indemnification = indemnifications[0]
@@ -1281,17 +1252,17 @@ class SimulateIndemnification(Wizard):
                 if indemnification.details[0].base_amount != \
                         prev_detail.base_amount:
                     state = KO
-                    msg = self.raise_user_error('amount_different', {
-                            'amount': prev_detail.base_amount,
-                            'computed': indemnification.details[0].base_amount,
-                            }, raise_exception=False)
+                    msg = gettext(
+                        'claim_indemnification.msg_amount_different',
+                        amount=prev_detail.base_amount,
+                        computed=indemnification.details[0].base_amount)
         except Exception:
-            msg = self.raise_user_error('compute_crash', raise_exception=False)
+            msg = gettext('claim_indemnification.msg_compute_crash')
             trace = traceback.format_exc()
             state = KO
         if (not previous_indemn.details or not
                 previous_indemn.details[0].extra_details.get('ijss', 0)):
-            msg = self.raise_user_error('no_ijss', raise_exception=False)
+            msg = gettext('claim_indemnification.msg_no_ijss')
         return self._create_displayer(
             identifier=identifier, state=state, message=msg, stack_info=trace)
 
@@ -1311,8 +1282,9 @@ class SimulateIndemnification(Wizard):
             if (claim.delivered_services and not
                     claim.delivered_services[0].gross_salary):
                 test_id = claim.name
-                msg = self.raise_user_error('no_salary', {'claim': claim.name},
-                    raise_exception=False)
+                msg = gettext(
+                    'claim_indemnification.msg_no_salary',
+                    claim=claim.name)
                 displayers.append(self._create_displayer(
                         identifier=test_id, message=msg, state=KO))
                 continue
@@ -1323,8 +1295,8 @@ class SimulateIndemnification(Wizard):
                 indemnifications = [x for x in service.indemnifications
                     if any(d.kind != 'deductible' for d in x.details)]
                 if not indemnifications:
-                    msg = self.raise_user_error('no_previous_indemn',
-                        raise_exception=False)
+                    msg = gettext(
+                        'claim_indemnification.msg_no_previous_indemn')
                     displayers.append(self._create_displayer(
                             identifier=test_id, message=msg, state=KO))
                     continue

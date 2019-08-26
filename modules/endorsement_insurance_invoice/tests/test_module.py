@@ -108,11 +108,12 @@ class ModuleTestCase(test_framework.CoogTestCase):
         account_kind, = self.AccountKind.create([{
                     'name': 'Product',
                     'company': company.id,
+                    'statement': 'income',
+                    'revenue': True,
                     }])
         account, = self.Account.create([{
                     'name': 'Account for Product',
                     'code': 'Account for Product',
-                    'kind': 'revenue',
                     'company': company.id,
                     'type': account_kind.id,
                     }])

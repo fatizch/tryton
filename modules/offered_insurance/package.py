@@ -1,5 +1,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+from trytond.i18n import gettext
+from trytond.model.exceptions import ValidationError
 from trytond.pool import PoolMeta
 
 __all__ = [
@@ -53,7 +55,8 @@ class Package(metaclass=PoolMeta):
 
     def apply_package_on_covered(self, covered):
         if covered.contract.status != 'quote':
-            self.raise_user_error('package_only_on_subscription')
+            raise ValidationError(gettext(
+                    'offered.msg_package_only_on_subscription'))
         covered = self.update_covered_options(covered)
         covered = self.update_covered_extra_datas(covered)
         covered = self.update_covered_options_extra_datas(covered)

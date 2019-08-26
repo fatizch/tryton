@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<tryton>
+    <data group="1">
+        <record model="ir.message" id="msg_indemnifications_above_ceiling">
+            <field name="text">The total of indemnifications %(amount)s for %(service)s is above ceiling %(ceiling)s.</field>
+        </record>
+    </data>
+</tryton>

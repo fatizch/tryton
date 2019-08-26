@@ -1,8 +1,11 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+from trytond.i18n import gettext
 from trytond.pool import PoolMeta, Pool
 from trytond.modules.coog_core import fields
 from trytond.pyson import Eval
+
+from trytond.modules.party.exceptions import EraseError
 
 
 __all__ = [
@@ -135,15 +138,6 @@ class SelectService(metaclass=PoolMeta):
 class PartyErase(metaclass=PoolMeta):
     __name__ = 'party.erase'
 
-    @classmethod
-    def __setup__(cls):
-        super(PartyErase, cls).__setup__()
-        cls._error_messages.update({
-                'party_is_on_claim': 'The party %(party)s can not be erased '
-                'because it is covered on the following open claims: \n'
-                '%(claims)s'
-                })
-
     def check_erase(self, party):
         super(PartyErase, self).check_erase(party)
         Loss = Pool().get('claim.loss')
@@ -153,7 +147,7 @@ class PartyErase(metaclass=PoolMeta):
                 ])
         if party_losses:
             party_claims = list(set([l.claim for l in party_losses]))
-            self.raise_user_error('party_is_on_claim', {
-                    'party': party.rec_name,
-                    'claims': ', '.join([c.rec_name for c in party_claims])
-                    })
+            raise EraseError(gettext(
+                    'claim_life.msg_party_is_on_claim',
+                    party=party.rec_name,
+                    claims=', '.join(c.rec_name for c in party_claims)))

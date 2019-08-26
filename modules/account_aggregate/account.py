@@ -5,13 +5,15 @@ from itertools import groupby
 from sql import Literal, Cast, Null
 from sql.aggregate import Max, Sum
 from sql.conditionals import Coalesce, Case
-from sql.functions import ToChar, CurrentTimestamp
+from sql.functions import Function, ToChar, CurrentTimestamp
 from sql.operators import Concat
 
 from trytond import backend
 from trytond.config import config
+from trytond.i18n import gettext
 from trytond.pool import PoolMeta, Pool
 from trytond.model import Unique
+from trytond.model.exceptions import RequiredValidationError, ValidationError
 from trytond.pyson import Eval, PYSONEncoder
 from trytond.wizard import Wizard, StateView, StateTransition, StateAction, \
     Button
@@ -39,6 +41,11 @@ __all__ = [
     'OpenLineAggregated',
     'OpenLine',
     ]
+
+
+class SQLiteStrftime(Function):
+    __slots__ = ()
+    _function = 'STRFTIME'
 
 
 class FiscalYear(metaclass=PoolMeta):
@@ -81,14 +88,6 @@ class Journal(metaclass=PoolMeta):
             },
         depends=['aggregate'])
 
-    @classmethod
-    def __setup__(cls):
-        super(Journal, cls).__setup__()
-        cls._error_messages.update({
-                'never': 'Never',
-                'always': 'Always',
-                })
-
     @staticmethod
     def default_aggregate():
         return True
@@ -100,10 +99,8 @@ class Journal(metaclass=PoolMeta):
     @classmethod
     def get_aggregate_posting_options(cls):
         return [
-            ('never', cls.raise_user_error('never',
-                    raise_exception=False)),
-            ('always', cls.raise_user_error('always',
-                        raise_exception=False)),
+            ('never', gettext('account_aggregate.msg_never')),
+            ('always', gettext('account_aggregate.msg_always')),
             ]
 
 
@@ -205,6 +202,8 @@ class ConfigurationSnapshotSequence(model.CoogSQL, CompanyValueMixin):
 
     @classmethod
     def update_snapshot_sequence_type(cls):
+        if backend.name() == 'sqlite':
+            return
         cursor = Transaction().connection.cursor()
         table = cls.__table__()
         sequence = Pool().get('ir.sequence').__table__()
@@ -280,14 +279,9 @@ class Snapshot(model.CoogSQL, model.CoogView):
     @classmethod
     def __setup__(cls):
         super(Snapshot, cls).__setup__()
-        cls._error_messages.update({
-            'no_sequence_defined': 'No sequence defined in configuration',
-            'no_fiscal_year': 'No fiscal year defined with the Export Moves'
-            ' option',
-            })
         t = cls.__table__()
         cls._sql_constraints += [('snapshot_uniq_name', Unique(t, t.name),
-                'The name on shapshot must be unique')]
+                'account_aggregate.msg_snapshot_uniq_name')]
 
     @classmethod
     def create(cls, vlist):
@@ -297,7 +291,8 @@ class Snapshot(model.CoogSQL, model.CoogView):
 
         config = Configuration(1)
         if not config.snapshot_sequence:
-            cls.raise_user_error('no_sequence_defined')
+            raise RequiredValidationError(gettext(
+                    'account_aggregate.msg_no_sequence_defined'))
         vlist = [v.copy() for v in vlist]
         for values in vlist:
             if not values.get('name'):
@@ -312,7 +307,8 @@ class Snapshot(model.CoogSQL, model.CoogView):
         allowed_periods = Period.search([
                 ('fiscalyear.export_moves', '=', True)])
         if not allowed_periods:
-            cls.raise_user_error('no_fiscal_year')
+            raise ValidationError(
+                gettext('account_aggregate.msg_no_fiscal_year'))
 
         snapshot, = cls.create([{}])
         move = Move.__table__()
@@ -396,6 +392,8 @@ class LineAggregated(model.CoogSQL, model.CoogView):
     def sql_wrapper_batch(cls, col, type_):
         if ServerContext().get('from_batch', False):
             if type_ == 'date':
+                if backend.name() == 'sqlite':
+                    return SQLiteStrftime('%Y%m%d', col)
                 return ToChar(col, 'YYYYMMDD')
             elif type_ == 'decimal':
                 return Cast(col, 'VARCHAR')
@@ -428,6 +426,8 @@ class LineAggregated(model.CoogSQL, model.CoogView):
             Case((journal.aggregate,
                 Concat(Concat(
                         cls.get_aggregate_prefix(),
+                        SQLiteStrftime('%Y%m%d', move.post_date)
+                        if backend.name() == 'sqlite' else
                         ToChar(move.post_date, 'YYYYMMDD')),
                     Cast(move.snapshot, 'VARCHAR'))),
                 else_=Concat(
@@ -514,6 +514,8 @@ class LineAggregated(model.CoogSQL, model.CoogView):
             Case((journal.aggregate,
                 Concat(Concat(
                         cls.get_aggregate_prefix(),
+                        SQLiteStrftime('%Y%m%d', move.post_date)
+                        if backend.name() == 'sqlite' else
                         ToChar(move.post_date, 'YYYYMMDD')),
                     Cast(move.snapshot, 'VARCHAR'))),
                 else_=Concat(

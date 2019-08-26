@@ -2,6 +2,14 @@
 <!-- This file is part of Coog. The COPYRIGHT file at the top level of
 this repository contains the full copyright notices and license terms. -->
 <tryton>
+    <data group="1">
+        <record model="ir.message" id="msg_delete_draft_msg">
+            <field name="text">Message "%(message)s" must be in draft before deletion.</field>
+        </record>
+        <record model="ir.message" id="msg_undefined_dsn_section">
+            <field name="text">Dsn configuration is not done, message generation will be disabled.</field>
+        </record>
+    </data>
     <data>
         <record model="ir.ui.view" id="dsn_message_view_form">
             <field name="model">dsn.message</field>

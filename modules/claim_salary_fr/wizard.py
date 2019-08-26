@@ -1,5 +1,8 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+from trytond.exceptions import UserWarning
+from trytond.i18n import gettext
+from trytond.model.exceptions import ValidationError
 from trytond.pool import Pool, PoolMeta
 from trytond.wizard import Wizard, StateView, StateTransition, Button
 from trytond.transaction import Transaction
@@ -74,23 +77,6 @@ class SalariesComputation(Wizard):
     compute = StateTransition()
     set_contributions = StateTransition()
 
-    @classmethod
-    def __setup__(cls):
-        super(SalariesComputation, cls).__setup__()
-        cls._error_messages.update({
-                'no_delivered_services': 'No service can be delivered for this'
-                ' claim',
-                'no_rule': 'No net salary computation rule has been defined',
-                'indemnifications': 'This claim has indemnification periods, '
-                'you may have to cancel them or recompute if salaries are '
-                'modifed',
-                'wrong_computation_date_1': 'The computation date must be equal'
-                ' to salary periods dates',
-                'wrong_computation_date_2': 'The computation start set date is '
-                'is after the computation end date!',
-                'missing_rates': 'A rate is missing',
-                })
-
     def get_rule_service(self):
         assert Transaction().context.get('active_model') == 'claim'
         selected_id = Transaction().context.get('active_id')
@@ -119,11 +105,17 @@ class SalariesComputation(Wizard):
         return None
 
     def default_start(self, fields):
+        pool = Pool()
+        Warning = pool.get('res.user.warning')
         delivered = self.get_rule_service()
         if not delivered:
-            self.raise_user_error('no_delivered_services')
+            raise ValidationError(gettext(
+                    'claim_salary_fr.msg_no_delivered_services'))
         if delivered['is_indemnificated']:
-            self.raise_user_warning('indemnifications', 'indemnifications')
+            key = 'indemnifications'
+            if Warning.check(key):
+                raise UserWarning(key, gettext(
+                        'claim_salary_fr.msg_indemnifications'))
         net_limit_mode = delivered['net_limit_mode']
         delivered_service = delivered['delivered_service']
         return {
@@ -143,11 +135,13 @@ class SalariesComputation(Wizard):
     def default_net_salary(self, fields):
         delivered_rule = self.get_rule_service()
         if not delivered_rule:
-            self.raise_user_error('no_delivered_services')
+            raise ValidationError(gettext(
+                    'claim_salary_fr.msg_no_delivered_services'))
         delivered_service = delivered_rule['delivered_service']
         rule = delivered_rule['rule']
         if not rule:
-            self.raise_user_error('no_rule')
+            raise ValidationError(gettext(
+                    'claim_salary_fr.msg_no_rule'))
         salaries = delivered_service.salary
         return {
             'rule': rule.rule.id,
@@ -191,15 +185,19 @@ class SalariesComputation(Wizard):
     def transition_set_contributions(self):
         delivered_rule = self.get_rule_service()
         if not delivered_rule:
-            self.raise_user_error('no_delivered_services')
+            raise ValidationError(gettext(
+                    'claim_salary_fr.msg_no_delivered_services'))
         rule = delivered_rule['rule']
         if not rule:
-            self.raise_user_error('no_rule')
+            raise ValidationError(gettext(
+                    'claim_salary_fr.msg_no_rule'))
         self.check_computation_date()
         self.update_salary()
         return 'net_salary'
 
     def transition_compute(self):
+        pool = Pool()
+        Warning = pool.get('res.user.warning')
         display_warning = True
         self.check_computation_date()
         for rate in self.net_salary.rates:
@@ -207,7 +205,10 @@ class SalariesComputation(Wizard):
                 display_warning = False
                 break
         if display_warning:
-            self.raise_user_warning('missing_rates', 'missing_rates')
+            key = 'missing_rates'
+            if Warning.check(key):
+                raise UserWarning(key, gettext(
+                        'claim_salary_fr.msg_missing_rates'))
         self.update_salary()
         return 'end'
 
@@ -222,9 +223,11 @@ class SalariesComputation(Wizard):
         delivered_service = delivered_rule['delivered_service']
         salaries = delivered_service.salary
         if self.net_salary.from_date > self.net_salary.to_date:
-            self.raise_user_error('wrong_computation_date_2')
+            raise ValidationError(gettext(
+                    'claim_salary_fr.msg_wrong_computation_date_2'))
         if self.net_salary.from_date not in (
                 s.from_date for s in salaries) or \
                 self.net_salary.to_date not in (
                 s.to_date for s in salaries):
-            self.raise_user_error('wrong_computation_date_1')
+            raise ValidationError(gettext(
+                    'claim_salary_fr.msg_wrong_computation_date_1'))

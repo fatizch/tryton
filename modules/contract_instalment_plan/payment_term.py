@@ -2,6 +2,8 @@
 # this repository contains the full copyright notices and license terms.
 from dateutil.relativedelta import relativedelta
 
+from trytond.i18n import gettext
+from trytond.model.exceptions import ValidationError
 from trytond.pool import PoolMeta
 from trytond.pyson import Eval
 from trytond.server_context import ServerContext
@@ -23,10 +25,6 @@ class PaymentTerm(metaclass=PoolMeta):
     @classmethod
     def __setup__(cls):
         super(PaymentTerm, cls).__setup__()
-        cls._error_messages.update({
-                'no_invoice_provided': ('A contract invoice with an instalment '
-                    'is required to compute terms based on instalment.'),
-                })
         cls.lines.states.update({'invisible': Eval('based_on_instalment')})
 
     @staticmethod
@@ -42,15 +40,18 @@ class PaymentTerm(metaclass=PoolMeta):
             return super(PaymentTerm, self).compute(amount, currency, date)
         invoice = ServerContext().get('_current_invoice', None)
         if not invoice:
-            self.raise_user_error('no_invoice_provided')
+            raise ValidationError(gettext(
+                    'contract_instalment_plan.msg_no_invoice_provided'))
         instalment = invoice.instalment_plan
         if not instalment:
-            self.raise_user_error('no_invoice_provided')
+            raise ValidationError(gettext(
+                    'contract_instalment_plan.msg_no_invoice_provided'))
         contract = instalment.contract
         start_date = invoice.start
         end_date = invoice.end
         if not start_date or not end_date:
-            self.raise_user_error('no_invoice_provided')
+            raise ValidationError(gettext(
+                    'contract_instalment_plan.msg_no_invoice_provided'))
         previous_invoices = contract.get_future_invoices(contract,
             instalment.invoice_period_start,
             start_date + relativedelta(days=-1))

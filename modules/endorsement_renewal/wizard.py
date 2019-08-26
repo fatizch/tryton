@@ -1,6 +1,9 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 from dateutil.relativedelta import relativedelta
+
+from trytond.i18n import gettext
+from trytond.model.exceptions import ValidationError
 from trytond.pool import Pool, PoolMeta
 from trytond.modules.endorsement.wizard import \
     EndorsementWizardStepMixin, add_endorsement_step
@@ -21,14 +24,6 @@ class ContractRenew(EndorsementWizardStepMixin):
     current_end_date = fields.Date('Current End Date', readonly=True)
     new_period_start_date = fields.Date('New Period Start Date', readonly=True)
     new_period_end_date = fields.Date('New Period End Date', readonly=True)
-
-    @classmethod
-    def __setup__(cls):
-        super(ContractRenew, cls).__setup__()
-        cls._error_messages.update({
-                'not_renewable': 'The contract %s is not renewable ',
-                'already_renewed': 'The contract %s is already renewed ',
-                })
 
     @classmethod
     def get_methods_for_model(cls, model_name):
@@ -75,10 +70,15 @@ class ContractRenew(EndorsementWizardStepMixin):
     def check_before_start(cls, select_screen):
         contract = select_screen.contract
         if not contract.is_renewable:
-            cls.append_functional_error('not_renewable', (contract.rec_name,))
+            cls.append_functional_error(
+                ValidationError(gettext(
+                        'endorsement_renewal.msg_not_renewable',
+                        contract=contract.rec_name)))
         elif contract.end_date != contract.activation_history[-1].end_date:
-            cls.append_functional_error('already_renewed',
-                (contract.rec_name,))
+            cls.append_functional_error(
+                ValidationError(gettext(
+                        'endorsement_renewal.msg_already_renewed',
+                        contract=contract.rec_name)))
 
     @classmethod
     def add_renewal_endorsement(cls, endorsement):

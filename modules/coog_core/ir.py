@@ -7,6 +7,8 @@ from lxml import etree
 from sql.operators import Concat
 
 from trytond import backend
+from trytond.exceptions import UserWarning
+from trytond.i18n import gettext
 from trytond.pool import PoolMeta, Pool
 from trytond.server_context import ServerContext
 from trytond.cache import Cache
@@ -247,10 +249,10 @@ class View(ExportImportMixin, metaclass=PoolMeta):
             for attr in attributes.iterchildren("*"):
                 rng.append(attr)
         elif type_ == 'form':
-            widgets = rng.xpath(
+            widgets, = rng.xpath(
                 '//ns:define/ns:optional/ns:attribute'
-                '[@name="widget"]/ns:choice',
-                namespaces={'ns': 'http://relaxng.org/ns/structure/1.0'})[0]
+                '/ns:name[.="widget"]/following-sibling::ns:choice[1]',
+                namespaces={'ns': 'http://relaxng.org/ns/structure/1.0'})
             for widget_name in FORM_WIDGETS:
                 subelem = etree.SubElement(widgets,
                     '{http://relaxng.org/ns/structure/1.0}value')
@@ -483,13 +485,6 @@ class IrModel(ExportImportMixin, metaclass=PoolMeta):
     @classmethod
     def __setup__(cls):
         super(IrModel, cls).__setup__()
-        cls._error_messages.update({
-                'force_set_warning': 'This will forcefully set the history for'
-                ' this model, a full database update will be required.',
-                'force_unset_warning': 'This will deactivate the history for '
-                'this model, the history table will be kept in the database '
-                'until it is manually removed.',
-                })
         cls._buttons.update({
                 'force_set_history': {
                     'invisible':
@@ -558,21 +553,30 @@ class IrModel(ExportImportMixin, metaclass=PoolMeta):
     @classmethod
     @model.CoogView.button
     def force_set_history(cls, models):
+        pool = Pool()
+        Warning = pool.get('res.user.warning')
         for cur_model in models:
             assert cur_model.history_status in ('never_activated',
                 'partially_deactivated', 'waiting_for_removal')
-        cls.raise_user_warning('force_set_warning', 'force_set_warning', ())
+        if Warning.check('force_set_warning'):
+            raise UserWarning(
+                'force_set_warning',
+                gettext('coog_core.msg_force_set_warning'))
         cls.write(models, {'manual_history': True})
         cls.update_ir_status()
 
     @classmethod
     @model.CoogView.button
     def force_unset_history(cls, models):
+        pool = Pool()
+        Warning = pool.get('res.user.warning')
         for cur_model in models:
             assert cur_model.history_status in ('manual',
                 'waiting_for_activation')
-        cls.raise_user_warning('force_unset_warning',
-            'force_unset_warning', ())
+        if Warning.check('force_unset_warning'):
+            raise UserWarning(
+                'force_unset_warning',
+                gettext('coog_core.msg_force_unset_warning'))
         cls.write(models, {'manual_history': False})
         cls.update_ir_status()
 

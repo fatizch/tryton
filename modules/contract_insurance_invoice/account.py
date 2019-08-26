@@ -1,5 +1,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+from trytond.i18n import gettext
+from trytond.model.exceptions import ValidationError
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Id
 
@@ -14,15 +16,6 @@ __all__ = [
 class Configuration(metaclass=PoolMeta):
     __name__ = 'account.configuration'
 
-    @classmethod
-    def __setup__(cls):
-        super(Configuration, cls).__setup__()
-        cls._error_messages.update({
-                'rounding_document_method_error': 'Following products or '
-                'coverages : %s have tax included option which is not allowed '
-                'with document rounding method.'
-                })
-
     def check_taxes_included_option(self, company):
         pool = Pool()
         Product = pool.get('offered.product')
@@ -30,13 +23,17 @@ class Configuration(metaclass=PoolMeta):
         products = Product.search([('company', '=', company.id),
                 ('taxes_included_in_premium', '=', True)])
         if products:
-            self.raise_user_error('rounding_document_method_error',
-                ','.join([product.name for product in products]))
+            raise ValidationError(gettext(
+                    'contract_insurance_invoice'
+                    '.msg_rounding_document_method_error',
+                    name=','.join(product.name for product in products)))
         options = Option.search([('company', '=', company.id),
                 ('taxes_included_in_premium', '=', True)])
         if options:
-            self.raise_user_error('rounding_document_method_error',
-                ','.join([option.name for option in options]))
+            raise ValidationError(gettext(
+                    'contract_insurance_invoice'
+                    '.msg_rounding_document_method_error',
+                    name=','.join(option.name for option in options)))
 
     @classmethod
     def validate(cls, configurations):

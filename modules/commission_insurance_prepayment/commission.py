@@ -7,6 +7,7 @@ from sql.operators import Or
 from sql.aggregate import Sum
 from sql.conditionals import Case, Coalesce
 
+from trytond.i18n import gettext
 from trytond.tools import decistmt
 from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
@@ -46,12 +47,6 @@ class Commission(metaclass=PoolMeta):
                 ('amount', '!=', 0),
                 (),
                 )]
-        cls._error_messages.update({
-                'prepayment_amortization': 'Prepayment Amortization',
-                'prepayment': 'Prepayment',
-                'redeemed_prepayment': 'Redeemed prepayment: '
-                '%(redeemed_amount)s\n',
-                })
 
     @classmethod
     def _get_origin(cls):
@@ -69,11 +64,11 @@ class Commission(metaclass=PoolMeta):
         invoice_line = super(Commission, cls)._get_invoice_line(key, invoice,
             commissions)
         if invoice_line and key['is_prepayment']:
-            invoice_line.description = cls.raise_user_error(
-                    'prepayment', raise_exception=False)
+            invoice_line.description = gettext(
+                'commission_insurance_prepayment.msg_prepayment')
         elif invoice_line and key['with_prepayment']:
-            invoice_line.description = cls.raise_user_error(
-                    'prepayment_amortization', raise_exception=False)
+            invoice_line.description = gettext(
+                'commission_insurance_prepayment.msg_prepayment_amortization')
         return invoice_line
 
     def _group_to_agent_option_key(self):
@@ -141,9 +136,11 @@ class Commission(metaclass=PoolMeta):
             if redeemed_amount <= Decimal('0.001'):
                 redeemed_amount = Decimal('0.0')
             if redeemed_amount != 0:
-                description = self.raise_user_error('redeemed_prepayment', {
-                        'redeemed_amount': redeemed_amount
-                        }, raise_exception=False) + description
+                description = (gettext(
+                        'commission_insurance_prepayment'
+                        '.msg_redeemed_prepayment',
+                        redeemed_amount=redeemed_amount)
+                    + '\n' + description)
                 description += ' - %s' % redeemed_amount
         return description
 

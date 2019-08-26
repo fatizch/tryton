@@ -5,6 +5,8 @@ from sql.aggregate import Max
 from sql import Literal, Null
 from sql.operators import Greater
 
+from trytond.i18n import gettext
+from trytond.model.exceptions import ValidationError
 from trytond.pool import Pool, PoolMeta
 from trytond.wizard import Wizard
 from trytond.pyson import PYSONEncoder, Eval
@@ -79,10 +81,6 @@ class Party(ModelCurrency, model.CoogView):
         cls.receivable.depends += ['currency_digits']
         cls.receivable_today.digits = (16, Eval('currency_digits', 2))
         cls.receivable_today.depends += ['currency_digits']
-        cls._error_messages.update({
-                'too_many_postponements': 'There is already a reconciliation '
-                'postponement on the party %(party)s',
-                })
 
     @classmethod
     def view_attributes(cls):
@@ -95,9 +93,9 @@ class Party(ModelCurrency, model.CoogView):
         with model.error_manager():
             for party in parties:
                 if len(party.reconciliation_postponements) > 1:
-                    cls.append_functional_error('too_many_postponements', {
-                        'party': party.rec_name,
-                        })
+                    raise ValidationError(gettext(
+                            'account_cog.msg_too_many_postponements',
+                            party=party.rec_name))
 
     @fields.depends('reconciliation_postponements',
         'inactive_reconciliation_postponements')
@@ -272,7 +270,7 @@ class SynthesisMenu(metaclass=PoolMeta):
         account = pool.get('account.account').__table__()
         move = pool.get('account.move').__table__()
         return table.join(account, condition=((account.id == table.account)
-                & (account.kind == 'receivable'))).\
+                & (account.type.receivable == Literal(True)))).\
             join(move, condition=((move.id == table.move))).\
             select(*columns,
                 where=((table.credit > 0) & (table.reconciliation == Null)))
@@ -290,7 +288,7 @@ class SynthesisMenuOpen(Wizard):
             return super(SynthesisMenuOpen, self).get_action(record)
         if Model.__name__ == 'party.synthesis.menu.move.line':
             domain = PYSONEncoder().encode([('party', '=', record.id),
-                    ('account.kind', '=', 'receivable'),
+                    ('account.type.receivable', '=', True),
                     ('credit', '>', 0)])
             actions = {
                 'res_model': 'account.move.line',

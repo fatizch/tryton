@@ -113,7 +113,6 @@ Create chart of accounts::
     >>> bank_clearing.type = accounts['payable'].type
     >>> bank_clearing.reconcile = True
     >>> bank_clearing.deferral = True
-    >>> bank_clearing.kind = 'other'
     >>> bank_clearing.save()
 
 Create Product::
@@ -424,7 +423,7 @@ payment)::
     >>> create_payment.form.journal = journal
     >>> MoveLine = Model.get('account.move.line')
     >>> for line in [x for x in contract_invoice_2.invoice.move.lines
-    ...         if x.account.kind == 'receivable']:
+    ...         if x.account.type.receivable]:
     ...     create_payment.form.lines_to_pay.append(MoveLine(line.id))
     >>> create_payment.form.description = "test"
     >>> create_payment.form.bank_account = mandate.account_number.account
@@ -458,7 +457,7 @@ used to generate the previous payment just before processing it::
     >>> billing_information_no_sepa.sepa_mandate = None
     >>> billing_information_no_sepa.direct_debit_account = None
     >>> billing_information_no_sepa.save()
-    >>> payment.state = 'approved'
+    >>> payment.click('approve')
     >>> payment.save()
     >>> process_payment = Wizard('account.payment.process', [payment])
     >>> process_payment.execute('pre_process')

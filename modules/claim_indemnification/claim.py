@@ -10,9 +10,12 @@ from itertools import groupby
 from collections import defaultdict
 
 from trytond import backend
+from trytond.exceptions import UserWarning
+from trytond.i18n import gettext
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, Or, Bool, In, Not, Len
 from trytond.model import ModelView, Unique
+from trytond.model.exceptions import ValidationError, AccessError
 from trytond.transaction import Transaction
 from trytond.rpc import RPC
 from trytond.tools import grouped_slice, reduce_ids
@@ -183,26 +186,10 @@ class Claim(metaclass=PoolMeta):
 class Loss(metaclass=PoolMeta):
     __name__ = 'claim.loss'
 
-    @classmethod
-    def __setup__(cls):
-        super(Loss, cls).__setup__()
-        cls._error_messages.update({
-                'indemnized_losses': 'Some draft losses have active '
-                'indemnifications, they may have to be reevaluated:\n\n%s',
-                'bad_indemnification_shares': 'Total share amount for service '
-                '%(service)s should be 100: %(total_share)s %%',
-                'missing_end_date': 'The end date is missing on the loss',
-                'missing_closing_reason': 'The closing reason is missing on the'
-                ' loss',
-                'unpaid_indemnification': '%s indemnification(s) remains '
-                'unpaid',
-                'gap_found_in_period': 'A gap has been detected from %s to %s',
-                'no_indemnifications': 'No indemnification has been found',
-                })
-
     def check_indemnification_gaps(self, service):
         pool = Pool()
         Date = pool.get('ir.date')
+        Warning = pool.get('res.user.warning')
         lang = pool.get('res.user')(Transaction().user).language
         indemnifications = [x
             for x in service.indemnifications
@@ -214,41 +201,52 @@ class Loss(metaclass=PoolMeta):
             previous_indemn = indemnifications[index]
             if (previous_indemn.end_date and (indemn.start_date -
                     previous_indemn.end_date).days > 1):
-                self.__class__.raise_user_warning('gap_found_in_period_%s' %
-                    '-'.join([str(previous_indemn.id), str(indemn.id)]),
-                    'gap_found_in_period',
-                    (Date.date_as_string(previous_indemn.end_date, lang),
-                        Date.date_as_string(indemn.start_date, lang)))
+                key = ('gap_found_in_period_%s' %
+                    '-'.join([str(previous_indemn.id), str(indemn.id)]))
+                if Warning.check(key):
+                    raise UserWarning(key, gettext(
+                            'claim_indemnification.msg_gap_found_in_period',
+                            from_=Date.date_as_string(
+                                previous_indemn.end_date, lang),
+                            to=Date.date_as_string(indemn.start_date, lang)))
         if indemnifications and indemn and indemn.end_date < self.end_date:
-            self.__class__.raise_user_warning('gap_found_in_period_%s' %
-                '-'.join([str(indemn.id), str(self.id)]),
-                'gap_found_in_period', (
-                    Date.date_as_string(indemn.end_date, lang),
-                    Date.date_as_string(self.end_date, lang)))
+            key = ('gap_found_in_period_%s' %
+                '-'.join([str(indemn.id), str(self.id)]))
+            if Warning.check(key):
+                raise UserWarning(key, gettext(
+                        'claim_indemnification.msg_gap_found_in_period',
+                        from_=Date.date_as_string(indemn.end_date, lang),
+                        to=Date.date_as_string(self.end_date, lang)))
 
     def close(self, sub_status, date=None):
+        pool = Pool()
+        Warning = pool.get('res.user.warning')
         super(Loss, self).close(sub_status, date)
         all_service_refused = all([x.eligibility_status == 'refused'
             for x in self.services])
         if (not all_service_refused and self.has_end_date
                 and not self.end_date):
-            self.__class__.raise_user_error('missing_end_date')
+            raise ValidationError(gettext(
+                    'claim_indemnification.msg_missing_end_date'))
         if (not all_service_refused and self.has_end_date
                 and not self.closing_reason):
-            self.__class__.raise_user_error('missing_closing_reason')
+            raise ValidationError(gettext(
+                    'claim_indemnification.msg_missing_closing_reason'))
         for service in self.services:
             if service.eligibility_status == 'refused':
                 continue
             if not service.indemnifications:
-                self.__class__.raise_user_warning(
-                    'no_indemnifications_%s' % service.id,
-                    'no_indemnifications')
+                key = 'no_indemnifications_%s' % service.id
+                if Warning.check(key):
+                    raise UserWarning(key, gettext(
+                            'claim_indemnification.msg_no_indemnifications'))
                 continue
             unpaid = [x for x in service.indemnifications
                 if x.status == 'calculated']
             if unpaid:
-                self.__class__.raise_user_error(
-                    'unpaid_indemnification', len(unpaid))
+                raise ValidationError(gettext(
+                        'claim_indemnification.msg_unpaid_indemnification',
+                        count=len(unpaid)))
             if not self.end_date:
                 continue
             self.check_indemnification_gaps(service)
@@ -264,9 +262,12 @@ class Loss(metaclass=PoolMeta):
             if not share_valid:
                 if service_delegation.claim_create_indemnifications or \
                         service_delegation.claim_pay_indemnifications:
-                    self.append_functional_error('bad_indemnification_shares', {
-                            'service': self.rec_name,
-                            'total_share': str(int(total_share * 100))})
+                    self.append_functional_error(
+                        ValidationError(gettext(
+                                'claim_indemnification'
+                                '.msg_bad_indemnification_shares',
+                                service=self.rec_name,
+                                total_share=str(int(total_share * 100)))))
 
     def total_share_valid(self, service):
         total_share = sum(x.share for x in service.indemnifications)
@@ -275,6 +276,8 @@ class Loss(metaclass=PoolMeta):
     @classmethod
     @model.CoogView.button
     def activate(cls, losses):
+        pool = Pool()
+        Warning = pool.get('res.user.warning')
         indemnized_losses = []
         for loss in losses:
             if loss.state == 'active':
@@ -286,9 +289,12 @@ class Loss(metaclass=PoolMeta):
                     indemnized_losses.append(loss)
                     break
         if indemnized_losses:
-            cls.raise_user_warning('indemnized_' + ','.join(
-                    str(x.id) for x in indemnized_losses), 'indemnized_losses',
-                ('\n'.join(x.rec_name for x in indemnized_losses),))
+            key = 'indemnized_' + ','.join(
+                str(x.id) for x in indemnized_losses)
+            if Warning.check(key):
+                raise UserWarning(key, gettext(
+                        'claim_indemnification.msg_indemnized_losses',
+                        names='\n'.join(x.rec_name for x in indemnized_losses)))
         super(Loss, cls).activate(losses)
 
 
@@ -338,19 +344,6 @@ class ClaimService(metaclass=PoolMeta):
         cls._buttons.update({
                 'create_indemnification': {},
                 'fill_extra_datas': {},
-                })
-        cls._error_messages.update({
-                'overlap_date': 'Are you sure you want to cancel '
-                'the periods between %s and %s?',
-                'offset_date': 'The date is not equal to the cancelled date',
-                'multiple_capital_indemnifications': 'There may not be '
-                'multiple capital indemnifications for a given beneficiary, '
-                'the current one will be cancelled',
-                'period_will_be_deleted': 'The period "%(description)s" will '
-                'be definitely deleted for the calculation, event if you '
-                'cancel the process',
-                'indemnification_paid': 'The service %(service)s has non-'
-                'cancelled indemnifications',
                 })
 
     @classmethod
@@ -485,7 +478,9 @@ class ClaimService(metaclass=PoolMeta):
         # We cancel / delete all indemnifications whose period overstep
         # the given `at_date` parameter. For capitals, we only check the
         # `beneficiary` parameter, `None` will clear all
-        Date = Pool().get('ir.date')
+        pool = Pool()
+        Date = pool.get('ir.date')
+        Warning = pool.get('res.user.warning')
         to_cancel = []
         to_delete = []
         ClaimIndemnification = Pool().get('claim.indemnification')
@@ -507,22 +502,31 @@ class ClaimService(metaclass=PoolMeta):
             if (service.benefit.indemnification_kind != 'capital' and
                     (from_date > to_cancel[0].start_date or
                         to_date < to_cancel[-1].end_date)):
-                cls.raise_user_error('offset_date')
+                raise ValidationError(gettext(
+                        'claim_indemnification.msg_offset_date'))
             if service.benefit.indemnification_kind != 'capital':
-                cls.raise_user_warning('overlap_date', 'overlap_date',
-                    (Date.date_as_string(to_cancel[0].start_date),
-                        Date.date_as_string(to_cancel[-1].end_date)))
+                key = 'overlap_date'
+                if Warning.check(key):
+                    raise UserWarning(key, gettext(
+                            'claim_indemnification.msg_overlap_date',
+                            start=Date.date_as_string(to_cancel[0].start_date),
+                            end=Date.date_as_string(to_cancel[-1].end_date)))
             else:
-                cls.raise_user_warning('multiple_capital_indemnifications_%s' %
-                    str([x.id for x in services]),
-                    'multiple_capital_indemnifications')
+                key = ('multiple_capital_indemnifications_%s' %
+                    str([x.id for x in services]))
+                if Warning.check(key):
+                    raise UserWarning(key, gettext(
+                            'claim_indemnification'
+                            '.msg_multiple_capital_indemnifications'))
             ClaimIndemnification.cancel_indemnification(to_cancel)
         if to_delete:
             for deletion in to_delete:
-                cls.raise_user_warning('period_%s' % deletion.id,
-                    'period_will_be_deleted', {
-                        'description': deletion.rec_name + ' - ' +
-                        deletion.service.rec_name})
+                key = 'period_%s' % deletion.id
+                if Warning.check(key):
+                    raise UserWarning(key, gettext(
+                            'claim_indemnification.msg_period_will_be_deleted',
+                            description=deletion.rec_name + ' - ' +
+                            deletion.service.rec_name))
 
             ClaimIndemnification.delete(to_delete)
 
@@ -645,8 +649,9 @@ class ClaimService(metaclass=PoolMeta):
             if any(x.status in ('calculated', 'scheduled', 'controlled',
                         'validated', 'paid')
                     for x in service.indemnifications):
-                cls.raise_user_error('indemnification_paid', {
-                        'service': service.rec_name})
+                raise ValidationError(gettext(
+                        'claim_indemnification.msg_indemnification_paid',
+                        service=service.rec_name))
         super().clear_origin_service(services)
 
 
@@ -821,51 +826,7 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
                     'invisible': Not(In(Eval('status'),
                             ['paid', 'validated']))},
                 })
-        cls._error_messages.update({
-                'cannot_create_indemnifications': 'The insurer %(insurer)s '
-                'did not allow to create indemnifications.',
-                'cannot_pay_indemnifications': 'The insurer %(insurer)s '
-                'did not allow to pay indemnifications.',
-                'cannot_schedule_draft_loss': 'Cannot schedule '
-                'indemnifications for draft loss %(loss)s',
-                'schedule_cancel_period_first': 'Cannot schedule '
-                'indemnifications as there is cancelled indemnification '
-                'not scheduled for service %(service)s',
-                'no_bank_account': 'No bank account found for the beneficiary '
-                '%s on loss %s',
-                'not_enough_money': 'The invoices for %(party_names)s '
-                'are negative and contain a continuous payback: '
-                'they will not be validated',
-                'missing_previous_indemnification': 'You can not schedule '
-                'the indemnification %(indemnification)s because a scheduled '
-                'period of %(missing_days)s day(s) should be ahead',
-                'tax_change_in_period': 'The tax %(tax)s starts on '
-                '%(tax_start)s and ends on %(tax_end)s . Please create '
-                'different indemnifications between %(period_start)s and '
-                '%(period_end)s so that no tax changes happen during a '
-                'given indemnification.',
-                'overlapping_indemnification': 'The indemnification to '
-                'schedule duplicates exisiting one(s): %s',
-                'same_benefit_same_service': 'The following indemnification '
-                'period(s) duplicates the period to schedule (same benefit, '
-                'loss and option):',
-                'period_duplicate_data': '%(covered)s: with the contract '
-                'number: %(ctr)s, claim: %(number)s, period: %(period)s '
-                '(%(overlap)s day(s) of overlap)',
-                'other_loss_same_covered': 'The following indemnification '
-                'period(s) duplicates the period to schedule (with another '
-                'loss):',
-                'period_duplicate_data': '%(covered)s: with the contract '
-                'number: %(ctr)s, claim: %(number)s, period: %(period)s '
-                '(%(overlap)s day(s) of overlap)',
-                'scheduling_blocked': 'Scheduling is blocked for '
-                'indemnification %(indemnification)s, claim\'s '
-                'sub status is %(sub_status)s',
-                'quote_contract': 'Scheduling is blocked for '
-                'indemnification %(indemnification)s, contract %(contract)s is '
-                'not activated',
-                })
-        cls._order = [('start_date', 'ASC')]
+        cls._order.insert(0, ('start_date', 'ASC'))
 
     @classmethod
     def __post_setup__(cls):
@@ -928,8 +889,11 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
         for coverage in coverages:
             if not coverage.get_insurer_flag(coverage,
                     'claim_create_indemnifications'):
-                cls.append_functional_error('cannot_create_indemnifications',
-                    {'insurer': coverage.insurer.rec_name})
+                cls.append_functional_error(
+                    ValidationError(gettext(
+                            'claim_indemnification'
+                            '.msg_cannot_create_indemnifications',
+                            insurer=coverage.insurer.rec_name)))
 
     @classmethod
     def check_tax_dates(cls, indemnifications):
@@ -949,13 +913,17 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
                 indemn_end = indemn.end_date or datetime.date.max
                 if (indemn.start_date < tax_start <= indemn_end) \
                         or (indemn.start_date <= tax_end < indemn_end):
-                    cls.append_functional_error('tax_change_in_period', {
-                            'tax': tax.rec_name,
-                            'tax_start': Date.date_as_string(tax_start),
-                            'tax_end': Date.date_as_string(tax_end),
-                            'period_start': Date.date_as_string(
-                                indemn.start_date),
-                            'period_end': Date.date_as_string(indemn.end_date)})
+                    cls.append_functional_error(
+                        ValidationError(gettext(
+                                'claim_indemnification'
+                                '.msg_tax_change_in_period',
+                                tax=tax.rec_name,
+                                tax_start=Date.date_as_string(tax_start),
+                                tax_end=Date.date_as_string(tax_end),
+                                period_start=Date.date_as_string(
+                                    indemn.start_date),
+                                period_end=Date.date_as_string(indemn.end_date))
+                            ))
 
     @classmethod
     @model.CoogView.button_action(
@@ -1310,23 +1278,34 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
         to_schedule = []
         for indemnification in indemnifications:
             if (indemnification.service.contract.status == 'quote'):
-                cls.append_functional_error('quote_contract',
-                    {'indemnification': indemnification.rec_name,
-                        'contract': indemnification.service.contract.rec_name})
+                cls.append_functional_error(
+                    ValidationError(gettext(
+                            'claim_indemnification.msg_quote_contract',
+                            indemnification=indemnification.rec_name,
+                            contract=indemnification.service.contract.rec_name))
+                    )
             if (indemnification.service.claim.sub_status and indemnification.
                     service.claim.sub_status.block_indemnifications):
-                cls.append_functional_error('scheduling_blocked',
-                    {'indemnification': indemnification.rec_name,
-                        'sub_status': indemnification.service.claim.
-                            sub_status.name})
+                cls.append_functional_error(
+                    ValidationError(gettext(
+                            'claim_indemnification.msg_scheduling_blocked',
+                            indemnification=indemnification.rec_name,
+                            sub_status=(indemnification.service.claim
+                                .  sub_status.name))))
             if ('cancel' not in indemnification.status and
                     indemnification.service in service_to_not_schedule):
                 # Cancel indemnification must be schedule first
-                cls.append_functional_error('schedule_cancel_period_first',
-                    {'service': indemnification.service.rec_name})
+                cls.append_functional_error(
+                    ValidationError(gettext(
+                            'claim_indemnification'
+                            '.msg_schedule_cancel_period_first',
+                            service=indemnification.service.rec_name)))
             if indemnification.service.loss.state == 'draft':
-                cls.append_functional_error('cannot_schedule_draft_loss',
-                    {'loss': indemnification.service.loss.rec_name})
+                cls.append_functional_error(
+                    ValidationError(gettext(
+                            'claim_indemnification'
+                            '.msg_cannot_schedule_draft_loss',
+                            loss=indemnification.service.loss.rec_name)))
 
             if indemnification.status != 'cancelled':
                 previous_indemnification = \
@@ -1338,16 +1317,19 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
                         and previous_indemnification.status == 'calculated'
                         and previous_indemnification not in to_schedule):
                     cls.append_functional_error(
-                        'missing_previous_indemnification', {
-                            'indemnification': indemnification.rec_name,
-                            'missing_days': delta - 1,
-                            })
+                        ValidationError(gettext(
+                                'claim_indemnification'
+                                '.msg_missing_previous_indemnification',
+                                indemnification=indemnification.rec_name,
+                                missing_days=delta - 1)))
             journal = indemnification.journal
             if (journal and journal.needs_bank_account() and
                     not indemnification.bank_account):
-                cls.append_functional_error('no_bank_account', (
-                        indemnification.beneficiary.rec_name,
-                        indemnification.service.claim.name))
+                cls.append_functional_error(
+                    ValidationError(gettext(
+                            'claim_indemnification.msg_no_bank_account',
+                            beneficiary=indemnification.beneficiary.rec_name,
+                            loss=indemnification.service.claim.name)))
             to_schedule.append(indemnification)
 
     @classmethod
@@ -1387,6 +1369,7 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
         indemnifications = sorted(indemnifications,
             key=cls._group_by_duplicate)
         pool = Pool()
+        Warning = pool.get('res.user.warning')
         for covered, cov_indemnifications in groupby(indemnifications,
                 key=cls._group_by_duplicate):
             if not covered:
@@ -1411,31 +1394,37 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
             x['existing'].service.option == x['to_sched'].service.option]
 
         if with_different_loss:
-            warning_msg = cls.raise_user_error('other_loss_same_covered',
-            raise_exception=False) + '\n'.join(
-                [cls.raise_user_error('period_duplicate_data', {
-                            'covered': x['covered'].rec_name,
-                            'number': x['claim'].name,
-                            'ctr': x['claim'].get_contract().contract_number
+            warning_msg = (gettext(
+                    'claim_indemnification.msg_other_loss_same_covered'),
+                + '\n'.join(
+                    [gettext(
+                            'claim_indemnification.msg_period_duplicate_data',
+                            covered=x['covered'].rec_name,
+                            number=x['claim'].name,
+                            ctr=x['claim'].get_contract().contract_number
                             if x['claim'].get_contract() else '',
-                            'period': x['existing'].rec_name,
-                            'overlap': x['overlap'],
-                            }, raise_exception=False)
-                   for x in with_different_loss])
-            cls.raise_user_warning(warning_msg, warning_msg)
+                            period=x['existing'].rec_name,
+                            overlap=x['overlap'])
+                        for x in with_different_loss]))
+            key = 'other_loss_same_covered'
+            if Warning.check(key):
+                raise UserWarning(key, warning_msg)
         if same_benefit_option:
-            warning_msg = cls.raise_user_error('same_benefit_same_service',
-            raise_exception=False) + '\n'.join(
-                [cls.raise_user_error('period_duplicate_data', {
-                            'covered': x['covered'].rec_name,
-                            'number': x['claim'].name,
-                            'ctr': x['claim'].get_contract().contract_number
+            warning_msg = (gettext(
+                    'claim_indemnification.msg_same_benefit_same_service')
+                + '\n'.join(
+                    [gettext(
+                            'claim_indemnification.msg_period_duplicate_data',
+                            covered=x['covered'].rec_name,
+                            number=x['claim'].name,
+                            ctr=x['claim'].get_contract().contract_number
                             if x['claim'].get_contract() else '',
-                            'period': x['existing'].rec_name,
-                            'overlap': x['overlap'],
-                            }, raise_exception=False)
-                    for x in same_benefit_option])
-            cls.raise_user_warning(warning_msg, warning_msg)
+                            period=x['existing'].rec_name,
+                            overlap=x['overlap'])
+                    for x in same_benefit_option]))
+            key = 'same_benefit_same_service'
+            if Warning.check(key):
+                raise UserWarning(key, warning_msg)
 
     @classmethod
     @ModelView.button
@@ -1727,8 +1716,11 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
         for coverage in coverages:
             if not coverage.get_insurer_flag(coverage,
                     'claim_pay_indemnifications'):
-                cls.append_functional_error('cannot_pay_indemnifications',
-                    {'insurer': coverage.insurer.rec_name})
+                cls.append_functional_error(
+                    ValidationError(gettext(
+                            'claim_indemnification'
+                            '.msg_cannot_pay_indemnifications',
+                            insurer=coverage.insurer.rec_name)))
 
     @classmethod
     @ModelView.button_action(
@@ -1873,11 +1865,6 @@ class IndemnificationDetail(model.CoogSQL, model.CoogView, ModelCurrency,
                 Eval('indemnification_status') != 'calculated'))
         cls.extra_details.depends += [
             'indemnification_status', 'is_manual_indemnification']
-        cls._error_messages.update({
-                'capital_string': 'Capital',
-                'indemnification_not_removable': 'The indemnification '
-                '%(indemnification)s cannot be removed',
-                })
         cls._order = [('start_date', 'ASC')]
 
     @classmethod
@@ -1926,9 +1913,10 @@ class IndemnificationDetail(model.CoogSQL, model.CoogView, ModelCurrency,
             for indemnification in indemnifications:
                 if not indemnification.is_removable():
                     cls.append_functional_error(
-                        'indemnification_not_removable', {
-                            'indemnification': indemnification.rec_name,
-                            })
+                        AccessError(gettext(
+                                'claim_indemnification'
+                                '.msg_indemnification_not_removable',
+                                indemnification=indemnification.rec_name)))
 
     def get_indemnification_note(self, name):
         return self.indemnification.note
@@ -1945,8 +1933,7 @@ class IndemnificationDetail(model.CoogSQL, model.CoogView, ModelCurrency,
 
     def get_duration_description(self, name):
         if self.indemnification.kind == 'capital':
-            return self.raise_user_error('capital_string',
-                raise_exception=False)
+            return gettext('claim_indemnification.msg_capital')
         return '%s %s(s)' % (self.nb_of_unit, self.unit_string)
 
     def get_benefit_description(self, name):

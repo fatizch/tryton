@@ -2,6 +2,8 @@
 # this repository contains the full copyright notices and license terms.
 from textwrap import TextWrapper
 
+from trytond.i18n import gettext
+from trytond.model.exceptions import ValidationError
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, If
 from trytond.modules.coog_core import model, fields
@@ -81,9 +83,6 @@ class ClaimService(metaclass=PoolMeta):
                 },
             'reject_services': {},
             })
-        cls._error_messages.update({
-                'warning_refuse_service': 'Confirm service refusal'
-                })
 
     @staticmethod
     def default_eligibility_status():
@@ -216,15 +215,9 @@ class ClaimIndemnification(metaclass=PoolMeta):
     __name__ = 'claim.indemnification'
 
     @classmethod
-    def __setup__(cls):
-        super(ClaimIndemnification, cls).__setup__()
-        cls._error_messages.update({
-                'ineligible': 'The claim service is not eligible',
-                })
-
-    @classmethod
     def check_schedulability(cls, indemnifications):
         super(ClaimIndemnification, cls).check_schedulability(indemnifications)
         for i in indemnifications:
             if i.service.eligibility_status != 'accepted':
-                cls.append_functional_error('ineligible')
+                raise ValidationError(gettext(
+                        'claim_eligibility.msg_ineligible'))

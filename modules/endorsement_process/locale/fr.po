@@ -2,31 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:endorsement.ask_next_endorsement:"
-msgid "Do you want to execute the endorsement \"%(next_endorsement)s\" too?"
-msgstr "Souhaitez-vous exécuter l'avenant \"%(next_endorsement)s\" également?"
-
-msgctxt "error:endorsement.start_process:"
-msgid ""
-"The chosen endorsement definition cannot be applied on several contracts."
-msgstr "L'avenant choisi ne peut pas être appliqué sur plusieurs contrats."
-
-msgctxt "error:endorsement:"
-msgid "Enter a value for field '%s' of '%s'"
-msgstr "Entrez  une valeur pour le champ '%s' de '%s'"
-
-msgctxt "error:endorsement:"
-msgid "Enter a value for field(s): %s"
-msgstr "Entrez une valeur pour le(s) champs(s) : %s"
-
-msgctxt "error:endorsement:"
-msgid "Everything is good !"
-msgstr "Tout est bon!"
-
-msgctxt "error:endorsement:"
-msgid "Select a date that is not in the future for field(s): %s"
-msgstr "Sélectionnez une date non à venir pour le(s) champ(s) : %s"
-
 msgctxt "field:endorsement,created_attachments:"
 msgid "Created Attachments"
 msgstr "Pièces jointes créées"
@@ -166,6 +141,15 @@ msgstr "Prévisualiser les modifications"
 msgctxt "model:ir.action,name:endorsement_process_launcher"
 msgid "Start Endorsement Process"
 msgstr "Démarrer le processus d'avenant"
+
+msgctxt "model:ir.message,text:msg_ask_next_endorsement"
+msgid "Do you want to execute the endorsement \"%(next_endorsement)s\" too?"
+msgstr "Souhaitez-vous exécuter l'avenant \"%(next_endorsement)s\" également?"
+
+msgctxt "model:ir.message,text:msg_single_contract_definition"
+msgid ""
+"The chosen endorsement definition cannot be applied on several contracts."
+msgstr "L'avenant choisi ne peut pas être appliqué sur plusieurs contrats."
 
 msgctxt "model:ir.ui.menu,name:menu_start_endorsement_process"
 msgid "Start Endorsement Process"

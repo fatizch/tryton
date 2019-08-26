@@ -2,6 +2,9 @@
 # this repository contains the full copyright notices and license terms.
 from itertools import groupby
 
+from trytond.exceptions import UserError
+from trytond.i18n import gettext
+
 from trytond.pool import PoolMeta, Pool
 
 __all__ = [
@@ -12,22 +15,16 @@ __all__ = [
 class Contract(metaclass=PoolMeta):
     __name__ = 'contract'
 
-    @classmethod
-    def __setup__(cls):
-        super().__setup__()
-        cls._error_messages.update({
-                'invalid_nb_invoices': 'Invoices number should be positive',
-                'invalid_nb_lines_to_pay': 'Lines to pay number should be '
-                'strictily positive',
-                })
-
     def pay_with_paybox(self, nb_invoices=0, nb_lines_to_pay=1):
         if not self.billing_information.process_method != 'paybox':
             return
         if nb_invoices < 0:
-            self.append_functional_error('invalid_nb_invoices')
+            self.append_functional_error(UserError(gettext(
+                        'account_payment_paybox_cog.msg_invalid_nb_invoices')))
         if nb_lines_to_pay < 1:
-            self.append_functional_error('invalid_nb_lines_to_pay')
+            self.append_functional_error(UserError(gettext(
+                        'account_payment_paybox_cog'
+                        '.msg_invalid_nb_lines_to_pay')))
         pool = Pool()
         MoveLine = pool.get('account.move.line')
         Payment = pool.get('account.payment')

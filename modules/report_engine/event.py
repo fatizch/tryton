@@ -6,6 +6,7 @@ from itertools import groupby
 from collections import defaultdict
 import datetime
 
+from trytond.i18n import gettext
 from trytond.protocols.jsonrpc import JSONEncoder, JSONDecoder
 from trytond.cache import Cache
 from trytond.pyson import Eval
@@ -44,15 +45,10 @@ class EventTypeAction(metaclass=PoolMeta):
         states={'invisible': Eval('action') != 'generate_documents'})
 
     @classmethod
-    def __setup__(cls):
-        super(EventTypeAction, cls).__setup__()
-        cls._error_messages.update({'generate_documents': 'Generate Documents'})
-
-    @classmethod
     def get_action_types(cls):
         return super(EventTypeAction, cls).get_action_types() + [
-            ('generate_documents', cls.raise_user_error(
-                    'generate_documents', raise_exception=False))]
+            ('generate_documents',
+                gettext('report_engine.msg_generate_documents'))]
 
     @classmethod
     def default_treatment_kind(cls):

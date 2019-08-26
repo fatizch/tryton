@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<tryton>
+    <data group="1">
+        <record model="ir.message" id="msg_beneficiary_modifications">
+            <field name="text">Beneficiaries Modification:</field>
+        </record>
+        <record model="ir.message" id="msg_new_beneficiary">
+            <field name="text">New Beneficiary: %(name)s</field>
+        </record>
+    </data>
+</tryton>

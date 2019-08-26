@@ -736,7 +736,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
                 its message will be the message below
             """
             MSG = "You are trying to create a covered element " \
-                  "that overlaps with an old covered element"
+                  "that overlaps with an old covered element."
 
             def wrapper(*args, **kwargs):
                 try:

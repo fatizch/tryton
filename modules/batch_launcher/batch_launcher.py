@@ -3,6 +3,8 @@
 import logging
 import inspect
 
+from trytond.i18n import gettext
+from trytond.model.exceptions import ValidationError
 from trytond.pyson import Eval, Bool, Not
 from trytond.pool import Pool
 from trytond.wizard import Wizard, StateView, StateTransition, Button
@@ -77,8 +79,11 @@ class LaunchBatch(Wizard):
         for param in self.start.parameters:
             if param.code in used_params and param.value == '':
                 with model.error_manager():
-                    self.start.append_functional_error('required_parameter',
-                        {'param': param.code})
+                    self.start.append_functional_error(
+                        ValidationError(gettext(
+                                'batch_launcher.required_parameter',
+                                param=param.code,
+                                )))
 
     @classmethod
     def possible_batches(cls):
@@ -145,13 +150,6 @@ class SelectBatch(model.CoogView):
         'Loaded Parameters')
     has_treatment_date = fields.Function(fields.Boolean('Has Treatment Date'),
         'on_change_with_has_treatment_date')
-
-    @classmethod
-    def __setup__(cls):
-        super(SelectBatch, cls).__setup__()
-        cls._error_messages.update({
-            'required_parameter': 'Required parameter: %(param)s'
-            })
 
     @fields.depends('batch')
     def on_change_with_on_model(self, name=None):

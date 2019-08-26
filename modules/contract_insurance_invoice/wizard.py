@@ -1,6 +1,8 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 
+from trytond.i18n import gettext
+from trytond.model.exceptions import ValidationError
 from trytond.pool import Pool, PoolMeta
 
 __all__ = [
@@ -33,7 +35,8 @@ class CreateStatement(metaclass=PoolMeta):
             active_model, instances, company)
         if active_model == 'contract':
             if len(list({x.subscriber.id for x in instances})) > 1:
-                self.__class__.raise_user_error('too_many_parties')
+                raise ValidationError(gettext(
+                        'account_statement_cog.msg_too_many_parties'))
             values['party'] = instances[0].subscriber.id
         return values
 

@@ -6,6 +6,7 @@ from sql import Table, Literal
 from decimal import Decimal
 
 from trytond import backend
+from trytond.i18n import gettext
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Bool, Eval
 from trytond.transaction import Transaction
@@ -173,9 +174,6 @@ class WaiverPremiumRule(get_rule_mixin('duration_rule', 'Duration Rule',
             'Returns a list containing the start and the end date'
         cls.duration_rule.states['required'] = Bool(Eval('automatic'))
         cls.duration_rule.depends += ['automatic']
-        cls._error_messages.update({
-                'waiver_line': 'Waiver of Premium',
-                })
 
     @staticmethod
     def default_rate():
@@ -242,8 +240,8 @@ class WaiverPremiumRule(get_rule_mixin('duration_rule', 'Duration Rule',
                 Decimal(1) / 10 ** InvoiceLine.unit_price.digits[1])
         else:
             line.unit_price *= -1 * self.rate
-        line.description += ' - ' + self.raise_user_error(
-            'waiver_line', raise_exception=False)
+        line.description += ' - ' + gettext(
+            'contract_waiver_premium.msg_waiver_line')
         line.unit_price = premium.compute_amount_with_taxes(line.unit_price,
             waiver_start)
         return line

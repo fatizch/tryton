@@ -1,5 +1,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+from trytond.i18n import gettext
+from trytond.model.exceptions import ValidationError
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval
 
@@ -15,16 +17,6 @@ __all__ = [
 
 class CreateIndemnification(metaclass=PoolMeta):
     __name__ = 'claim.create_indemnification'
-
-    @classmethod
-    def __setup__(cls):
-        super(CreateIndemnification, cls).__setup__()
-        cls._error_messages.update({
-                'missing_deduction_period_end_date': 'The deduction period '
-                'which starts at %(start_date)s must have an end date',
-                'missing_deduction_period_amount': 'The deduction period '
-                'which starts at %(start_date)s must have a non null amount'
-                })
 
     def default_definition(self, name):
         defaults = super(CreateIndemnification, self).default_definition(name)
@@ -64,13 +56,17 @@ class CreateIndemnification(metaclass=PoolMeta):
         super(CreateIndemnification, self).check_input()
         for deduction_period in self.definition.deduction_periods:
             if deduction_period.end_date is None:
-                self.raise_user_error('missing_deduction_period_end_date',
-                    {'start_date': coog_string.translate_value(
-                        deduction_period, 'start_date')})
+                raise ValidationError(gettext(
+                        'claim_deduction_period'
+                        '.msg_missing_deduction_period_end_date',
+                        start_date=coog_string.translate_value(
+                            deduction_period, 'start_date')))
             if not deduction_period.amount_received:
-                self.raise_user_error('missing_deduction_period_amount',
-                    {'start_date': coog_string.translate_value(
-                        deduction_period, 'start_date')})
+                raise ValidationError(gettext(
+                        'claim_deduction_period'
+                        '.msg_missing_deduction_period_amount',
+                        start_date=coog_string.translate_value(
+                            deduction_period, 'start_date')))
 
 
 class IndemnificationDefinition(metaclass=PoolMeta):

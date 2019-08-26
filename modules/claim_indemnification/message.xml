@@ -1,0 +1,164 @@
+<?xml version="1.0"?>
+<tryton>
+    <data group="1">
+        <record model="ir.message" id="msg_indemnification_lines_only">
+            <field name="text">Please check whether the lines to pay are all related to a claim invoice.</field>
+        </record>
+        <record model="ir.message" id="msg_cannot_refuse_cancel_indemnifications">
+            <field name="text">Cancelled indemnification %(indemnification)s can't be refused.</field>
+        </record>
+        <record model="ir.message" id="msg_cannot_refuse_indemnifications_without_note">
+            <field name="text">Indemnification %(indemnification)s must have a note to be canceled, please write a note to motivate your refusal.</field>
+        </record>
+        <record model="ir.message" id="msg_wrong_date">
+            <field name="text">End date must be greater than the start date.</field>
+        </record>
+        <record model="ir.message" id="msg_end_date_future">
+            <field name="text">Indemnifications in the future are not allowed.</field>
+        </record>
+        <record model="ir.message" id="msg_end_date_exceeds_loss">
+            <field name="text">The end date must not exceed the loss end date.</field>
+        </record>
+        <record model="ir.message" id="msg_end_date_required">
+            <field name="text">End date is required.</field>
+        </record>
+        <record model="ir.message" id="msg_start_date_required">
+            <field name="text">Start date is required.</field>
+        </record>
+        <record model="ir.message" id="msg_journal_required">
+            <field name="text">The journal is required.</field>
+        </record>
+        <record model="ir.message" id="msg_beneficiary_required">
+            <field name="text">The beneficiary is required.</field>
+        </record>
+        <record model="ir.message" id="msg_no_salary">
+            <field name="text">No salary defined on the claim %(claim)s.</field>
+        </record>
+        <record model="ir.message" id="msg_no_previous_indemn">
+            <field name="text">No indemnifications on the claim to compare with.</field>
+        </record>
+        <record model="ir.message" id="msg_compute_crash">
+            <field name="text">A crash occurs while computing the indemnification, see stack trace for more informations.</field>
+        </record>
+        <record model="ir.message" id="msg_amount_different">
+            <field name="text">The computed amount is different from the last indemnfication. We should have %(amount)s, got %(computed)s instead.</field>
+        </record>
+        <record model="ir.message" id="msg_no_computed_indemn">
+            <field name="text">The indemnification rule returns no indemnification.</field>
+        </record>
+        <record model="ir.message" id="msg_no_ijss">
+            <field name="text">No ijss defined in previous indemnification details.</field>
+        </record>
+        <record model="ir.message" id="msg_beneficiary_share">
+            <field name="text">Share for current beneficiary: %(share)s %%</field>
+        </record>
+        <record model="ir.message" id="msg_final_result">
+            <field name="text">Total after share: %(amount).2f</field>
+        </record>
+        <record model="ir.message" id="msg_no_indemnification_rule">
+            <field name="text">No indemnification rule defined.</field>
+        </record>
+        <record model="ir.message" id="msg_period_description">
+            <field name="text">Indemnification computed with forced base amount %(forced_amount)s
+Indemnification amount is %(forced_amount)s * %(nb_of_unit)s = %(amount)s.</field>
+        </record>
+        <record model="ir.message" id="msg_capital_description">
+            <field name="text">Capital forced amount %(forced_amount)s.</field>
+        </record>
+        <record model="ir.message" id="msg_annuity_general_description">
+            <field name="text">Annuities generated with forced base amount %(forced_amount)s on a %(frequency)s frequency.
+Therefore, annual annuity amount is %(annual_forced_amount)s.</field>
+        </record>
+        <record model="ir.message" id="msg_annuity_description">
+            <field name="text">The prorata for this period is %(prorata)s / %(ratio)s = %(prorata_on_ratio)s
+The amount per day is %(annual_forced_amount)s / %(ratio)s = %(amount_per_unit)s.
+The annuity amount is %(amount_per_unit)s * %(prorata)s = %(annuity_amount)s.</field>
+        </record>
+        <record model="ir.message" id="msg_invalid_detail_deductible_rule">
+            <field name="text">Detail %(detail_key) does not exist in configuration for deductible rules.</field>
+        </record>
+        <record model="ir.message" id="msg_indemnized_losses">
+            <field name="text">Some draft losses have active indemnifications, they may have to be reevaluated:
+
+%(names)s</field>
+        </record>
+        <record model="ir.message" id="msg_bad_indemnification_shares">
+            <field name="text">Total share amount for service %(service)s should be 100: %(total_share)s %%.</field>
+        </record>
+        <record model="ir.message" id="msg_missing_end_date">
+            <field name="text">The end date is missing on the loss.</field>
+        </record>
+        <record model="ir.message" id="msg_missing_closing_reason">
+            <field name="text">The closing reason is missing on the loss.</field>
+        </record>
+        <record model="ir.message" id="msg_unpaid_indemnification">
+            <field name="text">%(count)s indemnification(s) remains unpaid.</field>
+        </record>
+        <record model="ir.message" id="msg_gap_found_in_period">
+            <field name="text">A gap has been detected from %(from_)s to %(to)s</field>
+        </record>
+        <record model="ir.message" id="msg_no_indemnifications">
+            <field name="text">No indemnification has been found.</field>
+        </record>
+        <record model="ir.message" id="msg_overlap_date">
+            <field name="text">Are you sure you want to cancel the periods between %(start)s and %(end)s?</field>
+        </record>
+        <record model="ir.message" id="msg_offset_date">
+            <field name="text">The date is not equal to the cancelled date.</field>
+        </record>
+        <record model="ir.message" id="msg_multiple_capital_indemnifications">
+            <field name="text">There may not be multiple capital indemnifications for a given beneficiary, the current one will be cancelled.</field>
+        </record>
+        <record model="ir.message" id="msg_period_will_be_deleted">
+            <field name="text">The period "%(description)s" will be definitely deleted for the calculation, event if you cancel the process.</field>
+        </record>
+        <record model="ir.message" id="msg_indemnification_paid">
+            <field name="text">The service %(service)s has non-cancelled indemnifications.</field>
+        </record>
+        <record model="ir.message" id="msg_cannot_create_indemnifications">
+            <field name="text">The insurer %(insurer)s did not allow to create indemnifications.</field>
+        </record>
+        <record model="ir.message" id="msg_cannot_pay_indemnifications">
+            <field name="text">The insurer %(insurer)s did not allow to pay indemnifications.</field>
+        </record>
+        <record model="ir.message" id="msg_cannot_schedule_draft_loss">
+            <field name="text">Cannot schedule indemnifications for draft loss %(loss)s.</field>
+        </record>
+        <record model="ir.message" id="msg_schedule_cancel_period_first">
+            <field name="text">Cannot schedule indemnifications as there is cancelled indemnification not scheduled for service %(service)s.</field>
+        </record>
+        <record model="ir.message" id="msg_no_bank_account">
+            <field name="text">No bank account found for the beneficiary %(beneficiary)s on loss %(loss)s.</field>
+        </record>
+        <record model="ir.message" id="msg_missing_previous_indemnification">
+            <field name="text">You can not schedule the indemnification %(indemnification)s because a scheduled period of %(missing_days)s day(s) should be ahead.</field>
+        </record>
+        <record model="ir.message" id="msg_tax_change_in_period">
+            <field name="text">The tax %(tax)s starts on %(tax_start)s and ends on %(tax_end)s . Please create different indemnifications between %(period_start)s and %(period_end)s so that no tax changes happen during a given indemnification.</field>
+        </record>
+        <record model="ir.message" id="msg_same_benefit_same_service">
+            <field name="text">The following indemnification period(s) duplicates the period to schedule (same benefit, loss and option):</field>
+        </record>
+        <record model="ir.message" id="msg_period_duplicate_data">
+            <field name="text">%(covered)s: with the contract number: %(ctr)s, claim: %(number)s, period: %(period)s (%(overlap)s day(s) of overlap).</field>
+        </record>
+        <record model="ir.message" id="msg_other_loss_same_covered">
+            <field name="text">The following indemnification period(s) duplicates the period to schedule (with another loss):</field>
+        </record>
+        <record model="ir.message" id="msg_scheduling_blocked">
+            <field name="text">Scheduling is blocked for indemnification %(indemnification)s, claim's sub status is %(sub_status)s.</field>
+        </record>
+        <record model="ir.message" id="msg_quote_contract">
+            <field name="text">Scheduling is blocked for indemnification %(indemnification)s, contract %(contract)s is not activated.</field>
+        </record>
+        <record model="ir.message" id="msg_capital">
+            <field name="text">Capital</field>
+        </record>
+        <record model="ir.message" id="msg_indemnification_not_removable">
+            <field name="text">The indemnification %(indemnification)s cannot be removed.</field>
+        </record>
+        <record model="ir.message" id="msg_wrong_parameters">
+            <field name="text">Invalid configuration: the revaluation rule is called with invalid parameters.</field>
+        </record>
+    </data>
+</tryton>

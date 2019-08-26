@@ -6,6 +6,9 @@ from dateutil.relativedelta import relativedelta
 from sql import Null
 from sql.aggregate import Count
 
+from trytond.exceptions import UserWarning
+from trytond.i18n import gettext
+from trytond.model.exceptions import ValidationError
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, If, Bool
 from trytond.wizard import Wizard, StateView, StateTransition, Button
@@ -69,21 +72,6 @@ class IndemnificationDefinition(metaclass=PoolMeta):
 class CreateIndemnification(metaclass=PoolMeta):
     __name__ = 'claim.create_indemnification'
 
-    @classmethod
-    def __setup__(cls):
-        super(CreateIndemnification, cls).__setup__()
-        cls._error_messages.update({
-                'bad_start_date': 'The contract was terminated on the '
-                '%(contract_end)s, a new indemnification cannot start on '
-                '%(indemn_start)s.',
-                'truncated_end_date': 'The contract was terminated on the '
-                '%(contract_end)s, so the requested indemnification end ('
-                '%(indemn_end)s) will automatically be updated',
-                'lock_end_date': 'The contract was terminated on the '
-                '%(contract_end)s, there will not be any revaluation '
-                'after this date',
-                })
-
     def _get_definition_start_date(self, service, non_cancelled):
         start_date = super(CreateIndemnification, self
             )._get_definition_start_date(service, non_cancelled)
@@ -103,9 +91,10 @@ class CreateIndemnification(metaclass=PoolMeta):
             if contract_end < defaults['start_date']:
                 if (service.contract.post_termination_claim_behaviour ==
                         'stop_indemnifications'):
-                    self.raise_user_error('bad_start_date', {
-                            'indemn_start': defaults['start_date'],
-                            'contract_end': contract_end})
+                    raise ValidationError(gettext(
+                            'claim_indemnification_group.msg_bad_start_date',
+                            indemn_start=defaults['start_date'],
+                            contract_end=contract_end))
         non_cancelled = []
         for indemnification in service.indemnifications:
             if 'cancel' not in indemnification.status:
@@ -127,6 +116,8 @@ class CreateIndemnification(metaclass=PoolMeta):
         return defaults
 
     def check_input(self):
+        pool = Pool()
+        Warning = pool.get('res.user.warning')
         res = super(CreateIndemnification, self).check_input()
         input_start_date = self.definition.start_date
         input_end_date = self.definition.end_date
@@ -137,23 +128,28 @@ class CreateIndemnification(metaclass=PoolMeta):
             behaviour = service.contract.post_termination_claim_behaviour
             if contract_end < input_start_date:
                 if behaviour == 'stop_indemnifications':
-                    self.raise_user_error('bad_start_date', {
-                            'indemn_start': input_start_date,
-                            'contract_end': contract_end})
+                    raise ValidationError(gettext(
+                            'claim_indemnification_group.msg_bad_start_date',
+                            indemn_start=input_start_date,
+                            contract_end=contract_end))
             if contract_end < input_end_date:
                 if behaviour == 'stop_indemnifications':
-                    self.raise_user_warning(
-                        'truncated_end_date_%i' % service.id,
-                        'truncated_end_date', {
-                            'indemn_end': input_end_date,
-                            'contract_end': contract_end})
+                    key = 'truncated_end_date_%i' % service.id
+                    if Warning.check(key):
+                        raise UserWarning(key, gettext(
+                                'claim_indemnification_group'
+                                '.msg_truncated_end_date',
+                                indemn_end=input_end_date,
+                                contract_end=contract_end))
                     input_end_date = contract_end
                 elif behaviour == 'lock_indemnifications':
-                    self.raise_user_warning(
-                        'lock_end_date_%i' % service.id,
-                        'lock_end_date', {
-                            'indemn_end': input_end_date,
-                            'contract_end': contract_end})
+                    key = 'lock_end_date_%i' % service.id
+                    if Warning.check(key):
+                        raise UserWarning(key, gettext(
+                                'claim_indemnification_group'
+                                '.msg_lock_end_date',
+                                indemn_end=input_end_date,
+                                contract_end=contract_end))
         return res
 
     def update_service_extra_data(self, values):
@@ -262,13 +258,6 @@ class TransferServicesContracts(model.CoogView):
     target_benefits = fields.Text('Target Benefits', readonly=True)
 
     @classmethod
-    def __setup__(cls):
-        super(TransferServicesContracts, cls).__setup__()
-        cls._error_messages.update({
-                'benefit_displayer': '%s (%i claims)',
-                })
-
-    @classmethod
     def benefit_data(cls, contract, at_date):
         pool = Pool()
         LossDesc = pool.get('benefit.loss.description')
@@ -314,10 +303,10 @@ class TransferServicesContracts(model.CoogView):
         self.source_product = self.source_contract.product
         benefit_data = self.benefit_data(self.source_contract,
             self.target_contract.end_date)
-        self.source_benefits = '\n'.join([self.raise_user_error(
-                    'benefit_displayer', (b.rec_name, len(o)),
-                    raise_exception=False)
-                for b, o in list(benefit_data.items())])
+        self.source_benefits = '\n'.join(
+            gettext('claim_indemnification_group.msg_benefit_displayer',
+                name=b.rec_name, length=len(o))
+            for b, o in list(benefit_data.items()))
 
     @fields.depends('target_contract', 'target_benefits', 'target_product')
     def on_change_target_contract(self):
@@ -328,10 +317,10 @@ class TransferServicesContracts(model.CoogView):
         self.target_product = self.target_contract.product
         benefit_data = self.benefit_data(self.target_contract,
             self.target_contract.end_date)
-        self.target_benefits = '\n'.join([self.raise_user_error(
-                    'benefit_displayer', (b.rec_name, len(o)),
-                    raise_exception=False)
-                for b, o in list(benefit_data.items())])
+        self.target_benefits = '\n'.join(
+            gettext('claim_indemnification_group.msg_benefit_displayer',
+                name=b.rec_name, length=len(o))
+            for b, o in list(benefit_data.items()))
 
 
 class TransferServicesBenefits(model.CoogView):

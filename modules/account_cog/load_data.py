@@ -2,6 +2,7 @@
 # this repository contains the full copyright notices and license terms.
 import datetime
 
+from trytond.i18n import gettext
 from trytond.pool import Pool
 from trytond.transaction import Transaction
 from trytond.wizard import Wizard, Button, StateView, StateTransition
@@ -45,14 +46,6 @@ class FiscalYearSetWizard(Wizard):
             ])
     set_ = StateTransition()
 
-    @classmethod
-    def __setup__(cls):
-        super(FiscalYearSetWizard, cls).__setup__()
-        cls._error_messages.update({
-                'fiscal_year': 'Fiscal Year',
-                'post_move_sequence': 'Post Move Sequence',
-                })
-
     def transition_set_(self):
         FiscalYear = Pool().get('account.fiscalyear')
         fiscal_years = []
@@ -75,7 +68,7 @@ class FiscalYearSetWizard(Wizard):
         FiscalYear = pool.get('account.fiscalyear')
         Company = pool.get('company.company')
         company = Company(Transaction().context.get('company'))
-        fiscal_year_str = cls.translate('fiscal_year')
+        fiscal_year_str = gettext('account_cog.msg_fiscal_year')
         return FiscalYear(**{
                 'start_date': start_date,
                 'end_date': coog_date.add_day(
@@ -97,14 +90,10 @@ class FiscalYearSetWizard(Wizard):
         sequence = Sequence(**{
                 'company': company,
                 'name': '%s - %s %s' % (
-                    cls.translate('post_move_sequence'),
-                    cls.translate('fiscal_year'), start_date.year),
+                    gettext('account_cog.post_move_sequence'),
+                    gettext('account_cog.msg_fiscal_year'), start_date.year),
                 'code': 'account.move',
                 'prefix': str(start_date.year),
                 'padding': 9,
                 })
         return Sequence.create([sequence._save_values])[0]
-
-    @classmethod
-    def translate(cls, s):
-        return '%s' % cls.raise_user_error(s, raise_exception=False)

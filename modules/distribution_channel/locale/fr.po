@@ -2,14 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:distribution.channel:"
-msgid "The code must be unique!"
-msgstr "Le code doit être unique !"
-
-msgctxt "error:distribution.network:"
-msgid "at least one channel is required on %s network or its parents"
-msgstr "Au moins un canal est requis sur le réseau %s ou ses parents"
-
 msgctxt "field:contract,dist_channel:"
 msgid "Channel"
 msgstr "Canal"
@@ -233,6 +225,10 @@ msgctxt "model:distribution.channel,name:channel_back_office"
 msgid "BackOffice"
 msgstr "Backoffice"
 
+msgctxt "model:distribution.channel,name:channel_web"
+msgid "Web"
+msgstr ""
+
 msgctxt "model:distribution.commercial_product-distribution.channel,name:"
 msgid "Commercial Product Channel Relation"
 msgstr "Relation canal produit commercial"
@@ -244,6 +240,11 @@ msgstr "Relation distribution réseau canal"
 msgctxt "model:ir.action,name:act_dist_channel_form"
 msgid "Distribution Channels"
 msgstr "Canaux de distribution "
+
+msgctxt "model:ir.message,text:msg_net_must_have_at_least_one_channel"
+msgid ""
+"At least one channel is required on %(network)s network or its parents."
+msgstr "Au moins un canal est requis sur le réseau %(network)s ou ses parents"
 
 msgctxt "model:ir.ui.menu,name:menu_dist_channel_form"
 msgid "Distribution Channels"

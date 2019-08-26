@@ -72,14 +72,15 @@ Create Broker Fee Account::
     >>> broker_fee_kind = AccountKind()
     >>> broker_fee_kind.name = 'Broker Fee Account Kind'
     >>> broker_fee_kind.company = company
+    >>> broker_fee_kind.statement = 'off-balance'
+    >>> broker_fee_kind.other = True
     >>> broker_fee_kind.save()
     >>> Account = Model.get('account.account')
     >>> broker_fee_account = Account()
     >>> broker_fee_account.name = 'Broker Fee Account'
     >>> broker_fee_account.code = 'broker_fee_account'
-    >>> broker_fee_account.kind = 'other'
-    >>> broker_fee_account.party_required = True
     >>> broker_fee_account.type = broker_fee_kind
+    >>> broker_fee_account.party_required = True
     >>> broker_fee_account.company = company
     >>> broker_fee_account.save()
     >>> Journal = Model.get('account.journal')
@@ -94,7 +95,6 @@ Create Broker Fee Account::
     >>> payment_method.save()
     >>> config = switch_user('product_user')
     >>> Account = Model.get('account.account')
-    >>> accounts = get_accounts(company)
     >>> ProductCategory = Model.get('product.category')
     >>> account_category = ProductCategory(name="Account Category")
     >>> account_category.accounting = True
@@ -106,8 +106,8 @@ Create Broker Fee Account::
     >>> account_category_commission = ProductCategory(
     ...     name="Account Category Commission")
     >>> account_category_commission.accounting = True
-    >>> account_category_commission.account_expense = accounts['expense']
-    >>> account_category_commission.account_revenue = accounts['revenue']
+    >>> account_category_commission.account_expense = Account(accounts['expense'].id)
+    >>> account_category_commission.account_revenue = Account(accounts['revenue'].id)
     >>> account_category_commission.code = 'account_category_commission'
     >>> account_category_commission.save()
 
@@ -154,7 +154,6 @@ Create Product::
     >>> Uom = Model.get('product.uom')
     >>> ProductCategory = Model.get('product.category')
     >>> unit, = Uom.find([('name', '=', 'Unit')])
-    >>> accounts = get_accounts(company)
 
 Create commission product::
 
@@ -241,7 +240,6 @@ Create insurer agent::
     >>> Agent = Model.get('commission.agent')
     >>> OfferedProduct = Model.get('offered.product')
     >>> company = get_company()
-    >>> accounts = get_accounts(company)
 
 Create Subscriber::
 

@@ -2,10 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:distribution.network:"
-msgid "The code must be unique"
-msgstr "Le code doit être unique"
-
 msgctxt "field:distribution.network,address:"
 msgid "Address"
 msgstr "Adresse"
@@ -208,6 +204,10 @@ msgctxt ""
 "model:ir.action.act_window.domain,name:act_dist_network_domain_parent"
 msgid "Tree"
 msgstr "Arbre"
+
+msgctxt "model:ir.rule.group,name:rule_group_dist_network"
+msgid "User in company"
+msgstr "Utilisateur dans le société"
 
 msgctxt "model:ir.test_case.instance,name:distribution_network_test_case"
 msgid "Distribution Network Test Case"

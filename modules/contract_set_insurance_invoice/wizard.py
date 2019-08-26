@@ -2,7 +2,9 @@
 # this repository contains the full copyright notices and license terms.
 import datetime
 
-from trytond.pool import PoolMeta
+from trytond.i18n import gettext
+from trytond.model.exceptions import ValidationError
+from trytond.pool import Pool, PoolMeta
 
 
 __all__ = [
@@ -14,18 +16,9 @@ class Renew(metaclass=PoolMeta):
     __name__ = 'contract_term_renewal.renew'
 
     @classmethod
-    def __setup__(cls):
-        super(Renew, cls).__setup__()
-        cls._error_messages.update({
-                'must_renew_all': 'All contracts on contract set %s'
-                ' must be renewed together',
-                'should_renew_all': 'All contracts on contract set %s'
-                ' should be renewed together, ensure you want to perform'
-                ' this action',
-                })
-
-    @classmethod
     def renew_contracts(cls, contracts):
+        pool = Pool()
+        Warning = pool.get('res.user.warning')
         for contract in contracts:
             if contract.contract_set:
                 active_contracts = [c for c in contract.contract_set.contracts
@@ -38,9 +31,15 @@ class Renew(metaclass=PoolMeta):
                 if not set(active_contracts).issubset(
                         contracts):
                     if contract.end_date >= max_end_date:
-                        cls.raise_user_error('must_renew_all',
-                            contract.contract_set.number)
-                    cls.raise_user_warning('should_renew_all_%s' %
-                        contract.contract_set.number, 'should_renew_all',
-                        contract.contract_set.number)
+                        raise ValidationError(
+                            gettext(
+                                'contract_set_insurance_invoice'
+                                '.msg_must_renew_all',
+                                contract_set=contract.contract_set.number))
+                    key = 'should_renew_all_%s' % contract.contract_set.number
+                    if Warning.check(key):
+                        raise UserWarning(key, gettext(
+                                'contract_set_insurance_invoice'
+                                '.msg_should_renew_all',
+                                contract_set=contract.contract_set.number))
         return super(Renew, cls).renew_contracts(contracts)

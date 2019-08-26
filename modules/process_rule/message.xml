@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<tryton>
+    <data group="1">
+        <record model="ir.message" id="msg_bad_target_path">
+            <field name="text">Target path "%(path)s" must start with "object".</field>
+        </record>
+        <record model="ir.message" id="msg_invalid_path_field">
+            <field name="text">Invalid field "%(field_name)s" for model %(model_name)s.</field>
+        </record>
+        <record model="ir.message" id="msg_invalid_path_field_type">
+            <field name="text">Invalid field type "%(field_type)s" for node "%(node)s".</field>
+        </record>
+    </data>
+</tryton>

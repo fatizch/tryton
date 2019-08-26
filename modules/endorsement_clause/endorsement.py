@@ -1,5 +1,6 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+from trytond.i18n import gettext
 from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
 from trytond.pyson import Eval
@@ -27,13 +28,6 @@ class EndorsementContract(metaclass=PoolMeta):
         'contract_endorsement', 'Clause Endorsement', delete_missing=True)
 
     @classmethod
-    def __setup__(cls):
-        super(EndorsementContract, cls).__setup__()
-        cls._error_messages.update({
-                'msg_clause_modifications': 'Clauses Modification',
-                })
-
-    @classmethod
     def _get_restore_history_order(cls):
         order = super(EndorsementContract, cls)._get_restore_history_order()
         contract_idx = order.index('contract')
@@ -52,9 +46,8 @@ class EndorsementContract(metaclass=PoolMeta):
         clause_summary = [x.get_diff('contract.clause', x.clause)
             for x in self.clauses]
         if clause_summary:
-            result[1].append(['%s :' % (self.raise_user_error(
-                            'msg_clause_modifications',
-                            raise_exception=False)),
+            result[1].append([
+                    gettext('endorsement_clause.msg_clause_modifications'),
                     clause_summary])
         return result
 
@@ -85,9 +78,6 @@ class EndorsementClause(relation_mixin('endorsement.contract.clause.field',
         super(EndorsementClause, cls).__setup__()
         cls.values.domain = [('definition', '=', Eval('definition'))]
         cls.values.depends = ['definition']
-        cls._error_messages.update({
-                'new_clause': 'New Clause: %s',
-                })
 
     @classmethod
     def default_definition(cls):
@@ -100,9 +90,9 @@ class EndorsementClause(relation_mixin('endorsement.contract.clause.field',
         if self.clause:
             return self.clause.rec_name
         Clause = Pool().get('contract.clause')
-        return self.raise_user_error('new_clause',
-            Clause(**self.values).get_rec_name(None),
-            raise_exception=False)
+        return gettext(
+            'endorsement_clause.msg_new_clause',
+            name=Clause(**self.values).get_rec_name(None))
 
     @classmethod
     def _ignore_fields_for_matching(cls):

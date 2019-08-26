@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<tryton>
+    <data group="1">
+        <record model="ir.message" id="msg_fiscal_year">
+            <field name="text">Fiscal Year</field>
+        </record>
+        <record model="ir.message" id="msg_post_move_sequence">
+            <field name="text">Post Move Sequence</field>
+        </record>
+        <record model="ir.message" id="msg_cannot_cancel_twice">
+            <field name="text">You cannot cancel the move %(move)s more than once.</field>
+        </record>
+        <record model="ir.message" id="msg_split_move_description">
+            <field name="text">Automatic Split Move</field>
+        </record>
+        <record model="ir.message" id="msg_unreconcile_cancel_move">
+            <field name="text">You cannot unreconcile lines which are part of a cancelled move.</field>
+        </record>
+        <record model="ir.message" id="msg_postpone_date_or_motive">
+            <field name="text">Date and motive are required to continue.</field>
+        </record>
+        <record model="ir.message" id="msg_too_many_postponements">
+            <field name="text">There is already a reconciliation postponement on the party %(party)s.</field>
+        </record>
+    </data>
+</tryton>

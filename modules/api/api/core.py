@@ -46,10 +46,15 @@ from decimal import Decimal, InvalidOperation
 from contextlib import contextmanager
 
 from trytond.pool import Pool
-from trytond.model import Model, ModelStorage
+from trytond.model import Model
 from trytond.transaction import Transaction
 from trytond.config import config
 from trytond.rpc import RPC
+from trytond.exceptions import UserError, LoginException, ConcurrencyException
+from trytond.exceptions import MissingDependenciesException
+from trytond.model.modelstorage import AccessError, ImportDataError, \
+    ValidationError, RequiredValidationError, SizeValidationError, \
+    DigitsValidationError, SelectionValidationError, TimeFormatValidationError
 from trytond.server_context import ServerContext
 
 
@@ -270,8 +275,7 @@ class APIUserError(APIError):
     '''
     def __init__(self, data):
         '''
-            This will be an automatically converted error from
-            raise_user_error
+            This will be an automatically converted error from UserErrors
         '''
         self.data = data
 
@@ -281,40 +285,6 @@ class APIUserError(APIError):
             'error_message': 'User Error',
             'error_data': self.data,
             }
-
-
-class APIErrorHandler(ModelStorage):
-    '''
-        Overrides Model "raise_user_error" methods to transform user errors
-        into api errors
-    '''
-    @classmethod
-    def raise_user_error(cls, errors, error_args=None, error_description='',
-            error_description_args=None, raise_exception=True):
-        if (raise_exception and api_context() is not None):
-            # TODO : investigate why this class is registered (in tests) even
-            # when the 'api' module is not installed
-            # We must get the api model inside the if because api_context will
-            # protect us, but we should not have to
-            API = Pool().get('api')
-            if errors not in API._blacklisted_errors:
-                error_data = {'type': errors}
-                new_error_args = {}
-                for k, v in (error_args or {}).items():
-                    if isinstance(v, Decimal):
-                        value = str(v)
-                    elif isinstance(v, datetime.date):
-                        value = v.strftime('%Y-%m-%d')
-                    else:
-                        value = v
-                    new_error_args[k] = value
-                new_error_args['message'] = super().raise_user_error(errors,
-                    error_args, error_description, error_description_args,
-                    raise_exception=False)
-                error_data['data'] = new_error_args
-                raise APIUserError(error_data)
-        return super().raise_user_error(errors, error_args, error_description,
-            error_description_args, raise_exception)
 
 
 class APIModel(Model):
@@ -331,25 +301,18 @@ class APIModel(Model):
     __name__ = 'api'
 
     # User Errors codes that will be treated as server errors
-    _blacklisted_errors = {
-        'access_error',
-        'delete_xml_record',
-        'digits_validation_record',
-        'domain_validation_record',
-        'foreign_model_exist',
-        'foreign_model_missing',
-        'read_error',
-        'reference_syntax_error',
-        'relation_not_found',
-        'required_field',
-        'required_validation_record',
-        'selection_validation_record',
-        'size_validation_record',
-        'time_format_validation_record',
-        'too_many_relations_found',
-        'write_xml_record',
-        'xml_id_syntax_error',
-        }
+    _blacklisted_errors = [
+        LoginException,
+        ConcurrencyException,
+        MissingDependenciesException,
+        AccessError,
+        ImportDataError,
+        RequiredValidationError,
+        SizeValidationError,
+        DigitsValidationError,
+        SelectionValidationError,
+        TimeFormatValidationError,
+        ]
 
     @classmethod
     def add_api(cls, Model, name, data):
@@ -528,6 +491,13 @@ class APIModel(Model):
         '''
         if isinstance(error, APIError):
             return error
+        elif isinstance(error, UserError) and error.__class__ not in \
+                cls._blacklisted_errors:
+            return APIUserError({
+                    'message': error.message,
+                    'description': error.description,
+                    'code': error.code,
+                    })
         # TODO: Trigger sentry if it is available + dump the trace somewhere in
         # the log
         return APIServerError(error)

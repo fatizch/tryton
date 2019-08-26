@@ -3,6 +3,8 @@
 from decimal import Decimal
 
 from trytond import backend
+from trytond.i18n import gettext
+from trytond.model.exceptions import AccessError
 from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
 from trytond.modules.rule_engine import check_args
@@ -20,14 +22,6 @@ __all__ = [
 
 class Table(metaclass=PoolMeta):
     __name__ = 'table'
-
-    @classmethod
-    def __setup__(cls):
-        super().__setup__()
-        cls._error_messages.update({
-                'modify_configuration_table': 'You cannnot modify the content '
-                'of tables from the configuration',
-                })
 
     @classmethod
     def __register__(cls, module):
@@ -99,7 +93,8 @@ class DimensionValue(metaclass=PoolMeta):
             hardcoded_tables_ids = [x.id for x in hardcoded_tables if x]
             if any(x.get('definition', 0) in hardcoded_tables_ids
                     for x in vlist):
-                Table.raise_user_error('modify_configuration_table')
+                raise AccessError(gettext(
+                        'claim_salary_fr.msg_modify_configuration_table'))
         return super().create(vlist)
 
 
@@ -116,7 +111,8 @@ class Cell(metaclass=PoolMeta):
             hardcoded_tables_ids = [x.id for x in hardcoded_tables if x]
             if any(x.get('definition', 0) in hardcoded_tables_ids
                     for x in vlist):
-                Table.raise_user_error('modify_configuration_table')
+                raise AccessError(gettext(
+                        'claim_salary_fr.msg_modify_configuration_table'))
         return super().create(vlist)
 
 

@@ -1,6 +1,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 
+from trytond.i18n import gettext
 from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
 from trytond.wizard import StateAction
@@ -8,6 +9,7 @@ from trytond.pyson import Eval, Bool, If, And
 from trytond.wizard import StateView, Button, StateTransition
 from trytond.server_context import ServerContext
 from trytond.model import Workflow, ModelView
+from trytond.model.exceptions import ValidationError
 
 from trytond.modules.coog_core import fields, model, coog_string, utils
 from trytond.modules.account_payment.payment import KINDS
@@ -78,17 +80,15 @@ class Payment(metaclass=PoolMeta):
                             Bool(Eval('line_valid'))),
                     },
                 })
-        cls._error_messages.update({
-                'multiple_parties_not_supported': 'Multiple parties is not '
-                'supported',
-                })
 
     @classmethod
     @model.CoogView.button_action(
         'account_payment_paybox_cog.act_create_paybox_from_rejected_payment')
     def generate_paybox(cls, instances):
         if len(list({x.party for x in instances})) > 1:
-            cls.raise_user_error('multiple_parties_not_supported')
+            raise ValidationError(gettext(
+                    'account_payment_paybox_cog'
+                    '.msg_multiple_parties_not_supported'))
 
     def get_line_valid(self, name):
         if self.line:
@@ -121,17 +121,6 @@ class PaymentCreation(model.FunctionalErrorMixIn, metaclass=PoolMeta):
         'account_payment_cog.act_process_payments_button')
 
     @classmethod
-    def __setup__(cls):
-        super(PaymentCreation, cls).__setup__()
-        cls._error_messages.update({
-                'email_required': 'The email is required on the party '
-                '%(party)s',
-                'invalid_paybox_payment_date': 'The paybox payment must have '
-                'a payment date less or equal than today (payment date: '
-                '%(payment_date)s)'
-                })
-
-    @classmethod
     def get_possible_journals(cls, lines, kind=None):
         '''
         Paybox must be always available when creating a payment.
@@ -147,18 +136,20 @@ class PaymentCreation(model.FunctionalErrorMixIn, metaclass=PoolMeta):
     def transition_create_payments(self):
         if (self.start.process_method == 'paybox'
                 and not self.start.party.email):
-            self.raise_user_error('email_required',
-                {'party': self.start.party.rec_name})
+            raise ValidationError(gettext(
+                    'account_payment_paybox_cog.msg_email_required',
+                    party=self.start.party.rec_name))
         next_action = super(PaymentCreation, self).transition_create_payments()
         if self.start.process_method == 'paybox':
             with model.error_manager():
                 for payment in self.start.created_payments:
                     if payment.date > utils.today():
                         self.append_functional_error(
-                            'invalid_paybox_payment_date', {
-                                'payment_date': coog_string.translate_value(
-                                    payment, 'date'),
-                                })
+                            ValidationError(gettext(
+                                    'account_payment_paybox_cog'
+                                    '.msg_invalid_paybox_payment_date',
+                                    payment_date=coog_string.translate_value(
+                                        payment, 'date'))))
         return next_action
 
     def action_paybox(self):

@@ -1,5 +1,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+from trytond.i18n import gettext
+from trytond.model.exceptions import AccessError
 from trytond.pool import Pool, PoolMeta
 from trytond.transaction import Transaction
 from trytond.pyson import Eval
@@ -26,19 +28,12 @@ class ChangePaymentTerm(Wizard):
             Button('Change', 'change', 'tryton-go-next', default=True)])
     change = StateTransition()
 
-    @classmethod
-    def __setup__(cls):
-        super(ChangePaymentTerm, cls).__setup__()
-        cls._error_messages.update({
-                'bad_state': 'The invoice must be posted !',
-                })
-
     def default_select_term(self, name):
         assert Transaction().context.get('active_model') == 'account.invoice'
         invoice = Pool().get('account.invoice')(Transaction().context.get(
                 'active_id'))
         if invoice.state != 'posted':
-            self.raise_user_error('bad_state')
+            raise AccessError(gettext('account_invoice_cog.msg_bad_state'))
         return {
             'invoice': invoice.id,
             'current_term': invoice.payment_term.id,

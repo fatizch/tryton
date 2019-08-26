@@ -2,14 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:currency.currency:"
-msgid "The code must be unique!"
-msgstr "Le code doit être unique !"
-
-msgctxt "error:currency.currency:"
-msgid "and"
-msgstr "et"
-
 msgctxt "field:currency.currency,create_date_:"
 msgid "Creation date"
 msgstr "Date de Création"
@@ -25,3 +17,7 @@ msgstr "Identifiant XML"
 msgctxt "field:ir.test_case,currency:"
 msgid "Main Currency"
 msgstr "Devise principale"
+
+msgctxt "model:ir.message,text:msg_floating_separator_string"
+msgid "and"
+msgstr "et"

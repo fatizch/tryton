@@ -2,6 +2,7 @@
 # this repository contains the full copyright notices and license terms.
 import datetime
 
+from trytond.i18n import gettext
 from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
 from trytond.pyson import Eval, Or, Bool
@@ -182,13 +183,6 @@ class EndorsementContract(metaclass=PoolMeta):
         depends=['state', 'definition'], delete_missing=True,
         context={'definition': Eval('definition')})
 
-    @classmethod
-    def __setup__(cls):
-        super(EndorsementContract, cls).__setup__()
-        cls._error_messages.update({
-                'mes_billing_modifications': 'Billing Modifications',
-                })
-
     def get_endorsement_summary(self, name):
         result = super(EndorsementContract, self).get_endorsement_summary(name)
         previous_billing_information = self.base_instance.billing_information
@@ -196,9 +190,11 @@ class EndorsementContract(metaclass=PoolMeta):
                 'contract.billing_information', previous_billing_information)
             for billing_information in self.billing_informations]
         if billing_summary:
-            result[1].append(['%s :' % self.raise_user_error(
-                   'mes_billing_modifications', raise_exception=False),
-                billing_summary])
+            result[1].append([
+                    gettext(
+                        'endorsement_insurance_invoice'
+                        '.msg_billing_modifications'),
+                    billing_summary])
         return result
 
     @classmethod

@@ -8,12 +8,15 @@ from sql.aggregate import Min, Max
 from dateutil.relativedelta import relativedelta
 
 from trytond import backend
+from trytond.exceptions import UserWarning
+from trytond.i18n import gettext
 from trytond.config import config
 from trytond.rpc import RPC
 from trytond.pool import Pool
 from trytond.transaction import Transaction
 from trytond.pyson import Eval, Bool, If, Not
 from trytond.model import Workflow, Unique
+from trytond.model.exceptions import ValidationError
 from trytond.tools import grouped_slice
 
 from trytond.modules.coog_core import utils, coog_date, fields, model
@@ -201,21 +204,6 @@ class Loan(Workflow, model.CoogSQL, model.CoogView, with_extra_data(['loan'])):
                 'ws_calculate': RPC(instantiate=0),
                 })
         cls._order.insert(0, ('last_modification', 'DESC'))
-        cls._error_messages.update({
-                'missing_loan_sequence_config': 'No sequence defined for loan '
-                'numbers in offered configuration',
-                'used_on_non_project_contract': (
-                    'The loan "%(loan)s" is used on '
-                    'the contract(s) "%(contract)s". '
-                    'Are you sure you want to continue?'),
-                'bad_increment_start': 'Increment start date cannot be before '
-                'first payment date !',
-                'invalid_nb_payments': 'The number of payments '
-                '(%(number_of_payments)s) on the increment number '
-                '%(increment)s of the loan %(loan)s is invalid.',
-                'invalid_increments': 'All the increments on loan %(loan)s '
-                'must have a start date and a end date',
-                })
         cls._transitions |= set((
                 ('draft', 'calculated'),
                 ('calculated', 'draft'),
@@ -248,7 +236,8 @@ class Loan(Workflow, model.CoogSQL, model.CoogView, with_extra_data(['loan'])):
             if len(sequences) == 1:
                 sequence, = sequences
             else:
-                cls.raise_user_error('missing_loan_sequence_config')
+                raise ValidationError(gettext(
+                        'loan.msg_missing_loan_sequence_config'))
         vlist = [x.copy() for x in vlist]
         for vals in vlist:
             if not vals.get('number'):
@@ -263,9 +252,9 @@ class Loan(Workflow, model.CoogSQL, model.CoogView, with_extra_data(['loan'])):
                 if loan.state == 'calculated':
                     if not all(x.start_date and x.end_date
                             for x in loan.increments):
-                        cls.raise_user_error('invalid_increments', {
-                                'loan': loan.id
-                                })
+                        raise ValidationError(gettext(
+                                    'loan.msg_invalid_nb_payments',
+                                    loan=loan.id))
                     loan._check_loan_consistency()
 
     def _check_loan_consistency(self):
@@ -274,12 +263,13 @@ class Loan(Workflow, model.CoogSQL, model.CoogView, with_extra_data(['loan'])):
                 increment.start_date, increment.end_date,
                 increment.payment_frequency) + 1
             if duration != increment.number_of_payments:
-                self.append_functional_error('invalid_nb_payments', {
-                        'number_of_payments': int(
-                            increment.number_of_payments),
-                        'increment': increment.number,
-                        'loan': increment.loan.id,
-                        })
+                self.append_functional_error(
+                    ValidationError(gettext(
+                            'loan.msg_invalid_nb_payments',
+                            number_of_payments=int(
+                                increment.number_of_payments),
+                            increment=increment.number,
+                            loan=increment.loan.id)))
 
     @classmethod
     def view_attributes(cls):
@@ -397,7 +387,8 @@ class Loan(Workflow, model.CoogSQL, model.CoogView, with_extra_data(['loan'])):
         for increment in self.increments:
             if getattr(increment, 'start_date', None) and (
                     increment.start_date < self.first_payment_date):
-                self.raise_user_error('bad_increment_start')
+                raise ValidationError(gettext(
+                        'loan.msg_bad_increment_start'))
 
     def init_increments(self):
         if any([getattr(x, 'manual', None)
@@ -919,17 +910,20 @@ class Loan(Workflow, model.CoogSQL, model.CoogView, with_extra_data(['loan'])):
 
     @classmethod
     def check_loan_is_used(cls, loans):
+        pool = Pool()
+        Warning = pool.get('res.user.warning')
         for loan in loans:
             contracts = set([(x.contract.rec_name, x.contract.status_string)
                     for x in loan.loan_shares
                     if x.contract.status in ['active', 'hold']])
             if contracts:
-                cls.raise_user_warning(loan.rec_name,
-                    'used_on_non_project_contract', {
-                        'contract': ', '.join(
-                            ['%s (%s)' % (x[0], x[1]) for x in contracts]),
-                        'loan': loan.rec_name,
-                        })
+                key = loan.rec_name
+                if Warning.check(key):
+                    raise UserWarning(key, gettext(
+                            'loan.msg_used_on_non_project_contract',
+                            contract=', '.join(
+                                '%s (%s)' % (x[0], x[1]) for x in contracts),
+                            loan=loan.rec_name))
 
     @classmethod
     @model.CoogView.button
@@ -1022,12 +1016,6 @@ class LoanIncrement(model.CoogSQL, model.CoogView, ModelCurrency):
     def __setup__(cls):
         super(LoanIncrement, cls).__setup__()
         cls._order.insert(0, ('number', 'ASC'))
-        cls._error_messages.update({
-                'invalid_number_of_payments': 'Number of payments must be > 0',
-                'incoherent_balances': 'Incoherent begin balance (%(begin)s) '
-                'and end balance (%(end)s) regarding payment amount '
-                '(%(payment)s).',
-                })
 
     @classmethod
     def __register__(cls, module_name):
@@ -1127,7 +1115,8 @@ class LoanIncrement(model.CoogSQL, model.CoogView, ModelCurrency):
             # We need to raise an error, because the domain validation record
             # domain=[('number_of_payments', '>', 0)]
             # forces the focus on the field in form view
-            self.raise_user_error('invalid_number_of_payments')
+            raise ValidationError(gettext(
+                    'loan.msg_invalid_nb_payments'))
         if not self.first_payment_end_balance:
             return
         if self.begin_balance:
@@ -1135,12 +1124,12 @@ class LoanIncrement(model.CoogSQL, model.CoogView, ModelCurrency):
             # We accept a (very) small difference to handle rounding
             if abs(self.get_first_payment_end_balance()
                     - self.first_payment_end_balance) > 1:
-                self.raise_user_error('incoherent_balances', {
-                        'begin': self.begin_balance,
-                        'end': self.first_payment_end_balance,
-                        'payment': self.payment_amount or
-                        self.calculate_payment_amount(),
-                        })
+                raise ValidationError(gettext(
+                        'loan.msg_incoherent_balances',
+                        begin=self.begin_balance,
+                        end=self.first_payment_end_balance,
+                        payment=(self.payment_amount
+                            or self.calculate_payment_amount())))
 
     @fields.depends('begin_balance', 'currency', 'first_payment_end_balance',
         'deferral', 'loan', 'number_of_payments', 'payment_amount',

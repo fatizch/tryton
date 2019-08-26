@@ -4,8 +4,10 @@ from sql.aggregate import Max, Sum
 
 from trytond.transaction import Transaction
 from trytond import backend
+from trytond.i18n import gettext
 from trytond.pool import PoolMeta, Pool
 from trytond.model import Unique
+from trytond.model.exceptions import ValidationError
 from trytond.pyson import Eval, Bool, If
 from trytond.wizard import Wizard, StateView, Button, StateAction
 from trytond.model import ModelView, Workflow
@@ -129,13 +131,10 @@ class Statement(export.ExportImportMixin):
         cls.name.readonly = True
         cls.date.states.update(_STATES)
         cls.date.depends += _DEPENDS
-        cls._error_messages.update({
-                'empty_lines': 'No lines associated to the statement(s) %s',
-                })
         t = cls.__table__()
         cls._sql_constraints += [('statement_uniq_name',
                 Unique(t, t.name, t.company),
-                'The name on statement must be unique per company')]
+                'account_statement_cog.msg_uniq_name')]
 
     @classmethod
     def create(cls, vlist):
@@ -222,7 +221,9 @@ class Statement(export.ExportImportMixin):
             if not statement.lines:
                 errors.append(statement.name)
         if errors:
-            cls.raise_user_error('empty_lines', ', '.join(errors))
+            raise ValidationError(gettext(
+                    'account_statement_cog.msg_empty_lines',
+                    statements=', '.join(errors)))
         super(Statement, cls).validate_statement(statements)
 
     @classmethod
@@ -302,7 +303,8 @@ class LineGroup(metaclass=PoolMeta):
         to_post = []
         for line_group in line_groups:
             if line_group.move.cancel_move:
-                line_group.move.raise_user_error('already_cancelled')
+                raise ValidationError(gettext(
+                        'account_statement_cog.msg_already_cancelled'))
             line_group.move.cancel_and_reconcile({'description': cancel_motive})
             to_post.append(line_group.move.cancel_move)
         if to_post:
@@ -353,12 +355,12 @@ class CancelLineGroup(Wizard):
         pool = Pool()
         # Statement line group ids are actually move ids
         move_ids = Transaction().context.get('active_ids')
-        Journal = pool.get('account.statement.journal')
         StatementLine = pool.get('account.statement.line')
         journals = {x.statement.journal.id for x in
                     StatementLine.search([('move', 'in', move_ids)])}
         if len(set(journals)) > 1:
-            Journal.raise_user_error('cancel_journal_mixin')
+            raise ValidationError(gettext(
+                    'account_statement_cog.msg_cancel_journal_mixin'))
         return {
             'journal': list(journals)[0],
             'cancel_motive': None,
