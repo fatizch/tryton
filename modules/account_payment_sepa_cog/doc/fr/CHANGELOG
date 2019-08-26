@@ -1,3 +1,4 @@
+* BUG#12460 Correction de la génération des fichiers SEPA par batch
 * OTH#00000 Corriger plusieurs traductions françaises
 * OTH#00000 Ajout de la date d'effet dans la vue liste des mandats
 * BUG#12141 Toujours renseigner le type métier sur les frais de rejets

@@ -827,7 +827,7 @@ class Message(metaclass=PoolMeta):
     def dump_sepa_message(self, dirpath):
         filepath = os.path.join(dirpath, self.filename)
         with open(filepath, 'w') as _f:
-            _f.write(self.message.encode('utf-8'))
+            _f.write(self.message)
         return filepath
 
     def parse(self):
