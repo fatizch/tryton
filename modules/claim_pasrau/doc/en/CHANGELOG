@@ -1,3 +1,5 @@
+* BUG#12462 Pasrau amount must be rounded to the closest euro
+* BUG#12365 Declare zero to avoid a negative Pasrau amount S21.G00.20.005
 * BUG#12304 Declare party field modification only if the previous value was not empty
 * BUG#12278 Fix support personalized rate at 0
 * BUG#12042 Fix pasrau message generation to prevent duplicate lines

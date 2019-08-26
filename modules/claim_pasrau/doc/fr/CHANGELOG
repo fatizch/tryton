@@ -1,3 +1,5 @@
+* BUG#12462 Le montant Pasrau doit être arrondi à l'euro le plus proche
+* BUG#12365 Déclarer zéro pour évter un montant Pasrau négatif S21.G00.20.005
 * BUG#12304 Ne déclarer une modification de champ du tiers uniquement si la valeur précédente n'était pas vide
 * BUG#12278 Correction pour supporter un taux personnalisé à 0
 * BUG#12042 Correction de la génération du message pasrau pour empêcher les doublons de lignes

@@ -328,7 +328,9 @@ class NEORAUTemplate(dsn.NEODeSTemplate):
         return party.name if party.birth_name else None
 
     def custom_pasrau_total_amount(self, slip):
-        return slip.total_amount if slip.total_amount else Decimal('0')
+        if slip.total_amount:
+            return max(round(slip.total_amount), Decimal(0))
+        return Decimal('0')
 
     def custom_pasrau_slip_start_date(self, slip):
         return datetime.date(slip.invoice_date.year, slip.invoice_date.month,
