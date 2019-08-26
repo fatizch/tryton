@@ -1,7 +1,7 @@
 # vim: set ft=sh:
 # batch chain management
 
-coog_chain_main() { # execute batch chain - <module> <chain>
+coog_chain_main() { # execute batch chain -- <module> <chain>
         [ $# -lt 2 ] && >&2 echo missing arguments && return 1
         local mod; mod="$1"; shift
         local chain; chain="$1"; shift

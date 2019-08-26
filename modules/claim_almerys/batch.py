@@ -223,7 +223,7 @@ class AlmerysClaimIndemnification(AlmerysXMLBatchMixin):
                 loss_e['topDepassement'])
             health_loss.almerys_depassement_amount = get_amount(
                 loss_e['mtDepassement'])
-            health_loss.almerys_num_dents = int(loss_e['numDents'])
+            health_loss.almerys_num_dents = int(loss_e['numDents'] or 0)
             health_loss.act_coefficient = get_amount(loss_e['coefActe'])
             health_loss.is_off_care_pathway = not get_bool(
                 loss_e['topParcoursSoin'])
@@ -355,6 +355,8 @@ class AlmerysClaimIndemnification(AlmerysXMLBatchMixin):
             loss2amount[code] = get_amount(loss['mtRemboursementRC'])
             loss2prescriber[code] = loss['prescriber']
         for loss in claim.losses:
+            if not loss.services:
+                continue
             service, = loss.services
             journal, = service.benefit.payment_journals
             health_loss, = loss.health_loss
