@@ -1,3 +1,4 @@
+* BUG#12466 Corriger l'écran d'avenant d'adresse
 * FEA#12225 Ajout de l'avenant "Modifier le numéro de sécurité sociale" à la configuration par défaut
 * FEA#12151 Ajout du bouton "Lancer un avenant" directement dans le menu sur un tiers (comme ce qui existe sur un contrat)
 * OTH#10851 Iteration sur la vérification des adresses en fonction de la configuration du pays

@@ -80,6 +80,13 @@ class AddressDisplayer(model.CoogView):
             self.date = self.new_address[0].start_date
         self.party = self.new_address[0].party
 
+    @classmethod
+    def view_attributes(cls):
+        return super(AddressDisplayer, cls).view_attributes() + [
+            ("/form/group[@id='previous_address']", 'states',
+                {'invisible': Eval('is_new')}),
+            ]
+
 
 class ChangePartyAddress(EndorsementWizardStepMixin):
     'Change Party Address'

@@ -858,12 +858,12 @@ msgid "Change Party Addresses"
 msgstr "Changer les adresses d'un tiers"
 
 msgctxt "view:endorsement.party.change_address_displayer:"
-msgid "Addresses"
-msgstr "Adresses"
+msgid "New address"
+msgstr "Nouvelle adresse"
 
 msgctxt "view:endorsement.party.change_address_displayer:"
-msgid "Change Party Addresses"
-msgstr "Changement d'adresses"
+msgid "Previous address"
+msgstr "Adresse précédente"
 
 msgctxt "view:endorsement.party.change_birth_date:"
 msgid "Change Party Birth Date"

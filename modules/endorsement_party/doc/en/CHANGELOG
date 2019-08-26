@@ -1,3 +1,4 @@
+* BUG#12466 Fix address endorsement view
 * FEA#12225 Add "Change Party Social Security Number" endorsement in default configuration
 * FEA#12151 Add start endorsement button in toolbar on party (like for contract)
 * OTH#10851 Iteration on address checks according to the country configuration

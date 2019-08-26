@@ -11,5 +11,5 @@ this repository contains the full copyright notices and license terms. -->
         <field name="endorsement_definition"/>
     </group>
     <newline/>
-    <field name="displayers" mode="tree,form"/>
+    <field name="displayers" mode="tree,form" yexpand="1" yfill="1"/>
 </form>
