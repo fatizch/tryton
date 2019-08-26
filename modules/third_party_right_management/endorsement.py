@@ -16,6 +16,10 @@ class EndorsementPart(metaclass=PoolMeta):
             ('watched_events.code', '=', 'apply_endorsement')
             ])
 
+    @classmethod
+    def _export_skips(cls):
+        return super()._export_skips() | {'third_party_protocols'}
+
 
 class ThirdPartyProtocolEndorsementPart(model.CoogSQL):
     "Third Party Protocol - Endorsement Part"
@@ -25,3 +29,7 @@ class ThirdPartyProtocolEndorsementPart(model.CoogSQL):
         required=True, ondelete='CASCADE')
     protocol = fields.Many2One('third_party_manager.protocol', "Protocol",
         required=True, ondelete='CASCADE')
+
+    @classmethod
+    def _export_light(cls):
+        return super()._export_light() | {'endorsement_part', 'protocol'}
