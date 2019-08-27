@@ -1,3 +1,4 @@
+* OTH#00000 Fix succeed payment method to call right behavior according to date 
 * BUG#11103 The payment date was not removed on failure if the payment was used to pay a different line than the original one
 
 Version 2.4 - 2019-04-12

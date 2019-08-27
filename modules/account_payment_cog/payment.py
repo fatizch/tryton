@@ -1257,7 +1257,17 @@ class Group(Workflow, ModelCurrency, export.ExportImportMixin, Printable,
 
     @classmethod
     def succeed_payment_group(cls, groups, *args):
-        cls.to_acknowledge(groups)
+        today = utils.today()
+        ack_groups, to_ack_groups = [], []
+        for group in groups:
+            if group.payment_date_min and group.payment_date_min <= today:
+                ack_groups.append(group)
+            else:
+                to_ack_groups.append(group)
+        if ack_groups:
+            cls.acknowledge(groups)
+        if to_ack_groups:
+            cls.to_acknowledge(groups)
 
     def get_currency(self):
         return self.journal.currency if self.journal else None
