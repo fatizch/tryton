@@ -95,33 +95,38 @@ FiscalYear.create_period([fiscalyear.id], config.context)
 product_account_kind = AccountKind()
 product_account_kind.name = 'Product Account Kind'
 product_account_kind.company = company
+product_account_kind.statement = 'income'
+product_account_kind.revenue = True
 product_account_kind.save()
 receivable_account_kind = AccountKind()
 receivable_account_kind.name = 'Receivable Account Kind'
 receivable_account_kind.company = company
+receivable_account_kind.statement = 'balance'
+receivable_account_kind.receivable = True
 receivable_account_kind.save()
 payable_account_kind = AccountKind()
 payable_account_kind.name = 'Payable Account Kind'
 payable_account_kind.company = company
+payable_account_kind.statement = 'balance'
+payable_account_kind.payable = True
 payable_account_kind.save()
 tax_account_kind = AccountKind()
 tax_account_kind.name = 'Tax Account Kind'
 tax_account_kind.company = company
+tax_account_kind.statement = 'balance'
+tax_account_kind.receivable = True
 tax_account_kind.save()
 
 # #Comment# #Create Account
 product_account = Account()
 product_account.name = 'Product Account'
 product_account.code = 'product_account'
-product_account.kind = 'revenue'
-product_account.party_required = True
 product_account.type = product_account_kind
 product_account.company = company
 product_account.save()
 receivable_account = Account()
 receivable_account.name = 'Account Receivable'
 receivable_account.code = 'account_receivable'
-receivable_account.kind = 'receivable'
 receivable_account.reconcile = True
 receivable_account.party_required = True
 receivable_account.type = receivable_account_kind
@@ -131,7 +136,6 @@ receivable_account.save()
 payable_account = Account()
 payable_account.name = 'Account Payable'
 payable_account.code = 'account_payable'
-payable_account.kind = 'payable'
 payable_account.party_required = True
 payable_account.type = payable_account_kind
 payable_account.company = company

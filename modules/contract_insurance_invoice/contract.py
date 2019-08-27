@@ -254,7 +254,7 @@ class Contract(metaclass=PoolMeta):
                     condition=account.type == account_type.id
                     ).select(line.contract, balance,
                     where=(
-                        (account_type.receivable == True)
+                        (account_type.receivable == Literal(True))
                         & (line.reconciliation == Null)
                         & (account.company == company_id)
                         & line_query

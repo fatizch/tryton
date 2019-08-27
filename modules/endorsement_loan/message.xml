@@ -32,8 +32,5 @@
             <field name="text">The following coverages have no loan share:
 	%(coverage)s</field>
         </record>
-        <record model="ir.message" id="msg_loan_share_modifications">
-            <field name="text">Loan Share Modifications:</field>
-        </record>
     </data>
 </tryton>
