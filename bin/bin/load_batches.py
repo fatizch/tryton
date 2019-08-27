@@ -58,11 +58,11 @@ def main(args):
             for name in default_batches:
                 print(name)
         else:
-            specific_batches = specific_batches.keys()
-            assert specific_batches
+            specific_list = list(specific_batches.keys())
+            assert specific_list
             for specific_name, concurrency in specific_batches.items():
                 run_specific_batch(specific_name, concurrency,
-                    last=specific_name == specific_batches[-1])
+                    last=specific_name == specific_list[-1])
 
 
 if __name__ == '__main__':
