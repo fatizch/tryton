@@ -1,9 +1,11 @@
 #!/usr/bin/env python
 import os
+import argparse
+from collections import OrderedDict
+
 from trytond.pool import Pool
 from trytond.modules.coog_core import batch, queue
 from trytond.transaction import Transaction
-import argparse
 
 
 def get_specific_concurrency_batches():
@@ -16,7 +18,7 @@ def get_specific_concurrency_batches():
        - Exemple: TRYTOND_CONCURRENCY_ACCOUNT_AGED___BALANCE_GENERATE=1
          => account.aged_balance.generate will be started with one worker
     """
-    batches = {}
+    batches = OrderedDict()
     for key, value in os.environ.items():
         if not key.startswith('TRYTOND_CONCURRENCY_'):
             continue
@@ -32,11 +34,11 @@ def get_specific_concurrency_batches():
     return batches
 
 
-def run_specific_batch(specific_name, concurrency):
+def run_specific_batch(specific_name, concurrency, last=False):
     loglevel = os.environ.get('LOG_LEVEL', 'ERROR')
     os.system("celery worker --app=coog_async.broker_celery --loglevel=%s "
-        "--concurrency=%s --queues=%s > /dev/null 2>&1 &" %
-        (loglevel, concurrency, specific_name))
+        "--concurrency=%s --queues=%s > /dev/null 2>&1 %s"
+        (loglevel, concurrency, specific_name, "&" if not last else ""))
 
 
 def main(args):
@@ -47,16 +49,20 @@ def main(args):
         pool.init()
         specific_batches = get_specific_concurrency_batches()
         default_batches = []
-        for name, kls in pool.iterobject():
-            if issubclass(kls, batch.BatchRoot) or issubclass(kls,
-                    queue.QueueMixin):
-                if name not in specific_batches.keys():
-                    default_batches.append(name)
-        if args.run_specific:
+        if not args.run_specific:
+            for name, kls in pool.iterobject():
+                if issubclass(kls, batch.BatchRoot) or issubclass(kls,
+                        queue.QueueMixin):
+                    if name not in specific_batches.keys():
+                        default_batches.append(name)
+            for name in default_batches:
+                print(name)
+        else:
+            specific_batches = specific_batches.keys()
+            assert specific_batches
             for specific_name, concurrency in specific_batches.items():
-                run_specific_batch(specific_name, concurrency)
-        for name in default_batches:
-            print(name)
+                run_specific_batch(specific_name, concurrency,
+                    last=specific_name == specific_batches[-1])
 
 
 if __name__ == '__main__':
