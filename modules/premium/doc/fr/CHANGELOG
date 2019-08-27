@@ -1,3 +1,4 @@
+* OTH#00000 Hotfix sur la date manquante dans le contexte lors de l'execution de la règle d'eligibilité des lignes de dates de calcul (primes)
 * OTH#00000 Itération sur les développements de la fonctionnalité des règles de taxe par subdivision (#12265)
 * FEA#12345 Afficher en gras la somme des tarifs
 * FEA#12294 Règle d'éligibilité sur les patterns de date de calcul

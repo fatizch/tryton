@@ -96,7 +96,10 @@ class ProductPremiumDate(
 
     def _check_rule_availability(self, contract):
         if getattr(self, 'rule', None):
-            args = {}
+            # we assume that premium dates rules are filtered using rule
+            # which use contract initial start date as context date
+            # execution.
+            args = {'date': contract.initial_start_date}
             args['context'] = self
             contract.init_dict_for_rule_engine(args)
             return self.calculate_rule(args)

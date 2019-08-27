@@ -1,3 +1,4 @@
+* OTH#00000 Hotfix on missing context date when executing eligiblity rule for computation dates lines (premiums)
 * OTH#00000 Iteration over subdivision taxe rule feature (#12265)
 * FEA#12345 View premiums amount sum bold
 * FEA#12294 Add configuration to contextually ignore some premium dates
