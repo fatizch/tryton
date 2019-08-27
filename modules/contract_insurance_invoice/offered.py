@@ -287,7 +287,7 @@ class BillingMode(model.CodedMixin, model.CoogView):
     @classmethod
     def get_process_method(cls):
         Journal = Pool().get('account.payment.journal')
-        return set(Journal.process_method.selection + [('sepa', 'SEPA')])
+        return list(set(Journal.process_method.selection + [('sepa', 'SEPA')]))
 
 
 class BillingModeFeeRelation(model.CoogSQL):

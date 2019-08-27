@@ -113,8 +113,8 @@ class MoveLine(metaclass=PoolMeta):
 
         result = {x.id: Decimal(0) for x in instances}
         cursor.execute(*join.select(move_line.id, amount_expr,
-                where=((account_type.payable == True)
-                    | (account_type.receivable == True))
+                where=((account_type.payable == Literal(True))
+                    | (account_type.receivable == Literal(True)))
                 & move_line.id.in_([x.id for x in instances]),
                 group_by=group_expr))
 
@@ -139,8 +139,8 @@ class MoveLine(metaclass=PoolMeta):
         move_line = tables['move_line']
         account_type = tables['account_type']
         query = join.select(move_line.id,
-            where=((account_type.payable == True)
-                | (account_type.receivable == True)),
+            where=((account_type.payable == Literal(True))
+                | (account_type.receivable == Literal(True))),
             group_by=group_expr,
             having=Operator(amount_expr, value))
         return [('id', 'in', query)]
