@@ -1,4 +1,5 @@
-* OTH#0000 Fix period management for endorsements
-* OTH#0000 Fix date overlap validation for third party periods
-* OTH#0000 Handle JSON export and import of third party protocols
+* BUG#12476 Endorsements cancellations do not restore third party periods
+* OTH#00000 Fix period management for endorsements
+* OTH#00000 Fix date overlap validation for third party periods
+* OTH#00000 Handle JSON export and import of third party protocols
 * FEA#11489: Module creation

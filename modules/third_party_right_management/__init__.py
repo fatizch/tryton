@@ -28,6 +28,7 @@ def register():
         protocol.ProtocolEndorsement,
         endorsement.EndorsementPart,
         endorsement.ThirdPartyProtocolEndorsementPart,
+        endorsement.EndorsementContract,
         module='third_party_right_management', type_='model',
         depends=['endorsement'])
     Pool.register(

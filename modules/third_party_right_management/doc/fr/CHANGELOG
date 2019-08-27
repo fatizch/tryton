@@ -1,4 +1,5 @@
-* OTH#0000 Correction de la gestion des périodes pour les avenants
-* OTH#0000 Correction du test de chevauchement des dates
-* OTH#0000 Gestion de l'import et de l'export JSON des protocoles délégataires
+* BUG#12476 L'annulation des avenants ne rétablit pas les périodes de droits telles qu'initialement calculées
+* OTH#00000 Correction de la gestion des périodes pour les avenants
+* OTH#00000 Correction du test de chevauchement des dates
+* OTH#00000 Gestion de l'import et de l'export JSON des protocoles délégataires
 * FEA#11489: Création du module

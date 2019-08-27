@@ -33,3 +33,17 @@ class ThirdPartyProtocolEndorsementPart(model.CoogSQL):
     @classmethod
     def _export_light(cls):
         return super()._export_light() | {'endorsement_part', 'protocol'}
+
+
+class EndorsementContract(metaclass=PoolMeta):
+    __name__ = 'endorsement.contract'
+
+    @classmethod
+    def _prepare_restore_history(cls, instances, at_date):
+        super(EndorsementContract, cls)._prepare_restore_history(instances,
+            at_date)
+        new_periods = []
+        for option in instances['contract.option']:
+            if option.third_party_periods:
+                new_periods += option.third_party_periods
+        instances['contract.option.third_party_period'] = new_periods

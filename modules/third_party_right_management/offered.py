@@ -28,6 +28,8 @@ class ThirdPartyPeriod(WithExtraDetails, model.CoogView, model.CoogSQL):
     "Third Party Period"
     __name__ = 'contract.option.third_party_period'
 
+    _history = True
+
     option = fields.Many2One('contract.option', "Contract Option",
         required=True, ondelete='CASCADE', select=True)
     party = fields.Function(
