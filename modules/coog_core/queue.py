@@ -194,7 +194,8 @@ class QueueMixin(object):
 
                 key = 'async_job_%s' % [str(x) for x in instances]
                 if Warning.check(key):
-                    raise UserWarning(gettext('coog_core.msg_async_job'))
+                    raise UserWarning(key,
+                        gettext('coog_core.msg_async_job'))
 
                 ids = [x.id for x in instances]
                 enqueue_args = (ids, ) + args

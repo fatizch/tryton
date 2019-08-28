@@ -1379,7 +1379,7 @@ class PartyReplace(metaclass=PoolMeta):
         if source.first_name != destination.first_name:
             key = 'party.replace first_name %s %s' % (source.id, destination.id)
             if Warning.check(key):
-                raise SimilarityWarning(gettext(
+                raise SimilarityWarning(key, gettext(
                         'party_cog.msg_different_first_name',
                         source_name='%s %s' % (source.name, source.first_name),
                         destination_name='%s %s' % (

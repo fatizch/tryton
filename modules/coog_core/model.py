@@ -789,7 +789,7 @@ class CoogDictSchema(DictSchemaMixin):
             key = 'rename_dict_codes_%s' % '_'.join(
                 (x[0] for x in codes_for_error))
             if Warning.check(key):
-                raise UserWarning(gettext(
+                raise UserWarning(key, gettext(
                         'coog_core.msg_rename_dict_codes',
                         codes='\n'.join(
                             ' -> '.join(x) for x in codes_for_error),
@@ -817,7 +817,7 @@ class CoogDictSchema(DictSchemaMixin):
             codes_for_error = [x['code_to_remove'] for x in schema_data][:10]
             key = 'remove_dict_codes_%s' % '_'.join(codes_for_error)
             if Warning.check(key):
-                raise UserWarning(gettext(
+                raise UserWarning(key, gettext(
                         'coog_core.msg_remove_dict_codes',
                         codes=' - '.join(codes_for_error),
                         ))

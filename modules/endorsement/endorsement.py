@@ -2032,7 +2032,7 @@ class EndorsementContract(values_mixin('endorsement.contract.field'),
                 key = 'process_in_progress_%s_%s' % (
                     str(contract.id), str(contract_endorsement.id))
                 if Warning.check(key):
-                    raise UserWarning(gettext(
+                    raise UserWarning(key, gettext(
                             'endorsement.msg_process_in_progress',
                             contract=contract.rec_name,
                             process=contract.current_state.process.fancy_name))
@@ -2058,7 +2058,7 @@ class EndorsementContract(values_mixin('endorsement.contract.field'),
                 key = 'process_in_progress_%s_%s' % (
                     str(contract.id), str(contract_endorsement.id))
                 if Warning.check(key):
-                    raise UserWarning(gettext(
+                    raise UserWarning(key, gettext(
                             'endorsement.msg_process_in_progress',
                             contract=contract.rec_name,
                             process=contract.current_state.process.fancy_name))

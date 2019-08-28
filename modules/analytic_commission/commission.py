@@ -47,7 +47,7 @@ class Commission(metaclass=PoolMeta):
         else:
             key = 'missing_broker_analytic_account'
             if Warning.check(key):
-                raise UserWarning(gettext(
+                raise UserWarning(key, gettext(
                         'analytic_commission'
                         '.msg_missing_broker_analytic_account'))
             for account in root_accounts:

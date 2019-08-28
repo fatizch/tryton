@@ -247,7 +247,8 @@ class DocumentReception(model.CoogSQL, model.CoogView):
             if not document.attachment:
                 key = 'not_attached' + str(document.id)
                 if Warning.check(key):
-                    raise UserWarning(gettext('document.msg_not_attached'))
+                    raise UserWarning(key,
+                        gettext('document.msg_not_attached'))
 
     @classmethod
     @model.CoogView.button_action('document.act_receive_document')

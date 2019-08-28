@@ -44,7 +44,8 @@ class TestCaseModel(metaclass=PoolMeta):
         Lang = pool.get('ir.lang')
         lang, = Lang.search([('code', '=', lang)], limit=1)
         if not lang and Warning.check('no_language'):
-            raise UserWarning(gettext('coog_core.msg_no_language'))
+            raise UserWarning('no_language',
+                gettext('coog_core.msg_no_language'))
         authorization_users = User.search(
             [
                 ('login', 'in', [x + '_user'

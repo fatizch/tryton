@@ -1505,8 +1505,8 @@ class VoidContract(EndorsementWizardStepMixin):
                 to_warn.append(str(contract.id))
         if to_warn:
             if Warning.check('void_renewed_contract'):
-                raise UserWarning(gettext(
-                        'endorsement.msg_void_renewed_contract'))
+                raise UserWarning('void_renewed_contract',
+                    gettext('endorsement.msg_void_renewed_contract'))
 
     @classmethod
     def allow_effective_date_before_contract(cls, select_screen):
