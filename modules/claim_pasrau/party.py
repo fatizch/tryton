@@ -2,6 +2,8 @@
 # this repository contains the full copyright notices and license terms.
 from itertools import groupby
 
+from trytond.i18n import gettext
+from trytond.model.exceptions import ValidationError
 from trytond.pool import PoolMeta, Pool
 from trytond.server_context import ServerContext
 from trytond.modules.coog_core import model

@@ -328,8 +328,9 @@ class NEORAUTemplate(dsn.NEODeSTemplate):
         return party.name if party.birth_name else None
 
     def custom_pasrau_total_amount(self, slip):
+        # total amount must be positive and rounded
         if slip.total_amount:
-            return max(round(slip.total_amount), Decimal(0))
+            return max(Decimal(round(slip.total_amount)), Decimal(0))
         return Decimal('0')
 
     def custom_pasrau_slip_start_date(self, slip):
@@ -421,7 +422,7 @@ class NEORAUTemplate(dsn.NEODeSTemplate):
         return self.get_pasrau_tax_line(line).base
 
     def custom_pasrau_regularization_debit_amount(self, line):
-        return self.get_pasrau_tax_line(line).amount
+        return self.get_pasrau_tax_line(line).amount * -1
 
 
 class NEORAU(dsn.NEODES):
