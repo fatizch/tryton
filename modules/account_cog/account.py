@@ -101,7 +101,7 @@ class Account(export.ExportImportMixin, model.TaggedMixin):
         table = cls.__table_handler__(module_name)
 
         # Migration from 2.4:
-        # move other kind to account.account.type
+        # move kind to account.account.type
         if table.column_exist('kind'):
 
             # Migrate 'other' accounts
@@ -112,11 +112,12 @@ class Account(export.ExportImportMixin, model.TaggedMixin):
                     group_by=type_table.id)
             cursor.execute(*query)
             ids = [x for x, in cursor.fetchall()]
-            cursor.execute(*type_table.update(
-                    columns=[type_table.other, type_table.statement,
-                        type_table.template_override],
-                    values=[True, 'off-balance', True],
-                    where=type_table.id.in_(ids)))
+            if ids:
+                cursor.execute(*type_table.update(
+                        columns=[type_table.other, type_table.statement,
+                            type_table.template_override],
+                        values=[True, 'off-balance', True],
+                        where=type_table.id.in_(ids)))
 
             # Migrate 'payable' accounts
             query = account_table.join(type_table, condition=(
@@ -126,12 +127,12 @@ class Account(export.ExportImportMixin, model.TaggedMixin):
                     group_by=type_table.id)
             cursor.execute(*query)
             ids = [x for x, in cursor.fetchall()]
-
-            cursor.execute(*type_table.update(
-                    columns=[type_table.payable, type_table.statement,
-                        type_table.template_override, type_table.assets],
-                    values=[True, 'balance', True, False],
-                    where=type_table.id.in_(ids)))
+            if ids:
+                cursor.execute(*type_table.update(
+                        columns=[type_table.payable, type_table.statement,
+                            type_table.template_override, type_table.assets],
+                        values=[True, 'balance', True, False],
+                        where=type_table.id.in_(ids)))
 
             # Migrate 'receivable' accounts
             query = account_table.join(type_table, condition=(
@@ -142,11 +143,12 @@ class Account(export.ExportImportMixin, model.TaggedMixin):
             cursor.execute(*query)
             ids = [x for x, in cursor.fetchall()]
 
-            cursor.execute(*type_table.update(
-                    columns=[type_table.receivable, type_table.statement,
-                        type_table.template_override, type_table.assets],
-                    values=[True, 'balance', True, True],
-                    where=type_table.id.in_(ids)))
+            if ids:
+                cursor.execute(*type_table.update(
+                        columns=[type_table.receivable, type_table.statement,
+                            type_table.template_override, type_table.assets],
+                        values=[True, 'balance', True, True],
+                        where=type_table.id.in_(ids)))
 
             # Migrate 'revenue' accounts
             query = account_table.join(type_table, condition=(
@@ -156,12 +158,12 @@ class Account(export.ExportImportMixin, model.TaggedMixin):
                     group_by=type_table.id)
             cursor.execute(*query)
             ids = [x for x, in cursor.fetchall()]
-
-            cursor.execute(*type_table.update(
-                    columns=[type_table.revenue, type_table.statement,
-                        type_table.template_override],
-                    values=[True, 'income', True],
-                    where=type_table.id.in_(ids)))
+            if ids:
+                cursor.execute(*type_table.update(
+                        columns=[type_table.revenue, type_table.statement,
+                            type_table.template_override],
+                        values=[True, 'income', True],
+                        where=type_table.id.in_(ids)))
 
             # Migrate 'expense' accounts
             query = account_table.join(type_table, condition=(
@@ -172,14 +174,15 @@ class Account(export.ExportImportMixin, model.TaggedMixin):
             cursor.execute(*query)
             ids = [x for x, in cursor.fetchall()]
 
-            cursor.execute(*type_table.update(
-                    columns=[type_table.expense, type_table.statement,
-                        type_table.template_override],
-                    values=[True, 'income', True],
-                    where=type_table.id.in_(ids)))
+            if ids:
+                cursor.execute(*type_table.update(
+                        columns=[type_table.expense, type_table.statement,
+                            type_table.template_override],
+                        values=[True, 'income', True],
+                        where=type_table.id.in_(ids)))
 
-            # JMO: keep it to be able to track history
-            # table.drop_column('kind')
+            # JMO: rename it to be able to track history
+            table.column_rename('kind', 'kind_deprecated')
 
     @classmethod
     def is_master_object(cls):
