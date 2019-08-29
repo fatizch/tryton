@@ -67,6 +67,10 @@ msgctxt ""
 msgid "Last Receivable Payment SEPA Creation"
 msgstr "Date de la dernière génération des prélèvements SEPA"
 
+msgctxt "field:account.payment.journal,remittance_info:"
+msgid "Remittance information"
+msgstr "Motif affiché (Remittance Information)"
+
 msgctxt "field:account.payment.journal,sepa_party:"
 msgid "Sepa Creditor / Debtor"
 msgstr "Créditeur / Débiteur Sepa"
@@ -131,6 +135,10 @@ msgid ""
 msgstr ""
 "Si coché, la balise OrgnlDbtrAcct sera toujours à \"SMNDA\" même si le BIC "
 "n'a pas été modifié"
+
+msgctxt "help:account.payment.journal,remittance_info:"
+msgid "Sepa remittance information"
+msgstr "Libellé des prélèvements sur le compte des clients"
 
 msgctxt "help:account.payment.journal,sepa_party:"
 msgid ""

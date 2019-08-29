@@ -1,3 +1,4 @@
+* FEA#12319 Allow to customize sepa remittance information
 * BUG#12460 Fix sepa batches (files can not be dumped)
 * OTH#00000 Fix some french translations
 * OTH#00000 Add effective date in sepa mandate list view

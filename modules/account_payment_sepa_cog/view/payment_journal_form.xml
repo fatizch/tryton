@@ -14,5 +14,7 @@ this repository contains the full copyright notices and license terms. -->
         <newline/>
         <label name="force_smnda"/>
         <field name="force_smnda"/>
+        <label name="remittance_info"/>
+        <field name="remittance_info"/>
     </xpath>
 </data>

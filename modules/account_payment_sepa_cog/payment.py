@@ -418,6 +418,8 @@ class Group(metaclass=PoolMeta):
             Payment.write(*to_write)
 
     def get_remittance_info(self, payments):
+        if payments:
+            return payments[0].journal.remittance_info
         return ''
 
     @property
@@ -753,6 +755,9 @@ class Journal(metaclass=PoolMeta):
         depends=['process_method'],
         help='If True, the OrgnlDbtrAcct tag will always use SMNDA even when '
         'the BIC did not change')
+    remittance_info = fields.Char('Remittance information', size=140,
+        states={'invisible': Eval('process_method') != 'sepa'},
+        help='Sepa remittance information')
 
     @classmethod
     def __register__(cls, module):
