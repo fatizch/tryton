@@ -91,7 +91,6 @@ def batch_generate(name, params):
         with Transaction().set_context(
                 User.get_preferences(context_only=True),
                 client_defined_date=connection_date, company=company):
-            Cache.clean(database)
             try:
                 with ServerContext().set_context(
                         from_batch=True,
@@ -112,8 +111,6 @@ def batch_generate(name, params):
             except Exception:
                 logger.critical('Job generation crashed')
                 raise
-            finally:
-                Cache.resets(database)
     logger.info('generated with params: %s', batch_params)
     return res
 
@@ -179,7 +176,6 @@ def batch_exec(name, ids, params, **kwargs):
             with transaction.set_context(
                     User.get_preferences(context_only=True),
                     client_defined_date=connection_date, company=company):
-                Cache.clean(database)
                 try:
                     with ServerContext().set_context(from_batch=True,
                             user_to_notify=kwargs.get('user'),
@@ -206,8 +202,6 @@ def batch_exec(name, ids, params, **kwargs):
                 except Exception:
                     logger.critical('Job execution crashed')
                     raise
-                finally:
-                    Cache.resets(database)
     return res
 
 
