@@ -175,7 +175,8 @@ class Product(metaclass=PoolMeta):
         if option.status == 'void':
             return
         dates.add(option.start_date)
-        if option.end_date:
+        if option.end_date and (not option.parent_contract.final_end_date or
+                option.parent_contract.final_end_date > option.end_date):
             dates.add(coog_date.add_day(option.end_date, 1))
         for version in option.versions:
             if version.start is not None:
