@@ -37,7 +37,7 @@ def get_specific_concurrency_batches():
 def run_specific_batch(specific_name, concurrency, last=False):
     loglevel = os.environ.get('LOG_LEVEL', 'ERROR')
     os.system("celery worker --app=coog_async.broker_celery --loglevel=%s "
-        "--concurrency=%s --queues=%s > /dev/null 2>&1 %s" %
+        "--concurrency=%s --queues=%s 2>&1 %s " %
         (loglevel, concurrency, specific_name, "&" if not last else ""))
 
 
