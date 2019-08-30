@@ -105,6 +105,7 @@ class ProcessAction(
         return new_targets
 
     def execute(self, target):
+        Warning = Pool().get('res.user.warning')
         if self.content != 'rule':
             return super(ProcessAction, self).execute(target)
         targets = self.get_rule_targets(target)
