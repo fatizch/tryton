@@ -1,4 +1,5 @@
-* OTH#00000 Correction des méthodes de traitement des mdoes de quittancement
+* OTH#00000 Définition automatique du compte bancaire sur le mode de quittancement lors de l'affectation du payeur
+* OTH#00000 Correction des méthodes de traitement des modes de quittancement
 * BUG#12338 Correction du calcul de primes sur les produits en quittancement annuel et sans prorata
 * FEA#12228 Ajout d'une option permettant de systématiquement quittancer l'intégralité du terme
 * BUG#12257 Vérification de l'existence d'un contrat sur la ligne comptable (suite de 8f10fb735)

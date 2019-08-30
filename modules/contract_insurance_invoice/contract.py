@@ -1952,6 +1952,8 @@ class ContractBillingInformation(model._RevisionMixin, model.CoogSQL,
         if not self.payer or self.direct_debit_account and (self.payer not in
                 self.direct_debit_account.owners):
             self.direct_debit_account = None
+        if not self.direct_debit_account and self.payer:
+            self.direct_debit_account = self.payer.get_bank_account()
 
     @fields.depends('billing_mode', 'direct_debit_day',
         'direct_debit_day_selector', 'direct_debit_account')
