@@ -1,3 +1,4 @@
+* BUG#12474 invoice_to_end_date must not crash if contract has no end date
 * OTH#00000 Automatically set bank account on billing information when setting payer
 * OTH#00000 Fix payment process method getter
 * BUG#12338 Fix broken premium computing on product with annual billing mode and no prorata

@@ -1,3 +1,4 @@
+* BUG#12474 La méthode invoice_to_end_date ne doit pas tomber en erreur si il n'y a pas de date de fin sur le contrat
 * OTH#00000 Définition automatique du compte bancaire sur le mode de quittancement lors de l'affectation du payeur
 * OTH#00000 Correction des méthodes de traitement des modes de quittancement
 * BUG#12338 Correction du calcul de primes sur les produits en quittancement annuel et sans prorata
