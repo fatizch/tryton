@@ -182,6 +182,8 @@ class Account(export.ExportImportMixin, model.TaggedMixin):
                         where=type_table.id.in_(ids)))
 
             # JMO: rename it to be able to track history
+            cursor.execute('ALTER TABLE account_account alter column kind '
+                'drop not null')
             table.column_rename('kind', 'kind_deprecated')
 
     @classmethod
