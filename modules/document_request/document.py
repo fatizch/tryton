@@ -3,7 +3,7 @@
 from collections import defaultdict
 from dateutil.relativedelta import relativedelta
 from sql.functions import CurrentDate
-from sql import Null
+from sql import Null, Literal
 from sql.aggregate import Count, Sum
 from sql.conditionals import Case
 
@@ -94,7 +94,8 @@ class DocumentRequestLine(Printable, model.CoogSQL, model.CoogView):
     __name__ = 'document.request.line'
 
     document_desc = fields.Many2One('document.description',
-        'Document Definition', required=True, ondelete='RESTRICT')
+        'Document Definition', required=True, ondelete='RESTRICT',
+        states={'readonly': Eval('id', 0) > 0}, depends=['id'])
     for_object = fields.Reference('Needed For', selection='models_get',
         states={'readonly': ~~Eval('for_object')}, required=True, select=True,
         help='References the object for which the document is asked.')
@@ -446,30 +447,54 @@ class DocumentRequestLineOffered(
             },
         })
 
-    @fields.depends('document_desc', 'extra_data', 'attachment')
+    @classmethod
+    def __register__(cls, module):
+        table = cls.__table_handler__(module)
+        to_migrate = table and not table.column_exist('data_status')
+
+        super().__register__(module)
+
+        # Migration from 2.4: Init column to 'done'
+        if to_migrate:
+            cursor = Transaction().connection.cursor()
+            table = cls.__table__()
+            cursor.execute(*table.update(
+                    columns=[table.data_status],
+                    values=[Literal('done')],
+                    ))
+
+    @fields.depends('document_desc')
     def on_change_document_desc(self):
-        super(DocumentRequestLineOffered, self).on_change_document_desc()
+        super().on_change_document_desc()
         status = 'waiting'
-        if self.document_desc and self.extra_data and self.attachment:
+        if (self.document_desc and not self.document_desc.extra_data_def and
+                not self.document_desc.template):
             status = 'done'
         self.data_status = status
+
+    @fields.depends('data_status')
+    def on_change_with_received(self, name=None):
+        received = super().on_change_with_received()
+        return received and self.data_status == 'done'
 
     @classmethod
     def _generate_template_documents(cls, documents):
         pool = Pool()
         Attachment = pool.get('ir.attachment')
-        date_today = pool.get('ir.date').today()
+        date_today = utils.today()
         for document in documents:
+            attachments = []
             if document.document_desc and document.document_desc.template:
                 reports, attachments = \
                     document.document_desc.template.produce_reports([document],
                         {})
-                Attachment.write([attachments[0]], {
-                    'resource': str(document.for_object),
-                    'document_desc': document.document_desc.id})
+                if attachments:
+                    Attachment.write([attachments[0]], {
+                        'resource': str(document.for_object),
+                        'document_desc': document.document_desc.id})
             cls.write([document], {
                 'data_status': 'done',
-                'attachment': attachments[0].id,
+                'attachment': attachments[0].id if attachments else None,
                 'reception_date': date_today, })
 
     @classmethod

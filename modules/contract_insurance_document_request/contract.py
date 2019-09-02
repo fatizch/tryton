@@ -176,8 +176,11 @@ class Contract(RemindableInterface, metaclass=PoolMeta):
             to_save.append(line)
         if to_save:
             DocumentRequestLine.save(to_save)
-            if not DocumentRequestLine.extra_data:
-                DocumentRequestLine.confirm_attachment(to_save)
+            to_confirm = [x for x in to_save
+                if x.data_status == 'waiting' and x.document_desc
+                and not x.document_desc.extra_data_def]
+            if to_confirm:
+                DocumentRequestLine.confirm_attachment(to_confirm)
         to_delete = []
         for request in self.document_request_lines:
             if (request.document_desc.code in existing_document_desc_code and

@@ -1,3 +1,4 @@
+* BUG#12530 Vérification du statut des données lors de la vérification de la réception
 * FEA#11908 Ajouter un champ commentaire à la demande de document
 * BUG#11602 Permettre la création de demandes de documents depuis une vue liste
 * FEA#12049 Saisie de données et génération de documents pour les demandes de documents

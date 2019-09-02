@@ -10,7 +10,7 @@ from trytond.modules.coog_core import utils, model
 from trytond.modules.rule_engine import check_args
 
 from trytond.modules.api import APIMixin, date_from_api, APIInputError
-from trytond.modules.api import APIUserError, APIServerError
+from trytond.modules.api import APIServerError
 from trytond.modules.api import DATE_SCHEMA
 from trytond.modules.coog_core.api import CODED_OBJECT_SCHEMA, OBJECT_ID_SCHEMA
 from trytond.modules.party_cog.api import PARTY_RELATION_SCHEMA
