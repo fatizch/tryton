@@ -45,7 +45,7 @@ class APIProduct(metaclass=PoolMeta):
             Core._field_description('loan', 'payment_frequency',
                 required=True, sequence=30),
             Core._field_description('loan', 'rate',
-                required=True, sequence=40),
+                required=True, sequence=40, force_type='percentage'),
             Core._field_description('loan', 'funds_release_date',
                 required=True, sequence=50),
             Core._field_description('loan', 'first_payment_date',

@@ -4,5 +4,5 @@ this repository contains the full copyright notices and license terms. -->
 <tree editable="bottom">
     <field name="key" expand="1"/>
     <field name="value" expand="1"/>
-    <field name="origin" tree_invisible="1"/>
+    <field name="origin" tree_invisible="0"/>
 </tree>

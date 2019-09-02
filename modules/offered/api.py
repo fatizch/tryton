@@ -40,6 +40,7 @@ __all__ = [
     'APIModel',
     'APICore',
     'APIProduct',
+    'APIResource',
     'ExtraData',
     ]
 
@@ -106,6 +107,9 @@ class APICore(metaclass=PoolMeta):
                 per_key[elem['code']]['selection'] = [
                     {'value': x[0], 'name': x[1], 'sequence': idx}
                     for idx, x in enumerate(selection)]
+            if 'custom_resources' in elem:
+                per_key[elem['code']]['custom_resources'] = \
+                    elem['custom_resources']
             if 'sub_data' in elem:
                 for operator, value, sub_structure in elem['sub_data']:
                     parse_structure(sub_structure)
@@ -161,6 +165,8 @@ class APICore(metaclass=PoolMeta):
                                     },
                                 'additionalItems': False,
                                 },
+                            'custom_resources': {},
+                            'default': {'type': 'boolean'},
                             },
                         'required': ['code', 'name', 'type',
                             'sequence'],
@@ -208,6 +214,8 @@ class APICore(metaclass=PoolMeta):
                                     },
                                 'additionalItems': False,
                                 },
+                            'custom_resources': {},
+                            'default': {'type': 'string'},
                             },
                         'required': ['code', 'name', 'type',
                             'sequence', 'selection'],
@@ -241,6 +249,7 @@ class APICore(metaclass=PoolMeta):
                                     },
                                 'additionalItems': False,
                                 },
+                            'custom_resources': {},
                             },
                         'required': ['code', 'name', 'type',
                             'sequence'],
@@ -771,5 +780,34 @@ class APIProduct(APIMixin):
             }
 
 
-class ExtraData(APIResourceMixin, metaclass=PoolMeta):
+class APIResource(metaclass=PoolMeta):
+    __name__ = 'api.resource'
+
+    @classmethod
+    def create(cls, vlist):
+        created = super().create(vlist)
+        Pool().get('extra_data')._extra_data_cache.clear()
+        return created
+
+    @classmethod
+    def delete(cls, ids):
+        super().delete(ids)
+        Pool().get('extra_data')._extra_data_cache.clear()
+
+    @classmethod
+    def write(cls, *args):
+        super().write(*args)
+        Pool().get('extra_data')._extra_data_cache.clear()
+
+
+class ExtraData(APIResourceMixin):
     __name__ = 'extra_data'
+
+    def _get_structure(self):
+        res = super()._get_structure()
+        if self.api_resources:
+            res['custom_resources'] = {
+                x.key: x.value
+                for x in self.api_resources
+                }
+        return res

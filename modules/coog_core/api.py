@@ -107,7 +107,7 @@ FIELD_SCHEMA = {
                 'type': {
                     'type': 'string',
                     'enum': ['string', 'date', 'email', 'phone_number',
-                        'percentage', 'amount', 'boolean'],
+                        'percentage', 'amount', 'boolean', 'integer'],
                     },
                 'required': {'type': 'boolean'},
                 'label': {'type': 'string'},
@@ -222,15 +222,13 @@ class APIResource(model.CoogSQL, model.CoogView):
 
     @classmethod
     def select_resource_models(cls):
-        # We can do this this way because we do not really care about
-        # translations
-        if hasattr(cls, '__resource_models'):
-            return cls.__resource_models
+        pool = Pool()
+        all_models = pool.get('ir.attachment').get_models()
         result = []
-        for _, klass in Pool().iterobject():
-            if not issubclass(klass, APIResourceMixin):
+        for model_name, translation in all_models:
+            if not issubclass(pool.get(model_name), APIResourceMixin):
                 continue
-            result.append((klass.__name__, klass.__name__))
+            result.append((model_name, translation))
         return result
 
 
@@ -489,7 +487,7 @@ class APICore(metaclass=PoolMeta):
         elif isinstance(field, tryton_fields.Integer):
             result['type'] = 'integer'
         elif isinstance(field, tryton_fields.Numeric):
-            result['type'] = 'numeric'
+            result['type'] = 'amount'
         elif isinstance(field, tryton_fields.Boolean):
             result['type'] = 'boolean'
         elif isinstance(field, tryton_fields.Selection):

@@ -6,6 +6,7 @@ import unittest
 from decimal import Decimal
 
 import trytond.tests.test_tryton
+from trytond.pool import Pool
 
 from trytond.modules.coog_core import test_framework
 from trytond.modules.api import APIInputError, api_input_error_manager
@@ -608,10 +609,29 @@ class ModuleTestCase(test_framework.CoogTestCase):
         'offered.test0030_testProductCoverageRelation',
         )
     def test0070_productDescription(self):
-        product_a, = self.Product.search([('code', '=', 'AAA')])
+        pool = Pool()
+
+        product_a, = pool.get('offered.product').search([('code', '=', 'AAA')])
+
+        # Add some API resources on extra_data
+        contract_1, = pool.get('extra_data').search(
+            [('name', '=', 'contract_1')])
+        contract_1.api_resources = [
+            {
+                'key': 'test',
+                'value': '"some value"',
+                },
+            {
+                'key': 'other_test',
+                'value': '1234',
+                },
+            ]
+        contract_1.save()
+
         self.maxDiff = None
         self.assertEqual(
-            self.APIProduct.describe_products({}, {'_debug_server': True}),
+            pool.get('api.product').describe_products(
+                {}, {'_debug_server': True}),
             [
                 {
                     'id': product_a.id,
@@ -625,6 +645,10 @@ class ModuleTestCase(test_framework.CoogTestCase):
                             'type': 'numeric',
                             'sequence': 1,
                             'digits': 2,
+                            'custom_resources': {
+                                'other_test': '1234',
+                                'test': '"some value"',
+                                },
                             },
                         {
                             'code': 'contract_2',

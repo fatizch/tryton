@@ -40,5 +40,6 @@ def register():
         api.APIModel,
         api.APICore,
         api.APIProduct,
+        api.APIResource,
         api.ExtraData,
         module='offered', type_='model', depends=['api'])
