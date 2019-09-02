@@ -1,3 +1,4 @@
+* OTH#00000 Ignorer les droits d'accès personnalisés si l'utilisateur est root
 * BUG#11531 Correctif sur la recherche des documents en fonction des droits d'accès
 
 Version 2.4 - 2019-04-12
