@@ -1,3 +1,4 @@
+* BUG#12508 Gestion du premier niveau de relance basé sur la date du précédent niveau, ajout de tests
 * FEA#8010 Ajout d'un lien vers les relances depuis un contrat
 * BUG#11507 Modification de l'adresse de facturation sur les quittances de frais afin qu'elle soit égale à celle du souscripteur de contrat
 

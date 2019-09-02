@@ -110,7 +110,8 @@ class Level(export.ExportImportMixin):
         pass
 
     def test(self, line, date):
-        if self.days_from_previous_step and self.overdue is not None:
+        if (self.days_from_previous_step and self.overdue is not None
+                and self.procedure.levels.index(self) != 0):
             res = False
             if line.dunnings:
                 level_rank = self.procedure.levels.index(self)

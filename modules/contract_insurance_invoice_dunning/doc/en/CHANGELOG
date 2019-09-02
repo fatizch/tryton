@@ -1,3 +1,4 @@
+* BUG#12508 Manage first level based on previous date, add tests
 * FEA#8010 Add link to dunnings from contract
 * BUG#11507 Change the invoice address in order to be the same of the contract subscriber
 
