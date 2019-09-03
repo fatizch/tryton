@@ -1,3 +1,4 @@
+* OTH#00000 Fix pay_with_paybox method
 * FEA#12377 Add new method to call in configuration which pays contract invoices through Paybox
 
 Version 2.4 - 2019-04-12

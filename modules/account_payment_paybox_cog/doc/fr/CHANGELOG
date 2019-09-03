@@ -1,3 +1,4 @@
+* OTH#00000 Corriger la méthode pay_with_paybox
 * FEA#12377 Ajout d'une méthode à exploiter dans la configuration afin de payer les quittances d'un contrat via Paybox
 
 Version 2.4 - 2019-04-12

@@ -16,7 +16,7 @@ class Contract(metaclass=PoolMeta):
     __name__ = 'contract'
 
     def pay_with_paybox(self, nb_invoices=0, nb_lines_to_pay=1):
-        if not self.billing_information.process_method != 'paybox':
+        if self.billing_information.process_method != 'paybox':
             return
         if nb_invoices < 0:
             self.append_functional_error(UserError(gettext(
