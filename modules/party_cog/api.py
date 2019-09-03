@@ -270,6 +270,12 @@ class APIParty(APIMixin):
                             'ref': '1',
                             'is_person': False,
                             'name': 'My company',
+                            'contacts': [
+                                {
+                                    'type': 'email',
+                                    'value': '123@456.com',
+                                    },
+                                ],
                             },
                         ],
                     },
@@ -286,6 +292,12 @@ class APIParty(APIMixin):
                             'first_name': 'John',
                             'birth_date': '1986-05-12',
                             'gender': 'male',
+                            'identifiers': [
+                                {
+                                    'type': 'external_identifier',
+                                    'code': '12345',
+                                    },
+                                ],
                             },
                         ],
                     },
@@ -347,6 +359,7 @@ class APIParty(APIMixin):
         relation_from_party_schema['required'] = [
             x for x in relation_from_party_schema['required']
             if x != 'from']
+
         return {
             'type': 'object',
             'additionalProperties': False,
@@ -362,10 +375,20 @@ class APIParty(APIMixin):
                     'additionalItems': False,
                     'items': cls._party_address_schema(),
                     },
+                'contacts': {
+                    'type': 'array',
+                    'additionalItems': False,
+                    'items': cls._party_contact_schema(),
+                    },
                 'relations': {
                     'type': 'array',
                     'additionalItems': False,
                     'items': relation_from_party_schema,
+                    },
+                'identifiers': {
+                    'type': 'array',
+                    'additionalItems': False,
+                    'items': cls._party_identifier_schema(),
                     },
                 },
             'required': ['name'],
@@ -388,6 +411,32 @@ class APIParty(APIMixin):
                 'country': {'type': 'string'},
                 },
             'required': ['city', 'zip', 'country', 'street'],
+            }
+
+    @classmethod
+    def _party_identifier_schema(cls):
+        return {
+            'additionalProperties': False,
+            'properties': {
+                'type': {'type': 'string'},
+                'code': {'type': 'string'},
+                },
+            'required': ['type', 'code'],
+            }
+
+    @classmethod
+    def _party_contact_schema(cls):
+        ContactMechanism = Pool().get('party.contact_mechanism')
+        return {
+            'additionalProperties': False,
+            'properties': {
+                'type': {
+                    'type': 'string',
+                    'enum': [x[0] for x in ContactMechanism.type.selection],
+                    },
+                'value': {'type': 'string'},
+                },
+            'required': ['type', 'value'],
             }
 
     @classmethod
@@ -415,6 +464,10 @@ class APIParty(APIMixin):
 
     @classmethod
     def _party_convert(cls, data, options, parameters):
+        pool = Pool()
+        API = pool.get('api')
+        PartyIdentifier = pool.get('party.identifier')
+
         if 'birth_date' in data:
             data['birth_date'] = date_from_api(data['birth_date'])
         for address in data.get('addresses', []):
@@ -425,6 +478,17 @@ class APIParty(APIMixin):
                 if fname in data:
                     relation['from'] = {fname: data[fname]}
             parameters['relations'].append(relation)
+
+        identifier_types = [x[0] for x in PartyIdentifier.get_types() if x[0]]
+        for identifier in data.get('identifiers', []):
+            if identifier['type'] not in identifier_types:
+                API.add_input_error({
+                        'type': 'unknown_party_identifier',
+                        'data': {
+                            'type': identifier['type'],
+                            'allowed_types': identifier_types,
+                            },
+                        })
 
     @classmethod
     def _party_address_convert(cls, data, options, parameters):
@@ -489,7 +553,7 @@ class APIParty(APIMixin):
                         })
             return party
         else:
-            API.add_input_erro({
+            API.add_input_error({
                     'type': 'bad_instance',
                     'data': {
                         'model': 'party.party',
@@ -545,6 +609,8 @@ class APIParty(APIMixin):
         else:
             party = cls._init_new_company(data, options)
         party.addresses = []
+        party.identifiers = []
+        party.contact_mechanisms = []
 
         # This is stupidly necessary because this field is stupid
         party.all_addresses = []
@@ -601,10 +667,18 @@ class APIParty(APIMixin):
             if fname in data and getattr(party, fname) != data[fname]:
                 setattr(party, fname, data[fname])
 
+        cls._update_party_addresses(party, data, options)
+        cls._update_party_identifiers(party, data, options)
+        cls._update_party_contacts(party, data, options)
+
+    @classmethod
+    def _update_party_addresses(cls, party, data, options):
         party.addresses = getattr(party, 'addresses', [])
         if data.get('addresses', None):
             # For now, the rules for update if multiple addresses are given are
             # not known
+            # TODO: Maybe add options to define alternative behaviours
+            # (always_append, always_replace, etc...)
             assert len(data['addresses']) == 1
 
             address_data = data['addresses'][0]
@@ -613,6 +687,27 @@ class APIParty(APIMixin):
             address.zip = address_data['zip']
             address.city = address_data['city']
             address.country = address_data['country']
+
+    @classmethod
+    def _update_party_identifiers(cls, party, data, options):
+        if data.get('identifiers', None):
+            for identifier_data in data['identifiers']:
+                party.update_identifier(
+                    identifier_data['type'], identifier_data['code'])
+
+    @classmethod
+    def _update_party_contacts(cls, party, data, options):
+        ContactMechanism = Pool().get('party.contact_mechanism')
+        contact_mechanisms = list(party.contact_mechanisms)
+        keys = {(x.type, x.value) for x in contact_mechanisms}
+        for contact_data in data.get('contacts', []):
+            if (contact_data['type'], contact_data['value']) in keys:
+                pass
+            contact_mechanisms.append(ContactMechanism(
+                    type=contact_data['type'],
+                    value=contact_data['value'],
+                    ))
+        party.contact_mechanisms = contact_mechanisms
 
     @classmethod
     def _update_party_fields(cls):

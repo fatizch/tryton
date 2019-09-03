@@ -37,7 +37,6 @@ def register():
         module='offered', type_='model')
 
     Pool.register(
-        api.APIModel,
         api.APICore,
         api.APIProduct,
         api.APIResource,

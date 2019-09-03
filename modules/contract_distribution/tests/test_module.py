@@ -46,6 +46,12 @@ class ModuleTestCase(test_framework.CoogTestCase):
         com_product_2.product = product
         com_product_2.save()
 
+        com_product_3 = ComProduct()
+        com_product_3.code = 'com_product_3'
+        com_product_3.name = 'Commercial Product 3'
+        com_product_3.product = product
+        com_product_3.save()
+
         node_1.commercial_products = [com_product_1]
         node_1.save()
         node_1_1.commercial_products = [com_product_2]
@@ -305,6 +311,35 @@ class ModuleTestCase(test_framework.CoogTestCase):
         data_dict = copy.deepcopy(data_ref)
         self.assertEqual(ContractAPI.subscribe_contracts(data_dict, {}).data,
             [{'type': 'missing_dist_network', 'data': {}}])
+
+    @test_framework.prepare_test(
+        'contract_distribution.test0002_test_commercial_products',
+        )
+    def test0020_create_distribution_networks_api(self):
+        pool = Pool()
+        APICore = pool.get('api.core')
+        Network = pool.get('distribution.network')
+
+        data_ref = {
+            'networks': [
+                {
+                    'ref': '1',
+                    'name': 'My Test Network',
+                    'parent': {'code': 'node_2_1'},
+                    'commercial_products': [
+                        {'code': 'com_product_1'},
+                        {'code': 'com_product_3'},
+                        ],
+                    },
+                ],
+            }
+
+        data_dict = copy.deepcopy(data_ref)
+        created = APICore.create_distribution_networks(data_dict,
+            {'_debug_server': True})
+        network_1 = Network(created['networks'][0]['id'])
+        self.assertEqual({x.code for x in network_1.commercial_products},
+            {'com_product_1', 'com_product_3'})
 
 
 def suite():

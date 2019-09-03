@@ -5,6 +5,7 @@ import unittest
 
 import trytond.tests.test_tryton
 from trytond.transaction import Transaction
+from trytond.pool import Pool
 from trytond.exceptions import UserWarning
 from trytond.modules.coog_core import test_framework
 
@@ -30,13 +31,6 @@ class ModuleTestCase(test_framework.CoogTestCase):
             'APIParty': 'api.party',
         }
 
-    def test0002_testCountryCreation(self):
-        self.Country(
-            code='FR',
-            code3='FRA',
-            name='France',
-            ).save()
-
     def test0001_createParties(self):
         self.Party.create([{
                     'name': 'Parent',
@@ -53,6 +47,21 @@ class ModuleTestCase(test_framework.CoogTestCase):
                     }])
         relation_parent.reverse = relation_children
         relation_parent.save()
+
+    def test0002_testCountryCreation(self):
+        self.Country(
+            code='FR',
+            code3='FRA',
+            name='France',
+            ).save()
+
+    def test0003_createIdentifierTypes(self):
+        pool = Pool()
+        IdentifierType = pool.get('party.identifier.type')
+        identifier = IdentifierType()
+        identifier.name = 'Test Identifier'
+        identifier.code = 'test_identifier'
+        identifier.save()
 
     @test_framework.prepare_test('party_cog.test0001_createParties')
     def test0010relations(self):
@@ -213,7 +222,10 @@ class ModuleTestCase(test_framework.CoogTestCase):
     def test0050_party_api_models(self):
         self.APICore.model_definitions({}, {'_debug_server': True})
 
-    @test_framework.prepare_test('party_cog.test0002_testCountryCreation')
+    @test_framework.prepare_test(
+        'party_cog.test0002_testCountryCreation',
+        'party_cog.test0003_createIdentifierTypes',
+        )
     def test0060_party_API(self):
         # Run examples
         for example in self.APIParty._create_party_examples():
@@ -225,6 +237,18 @@ class ModuleTestCase(test_framework.CoogTestCase):
                         'ref': '1',
                         'is_person': False,
                         'name': 'My API Company',
+                        'identifiers': [
+                            {
+                                'type': 'test_identifier',
+                                'code': '12345',
+                                },
+                            ],
+                        'contacts': [
+                            {
+                                'type': 'email',
+                                'value': '123@456.com',
+                                },
+                            ],
                         },
                     {
                         'ref': '2',
@@ -262,6 +286,11 @@ class ModuleTestCase(test_framework.CoogTestCase):
 
         self.assertEqual(company.is_person, False)
         self.assertEqual(company.name, 'My API Company')
+        self.assertEqual(len(company.contact_mechanisms), 1)
+        self.assertEqual(company.email, '123@456.com')
+
+        self.assertEqual(
+            company.get_identifier_value('test_identifier'), '12345')
 
         self.assertEqual(father.is_person, True)
         self.assertEqual(father.name, 'Doe')

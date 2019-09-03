@@ -1,3 +1,5 @@
+* FEA#12221 Add a create_distribution_networks API
+
 Version 2.4 - 2019-04-12
 Version 2.2 - 2018-10-12
 * BUG#10010 Unset address when removing party from distribution network

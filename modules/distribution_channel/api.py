@@ -4,6 +4,7 @@ from trytond.pool import PoolMeta, Pool
 
 from trytond.modules.api import api_context
 from trytond.modules.coog_core.api import OBJECT_ID_SCHEMA
+from trytond.modules.coog_core.api import CODED_OBJECT_ARRAY_SCHEMA
 
 __all__ = [
     'APIIdentity',
@@ -78,6 +79,32 @@ class APICore(metaclass=PoolMeta):
             return network.all_net_channels[0]
 
         return None
+
+    @classmethod
+    def _distribution_network_schema(cls):
+        schema = super()._distribution_network_schema()
+        schema['properties']['distribution_channels'] = \
+            CODED_OBJECT_ARRAY_SCHEMA
+        return schema
+
+    @classmethod
+    def _create_distribution_network(cls, network_data):
+        network = super()._create_distribution_network(network_data)
+        network.authorized_distribution_channels = network_data.get(
+            'distribution_channels', [])
+        return network
+
+    @classmethod
+    def _distribution_network_convert(cls, data, parameters):
+        API = Pool().get('api')
+
+        super()._distribution_network_convert(data, parameters)
+        if 'distribution_channels' in data:
+            # There should probably be some sort of controls on what products
+            # are available here, but nothing exists yet :'(
+            data['distribution_channels'] = [
+                API.instantiate_code_object('distribution.channel', x)
+                for x in data['distribution_channels']]
 
 
 class APIContract(metaclass=PoolMeta):

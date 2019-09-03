@@ -763,6 +763,23 @@ class Party(export.ExportImportMixin, summary.SummaryMixin):
         return {'first_name': None, 'birth_name': None, 'birth_date': None,
             'extra_data': None}
 
+    def update_identifier(self, type, code):
+        PartyIdentifier = Pool().get('party.identifier')
+
+        identifiers = list(self.identifiers)
+
+        for identifier in identifiers:
+            if identifier.type == type:
+                identifier.code = code
+                break
+        else:
+            identifier = PartyIdentifier()
+            identifier.type = type
+            identifier.code = code
+            identifiers.append(identifier)
+
+        self.identifiers = identifiers
+
 
 class PartyLang(export.ExportImportMixin, metaclass=PoolMeta):
     __name__ = 'party.party.lang'

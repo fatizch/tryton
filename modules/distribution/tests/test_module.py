@@ -1,6 +1,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 import unittest
+import copy
 
 import trytond.tests.test_tryton
 
@@ -53,6 +54,84 @@ class ModuleTestCase(test_framework.CoogTestCase):
         self.assertEqual({x.id for x in root.all_children},
             {root.id, node_1.id, node_1_1.id, node_1_2.id, node_2.id,
                 node_2_1.id, node_2_2.id})
+
+    @test_framework.prepare_test(
+        'distribution.test0002_dist_network_creation',
+        )
+    def test0020_create_distribution_networks_api(self):
+        pool = Pool()
+        Core = pool.get('api.core')
+        Network = pool.get('distribution.network')
+        node_2_2, = Network.search([('code', '=', 'node_2_2')])
+
+        data_ref = {
+            'parties': [
+                {
+                    'ref': '1',
+                    'is_person': False,
+                    'name': 'My Network',
+                    },
+                ],
+            'networks': [
+                {
+                    'ref': '1',
+                    'party': {'ref': '1'},
+                    'parent': {'code': 'node_2_1'},
+                    },
+                ],
+            }
+
+        data_dict = copy.deepcopy(data_ref)
+        created = Core.create_distribution_networks(data_dict,
+            {'_debug_server': True})
+        network_1 = Network(created['networks'][0]['id'])
+        self.assertEqual(network_1.code, created['networks'][0]['code'])
+        self.assertEqual(network_1.code, 'node_2_1_1')
+        self.assertEqual(network_1.party.id, created['parties'][0]['id'])
+        self.assertEqual(network_1.party.name, 'My Network')
+        self.assertEqual(network_1.parent.code, 'node_2_1')
+        self.assertEqual(network_1.name, 'My Network')
+
+        data_dict = copy.deepcopy(data_ref)
+        del data_dict['parties']
+        del data_dict['networks'][0]['party']
+        data_dict['networks'][0]['name'] = 'Some Network'
+        created = Core.create_distribution_networks(data_dict,
+            {'_debug_server': True})
+        network_2 = Network(created['networks'][0]['id'])
+        self.assertEqual(network_2.code, 'node_2_1_2')
+        self.assertEqual(network_2.party, None)
+        self.assertEqual(network_2.name, 'Some Network')
+
+        # Infer network from context
+        data_dict = copy.deepcopy(data_ref)
+        del data_dict['networks'][0]['parent']
+        created = Core.create_distribution_networks(data_dict,
+            {'_debug_server': True, 'dist_network': node_2_2.id})
+        network_3 = Network(created['networks'][0]['id'])
+        self.assertEqual(network_3.parent.code, 'node_2_2')
+
+        # Error when trying to force a network you are not allowed to
+        data_dict = copy.deepcopy(data_ref)
+        self.assertEqual(
+            Core.create_distribution_networks(data_dict,
+                {'dist_network': node_2_2.id}).data,
+            [{
+                    'type': 'unauthorized_network',
+                    'data': {
+                        'user_network': 'node_2_2',
+                        'network': 'node_2_1',
+                        },
+                    }])
+
+        # Reuse existing party
+        data_dict = copy.deepcopy(data_ref)
+        del data_dict['parties']
+        data_dict['networks'][0]['party'] = {'code': network_1.party.code}
+        created = Core.create_distribution_networks(data_dict,
+            {'_debug_server': True})
+        network_3 = Network(created['networks'][0]['id'])
+        self.assertEqual(network_3.party.id, network_1.party.id)
 
     @test_framework.prepare_test(
         'party_cog.test0001_createParties',

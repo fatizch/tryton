@@ -281,6 +281,30 @@ class API(metaclass=PoolMeta):
                             },
                         })
 
+    @classmethod
+    def instantiate_code_object(cls, model, identifier):
+        pool = Pool()
+        Model = pool.get(model)
+
+        assert len(identifier) == 1, 'Invalid key'  # Should not happen (schema)
+        key, value = list(identifier.items())[0]
+        if key == 'id':
+            # Check the id actually exists. Maybe cache it someday
+            matches = Model.search([('id', '=', value)])
+            if matches:
+                return matches[0]
+            pool.get('api').add_input_error({
+                    'type': 'invalid_id',
+                    'data': {
+                        'model': model,
+                        'id': value,
+                        },
+                    })
+        elif key == 'code':
+            return cls.instance_from_code(model, value)
+        else:
+            raise ValueError  # Should not happen (schema)
+
 
 class APICore(metaclass=PoolMeta):
     __name__ = 'api.core'

@@ -87,7 +87,8 @@ class APIContract(APIMixin):
             Link newly created records in the contract data structure (ex:
             subscriber)
         '''
-        if 'ref' in contract_data['subscriber']:
+        if (isinstance(contract_data['subscriber'], dict) and
+                    'ref' in contract_data['subscriber']):
             contract_data['subscriber'] = created['parties'][
                 contract_data['subscriber']['ref']]
 
@@ -358,6 +359,7 @@ class APIContract(APIMixin):
                     'type': 'array',
                     'additionalItems': False,
                     'items': cls._contract_schema(minimum=minimum),
+                    'minItems': 1,
                     },
                 'options': {
                     'type': 'object',

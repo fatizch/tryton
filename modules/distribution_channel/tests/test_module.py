@@ -303,6 +303,37 @@ class ModuleTestCase(test_framework.CoogTestCase):
                         {'dist_channel': channel_1}).result,
                     'channel_1')
 
+    @test_framework.prepare_test(
+        'distribution_channel.test0002_create_channels',
+        'distribution.test0002_dist_network_creation',
+        )
+    def test0020_create_distribution_networks_api(self):
+        pool = Pool()
+        APICore = pool.get('api.core')
+        Network = pool.get('distribution.network')
+
+        data_ref = {
+            'networks': [
+                {
+                    'ref': '1',
+                    'name': 'My Test Network',
+                    'parent': {'code': 'node_2_1'},
+                    'distribution_channels': [
+                        {'code': 'channel_2'},
+                        {'code': 'channel_3'},
+                        ],
+                    },
+                ],
+            }
+
+        data_dict = copy.deepcopy(data_ref)
+        created = APICore.create_distribution_networks(data_dict,
+            {'_debug_server': True})
+        network_1 = Network(created['networks'][0]['id'])
+        self.assertEqual(
+            {x.code for x in network_1.authorized_distribution_channels},
+            {'channel_2', 'channel_3'})
+
 
 def suite():
     suite = trytond.tests.test_tryton.suite()

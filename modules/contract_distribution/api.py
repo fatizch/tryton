@@ -2,8 +2,8 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import PoolMeta, Pool
 
-from trytond.modules.api import api_context
 from trytond.modules.coog_core.api import CODED_OBJECT_SCHEMA, OBJECT_ID_SCHEMA
+from trytond.modules.coog_core.api import CODED_OBJECT_ARRAY_SCHEMA
 
 
 __all__ = [
@@ -17,20 +17,30 @@ class APICore(metaclass=PoolMeta):
     __name__ = 'api.core'
 
     @classmethod
-    def _get_dist_network(cls):
-        pool = Pool()
-        DistNetwork = pool.get('distribution.network')
-        User = pool.get('res.user')
+    def _distribution_network_schema(cls):
+        schema = super()._distribution_network_schema()
+        schema['properties']['commercial_products'] = CODED_OBJECT_ARRAY_SCHEMA
+        return schema
 
-        network = None
-        context = api_context()
-        if 'dist_network' in context and context['dist_network']:
-            network = DistNetwork(context['dist_network'])
-        elif 'user' in context and context['user']:
-            user = User(context['user'])
-            if user.dist_network:
-                network = user.dist_network
+    @classmethod
+    def _create_distribution_network(cls, network_data):
+        network = super()._create_distribution_network(network_data)
+        network.commercial_products = network_data.get(
+            'commercial_products', [])
         return network
+
+    @classmethod
+    def _distribution_network_convert(cls, data, parameters):
+        API = Pool().get('api')
+
+        super()._distribution_network_convert(data, parameters)
+        if 'commercial_products' in data:
+            # There should probably be some sort of controls on what products
+            # are available here, but nothing exists yet :'(
+            data['commercial_products'] = [
+                API.instantiate_code_object('distribution.commercial_product',
+                    x)
+                for x in data['commercial_products']]
 
 
 class APIProduct(metaclass=PoolMeta):
