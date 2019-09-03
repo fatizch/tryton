@@ -664,7 +664,7 @@ class APIParty(APIMixin):
     @classmethod
     def _update_party(cls, party, data, options):
         for fname in cls._update_party_fields():
-            if fname in data and getattr(party, fname) != data[fname]:
+            if fname in data and getattr(party, fname, None) != data[fname]:
                 setattr(party, fname, data[fname])
 
         cls._update_party_addresses(party, data, options)

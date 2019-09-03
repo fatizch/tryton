@@ -27,6 +27,7 @@ class APICore(metaclass=PoolMeta):
         network = super()._create_distribution_network(network_data)
         network.commercial_products = network_data.get(
             'commercial_products', [])
+        network.is_distributor = True
         return network
 
     @classmethod
