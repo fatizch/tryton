@@ -89,6 +89,7 @@ class Claim(CoogProcessFramework, metaclass=ClassAttr):
                 else:
                     line.for_object = '%s,%s' % (self.__name__, self.id)
                 line.claim = self
+                line.on_change_document_desc()
                 to_save.append(line)
         if to_save:
             DocumentRequestLine.save(to_save)

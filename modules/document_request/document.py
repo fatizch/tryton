@@ -10,7 +10,7 @@ from sql.conditionals import Case
 from trytond.i18n import gettext
 from trytond.model.exceptions import ValidationError
 from trytond.pool import Pool, PoolMeta
-from trytond.pyson import Eval, Bool
+from trytond.pyson import Eval, Bool, And
 from trytond import backend
 from trytond.transaction import Transaction
 from trytond.cache import Cache
@@ -436,8 +436,9 @@ class DocumentRequestLineOffered(
             'readonly': Eval('data_status') == 'done',
             }
         cls.attachment.states = {
-            'readonly': Eval('data_status') == 'done',
+            'readonly': And(Eval('extra_data'), Eval('data_status') == 'done'),
         }
+        cls.attachment.depends.append('extra_data')
         cls.document_desc.states = {
             'readonly': Eval('data_status') == 'done',
         }

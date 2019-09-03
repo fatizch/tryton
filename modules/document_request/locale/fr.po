@@ -16,7 +16,7 @@ msgstr "La réception requiert la pièce jointe"
 
 msgctxt "field:document.description,template:"
 msgid "Template"
-msgstr "modèles de corrier"
+msgstr "Modèle de courrier"
 
 msgctxt "field:document.description-extra_data,create_date:"
 msgid "Create Date"
