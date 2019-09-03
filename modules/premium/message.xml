@@ -4,5 +4,8 @@
         <record model="ir.message" id="msg_no_contract_found">
             <field name="text">No contract found in context.</field>
         </record>
+        <record model="ir.message" id="msg_multiple_premium_at_same_date">
+            <field name="text">Only one premium not null at date %(date) can be saved. Check your rating rule: only one rate must be defined for a date</field>
+        </record>
     </data>
 </tryton>

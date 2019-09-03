@@ -610,6 +610,13 @@ msgctxt "model:ir.action,name:act_premium_display"
 msgid "Display Contract Premium"
 msgstr "Afficher les primes du contrat"
 
+msgctxt "model:ir.message,text:msg_multiple_premium_at_same_date"
+msgid "Only one premium not null at date %(date) can be saved. Check your "
+"rating rule: only one rate must be defined for a date"
+msgstr "Seulement une seule prime non nulles peut être sauvegarder à la date "
+"du %(date). Vérifier vos règles de tarifications : un seul tarif doit être "
+"définie à une date"
+
 msgctxt "model:ir.message,text:msg_no_contract_found"
 msgid "No contract found in context."
 msgstr "Pas de contrat trouvé dans le contexte."

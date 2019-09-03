@@ -1,3 +1,4 @@
+* BUG#12448 Generate error when two premiums with amount defined are saved on the same rated entity
 * BUG#12463 Fix premium period computation when coverage is defined with an end rule and product has term and renewal rule defined
 * OTH#00000 Hotfix on missing context date when executing eligiblity rule for computation dates lines (premiums)
 * OTH#00000 Iteration over subdivision taxe rule feature (#12265)

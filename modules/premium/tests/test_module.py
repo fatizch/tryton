@@ -6,6 +6,7 @@ import datetime
 import mock
 
 import trytond.tests.test_tryton
+from trytond.exceptions import UserError
 from trytond.modules.coog_core import test_framework
 
 
@@ -15,10 +16,15 @@ class ModuleTestCase(test_framework.CoogTestCase):
     module = 'premium'
 
     @classmethod
+    def fetch_models_for(cls):
+        return ['company_cog']
+
+    @classmethod
     def get_models(cls):
         return {
             'Product': 'offered.product',
             'PremiumDate': 'offered.product.premium_date',
+            'PremiumRule': 'offered.option.description.premium_rule',
             'Contract': 'contract',
             'Option': 'contract.option',
             'Premium': 'contract.premium',
@@ -26,6 +32,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
             'ContractFee': 'contract.fee',
             'Rule': 'rule_engine',
             'Context': 'rule_engine.context',
+            'OptionDescription': 'offered.option.description',
             }
 
     def test001_premium_date_configuration(self):
@@ -379,6 +386,125 @@ class ModuleTestCase(test_framework.CoogTestCase):
             test_matching_premium(new_line1,
                 expected_end=datetime.date(2003, 12, 31),
                 start=datetime.date(2001, 9, 1))
+
+    def test012_store_prices_with_multiple_premium_at_same_date(self):
+
+        def premium_matches(premium, input_line):
+            for fname in ['rated_entity', 'amount', 'frequency']:
+                if getattr(premium, fname) != getattr(input_line, fname):
+                    return False
+            return True
+
+        def get_matching_premium(line, start):
+            res, = [x for x in save_args if premium_matches(x, line)
+                if x.start == start]
+            return res
+
+        def test_matching_premium(line, expected_end=None, start=None,
+                amount=0):
+            premium = get_matching_premium(line, start)
+            self.assertEqual(premium.end, expected_end)
+            self.assertEqual(premium.amount, amount)
+
+        rated_entity_1 = self.Product()
+        rated_entity_1.id = 10
+
+        parent_1 = self.Contract()
+        parent_1.id = 100
+        parent_1.final_end_date = datetime.date(2003, 12, 31)
+        parent_1.premiums = []
+
+        new_line1 = mock.Mock()
+        new_line1.rated_entity = rated_entity_1
+        new_line1.rated_instance = parent_1
+        new_line1.amount = 100
+        new_line1.frequency = 'monthly'
+        new_line1.taxes = []
+
+        null_line = mock.Mock()
+        null_line.rated_entity = rated_entity_1
+        null_line.rated_instance = parent_1
+        null_line.amount = 0
+        null_line.frequency = 'monthly'
+        null_line.taxes = []
+
+        new_line2 = mock.Mock()
+        new_line2.rated_entity = rated_entity_1
+        new_line2.rated_instance = parent_1
+        new_line2.amount = 200
+        new_line2.frequency = 'monthly'
+        new_line2.taxes = []
+
+        with mock.patch.object(self.Premium, 'save') as patched_save:
+            # test error if two premiums saved for same ratd entity at same
+            # date with amount different from 0
+            test_data = {
+                datetime.date(2001, 1, 1): [new_line1, new_line2]
+                }
+            with self.assertRaises(UserError):
+                self.Contract.store_prices(test_data)
+
+            # no error if two premium saved with one with zero amount
+            test_data = {
+                datetime.date(2001, 1, 1): [new_line1, null_line]
+                }
+            self.Contract.store_prices(test_data)
+            save_args = patched_save.call_args[0][0]
+            self.assertEqual(len(save_args), 1)
+            test_matching_premium(new_line1,
+                expected_end=datetime.date(2003, 12, 31),
+                start=datetime.date(2001, 1, 1), amount=100)
+
+            parent_1.premiums = []
+            # no error if two premium saved with one with zero amount
+            test_data = {
+                datetime.date(2001, 1, 1): [null_line, new_line1],
+                datetime.date(2002, 1, 1): [new_line2]
+                }
+            self.Contract.store_prices(test_data)
+            save_args = patched_save.call_args[0][0]
+            self.assertEqual(len(save_args), 2)
+            test_matching_premium(new_line1,
+                expected_end=datetime.date(2001, 12, 31),
+                start=datetime.date(2001, 1, 1), amount=100)
+            test_matching_premium(new_line2,
+                expected_end=datetime.date(2003, 12, 31),
+                start=datetime.date(2002, 1, 1), amount=200)
+
+    @test_framework.prepare_test(
+        'company_cog.test0001_testCompanyCreation',
+        )
+    def test013_allow_to_configure_two_premium_rules(self):
+        # with the limit of only one premium not null at the same date it's
+        # possible to configure multiple premium rules
+        # For example it's used to configure different rules according invoice
+        # frequency (funeral product)
+        company, = self.Company.search([('party.name', '=', 'World Company')])
+        context = self.Context()
+        context.name = 'test_context'
+        rule1 = self.Rule()
+        rule1.context = context
+        rule1.type_ = 'premium'
+        rule1.name = 'Calcul Test Rule 1'
+        rule1.short_name = 'calcul_test_rule1'
+        rule1.algorithm = 'return 100'
+        rule1.status = 'validated'
+        rule1.save()
+        rule2 = self.Rule()
+        rule2.context = context
+        rule2.type_ = 'premium'
+        rule2.name = 'Calcul Test Rule 2'
+        rule2.short_name = 'calcul_test_rule2'
+        rule2.algorithm = 'return 0'
+        rule2.status = 'validated'
+        rule2.save()
+
+        option = self.OptionDescription(name='Coverage', code='c',
+            company=company, currency=company.currency)
+        premium_rule1 = self.PremiumRule(frequency='monthly', rule=rule1)
+        premium_rule2 = self.PremiumRule(frequency='monthly', rule=rule2)
+        option.premium_rules = [premium_rule1, premium_rule2]
+        option.save()
 
 
 def suite():

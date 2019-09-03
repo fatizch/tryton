@@ -15,6 +15,8 @@ from trytond.transaction import Transaction
 from trytond.rpc import RPC
 from trytond.model import dualmethod
 from trytond.cache import Cache
+from trytond.exceptions import UserError
+from trytond.i18n import gettext
 
 from trytond.modules.coog_core import model, fields, utils, coog_date
 from trytond.modules.currency_cog import ModelCurrency
@@ -220,11 +222,22 @@ class Contract(metaclass=PoolMeta):
                 if prev_value:
                     if prev_value._get_key(no_date=True) == elem._get_key(
                             no_date=True):
-                        # If the previous element concerns the same
-                        # rated_entity, we update its end to match
-                        # the new one if it is a dated premium
-                        if prev_value.start:
-                            prev_value.end = coog_date.add_day(elem.start, -1)
+                        if prev_value.start == elem.start:
+                            # If two premiums with the same key have the same
+                            # date, the only valid case would be if they are
+                            # generated from different premium rules, and that
+                            # only one of those returns a not null value
+                            if elem.amount:
+                                raise UserError(gettext(
+                                    'msg_multiple_premium_at_same_date',
+                                    date=prev_value.start))
+                        else:
+                            # If the previous element concerns the same
+                            # rated_entity, we update its end to match
+                            # the new one if it is a dated premium
+                            if prev_value.start:
+                                prev_value.end = coog_date.add_day(
+                                    elem.start, -1)
                     else:
                         if (getattr(prev_value, 'end', None) is None and
                                 (getattr(prev_value, 'id', -1) or -1) < 0 and

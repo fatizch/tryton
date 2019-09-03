@@ -1,3 +1,4 @@
+* BUG#12448 Générer une erreur si deux tarifs avec des montants non nulls sont sauvegardés pour le même élément facturé
 * BUG#12463 Correction du calcul des primes lorsque sur une garantie une règle de fin est définie et que sur le produit une règle de renouvellement est paramétrée.
 * OTH#00000 Hotfix sur la date manquante dans le contexte lors de l'execution de la règle d'eligibilité des lignes de dates de calcul (primes)
 * OTH#00000 Itération sur les développements de la fonctionnalité des règles de taxe par subdivision (#12265)
