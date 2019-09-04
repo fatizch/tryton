@@ -46,6 +46,7 @@ __all__ = [
     'InvoiceContractStart',
     'DisplayContractPremium',
     'ContractSubStatus',
+    'PremiumTaxRuleCountry',
     ]
 
 FREQUENCIES = [
@@ -1557,6 +1558,29 @@ class Contract(metaclass=PoolMeta):
         limit_date = self.initial_start_date - datetime.timedelta(days=1)
         self.clean_up_contract_invoices(contracts=[self], to_date=limit_date)
 
+    def _get_tax_rule_pattern(self):
+        from_country = from_subdivision = to_country = to_subdivision = None
+        company_address = self.company.party.main_address
+        if company_address:
+            from_country = company_address.country
+            from_subdivision = company_address.subdivision
+        if self.subscriber:
+            subscriber_address = self.subscriber.main_address
+            if subscriber_address:
+                to_country = subscriber_address.country
+                to_subdivision = \
+                    subscriber_address.subdivision or \
+                    (subscriber_address.zip_and_city.subdivision if
+                        subscriber_address.zip_and_city else None)
+        return {
+            'from_country': from_country.id if from_country else None,
+            'from_subdivision': (
+                from_subdivision.id if from_subdivision else None),
+            'to_country': to_country.id if to_country else None,
+            'to_subdivision': (
+                to_subdivision.id if to_subdivision else None),
+            }
+
 
 class ContractFee(metaclass=PoolMeta):
     __name__ = 'contract.fee'
@@ -2350,3 +2374,12 @@ class ContractSubStatus(metaclass=PoolMeta):
 
     hold_billing = fields.Boolean('Hold Billing', depends=['status'],
         states={'invisible': Eval('status') != 'hold'})
+
+
+class PremiumTaxRuleCountry(metaclass=PoolMeta):
+    __name__ = 'contract.premium'
+
+    def _get_tax_rule_pattern(self):
+        if self.main_contract:
+            return self.main_contract._get_tax_rule_pattern()
+        return super(PremiumTaxRuleCountry, self)._get_tax_rule_pattern()
