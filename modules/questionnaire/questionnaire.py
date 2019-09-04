@@ -1,7 +1,6 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 from trytond.i18n import gettext
-from trytond.model import Unique
 from trytond.model.exceptions import ValidationError
 from sql import Literal
 
@@ -170,7 +169,8 @@ class QuestionnairePart(model.CoogSQL, model.CoogView, model.SequenceMixin,
             assert all(x in requirements
                 for x in ['score', 'description', 'product', 'eligible'])
         except AssertionError:
-            raise ValidationError(gettext('questionnaire.msg_invalid_rule_output',
+            raise ValidationError(
+                gettext('questionnaire.msg_invalid_rule_output',
                     rule=self.rule.rec_name))
 
     def _accept_result(self, result):

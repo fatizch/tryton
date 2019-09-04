@@ -159,8 +159,9 @@ class RunQuestionnaire(Wizard):
         for result in self.proposition.results:
             if result.part.mandatory and all(not x.selected for x in
                     result.choices):
-                raise ValidationError(gettext('questionnaire.msg_mandatory_choice',
-                    part=result.part.result))
+                raise ValidationError(
+                    gettext('questionnaire.msg_mandatory_choice',
+                        part=result.part.result))
 
 
 class RunQuestionnaireQuestions(model.CoogView):
@@ -170,7 +171,8 @@ class RunQuestionnaireQuestions(model.CoogView):
 
     questionnaire = fields.Many2One('questionnaire', 'Questionnaire',
         domain=[('id', 'in', Eval('possible_questionnaires', []))],
-        depends=['possible_questionnaires'])
+        depends=['possible_questionnaires'],
+        required=True)
     description = fields.Text('Description', readonly=True,
         states={'invisible': ~Eval('questionnaire')})
     possible_questionnaires = fields.Many2Many('questionnaire', None, None,

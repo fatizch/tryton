@@ -1,3 +1,4 @@
+* OTH#00000 Le questionnaire est requis dans le processus de recueil de besoin
 * BUG#12267 L'écran de saisie des réponses de questionnaire apparait en lecture seul lors de la saisie des réponses dans Coog
 * OTH#00000 Corriger l'initialisation de la date d'effet du processus de souscription depuis un questionnaire
 * FEA#11785 Intégration des questionnaires de recueil de besoin lors du parcours de vente dans Coog

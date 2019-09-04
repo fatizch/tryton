@@ -1,3 +1,4 @@
+* OTH#00000 Questionnaire is required in questionnaire wizard
 * BUG#12267 Questionnaire answers are readonly in questionnaire wizard
 * OTH#00000 Fix subscription process start date initialization from questionnaire wizard
 * FEA#11785 Backoffice questionnaire management, multipart questionnaires
