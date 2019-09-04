@@ -90,6 +90,17 @@ l'assuré</field>
 l'assuré défini sur son adresse</field>
             <field name="parent" ref="dossier_personne_couverte"/>
         </record>
+        <record model="rule_engine.function" id="code_postal_residence">
+            <field name="translated_technical_name">code_postal_residence</field>
+            <field name="description">Code postal de résidence</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_get_person_living_zipcode</field>
+            <field name="long_description">Retourne le code postal de résidence 
+de l'assuré défini sur son adresse</field>
+            <field name="parent" ref="dossier_personne_couverte"/>
+        </record>
         <record model="rule_engine.function" id="dossier_souscripteur">
             <field name="translated_technical_name">dossier_souscripteur</field>
             <field name="description">Souscripteur</field>
@@ -118,7 +129,18 @@ souscripteur du contrat</field>
 souscripteur du contrat défini sur l'adresse du souscripteur</field>
             <field name="parent" ref="dossier_souscripteur"/>
         </record>
-         <record model="rule_engine.function" id="code_pays_de_residence_souscripteur">
+        <record model="rule_engine.function" id="code_postal_residence_souscripteur">
+            <field name="translated_technical_name">code_postal_residence_souscripteur</field>
+            <field name="description">Code postal de résidence</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_get_subscriber_living_zipcode</field>
+            <field name="long_description">Retourne le code postal de résidence 
+du souscripteur du contrat défini sur son adresse</field>
+            <field name="parent" ref="dossier_souscripteur"/>
+        </record>
+        <record model="rule_engine.function" id="code_pays_de_residence_souscripteur">
             <field name="translated_technical_name">code_pays_de_residence_souscripteur</field>
             <field name="description">Code du pays de résidence</field>
             <field name="type">function</field>
@@ -128,7 +150,7 @@ souscripteur du contrat défini sur l'adresse du souscripteur</field>
             <field name="long_description">Retourne le code du pays de résidence du 
 souscripteur du contrat défini sur l'adresse du souscripteur</field>
             <field name="parent" ref="dossier_souscripteur"/>
-        </record>
+       </record>
        <record model="rule_engine.function" id="souscripteur_a_souscrit_produit">
             <field name="translated_technical_name">souscripteur_a_souscrit_produit</field>
             <field name="description">A souscrit le produit</field>

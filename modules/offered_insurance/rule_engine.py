@@ -161,6 +161,12 @@ class RuleEngineRuntime(metaclass=PoolMeta):
 
     @classmethod
     @check_args('contract')
+    def _re_get_subscriber_living_zipcode(cls, args):
+        address = args['contract'].subscriber.address_get()
+        return address.zip
+
+    @classmethod
+    @check_args('contract')
     def _re_get_subscriber_living_country_code(cls, args):
         address = args['contract'].subscriber.address_get()
         return address.country.code if address.country else ''
@@ -196,6 +202,11 @@ class RuleEngineRuntime(metaclass=PoolMeta):
     def _re_get_person_living_country(cls, args):
         address = cls.get_person(args).address_get()
         return address.country
+
+    @classmethod
+    def _re_get_person_living_zipcode(cls, args):
+        address = cls.get_person(args).address_get()
+        return address.zip
 
     @classmethod
     def _re_person_subscribed(cls, args, product_name):

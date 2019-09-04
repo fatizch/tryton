@@ -1,3 +1,4 @@
+* OTH#00000 Add Subscriber zipcode in rule engine functions
 * BUG#12120 Fix rule engine method: Option already subscribed
 * BUG#12088 Impossible to use rules base on subscriber country code when using quotation.calculate APIs
 * FEA#11912 Manage exclusions right access
