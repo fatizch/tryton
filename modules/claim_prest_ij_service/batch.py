@@ -547,8 +547,8 @@ class ProcessGestipFluxBatch(batch.BatchRoot):
         archive_dir = os.path.join(directory, 'archive')
         if not os.path.exists(archive_dir):
             os.makedirs(archive_dir)
+        to_archive = []
         for filepath in ids:
-            to_archive = False
             zip_file = zipfile.ZipFile(filepath)
             for data_file in zip_file.namelist():
                 with zip_file.open(data_file, 'r') as fd_:
@@ -558,9 +558,9 @@ class ProcessGestipFluxBatch(batch.BatchRoot):
                         continue
                     process_method = getattr(Group, 'process_%s_data' % kind)
                     process_method(data)
-                    to_archive = True
-            if to_archive:
-                shutil.move(filepath, archive_dir)
+                    to_archive.append(filepath)
+        for filepath in to_archive:
+            shutil.move(filepath, archive_dir)
 
 
 class CreatePrestIjPeriodsBatch(batch.BatchRoot):
@@ -594,6 +594,9 @@ class CreatePrestIjPeriodsBatch(batch.BatchRoot):
         archive_dir = os.path.join(directory, 'archive')
         if not os.path.exists(archive_dir):
             os.makedirs(archive_dir)
+        to_archive = []
         for filepath in ids:
             if Period.process_zip_file(filepath):
-                shutil.move(filepath, archive_dir)
+                to_archive.append(filepath)
+        for filepath in to_archive:
+            shutil.move(filepath, archive_dir)
