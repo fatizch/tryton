@@ -38,6 +38,8 @@ class APIAccess(ModelSQL, ModelView):
     @classmethod
     def check_access(cls, api_name):
         user = Transaction().user
+        if user == 0:
+            return True
         cached_value = cls._access_cache.get(user, -1)
         if cached_value != -1:
             return api_name in cached_value
