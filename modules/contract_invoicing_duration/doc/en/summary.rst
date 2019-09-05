@@ -1,0 +1,1 @@
+This module handle the generation of invoicing for contracts on a specific duration.

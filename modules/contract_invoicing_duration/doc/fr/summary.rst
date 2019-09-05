@@ -1,0 +1,1 @@
+Ce module permet de gérer le quittancement des contrats sur une durée spécifique.

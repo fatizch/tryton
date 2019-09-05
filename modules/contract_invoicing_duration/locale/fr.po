@@ -1,0 +1,33 @@
+#
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:contract,invoicing_end_date:"
+msgid "Invoicing end date"
+msgstr "Date de fin de quittancement"
+
+msgctxt "field:offered.product.billing_rule,invoicing_end_rule:"
+msgid "Invoicing end rule"
+msgstr "Règle de fin de quittancement"
+
+msgctxt "field:offered.product.billing_rule,invoicing_end_rule_extra_data:"
+msgid "Rule Extra Data"
+msgstr "Paramètres de la règle de fin de quittancement"
+
+msgctxt "field:rule_engine,genshi_evaluated_description:"
+msgid " Genshi Evaluated"
+msgstr "Genshi évalué"
+
+msgctxt "help:contract,invoicing_end_date:"
+msgid "If set, invoices will be generated until this date"
+msgstr "Si définie, les quittances seront générées jusqu'à cette date"
+
+msgctxt "model:ir.message,text:msg_invalid_invoicing_end_date"
+msgid "Invoicing end date prior to contract initial start date"
+msgstr ""
+"Date de fin de quittancement antérieure à la date de début initiale du "
+"contrat"
+
+msgctxt "selection:rule_engine,type_:"
+msgid "Invoicing Duration"
+msgstr "Durée de quittancement"
