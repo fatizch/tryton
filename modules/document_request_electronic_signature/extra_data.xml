@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data depends="offered">
+        <record model="extra_data" id="signature_page">
+            <field name="name">page</field>
+            <field name="string">The page on which the signature must appear</field>
+            <field name="type_">integer</field>
+            <field name="kind">signature</field>
+        </record>
+        <record model="extra_data" id="signature_coordinate_x">
+            <field name="name">coordinate_x</field>
+            <field name="string">The horizontal coordinate on the page</field>
+            <field name="type_">integer</field>
+            <field name="kind">signature</field>
+        </record>
+        <record model="extra_data" id="signature_coordinate_y">
+            <field name="name">coordinate_y</field>
+            <field name="string">The vertical coordinate on the page</field>
+            <field name="type_">integer</field>
+            <field name="kind">signature</field>
+        </record>
+    </data>
+</tryton>

@@ -10,26 +10,25 @@ __all__ = [
 class ReportTemplate(metaclass=PoolMeta):
     __name__ = 'report.template'
 
-    def _create_attachment_from_report(self, report):
-        attachment = super(ReportTemplate, self)._create_attachment_from_report(
-            report)
-        if attachment.document_desc and \
-                attachment.document_desc.digital_signature_required:
-            signer = report.get('party') or (report.get('origin') or
-                    report.get('resource')or attachment.resource).get_contact()
-            attachment.update_electronic_signer(signer)
-        return attachment
-
-    def save_reports_in_edm(self, reports):
-        Attachment = Pool().get('ir.attachment')
-        attachments = super(ReportTemplate, self).save_reports_in_edm(reports)
-        to_request_for_signature = []
-        for attachment in attachments:
-            if attachment.document_desc and \
-                    attachment.document_desc.digital_signature_required:
-                if not attachment.has_signature_transaction_request():
-                    to_request_for_signature.append(attachment)
-        if to_request_for_signature:
-            Attachment.request_electronic_signature_transaction(
-                to_request_for_signature)
-        return attachments
+    def produce_reports(self, objects, context_=None):
+        Signature = Pool().get('document.signature')
+        reports, attachments = super(ReportTemplate, self).produce_reports(
+            objects, context_)
+        if (not self.document_desc
+                or not self.document_desc.digital_signature_required):
+            return reports, attachments
+        for report, attachment in zip(reports,
+                attachments or [None] * len(reports)):
+            signer = (report.get('party') or (report.get('origin')
+                    or report.get('resource')
+                    or attachment.resource).get_contact())
+            # No need to try an electronic signature if we can't go through
+            if signer and signer.email and (signer.mobile or signer.phone):
+                report['signers'] = [signer]
+                Signature.request_transaction(report, attachment,
+                    config=self.document_desc.signature_configuration
+                    if self.document_desc else None,
+                    extra_data=self.document_desc.extra_data
+                    if self.document_desc else None,
+                    credential=self.document_desc.signature_credential
+                    if self.document_desc else None)

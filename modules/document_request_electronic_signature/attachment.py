@@ -26,13 +26,5 @@ class Attachment(metaclass=PoolMeta):
         return bool(getattr(self, signature_status_field))
 
     @classmethod
-    def request_electronic_signature_transaction(cls, attachments):
-        return getattr(cls, provider_name + '_request_transaction')(attachments)
-
-    @classmethod
-    def get_electronic_signature_transaction_info(cls, attachments):
-        return getattr(cls, provider_name + '_get_transaction_info')(
-                attachments)
-
-    def update_electronic_signer(self, signer):
-        setattr(self, provider_name + '_signer', signer)
+    def update_electronic_signature_transaction_info(cls, attachments):
+        getattr(cls, provider_name + '_update_transaction_info')(attachments)

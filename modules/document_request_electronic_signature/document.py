@@ -5,9 +5,11 @@ from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, Bool
 
 from trytond.modules.coog_core import utils
+from trytond.modules.offered.extra_data import with_extra_data
 
 __all__ = [
     'DocumentDescription',
+    'OfferedDocumentDescription',
     'DocumentRequestLine',
     ]
 
@@ -18,12 +20,51 @@ class DocumentDescription(metaclass=PoolMeta):
     digital_signature_required = fields.Boolean('Digital Signature Required',
         states={'invisible': ~Eval('reception_requires_attachment')},
         depends=['reception_requires_attachment'])
+    signature_configuration = fields.Many2One(
+        'document.signature.configuration', 'Signature Configuration',
+        ondelete="RESTRICT",
+        states={'invisible': ~Eval('digital_signature_required')},
+        depends=['digital_signature_required'])
+    signature_credential = fields.Many2One(
+        'document.signature.credential', 'Signature Credential',
+        ondelete="RESTRICT",
+        states={'invisible': ~Eval('digital_signature_required')},
+        depends=['digital_signature_required'])
 
     @fields.depends('digital_signature_required',
-        'reception_requires_attachment')
+        'reception_requires_attachment', 'signature_configuration',
+        'signature_credential')
     def on_change_reception_requires_attachment(self):
         if not self.reception_requires_attachment:
             self.digital_signature_required = False
+            self.signature_configuration = None
+            self.signature_credential = None
+
+
+class OfferedDocumentDescription(with_extra_data(['signature']),
+        metaclass=PoolMeta):
+    __name__ = 'document.description'
+
+    @classmethod
+    def __setup__(cls):
+        super(DocumentDescription, cls).__setup__()
+        cls.extra_data.states = {
+            'invisible': ~Eval('digital_signature_required')}
+        cls.extra_data.depends = ['digital_signature_required']
+
+    @fields.depends('extra_data', 'signature_configuration')
+    def on_change_signature_configuration(self):
+        self.extra_data = {}
+        if self.signature_configuration:
+            for cur_extra_data in self.signature_configuration.extra_data_def:
+                self.extra_data[cur_extra_data.name] = None
+
+    @fields.depends('extra_data')
+    def on_change_reception_requires_attachment(self):
+        super(OfferedDocumentDescription,
+            self).on_change_reception_requires_attachment()
+        if not self.reception_requires_attachment:
+            self.extra_data = {}
 
 
 class DocumentRequestLine(metaclass=PoolMeta):
@@ -76,7 +117,7 @@ class DocumentRequestLine(metaclass=PoolMeta):
             if has_signature_request and not line.attachment.is_signed():
                 to_update[line] = line.attachment
         if to_update:
-            Attachment.get_electronic_signature_transaction_info(
+            Attachment.update_electronic_signature_transaction_info(
                 list(to_update.values()))
         to_receive = []
         for line, attachment in to_update.items():
