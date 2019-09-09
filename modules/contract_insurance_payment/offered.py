@@ -34,12 +34,12 @@ class Product(metaclass=PoolMeta):
 
     @classmethod
     def _export_light(cls):
-        return super(Product, cls)._export_light() | {'payment_journal'}
+        return super(Product, cls)._export_light() | {'sepa_payment_journal'}
 
     def get_documentation_structure(self):
         doc = super(Product, self).get_documentation_structure()
         doc['parameters'].append(
-            coog_string.doc_for_field(self, 'payment_journal'))
+            coog_string.doc_for_field(self, 'sepa_payment_journal'))
         return doc
 
 
