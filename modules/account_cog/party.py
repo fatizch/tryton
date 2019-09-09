@@ -269,8 +269,10 @@ class SynthesisMenu(metaclass=PoolMeta):
                 columns)
         account = pool.get('account.account').__table__()
         move = pool.get('account.move').__table__()
-        return table.join(account, condition=((account.id == table.account)
-                & (account.type.receivable == Literal(True)))).\
+        type_ = pool.get('account.account.type').__table__()
+        return table.join(account, condition=(account.id == table.account)
+                ).join(type_, condition=(account.type == type_.id) &
+                type_.receivable == Literal(True)).\
             join(move, condition=((move.id == table.move))).\
             select(*columns,
                 where=((table.credit > 0) & (table.reconciliation == Null)))

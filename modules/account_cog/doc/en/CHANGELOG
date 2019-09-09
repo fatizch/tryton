@@ -1,3 +1,4 @@
+* BUG#12602 Fix crash due to merge with 5.2
 * OTH#00000 Remove not null constraint on kind deprecated on account following tryton merge
 * OTH#11198 Add create date and write date, create user also on the reconciliation postponement form views
 * OTH#11198 Iteration on reconciliation postponement feature
