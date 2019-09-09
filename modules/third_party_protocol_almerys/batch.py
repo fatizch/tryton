@@ -256,7 +256,7 @@ class AlmerysProtocolBatch(batch.BatchRoot):
                         E.NNI_RATT(
                             contract.subscriber.main_insured_ssn[:13]
                             if contract.subscriber.main_insured_ssn and
-                            not contract.subscriber.ssn_no_key[:13] else ''),
+                            contract.subscriber.ssn_no_key else ''),
                         )
                     membre.extend([
                             E.VIP('false'),
@@ -400,7 +400,7 @@ class AlmerysProtocolBatch(batch.BatchRoot):
                                 covered.party.main_insured_ssn else ''),
                             E.NNI_RATT(
                                 covered.party.main_insured_ssn[:13]
-                                if covered.party.main_insured_ssn and not
+                                if covered.party.main_insured_ssn and
                                 covered.party.ssn_no_key else ''),
                             )
                         membre.extend([
@@ -487,6 +487,12 @@ class AlmerysProtocolBatch(batch.BatchRoot):
                                 covered.noemie_end_date.isoformat()
                                 if covered.noemie_end_date else ''),
                             ))
+                    if all_periods:
+                        first_period = all_periods[0]
+                        c_carte = first_period.extra_details.get(
+                            tp_prefix + 'code_mouvement_carte', None)
+                        if c_carte:
+                            beneficiaire.append(E.CODE_MOUVEMENT_CARTE(c_carte))
                     if any(tpp.protocol.almerys_support_tp
                             for tpp in all_periods):
                         first_period = next(tpp

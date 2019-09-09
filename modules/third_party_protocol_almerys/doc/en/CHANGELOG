@@ -1,3 +1,4 @@
+* OTH#00000 Fix Almerys v3 batch
 * OTH#00000 Remove addresses constraints from register since they are added on setup
 * BUG#12369 Enhance claim bank account management in Almerys batch
 * OTH#00000 Add Almerys chain
