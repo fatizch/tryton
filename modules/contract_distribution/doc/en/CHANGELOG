@@ -1,3 +1,5 @@
+* OTH#00000 Handle is distributor flag in network creation API
+
 Version 2.4 - 2019-04-12
 * BUG#11119 Parent commercial product display incorrect products
 

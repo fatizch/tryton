@@ -20,6 +20,10 @@ class APICore(metaclass=PoolMeta):
     def _distribution_network_schema(cls):
         schema = super()._distribution_network_schema()
         schema['properties']['commercial_products'] = CODED_OBJECT_ARRAY_SCHEMA
+        schema['properties']['is_distributor'] = {
+            'type': 'boolean',
+            'default': True,
+            }
         return schema
 
     @classmethod
@@ -27,7 +31,7 @@ class APICore(metaclass=PoolMeta):
         network = super()._create_distribution_network(network_data)
         network.commercial_products = network_data.get(
             'commercial_products', [])
-        network.is_distributor = True
+        network.is_distributor = network_data['is_distributor']
         return network
 
     @classmethod

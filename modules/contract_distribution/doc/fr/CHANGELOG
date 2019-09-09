@@ -1,3 +1,5 @@
+* OTH#00000 Ajout du champs "est distributeur" dans l'API de création des réseaux de distribution
+
 Version 2.4 - 2019-04-12
 * BUG#11119 Le champs produits comerciaux des réseaux parents affichent de mauvais produit commerciaux
 
