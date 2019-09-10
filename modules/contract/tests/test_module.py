@@ -95,6 +95,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
 
     @test_framework.prepare_test('contract.test0001_testPersonCreation',
         'offered.test0030_testProductCoverageRelation',
+        'contract.test0005_PrepareProductForSubscription'
         )
     def test0010_testContractCreation(self):
         sub_status, = self.SubStatus.search([

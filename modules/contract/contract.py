@@ -602,7 +602,7 @@ class Contract(model.CoogSQL, model.CoogView, with_extra_data(['contract'],
             vals = vals.copy()
             vlist[rank] = vals
             rank += 1
-            if (vals.get('status', '') == 'quote'
+            if (vals.get('status', 'quote') == 'quote'
                     and not vals.get('quote_number')):
                 sequence = product_dict[
                     vals.get('product')].quote_number_sequence

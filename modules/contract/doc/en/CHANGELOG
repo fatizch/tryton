@@ -1,3 +1,4 @@
+* BUG#12556 Quote number undefined when subscription is made by API V1
 * FEA#11970 Add subscribe_contract API
 * BUG#12036 Take into account the quote status inthe calculation of is_active_at_date in order to activate the contract
 * FEA#11698 Add coverage configuration and batch to automatically terminate contract options which the automatic end date is exceeded
