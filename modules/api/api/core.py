@@ -131,7 +131,10 @@ def apify(klass, api_name):
             supered = True
         else:
             transaction_context = Api.update_transaction_context(context)
-            api_context = {'_api_context': context}
+            api_context = {
+                '_api_context': context,
+                'auto_accept_warnings': True,
+                }
         with Transaction().set_context(**transaction_context):
             with ServerContext().set_context(**api_context):
                 try:
