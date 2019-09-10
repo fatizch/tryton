@@ -2,6 +2,12 @@
 <!-- This file is part of Coog. The COPYRIGHT file at the top level of
 this repository contains the full copyright notices and license terms. -->
 <tryton>
+    <data depends="loan">
+        <record model="rule_engine.context-function" id="cte_default_pret">
+            <field name="context" ref="commission_context"/>
+            <field name="tree_element" ref="loan.pret"/>
+        </record>
+    </data>
     <data>
         <record model="rule_engine.context" id="commission_context">
             <field name="name">Commission Context</field>
@@ -13,6 +19,10 @@ this repository contains the full copyright notices and license terms. -->
         <record model="rule_engine.context-function" id="cte_commission_coverage">
             <field name="context" ref="commission_context"/>
             <field name="tree_element" ref="offered_insurance.dossier_garantie"/>
+        </record>
+        <record model="rule_engine.context-function" id="cte_commission_dossier_personne_couverte">
+            <field name="context" ref="commission_context"/>
+            <field name="tree_element" ref="offered_insurance.dossier_personne_couverte"/>
         </record>
         <record model="rule_engine.context-function" id="cte_commission_tools">
             <field name="context" ref="commission_context"/>

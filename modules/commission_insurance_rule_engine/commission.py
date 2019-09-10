@@ -13,6 +13,8 @@ from trytond.modules.offered.extra_data import with_extra_data_def
 __all__ = [
     'Plan',
     'PlanLines',
+    'PlanWithLoan',
+    'PlanLinesWithLoan',
     'Agent',
     ]
 
@@ -89,6 +91,28 @@ class PlanLines(
 
     def get_func_key(self, name):
         return self.options_extract
+
+
+class PlanWithLoan(metaclass=PoolMeta):
+    __name__ = 'commission.plan'
+
+    def get_context_formula(self, amount, product, pattern=None):
+        context = super(PlanWithLoan, self).get_context_formula(amount, product,
+            pattern)
+        if pattern and 'loan_share' in pattern:
+            context['names']['loan_share'] = pattern['loan_share']
+        return context
+
+
+class PlanLinesWithLoan(metaclass=PoolMeta):
+    __name__ = 'commission.plan.line'
+
+    def get_rule_engine_args_from_context(self, context):
+        args = super(PlanLinesWithLoan, self).get_rule_engine_args_from_context(
+            context)
+        if 'loan_share' in context['names']:
+            context['names']['loan_share'].init_dict_for_rule_engine(args)
+        return args
 
 
 class Agent(with_extra_data(['agent'], schema='plan'), metaclass=PoolMeta):
