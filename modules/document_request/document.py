@@ -10,7 +10,7 @@ from sql.conditionals import Case
 from trytond.i18n import gettext
 from trytond.model.exceptions import ValidationError
 from trytond.pool import Pool, PoolMeta
-from trytond.pyson import Eval, Bool, And
+from trytond.pyson import Eval, Bool
 from trytond import backend
 from trytond.transaction import Transaction
 from trytond.cache import Cache
@@ -94,8 +94,7 @@ class DocumentRequestLine(Printable, model.CoogSQL, model.CoogView):
     __name__ = 'document.request.line'
 
     document_desc = fields.Many2One('document.description',
-        'Document Definition', required=True, ondelete='RESTRICT',
-        states={'readonly': Eval('id', 0) > 0}, depends=['id'])
+        'Document Definition', required=True, ondelete='RESTRICT')
     for_object = fields.Reference('Needed For', selection='models_get',
         states={'readonly': ~~Eval('for_object')}, required=True, select=True,
         help='References the object for which the document is asked.')
@@ -419,34 +418,40 @@ class DocumentRequestLineOffered(
         depends=['status_visibility'])
     data_status_string = data_status.translated('data_status')
     status_visibility = fields.Function(fields.Boolean('Status Visibily'),
-        'get_doc_desc_extra_data')
+        'on_change_with_status_visibility')
 
     @classmethod
     def __setup__(cls):
         super(DocumentRequestLineOffered, cls).__setup__()
         cls.reception_date.states = {
-            'readonly': Bool(Eval('data_status') != 'waiting')
+            'readonly': Eval('status_visibility') & (
+                Eval('data_status') == 'done'),
             }
-        cls.reception_date.depends = ['data_status']
-        cls.received.states = {
-            'readonly': Bool(Eval('data_status') != 'waiting')
-            }
-        cls.received.depends = ['allow_force_receive', 'data_status']
-        cls.extra_data.states = {
-            'readonly': Eval('data_status') == 'done',
-            }
+        cls.reception_date.depends += ['data_status', 'status_visibility']
+        cls.received.states['readonly'] |= (Eval('status_visibility') &
+            (Eval('data_status') == 'done'))
+        cls.received.depends += ['data_status', 'status_visibility']
+        cls.extra_data.states['readonly'] = Eval('data_status') == 'done'
+        cls.extra_data.depends += ['data_status']
         cls.attachment.states = {
-            'readonly': And(Eval('extra_data'), Eval('data_status') == 'done'),
-        }
-        cls.attachment.depends.append('extra_data')
-        cls.document_desc.states = {
-            'readonly': Eval('data_status') == 'done',
-        }
+            'invisible': Eval('data_status') != 'done',
+            'readonly': Eval('status_visibility') & (
+                Eval('data_status') == 'done'),
+            }
+        cls.attachment.depends += ['data_status', 'status_visibility']
+        cls.attachment_data.states = {
+            'invisible': Eval('data_status') != 'done',
+            'readonly': Eval('status_visibility') & (
+                Eval('data_status') == 'done'),
+            }
+        cls.attachment_data.depends += ['data_status', 'status_visibility']
         cls._buttons.update({
-            'confirm_attachment': {
-                'readonly': Eval('data_status') == 'done',
-            },
-        })
+                'confirm_attachment': {
+                    'invisible': ~Eval('status_visibility') | (
+                        Eval('data_status') == 'done'),
+                    'readonly': Eval('data_status') == 'done',
+                    },
+                })
 
     @classmethod
     def __register__(cls, module):
@@ -465,13 +470,17 @@ class DocumentRequestLineOffered(
                     ))
 
     @fields.depends('document_desc')
+    def on_change_with_status_visibility(self, name=None):
+        return bool(self.document_desc and (
+                self.document_desc.template
+                or self.document_desc.extra_data_def))
+
+    @fields.depends('document_desc')
     def on_change_document_desc(self):
         super().on_change_document_desc()
-        status = 'waiting'
-        if (self.document_desc and not self.document_desc.extra_data_def and
-                not self.document_desc.template):
-            status = 'done'
-        self.data_status = status
+
+        self.status_visibility = self.on_change_with_status_visibility()
+        self.data_status = 'waiting' if self.status_visibility else 'done'
 
     @fields.depends('data_status')
     def on_change_with_received(self, name=None):
@@ -502,9 +511,6 @@ class DocumentRequestLineOffered(
     @ModelView.button
     def confirm_attachment(cls, documents):
         cls._generate_template_documents(documents)
-
-    def get_doc_desc_extra_data(self, name):
-        return bool(self.document_desc)
 
     def get_contact(self):
         return None

@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<form col="8">
+    <label name="document_desc"/>
+    <field name="document_desc"/>
+    <label name="for_object"/>
+    <field name="for_object"/>
+    <label name="blocking"/>
+    <field name="blocking"/>
+    <label name="received"/>
+    <field name="received"/>
+    <group id="details" expandable="0" string="Details" yfill="1" colspan="8" col="4">
+        <label name="request_date"/>
+        <field name="request_date"/>
+        <label name="send_date"/>
+        <field name="send_date"/>
+        <newline/>
+        <label name="first_reception_date"/>
+        <field name="first_reception_date"/>
+        <label name="reception_date"/>
+        <field name="reception_date"/>
+        <newline/>
+        <label name="attachment"/>
+        <field name="attachment"/>
+        <label name="attachment_data"/>
+        <field name="attachment_data"/>
+    </group>
+</form>

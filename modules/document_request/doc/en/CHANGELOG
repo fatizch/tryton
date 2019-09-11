@@ -1,3 +1,4 @@
+* BUG#12630 Only check data_status if the document description requires it
 * BUG#12530 Use data_status to compute 'received' field
 * FEA#11908 Add comment field on document request
 * BUG#11602 Enable document request creation from list view

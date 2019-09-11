@@ -248,7 +248,7 @@ class View(ExportImportMixin, metaclass=PoolMeta):
             attributes = etree.fromstring(TREE_ATTRIBUTES)
             for attr in attributes.iterchildren("*"):
                 rng.append(attr)
-        elif type_ == 'form':
+        elif type_ in ('form', 'list-form'):
             widgets, = rng.xpath(
                 '//ns:define/ns:optional/ns:attribute'
                 '/ns:name[.="widget"]/following-sibling::ns:choice[1]',

@@ -18,7 +18,7 @@ class View(metaclass=PoolMeta):
     @memoize(10)
     def get_rng(cls, type_):
         rng = super(View, cls).get_rng(type_)
-        if type_ == 'form':
+        if type_ in ('form', 'list-form'):
             widgets = rng.xpath(
                 '//ns:define/ns:optional/ns:attribute'
                 '/ns:name[.="widget"]/following-sibling::ns:choice',
