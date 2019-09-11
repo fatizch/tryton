@@ -1395,7 +1395,7 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
 
         if with_different_loss:
             warning_msg = (gettext(
-                    'claim_indemnification.msg_other_loss_same_covered'),
+                    'claim_indemnification.msg_other_loss_same_covered')
                 + '\n'.join(
                     [gettext(
                             'claim_indemnification.msg_period_duplicate_data',
