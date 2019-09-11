@@ -15,7 +15,7 @@ class APIProduct(metaclass=PoolMeta):
         result = super()._describe_coverage(coverage)
         if coverage.beneficiaries_clauses:
             result['beneficiaries_clauses'] = [
-                dict(default=coverage.default_beneficiary_clause.id == x.id,
+                dict(default=coverage.default_beneficiary_clause == x,
                      **cls._describe_clause(x))
                 for x in coverage.beneficiaries_clauses
                 ]

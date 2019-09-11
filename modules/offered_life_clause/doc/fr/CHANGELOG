@@ -1,3 +1,4 @@
+OTH#0000 Correction dans l'API describe_product quand aucune clause bénéficiaire par défaut n'est définie
 OTH#0000 Ajout de défaut sur le champ clause par défaut pour une meilleure compréhension par l'utilisateur
 
 Version 2.4 - 2019-04-12
