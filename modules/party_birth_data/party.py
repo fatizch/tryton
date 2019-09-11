@@ -1,9 +1,11 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import PoolMeta, Pool
+from trytond.i18n import gettext
 from trytond.modules.coog_core import fields
 from trytond.config import config
 from trytond.pyson import Eval, Bool
+from trytond.exceptions import UserWarning
 
 __all__ = [
     'Party',
@@ -114,3 +116,12 @@ class PartySSN(metaclass=PoolMeta):
         if self.ssn and len(self.ssn[5:10]) == 5:
             zip_code = self.__class__.get_birth_zip_from_code(self.ssn[5:10])
             return zip_code.country.id if zip_code else None
+
+    def check_SSN_from_party_information(self):
+        super().check_SSN_from_party_information()
+        Warning = Pool().get('res.user.warning')
+        if self.birth_zip_and_city and \
+                self.ssn[5:10] != self.birth_zip_and_city.insee_code:
+            if Warning.check(self.ssn):
+                raise UserWarning(self.ssn,
+                    gettext('party_birth_data.msg_invalid_ssn_insee_code'))

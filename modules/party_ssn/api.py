@@ -45,14 +45,15 @@ class APIParty(metaclass=PoolMeta):
         if 'ssn' in data:
             try:
                 # SSN control api is completely broken
-                test_party = Party(ssn=data['ssn'])
-                test_party.check_ssn()
+                test_party = Party(ssn=data['ssn'], gender=data['gender'],
+                    birth_date=data['birth_date'])
+                Party.check_ssn_format(data['ssn'])
                 ssn_key = test_party.get_ssn('ssn_key')
                 ssn_no_key = test_party.get_ssn('ssn_no_key')
                 test_party.ssn_key = ssn_key
                 test_party.ssn_no_key = ssn_no_key
                 test_party.check_ssn_key()
-            except Exception:
+            except UserError:
                 API.add_input_error({
                         'type': 'invalid_ssn',
                         'data': {

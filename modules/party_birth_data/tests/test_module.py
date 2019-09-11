@@ -1,7 +1,10 @@
 import unittest
 
 import trytond.tests.test_tryton
+from trytond.pool import Pool
 from trytond.modules.coog_core import test_framework
+from trytond.transaction import Transaction
+from trytond.exceptions import UserWarning
 import datetime
 
 
@@ -83,6 +86,37 @@ class ModuleTestCase(test_framework.CoogTestCase):
         birth_city = second_party.on_change_with_birth_city()
         second_party.save()
         self.assertEqual(birth_city, None)
+
+    def test_check_SSN_from_party_information(self):
+        Configuration = Pool().get('party.configuration')
+        config = Configuration(1)
+        config.check_ssn_with_party_information = True
+        config.save()
+        country = self.Country(name="France", code='fr')
+        country.save()
+        zipcode = self.ZipCode(city="Nice", zip="72264",
+                               insee_code="72264", country=country)
+        zipcode.save()
+        with Transaction().set_user(1):
+            person, = self.Party.create([{
+                'is_person': True,
+                'name': 'Person test',
+                'first_name': 'first name test',
+                'ssn': '180127226401223',
+                'birth_date': datetime.date(1980, 12, 5),
+                'gender': 'male',
+                'addresses': [],
+                'birth_country': country,
+                'birth_zip': '72264',
+                'birth_city': 'Nice'
+            }])
+            # Test ok
+            person.save()
+            # Test ko
+            zipcode.insee_code = "72265"
+            zipcode.save()
+            person.birth_zip = "72265"
+            self.assertRaises(UserWarning, person.save)
 
 
 def suite():

@@ -7,5 +7,11 @@
         <record model="ir.message" id="msg_invalid_ssn_key">
             <field name="text">Invalid SSN Key.</field>
         </record>
+        <record model="ir.message" id="msg_invalid_ssn_gender">
+            <field name="text">Invalid SSN Gender</field>
+        </record>
+         <record model="ir.message" id="msg_invalid_ssn_year_or_month_of_birth">
+            <field name="text">Invalid SSN : incorrect year or month of birth</field>
+        </record>
     </data>
 </tryton>

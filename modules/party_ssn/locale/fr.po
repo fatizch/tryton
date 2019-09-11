@@ -2,6 +2,10 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "field:party.configuration,check_ssn_with_party_information:"
+msgid "Check ssn with party information"
+msgstr "Vérification du NIR avec les informations de la personne"
+
 msgctxt "field:party.party,ssn:"
 msgid "SSN"
 msgstr "NIR"
@@ -18,10 +22,27 @@ msgctxt "field:party.party,ssn_required:"
 msgid "SSN Required"
 msgstr "Numéro de SS obligatoire"
 
+msgctxt "help:party.configuration,check_ssn_with_party_information:"
+msgid ""
+"If check, SSN will be validated based on gender, birth date and birth zip "
+"code information"
+msgstr ""
+"Si coché, le NIR sera validé en fonction de la civilité, de la date de "
+"naissance et du code postal de naissance"
+
 msgctxt "model:ir.message,text:msg_invalid_ssn"
 msgid "Invalid format for SSN."
 msgstr "Format non valide pour le numéro de sécu."
 
+msgctxt "model:ir.message,text:msg_invalid_ssn_gender"
+msgid "Invalid SSN Gender"
+msgstr "Le premier chiffre du NIR ne correspond pas avec la civilité"
+
 msgctxt "model:ir.message,text:msg_invalid_ssn_key"
 msgid "Invalid SSN Key."
 msgstr "Clé de numéro de sécu non valide."
+
+msgctxt "model:ir.message,text:msg_invalid_ssn_year_or_month_of_birth"
+msgid "Invalid SSN : incorrect year or month of birth"
+msgstr ""
+"Les chiffres de 2 à 6 ne correspondent pas à l'année et mois de naissance."

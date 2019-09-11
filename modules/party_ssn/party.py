@@ -3,10 +3,11 @@
 import re
 
 from trytond.i18n import gettext
-from trytond.pool import PoolMeta
+from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval
 from trytond.model import Unique
 from trytond.model.exceptions import ValidationError
+from trytond.exceptions import UserWarning
 
 from trytond.modules.coog_core import fields, coog_string, utils
 from trytond.modules.party_cog.party import STATES_PERSON, STATES_ACTIVE
@@ -50,6 +51,7 @@ class Party(metaclass=PoolMeta):
     @classmethod
     def validate(cls, parties):
         super(Party, cls).validate(parties)
+
         for party in parties:
             party.check_ssn()
             party.check_ssn_key()
@@ -93,20 +95,44 @@ class Party(metaclass=PoolMeta):
         key = 97 - int(ssn_as_num) % 97
         return key
 
-    def check_ssn(self):
-        if not self.ssn:
-            res = True
-        else:
-            pattern = """^[12345678]
-                [0-9]{2}
-                [0-9][0-9]
-                (2[AB]|[0-9]{2})
-                [0-9]{3}
-                [0-9]{3}
-                [0-9]{2}$"""
-            res = re.search(pattern, self.ssn, re.X)
+    def check_SSN_from_party_information(self):
+        Warning = Pool().get('res.user.warning')
+        if self.gender and not(
+                (self.gender == 'male' and self.ssn[0] == '1') or
+                (self.gender == 'female' and self.ssn[0] == '2')):
+            key = f'{self.ssn}_1'
+            if Warning.check(key):
+                raise UserWarning(key,
+                    gettext('party_ssn.msg_invalid_ssn_gender'))
+
+        if self.birth_date and not(
+                self.ssn[1:3] == str(self.birth_date.year)[2:] and
+                self.ssn[3:5] == f'{self.birth_date.month:02d}'):
+            key = f'{self.ssn}_2'
+            if Warning.check(key):
+                raise UserWarning(key, gettext(
+                    'party_ssn.msg_invalid_ssn_year_or_month_of_birth'))
+
+    @classmethod
+    def check_ssn_format(cls, ssn):
+        pattern = """^[12345678]
+                   [0-9]{2}
+                   [0-9][0-9]
+                   (2[AB]|[0-9]{2})
+                   [0-9]{3}
+                   [0-9]{3}
+                   [0-9]{2}$"""
+        res = re.search(pattern, ssn, re.X)
         if not res:
             raise ValidationError(gettext('party_ssn.msg_invalid_ssn'))
+
+    def check_ssn(self):
+        if self.ssn:
+            self.__class__.check_ssn_format(self.ssn)
+            Configuration = Pool().get('party.configuration')
+            config = Configuration(1)
+            if config.check_ssn_with_party_information and self.ssn:
+                self.check_SSN_from_party_information()
 
     def check_ssn_key(self):
         if not self.ssn:

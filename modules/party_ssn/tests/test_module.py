@@ -6,6 +6,8 @@ from datetime import date
 
 import trytond.tests.test_tryton
 from trytond.pool import Pool
+from trytond.exceptions import UserWarning, UserError
+from trytond.transaction import Transaction
 
 from trytond.modules.coog_core import test_framework
 
@@ -71,42 +73,80 @@ class ModuleTestCase(test_framework.CoogTestCase):
 
     @test_framework.prepare_test('party_cog.test0002_testCountryCreation')
     def test0060_party_API(self):
+        Configuration = Pool().get('party.configuration')
+        config = Configuration(1)
+        config.check_ssn_with_party_information = True
+        config.save()
         pool = Pool()
         APIParty = pool.get('api.party')
         Party = pool.get('party.party')
 
-        result = APIParty.create_party({
-                'parties': [
-                    {
-                        'ref': '1',
-                        'is_person': True,
-                        'name': 'Doe',
-                        'first_name': 'Father',
-                        'birth_date': '1980-01-20',
-                        'gender': 'male',
-                        'ssn': '145067512312354',
-                        },
-                    ]}, {'_debug_server': True})
-        party = Party(result['parties'][0]['id'])
-        self.assertEqual(party.ssn, '145067512312354')
+        with Transaction().set_user(1):
+            result = APIParty.create_party({
+                    'parties': [
+                        {
+                            'ref': '1',
+                            'is_person': True,
+                            'name': 'Doe',
+                            'first_name': 'Father',
+                            'birth_date': '1980-01-20',
+                            'gender': 'male',
+                            'ssn': '145067512312354',
+                            },
+                        ]}, {'_debug_server': True})
+            party = Party(result['parties'][0]['id'])
+            self.assertEqual(party.ssn, '145067512312354')
 
-        self.assertEqual(
-            APIParty.create_party({
-                'parties': [
-                    {
-                        'ref': '1',
-                        'is_person': True,
-                        'name': 'Doe',
-                        'first_name': 'Father',
-                        'birth_date': '1980-01-20',
-                        'gender': 'male',
-                        'ssn': '145067512312353',
-                        },
-                        ]}, {}).data,
-            [{
-                    'type': 'invalid_ssn',
-                    'data': {'ssn': '145067512312353'},
-                    }])
+            self.assertEqual(
+                APIParty.create_party({
+                    'parties': [
+                        {
+                            'ref': '1',
+                            'is_person': True,
+                            'name': 'Doe',
+                            'first_name': 'Father',
+                            'birth_date': '1980-01-20',
+                            'gender': 'male',
+                            'ssn': '145067512312353',
+                            },
+                            ]}, {}).data,
+                [{
+                        'type': 'invalid_ssn',
+                        'data': {'ssn': '145067512312353'},
+                        }])
+
+    def _check_error_message_ssn_validation(self, person, msg):
+        try:
+            person.save()
+        except (UserWarning, UserError) as w:
+            self.assertEqual(w.message, msg)
+
+    def test_check_SSN_from_party_information(self):
+        Configuration = Pool().get('party.configuration')
+        config = Configuration(1)
+        config.check_ssn_with_party_information = True
+        config.save()
+        with Transaction().set_user(1):
+            person, = self.Party.create([{
+                'is_person': True,
+                'name': 'Person test',
+                'first_name': 'first name test',
+                'ssn': '279121414251193',
+                'birth_date': date(1979, 12, 5),
+                'gender': 'female',
+                'addresses': []
+            }])
+            # Test Ok
+            person.save()
+            # Test ko # Change gender
+            person.gender = 'male'
+            self._check_error_message_ssn_validation(
+                person, 'Invalid SSN Gender')
+            # Test ko # Change birth date
+            person.gender = 'female'
+            person.birth_date = date(1980, 12, 5)
+            self._check_error_message_ssn_validation(person,
+                'Invalid SSN : incorrect year or month of birth')
 
 
 def suite():

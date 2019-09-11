@@ -2,6 +2,7 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
 from . import party
+from . import configuration
 
 from . import api
 
@@ -9,6 +10,7 @@ from . import api
 def register():
     Pool.register(
         party.Party,
+        configuration.Configuration,
         module='party_ssn', type_='model')
 
     Pool.register(
