@@ -723,6 +723,15 @@ class Translation(metaclass=PoolMeta):
     __name__ = 'ir.translation'
 
     @classmethod
+    def __register__(cls, module_name):
+        super(Translation, cls).__register__(module_name)
+        cursor = Transaction().connection.cursor()
+        translation = cls.__table__()
+        # Migration from coog-2.4
+        query = translation.delete(where=translation.type == 'error')
+        cursor.execute(*query)
+
+    @classmethod
     def delete(cls, translations):
         if not translations:
             return
