@@ -1,3 +1,4 @@
+* OTH#0000 Fix invalid tag in icons
 * FEA#12410 Allow to enforce readonly behaviour in sub-views of O2M fields
 * BUG#00000 Fix JSON export and import issues for billing rules, endorsement definitions, questionnaires and third party protocols
 * BUG#00000 Fix various JSON export and import issues on: journal sequences, billing rules, distribution channels and party addresses
