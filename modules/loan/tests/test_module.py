@@ -650,6 +650,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
                 appliable_conditions_date=start_date,
                 start_date=start_date,
                 )
+            contract.quote_number = 'QuoY'
             contract.save()
             contract.account_for_billing = account
             contract.subscriber = subscriber
@@ -911,8 +912,9 @@ class ModuleTestCase(test_framework.CoogTestCase):
                 example['output'])
 
     @test_framework.prepare_test(
+        'offered_insurance.test0010Coverage_creation',
         'contract_insurance.test0001_testPersonCreation',
-        'contract_insurance.test0005_PrepareProductForSubscription',
+        'contract.test0005_PrepareProductForSubscription',
         'contract.test0002_testCountryCreation',
         'loan.test0010loan_basic_data',
         )

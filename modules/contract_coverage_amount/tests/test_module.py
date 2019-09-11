@@ -93,16 +93,7 @@ return coverage_amount() < 1000
 
     @test_framework.prepare_test(
         'contract_coverage_amount.test0005_AddCoverageAmountRule',
-        )
-    def test0009_PrepareProductForSubscription(self):
-        quote_sequence, = self.Sequence.search([('code', '=', 'quote')])
-
-        product_a, = self.Product.search([('code', '=', 'AAA')])
-        product_a.quote_number_sequence = quote_sequence
-        product_a.save()
-
-    @test_framework.prepare_test(
-        'contract_coverage_amount.test0009_PrepareProductForSubscription',
+        'contract.test0005_PrepareProductForSubscription',
         )
     def test0050_productDescription(self):
         product, = self.Product.search([('code', '=', 'AAA')])
@@ -182,7 +173,8 @@ return coverage_amount() < 1000
             )
 
     @test_framework.prepare_test(
-        'contract_coverage_amount.test0009_PrepareProductForSubscription',
+        'contract_coverage_amount.test0005_AddCoverageAmountRule',
+        'contract.test0005_PrepareProductForSubscription',
         'contract.test0002_testCountryCreation',
         )
     def test0060_subscribe_contract_API(self):

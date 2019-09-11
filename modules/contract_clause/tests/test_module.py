@@ -20,27 +20,9 @@ class ModuleTestCase(test_framework.CoogTestCase):
         return ['contract', 'offered']
 
     @test_framework.prepare_test(
-        'offered_clause.test0020_addClausesToProduct',
-        )
-    def test0005_PrepareProductForSubscription(self):
-        pool = Pool()
-        Sequence = pool.get('ir.sequence')
-        Product = pool.get('offered.product')
-
-        qg = Sequence()
-        qg.name = 'Quote Sequence'
-        qg.code = 'quote'
-        qg.prefix = 'Quo'
-        qg.suffix = 'Y${year}'
-        qg.save()
-
-        product_a, = Product.search([('code', '=', 'AAA')])
-        product_a.quote_number_sequence = qg
-        product_a.save()
-
-    @test_framework.prepare_test(
         'contract.test0002_testCountryCreation',
-        'contract_clause.test0005_PrepareProductForSubscription',
+        'offered_clause.test0020_addClausesToProduct',
+        'contract.test0005_PrepareProductForSubscription',
         )
     def test0100_subscribe_contract_API(self):
         pool = Pool()

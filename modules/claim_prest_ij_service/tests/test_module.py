@@ -124,6 +124,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
 
     @test_framework.prepare_test(
         'offered_insurance.test0010Coverage_creation',
+        'contract.test0005_PrepareProductForSubscription',
         )
     def test0002_test_create_ij_subscription_batch(self):
         birth_date = datetime.date(1980, 1, 1)

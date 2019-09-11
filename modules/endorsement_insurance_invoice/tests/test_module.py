@@ -134,43 +134,43 @@ class ModuleTestCase(test_framework.CoogTestCase):
                                         }])],
                         }])
 
-        config = self.OfferedConfiguration(1)
-        config.split_invoices_on_endorsement_dates = True
-        config.save()
-        contract = self.Contract(company=company,
-            start_date=datetime.date(2017, 8, 1),
-            product=product,
-            billing_informations=[
-                self.BillingInformation(date=None,
-                    billing_mode=freq_year,
-                    payment_term=payment_term),
-                self.BillingInformation(date=datetime.date(2018, 1, 1),
-                    billing_mode=freq_quart,
-                    direct_debit_day=5,
-                    payment_term=payment_term),
-                ],
-            )
-        contract.save()
-        self.maxDiff = None
-        contract.rebill_endorsement_dates = mock.Mock(return_value=[
-                datetime.datetime.combine(datetime.date(2017, 12, 15),
-                    datetime.time()),
-                datetime.datetime.combine(datetime.date(2018, 2, 28),
-                    datetime.time())])
-        self.assertEqual(contract.get_invoice_periods(
-                datetime.date(2018, 4, 1), contract.start_date),
-            [
-                (datetime.date(2017, 8, 1), datetime.date(2017, 12, 14),
-                    contract.billing_informations[0]),
-                (datetime.date(2017, 12, 15), datetime.date(2017, 12, 31),
-                    contract.billing_informations[0]),
-                (datetime.date(2018, 1, 1), datetime.date(2018, 2, 27),
-                    contract.billing_informations[1]),
-                (datetime.date(2018, 2, 28), datetime.date(2018, 3, 31),
-                    contract.billing_informations[1]),
-                (datetime.date(2018, 4, 1), datetime.date(2018, 6, 30),
-                    contract.billing_informations[1]),
-                ])
+            config = self.OfferedConfiguration(1)
+            config.split_invoices_on_endorsement_dates = True
+            config.save()
+            contract = self.Contract(company=company,
+                start_date=datetime.date(2017, 8, 1),
+                product=product,
+                billing_informations=[
+                    self.BillingInformation(date=None,
+                        billing_mode=freq_year,
+                        payment_term=payment_term),
+                    self.BillingInformation(date=datetime.date(2018, 1, 1),
+                        billing_mode=freq_quart,
+                        direct_debit_day=5,
+                        payment_term=payment_term),
+                    ],
+                )
+            contract.save()
+            self.maxDiff = None
+            contract.rebill_endorsement_dates = mock.Mock(return_value=[
+                    datetime.datetime.combine(datetime.date(2017, 12, 15),
+                        datetime.time()),
+                    datetime.datetime.combine(datetime.date(2018, 2, 28),
+                        datetime.time())])
+            self.assertEqual(contract.get_invoice_periods(
+                    datetime.date(2018, 4, 1), contract.start_date),
+                [
+                    (datetime.date(2017, 8, 1), datetime.date(2017, 12, 14),
+                        contract.billing_informations[0]),
+                    (datetime.date(2017, 12, 15), datetime.date(2017, 12, 31),
+                        contract.billing_informations[0]),
+                    (datetime.date(2018, 1, 1), datetime.date(2018, 2, 27),
+                        contract.billing_informations[1]),
+                    (datetime.date(2018, 2, 28), datetime.date(2018, 3, 31),
+                        contract.billing_informations[1]),
+                    (datetime.date(2018, 4, 1), datetime.date(2018, 6, 30),
+                        contract.billing_informations[1]),
+                    ])
 
 
 def suite():

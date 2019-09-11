@@ -32,7 +32,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
             }
 
     @test_framework.prepare_test(
-        'contract_insurance.test0005_PrepareProductForSubscription',
+        'contract.test0005_PrepareProductForSubscription',
         )
     def test0005_PrepareProductForSubscription(self):
         pool = Pool()
@@ -153,6 +153,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
             _re_number_of_covered_with_relation(args, 'spouse'), 2)
 
     @test_framework.prepare_test(
+        'offered_insurance.test0010Coverage_creation',
         'health.test0005_PrepareProductForSubscription',
         'contract.test0002_testCountryCreation',
         )

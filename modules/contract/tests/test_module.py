@@ -80,18 +80,21 @@ class ModuleTestCase(test_framework.CoogTestCase):
             name='France',
             ).save()
 
-    @test_framework.prepare_test('offered.test0030_testProductCoverageRelation')
     def test0005_PrepareProductForSubscription(self):
-        qg = self.Sequence()
-        qg.name = 'Quote Sequence'
-        qg.code = 'quote'
-        qg.prefix = 'Quo'
-        qg.suffix = 'Y${year}'
-        qg.save()
+        quote_sequence = self.Sequence.search([('code', '=', 'quote')])
+        if quote_sequence:
+            quote_sequence = quote_sequence[0]
+        else:
+            quote_sequence = self.Sequence()
+            quote_sequence.name = 'Quote Sequence'
+            quote_sequence.code = 'quote'
+            quote_sequence.prefix = 'Quo'
+            quote_sequence.suffix = 'Y${year}'
+            quote_sequence.save()
 
-        product_a, = self.Product.search([('code', '=', 'AAA')])
-        product_a.quote_number_sequence = qg
-        product_a.save()
+        for product in self.Product.search([]):
+            product.quote_number_sequence = quote_sequence
+            product.save()
 
     @test_framework.prepare_test('contract.test0001_testPersonCreation',
         'offered.test0030_testProductCoverageRelation',
@@ -589,6 +592,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
         self.assertEqual(option.status, 'void')
 
     @test_framework.prepare_test(
+        'offered.test0030_testProductCoverageRelation',
         'contract.test0002_testCountryCreation',
         'contract.test0005_PrepareProductForSubscription',
         )

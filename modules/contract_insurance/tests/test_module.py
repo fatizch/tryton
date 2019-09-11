@@ -79,16 +79,6 @@ class ModuleTestCase(test_framework.CoogTestCase):
         qg.save()
 
     @test_framework.prepare_test(
-        'offered_insurance.test0010Coverage_creation',
-        )
-    def test0005_PrepareProductForSubscription(self):
-        quote_sequence, = self.Sequence.search([('code', '=', 'quote')])
-
-        product_a, = self.Product.search([('code', '=', 'AAA')])
-        product_a.quote_number_sequence = quote_sequence
-        product_a.save()
-
-    @test_framework.prepare_test(
         'offered_insurance.test0100_testExtraPremiumKindCreation',
     )
     def test0010_testExtraPremiumRateCalculate(self):
@@ -118,6 +108,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
 
     @test_framework.prepare_test(
         'offered_insurance.test0010Coverage_creation',
+        'contract.test0005_PrepareProductForSubscription',
         'contract_insurance.test0001_testPersonCreation',
         )
     def test0012_testContractCreation(self):
@@ -880,8 +871,9 @@ class ModuleTestCase(test_framework.CoogTestCase):
         self.assertEqual(contract.status, 'void')
 
     @test_framework.prepare_test(
+        'offered_insurance.test0010Coverage_creation',
         'contract_insurance.test0001_testPersonCreation',
-        'contract_insurance.test0005_PrepareProductForSubscription',
+        'contract.test0005_PrepareProductForSubscription',
         'contract.test0002_testCountryCreation',
         )
     def test0060_subscribe_contract_API(self):
@@ -1082,7 +1074,9 @@ class ModuleTestCase(test_framework.CoogTestCase):
         pass
 
     @test_framework.prepare_test(
+        'offered_insurance.test0010Coverage_creation',
         'contract_insurance.test0001_testPersonCreation',
+        'contract.test0005_PrepareProductForSubscription',
         'offered_insurance.test0010Package_creation'
         )
     def test0080_subscription_by_package(self):

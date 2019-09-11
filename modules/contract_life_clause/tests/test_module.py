@@ -59,27 +59,9 @@ class ModuleTestCase(test_framework.CoogTestCase):
         coverage_a.save()
 
     @test_framework.prepare_test(
-        'contract_life_clause.test0010_addBeneficiaryClauses',
-        )
-    def test0020_PrepareProductForSubscription(self):
-        pool = Pool()
-        Sequence = pool.get('ir.sequence')
-        Product = pool.get('offered.product')
-
-        qg = Sequence()
-        qg.name = 'Quote Sequence'
-        qg.code = 'quote'
-        qg.prefix = 'Quo'
-        qg.suffix = 'Y${year}'
-        qg.save()
-
-        product_a, = Product.search([('code', '=', 'AAA')])
-        product_a.quote_number_sequence = qg
-        product_a.save()
-
-    @test_framework.prepare_test(
         'contract_insurance.test0001_testPersonCreation',
-        'contract_life_clause.test0020_PrepareProductForSubscription',
+        'contract_life_clause.test0010_addBeneficiaryClauses',
+        'contract.test0005_PrepareProductForSubscription',
         'contract.test0002_testCountryCreation',
         )
     def test0060_subscribe_contract_API(self):
