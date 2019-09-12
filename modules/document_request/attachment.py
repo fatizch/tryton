@@ -23,8 +23,9 @@ class Attachment(metaclass=PoolMeta):
     is_conform = fields.Function(
         fields.Boolean('Conform'),
         'on_change_with_is_conform')
-    status_change_date = fields.Date('Status Change Date', readonly=True,
-        states={'invisible': Eval('status') == 'waiting_validation'},
+    status_change_date = fields.Date('Status Change Date',
+        states={'invisible': Eval('status') == 'waiting_validation',
+            'readonly': True},
         depends=['status'], help="Date of Last Status Change"
         )
 
