@@ -21,6 +21,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
 
     @test_framework.prepare_test(
         'contract.test0002_testCountryCreation',
+        'offered.test0030_testProductCoverageRelation',
         'contract.test0005_PrepareProductForSubscription',
         'distribution.test0002_dist_network_creation',
         )

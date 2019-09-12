@@ -114,6 +114,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
 
     @test_framework.prepare_test(
         'contract_insurance_document_request.test0001_CreateDocumentDescs',
+        'offered.test0030_testProductCoverageRelation',
         'contract.test0005_PrepareProductForSubscription',
         'contract.test0002_testCountryCreation',
         )
