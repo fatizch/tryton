@@ -36,15 +36,17 @@ class DistributionNetwork(metaclass=PoolMeta):
         return super()._export_light() | {'authorized_distribution_channels'}
 
     @classmethod
-    def validate(cls, dis_networks):
-        for network in dis_networks:
-            if network.is_distributor:
-                if not network.authorized_distribution_channels \
-                        and not network.parent_authorized_distribution_channels:
-                    raise ValidationError(gettext(
-                            'distribution_channel'
-                            '.msg_net_must_have_at_least_one_channel',
-                            network=network.get_rec_name('')))
+    def validate(cls, dist_networks):
+        for network in dist_networks:
+            # This is very sad, but the mptt update does not seem to properly
+            # reset the transaction cache, so left and right are not up to date
+            # when searching the parents
+            network._cache.pop(network.id, None)
+            if network.is_distributor and not network.all_net_channels:
+                raise ValidationError(gettext(
+                        'distribution_channel'
+                        '.msg_net_must_have_at_least_one_channel',
+                        network=network.get_rec_name('')))
 
     def get_parent_distribution_channels_id(self, name):
         return list({channel.id for parent in self.parents

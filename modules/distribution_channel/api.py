@@ -105,6 +105,15 @@ class APICore(metaclass=PoolMeta):
             data['distribution_channels'] = [
                 API.instantiate_code_object('distribution.channel', x)
                 for x in data['distribution_channels']]
+        else:
+            if not data['parent'].all_net_channels:
+                API.add_input_error({
+                        'type': 'missing_distribution_channel',
+                        'data': {
+                            'parent': data['parent'].code,
+                            'parent_channels': [],
+                            },
+                        })
 
 
 class APIContract(metaclass=PoolMeta):
