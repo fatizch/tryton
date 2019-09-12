@@ -57,6 +57,11 @@ class Fee(model.CoogSQL, model.CoogView, ModelCurrency):
     allow_override = fields.Boolean('Allow Override')
     coverages = fields.Many2Many('offered.option.description-account.fee',
         'fee', 'coverage', 'Coverages')
+    invoice_amount_threshold = fields.Numeric('Invoice Amount Threshold',
+        digits=(16, 2),
+        states={'invisible': Eval('frequency') != 'once_per_invoice'},
+        help='If set, the fee will not be applied if the total amount '
+             'of the associated invoice exceeds it')
 
     @classmethod
     def _export_light(cls):
@@ -99,6 +104,11 @@ class Fee(model.CoogSQL, model.CoogView, ModelCurrency):
     @staticmethod
     def default_type():
         return 'fixed'
+
+    @fields.depends('frequency')
+    def on_change_with_invoice_amount_threshold(self):
+        if self.frequency != 'once_per_invoice':
+            return None
 
     @fields.depends('code', 'name')
     def on_change_with_code(self):

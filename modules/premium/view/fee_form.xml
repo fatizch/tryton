@@ -16,6 +16,11 @@ this repository contains the full copyright notices and license terms. -->
     </group>
     <label name="frequency"/>
     <field name="frequency"/>
+    <label name="invoice_amount_threshold"/>
+    <group name="invoice_amount_threshold" string="">
+        <field name="invoice_amount_threshold" xexpand="0"/>
+        <label name="currency_symbol" string="" xexpand="1" xalign="0"/>
+    </group>
     <newline/>
     <label name="rate"/>
     <group name="rate" string="">

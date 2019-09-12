@@ -1083,14 +1083,34 @@ class Contract(metaclass=PoolMeta):
         if date_invoices and len(date_invoices) == 1:
             return date_invoices[0]
 
+    def _filter_threshold_fees(self, lines):
+        Fee = Pool().get('account.fee')
+        total, fees = Decimal(0), []
+        for line in lines:
+            rated_instance = line.details[0].rated_entity
+            if isinstance(rated_instance, Fee):
+                if (rated_instance.frequency == 'once_per_invoice' and
+                        rated_instance.invoice_amount_threshold):
+                    fees.append(line)
+            else:
+                total += line.unit_price
+        to_ignore = []
+        for fee in fees:
+            rated_instance = fee.details[0].rated_entity
+            if isinstance(rated_instance, Fee):
+                if total <= rated_instance.invoice_amount_threshold:
+                    to_ignore.append(fee)
+        return [x for x in lines if x not in to_ignore]
+
     def finalize_invoices_lines(self, lines):
         for line in lines:
             line.company = self.company
 
     def get_invoice_lines(self, start, end):
         lines = self.compute_invoice_lines(start, end)
-        self.finalize_invoices_lines(lines)
-        return lines
+        filtered = self._filter_threshold_fees(lines)
+        self.finalize_invoices_lines(filtered)
+        return filtered
 
     def compute_invoice_lines(self, start, end):
         lines = []
