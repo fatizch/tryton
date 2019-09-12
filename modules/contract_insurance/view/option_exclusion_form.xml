@@ -1,9 +1,11 @@
 <?xml version="1.0"?>
 <!-- This file is part of Coog. The COPYRIGHT file at the top level of
 this repository contains the full copyright notices and license terms. -->
-<tree editable="bottom">
+<form>
+    <label name="option"/>
+    <field name="option"/>
+    <label name="exclusion"/>
     <field name="exclusion"/>
-    <field name="action"/>
+    <label name="comment"/>
     <field name="comment"/>
-    <field name="exclusion_src" tree_invisible="1"/>
-</tree>
+</form>

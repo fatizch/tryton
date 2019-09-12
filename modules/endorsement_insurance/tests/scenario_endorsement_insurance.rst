@@ -247,6 +247,7 @@ Create Test Contract::
     >>> ExclusionKind = Model.get('offered.exclusion')
     >>> ItemDescription = Model.get('offered.item.description')
     >>> Product = Model.get('offered.product')
+    >>> ContractOptionExclusion = Model.get('contract.option.exclusion')
     >>> coverage = OptionDescription(coverage.id)
     >>> item_description = ItemDescription(item_description.id)
     >>> exclusion_1 = ExclusionKind(exclusion_1.id)
@@ -266,7 +267,9 @@ Create Test Contract::
     >>> covered_element2.item_desc = item_description
     >>> option2 = covered_element2.options.new()
     >>> option2.coverage = coverage
-    >>> option2.exclusions.append(exclusion_1)
+    >>> exclusion_option = ContractOptionExclusion(exclusion=exclusion_1,
+    ...     option=option2, comment='')
+    >>> option2.exclusions.append(exclusion_option)
     >>> contract.subscriber = subscriber
     >>> contract.save()
     >>> Contract.write([contract], {
@@ -320,8 +323,8 @@ New Manage Exclusions Endorsement::
     >>> new_endorsement.execute('manage_exclusions_next')
     >>> new_endorsement.execute('apply_endorsement')
     >>> contract = Contract(contract.id)
-    >>> [x.code for x in contract.covered_elements[0].options[0].exclusions] == [
-    ...     'exclusion_2']
+    >>> [x.exclusion.code for x in contract.covered_elements[0].options[0]
+    ...     .exclusions] == ['exclusion_2']
     True
     >>> len(contract.covered_elements[1].options[0].exclusions) == 0
     True
@@ -330,8 +333,8 @@ New Manage Exclusions Endorsement::
     >>> contract = Contract(contract.id)
     >>> len(contract.covered_elements[0].options[0].exclusions) == 0
     True
-    >>> [x.code for x in contract.covered_elements[1].options[0].exclusions] == [
-    ...     'exclusion_1']
+    >>> [x.exclusion.code for x in contract.covered_elements[1].options[0]
+    ...     .exclusions] == ['exclusion_1']
     True
 
 New Remove Option Endorsement::

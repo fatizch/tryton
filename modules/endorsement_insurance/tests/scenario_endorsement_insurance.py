@@ -237,6 +237,7 @@ OptionDescription = Model.get('offered.option.description')
 ExclusionKind = Model.get('offered.exclusion')
 ItemDescription = Model.get('offered.item.description')
 Product = Model.get('offered.product')
+ContractOptionExclusion = Model.get('contract.option.exclusion')
 
 coverage = OptionDescription(coverage.id)
 item_description = ItemDescription(item_description.id)
@@ -258,7 +259,9 @@ covered_element2.party = luigi
 covered_element2.item_desc = item_description
 option2 = covered_element2.options.new()
 option2.coverage = coverage
-option2.exclusions.append(exclusion_1)
+exclusion_option = ContractOptionExclusion(exclusion=exclusion_1,
+    option=option2, comment='')
+option2.exclusions.append(exclusion_option)
 contract.subscriber = subscriber
 contract.save()
 Contract.write([contract], {
@@ -314,8 +317,8 @@ new_endorsement.execute('manage_exclusions_next')
 new_endorsement.execute('apply_endorsement')
 
 contract = Contract(contract.id)
-[x.code for x in contract.covered_elements[0].options[0].exclusions] == [
-    'exclusion_2']
+[x.exclusion.code for x in contract.covered_elements[0].options[0]
+    .exclusions] == ['exclusion_2']
 # #Res# #True
 len(contract.covered_elements[1].options[0].exclusions) == 0
 # #Res# #True
@@ -324,8 +327,8 @@ endorsement_last.click('cancel')
 contract = Contract(contract.id)
 len(contract.covered_elements[0].options[0].exclusions) == 0
 # #Res# #True
-[x.code for x in contract.covered_elements[1].options[0].exclusions] == [
-    'exclusion_1']
+[x.exclusion.code for x in contract.covered_elements[1].options[0]
+    .exclusions] == ['exclusion_1']
 # #Res# #True
 
 # #Comment# #New Remove Option Endorsement

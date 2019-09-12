@@ -522,23 +522,29 @@ class ManageExclusion(Wizard):
         defaults = {
             'covered_element': covered_element.id if covered_element else None,
             'possible_covered_elements': [x.id
-                for x in contract.covered_elements],
-            }
+                for x in contract.covered_elements]}
         all_exclusions = []
         for cur_covered in contract.covered_elements:
             exclusions = defaultdict(list)
             for option in cur_covered.options:
                 for exclusion in option.exclusions:
-                    exclusions[exclusion.id].append(option)
+                    option_comment = {
+                        'option': option,
+                        'comment': exclusion.comment}
+                    exclusions[exclusion.exclusion.id].append(option_comment)
             all_exclusions += [model.dictionarize(Displayer.new_displayer(
-                        cur_covered, exclusion, options))
-                for exclusion, options in exclusions.items()]
+                cur_covered, exclusion, [elt.get('option') for elt in options],
+                op.get('comment'))) for exclusion, options in exclusions.items()
+                for op in options]
 
         defaults['all_exclusions'] = all_exclusions
         if covered_element:
-            defaults['cur_exclusions'] = [x for x in defaults['all_exclusions']
-                if x['parent'] == str(covered_element)]
-
+            default_exclusions = []
+            for x in defaults['all_exclusions']:
+                if x['parent'] == str(covered_element) and x not in \
+                        default_exclusions:
+                    default_exclusions.append(x)
+            defaults['cur_exclusions'] = default_exclusions
         return defaults
 
     def transition_apply(self):
@@ -546,15 +552,22 @@ class ManageExclusion(Wizard):
         self.existing.update_exclusions()
         per_option = {option: []
             for covered_element in self.existing.possible_covered_elements
-            for option in covered_element.options}
+            for option in covered_element.options
+            }
         for exclusion in self.existing.all_exclusions:
             for option in exclusion.options:
                 if option.selected:
-                    per_option[option.option].append(exclusion.exclusion)
+                    per_option[option.option].append({
+                        'exclusion': exclusion.exclusion,
+                        'comment': exclusion.comment})
         to_save = []
         for option, exclusions in per_option.items():
-            if {x.id for x in exclusions} != {x.id for x in option.exclusions}:
-                option.exclusions = exclusions
+            if {x.get('exclusion').id for x in exclusions} != \
+                    {x.id for x in option.exclusions}:
+                option.exclusions = [{
+                    'option': option,
+                    'exclusion': ex.get('exclusion'),
+                    'comment': ex.get('comment')} for ex in exclusions]
                 to_save.append(option)
         if to_save:
             Option.save(to_save)
@@ -651,6 +664,7 @@ class ExclusionSelector(model.CoogView):
     parent = fields.Char('Parent', states={'invisible': True})
     options = fields.One2Many('contract.option.selector', None, 'Options')
     option_string = fields.Char('Options', readonly=True)
+    comment = fields.Text('Comment')
 
     @classmethod
     def __setup__(cls):
@@ -685,14 +699,14 @@ class ExclusionSelector(model.CoogView):
         self.options = list(self.options)
 
     @classmethod
-    def new_displayer(cls, covered_element, exclusion, options):
+    def new_displayer(cls, covered_element, exclusion, options, comment=''):
         OptionSelector = Pool().get('contract.option.selector')
         displayer = cls(
             parent=str(covered_element),
             exclusion=exclusion,
-            options=[OptionSelector(option=x,
-                    selected=x in (options or []))
-                for x in covered_element.options])
+            options=[OptionSelector(option=x, selected=x in (options or []))
+                for x in options if x.coverage.with_exclusions],
+            comment=comment)
         displayer.option_string = displayer.on_change_with_option_string()
         return displayer
 

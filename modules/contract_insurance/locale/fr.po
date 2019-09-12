@@ -406,6 +406,10 @@ msgctxt "field:contract.manage_exclusion.select,used_exclusions:"
 msgid "Used Exclusions"
 msgstr "Exclusions utilisées"
 
+msgctxt "field:contract.manage_exclusion.select.exclusion,comment:"
+msgid "Comment"
+msgstr "Commentaire"
+
 msgctxt "field:contract.manage_exclusion.select.exclusion,exclusion:"
 msgid "Exclusion"
 msgstr "Exclusion"
@@ -522,10 +526,6 @@ msgctxt "field:contract.option,end_date:"
 msgid "End Date"
 msgstr "Date de Fin"
 
-msgctxt "field:contract.option,exclusion_list:"
-msgid "Exclusion List"
-msgstr "Liste des exclusions"
-
 msgctxt "field:contract.option,exclusions:"
 msgid "Exclusions"
 msgstr "Exclusions"
@@ -594,43 +594,51 @@ msgctxt "field:contract.option,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:contract.option-exclusion.kind,create_date:"
+msgctxt "field:contract.option.exclusion,comment:"
+msgid "Comment"
+msgstr "Commentaire"
+
+msgctxt "help:contract.option.exclusion,comment:"
+msgid "A free-input field to detail why the exclusion was added"
+msgstr "Un champ de saisie libre pour expliquer pourquoi l'exclusion a été ajoutée"
+
+msgctxt "field:contract.option.exclusion,create_date:"
 msgid "Create Date"
 msgstr "Date de Création"
 
-msgctxt "field:contract.option-exclusion.kind,create_date_:"
+msgctxt "field:contract.option.exclusion,create_date_:"
 msgid "Creation date"
 msgstr "Date de Création"
 
-msgctxt "field:contract.option-exclusion.kind,create_uid:"
+msgctxt "field:contract.option.exclusion,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:contract.option-exclusion.kind,exclusion:"
+msgctxt "field:contract.option.exclusion,exclusion:"
 msgid "Exclusion"
 msgstr "Exclusion"
 
-msgctxt "field:contract.option-exclusion.kind,id:"
+msgctxt "field:contract.option.exclusion,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:contract.option-exclusion.kind,option:"
+msgctxt "field:contract.option.exclusion,option:"
 msgid "Option"
 msgstr "Option"
 
-msgctxt "field:contract.option-exclusion.kind,rec_name:"
+msgctxt "field:contract.option.exclusion,rec_name:"
 msgid "Record Name"
 msgstr "Nom"
 
-msgctxt "field:contract.option-exclusion.kind,write_date:"
+msgctxt "field:contract.option.exclusion,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:contract.option-exclusion.kind,write_uid:"
+msgctxt "field:contract.option.exclusion,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:contract.option-exclusion.kind,xml_id:"
+msgctxt "field:contract.option.exclusion,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
@@ -909,7 +917,7 @@ msgctxt "model:contract.option,name:"
 msgid "Contract Option"
 msgstr "Garantie"
 
-msgctxt "model:contract.option-exclusion.kind,name:"
+msgctxt "model:contract.option.exclusion,name:"
 msgid "Option to Exclusion Kind relation"
 msgstr "Relation garantie exclusion"
 

@@ -1,3 +1,4 @@
+* FEA#12497 Gestion d'exclusions libres
 * BUG#11891 Correction d'un crash lors de l'exécution de l'assistant 'Gestion des options' depuis un élément couvert.
 * BUG#11141 Gérer la sélection des couvertures optionnelles au niveau contrat dans l'assistant de gestion des options
 * BUG#11036 Vérification des chevauchements sur les élements couverts ayant le même parent et la même personne

@@ -1437,6 +1437,14 @@ msgctxt ""
 msgid "Void"
 msgstr "Sans Effet"
 
+msgctxt "field:contract.manage_exclusions.exclusion,comment:"
+msgid "Comment"
+msgstr "Commentaire"
+
+msgctxt "field:contract.manage_exclusions.exclusion,exclusion_src:"
+msgid "Exclusion Source"
+msgstr "Exclusion Originale"
+
 msgctxt "selection:contract.manage_exclusions.exclusion,action:"
 msgid "Added"
 msgstr "Ajoutée"
@@ -1448,6 +1456,10 @@ msgstr "Rien"
 msgctxt "selection:contract.manage_exclusions.exclusion,action:"
 msgid "Removed"
 msgstr "Retirée"
+
+msgctxt "selection:contract.manage_exclusions.exclusion,action:"
+msgid "Modified"
+msgstr "Modifiée"
 
 msgctxt "selection:endorsement.contract.covered_element,action:"
 msgid "Add"

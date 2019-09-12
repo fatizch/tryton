@@ -135,7 +135,7 @@ class ExtraPremium(object, metaclass=PoolMeta):
 
 class OptionExclusionRelation(object, metaclass=PoolMeta):
     _history = True
-    __name__ = 'contract.option-exclusion.kind'
+    __name__ = 'contract.option.exclusion'
 
 
 class Endorsement(metaclass=PoolMeta):
@@ -171,7 +171,7 @@ class EndorsementContract(metaclass=PoolMeta):
         order.insert(contract_idx + 1, 'contract.covered_element')
         order.insert(contract_idx + 2, 'contract.covered_element.version')
         option_idx = order.index('contract.option')
-        order.insert(option_idx + 1, 'contract.option-exclusion.kind')
+        order.insert(option_idx + 1, 'contract.option.exclusion')
         order.insert(option_idx + 1, 'contract.option.extra_premium')
         return order
 
@@ -188,8 +188,8 @@ class EndorsementContract(metaclass=PoolMeta):
                 for option in covered_element.options:
                     instances['contract.option.version'] += option.versions
         for option in instances['contract.option']:
-            instances['contract.option-exclusion.kind'] += \
-                option.exclusion_list
+            instances['contract.option.exclusion'] += \
+                option.exclusions
             instances['contract.option.extra_premium'] += option.extra_premiums
 
     def get_endorsement_summary(self, name):
@@ -423,7 +423,7 @@ class EndorsementCoveredElementOption(relation_mixin(
     extra_premiums = fields.One2Many('endorsement.contract.extra_premium',
         'covered_option_endorsement', 'Extra Premium Endorsement',
         delete_missing=True)
-    exclusion_list = fields.One2Many('endorsement.contract.option.exclusion',
+    exclusions = fields.One2Many('endorsement.contract.option.exclusion',
         'covered_option_endorsement', 'Exclusion Endorsements',
         delete_missing=True)
     coverage = fields.Function(
@@ -486,9 +486,9 @@ class EndorsementCoveredElementOption(relation_mixin(
                         'endorsement_insurance'
                         '.msg_extra_premium_modifications'),
                     extra_premium_summary])
-        exclusion_summary = [x.get_diff('contract.option-exclusion.kind',
+        exclusion_summary = [x.get_diff('contract.option.exclusion',
                 x.option_exclusion)
-            for x in self.exclusion_list]
+            for x in self.exclusions]
         if exclusion_summary:
             result[1].append([
                     gettext(
@@ -513,13 +513,13 @@ class EndorsementCoveredElementOption(relation_mixin(
                 values[1][0]['extra_premiums'] = extra_premium_values
             elif self.action == 'update':
                 values[2]['extra_premiums'] = extra_premium_values
-        for exclusion in self.exclusion_list:
+        for exclusion in self.exclusions:
             exclusion_values.append(exclusion.apply_values())
         if exclusion_values:
             if self.action == 'add':
-                values[1][0]['exclusion_list'] = exclusion_values
+                values[1][0]['exclusions'] = exclusion_values
             elif self.action == 'update':
-                values[2]['exclusion_list'] = exclusion_values
+                values[2]['exclusions'] = exclusion_values
         return values
 
     @property
@@ -644,7 +644,7 @@ class EndorsementExtraPremium(relation_mixin(
 
 class EndorsementExclusion(relation_mixin(
             'endorsement.contract.option.exclusion.field', 'option_exclusion',
-            'contract.option-exclusion.kind', 'Exclusion'),
+            'contract.option.exclusion', 'Exclusion'),
         model.CoogSQL, model.CoogView, metaclass=PoolMeta):
     'Endorsement Exclusion'
     __name__ = 'endorsement.contract.option.exclusion'

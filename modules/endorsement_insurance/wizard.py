@@ -1739,7 +1739,7 @@ class ManageExclusions(EndorsementWizardStepMixin):
         pool = Pool()
         Option = pool.get('contract.option')
         Displayer = pool.get('contract.manage_exclusions.option')
-        Exclusion = pool.get('contract.option-exclusion.kind')
+        Exclusion = pool.get('contract.option.exclusion')
         per_key = {Displayer.get_parent_key(x): x
             for covered in contract_endorsement.contract.covered_elements
             for x in covered.options}
@@ -1747,7 +1747,7 @@ class ManageExclusions(EndorsementWizardStepMixin):
             patched_option = per_key[option.parent]
             if option.option_id:
                 old_exclusions = {x.exclusion: x
-                    for x in Option(option.option_id).exclusion_list}
+                    for x in Option(option.option_id).exclusions}
             else:
                 old_exclusions = {}
             exclusions = []
@@ -1757,9 +1757,12 @@ class ManageExclusions(EndorsementWizardStepMixin):
                 if exclusion.action == 'added':
                     exclusions.append(Exclusion(exclusion=exclusion.exclusion))
                     continue
-                # action == 'nothing' => already existed
+                if exclusion.action == 'modified':
+                    exclusions.append(Exclusion(exclusion=exclusion.exclusion,
+                            comment=exclusion.comment))
+                    continue
                 exclusions.append(old_exclusions[exclusion.exclusion])
-            patched_option.exclusion_list = exclusions
+            patched_option.exclusions = exclusions
 
     def get_updated_options_from_contract(self, contract_endorsement):
         contract = contract_endorsement.contract
@@ -1805,19 +1808,28 @@ class ManageExclusionsOptionDisplayer(model.CoogView):
         displayer.parent = cls.get_parent_key(option)
         displayer.option_id = getattr(option, 'id', None)
         displayer.display_name = option.get_rec_name(None)
-
         new_exclusions = {x.exclusion for x in getattr(option,
-                'exclusion_list', [])}
+                'exclusions', [])}
         if displayer.option_id:
+            exclusion_records = Option(displayer.option_id).exclusions
             current_exclusions = {x.exclusion
-                for x in Option(displayer.option_id).exclusion_list}
+                for x in exclusion_records}
         else:
             current_exclusions = set([])
-        exclusions = [Exclusion(exclusion=x, action='nothing')
+            exclusion_records = []
+        exclusions_info = {x.exclusion: x for x in
+            list(exclusion_records) + list(new_exclusions)
+                if hasattr(x, 'exclusion')}
+        exclusions = [Exclusion(exclusion=x, action='nothing',
+                comment=exclusions_info.get(x).comment,
+                exclusion_src=exclusions_info.get(x))
             for x in current_exclusions & new_exclusions]
-        exclusions += [Exclusion(exclusion=x, action='added')
+        exclusions += [Exclusion(exclusion=x, action='added',
+                comment='', exclusion_src=exclusions_info.get(x))
             for x in new_exclusions - current_exclusions]
-        exclusions += [Exclusion(exclusion=x, action='removed')
+        exclusions += [Exclusion(exclusion=x, action='removed',
+                comment=exclusions_info.get(x).comment,
+                exclusion_src=exclusions_info.get(x))
             for x in current_exclusions - new_exclusions]
         exclusions.sort(key=lambda x: x.exclusion.rec_name)
         displayer.exclusions = exclusions
@@ -1841,12 +1853,21 @@ class ManageExclusionsDisplayer(model.CoogView):
 
     exclusion = fields.Many2One('offered.exclusion', 'Exclusion Kind',
         required=True)
-    action = fields.Selection([('nothing', 'Nothing'),
-            ('added', 'Added'), ('removed', 'Removed')], 'Action')
+    action = fields.Selection([('nothing', 'Nothing'), ('added', 'Added'),
+        ('removed', 'Removed'), ('modified', 'Modified')], 'Action')
+    comment = fields.Text('Comment')
+    exclusion_src = fields.Many2One('contract.option.exclusion',
+        'Exclusion Source', readonly=True)
 
     @classmethod
     def default_action(cls):
         return 'added'
+
+    @fields.depends('comment', 'exclusion_src')
+    def on_change_comment(self):
+        comment = self.exclusion_src and self.exclusion_src.comment or ''
+        if self.comment != comment:
+            self.action = 'modified'
 
 
 class VoidContract(metaclass=PoolMeta):

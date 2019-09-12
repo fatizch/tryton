@@ -65,6 +65,19 @@ this repository contains the full copyright notices and license terms. -->
             <field name="name">option_form</field>
         </record>
         <!--################################################################ -->
+        <!-- Option Exclusion Screens -->
+        <!--################################################################ -->
+        <record model="ir.ui.view" id="option_exclusion_view_list">
+            <field name="model">contract.option.exclusion</field>
+            <field name="type">tree</field>
+            <field name="name">option_exclusion_list</field>
+        </record>
+        <record model="ir.ui.view" id="option_exclusion_view_form">
+            <field name="model">contract.option.exclusion</field>
+            <field name="type">form</field>
+            <field name="name">option_exclusion_form</field>
+        </record>
+        <!--################################################################ -->
         <!-- Covered Elements -->
         <!--################################################################ -->
         <record model="ir.ui.view" id="covered_element_view_tree">

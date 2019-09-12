@@ -482,14 +482,9 @@ class ContractOption(Printable):
             'readonly': Eval('contract_status') != 'quote',
             'invisible': ~Eval('covered_element'),
             }, depends=_CONTRACT_STATUS_DEPENDS)
-    exclusions = fields.Many2Many('contract.option-exclusion.kind',
-        'option', 'exclusion', 'Exclusions',
+    exclusions = fields.One2Many('contract.option.exclusion',
+        'option', 'Exclusions', delete_missing=True,
         states=_CONTRACT_STATUS_STATES, depends=_CONTRACT_STATUS_DEPENDS)
-    # O2M field to the M2M "exclusions" field table. This is for instance used
-    # in endorsements
-    exclusion_list = fields.One2Many('contract.option-exclusion.kind',
-        'option', 'Exclusion List', delete_missing=True,
-        order=[('exclusion', 'ASC')])
     extra_premiums = fields.One2Many('contract.option.extra_premium',
         'option', 'Extra Premiums',
         states=_CONTRACT_STATUS_STATES, depends=_CONTRACT_STATUS_DEPENDS,
@@ -577,7 +572,7 @@ class ContractOption(Printable):
 
     @classmethod
     def _export_skips(cls):
-        return super(ContractOption, cls)._export_skips() | {'exclusion_list',
+        return super(ContractOption, cls)._export_skips() | {'exclusions',
             'extra_premium_discounts', 'extra_premium_increases'}
 
     @fields.depends('item_desc')
@@ -2355,15 +2350,34 @@ class ExtraPremium(model.CoogSQL, model.CoogView, ModelCurrency):
                 years=years, days=-1)
 
 
-class OptionExclusionKindRelation(model.CoogSQL):
+class OptionExclusionKindRelation(model.CoogSQL, model.CoogView):
     'Option to Exclusion Kind relation'
 
-    __name__ = 'contract.option-exclusion.kind'
+    __name__ = 'contract.option.exclusion'
 
     option = fields.Many2One('contract.option', 'Option', ondelete='CASCADE',
         required=True, select=True)
     exclusion = fields.Many2One('offered.exclusion', 'Exclusion',
         ondelete='RESTRICT', required=True, select=True)
+    comment = fields.Text('Comment', help='A free-input field '
+        'to detail why the exclusion was added')
+
+    @classmethod
+    def __register__(cls, module_name):
+        # Migration from 2.4: rename 'contract_option-exclusion_kind' =>
+        # 'contract_option_exclusion'
+        TableHandler = backend.get('TableHandler')
+        if TableHandler.table_exist(
+                'contract_option-exclusion_kind '):
+            TableHandler.table_rename(
+                'contract_option-exclusion_kind',
+                'contract_option_exclusion')
+        elif TableHandler.\
+                table_exist('contract_option-exclusion_kind__history'):
+            TableHandler.table_rename(
+                'contract_option-exclusion_kind__history',
+                'contract_option_exclusion__history')
+        super(OptionExclusionKindRelation, cls).__register__(module_name)
 
     @classmethod
     def search(cls, domain, *args, **kwargs):
@@ -2373,3 +2387,9 @@ class OptionExclusionKindRelation(model.CoogSQL):
             ('exclusion', 'in', [x.id for x in exclusions])]]
         return super(OptionExclusionKindRelation, cls).search(
             domain, *args, **kwargs)
+
+    def get_rec_name(self, name):
+        return '%s%s%s'\
+               % (self.exclusion and self.exclusion.name or '',
+                  ' - ' if self.comment else '',
+                   self.comment)

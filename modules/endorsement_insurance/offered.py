@@ -100,7 +100,7 @@ class EndorsementExtraPremiumField(field_mixin(
 
 
 class EndorsementExclusionField(field_mixin(
-            'contract.option-exclusion.kind'), model.CoogSQL, model.CoogView):
+            'contract.option.exclusion'), model.CoogSQL, model.CoogView):
     'Endorsement Exclusion Field'
 
     __name__ = 'endorsement.contract.option.exclusion.field'
