@@ -278,6 +278,10 @@ msgctxt "field:ir.attachment,status:"
 msgid "Status"
 msgstr "Statut"
 
+msgctxt "field:ir.attachment,status_change_date:"
+msgid "Status Change Date"
+msgstr "Date de changement de statut"
+
 msgctxt "help:document.description,reception_requires_attachment:"
 msgid ""
 "If checked, the attachments will be required to mark the document request "
@@ -301,6 +305,10 @@ msgstr "Permet d'ajouter des précisions sur le document reçu"
 msgctxt "help:document.request.line,for_object:"
 msgid "References the object for which the document is asked."
 msgstr "Référence l'objet pour lequel le document est demandé."
+
+msgctxt "help:ir.attachment,status_change_date:"
+msgid "Date of Last Status Change"
+msgstr "Date du dernier changement de statut"
 
 msgctxt "model:batch.remind.documents,name:"
 msgid "Batch Remind Documents"
@@ -341,6 +349,18 @@ msgstr "Demandes de document"
 msgctxt "model:ir.message,text:msg_document_request_for"
 msgid "Document Request For %(name)s"
 msgstr "Demande de documents pour %(name)s"
+
+msgctxt "model:ir.message,text:msg_invalid"
+msgid "Invalid"
+msgstr "Non conforme"
+
+msgctxt "model:ir.message,text:msg_valid"
+msgid "Valid"
+msgstr "Conforme"
+
+msgctxt "model:ir.message,text:msg_waiting_validation"
+msgid "Waiting Validation"
+msgstr "En attente de validation"
 
 msgctxt "model:ir.message,text:msg_wrong_documents_rule"
 msgid ""

@@ -1,3 +1,4 @@
+* FEA#12567 Ajout du statut "En attente de validation" sur les pièces jointes
 * BUG#12630 Prise en compte du statut des données uniquement si le type de document le nécessite
 * BUG#12530 Vérification du statut des données lors de la vérification de la réception
 * FEA#11908 Ajouter un champ commentaire à la demande de document

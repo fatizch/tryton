@@ -7,5 +7,14 @@
         <record model="ir.message" id="msg_wrong_documents_rule">
             <field name="text">The return value of the document rule must be a dictionary with document description code as keys.</field>
         </record>
+        <record model="ir.message" id="msg_waiting_validation">
+            <field name="text">Waiting Validation</field>
+        </record>
+        <record model="ir.message" id="msg_invalid">
+            <field name="text">Invalid</field>
+        </record>
+        <record model="ir.message" id="msg_valid">
+            <field name="text">Valid</field>
+        </record>
     </data>
 </tryton>

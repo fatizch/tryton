@@ -5,5 +5,7 @@ this repository contains the full copyright notices and license terms. -->
     <xpath expr="/form/group/field[@name='document_desc']" position="after">
         <label name="status"/>
         <field name="status"/>
+        <label name="status_change_date"/>
+        <field name="status_change_date"/>
     </xpath>
 </data>

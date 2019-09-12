@@ -234,7 +234,10 @@ class DocumentRequestLine(Printable, model.CoogSQL, model.CoogView):
         return ['received']
 
     def attachment_ok(self):
-        return self.attachment or self.attachment_data
+        return (self.attachment and self.attachment.status == 'valid') \
+            or (not self.attachment and self.attachment_data)
+        # If there are attachment_data and no attachment
+        # Then the attachment status will default to valid
 
     @fields.depends('attachment', 'attachment_data', 'reception_date',
         'first_reception_date', 'allow_force_receive')
