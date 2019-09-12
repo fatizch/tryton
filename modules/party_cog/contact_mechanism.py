@@ -61,7 +61,7 @@ class ContactMechanism(export.ExportImportMixin, model.FunctionalErrorMixIn):
             import re
             if not re.match(VALID_EMAIL_REGEX, self.email):
                 self.append_functional_error(
-                    UserError(gettext('coog_core.msg_invalid_email')))
+                    UserError(gettext('party_cog.msg_invalid_email')))
         return
 
     def get_icon(self):
