@@ -275,10 +275,12 @@ class Contract(metaclass=PoolMeta):
         pool = Pool()
         MoveLine = pool.get('account.move.line')
         Account = pool.get('account.account')
+        AccountType = pool.get('account.account.type')
         User = pool.get('res.user')
 
         line = MoveLine.__table__()
         account = Account.__table__()
+        account_type = AccountType.__table__()
 
         user = User(Transaction().user)
         if not user.company:
@@ -294,10 +296,12 @@ class Contract(metaclass=PoolMeta):
         Operator = fields.SQL_OPERATORS[clause[1]]
 
         query = line.join(account, condition=account.id == line.account
-                ).select(line.contract,
-                    where=account.active
-                    & (account.kind == 'receivable')
-                    & (line.contract != Null)
+            ).join(account_type,
+                condition=(
+                    (account.type == account_type.id) & (
+                        account_type.receivable == Literal(True)))
+                    ).select(line.contract,
+                    where=(line.contract != Null)
                     & (line.reconciliation == Null)
                     & (account.company == company_id)
                     & line_query & date_clause,
@@ -316,10 +320,12 @@ class Contract(metaclass=PoolMeta):
             pool = Pool()
             MoveLine = pool.get('account.move.line')
             Account = pool.get('account.account')
+            AccountType = pool.get('account.account.type')
             User = pool.get('res.user')
 
             line = MoveLine.__table__()
             account = Account.__table__()
+            account_type = AccountType.__table__()
 
             user = User(Transaction().user)
             if not user.company:
@@ -336,10 +342,12 @@ class Contract(metaclass=PoolMeta):
                 Sum(Coalesce(line.credit, 0))).as_('balance')
             balance_table = line.join(account,
                 condition=(account.id == line.account)
+                ).join(account_type,
+                condition=(
+                    (account.type == account_type.id) & (
+                        account_type.receivable == Literal(True)))
                 ).select(line.contract, balance,
-                where=(account.active
-                    & (account.kind == 'receivable')
-                    & (line.reconciliation == Null)
+                where=((line.reconciliation == Null)
                     & (account.company == company_id)
                     & line_query
                     & date_clause),

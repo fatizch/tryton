@@ -3,7 +3,7 @@
 import logging
 import datetime
 
-from sql import Null, Cast, Expression
+from sql import Null, Cast, Expression, Literal
 from sql.conditionals import Coalesce
 from sql.aggregate import Max
 from sql.functions import ToChar, CurrentTimestamp
@@ -213,19 +213,23 @@ class InvoiceAgainstBalanceBatch(batch.BatchRoot):
         pool = Pool()
         MoveLine = pool.get('account.move.line')
         Account = pool.get('account.account')
+        AccountType = pool.get('account.account.type')
         cursor = Transaction().connection.cursor()
 
         line = MoveLine.__table__()
         account = Account.__table__()
+        account_type = AccountType.__table__()
 
         line_query, _ = MoveLine.query_get(line)
 
         query = line.join(account,
                 condition=account.id == line.account
+                ).join(account_type,
+                condition=(
+                    (account.type == account_type.id) & (
+                        account_type.receivable == Literal(True)))
                 ).select(line.contract,
-                where=(account.active &
-                    (account.kind == 'receivable') &
-                    (line.reconciliation == Null) &
+                where=((line.reconciliation == Null) &
                     line_query &
                     (line.state == 'valid') &
                     ((line.credit > 0) | (line.debit < 0)) &
