@@ -75,8 +75,8 @@ class Contract(RemindableInterface, metaclass=PoolMeta):
                 'appliable_conditions_date': contract.appliable_conditions_date,
                 }
             contract.init_dict_for_rule_engine(ctr_args)
-            product_docs = contract.product.calculate_required_documents(
-                ctr_args)
+            product_docs = {(contract, contract.product):
+                contract.product.calculate_required_documents(ctr_args)}
             documents_per_contract[contract].update(product_docs)
             for option in contract.covered_element_options + contract.options:
                 if option.status != 'active':
@@ -87,9 +87,12 @@ class Contract(RemindableInterface, metaclass=PoolMeta):
                     contract.appliable_conditions_date,
                     }
                 option.init_dict_for_rule_engine(args)
-                option_docs = option.coverage.calculate_required_documents(
-                    args)
-                documents_per_contract[contract].update(option_docs)
+                if option.covered_element:
+                    for_object = option.covered_element
+                else:
+                    for_object = contract
+                documents_per_contract[contract].update({(for_object, option):
+                    option.coverage.calculate_required_documents(args)})
         return documents_per_contract
 
     @classmethod
@@ -153,38 +156,55 @@ class Contract(RemindableInterface, metaclass=PoolMeta):
             return
         pool = Pool()
         DocumentRequestLine = pool.get('document.request.line')
-        DocumentDesc = pool.get('document.description')
+        DocumentDescription = pool.get('document.description')
         documents = self.get_calculated_required_documents([self])[self]
+        rule_codes_by_for_object = defaultdict(set)
+        existing_codes_by_for_object = defaultdict(list)
+
+        existing_lines = DocumentRequestLine.search(
+            [('contract', '=', self)],
+            order=[('for_object', 'ASC')])
+        for for_object, grouped_lines in groupby(existing_lines,
+                    key=lambda x: x.for_object):
+            existing_codes_by_for_object[for_object] = [
+                x.document_desc.code for x in grouped_lines]
+
         with Transaction().set_context(remove_document_desc_filter=True):
-            rule_doc_descs_by_code = {x.code: x for x in
-                DocumentDesc.search([('code', 'in', list(documents.keys()))])}
-            existing_document_desc_code = [request.document_desc.code
-                for request in DocumentRequestLine.search([
-                    ('for_object', '=', str(self))])]
+            for (for_object, rule_source), result in documents.items():
+                rule_codes = result.keys()
+                rule_codes_by_for_object[for_object] |= set(rule_codes)
+
         to_save = []
-        for code, rule_result_values in documents.items():
-            if code in existing_document_desc_code:
-                existing_document_desc_code.remove(code)
-                continue
-            line = DocumentRequestLine()
-            line.document_desc = rule_doc_descs_by_code[code]
-            line.for_object = '%s,%s' % (self.__name__, self.id)
-            line.contract = self
-            for k, v in rule_result_values.items():
-                setattr(line, k, v)
-            line.on_change_document_desc()
-            to_save.append(line)
+        for (for_object, rule_source), rule_result in documents.items():
+            for code, rule_result_values in rule_result.items():
+                if code in existing_codes_by_for_object[for_object]:
+                    continue
+                line = DocumentRequestLine()
+                line.document_desc = DocumentDescription.get_document_per_code(
+                    code)
+                line.contract = self
+                line.for_object = str(for_object)
+                for k, v in rule_result_values.items():
+                    setattr(line, k, v)
+                line.on_change_document_desc()
+                to_save.append(line)
         if to_save:
             DocumentRequestLine.save(to_save)
             to_confirm = [x for x in to_save
-                if x.data_status == 'waiting' and x.document_desc
+                if x.data_status == 'waiting'
+                and x.document_desc
                 and not x.document_desc.extra_data_def]
             if to_confirm:
                 DocumentRequestLine.confirm_attachment(to_confirm)
+
+        # handle case a document is not required because
+        # the rules now return a different result or
+        # the configuration has changed
         to_delete = []
         for request in self.document_request_lines:
-            if (request.document_desc.code in existing_document_desc_code and
-                    not request.send_date and not request.reception_date):
+            rule_codes = rule_codes_by_for_object[request.for_object]
+            if request.document_desc.code not in rule_codes \
+                    and not request.send_date and not request.reception_date:
                 to_delete.append(request)
         DocumentRequestLine.delete(to_delete)
 

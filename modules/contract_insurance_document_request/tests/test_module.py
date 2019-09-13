@@ -3,6 +3,7 @@
 # this repository contains the full copyright notices and license terms.
 import copy
 import unittest
+import datetime
 
 import trytond.tests.test_tryton
 
@@ -19,7 +20,8 @@ class ModuleTestCase(test_framework.CoogTestCase):
 
     @classmethod
     def fetch_models_for(cls):
-        return ['offered_insurance', 'contract']
+        return ['offered_insurance', 'contract_insurance',
+            'contract']
 
     @classmethod
     def get_models(cls):
@@ -30,6 +32,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
             'RuleContext': 'rule_engine.context',
             'RuleEngine': 'rule_engine',
             'RuleToDocDescRelation': 'document.rule-document.description',
+            'DocumentRequestLine': 'document.request.line',
             }
 
     def test0001_CreateDocumentDescs(self):
@@ -114,13 +117,14 @@ class ModuleTestCase(test_framework.CoogTestCase):
 
     @test_framework.prepare_test(
         'contract_insurance_document_request.test0001_CreateDocumentDescs',
-        'offered.test0030_testProductCoverageRelation',
+        'offered_insurance.test0010Coverage_creation',
         'contract.test0005_PrepareProductForSubscription',
         'contract.test0002_testCountryCreation',
         )
     def test0002_PrepareProductForSubscription(self):
         pool = Pool()
         Product = pool.get('offered.product')
+        Coverage = pool.get('offered.option.description')
         DocumentDesc = pool.get('document.description')
         DocumentRule = pool.get('document.rule')
         DocumentRuleLine = pool.get('document.rule-document.description')
@@ -132,6 +136,8 @@ class ModuleTestCase(test_framework.CoogTestCase):
             [('code', '=', 'document_desc_2')])
         document_desc_3, = DocumentDesc.search(
             [('code', '=', 'document_desc_3')])
+        document_desc_4, = DocumentDesc.search(
+            [('code', '=', 'document_desc_4')])
 
         product_a.document_rules = [
             DocumentRule(
@@ -146,6 +152,17 @@ class ModuleTestCase(test_framework.CoogTestCase):
                 ),
             ]
         product_a.save()
+
+        coverage_a, = Coverage.search([('code', '=', 'ALP')])
+        coverage_a.document_rules = [
+            DocumentRule(
+                documents=[
+                    DocumentRuleLine(
+                        document=document_desc_4, blocking=True),
+                    ],
+                ),
+            ]
+        coverage_a.save()
 
     @test_framework.prepare_test('contract.test0010_testContractCreation')
     def test0010_init_document_request(self):
@@ -190,7 +207,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
         contract.check_required_documents(only_blocking=True)
 
     @test_framework.prepare_test(
-        'contract_insurance_document_request.' +
+        'contract_insurance_document_request.'
         'test0002_PrepareProductForSubscription',
         )
     def test0040_TestContractDocumentRequest(self):
@@ -216,31 +233,51 @@ class ModuleTestCase(test_framework.CoogTestCase):
                             },
                         ],
                     },
+                {
+                    'ref': '2',
+                    'is_person': True,
+                    'name': 'Doe',
+                    'first_name': 'Buenaventura',
+                    'birth_date': '1988-01-20',
+                    'gender': 'male',
+                    'addresses': [
+                        {
+                            'street': 'Somewhere along the street',
+                            'zip': '75002',
+                            'city': 'Paris',
+                            'country': 'fr',
+                            },
+                        ],
+                    },
                 ],
             'contracts': [
                 {
                     'ref': '1',
                     'product': {'code': 'AAA'},
                     'subscriber': {'ref': '1'},
-                    'extra_data': {
-                        'contract_1': '16.10',
-                        'contract_2': False,
-                        'contract_3': '2',
-                        },
                     'coverages': [
                         {
-                            'coverage': {'code': 'ALP'},
-                            'extra_data': {
-                                'option_1': '6.10',
-                                'option_2': True,
-                                'option_3': '2',
-                                },
-                            },
-                        {
-                            'coverage': {'code': 'BET'},
-                            'extra_data': {},
+                            'coverage': {'code': 'DEL'},
                             },
                         ],
+                    'covereds': [
+                        {
+                            'item_descriptor': {'code': 'person'},
+                            'party': {'ref': '1'},
+                            'coverages': [
+                                {'coverage':
+                                    {'code': x}} for x in ('ALP', 'BET')
+                                ]
+                            },
+                        {
+                            'item_descriptor': {'code': 'person'},
+                            'party': {'ref': '2'},
+                            'coverages': [
+                                {'coverage':
+                                    {'code': x}} for x in ('ALP', 'BET')
+                                ]
+                            },
+                        ]
                     },
                 ],
             'options': {
@@ -264,53 +301,139 @@ class ModuleTestCase(test_framework.CoogTestCase):
                 data_dict, {'_debug_server': True})['contracts'][0]['id'])
 
         contract.init_subscription_document_request()
+        covered_element_0 = contract.covered_elements[0]
+        covered_element_1 = contract.covered_elements[1]
 
         documents = {
-            x.document_desc.code: x for x in contract.document_request_lines}
+            (x.document_desc.code, x.for_object):
+            x for x in contract.document_request_lines}
 
-        self.assertEqual(len(documents), 3)
+        self.assertEqual(len(contract.document_request_lines), 5)
 
-        self.assertEqual(documents['document_desc_1'].blocking, True)
-        self.assertEqual(documents['document_desc_2'].blocking, False)
-        self.assertEqual(documents['document_desc_3'].blocking, True)
+        self.assertEqual(
+            documents[('document_desc_1', contract)].blocking, True)
+        self.assertEqual(
+            documents[('document_desc_2', contract)].blocking, False)
+        self.assertEqual(
+            documents[('document_desc_3', contract)].blocking, True)
 
-        self.assertEqual(documents['document_desc_1'].reception_date, None)
-        self.assertEqual(documents['document_desc_2'].reception_date,
+        self.assertEqual(
+            documents[('document_desc_1', contract)].reception_date, None)
+        self.assertEqual(
+            documents[('document_desc_2', contract)].reception_date,
             utils.today())
-        self.assertEqual(documents['document_desc_3'].reception_date, None)
-
-        self.assertEqual(documents['document_desc_1'].received, False)
-        self.assertEqual(documents['document_desc_2'].received, True)
-        self.assertEqual(documents['document_desc_3'].received, False)
-
-        self.assertEqual(documents['document_desc_1'].data_status, 'waiting')
-        self.assertEqual(documents['document_desc_2'].data_status, 'done')
-        self.assertEqual(documents['document_desc_3'].data_status, 'done')
+        self.assertEqual(
+            documents[('document_desc_3', contract)].reception_date, None)
 
         self.assertEqual(
-            bool(documents['document_desc_1'].attachment), False)
+            documents[('document_desc_1', contract)].received, False)
         self.assertEqual(
-            bool(documents['document_desc_2'].attachment), True)
+            documents[('document_desc_2', contract)].received, True)
         self.assertEqual(
-            bool(documents['document_desc_3'].attachment), False)
+            documents[('document_desc_3', contract)].received, False)
+        self.assertEqual(
+            documents[('document_desc_4', covered_element_0)].received, False)
+        self.assertEqual(
+            documents[('document_desc_4', covered_element_1)].received, False)
+
+        self.assertEqual(
+            documents[('document_desc_1', contract)].contract, contract)
+        self.assertEqual(
+            documents[('document_desc_2', contract)].contract, contract)
+        self.assertEqual(
+            documents[('document_desc_3', contract)].contract, contract)
+        self.assertEqual(
+            documents[('document_desc_4', covered_element_0)].contract,
+            contract)
+        self.assertEqual(
+            documents[('document_desc_4', covered_element_1)].contract,
+            contract)
+
+        self.assertEqual(
+            documents[('document_desc_1', contract)].data_status, 'waiting')
+        self.assertEqual(
+            documents[('document_desc_2', contract)].data_status, 'done')
+        self.assertEqual(
+            documents[('document_desc_3', contract)].data_status, 'done')
+        self.assertEqual(
+            documents[('document_desc_3', contract)].data_status, 'done')
+
+        self.assertEqual(
+            bool(documents[('document_desc_1', contract)].attachment), False)
+        self.assertEqual(
+            bool(documents[('document_desc_2', contract)].attachment), True)
+        self.assertEqual(
+            bool(documents[('document_desc_3', contract)].attachment), False)
 
         self.assertFalse(contract.doc_received)
 
-        documents['document_desc_1'].extra_data = {
+        documents[('document_desc_1', contract)].extra_data = {
             'document_data_1': 10,
             'document_data_2': 20,
             }
-        documents['document_desc_1'].save()
-        documents['document_desc_1'].confirm_attachment(
-            [documents['document_desc_1']])
+        documents[('document_desc_1', contract)].save()
+        documents[('document_desc_1', contract)].confirm_attachment(
+            [documents[('document_desc_1', contract)]])
 
-        self.assertEqual(documents['document_desc_1'].reception_date,
-            utils.today())
-        self.assertEqual(documents['document_desc_1'].data_status, 'done')
-        self.assertEqual(documents['document_desc_1'].received, True)
         self.assertEqual(
-            bool(documents['document_desc_1'].attachment), True)
+            documents[('document_desc_1', contract)].reception_date,
+            utils.today())
+        self.assertEqual(
+            documents[('document_desc_1', contract)].data_status, 'done')
+        self.assertEqual(
+            documents[('document_desc_1', contract)].received, True)
+        self.assertEqual(
+            bool(documents[('document_desc_1', contract)].attachment), True)
         self.assertFalse(contract.doc_received)
+
+        # remove one , and check update init_subscription_document_request
+        # will recreate it
+
+        def test_reinit():
+            contract.init_subscription_document_request()
+            documents = {
+                (x.document_desc.code, x.for_object):
+                x for x in contract.document_request_lines}
+            self.assertEqual(len(contract.document_request_lines), 5)
+            self.assertEqual(
+                documents[('document_desc_1', contract)].contract, contract)
+            self.assertEqual(
+                documents[('document_desc_2', contract)].contract, contract)
+            self.assertEqual(
+                documents[('document_desc_3', contract)].contract, contract)
+            self.assertEqual(
+                documents[('document_desc_4', covered_element_0)].contract,
+                contract)
+            self.assertEqual(
+                documents[('document_desc_4', covered_element_1)].contract,
+                contract)
+
+        self.DocumentRequestLine.delete([documents[
+                ('document_desc_4', covered_element_0)]])
+        self.assertEqual(len(contract.document_request_lines), 4)
+        test_reinit()
+
+        # manually add one that is not configured, without send_date,
+        #  and check update removes it
+        document_desc_4, = self.DocumentDesc.search(
+            [('code', '=', 'document_desc_4')])
+        outer = self.DocumentRequestLine(for_object=str(contract),
+            document_desc=document_desc_4, data_status='waiting')
+        outer.save()
+        self.assertEqual(len(contract.document_request_lines), 6)
+        test_reinit()
+
+        # manually add one that is not configured, WITH send_date,
+        #  and check update does not remove it
+        document_desc_4, = self.DocumentDesc.search(
+            [('code', '=', 'document_desc_4')])
+        outer = self.DocumentRequestLine(for_object=str(contract),
+            document_desc=document_desc_4, data_status='waiting',
+            send_date=datetime.date.today())
+        outer.save()
+        self.assertEqual(len(contract.document_request_lines), 6)
+        contract.init_subscription_document_request()
+        self.assertEqual(len(contract.document_request_lines), 6)
 
 
 def suite():

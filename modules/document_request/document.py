@@ -111,8 +111,12 @@ class DocumentRequestLine(Printable, model.CoogSQL, model.CoogView):
     request = fields.Many2One('document.request', 'Document Request',
         ondelete='CASCADE', select=True)
     attachment = fields.Many2One('ir.attachment', 'Attachment',
-        domain=[('resource', '=', Eval('for_object')),
-            ('document_desc', '=', Eval('document_desc'))],
+        domain=[
+            ['OR',  # declare an OR clause for easier overload
+                ('resource', '=', Eval('for_object')),
+            ],
+            ('document_desc', '=', Eval('document_desc'))
+            ],
         depends=['for_object', 'document_desc'], ondelete='RESTRICT')
     attachment_name = fields.Function(fields.Char('Attachment Name',
             depends=['attachment']),
@@ -133,6 +137,11 @@ class DocumentRequestLine(Printable, model.CoogSQL, model.CoogView):
     allow_force_receive = fields.Function(fields.Boolean('Force Receive'),
         'get_allow_force_receive')
     _models_get_request_line_cache = Cache('models_get_request_line')
+
+    @classmethod
+    def __setup__(cls):
+        super(DocumentRequestLine, cls).__setup__()
+        cls._order = [('for_object', 'ASC'), ('document_desc', 'ASC')]
 
     @classmethod
     def __register__(cls, module_name):
@@ -382,8 +391,14 @@ class DocumentRequestLine(Printable, model.CoogSQL, model.CoogView):
     def get_matching_attachments(self, name):
         Attachment = Pool().get('ir.attachment')
         return [x.id for x in Attachment.search([
-                    ('resource', '=', str(self.for_object)),
-                    ('document_desc', '=', self.document_desc)])]
+                    ('resource', 'in',
+                        self.get_attachment_possible_resources()),
+                    ('document_desc', '=', self.document_desc)
+                    ]
+                )]
+
+    def get_attachment_possible_resources(self):
+        return [str(self.for_object)]
 
     @classmethod
     def update_and_notify_reminders(cls, to_remind_per_object,

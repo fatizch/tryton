@@ -149,7 +149,7 @@ class Product(metaclass=PoolMeta):
 
     def calculate_required_documents(self, args):
         if not self.document_rules:
-            return []
+            return {}
         return self.document_rules[0].calculate_required_documents(args)
 
     @property
@@ -183,7 +183,7 @@ class OptionDescription(metaclass=PoolMeta):
 
     def calculate_required_documents(self, args):
         if not self.document_rules:
-            return []
+            return {}
         return self.document_rules[0].calculate_required_documents(args)
 
     def get_documentation_structure(self):

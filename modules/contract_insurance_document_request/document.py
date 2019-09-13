@@ -26,6 +26,20 @@ class DocumentRequestLine(metaclass=PoolMeta):
         ondelete='CASCADE', select=True)
 
     @classmethod
+    def __setup__(cls):
+        super(DocumentRequestLine, cls).__setup__()
+        or_clause = cls.attachment.domain[0]
+        assert or_clause[0] == 'OR'
+        or_clause.append(('resource.id', '=', Eval('contract'), 'contract'))
+        cls.attachment.depends.append('contract')
+
+    def get_attachment_possible_resources(self):
+        res = super(DocumentRequestLine,
+            self).get_attachment_possible_resources()
+        res.append(str(self.contract))
+        return res
+
+    @classmethod
     def __register__(cls, module_name):
         TableHandler = backend.get('TableHandler')
         table_handler = TableHandler(cls, module_name)
@@ -65,7 +79,7 @@ class DocumentRequestLine(metaclass=PoolMeta):
     @classmethod
     def for_object_models(cls):
         return super(DocumentRequestLine, cls).for_object_models() + \
-            ['contract']
+            ['contract', 'contract.covered_element']
 
 
 class DocumentRequest(metaclass=PoolMeta):
