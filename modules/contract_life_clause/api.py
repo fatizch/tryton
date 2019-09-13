@@ -61,8 +61,8 @@ class APIContract(metaclass=PoolMeta):
         return option
 
     @classmethod
-    def _contract_option_convert(cls, data, options, parameters):
-        super()._contract_option_convert(data, options, parameters)
+    def _contract_option_convert(cls, data, options, parameters, package=None):
+        super()._contract_option_convert(data, options, parameters, package)
 
         pool = Pool()
         API = pool.get('api')

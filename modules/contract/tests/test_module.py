@@ -3,7 +3,6 @@
 import unittest
 import datetime
 import copy
-
 from decimal import Decimal
 from dateutil.relativedelta import relativedelta
 
@@ -768,13 +767,13 @@ class ModuleTestCase(test_framework.CoogTestCase):
         data_dict = copy.deepcopy(data_ref)
         data_dict['contracts'][0]['product']['code'] = 'foo'
         error = ContractAPI.subscribe_contracts(data_dict, {})
-        self.assertEqual(error.data, [{
-                    'type': 'configuration_not_found',
-                    'data': {
-                        'code': 'foo',
-                        'model': 'offered.product',
-                        },
-                    }])
+        self.assertEqual(error.data[0], {
+                'type': 'configuration_not_found',
+                'data': {
+                    'code': 'foo',
+                    'model': 'offered.product',
+                    },
+                })
 
         # Check missing extra_data
         data_dict = copy.deepcopy(data_ref)
@@ -845,6 +844,127 @@ class ModuleTestCase(test_framework.CoogTestCase):
                             'option_3'],
                         'expected_keys': ['option_1', 'option_2',
                             'option_3'],
+                        },
+                    }])
+
+    @test_framework.prepare_test(
+        'contract.test0002_testCountryCreation',
+        'offered.test0035_testProductPackages',
+        'contract.test0005_PrepareProductForSubscription',
+        )
+    def test0105_subscribe_package_contract_API(self):
+        pool = Pool()
+        ContractAPI = pool.get('api.contract')
+
+        data_ref = {
+            'parties': [
+                {
+                    'ref': '1',
+                    'is_person': True,
+                    'name': 'Doe',
+                    'first_name': 'Father',
+                    'birth_date': '1980-01-20',
+                    'gender': 'male',
+                    'addresses': [
+                        {
+                            'street': 'Somewhere along the street',
+                            'zip': '75002',
+                            'city': 'Paris',
+                            'country': 'fr',
+                            },
+                        ],
+                    },
+                ],
+            'contracts': [
+                {
+                    'ref': '1',
+                    'product': {'code': 'AAA'},
+                    'subscriber': {'ref': '1'},
+                    'extra_data': {
+                        'contract_2': False,
+                        'contract_3': '2',
+                        },
+                    'package': {'code': 'package_a'},
+                    'coverages': [
+                        {
+                            'coverage': {'code': 'ALP'},
+                            'extra_data': {
+                                'option_1': '6.10',
+                                'option_2': True,
+                                },
+                            },
+                        ],
+                    },
+                ],
+            }
+
+        def check_result(data, result):
+            contract = self.Contract(result['contracts'][0]['id'])
+
+            self.assertEqual(len(contract.extra_datas), 1)
+            self.assertEqual(contract.extra_datas[0].extra_data_values,
+                {
+                    'contract_1': Decimal('16.10'),
+                    'contract_2': False,
+                    'contract_3': '2',
+                    })
+
+            self.assertEqual(len(contract.options), 2)
+            self.assertEqual(contract.options[0].coverage.code, 'ALP')
+            self.assertEqual(len(contract.options[0].versions), 1)
+            self.assertEqual(contract.options[0].versions[0].extra_data,
+                {
+                    'option_1': Decimal('6.10'),
+                    'option_2': True,
+                    'option_3': '2',
+                    },
+                )
+            self.assertEqual(contract.options[1].coverage.code, 'BET')
+            self.assertEqual(len(contract.options[1].versions), 1)
+            self.assertEqual(contract.options[1].versions[0].extra_data, {})
+
+        data_dict = copy.deepcopy(data_ref)
+        result = ContractAPI.subscribe_contracts(data_dict,
+            {'_debug_server': True})
+        check_result(data_dict, result)
+
+        # Check package extra data conflict
+        data_dict = copy.deepcopy(data_ref)
+        data_dict['contracts'][0]['extra_data']['contract_1'] = '1.20'
+        error = ContractAPI.subscribe_contracts(data_dict, {})
+        self.assertEqual(error.data, [{
+                    'type': 'manual_package_extra_data',
+                    'data': {
+                        'product': 'AAA',
+                        'package': 'package_a',
+                        'extra_data': ['contract_1'],
+                        },
+                    }])
+        data_dict = copy.deepcopy(data_ref)
+        data_dict['contracts'][0]['coverages'][0]['extra_data'][
+            'option_3'] = '1'
+        error = ContractAPI.subscribe_contracts(data_dict, {})
+        self.assertEqual(error.data, [{
+                    'type': 'manual_package_extra_data',
+                    'data': {
+                        'coverage': 'ALP',
+                        'package': 'package_a',
+                        'extra_data': ['option_3'],
+                        },
+                    }])
+
+        # Check manual extra coverage conflict
+        data_dict = copy.deepcopy(data_ref)
+        data_dict['contracts'][0]['coverages'].append({
+                'coverage': {'code': 'GAM'},
+                })
+        error = ContractAPI.subscribe_contracts(data_dict, {})
+        self.assertEqual(error.data, [{
+                    'type': 'package_with_manual_coverages',
+                    'data': {
+                        'package': 'package_a',
+                        'package_contents': ['ALP', 'BET'],
+                        'manual_coverage': 'GAM',
                         },
                     }])
 

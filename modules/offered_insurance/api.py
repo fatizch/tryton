@@ -25,6 +25,9 @@ class APIProduct(metaclass=PoolMeta):
         result = super()._describe_product(product)
         result['item_descriptors'] = [
             cls._describe_item_descriptor(x) for x in product.item_descriptors]
+        if product.packages:
+            result['covered_packages'] = bool(
+                product.packages_defined_per_covered)
         return result
 
     @classmethod
@@ -87,6 +90,7 @@ class APIProduct(metaclass=PoolMeta):
             'additionalItems': False,
             'items': cls._describe_item_descriptor_schema(),
             }
+        schema['properties']['covered_packages'] = {'type': 'boolean'}
         schema['required'].append('item_descriptors')
         return schema
 

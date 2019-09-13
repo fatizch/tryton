@@ -56,21 +56,6 @@ class Product(metaclass=PoolMeta):
         super(Product, cls).validate(instances)
         cls.validate_covered_element_extra_data(instances)
 
-    @classmethod
-    def validate_packages(cls, instances):
-        ExtraData = Pool().get('extra_data')
-        for product in instances:
-            for package in product.packages:
-                for key, value in package.extra_data.items():
-                    extra_data_struct = ExtraData._extra_data_struct(key)
-                    if (extra_data_struct['kind'] == 'contract' and
-                            product.packages_defined_per_covered or
-                            extra_data_struct['kind'] == 'covered_element' and
-                            not product.packages_defined_per_covered):
-                        raise ValidationError(gettext(
-                                'offered_insurance.msg_wrong_extra_data_type',
-                                package=package.name, extra_data=key))
-
     @staticmethod
     def default_packages_defined_per_covered():
         return True

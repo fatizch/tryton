@@ -1,7 +1,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+import datetime
 from collections import defaultdict
-from datetime import datetime
 from decimal import Decimal, InvalidOperation
 
 from trytond.pool import PoolMeta, Pool
@@ -279,7 +279,8 @@ class APICore(metaclass=PoolMeta):
                     continue
                 result[code] = value
             elif structure['technical_kind'] == 'numeric':
-                if isinstance(value, int) and not isinstance(value, bool):
+                if isinstance(value, Decimal) or (
+                        isinstance(value, int) and not isinstance(value, bool)):
                     pass
                 elif not isinstance(value, str):
                     API.add_input_error({
@@ -340,6 +341,8 @@ class APICore(metaclass=PoolMeta):
                     continue
                 result[code] = value
             elif structure['technical_kind'] == 'date':
+                if isinstance(value, datetime.date):
+                    continue
                 if not isinstance(value, str):
                     API.add_input_error({
                             'type': 'extra_data_type',
@@ -351,7 +354,8 @@ class APICore(metaclass=PoolMeta):
                             })
                     continue
                 try:
-                    result[code] = datetime.strptime(value, '%Y-%m-%d').date()
+                    result[code] = datetime.datetime.strptime(
+                        value, '%Y-%m-%d').date()
                 except ValueError:
                     API.add_input_error({
                             'type': 'extra_data_conversion',
@@ -433,6 +437,7 @@ class APIProduct(APIMixin):
             'description': coverage.description or '',
             'extra_data': ApiCore._extra_data_structure(
                 coverage.extra_data_def),
+            'mandatory': coverage.subscription_behaviour == 'mandatory',
             }
 
     @classmethod
@@ -441,8 +446,18 @@ class APIProduct(APIMixin):
             'id': package.id,
             'code': package.code,
             'name': package.name,
-            'options': [{'id': x.option.id, 'code': x.option.code}
+            # Maybe remove "package" extra_data ?
+            'extra_data': package.extra_data,
+            'coverages': [cls._describe_package_option(x)
                 for x in package.option_relations],
+            }
+
+    @classmethod
+    def _describe_package_option(cls, package_option):
+        return {
+            'id': package_option.option.id,
+            'code': package_option.option.code,
+            'package_extra_data': package_option.extra_data,
             }
 
     @classmethod
@@ -541,7 +556,8 @@ class APIProduct(APIMixin):
                                                 'sequence': 4},
                                             ],
                                         },
-                                    ]
+                                    ],
+                                'mandatory': True,
                                 }
                             ],
                         'subscriber': {
@@ -611,6 +627,7 @@ class APIProduct(APIMixin):
                                             ],
                                         },
                                     ],
+                                'mandatory': True,
                                 }
                             ],
                         'subscriber': {
@@ -635,6 +652,7 @@ class APIProduct(APIMixin):
                                 'name': 'Test Coverage',
                                 'description': 'My Uber-Awesome Coverage 1',
                                 'extra_data': [],
+                                'mandatory': False,
                                 }
                             ],
                         'subscriber': {
@@ -653,8 +671,11 @@ class APIProduct(APIMixin):
                                 'id': 1,
                                 'code': 'test_package',
                                 'name': 'Test Package',
-                                'options': [
-                                    {'code': 'test_coverage'},
+                                'coverages': [
+                                    {
+                                        'id': 2,
+                                        'code': 'test_coverage',
+                                        },
                                     ],
                                 },
                             ],
@@ -732,8 +753,10 @@ class APIProduct(APIMixin):
                 'name': {'type': 'string'},
                 'description': {'type': 'string'},
                 'extra_data': Pool().get('api.core')._extra_data_schema(),
+                'mandatory': {'type': 'boolean'},
                 },
-            'required': ['id', 'code', 'name', 'description', 'extra_data'],
+            'required': ['id', 'code', 'name', 'description', 'extra_data',
+                'mandatory'],
             }
 
     @classmethod
@@ -745,9 +768,28 @@ class APIProduct(APIMixin):
                 'id': OBJECT_ID_SCHEMA,
                 'code': CODE_SCHEMA,
                 'name': {'type': 'string'},
-                'options': CODED_OBJECT_ARRAY_SCHEMA,
+                'coverages': {
+                    'type': 'array',
+                    'minItems': 1,
+                    'additionalItems': False,
+                    'items': cls._describe_package_option_schema(),
+                    },
+                'extra_data': EXTRA_DATA_VALUES_SCHEMA,
                 },
-            'required': ['id', 'code', 'name', 'options'],
+            'required': ['id', 'code', 'name', 'coverages'],
+            }
+
+    @classmethod
+    def _describe_package_option_schema(cls):
+        return {
+            'type': 'object',
+            'additionalProperties': False,
+            'properties': {
+                'id': OBJECT_ID_SCHEMA,
+                'code': CODE_SCHEMA,
+                'package_extra_data': EXTRA_DATA_VALUES_SCHEMA,
+                },
+            'required': ['id', 'code'],
             }
 
 

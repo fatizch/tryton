@@ -1,3 +1,4 @@
+* FEA#12470 Handle subscription through packages in APIs
 * BUG#12556 Quote number undefined when subscription is made by API V1
 * FEA#11970 Add subscribe_contract API
 * BUG#12036 Take into account the quote status inthe calculation of is_active_at_date in order to activate the contract

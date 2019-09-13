@@ -165,6 +165,50 @@ class ModuleTestCase(test_framework.CoogTestCase):
         product_a.coverages = [coverage_a, coverage_b]
         product_a.save()
 
+    @test_framework.prepare_test(
+        'offered.test0030_testProductCoverageRelation',
+        )
+    def test0035_testProductPackages(self):
+        pool = Pool()
+        Product = pool.get('offered.product')
+        Coverage = pool.get('offered.option.description')
+        Package = pool.get('offered.package')
+        PackageCoverageRelation = pool.get('offered.package-option.description')
+
+        product_a, = Product.search([('code', '=', 'AAA')])
+        coverage_a, = Coverage.search([('code', '=', 'ALP')])
+        coverage_b, = Coverage.search([('code', '=', 'BET')])
+
+        package_a = Package()
+        package_a.name = 'Package A'
+        package_a.code = 'package_a'
+        package_a.option_relations = [
+            PackageCoverageRelation(option=coverage_a, extra_data={
+                    'option_3': '2'}),
+            PackageCoverageRelation(option=coverage_b),
+            ]
+        package_a.extra_data = {
+            'contract_1': '16.10',
+            }
+        package_a.save()
+
+        package_b = Package()
+        package_b.name = 'Package B'
+        package_b.code = 'package_b'
+        package_b.option_relations = [
+            PackageCoverageRelation(option=coverage_a, extra_data={
+                    'option_3': '1'}),
+            ]
+        package_b.save()
+
+        product_a.packages = [package_a, package_b]
+
+        # This is ignored unless offered_insurance is installed, but this
+        # allows for a simple useful test in contract_insurance (test0070)
+        product_a.packages_defined_per_covered = False
+
+        product_a.save()
+
     def test0040_testExtraDataStructure(self):
         # Basic structure
         test_selection = self.ExtraData()
@@ -606,12 +650,20 @@ class ModuleTestCase(test_framework.CoogTestCase):
                 )
 
     @test_framework.prepare_test(
-        'offered.test0030_testProductCoverageRelation',
+        'offered.test0035_testProductPackages',
         )
     def test0070_productDescription(self):
         pool = Pool()
 
-        product_a, = pool.get('offered.product').search([('code', '=', 'AAA')])
+        Product = pool.get('offered.product')
+        Coverage = pool.get('offered.option.description')
+        Package = pool.get('offered.package')
+
+        product_a, = Product.search([('code', '=', 'AAA')])
+        coverage_a, = Coverage.search([('code', '=', 'ALP')])
+        coverage_b, = Coverage.search([('code', '=', 'BET')])
+        package_a, = Package.search([('code', '=', 'package_a')])
+        package_b, = Package.search([('code', '=', 'package_b')])
 
         # Add some API resources on extra_data
         contract_1, = pool.get('extra_data').search(
@@ -628,7 +680,6 @@ class ModuleTestCase(test_framework.CoogTestCase):
             ]
         contract_1.save()
 
-        self.maxDiff = None
         self.assertEqual(
             pool.get('api.product').describe_products(
                 {}, {'_debug_server': True}),
@@ -674,7 +725,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
                         ],
                     'coverages': [
                         {
-                            'id': product_a.coverages[0].id,
+                            'id': coverage_a.id,
                             'name': 'Alpha Coverage',
                             'code': 'ALP',
                             'description': '',
@@ -708,16 +759,56 @@ class ModuleTestCase(test_framework.CoogTestCase):
                                         ],
                                     },
                                 ],
+                            'mandatory': True,
                             },
                         {
-                            'id': product_a.coverages[1].id,
+                            'id': coverage_b.id,
                             'name': 'Beta Coverage',
                             'code': 'BET',
                             'description': '',
                             'extra_data': [],
+                            'mandatory': True,
                             },
                         ],
-                    'packages': [],
+                    'packages': [
+                        {
+                            'id': package_a.id,
+                            'code': 'package_a',
+                            'name': 'Package A',
+                            'coverages': [
+                                {
+                                    'id': coverage_a.id,
+                                    'code': 'ALP',
+                                    'package_extra_data': {
+                                        'option_3': '2',
+                                        },
+                                    },
+                                {
+                                    'id': coverage_b.id,
+                                    'code': 'BET',
+                                    'package_extra_data': {},
+                                    },
+                                ],
+                            'extra_data': {
+                                'contract_1': '16.10',
+                                },
+                            },
+                        {
+                            'id': package_b.id,
+                            'code': 'package_b',
+                            'name': 'Package B',
+                            'coverages': [
+                                {
+                                    'id': coverage_a.id,
+                                    'code': 'ALP',
+                                    'package_extra_data': {
+                                        'option_3': '1',
+                                        },
+                                    },
+                                ],
+                            'extra_data': {},
+                            },
+                        ],
                     'subscriber': {
                         'model': 'party',
                         'required': ['name', 'first_name', 'birth_date',

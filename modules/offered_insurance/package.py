@@ -2,7 +2,7 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.i18n import gettext
 from trytond.model.exceptions import ValidationError
-from trytond.pool import PoolMeta
+from trytond.pool import PoolMeta, Pool
 
 __all__ = [
     'Package',
@@ -17,6 +17,14 @@ class Package(metaclass=PoolMeta):
         super(Package, cls).__setup__()
         cls.extra_data.domain = ['OR', cls.extra_data.domain,
             [('kind', '=', 'covered_element')]]
+
+    @property
+    def _covered_extra_data(self):
+        ExtraData = Pool().get('extra_data')
+        return {
+            k: v for k, v in self.extra_data.items()
+            if ExtraData._extra_data_struct(k)['kind'] == 'covered_element'
+            }
 
     def update_covered_options(self, covered):
         covered.options = self.clean_and_add_options(
@@ -33,7 +41,7 @@ class Package(metaclass=PoolMeta):
         return contract
 
     def update_covered_extra_datas(self, covered):
-        for key, value in self.extra_data.items():
+        for key, value in self._covered_extra_data.items():
             covered.set_extra_data_value(key, value)
         return covered
 

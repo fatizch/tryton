@@ -99,10 +99,67 @@ class APIContract(metaclass=PoolMeta):
 
     @classmethod
     def _contract_convert(cls, data, options, parameters):
+        API = Pool().get('api')
+
         super()._contract_convert(data, options, parameters)
 
         for covered_data in data.get('covereds', []):
             cls._contract_covered_convert(covered_data, options, parameters)
+
+        # Super call made sure that if there was a package on the product, the
+        # configuration was consistent. We just need to check that if there is
+        # no package on the contract, the configuration matches what we are
+        # given
+        covered_packages = sorted({x['package'].code
+                for x in data.get('covereds', []) if x.get('package', None)})
+        if (covered_packages and not data.get('package', None) and
+                not data['product'].packages_defined_per_covered):
+            API.add_input_error({
+                    'type': 'per_contract_package',
+                    'data': {
+                        'product': data['product'].code,
+                        'covered_packages': covered_packages,
+                        },
+                    })
+
+    @classmethod
+    def _contract_apply_package(cls, data):
+        API = Pool().get('api')
+
+        # If there are covered elements, the package behaviour is slightly
+        # different from the basic use case. Packages are either forced on all
+        # covered elements, or they are defined per covered elements
+        if data.get('covereds', []):
+            if data['product'].packages_defined_per_covered:
+                # If there is a package, and it is "per covered", it must not
+                # be set at the contract level
+                API.add_input_error({
+                        'type': 'per_covered_package',
+                        'data': {
+                            'product': data['product'].code,
+                            'package': data['package'].code,
+                            },
+                        })
+            else:
+                # If there are covered element, and packages are not 'per
+                # covered', we propagate the selected package to each covered
+                # and let them handle it
+                for covered_data in data['covereds']:
+                    if covered_data.get('package', None):
+                        API.add_input_error({
+                                'code': 'global_package_configuration',
+                                'data': {
+                                    'product': data['product'].code,
+                                    'forced_package': data['package'].code,
+                                    },
+                                })
+                    else:
+                        covered_data['package'] = {
+                            'code': data['package'].code}
+
+        # We still call super to set contract extra data, and define service
+        # coverages
+        return super()._contract_apply_package(data)
 
     @classmethod
     def _contract_covered_convert(cls, data, options, parameters):
@@ -121,12 +178,56 @@ class APIContract(metaclass=PoolMeta):
             if party:
                 data['party'] = party
 
+        data['package'] = data.get('package', None)
+        if data['package']:
+            data['package'] = API.instantiate_code_object('offered.package',
+                data['package'])
+
+        data['coverages'] = data.get('coverages', [])
+        for coverage_data in data['coverages']:
+            cls._contract_option_convert(coverage_data, options, parameters,
+                package=data['package'])
+
         extra_data = data.get('extra_data', {})
+
+        if data['package']:
+            covered_extra_data = data['package']._covered_extra_data
+            intersection = set(extra_data.keys()).intersection(
+                set(covered_extra_data.keys()))
+            if intersection:
+                API.add_input_error({
+                        'type': 'manual_package_extra_data',
+                        'data': {
+                            'package': data['package'].code,
+                            'item_descriptor': data['item_descriptor'].code,
+                            'extra_data': sorted(intersection),
+                            },
+                        })
+            extra_data.update(covered_extra_data)
+            data['extra_data'] = extra_data
+
+            coverages = {x['coverage'].code for x in data['coverages']}
+
+            # Filter contract coverages
+            package_coverages = {x.option.code
+                for x in data['package'].option_relations
+                if x.option.item_desc}
+            if coverages - package_coverages:
+                API.add_input_error({
+                        'type': 'extra_coverage',
+                        'data': {
+                            'package': data['package'].code,
+                            'extra_coverages': sorted(
+                                coverages - package_coverages),
+                            },
+                        })
+            # Create missing minimum coverages
+            for coverage_code in package_coverages - coverages:
+                data['coverages'].append(cls._contract_create_package_option(
+                        data['package'], coverage_code))
+
         extra_data = Core._extra_data_convert(extra_data)
         data['extra_data'] = extra_data
-
-        for coverage_data in data.get('coverages', []):
-            cls._contract_option_convert(coverage_data, options, parameters)
 
     @classmethod
     def _subscribe_contracts_validate_input(cls, parameters):
@@ -240,12 +341,10 @@ class APIContract(metaclass=PoolMeta):
                     'additionalItems': False,
                     'items': cls._contract_option_schema(minimum=minimum),
                     },
+                'package': CODED_OBJECT_SCHEMA,
                 },
             'required': ['item_descriptor'],
             }
-
-        if not minimum:
-            schema['required'].append('coverages')
 
         return schema
 

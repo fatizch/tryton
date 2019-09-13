@@ -6,6 +6,7 @@ import datetime
 from decimal import Decimal
 
 import trytond.tests.test_tryton
+from trytond.pool import Pool
 
 from trytond.transaction import Transaction
 from trytond.modules.coog_core import test_framework
@@ -148,6 +149,18 @@ return True'''
             self.assertEqual(
                 res,
                 {'report': 'Test ... SUCCESS\n\nTest1 ... SUCCESS'})
+
+    def test0003_testExtraDataCreation(self):
+        pool = Pool()
+        ExtraData = pool.get('extra_data')
+
+        covered_extra_1 = ExtraData()
+        covered_extra_1.name = 'covered_1'
+        covered_extra_1.string = 'Covered 1'
+        covered_extra_1.kind = 'covered_element'
+        covered_extra_1.type_ = 'numeric'
+        covered_extra_1.digits = 2
+        covered_extra_1.save()
 
     def test0005_testItemDescCreation(self):
         item_desc = self.ItemDesc()
@@ -321,7 +334,7 @@ return True'''
         option_extra_data.string = 'Extra Data Coverage Alpha'
         option_extra_data.type_ = 'selection'
         option_extra_data.selection = 'option1: Option 1\n'\
-            'option2: Option 2,option3: Option 3'
+            'option2: Option 2\noption3: Option 3'
         option_extra_data.kind = 'option'
         option_extra_data.save()
         option_alpha = product.coverages[0]
@@ -334,7 +347,7 @@ return True'''
         covered_extra_data.string = 'Extra Data Covered'
         covered_extra_data.type_ = 'selection'
         covered_extra_data.selection = 'covered1: Covered 1\n'\
-            'covered2: Covered 2,covered3: Covered 3'
+            'covered2: Covered 2\ncovered3: Covered 3'
         covered_extra_data.kind = 'covered_element'
         covered_extra_data.save()
         item_desc.extra_data_def = [covered_extra_data]
@@ -355,6 +368,80 @@ return True'''
         product.packages = [package1, package2, package3]
         product.save()
         self.assertTrue(len(product.packages) == 3)
+
+    @test_framework.prepare_test(
+        'offered.test0005_testExtraDataCreation',
+        'offered_insurance.test0003_testExtraDataCreation',
+        'offered_insurance.test0010Coverage_creation',
+        )
+    def test0011ConsistentPackage_creation(self):
+        pool = Pool()
+
+        Product = pool.get('offered.product')
+        ItemDesc = pool.get('offered.item.description')
+        Coverage = pool.get('offered.option.description')
+        Package = pool.get('offered.package')
+        PackageCoverageRelation = pool.get('offered.package-option.description')
+        ExtraData = pool.get('extra_data')
+
+        product, = Product.search([('code', '=', 'AAA')])
+        item_desc, = ItemDesc.search([('code', '=', 'person')])
+        coverage_a, = Coverage.search([('code', '=', 'ALP')])
+        coverage_b, = Coverage.search([('code', '=', 'BET')])
+        coverage_c, = Coverage.search([('code', '=', 'GAM')])
+        coverage_d, = Coverage.search([('code', '=', 'DEL')])
+        option_extra, = ExtraData.search([('name', '=', 'option_1')])
+        covered_extra, = ExtraData.search([('name', '=', 'covered_1')])
+        contract_extra, = ExtraData.search([('name', '=', 'contract_1')])
+
+        product.extra_data_def = [contract_extra]
+        product.save()
+
+        coverage_a.extra_data_def = [option_extra]
+        coverage_a.save()
+
+        item_desc.extra_data_def = [covered_extra]
+        item_desc.save()
+
+        package_a = Package()
+        package_a.name = 'Package A'
+        package_a.code = 'package_a'
+        package_a.extra_data = {
+            'covered_1': Decimal('100'),
+            'contract_1': Decimal('1000'),
+            }
+        package_a.option_relations = [
+            PackageCoverageRelation(option=coverage_a,
+                extra_data={'option_1': Decimal('1')}),
+            PackageCoverageRelation(option=coverage_b),
+            PackageCoverageRelation(option=coverage_d),
+            ]
+        package_a.save()
+
+        package_b = Package()
+        package_b.name = 'Package B'
+        package_b.code = 'package_b'
+        package_b.option_relations = [
+            PackageCoverageRelation(option=coverage_a),
+            PackageCoverageRelation(option=coverage_b),
+            PackageCoverageRelation(option=coverage_d),
+            ]
+        package_b.save()
+
+        package_c = Package()
+        package_c.name = 'Package C'
+        package_c.code = 'package_c'
+        package_c.option_relations = [
+            PackageCoverageRelation(option=coverage_a),
+            PackageCoverageRelation(option=coverage_b),
+            PackageCoverageRelation(option=coverage_c),
+            PackageCoverageRelation(option=coverage_d),
+            ]
+        package_c.save()
+
+        product.packages = [package_a, package_b, package_c]
+        product.packages_defined_per_covered = False
+        product.save()
 
     def test0100_testExtraPremiumKindCreation(self):
         def createExtraPremiumKind(code, is_discount=False, max_rate=None,
@@ -389,12 +476,17 @@ return True'''
 
     @test_framework.prepare_test('offered_insurance.test0010Coverage_creation')
     def test0200_productDescription(self):
-        product, = self.Product.search([('code', '=', 'AAA')])
-        alpha, = self.OptionDescription.search([('code', '=', 'ALP')])
-        beta, = self.OptionDescription.search([('code', '=', 'BET')])
-        gamma, = self.OptionDescription.search([('code', '=', 'GAM')])
-        delta, = self.OptionDescription.search([('code', '=', 'DEL')])
-        item_desc, = self.ItemDesc.search([('code', '=', 'person')])
+        pool = Pool()
+        Product = pool.get('offered.product')
+        Coverage = pool.get('offered.option.description')
+        ItemDesc = pool.get('offered.item.description')
+
+        product, = Product.search([('code', '=', 'AAA')])
+        alpha, = Coverage.search([('code', '=', 'ALP')])
+        beta, = Coverage.search([('code', '=', 'BET')])
+        gamma, = Coverage.search([('code', '=', 'GAM')])
+        delta, = Coverage.search([('code', '=', 'DEL')])
+        item_desc, = ItemDesc.search([('code', '=', 'person')])
 
         self.maxDiff = None
         self.assertEqual(
@@ -408,6 +500,7 @@ return True'''
                             'extra_data': [],
                             'id': alpha.id,
                             'item_desc': item_desc.id,
+                            'mandatory': True,
                             'name': 'Alpha Coverage',
                             },
                         {
@@ -416,6 +509,7 @@ return True'''
                             'extra_data': [],
                             'id': beta.id,
                             'item_desc': item_desc.id,
+                            'mandatory': True,
                             'name': 'Beta Coverage',
                             },
                         {
@@ -424,6 +518,7 @@ return True'''
                             'extra_data': [],
                             'id': gamma.id,
                             'item_desc': item_desc.id,
+                            'mandatory': False,
                             'name': 'GammaCoverage',
                             },
                         {
@@ -432,6 +527,7 @@ return True'''
                             'extra_data': [],
                             'id': delta.id,
                             'item_desc': None,
+                            'mandatory': True,
                             'name': 'Delta Coverage',
                             }],
                     'description': '',
@@ -476,6 +572,245 @@ return True'''
                 'id': item_desc.id,
                 'name': 'Person',
                 })
+
+    @test_framework.prepare_test('offered_insurance.test0010Package_creation')
+    def test0210_productDescription(self):
+        pool = Pool()
+        Product = pool.get('offered.product')
+        Coverage = pool.get('offered.option.description')
+        ItemDesc = pool.get('offered.item.description')
+        Package = pool.get('offered.package')
+
+        product, = Product.search([('code', '=', 'AAA')])
+        alpha, = Coverage.search([('code', '=', 'ALP')])
+        beta, = Coverage.search([('code', '=', 'BET')])
+        gamma, = Coverage.search([('code', '=', 'GAM')])
+        delta, = Coverage.search([('code', '=', 'DEL')])
+        cont, = Coverage.search([('code', '=', 'CONT')])
+        item_desc, = ItemDesc.search([('code', '=', 'person')])
+        package_1, = Package.search([('code', '=', 'P1')])
+        package_2, = Package.search([('code', '=', 'P2')])
+        package_3, = Package.search([('code', '=', 'P3')])
+        package_4, = Package.search([('code', '=', 'P4')])
+
+        self.maxDiff = None
+        self.assertEqual(
+            self.APIProduct.describe_products({}, {'_debug_server': True}),
+            [{
+                    'code': 'AAA',
+                    'coverages': [
+                        {
+                            'code': 'ALP',
+                            'description': '',
+                            'extra_data': [
+                                {'code': 'extra_data_coverage_alpha',
+                                    'name': 'Extra Data Coverage Alpha',
+                                    'selection': [
+                                        {'name': 'Option 1',
+                                            'sequence': 0,
+                                            'value': 'option1'},
+                                        {
+                                            'name': 'Option 2',
+                                            'sequence': 1,
+                                            'value': 'option2',
+                                            },
+                                        {
+                                            'name': 'Option 3',
+                                            'sequence': 2,
+                                            'value': 'option3',
+                                            },
+                                        ],
+                                    'sequence': 2,
+                                    'type': 'selection'},
+                                ],
+                            'id': alpha.id,
+                            'item_desc': item_desc.id,
+                            'mandatory': True,
+                            'name': 'Alpha Coverage',
+                            },
+                        {
+                            'code': 'BET',
+                            'description': '',
+                            'extra_data': [],
+                            'id': beta.id,
+                            'item_desc': item_desc.id,
+                            'mandatory': True,
+                            'name': 'Beta Coverage',
+                            },
+                        {
+                            'code': 'GAM',
+                            'description': '',
+                            'extra_data': [],
+                            'id': gamma.id,
+                            'item_desc': item_desc.id,
+                            'mandatory': False,
+                            'name': 'GammaCoverage',
+                            },
+                        {
+                            'code': 'DEL',
+                            'description': '',
+                            'extra_data': [],
+                            'id': delta.id,
+                            'item_desc': None,
+                            'mandatory': True,
+                            'name': 'Delta Coverage',
+                            },
+                        {
+                            'code': 'CONT',
+                            'description': '',
+                            'extra_data': [],
+                            'id': cont.id,
+                            'item_desc': None,
+                            'mandatory': True,
+                            'name': 'Contract Coverage',
+                            },
+                        ],
+                    'covered_packages': False,
+                    'description': '',
+                    'extra_data': [
+                        {
+                            'code': 'extra_data_contract',
+                            'name': 'Extra Data Contract',
+                            'selection': [
+                                {
+                                    'name': 'Formula 1',
+                                    'sequence': 0,
+                                    'value': 'formula1',
+                                    },
+                                {
+                                    'name': 'Formula 2,formula3: Formula 3',
+                                    'sequence': 1,
+                                    'value': 'formula2',
+                                    },
+                                ],
+                            'sequence': 1,
+                            'type': 'selection',
+                            },
+                        ],
+                    'id': product.id,
+                    'item_descriptors': [
+                        {
+                            'code': 'person',
+                            'extra_data': [
+                                {
+                                    'code': 'extra_data_covered',
+                                    'name': 'Extra Data Covered',
+                                    'selection': [
+                                        {
+                                            'name': 'Covered 1',
+                                            'sequence': 0,
+                                            'value': 'covered1',
+                                            },
+                                        {
+                                            'name': 'Covered 2',
+                                            'sequence': 1,
+                                            'value': 'covered2',
+                                            },
+                                        {
+                                            'name': 'Covered 3',
+                                            'sequence': 2,
+                                            'value': 'covered3'},
+                                        ],
+                                    'sequence': 3,
+                                    'type': 'selection'},
+                                ],
+                            'fields': {
+                                'conditions': [
+                                    {'name': 'is_person', 'operator': '=',
+                                        'value': True},
+                                    ],
+                                'fields': ['name', 'first_name', 'birth_date',
+                                    'email', 'phone_number', 'address'],
+                                'model': 'party',
+                                'required': ['name', 'first_name', 'birth_date',
+                                    'email', 'address']},
+                            'id': item_desc.id,
+                            'name': 'Person'}],
+                    'name': 'Awesome Alternative Allowance',
+                    'packages': [
+                        {
+                            'code': 'P1',
+                            'extra_data': {},
+                            'id': package_1.id,
+                            'name': 'Package 1',
+                            'coverages': [
+                                {
+                                    'code': 'ALP',
+                                    'id': alpha.id,
+                                    'package_extra_data': {
+                                        'extra_data_coverage_alpha': 'option2',
+                                        },
+                                    },
+                                {
+                                    'code': 'BET',
+                                    'id': beta.id,
+                                    'package_extra_data': {},
+                                    },
+                                ],
+                            },
+                        {
+                            'code': 'P2',
+                            'extra_data': {
+                                'extra_data_contract': 'formula2',
+                                },
+                            'id': package_2.id,
+                            'name': 'Package 2',
+                            'coverages': [
+                                {
+                                    'code': 'ALP',
+                                    'id': alpha.id,
+                                    'package_extra_data': {
+                                        'extra_data_coverage_alpha': 'option3',
+                                        },
+                                    },
+                                {
+                                    'code': 'GAM',
+                                    'id': gamma.id,
+                                    'package_extra_data': {},
+                                    },
+                                {
+                                    'code': 'DEL',
+                                    'id': delta.id,
+                                    'package_extra_data': {},
+                                    },
+                                {
+                                    'code': 'CONT',
+                                    'id': cont.id,
+                                    'package_extra_data': {},
+                                    },
+                                ],
+                            },
+                        {
+                            'code': 'P3',
+                            'extra_data': {
+                                'extra_data_contract': 'formula3',
+                                },
+                            'id': package_3.id,
+                            'name': 'Package 3',
+                            'coverages': [
+                                {
+                                    'code': 'GAM',
+                                    'id': gamma.id,
+                                    'package_extra_data': {},
+                                    },
+                                {
+                                    'code': 'DEL',
+                                    'id': delta.id,
+                                    'package_extra_data': {},
+                                    },
+                                ],
+                            },
+                        ],
+                    'subscriber': {
+                        'fields': ['name', 'first_name', 'birth_date', 'email',
+                            'phone_number', 'is_person', 'addresses'],
+                        'model': 'party',
+                        'required': ['name', 'first_name', 'birth_date',
+                            'email', 'addresses'],
+                        },
+                    },
+                ]
+            )
 
 
 def suite():

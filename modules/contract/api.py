@@ -244,25 +244,128 @@ class APIContract(APIMixin):
         if subscriber:
             data['subscriber'] = subscriber
 
+        data['package'] = data.get('package', None)
+        if data['package']:
+            data['package'] = API.instantiate_code_object('offered.package',
+                data['package'])
+
+        data['coverages'] = data.get('coverages', [])
+        for coverage_data in data['coverages']:
+            cls._contract_option_convert(coverage_data, options, parameters,
+                package=data['package'])
+
+        if data['package']:
+            cls._contract_apply_package(data)
+
         extra_data = data.get('extra_data', {})
         extra_data = Core._extra_data_convert(extra_data)
         data['extra_data'] = extra_data
 
-        data['coverages'] = data.get('coverages', [])
-        for coverage_data in data['coverages']:
-            cls._contract_option_convert(coverage_data, options, parameters)
-
     @classmethod
-    def _contract_option_convert(cls, data, options, parameters):
+    def _contract_option_convert(cls, data, options, parameters, package=None):
         pool = Pool()
         API = pool.get('api')
         Core = pool.get('api.core')
 
         data['coverage'] = API.instantiate_code_object(
             'offered.option.description', data['coverage'])
+
+        if package:
+            cls._contract_option_check_package(data, options, parameters,
+                package)
+
         extra_data = data.get('extra_data', {})
         extra_data = Core._extra_data_convert(extra_data)
         data['extra_data'] = extra_data
+
+    @classmethod
+    def _contract_apply_package(cls, data):
+        API = Pool().get('api')
+
+        extra_data = data.get('extra_data', {})
+        contract_extra_data = data['package']._contract_extra_data
+        intersection = set(extra_data.keys()).intersection(
+            set(contract_extra_data.keys()))
+        if intersection:
+            API.add_input_error({
+                    'type': 'manual_package_extra_data',
+                    'data': {
+                        'package': data['package'].code,
+                        'product': data['product'].code,
+                        'extra_data': sorted(intersection),
+                        },
+                    })
+        extra_data.update(contract_extra_data)
+        data['extra_data'] = extra_data
+
+        coverages = {x['coverage'].code for x in data['coverages']}
+        package_coverages = {x.option.code
+            for x in data['package'].option_relations if x.option.is_service}
+        if coverages - package_coverages:
+            API.add_input_error({
+                    'type': 'extra_coverage',
+                    'data': {
+                        'package': data['package'].code,
+                        'extra_coverages': sorted(
+                            coverages - package_coverages),
+                        },
+                    })
+        # Create missing minimum coverages
+        for coverage_code in package_coverages - coverages:
+            data['coverages'].append(cls._contract_create_package_option(
+                    data['package'], coverage_code))
+
+        data['extra_data'] = extra_data
+
+    @classmethod
+    def _contract_option_check_package(cls, data, options, parameters,
+            package):
+        pool = Pool()
+        API = pool.get('api')
+
+        package_data = None
+        package_data = [x for x in package.option_relations
+            if x.option.code == data['coverage'].code]
+        if not package_data:
+            API.add_input_error({
+                    'type': 'package_with_manual_coverages',
+                    'data': {
+                        'package': package.code,
+                        'package_contents': sorted(x.option.code
+                            for x in package.option_relations),
+                        'manual_coverage': data['coverage'].code,
+                        },
+                    })
+        else:
+            package_data, = package_data
+
+        if not package_data.extra_data:
+            return
+
+        extra_data = data.get('extra_data', {})
+
+        intersection = set(extra_data.keys()).intersection(
+            set(package_data.extra_data.keys()))
+        if intersection:
+            API.add_input_error({
+                    'type': 'manual_package_extra_data',
+                    'data': {
+                        'package': package.code,
+                        'coverage': data['coverage'].code,
+                        'extra_data': sorted(intersection),
+                        },
+                    })
+        extra_data.update(package_data.extra_data)
+        data['extra_data'] = extra_data
+
+    @classmethod
+    def _contract_create_package_option(cls, package, coverage_code):
+        package_option, = [x for x in package.option_relations
+            if x.option.code == coverage_code]
+        return {
+            'coverage': package_option.option,
+            'extra_data': package_option.extra_data,
+            }
 
     @classmethod
     def _subscribe_contracts_validate_input(cls, parameters):
@@ -392,12 +495,10 @@ class APIContract(APIMixin):
                     'additionalItems': False,
                     'items': cls._contract_option_schema(minimum=minimum),
                     },
+                'package': CODED_OBJECT_SCHEMA,
                 },
             'required': ['ref', 'product', 'subscriber'],
             }
-
-        if minimum:
-            schema['required'] += ['coverages']
 
         return schema
 

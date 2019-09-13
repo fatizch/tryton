@@ -59,8 +59,16 @@ class Package(model.CodedMixin, model.CoogView, with_extra_data([
             contract, contract.options, True)
         return contract
 
+    @property
+    def _contract_extra_data(self):
+        ExtraData = Pool().get('extra_data')
+        return {
+            k: v for k, v in self.extra_data.items()
+            if ExtraData._extra_data_struct(k)['kind'] == 'contract'
+            }
+
     def update_contract_extra_datas(self, contract):
-        for key, value in self.extra_data.items():
+        for key, value in self._contract_extra_data.items():
             contract.set_extra_data_value(key, value)
         return contract
 

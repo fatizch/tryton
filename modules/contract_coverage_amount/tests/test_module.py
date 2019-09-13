@@ -113,6 +113,7 @@ return coverage_amount() < 1000
                             'extra_data': [],
                             'id': alpha.id,
                             'item_desc': item_desc.id,
+                            'mandatory': True,
                             'name': 'Alpha Coverage',
                             'coverage_amount': {
                                 'label': 'Coverage Amount',
@@ -129,6 +130,7 @@ return coverage_amount() < 1000
                             'extra_data': [],
                             'id': beta.id,
                             'item_desc': item_desc.id,
+                            'mandatory': True,
                             'name': 'Beta Coverage',
                             'coverage_amount': {
                                 'enum': ['100', '200', '300', '400', '500'],
