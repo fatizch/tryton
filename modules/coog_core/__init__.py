@@ -130,6 +130,10 @@ def register():
             models_for_tests.TestSubTransactionModel,
             module='coog_core', type_='model')
 
+        Pool.register(
+            models_for_tests.TestAPIs,
+            module='coog_core', type_='model', depends=['api'])
+
     Pool.register(
         export.ImportWizard,
         export.Add2ExportPackageWizard,

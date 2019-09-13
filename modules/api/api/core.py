@@ -53,7 +53,7 @@ from trytond.rpc import RPC
 from trytond.exceptions import UserError, LoginException, ConcurrencyException
 from trytond.exceptions import MissingDependenciesException
 from trytond.model.modelstorage import AccessError, ImportDataError, \
-    ValidationError, RequiredValidationError, SizeValidationError, \
+    RequiredValidationError, SizeValidationError, \
     DigitsValidationError, SelectionValidationError, TimeFormatValidationError
 from trytond.server_context import ServerContext
 
@@ -158,6 +158,19 @@ def apify(klass, api_name):
                     return Api.handle_result(
                         Model, api_name, parameters, result)
                 except Exception as e:
+                    if not Transaction().readonly:
+                        if (config.getboolean('env', 'testing') is not True or
+                                Transaction().context.get(
+                                    '_force_test_api_rollback', False)):
+                            # We do not want to rollback API Errors when
+                            # testing, since this makes configuration extremely
+                            # difficult.
+                            #
+                            # However we need to be able to force it when we
+                            # actually want to test the rollback mechanism,
+                            # hence the flag
+                            Transaction().rollback()
+
                     if (api_logger.isEnabledFor(logging.DEBUG)
                              or config.getboolean('env', 'testing') is True):
                         if context.get('_debug_server', False):

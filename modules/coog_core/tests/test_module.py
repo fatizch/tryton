@@ -14,6 +14,7 @@ from trytond import backend
 import trytond.tests.test_tryton
 from trytond.transaction import Transaction
 from trytond.exceptions import UserError
+from trytond.pool import Pool
 
 from trytond.modules.api import APIInputError
 from trytond.modules.coog_core import test_framework, history_tools
@@ -1662,6 +1663,32 @@ class ModuleTestCase(test_framework.CoogTestCase):
             {'kind': 'generic', 'identifier': 'hello_world_2'}, {})
         self.assertEqual(inexisting_id, APIInputError(
                 [{'type': 'unknown_identifier'}]))
+
+    def test_9900_api_rollbacks(self):
+        pool = Pool()
+        TestAPI = pool.get('api.test')
+        TestObject = pool.get('coog_core.export_test')
+
+        with Transaction().set_context(_force_test_api_rollback=True):
+            TestAPI.test_api({}, {})
+            Transaction().commit()
+            self.assertEqual(
+                len(TestObject.search([('char', '=', 'API CREATED')])), 1)
+
+            TestAPI.test_api({'fail_convert': True}, {})
+            Transaction().commit()
+            self.assertEqual(
+                len(TestObject.search([('char', '=', 'API CREATED')])), 1)
+
+            TestAPI.test_api({'fail_validate': True}, {})
+            Transaction().commit()
+            self.assertEqual(
+                len(TestObject.search([('char', '=', 'API CREATED')])), 1)
+
+            TestAPI.test_api({'fail_run': True}, {})
+            Transaction().commit()
+            self.assertEqual(
+                len(TestObject.search([('char', '=', 'API CREATED')])), 1)
 
 
 def suite():

@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+from trytond.pool import Pool
+
+from trytond.modules.api import APIMixin
 from trytond.modules.company.model import (CompanyValueMixin,
     CompanyMultiValueMixin)
 
@@ -29,6 +32,7 @@ __all__ = [
     'TestLoaderUpdater',
     'TestLocalMpttMaster',
     'TestLocalMptt',
+    'TestAPIs',
     ]
 
 
@@ -323,3 +327,56 @@ class TestSubTransactionModel(model.CoogSQL, model._RevisionMixin):
     'Test Sub Transaction Model'
     __name__ = 'coog_core.test_model_sub_transaction'
     value = fields.Integer('Value')
+
+
+class TestAPIs(APIMixin):
+    'Test APIs'
+    __name__ = 'api.test'
+
+    @classmethod
+    def __setup__(cls):
+        super().__setup__()
+        cls._apis.update({
+                'test_api': {
+                    'public': True,
+                    'readonly': False,
+                    'description': 'Test API',
+                    },
+                })
+
+    @classmethod
+    def test_api(cls, parameters):
+        TestObject = Pool().get('coog_core.export_test')
+        test_object = TestObject(char='API CREATED')
+        test_object.save()
+
+        if 'fail_run' in parameters:
+            raise Exception
+        return {}
+
+    @classmethod
+    def _test_api_schema(cls):
+        return {}
+
+    @classmethod
+    def _test_api_output_schema(cls):
+        return {}
+
+    @classmethod
+    def _test_api_convert_input(cls, parameters):
+        if 'fail_convert' in parameters:
+            raise Exception
+        return parameters
+
+    @classmethod
+    def _test_api_validate_input(cls, parameters):
+        if 'fail_validate' in parameters:
+            raise Exception
+        return parameters
+
+    @classmethod
+    def _test_api_examples(cls):
+        return [{
+                'input': {},
+                'output': {},
+                }]
