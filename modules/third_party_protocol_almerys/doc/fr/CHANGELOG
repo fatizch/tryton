@@ -1,3 +1,4 @@
+* OTH#00000 Corriger les valeurs par défaut des adresses pour Almerys
 * OTH#00000 Corriger le batch almerys v3
 * OTH#00000 Retirer les contraintes sur les adresses du register car elles sont à présent définies dans le setup
 * BUG#12369 Améliorer la gestion des comptes de prestations dans le batch Almerys

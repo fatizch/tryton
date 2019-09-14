@@ -83,17 +83,29 @@ class Address(metaclass=PoolMeta):
         cursor.execute(*address_t.update(
                 columns=[address_t.street, address_t.zip, address_t.country],
                 values=[
-                    Coalesce(address_t.street, 'ADDRESSE INCONNUE'),
+                    Coalesce(address_t.street, 'ADRESSE INCONNUE'),
                     Coalesce(address_t.zip, '99999'),
                     Coalesce(address_t.country, france_id)],
                 where=((address_t.street == Null)
                     | (address_t.zip == Null)
                     | (address_t.country == Null))))
 
-    @fields.depends('party')
+    @fields.depends('party', '_parent_party.is_person')
     def on_change_with_is_person(self, name=None):
         return self.party and self.party.is_person
 
     @classmethod
     def search_is_person(cls, name, clause):
         return [('party.is_person',) + tuple(clause[1:])]
+
+    @staticmethod
+    def default_zip():
+        return '99999'
+
+    @classmethod
+    def _format_address_FR(cls, lines):
+        lines = super(Address, cls)._format_address_FR(lines)
+        if lines is not None and '4_ligne4' in lines:
+            lines['4_ligne4'] = (lines['4_ligne4'] or 'ADRESSE INCONNUE'
+                ).replace(',', '')
+        return lines
