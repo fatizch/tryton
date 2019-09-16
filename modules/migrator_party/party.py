@@ -188,30 +188,30 @@ class MigratorContactMechanism(migrator.Migrator):
     @classmethod
     def query_data(cls, ids):
         select = cls.table.select(*cls.select_columns())
+        parties = [x.split('_')[0] for x in ids]
+        sequences = [x.split('_')[1] for x in ids]
+        select.where = cls.table.party.in_(parties)
+        select.where &= cls.table.sequence.in_(sequences)
         return select
 
     @classmethod
     def select_extract_ids(cls, select_key, rows):
         ids = []
         for row in rows:
-            for type_contact in ['phone', 'email', 'fax', 'mobile']:
-                if not row[type_contact]:
-                    continue
-                ids.append('{}_{}_{}'.format(
-                    row.get('party'),
-                    row.get('sequence'),
-                    type_contact,
-                    ))
+            ids.append('{}_{}'.format(
+                row.get('party'),
+                row.get('sequence'),
+                ))
         return set(ids)
 
     @classmethod
     def select_remove_ids(cls, ids, excluded, **kwargs):
         table_name = cls.model.replace('.', '_')
         existing_ids = list(tools.cache_from_query(table_name,
-            ('party', 'sequence', 'type')).keys())
+            ('party', 'sequence')).keys())
         existing = []
         for id_ in existing_ids:
-            existing.append('%s_%s_%s' % (id_[0], id_[1], id_[2]))
+            existing.append('%s_%s' % (id_[0], id_[1]))
         return set(ids) - set(existing) - set(excluded)
 
     @classmethod

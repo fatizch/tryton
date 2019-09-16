@@ -1,3 +1,5 @@
+* BUG#12485 Improve the migration contacts batch in order to no longer create duplicate contact lines in case of multiple types of contacts exists for the same party
+
 Version 2.4 - 2019-04-12
 * BUG#00000 Fix of address lines migration
 * BUG#10806 Remove party_ssn from module depends
