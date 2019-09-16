@@ -5,5 +5,9 @@
             <field name="name">Remind Documents</field>
             <field name="code">remind_documents</field>
         </record>
+        <record model="event.type" id="document_token_generation">
+            <field name="name">Document Token Generation</field>
+            <field name="code">document_token_generation</field>
+        </record>
     </data>
 </tryton>

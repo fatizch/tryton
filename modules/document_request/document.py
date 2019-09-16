@@ -87,6 +87,9 @@ class DocumentDescription(metaclass=PoolMeta):
     reception_requires_attachment = fields.Boolean(
         'Reception Requires Attachment', help='If checked, the attachments '
         'will be required to mark the document request lines as "received"')
+    prerequisite = fields.Boolean("Prerequisite",
+        help="The documents of this kind are a prerequisite for receiving "
+        "any other kind of documents. Only used for frontend applications.")
 
 
 class DocumentRequestLine(Printable, model.CoogSQL, model.CoogView):

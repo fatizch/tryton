@@ -845,7 +845,9 @@ class ContractOptionVersion(metaclass=PoolMeta):
             option_h.drop_column('extra_data')
 
 
-class CoveredElement(model.with_local_mptt('contract'), model.CoogView,
+class CoveredElement(Printable,
+        model.with_local_mptt('contract'),
+        model.CoogView,
         with_extra_data(['covered_element'], schema='item_desc',
             field_name='current_extra_data', field_string='Current Extra Data',
             getter_name='get_current_version', setter_name='setter_void'),
@@ -1929,6 +1931,15 @@ class CoveredElement(model.with_local_mptt('contract'), model.CoogView,
         res[1].append(coog_string.get_field_summary(self, 'options', True,
             at_date, lang))
         return tuple(res)
+
+    def get_contact(self):
+        return self.party or self.contract.get_contact()
+
+    def get_object_for_contact(self):
+        return self.contract
+
+    def get_sender(self):
+        return self.party or self.contract.get_sender()
 
 
 class CoveredElementVersion(model.CoogSQL, model.CoogView,

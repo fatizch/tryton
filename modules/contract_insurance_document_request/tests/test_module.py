@@ -4,6 +4,8 @@
 import copy
 import unittest
 import datetime
+import doctest
+from trytond.tests.test_tryton import doctest_teardown
 
 import trytond.tests.test_tryton
 
@@ -439,4 +441,8 @@ class ModuleTestCase(test_framework.CoogTestCase):
 def suite():
     suite = trytond.tests.test_tryton.suite()
     suite.addTests(unittest.TestLoader().loadTestsFromTestCase(ModuleTestCase))
+    suite.addTests(doctest.DocFileSuite(
+            'scenario_document_api.rst',
+            tearDown=doctest_teardown, encoding='utf-8',
+            optionflags=doctest.REPORT_ONLY_FIRST_FAILURE))
     return suite

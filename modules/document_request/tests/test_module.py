@@ -15,6 +15,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
     Test Coog module.
     '''
     module = 'document_request'
+    extras = ['offered']
 
     @classmethod
     def get_models(cls):
@@ -34,6 +35,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
             return_value=['coog_core.export_test'])
         line = self.DocumentRequestLine(document_desc=doc_desc,
             for_object=test_object)
+        line.on_change_document_desc()
         line.save()
         return line, doc_desc, test_object
 
@@ -52,6 +54,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
         line.on_change_attachment()
         # on_change_with_received will be also called by the client
         line.received = line.on_change_with_received()
+
         self.assertTrue(line.received)
         self.assertEqual(line.reception_date, utils.today())
         self.assertEqual(line.first_reception_date, utils.today())

@@ -84,18 +84,8 @@ class CoogTestCase(ModuleTestCase):
 
     @classmethod
     def setUpClass(cls):
-        import trytond.tests.test_tryton
-        trytond.tests.test_tryton.drop_db()
-        cls.activate_module()
-        super(ModuleTestCase, cls).setUpClass()
-
-    @classmethod
-    def activate_module(cls):
-        import trytond.tests.test_tryton
-        # Remove "api" from the cache name, so that databases can be reused for
-        # scenarios
-        trytond.tests.test_tryton.activate_module(['api', cls.module],
-            cache_name=cls.module)
+        cls.extras = (cls.extras or []) + ['api']
+        super(CoogTestCase, cls).setUpClass()
 
     def run(self, result=None):
         test_function = getattr(self, self._testMethodName)

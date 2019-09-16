@@ -7,6 +7,7 @@ from . import document
 from . import attachment
 from . import report_engine
 from . import party
+from . import api
 
 
 def register():
@@ -34,3 +35,6 @@ def register():
     Pool.register(
         report_engine.ReportGenerate,
         module='document_request', type_='report')
+    Pool.register(
+        api.APIParty,
+        module='document_request', type_='model', depends=['api', 'offered'])

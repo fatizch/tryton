@@ -200,6 +200,8 @@ def amount_from_api(amount):
 
 
 def date_for_api(date):
+    if not date:
+        return ''
     assert isinstance(date, datetime.date)
     return date.strftime('%Y-%m-%d')
 

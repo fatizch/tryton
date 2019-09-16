@@ -25,5 +25,7 @@ this repository contains the full copyright notices and license terms. -->
         <field name="attachment"/>
         <label name="attachment_data"/>
         <field name="attachment_data"/>
+        <label name="details"/>
+        <field name="details"/>
     </group>
 </form>

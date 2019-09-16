@@ -47,5 +47,6 @@ coog_dep_main() { # install base deps
                 "vobject" \
                 "werkzeug<0.15" \
                 "wrapt" \
+                "pyjwt" \
                 "sqlitebck" # for tests
 }
