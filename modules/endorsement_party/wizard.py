@@ -89,6 +89,12 @@ class AddressDisplayer(model.CoogView):
                 {'invisible': Eval('is_new')}),
             ]
 
+    def set_party(self, party):
+        if self.party is None and self.is_new:
+            self.party = party
+            self.new_address[0].party = party
+            self.new_address = list(self.new_address)
+
 
 class ChangePartyAddress(EndorsementWizardStepMixin):
     'Change Party Address'
@@ -110,6 +116,12 @@ class ChangePartyAddress(EndorsementWizardStepMixin):
     def state_view_name(cls):
         return 'endorsement_party.' \
             'party_change_address_view_form'
+
+    @fields.depends('party_id', 'displayers')
+    def on_change_displayers(self):
+        for displayer in self.displayers:
+            displayer.set_party(self.party_id)
+        self.displayers = list(self.displayers)
 
     @classmethod
     def _address_fields_to_extract(cls):
