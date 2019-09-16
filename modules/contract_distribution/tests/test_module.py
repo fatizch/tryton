@@ -121,6 +121,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
                     {
                         'id': product_a.coverages[0].id,
                         'name': 'Alpha Coverage',
+                        'mandatory': True,
                         'code': 'ALP',
                         'description': '',
                         'extra_data': [
@@ -157,6 +158,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
                     {
                         'id': product_a.coverages[1].id,
                         'name': 'Beta Coverage',
+                        'mandatory': True,
                         'code': 'BET',
                         'description': '',
                         'extra_data': [],
