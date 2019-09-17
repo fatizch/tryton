@@ -12,12 +12,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
     'Module Test Case'
 
     module = 'party_birth_data'
-
-    @classmethod
-    def activate_module(cls):
-        trytond.tests.test_tryton.activate_module(['api', 'country_hexaposte',
-                'party_ssn', 'party_birth_data'],
-            cache_name='party_birth_data')
+    extras = ['country_hexaposte', 'party_ssn']
 
     @classmethod
     def get_models(cls):
