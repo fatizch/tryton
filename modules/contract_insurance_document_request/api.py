@@ -72,8 +72,8 @@ class APIParty(metaclass=PoolMeta):
     __name__ = 'api.party'
 
     @classmethod
-    def _build_document_requests_response(cls, parameters):
-        response = super()._build_document_requests_response(parameters)
+    def _build_token_document_requests_response(cls, parameters):
+        response = super()._build_token_document_requests_response(parameters)
         object_ = parameters['for_object']
         if object_.__name__ == 'contract':
             contract = object_
