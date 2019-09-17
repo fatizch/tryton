@@ -110,6 +110,7 @@ class QuestionnairePart(model.CoogSQL, model.CoogView, model.SequenceMixin,
             '\n- description: a string which will be used to describe the '
             'proposition'
             '\n- product: the code of the suggested product'
+            '\n- package: (optional) the code of the suggested package'
             '\n- eligible: whether the product will be selectable or not for '
             'subscription')
 

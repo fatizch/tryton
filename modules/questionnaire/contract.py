@@ -127,17 +127,23 @@ class ContractQuestionnaireResult(model.CoogSQL, model.CoogView):
     def _format_result(self, result):
         product = Pool().get('offered.product').get_instance_from_code(
             result['product'])
-        return '\r'.join(
-            [
-                '%s: %s' % (gettext('questionnaire.msg_score'),
-                    result['score']),
-                '%s: %s' % (gettext('questionnaire.msg_product'),
-                    product.rec_name),
-                '%s: %s' % (gettext('questionnaire.msg_description'),
-                    result['description']),
-                gettext('msg_selected') if result.get('selected', False)
-                else gettext('msg_not_selected'),
-                ])
+        msgs = [
+            '%s: %s' % (gettext('questionnaire.msg_score'),
+                result['score']),
+            '%s: %s' % (gettext('questionnaire.msg_product'),
+                product.rec_name),
+            '%s: %s' % (gettext('questionnaire.msg_description'),
+                result['description']),
+            gettext('questionnaire.msg_selected') if result.get(
+                'selected', False)
+            else gettext('questionnaire.msg_not_selected')]
+        if result.get('package'):
+            package = Pool().get('offered.package').get_instance_from_code(
+                result['package'])
+            package_message = '%s: %s' % (gettext('questionnaire.msg_package'),
+                    package.rec_name)
+            msgs.insert(2, package_message)
+        return '\r'.join(msgs)
 
     @property
     def results_as_json(self):

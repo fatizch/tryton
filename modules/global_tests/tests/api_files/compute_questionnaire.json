@@ -63,6 +63,7 @@
                             "score": 100,
                             "description": "La solution qui vous convient",
                             "product": "life_product",
+                            "package": "basic_package",
                             "eligible": true,
                             "commercial_product": "prevoyance_plus",
                             "selected": true
@@ -81,7 +82,8 @@
                             "description": "La formule qui vous convient",
                             "eligible": false,
                             "commercial_product": "prevoyance_plus",
-                            "product": "life_product"
+                            "product": "life_product",
+                            "package": "basic_package"
                         }
                     ]
                 }
