@@ -14,11 +14,9 @@ class MigratorParty(metaclass=PoolMeta):
     @classmethod
     def __setup__(cls):
         super(MigratorParty, cls).__setup__()
-        cls.columns.update({'ssn': 'ssn', 'ssn_key': 'ssn_key'})
+        cls.columns.update({'ssn': 'ssn', 'birth_order': 'birth_rank'})
 
     @classmethod
     def populate(cls, row):
         row = super(MigratorParty, cls).populate(row)
-        if row['ssn'] and row['ssn_key']:
-            row['ssn'] += row['ssn_key']
         return row

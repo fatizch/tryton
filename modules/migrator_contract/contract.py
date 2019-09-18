@@ -12,6 +12,8 @@ from trytond.pool import Pool
 
 from trytond.modules.coog_core import coog_date
 from trytond.modules.migrator import migrator, tools
+from trytond.modules.coog_core import utils
+from trytond.server_context import ServerContext
 
 DatabaseOperationalError = backend.get('DatabaseOperationalError')
 
@@ -45,7 +47,7 @@ class MigratorContractPremium(migrator.Migrator):
                 })
 
     @classmethod
-    def init_cache(cls, rows):
+    def init_cache(cls, rows, **kwargs):
         cls.cache_obj['loan'] = tools.cache_from_query('loan', ('number', ),
             ('number', [r['loan'] for r in rows]))
         cls.cache_obj['contract'] = tools.cache_from_query('contract',
@@ -53,7 +55,7 @@ class MigratorContractPremium(migrator.Migrator):
             ('contract_number', [r['contract_number'] for r in rows]))
 
     @classmethod
-    def populate(cls, row):
+    def populate(cls, row, **kwargs):
         Contract = Pool().get('contract')
 
         row = super(MigratorContractPremium, cls).populate(row)
@@ -128,8 +130,9 @@ class MigratorContractPremium(migrator.Migrator):
 
         if to_create:
             to_create = Premium.create(to_create)
-        Contract.delete(Contract.search(
-            ['contract_number', 'in', delete_contract_numbers]))
+        if kwargs.get('delete', False):
+            Contract.delete(Contract.search(
+                ['contract_number', 'in', delete_contract_numbers]))
         res = {x: None for x in ids if x.split('-')[0] not in
             delete_contract_numbers}
         cls.logger.debug('mig contract premium return %s' % res)
@@ -150,62 +153,63 @@ class MigratorContract(migrator.Migrator):
                 })
         if not cls.table:
             cls.table = Table('contract')
-            cls.func_key = 'contract_id'
+            cls.func_key = 'contract_number'
             cls.model = 'contract'
             cls.transcoding = {'status': {}, 'frequency': {},
                 'n_de_collectivite': {}, 'franchise': {}}
             cls.cache_obj = {'bank_account': {}, 'contract': {}, 'network': {},
                 'party': {}, 'product': {}, 'sepa_mandate': {},
                 'billing_mode': {}}
-            cls.columns = {k: k for k in ('contract_id', 'contract_number',
-                    'version', 'product', 'subscriber', 'covered_person',
-                    'status', 'sub_status', 'signature_date',
-                    'appliable_conditions_date', 'start_date',
-                    'manual_end_date', 'start_management_date', 'dist_network',
-                    'agent', 'frequency', 'direct_debit', 'direct_debit_day',
-                    'payer')}
+            cls.columns = {k: k for k in ('contract_number',
+                    'product', 'subscriber',
+                    'status', 'dunning_date', 'signature_date',
+                    'appliable_conditions_date', 'initial_start_date',
+                    'start_date', 'end_date', 'manual_end_date', 'sub_status',
+                    'dist_network', 'agent', 'billing_mode', 'direct_debit_day',
+                    'payer', 'sepa_mandate', 'extra_data_values'
+                    )}
             cls.error_messages.update({
                     'not_payer_mandate': ('Cannot use sepa mandate with '
                         'party %s different than contract payer %s.'),
                     'missing_billing_info': ('Account or mandate not '
                         'available. iban: %s, sepa: %s'),
-                    'unauthorized_billing_mode': ('Billing mode (%s, %s) not '
+                    'unauthorized_billing_mode': ('Billing mode %s not '
                         'present on product %s.'),
-                    'bad_substatus': 'Incompatible status/sub-status: %s/%s',
+                    'bad_substatus': 'Incompatible status/sub-status for '
+                        'contract %s',
                     'bad_contract_data': '%s',
                     'delete_failed': '%s',
                     'calculate_fail': 'calculate failed: %s %s',
+                    'problem_with_status_and_end_date': 'Incompatible status %s'
+                        ' and the end_date %s of the contract',
+                    'contract_not_effectif_to_day': 'The contract %s '
+                        'is not effectif to day',
                     })
 
     @classmethod
-    def init_cache(cls, rows):
+    def init_cache(cls, rows, **kwargs):
         cls.cache_obj['product'] = tools.cache_from_query('offered_product',
             ('code', ))
-        ibans = [r['iban'] for r in rows if r['iban']]
-        if ibans:
-            cls.cache_obj['bank_account'] = tools.cache_from_search(
-                'bank.account', 'number', ('number', 'in', ibans))
+        cls.cache_obj['bank_account'] = tools.cache_from_search(
+                'bank.account', ('number'))
         sepa_mandates = [r['sepa_mandate'] for r in rows if r['sepa_mandate']]
         if sepa_mandates:
             cls.cache_obj['sepa_mandate'] = tools.cache_from_query(
                 'account_payment_sepa_mandate', ('identification', ),
                 ('identification', sepa_mandates))
+
         cls.cache_obj['party'] = tools.cache_from_query(
             'party_party', ('code', ),
             ('code', list(chain.from_iterable(
-                [(r['subscriber'], r['covered_person'], r['payer'])
+                [(r['subscriber'], r['payer'])
                 for r in rows]))))
         cls.cache_obj['network'] = tools.cache_from_query(
             'distribution_network', ('code', ))
         agents = Pool().get('commission.agent').search([])
-        cls.cache_obj['agent'] = {x.party.commercial_name: x for x in agents}
+        cls.cache_obj['agent'] = {x.code: x for x in agents}
         cls.cache_obj['contract'] = tools.cache_from_query(
             'contract', ('contract_number', ),
             ('contract_number', [r['contract_number'] for r in rows]))
-        if not cls.cache_obj.get('billing_mode', None):
-            cls.cache_obj['billing_mode'] = tools.cache_from_query(
-                'offered_product-offered_billing_mode',
-                ('product', 'billing_mode'), target='billing_mode')
 
     @classmethod
     def extra_migrator_names(cls):
@@ -219,31 +223,57 @@ class MigratorContract(migrator.Migrator):
     @classmethod
     def sanitize(cls, row):
         row = super(MigratorContract, cls).sanitize(row)
-        row['direct_debit'] = row['direct_debit'] or False
+        if row['status'] == 'actif':
+            row['status'] = 'active'
         return row
+
+    @classmethod
+    def _get_contract_exta_data(cls, row):
+        if row['extra_data_values']:
+            return eval(row['extra_data_values'])
+        return {}
 
     @classmethod
     def populate(cls, row):
         pool = Pool()
         ContractSubStatus = pool.get('contract.sub_status')
+        SepaMandate = pool.get('account.payment.sepa.mandate')
 
+        if row['status'] == 'active' and row['end_date'] < utils.today():
+            cls.raise_error(row, 'problem_with_status_and_end_date',
+                (row['status'], row['end_date']))
+        if row['end_date'].year < utils.today().year:
+            cls.raise_error(row, 'contract_not_effectif_to_day',
+                (row['contract_number'],))
         cls.resolve_key(row, 'product', 'product')
         cls.resolve_key(row, 'subscriber', 'party')
         cls.resolve_key(row, 'payer', 'party')
         cls.resolve_key(row, 'dist_network', 'network')
         row['agency'] = row['dist_network']
         cls.resolve_key(row, 'agent', 'agent')
-        cls.resolve_key(row, 'covered_person', 'party')
-        cls.resolve_key(row, 'iban', 'bank_account')
+        extra_data_values = cls._get_contract_exta_data(row)
+        if extra_data_values:
+            row['extra_datas'] = [('create', [{
+                            'extra_data_values': extra_data_values,
+                            'date': row['start_date'],
+                            }])]
         cls.resolve_key(row, 'sepa_mandate', 'sepa_mandate')
-
+        if row['sepa_mandate']:
+            row['iban'] = SepaMandate(row['sepa_mandate']).account_number.number
+            cls.resolve_key(row, 'iban', 'bank_account')
         if row['sub_status']:
             row['sub_status'] = ContractSubStatus.search(
                 [('code', '=', row['sub_status'])])[0]
+            if row['sub_status'].status == row['status']:
+                row['sub_status'] = row['sub_status']
+            else:
+                cls.raise_error(row, 'bad_substatus',
+                    (row['contract_number'],))
+                row['sub_status'] = None
         else:
             row['sub_status'] = None
         row['billing_informations'] = [cls.create_billing_information(row)]
-        row['covered_elements'] = [cls.create_covered_element(row)]
+        row['billing_mode'] = row['billing_informations'][0].billing_mode
         row['quote_number'] = row['contract_number']
         return super(MigratorContract, cls).populate(row)
 
@@ -263,7 +293,6 @@ class MigratorContract(migrator.Migrator):
                 else:
                     cls.logger.debug('Calculate contracts')
                     Contract.calculate([c])
-                    Contract.write([c], {'calculated': True})
                 c.save()
             except DatabaseOperationalError:
                 raise
@@ -286,21 +315,30 @@ class MigratorContract(migrator.Migrator):
             contract = Contract(**row)
             contracts[row[cls.func_key]] = contract
         Contract.save(list(contracts.values()))
-
-        skip_extra_migrators = cls.extra_args.get('skip_extra_migrators',
-            kwargs.get('skip_extra_migrators')).split(',')
-        extra_migrators = [x for x in cls.extra_migrator_names() if x not in
-            skip_extra_migrators]
+        if kwargs.get('skip_extra_migrators', None):
+            skip_extra_migrators = kwargs.get('skip_extra_migrators').split(',')
+            extra_migrators = [x for x in cls.extra_migrator_names() if x not in
+                skip_extra_migrators]
 
         if contracts:
+            contract_to_suspend = [x for x in contracts.values()
+            if x.status == 'hold']
+            if contract_to_suspend:
+                suspension_date = contract_to_suspend[0].manual_end_date
+                with ServerContext().set_context(
+                        suspension_start_date=suspension_date):
+                    Contract.hold(contract_to_suspend,
+                        contract_to_suspend[0].sub_status)
+
             for _migrator in extra_migrators:
                 cls.logger.info('migrator ex: %s' % _migrator)
                 Migrator = Pool().get(_migrator)
                 contracts_done = Migrator.migrate(list(contracts.keys()))
                 # Remove contracts deleted by extra migrator
-                for k in list(contracts.keys()):
-                    if k not in contracts_done:
-                        contracts.pop(k, None)
+                if kwargs.get('delete', False):
+                    for k in list(contracts.keys()):
+                        if k not in contracts_done:
+                            contracts.pop(k, None)
                 if not contracts:
                     break
         cls.calculate_contracts(contracts,
@@ -318,7 +356,7 @@ class MigratorContract(migrator.Migrator):
         version.extra_data = {}
         version.extra_data['qualite'] = row['qualite_assure']
         covered_element = CoveredElement(
-            party=row['covered_person'],
+            party=row['subscriber'],
             start_date=row['start_date'],
             item_desc=Product(row['product']).coverages[0].item_desc,
             product=row['product'],
@@ -329,21 +367,22 @@ class MigratorContract(migrator.Migrator):
     @classmethod
     def create_billing_information(cls, row):
         pool = Pool()
-        BillingMode = pool.get('offered.billing_mode')
+        Product = pool.get('offered.product')
         BillingInformation = pool.get('contract.billing_information')
-        billing_info = BillingInformation(date=row['version'])
-        for billing_mode_id in [v for (k, v)
-                in cls.cache_obj['billing_mode'].items()
-                if k[0] == row['product']]:
-            billing_mode = BillingMode(billing_mode_id)
-            if (billing_mode.frequency != row['frequency']) or (
-                    billing_mode.direct_debit != row['direct_debit']):
+        billing_info = BillingInformation(date=row['start_date'])
+        BillingRule = pool.get('offered.product.billing_rule')
+        billing_rule = BillingRule.search([
+            ('product', '=', row['product'])])[0]
+        for the_billing_mode in billing_rule.billing_modes:
+            if (the_billing_mode.code != row['billing_mode'] and
+                    the_billing_mode.allowed_direct_debit_days !=
+                    str(row['direct_debit_day'])):
                 continue
-            billing_info.billing_mode = billing_mode_id
+            billing_info.billing_mode = the_billing_mode
             break
         else:
             cls.raise_error(row, 'unauthorized_billing_mode',
-                (row['frequency'], row['direct_debit'], row['product'].code))
+                (row['billing_mode'], Product(row['product']).code))
 
         # Payment term is deduced from billing mode
         billing_info.payment_term = \
@@ -528,8 +567,8 @@ class MigratorContractOption(migrator.Migrator):
     def __setup__(cls):
         super(MigratorContractOption, cls).__setup__()
         cls.table = Table('contract_option')
-        cls.func_key = 'contract_id'
-        cls.columns = {k: k for k in ('contract_id', 'contract_number',
+        cls.func_key = 'contract_number'
+        cls.columns = {k: k for k in ('contract_number',
             'loan_number', 'option', 'share', 'beneficiary', 'accepting',
             'start_date')}
         cls.error_messages.update({
@@ -604,7 +643,7 @@ class MigratorContractOption(migrator.Migrator):
                             beneficiaries=row.get('beneficiaries', None)))
 
             contract.covered_elements[0].options = options
-            to_create[row['contract_id']] = contract
+            to_create[row['contract_number']] = contract
 
         CoveredElement.save([c.covered_elements[0]
             for c in list(to_create.values())])
@@ -617,7 +656,7 @@ class MigratorContractOption(migrator.Migrator):
 
         # Delete contracts with no options
         delete_numbers = [x['contract_number']
-            for x in [cls.sanitize({'contract_id': k})
+            for x in [cls.sanitize({'contract_number': k})
                 for k in set(ids).difference(list(to_create.keys()))]
                 ]
         for number in set(delete_numbers) - set(contracts_in_error):
@@ -693,9 +732,9 @@ class MigratorContractEvent(migrator.Migrator):
     def __setup__(cls):
         super(MigratorContractEvent, cls).__setup__()
         cls.table = Table('contract_event')
-        cls.func_key = 'contract_id'
-        cls.columns = {k: k for k in ('contract_id', 'version', 'date', 'code',
-                'motive')}
+        cls.func_key = 'contract_number'
+        cls.columns = {k: k for k in ('contract_number', 'version', 'date',
+            'code', 'motive')}
 
     @classmethod
     def init_cache(cls, rows):

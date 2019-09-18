@@ -1,8 +1,8 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
-
+import json
+import datetime
 from itertools import groupby
-from datetime import datetime
 
 from sql import Table, Column, Literal, Null
 
@@ -38,8 +38,8 @@ class MigratorParty(migrator.Migrator):
                 'existing_code': "a party already exists with code '%s'",
                 })
         cls.columns = {k: k for k in ('code', 'name', 'first_name',
-                'birth_name', 'gender', 'birth_date', 'extra_data'
-                )}
+                'birth_name', 'gender', 'birth_date', 'extra_data',
+                'identifiers')}
 
     @classmethod
     def init_update_cache(cls, rows):
@@ -58,8 +58,9 @@ class MigratorParty(migrator.Migrator):
         row = super(MigratorParty, cls).sanitize(row)
         err = None
         # Integrity checks
-        row['birth_date'] = datetime.strptime(
-            row['birth_date'], '%Y-%m-%d').date()
+        # row['birth_date'] = datetime.strptime(
+        #    row['birth_date'], '%Y-%m-%d').date()
+        row['identifiers'] = row['identifiers'] or "{}"
         if not row['name']:
             err = 'no_name'
         if err:
@@ -69,10 +70,35 @@ class MigratorParty(migrator.Migrator):
 
     @classmethod
     def populate(cls, row):
+        Party = Pool().get(cls.model)
+        exist_identifier = False
         row = super(MigratorParty, cls).populate(row)
         row['all_addresses'] = []
         row['is_person'] = True
         row['extra_data'] = eval(row['extra_data'] or '{}')
+        identifiers = json.loads(row['identifiers'])
+        if row['code'] in cls.cache_obj['party']:
+            party, = Party.search([('code', '=', row['code'])])
+            if party.identifiers:
+                for party_identifier in party.identifiers:
+                    for _type, code in identifiers.items():
+                        if (party_identifier.type == _type.lower() and
+                                party_identifier.code != code):
+                            party_identifier.code = code
+                            party_identifier.save()
+                            exist_identifier = True
+                            row['identifiers'] = [
+                                ('write', [{'id': party_identifier.id}])]
+                        if (party_identifier.type == _type.lower() and
+                                party_identifier.code == code):
+                            exist_identifier = True
+                            row['identifiers'] = [
+                                ('write', [{'id': party_identifier.id}])]
+        if (row['code'] not in cls.cache_obj['party'] or
+                exist_identifier is False):
+            row['identifiers'] = [('create', [
+                        {'type': _type.lower(), 'code': code} for _type, code in
+                        identifiers.items()])]
         return row
 
     @classmethod
@@ -80,9 +106,10 @@ class MigratorParty(migrator.Migrator):
         res = super(MigratorParty, cls).migrate(ids, **kwargs)
         if not res:
             return []
-        ids = [res[r]['code'] for r in res]
-        clause = Column(cls.table, cls.func_key).in_(ids)
-        cls.delete_rows(tools.CONNECT_SRC, cls.table, clause)
+        if kwargs.get('delete', False):
+            ids = [res[r]['code'] for r in res]
+            clause = Column(cls.table, cls.func_key).in_(ids)
+            cls.delete_rows(tools.CONNECT_SRC, cls.table, clause)
 
 
 class MigratorContactMechanism(migrator.Migrator):
@@ -239,23 +266,24 @@ class MigratorContactMechanism(migrator.Migrator):
         res = super(MigratorContactMechanism, cls).migrate(ids, **kwargs)
         if not res:
             return []
-        ids = [(res[r]['party'].code if 'party' in res[r] else
-                res[r]['uid'].split(':')[0], res[r]['sequence'],
-                res[r]['type'], res[r]['value']) for r in res]
-        clause = Literal(False)
-        ids = sorted(ids, key=cls._group_by_party_sequence)
-        for keys, values in groupby(ids,
-                key=cls._group_by_party_sequence):
-            values = list(values)
-            sub_clause = Literal(True)
-            for party, seq, type_, value in values:
-                sub_clause &= (
-                    (cls.table.party == party) &
-                    (cls.table.sequence == seq) &
-                    (Column(cls.table, type_) == value)
-                    )
-            clause |= sub_clause
-        cls.delete_rows(tools.CONNECT_SRC, cls.table, clause)
+        if kwargs.get('delete', False):
+            ids = [(res[r]['party'].code if 'party' in res[r] else
+                    res[r]['uid'].split(':')[0], res[r]['sequence'],
+                    res[r]['type'], res[r]['value']) for r in res]
+            clause = Literal(False)
+            ids = sorted(ids, key=cls._group_by_party_sequence)
+            for keys, values in groupby(ids,
+                    key=cls._group_by_party_sequence):
+                values = list(values)
+                sub_clause = Literal(True)
+                for party, seq, type_, value in values:
+                    sub_clause &= (
+                        (cls.table.party == party) &
+                        (cls.table.sequence == seq) &
+                        (Column(cls.table, type_) == value)
+                        )
+                clause |= sub_clause
+            cls.delete_rows(tools.CONNECT_SRC, cls.table, clause)
 
 
 class MigratorCompany(migrator.Migrator):
@@ -303,9 +331,10 @@ class MigratorCompany(migrator.Migrator):
         res = super(MigratorCompany, cls).migrate(ids, **kwargs)
         if not res:
             return []
-        ids = [res[r]['code'] for r in res]
-        clause = Column(cls.table, cls.func_key).in_(ids)
-        cls.delete_rows(tools.CONNECT_SRC, cls.table, clause)
+        if kwargs.get('delete', False):
+            ids = [res[r]['code'] for r in res]
+            clause = Column(cls.table, cls.func_key).in_(ids)
+            cls.delete_rows(tools.CONNECT_SRC, cls.table, clause)
 
 
 class MigratorPartyRelation(migrator.Migrator):
@@ -318,8 +347,13 @@ class MigratorPartyRelation(migrator.Migrator):
         super(MigratorPartyRelation, cls).__setup__()
         cls.table = Table('party_relation')
         cls.transcoding = {'type': {}}
-        cls.model = 'party.relation.all'
-        cls.columns = {k: k for k in ('id', 'from_', 'to', 'type')}
+        cls.func_key = 'from_'
+        cls.model = 'party.relation'
+        cls.columns = {k: k for k in ('from_', 'to', 'type')}
+        cls.error_messages.update({
+                'inexisting_party': ("The party '%s'"
+                " does not exist in the data base"),
+                })
 
     @classmethod
     def init_cache(cls, rows, **kwargs):
@@ -331,8 +365,14 @@ class MigratorPartyRelation(migrator.Migrator):
 
     @classmethod
     def populate(cls, row):
-        cls.resolve_key(row, 'from_', 'party')
-        cls.resolve_key(row, 'to', 'party')
+        if row['from_'] in cls.cache_obj['party']:
+            cls.resolve_key(row, 'from_', 'party')
+        else:
+            cls.raise_error(row, 'inexisting_party', (row['from_'],))
+        if row['to'] in cls.cache_obj['party']:
+            cls.resolve_key(row, 'to', 'party')
+        else:
+            cls.raise_error(row, 'inexisting_party', (row['to'],))
         cls.resolve_key(row, 'type', 'relation_type')
         return row
 
@@ -526,10 +566,11 @@ class MigratorInterlocutor(migrator.Migrator):
         res = super(MigratorInterlocutor, cls).migrate(ids, **kwargs)
         if not res:
             return []
-        ids = [(res[r]['party'].code, res[r]['name']) for r in res]
-        clause = Literal(False)
-        for company, interlocutor in ids:
-            clause |= ((Column(cls.table, 'company') == company) &
-                (Column(cls.table, 'interlocutor') == interlocutor))
-        cls.delete_rows(tools.CONNECT_SRC, cls.table, clause)
+        if kwargs.get('delete', False):
+            ids = [(res[r]['party'].code, res[r]['name']) for r in res]
+            clause = Literal(False)
+            for company, interlocutor in ids:
+                clause |= ((Column(cls.table, 'company') == company) &
+                    (Column(cls.table, 'interlocutor') == interlocutor))
+            cls.delete_rows(tools.CONNECT_SRC, cls.table, clause)
         return res

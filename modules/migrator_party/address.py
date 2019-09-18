@@ -128,6 +128,7 @@ class MigratorAddress(migrator.Migrator):
                 })
         cls.error_messages.update({
             'duplicate_address': "Address already imported",
+            'address_zip_code_required': "The zip code is required for '%s'",
             })
 
     @classmethod
@@ -183,6 +184,9 @@ class MigratorAddress(migrator.Migrator):
         row = super(MigratorAddress, cls).populate(row)
         cls.resolve_key(row, 'party', 'party')
         cls.resolve_key(row, 'country_code', 'country', dest_key='country')
+        if not row['zip']:
+            cls.raise_error(row, 'address_zip_code_required',
+                (row['party'].code,))
         for adr in row['party'].addresses:
             if all(row[x] == getattr(adr, x, None) for x in ('street',
                     'zip', 'start_date', 'city')):
@@ -200,6 +204,7 @@ class MigratorAddress(migrator.Migrator):
         row.pop('line4')
         row.pop('line5')
         row['street'] = street
+        row['sequence'] = str(row['sequence'])
         row['uid'] = ':'.join([row['sequence'], row['party']])
         return row
 
@@ -235,13 +240,14 @@ class MigratorAddress(migrator.Migrator):
         res = super(MigratorAddress, cls).migrate(ids, **kwargs)
         if not res:
             return []
-        ids = []
-        Party = Pool().get('party.party')
-        for r in res:
-            party_code = Party(res[r]['party']).code
-            ids.append(
-                (party_code, res[r]['sequence']),
-                )
-        clause = Column(cls.table, 'party').in_([x[0] for x in ids]
-            ) & Column(cls.table, 'sequence').in_([x[1] for x in ids])
-        cls.delete_rows(tools.CONNECT_SRC, cls.table, clause)
+        if kwargs.get('delete', False):
+            ids = []
+            Party = Pool().get('party.party')
+            for r in res:
+                party_code = Party(res[r]['party']).code
+                ids.append(
+                    (party_code, res[r]['sequence']),
+                    )
+            clause = Column(cls.table, 'party').in_([x[0] for x in ids]
+                ) & Column(cls.table, 'sequence').in_([x[1] for x in ids])
+            cls.delete_rows(tools.CONNECT_SRC, cls.table, clause)

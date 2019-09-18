@@ -1,7 +1,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 from itertools import groupby
-import datetime
+from stdnum import iban
 
 from sql import Table, Column
 
@@ -147,6 +147,7 @@ class MigratorBankAccount(migrator.Migrator):
             'iban': 'iban',
             'bic': 'bic',
             'identification': 'identification',
+            'signature_date': 'signature_date',
             }
 
     @classmethod
@@ -164,13 +165,13 @@ class MigratorBankAccount(migrator.Migrator):
                 Column(number, 'account') == Column(account, 'id')))
         query = accounts.select(account.id, account.start_date,
             where=(
-                Column(number, 'number_compact').in_(numbers)
+                Column(number, 'number').in_(numbers)
             ))
         cursor.execute(*query)
         update = {}
         accounts = Account.browse([row[0] for row in cursor.fetchall()])
         for account in accounts:
-            update[account.number.replace(' ', '')] = account
+            update[account.number] = account
         cls.cache_obj['update'] = update
 
     @classmethod
@@ -194,13 +195,10 @@ class MigratorBankAccount(migrator.Migrator):
     @classmethod
     def sanitize(cls, row):
         row = super(MigratorBankAccount, cls).sanitize(row)
+        if len(row['iban']) == 27:
+            row['iban'] = iban.format(row['iban'])
         if len(row['bic']) == 8:
             row['bic'] += 'XXX'
-        row['start_date'] = datetime.datetime.strptime(
-            row['start_date'], '%Y-%m-%d').date() if row['start_date'] else \
-            None
-        row['end_date'] = datetime.datetime.strptime(
-            row['end_date'], '%Y-%m-%d').date() if row['end_date'] else None
         return row
 
     @classmethod
@@ -226,7 +224,8 @@ class MigratorBankAccount(migrator.Migrator):
             to_update = {}
             for row in rows:
                 obj = cls.cache_obj['update'][row[cls.func_key]]
-                func_key = row[cls.func_key]
+                keys = (row[cls.func_key], row['party'])
+                func_key = ':'.join(keys)
                 row = {k: row[k] for k in row
                     if k in set(Model._fields) - {'id', }}
                 to_update[func_key] = [[obj], row]
@@ -234,11 +233,33 @@ class MigratorBankAccount(migrator.Migrator):
             return rows
         return []
 
-    # @classmethod
-    # def migrate_rows(cls, rows, ids, **kwargs):
-    #     super(MigratorBankAccount, cls).migrate_rows(
-    #         rows, ids, **kwargs)
-    #     cls.migrate_sepa_mandate(rows)
+    @classmethod
+    def migrate_rows(cls, rows, ids, **kwargs):
+        pool = Pool()
+        to_upsert = {}
+        for row in rows:
+            try:
+                row = cls.populate(row)
+            except migrator.MigrateError as e:
+                cls.logger.error(e)
+                continue
+            if not kwargs.get('update', False):
+                to_upsert[row[cls.func_key]] = row
+            else:
+                keys = (row[cls.func_key], row['party'])
+                key = ':'.join(keys)
+                to_upsert[key] = row
+        if to_upsert:
+            cls.upsert_records(list(to_upsert.values()), **kwargs)
+            for extra_migrator_name in cls.extra_migrator_names():
+                pool.get(extra_migrator_name).migrate(list(
+                    to_upsert.keys()), **kwargs)
+        if not cls.cache_obj['account']:
+            ibans = [r['iban'] for r in rows if r['iban']]
+            cls.cache_obj['account'] = tools.cache_from_search('bank.account',
+                'number', ('number', 'in', ibans))
+        cls.migrate_sepa_mandate(rows)
+        return to_upsert
 
     @classmethod
     def migrate_sepa_mandate(cls, rows):
@@ -247,8 +268,8 @@ class MigratorBankAccount(migrator.Migrator):
         SepaMandate = pool.get('account.payment.sepa.mandate')
         sepa_to_create = {}
         # Group rows by iban to handle bank accounts with multiple owners
-        for iban, _rows in groupby(rows, lambda row: row['iban']):
-            if not iban:
+        for _iban, _rows in groupby(rows, lambda row: row['iban']):
+            if not _iban:
                 continue
             iban_rows = list(_rows)
             for iban_row in iban_rows:
@@ -271,7 +292,7 @@ class MigratorBankAccount(migrator.Migrator):
                         'account_number': iban_row['account'].numbers[0].id,
                         'signature_date': iban_row['signature_date'],
                         'identification': iban_row['identification'],
-                        'party': iban_row['party_obj'],
+                        'party': cls.cache_obj['party'][iban_row['party']].id,
                         'state': 'validated',
                         }
         if sepa_to_create:
@@ -289,6 +310,7 @@ class MigratorBankAccount(migrator.Migrator):
         res = super(MigratorBankAccount, cls).migrate(ids, **kwargs)
         if not res:
             return []
-        ids = [res[r]['iban'] for r in res]
-        clause = Column(cls.table, cls.func_key).in_(ids)
-        cls.delete_rows(tools.CONNECT_SRC, cls.table, clause)
+        if kwargs.get('delete', False):
+            ids = [res[r]['iban'] for r in res]
+            clause = Column(cls.table, cls.func_key).in_(ids)
+            cls.delete_rows(tools.CONNECT_SRC, cls.table, clause)
