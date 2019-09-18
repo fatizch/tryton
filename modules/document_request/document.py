@@ -351,6 +351,7 @@ class DocumentRequestLine(Printable, model.CoogSQL, model.CoogView):
         for request in requests:
             if not request.attachment and value:
                 attachment = Attachment()
+                attachment.status = Attachment.default_status()
                 attachment.resource = request.for_object
                 attachment.document_desc = request.document_desc
                 if name == 'attachment_data':
