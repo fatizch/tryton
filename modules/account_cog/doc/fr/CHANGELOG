@@ -1,3 +1,4 @@
+* OTH#00000 Correction de l'affichage de la date de paiement suite au merge 5.2 (la date était toujours invisible)
 * BUG#12602 Correctif d'un crash suite au merge 5.2
 * OTH#00000 Suppresion de la contrainte non null sur la colonne kind_deprecated sur account_account suite au merge avec tryton
 * OTH#11198 Ajout de la date de création et de modification ainsi que l'utilisateur sur les vues de report de lettrage

@@ -272,6 +272,12 @@ class Line(export.ExportImportMixin):
     post_date = fields.Function(
         fields.Date('Post Date'),
         'get_move_field', searcher='search_move_field')
+    account_receivable = fields.Function(
+        fields.Boolean('Account Receivable', readonly=True),
+        'get_account_field')
+    account_payable = fields.Function(
+        fields.Boolean('Account Payable', readonly=True),
+        'get_account_field')
 
     @classmethod
     def __setup__(cls):
@@ -297,6 +303,13 @@ class Line(export.ExportImportMixin):
                 '/tree',
                 'colors',
                 Eval('color', 'black'))]
+
+    def get_account_field(self, name):
+        if not name:
+            return
+        _, field = name.split('_')
+        return getattr(self.account.type, field, None) \
+            if self.account and self.account.type else None
 
     @classmethod
     def query_get(cls, table):

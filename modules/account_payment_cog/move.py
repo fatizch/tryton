@@ -85,9 +85,9 @@ class MoveLine(metaclass=PoolMeta):
     __name__ = 'account.move.line'
 
     payment_date = fields.Date('Payment Date',
-        states={'invisible': (~Eval('account.type.receivable')) &
-            (~Eval('account.type.payable'))},
-        depends=['account'])
+        states={'invisible': (~Eval('account_payable')) &
+            (~Eval('account_receivable'))},
+        depends=['account_receivable', 'account_payable'])
 
     @classmethod
     def __setup__(cls):
