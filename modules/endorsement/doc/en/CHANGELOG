@@ -1,3 +1,4 @@
+* OTH#00000 Fix product documentation generation
 * BUG#12427 Check contract, covered element and option extra_data in endorsements
 * BUG#11934 Fix warning mechanism for endorsements on contracts with a process in progress
 * BUG#11803 Ignore options starting after effective date when doing manage options endorsement

@@ -411,7 +411,7 @@ class Product(metaclass=PoolMeta):
 
     def get_documentation_structure(self):
         doc = super(Product, self).get_documentation_structure()
-        doc['rules'].append(
+        doc['parameters'].append(
             coog_string.doc_for_field(self, 'endorsement_definitions'))
         return doc
 

@@ -1,3 +1,4 @@
+* OTH#00000 Correction de la génération des documents
 * BUG#12427 Vérifier les données complémentaires de contrat, d'avenant et de garantie dans les avenants
 * BUG#11934 Correction de la mécanique d'avertissement dans le cas d'avenants sur un contrat avec un processus en cours
 * BUG#11803 Ignorer les garanties commençant après la date d'effet dans l'avenant de gestion des options
