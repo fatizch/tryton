@@ -106,11 +106,14 @@ Imports::
     >>> assert len(requests_description['documents_to_fill']) == 1
     >>> assert len(requests_description['documents_to_upload']) == 1
     >>> file_data = base64.b64encode(b"hello").decode('utf8')
-    >>> to_upload = [{"id": by_code['subscription_request'].id,
-    ...         "filename": "some_filename.txt", "binary_data": file_data}]
-    >>> _ = APIParty.token_upload_documents(
-    ...     {'document_token': token, 'documents': to_upload},
-    ...     {'_debug_server': True}, {})
+    >>> to_upload = {
+    ...     'id': str(by_code['subscription_request'].id),
+    ...     'document_token': token,
+    ...     'filename':
+    ...     'some_filename.txt',
+    ...     'binary_data': file_data
+    ...     }
+    >>> _ = APIParty.token_upload_documents(to_upload, {'_debug_server': True}, {})
     >>> RequestLine = Model.get('document.request.line')
     >>> attachment = RequestLine(by_code['subscription_request'].id).attachment
     >>> assert attachment.status == 'waiting_validation'

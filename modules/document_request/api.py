@@ -370,22 +370,22 @@ class APIParty(metaclass=PoolMeta):
     """↓↓↓↓ Start Upload Documents API Methods ↓↓↓↓"""
 
     @classmethod
-    def token_upload_documents(cls, to_update):
+    def token_upload_documents(cls, data):
         pool = Pool()
         DocumentRequestLine = pool.get('document.request.line')
         Attachment = pool.get('ir.attachment')
-        for line, data in to_update.items():
-            attachment = Attachment(
-                resource=line.for_object if
-                line.for_object.__name__ == 'contract'
-                else line.for_object.contract,
-                document_desc=line.document_desc,
-                status='waiting_validation',
-                name=data['filename'],
-                data=data['binary_data'])
-            line.attachment = attachment
+        line = data['request_line']
+        attachment = Attachment(
+            resource=line.for_object if
+            line.for_object.__name__ == 'contract'
+            else line.for_object.contract,
+            document_desc=line.document_desc,
+            status='waiting_validation',
+            name=data['filename'],
+            data=data['binary_data'])
+        line.attachment = attachment
 
-        DocumentRequestLine.save(list(to_update.keys()))
+        DocumentRequestLine.save([line])
         return 'ok'
 
     @classmethod
@@ -394,24 +394,15 @@ class APIParty(metaclass=PoolMeta):
             'type': 'object',
             'additionalProperties': False,
             'properties': {
-                'documents': {
-                    'type': 'array',
-                    'items': {
-                        'type': 'object',
-                        'additionalProperties': False,
-                        'properties': {
-                            'id': {'type': 'integer'},
-                            'filename': {'type': 'string'},
-                            'binary_data': {
-                                'type': 'string',
-                                'media': {
-                                    'binaryEncoding': 'base64',
-                                    },
-                                },
-                            }
-                        }
-                    },
+                'id': {'type': 'string'},
+                'filename': {'type': 'string'},
                 'document_token': {'type': 'string'},
+                'binary_data': {
+                    'type': 'string',
+                    'media': {
+                        'binaryEncoding': 'base64',
+                        },
+                    },
                 }
             }
 
@@ -425,14 +416,10 @@ class APIParty(metaclass=PoolMeta):
             {
                 'input': {
                     'document_token': '123',
-                    'documents':
-                        [
-                            {'id': 12, 'filename': 'My doc.pdf',
-                                'binary_data': 'Ym9uam91cgo='},
-                            {'id': 24, 'filename': 'Other doc.pdf',
-                                'binary_data': 'Ym9uam91cgo='},
-                        ],
-                    },
+                    'id': '12',
+                    'filename': 'My doc.pdf',
+                    'binary_data': 'Ym9uam91cgo='
+                },
                 'output': 'ok'
             }
         ]
@@ -444,19 +431,17 @@ class APIParty(metaclass=PoolMeta):
         object_ = parameters['for_object']
         possible_lines = object_.get_documents_data()['document_request_lines']
         try:
-            to_update = {DocumentRequestLine(x['id']): x
-                for x in parameters['documents']}
+            line = DocumentRequestLine(int(parameters['id']))
         except AccessError:
-            raise APIInputError([{'type': 'wrong_document_request_ids'}])
+            raise APIInputError([{'type': 'wrong_document_request_id'}])
 
-        outers = [x for x in to_update if x not in possible_lines]
-        if outers:
+        if line not in possible_lines:
             raise APIInputError([{
                     'type': 'No matching document requests.',
-                    'data': [x.id for x in outers]}])
-        for data in to_update.values():
-            data['binary_data'] = base64.b64decode(data['binary_data'])
-        return to_update
+                    'data': parameters['id']}])
+        parameters['binary_data'] = base64.b64decode(parameters['binary_data'])
+        parameters['request_line'] = line
+        return parameters
 
     """*** End Upload Documents API Methods ***"""
 
