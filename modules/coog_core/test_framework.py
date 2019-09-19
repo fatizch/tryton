@@ -85,6 +85,7 @@ class CoogTestCase(ModuleTestCase):
     @classmethod
     def setUpClass(cls):
         cls.extras = (cls.extras or []) + ['api']
+        cls.cache_name = cls.cache_name or cls.module
         super(CoogTestCase, cls).setUpClass()
 
     def run(self, result=None):
