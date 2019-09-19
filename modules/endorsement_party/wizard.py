@@ -705,7 +705,9 @@ class SelectEndorsement(model.CoogView):
 
     def _get_new_endorsement(self):
         endorsement = super(SelectEndorsement, self)._get_new_endorsement()
-        if getattr(self, 'party', None):
+        if (getattr(self, 'party', None) and
+                any([p.endorsement_part.kind == 'party' for p in
+                self.endorsement_definition.ordered_endorsement_parts])):
             endorsement.party_endorsements = [{
                     'party': self.party.id,
                     'values': {},

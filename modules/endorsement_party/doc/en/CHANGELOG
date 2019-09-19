@@ -1,3 +1,4 @@
+* BUG#12709 Do not create endorsement party object if there is no endorsement party part
 * BUG#00000 Fix address endorsement party initalization
 * BUG#12466 Fix address endorsement view
 * FEA#12225 Add "Change Party Social Security Number" endorsement in default configuration
