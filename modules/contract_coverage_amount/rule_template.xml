@@ -34,5 +34,21 @@ return list(range(param_min_amount(), param_max_amount() + range_amount, range_a
             <field name="sequence_order" eval="3"/>
             <field name="parent_rule" ref="coverage_amount_per_range"/>
         </record>
+        <record model="rule_engine" id="coverage_amount_list_rule">
+            <field name="name">Coverage Amount Predefined List</field>
+            <field name="short_name">coverage_amount_predefined_list</field>
+            <field name="algorithm">return [Decimal(x) for x in param_coverage_amount_list().split(';')]</field>
+            <field name="description">Possible coverage amount are: ${' - '.join(coverage_amount_list.split(';'))}</field>
+            <field name="status">validated</field>
+            <field name="type_">coverage_amount_selection</field>
+            <field name="context" ref="rule_engine.default_context"/>
+        </record>
+        <record model="rule_engine.rule_parameter" id="coverage_amount_list_parameter">
+            <field name="name">coverage_amount_list</field>
+            <field name="type_">char</field>
+            <field name="string">Coverage Amount List Separated by ;</field>
+            <field name="sequence_order" eval="1"/>
+            <field name="parent_rule" ref="coverage_amount_list_rule"/>
+        </record>
     </data>
 </tryton>

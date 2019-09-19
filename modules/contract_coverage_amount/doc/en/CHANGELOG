@@ -1,3 +1,4 @@
+* FEA#12708 Add default coverage amount rule based on predefined list
 * FEA#12260 Manage coverage amount in subscription APIs
 * FEA#11626 Add default coverage amount rule based on amount range 
 

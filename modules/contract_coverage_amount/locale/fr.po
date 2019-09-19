@@ -135,6 +135,13 @@ msgctxt "model:offered.coverage_amount.rule,name:"
 msgid "Coverage Amount Rule"
 msgstr "Règle de montant de couverture"
 
+msgctxt "model:rule_engine,description:coverage_amount_list_rule"
+msgid ""
+"Possible coverage amount are: ${' - '.join(coverage_amount_list.split(';'))}"
+msgstr ""
+"Les montants de couverture possibles sont:  ${' - "
+"'.join(coverage_amount_list.split(';'))}"
+
 msgctxt "model:rule_engine,description:coverage_amount_per_range"
 msgid ""
 "Possible coverage amount are computed per ${coverage_amount_range} range "
@@ -144,9 +151,18 @@ msgstr ""
 "${coverage_amount_range}, en partant de ${min_amount} et avec une borne "
 "supérieure de ${max_amount}."
 
+msgctxt "model:rule_engine,name:coverage_amount_list_rule"
+msgid "Coverage Amount Predefined List"
+msgstr "Montants de couverture définis à partir d'une liste"
+
 msgctxt "model:rule_engine,name:coverage_amount_per_range"
 msgid "Coverage Amount Per Range Rule"
 msgstr "Règle de montant de couverture par tranches"
+
+msgctxt ""
+"model:rule_engine.rule_parameter,string:coverage_amount_list_parameter"
+msgid "Coverage Amount List Separate by ;"
+msgstr "Liste des montants de couverture séparés par ;"
 
 msgctxt "model:rule_engine.rule_parameter,string:coverage_amount_range"
 msgid "Coverage Amount Range"
