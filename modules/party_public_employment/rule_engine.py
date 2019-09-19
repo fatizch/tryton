@@ -72,3 +72,37 @@ class RuleEngineRuntime(metaclass=PoolMeta):
         at_date = datetime.date(args['date'].year, 1, 1)
         return args['contract'].subscriber.get_employment_version_data(
             'gross_index', at_date)
+
+    @classmethod
+    @check_args('date')
+    def _re_civil_service_employment_entry_date(cls, args):
+        return cls.get_person(args).civil_service_employment_entry_date()
+
+    @classmethod
+    @check_args('date')
+    def _re_administrative_situation(cls, args):
+        return cls.get_person(args).administrative_situation_at_date(
+            args['date'])
+
+    @classmethod
+    @check_args('date')
+    def _re_administrative_situation_sub_status(cls, args):
+        return cls.get_person(args).\
+            administrative_situation_sub_status_at_date(args['date'])
+
+    @classmethod
+    @check_args('contract', 'date')
+    def _re_subscriber_civil_service_employment_entry_date(cls, args):
+        return args['contract'].subscriber.civil_service_employment_entry_date()
+
+    @classmethod
+    @check_args('contract', 'date')
+    def _re_subscriber_administrative_situation(cls, args):
+        return args['contract'].subscriber.administrative_situation_at_date(
+            args['date'])
+
+    @classmethod
+    @check_args('contract', 'date')
+    def _re_subscriber_administrative_situation_sub_status(cls, args):
+        return args['contract'].subscriber.\
+            administrative_situation_sub_status_at_date(args['date'])

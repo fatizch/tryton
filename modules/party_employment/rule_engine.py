@@ -16,10 +16,10 @@ class RuleEngineRuntime(metaclass=PoolMeta):
     __name__ = 'rule_engine.runtime'
 
     @classmethod
-    @check_args('covered_element', 'date')
+    @check_args('date')
     def _re_employment_gross_salary(cls, args):
         at_date = args['date']
-        return args['covered_element'].get_employment_version_data(
+        return cls.get_person(args).get_employment_version_data(
             'gross_salary', at_date)
 
     @classmethod
@@ -30,10 +30,10 @@ class RuleEngineRuntime(metaclass=PoolMeta):
             'gross_salary', at_date)
 
     @classmethod
-    @check_args('covered_element', 'date')
+    @check_args('date')
     def _re_employment_gross_salary_1st_january(cls, args):
         at_date = datetime.date(args['date'].year, 1, 1)
-        return args['covered_element'].get_employment_version_data(
+        return cls.get_person(args).get_employment_version_data(
             'gross_salary', at_date)
 
     @classmethod

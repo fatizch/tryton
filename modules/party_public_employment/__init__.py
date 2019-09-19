@@ -7,6 +7,7 @@ from . import rule_engine
 
 def register():
     Pool.register(
+        party.Party,
         party.EmploymentVersion,
         party.AdminSituationSubStatus,
         party.PublicEmploymentIndex,

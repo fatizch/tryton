@@ -2,7 +2,7 @@
 # this repository contains the full copyright notices and license terms.
 import datetime
 
-from trytond.pool import PoolMeta, Pool
+from trytond.pool import PoolMeta
 from trytond.pyson import Eval, If, Bool
 from trytond.model import Unique
 
@@ -60,6 +60,12 @@ class Employment(model.CoogSQL, model.CoogView):
     def on_change_employer(self):
         self.work_section = None
 
+    def get_version_at_date(self, at_date):
+        for version in sorted(self.versions,
+                key=lambda x: x.date or datetime.date.min, reverse=True):
+            if (version.date or datetime.date.min) <= at_date:
+                return version
+
     def get_rec_name(self, name=None):
         return self.employer.rec_name + '(' + str(self.start_date) + ')'
 
@@ -89,11 +95,10 @@ class Party(metaclass=PoolMeta):
     def get_employment_version_data(self, name, at_date):
         if not self.is_person:
             return
-        Version = Pool().get('party.employment.version')
         employments = self.get_employments(at_date)
         for e in employments:
-            version = Version.version_at_date(e, at_date)
-            if getattr(version, name, None):
+            version = e.get_version_at_date(at_date)
+            if version and getattr(version, name, None):
                 return getattr(version, name)
 
 
@@ -175,14 +180,18 @@ class EmploymentWorkTimeType(model.CoogView, model.CoogSQL):
         return self.code
 
 
-class PartyWorkSection(model.CoogView, model.CoogSQL):
+class PartyWorkSection(model.CoogSQL, model.CoogView):
     'Party Work Section'
     __name__ = 'party.work_section'
+    _func_key = 'func_key'
 
     party = fields.Many2One('party.party', 'Party',
-        ondelete='RESTRICT', required=True, domain=[('is_person', '=', False)])
+        ondelete='CASCADE', required=True, select=True,
+        domain=[('is_person', '=', False)])
     name = fields.Char('Name', required=True, help='Work Section Name')
     code = fields.Char('Code', required=True)
+    func_key = fields.Function(fields.Char('Functional Key'),
+        'get_func_key', searcher='search_func_key')
 
     @classmethod
     def __setup__(cls):
@@ -191,3 +200,29 @@ class PartyWorkSection(model.CoogView, model.CoogSQL):
         cls._sql_constraints += [
             ('identifier_uniq', Unique(t, t.code, t.party),
              'The code and the party must be unique!')]
+
+    def get_rec_name(self, name):
+        return '[%s] %s' % (self.code, self.name)
+
+    @classmethod
+    def search_rec_name(cls, name, clause):
+        return ['OR',
+            ('code',) + tuple(clause[1:]),
+            ('name',) + tuple(clause[1:])
+            ]
+
+    def get_func_key(self, name):
+        return self.code + '|' + self.party.code
+
+    @classmethod
+    def search_func_key(cls, name, clause):
+        assert clause[1] == '='
+        if not clause[2]:
+            return [('id', '=', None)]
+        operands = clause[2].split('|')
+        if len(operands) == 2:
+            section_code, party_code = operands
+            return [('code', clause[1], section_code),
+                    ('party.code', clause[1], party_code)]
+        else:
+            return [('id', '=', None)]

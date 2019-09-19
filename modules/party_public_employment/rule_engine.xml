@@ -47,7 +47,7 @@ this repository contains the full copyright notices and license terms. -->
             <field name="parent" ref="offered_insurance.dossier_souscripteur"/>
         </record>
         <!-- ############################################################ -->
-        <!-- Rule Engine 1st january -->
+        <!-- Index data at 1st january -->
         <!-- ############################################################ -->
         <record model="rule_engine.function" id="indice_majore_1_er_janvier">
             <field name="translated_technical_name">indice_majore_1_er_janvier</field>
@@ -87,6 +87,75 @@ this repository contains the full copyright notices and license terms. -->
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_subscriber_employment_gross_index_1st_january</field>
             <field name="long_description">Indice brut de la fonction publique défini dans les données professionnelles du souscripteur du contrat en date du 1er janvier de l'année de la date de calcul</field>
+            <field name="parent" ref="offered_insurance.dossier_souscripteur"/>
+        </record>
+        <!-- ############################################################ -->
+        <!-- entry date in civil service -->
+        <!-- ############################################################ -->
+        <record model="rule_engine.function" id="date_entree_fonction_publique">
+            <field name="translated_technical_name">date_entree_fonction_publique</field>
+            <field name="description">Date d'entrée dans la fonction publique</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_civil_service_employment_entry_date</field>
+            <field name="long_description">Date d'entrée dans la fonction publique calculée à partir de la plus petite des dates d'entrée dans les emplois de la fonction publique</field>
+            <field name="parent" ref="offered_insurance.dossier_personne_couverte"/>
+        </record>
+        <record model="rule_engine.function" id="date_entree_fonction_publique_souscripteur">
+            <field name="translated_technical_name">date_entree_fonction_publique_souscripteur</field>
+            <field name="description">Date d'entrée dans la fonction publique du souscripteur</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_subscriber_civil_service_employment_entry_date</field>
+            <field name="long_description">Date d'entrée du souscripteur dans la fonction publique calculée à partir de la plus petite des dates d'entrée dans les emplois de la fonction publique</field>
+            <field name="parent" ref="offered_insurance.dossier_souscripteur"/>
+        </record>
+        <!-- ############################################################ -->
+        <!-- administrative situation -->
+        <!-- ############################################################ -->
+        <record model="rule_engine.function" id="situation_administrative">
+            <field name="translated_technical_name">situation_administrative</field>
+            <field name="description">Situation administrative</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_administrative_situation</field>
+            <field name="long_description">Situation administrative calculée à partir de la plus petite des dates d'entrée dans les emplois de la fonction publique</field>
+            <field name="parent" ref="offered_insurance.dossier_personne_couverte"/>
+        </record>
+        <record model="rule_engine.function" id="situation_administrative_souscripteur">
+            <field name="translated_technical_name">situation_administrative_souscripteur</field>
+            <field name="description">Situation administrative du souscripteur</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_subscriber_administrative_situation</field>
+            <field name="long_description">Situation administrative du souscripteur calculée à partir de la plus petite des dates d'entrée dans les emplois de la fonction publique</field>
+            <field name="parent" ref="offered_insurance.dossier_souscripteur"/>
+        </record>
+        <!-- ############################################################ -->
+        <!-- administrative situation sub status-->
+        <!-- ############################################################ -->
+        <record model="rule_engine.function" id="detail_situation_administrative">
+            <field name="translated_technical_name">detail_situation_administrative</field>
+            <field name="description">Détail de la situation administrative</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_administrative_situation_sub_status</field>
+            <field name="long_description">Détail de la situation administrative calculé à partir de la plus petite des dates d'entrée dans les emplois de la fonction publique</field>
+            <field name="parent" ref="offered_insurance.dossier_personne_couverte"/>
+        </record>
+        <record model="rule_engine.function" id="detail_situation_administrative_souscripteur">
+            <field name="translated_technical_name">detail_situation_administrative_souscripteur</field>
+            <field name="description">Détail de la situation administrative du souscripteur</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_subscriber_administrative_situation_sub_status</field>
+            <field name="long_description">Détail de la situation administrative du souscripteur calculé à partir de la plus petite des dates d'entrée dans les emplois de la fonction publique</field>
             <field name="parent" ref="offered_insurance.dossier_souscripteur"/>
         </record>
     </data>

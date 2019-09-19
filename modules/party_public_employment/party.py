@@ -5,7 +5,7 @@ from trytond.model import Unique
 from trytond.pyson import Eval, Bool
 from trytond.config import config
 
-from trytond.modules.coog_core import fields, model, coog_string
+from trytond.modules.coog_core import fields, model
 
 
 ADMINISTRATIVE_SITUATION = [
@@ -14,12 +14,75 @@ ADMINISTRATIVE_SITUATION = [
     ]
 
 __all__ = [
+    'Party',
     'AdminSituationSubStatus',
     'EmploymentVersion',
     'PublicEmploymentIndex',
     'EmploymentKind',
     'Employment',
     ]
+
+
+class Party(metaclass=PoolMeta):
+    __name__ = 'party.party'
+
+    def civil_service_employment_entry_date(self):
+        entry_dates = [e.entry_date
+            for e in self.get_civil_service_employments()]
+        if entry_dates:
+            return min(entry_dates)
+
+    def get_civil_service_employments(self):
+        return [e for e in self.employments if e.is_civil_service_employment]
+
+    def administrative_situation_at_date(self, date):
+        for e in self.get_civil_service_employments():
+            if (e.start_date <= date and
+                    (not e.end_date or e.end_date >= date)):
+                version = e.get_version_at_date(date)
+                if version and version.administrative_situation:
+                    return version.administrative_situation
+
+    def administrative_situation_sub_status_at_date(self, date):
+        for e in self.get_civil_service_employments():
+            if (e.start_date <= date and
+                    (not e.end_date or e.end_date >= date)):
+                version = e.get_version_at_date(date)
+                if version and version.administrative_situation_sub_status:
+                    return version.administrative_situation_sub_status.code
+
+
+class Employment(metaclass=PoolMeta):
+    __name__ = 'party.employment'
+
+    is_civil_service_employment = fields.Function(
+        fields.Boolean('Civil Service Employment',
+            depends=['employment_kind']),
+        'getter_is_civil_service_employment')
+    retirement_pension_identifier = fields.Char('Retirement Pension Identifier',
+        states={'invisible': ~(Bool(Eval('is_retired')))
+                | ~(Bool(Eval('is_civil_service_employment')))},
+        depends=['is_retired', 'is_civil_service_employment'])
+    is_retired = fields.Function(
+        fields.Boolean('Is retired', depends=['versions']),
+        'on_change_with_is_retired')
+
+    @fields.depends('versions')
+    def on_change_with_is_retired(self, name=None):
+        return any([v.administrative_situation ==
+                'retired' for v in self.versions])
+
+    def getter_is_civil_service_employment(self, name):
+        return self.employment_kind.is_civil_service_employment \
+            if self.employment_kind else None
+
+    @fields.depends('employment_kind', 'is_civil_service_employment')
+    def on_change_employment_kind(self):
+        if self.employment_kind:
+            self.is_civil_service_employment = self.employment_kind. \
+                is_civil_service_employment
+        else:
+            self.is_civil_service_employment = None
 
 
 class EmploymentVersion(metaclass=PoolMeta):
@@ -98,14 +161,10 @@ class EmploymentVersion(metaclass=PoolMeta):
             'gross_index', 'work_country', 'work_subdivision']
 
 
-class AdminSituationSubStatus(model.CoogView, model.CoogSQL):
+class AdminSituationSubStatus(model.CodedMixin, model.CoogView):
     'Administrative Situation Sub Status'
     __name__ = 'party.administrative_situation_sub_status'
-    _func_key = 'name'
 
-    name = fields.Char('Name', required=True,
-        help='Name of Administrative Situation Sub Status')
-    code = fields.Char('Code', required=True)
     situation = fields.Selection(ADMINISTRATIVE_SITUATION,
         'Administrative Situation',
         help='Define the administration situation (used to filter sub status '
@@ -115,21 +174,11 @@ class AdminSituationSubStatus(model.CoogView, model.CoogSQL):
     @classmethod
     def __setup__(cls):
         super().__setup__()
-        t = cls.__table__()
         cls._order = [('code', 'ASC')]
-        cls._sql_constraints += [
-            ('identifier_uniq', Unique(t, t.code), 'The code must be unique!')
-            ]
 
     @classmethod
     def is_master_object(cls):
         return True
-
-    @fields.depends('name', 'code')
-    def on_change_with_code(self):
-        if not self.code:
-            return coog_string.slugify(self.name)
-        return self.code
 
 
 class PublicEmploymentIndex(model.CoogView, model.CoogSQL):
@@ -174,35 +223,3 @@ class EmploymentKind(metaclass=PoolMeta):
 
     is_civil_service_employment = fields.Boolean('Civil Service Employment',
         help='Is Civil Service Employment')
-
-
-class Employment(metaclass=PoolMeta):
-    __name__ = 'party.employment'
-
-    is_civil_service_employment = fields.Function(
-        fields.Boolean('Civil Service Employment', depends=['employment_kind']),
-        'getter_is_civil_service_employment')
-    retirement_pension_identifier = fields.Char('Retirement Pension Identifier',
-        states={'invisible': ~(Bool(Eval('is_retired'))
-                & Bool(Eval('is_civil_service_employment')))},
-        depends=['is_retired', 'is_civil_service_employment'])
-    is_retired = fields.Function(
-        fields.Boolean('Is retired'),
-        'on_change_with_is_retired')
-
-    @fields.depends('versions')
-    def on_change_with_is_retired(self, name=None):
-        return any([v.administrative_situation ==
-                'retired' for v in self.versions])
-
-    def getter_is_civil_service_employment(self, name):
-        return self.employment_kind.is_civil_service_employment \
-            if self.employment_kind else None
-
-    @fields.depends('employment_kind', 'is_civil_service_employment')
-    def on_change_employment_kind(self):
-        if self.employment_kind:
-            self.is_civil_service_employment = self.employment_kind. \
-                is_civil_service_employment
-        else:
-            self.is_civil_service_employment = None
