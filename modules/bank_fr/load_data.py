@@ -135,6 +135,14 @@ class BankDataSetWizard(metaclass=PoolMeta):
 
     _SAVE_SIZE = 200
 
+    def get_file_reader(self):
+        if self.configuration.use_default:
+            with open(self.configuration.data_file, 'r') as _file:
+                return _file.readlines()
+        else:
+            return [line.decode('utf-8')
+                for line in self.configuration.resource.split(b'\n')]
+
     def transition_set_(self):
         # This method overloads bank_cog behavior to allow uploading
         # Banque de France standard file. This file contains banks and bank
@@ -166,127 +174,128 @@ class BankDataSetWizard(metaclass=PoolMeta):
         first_agency = False
 
         if self.configuration.file_format == 'banque_de_france':
-            with open(self.configuration.data_file, 'r') as _file:
-                saver_bank = model.Saver(Bank)
-                saver_address = model.Saver(Address)
-                for line in _file.readlines():
-                    if line[0] == '1':
-                        clean_line = BanqueDeFranceBankLine(line=line)
-                        bic, name, commercial_name, street, zip_code, city = \
-                            clean_line.bic, clean_line.name, \
-                            clean_line.commercial_name, clean_line.street, \
-                            clean_line.zip_code, clean_line.city
-                        if bic in treated_banks:
-                            continue
-                        party = existing_parties.get(bic[:8], None) or Party(
+            saver_bank = model.Saver(Bank)
+            saver_address = model.Saver(Address)
+            for line in self.get_file_reader():
+                if not line:
+                    continue
+                if line[0] == '1':
+                    clean_line = BanqueDeFranceBankLine(line=line)
+                    bic, name, commercial_name, street, zip_code, city = \
+                        clean_line.bic, clean_line.name, \
+                        clean_line.commercial_name, clean_line.street, \
+                        clean_line.zip_code, clean_line.city
+                    if bic in treated_banks:
+                        continue
+                    party = existing_parties.get(bic[:8], None) or Party(
+                        name=name,
+                        commercial_name=commercial_name,
+                        addresses=[])
+                    addr_dict = {
+                        'street': street,
+                        'city': city,
+                        'zip': zip_code,
+                        }
+                    address = self.check_addresses(party, addr_dict,
+                        france)
+                    if address is None:
+                        address = Address(
+                            street=street,
+                            city=city,
+                            country=france,
+                            party=party)
+                        saver_address.append(address)
+                    bank = None
+                    if bic in existing_banks:
+                        bank = existing_banks[bic]
+                        bank.bic = bic
+                        bank.party = party
+                        bank.name = name
+                        bank.commercial_name = commercial_name
+                        bank.address = address
+                    else:
+                        bank = Bank(
+                            bic=bic,
+                            party=party,
                             name=name,
-                            commercial_name=commercial_name,
-                            addresses=[])
-                        addr_dict = {
-                            'street': street,
-                            'city': city,
-                            'zip': zip_code,
-                            }
-                        address = self.check_addresses(party, addr_dict,
-                            france)
-                        if address is None:
-                            address = Address(
-                                street=street,
-                                city=city,
-                                country=france,
-                                party=party)
-                            saver_address.append(address)
-                        bank = None
-                        if bic in existing_banks:
-                            bank = existing_banks[bic]
-                            bank.bic = bic
-                            bank.party = party
-                            bank.name = name
-                            bank.commercial_name = commercial_name
-                            bank.address = address
-                        else:
-                            bank = Bank(
-                                bic=bic,
-                                party=party,
-                                name=name,
-                                address=address)
-                        treated_banks.add(bic)
-                        saver_bank.append(bank)
-                    elif line[0] == '3':
-                        if first_agency is False:
-                            saver_address.finish()
-                            saver_bank.finish()
-                            load_existing(existing_banks, existing_parties)
-                            existing_agencies = {';'.join(
-                                    [x.bank.bic, x.branch_code, x.bank_code]): x
-                                for x in Agency.search([()])}
-                            first_agency = True
-                        clean_line = BanqueDeFranceAgencyLine(line=line)
-                        bic = clean_line.bic
-                        if bic == '':
-                            continue
-                        if bic in existing_banks:
-                            agency_bank = existing_banks[bic]
-                        else:
-                            continue
-                        bank_code = clean_line.bank_code
-                        branch_code = clean_line.branch_code
-                        if bank_code == '' or branch_code == '':
-                            continue
-                        agency_name = clean_line.name
-                        agency_street = clean_line.street
-                        agency_zip = clean_line.zip_code
-                        agency_city = clean_line.city
-
-                        agency = existing_agencies.get(';'.join([bic,
-                                    clean_line.origin_branch_code,
-                                    clean_line.origin_bank_code]), None)
-                        if agency:
-                            agency_address = agency.address
-                            agency_address.street = agency_street
-                            agency_address.city = agency_city
-                            agency_address.zip = agency_zip
-                            agency_address.party = agency_bank.party
-                            agency.name = agency_name
-                            agency.bank_code = bank_code
-                            agency.branch_code = branch_code
-                            agency.address = agency_address
-                            agencies_to_update.append(agency)
-                            addresses_to_update.append(agency_address)
-                        else:
-                            if (agency_zip == '' or agency_city == ''
-                                    or agency_street == ''):
-                                agency_address = agency_bank.address
-                            else:
-                                agency_address = Address(
-                                    street=agency_street,
-                                    city=agency_city,
-                                    zip=agency_zip,
-                                    country=france,
-                                    party=agency_bank.party)
-                                addresses_to_create.append(agency_address)
-                            agency = Agency(
-                                bank=agency_bank,
-                                name=agency_name,
-                                bank_code=bank_code,
-                                branch_code=branch_code,
-                                address=agency_address)
-                            agencies_to_create.append(agency)
+                            address=address)
+                    treated_banks.add(bic)
+                    saver_bank.append(bank)
+                elif line[0] == '3':
+                    if first_agency is False:
+                        saver_address.finish()
+                        saver_bank.finish()
+                        load_existing(existing_banks, existing_parties)
+                        existing_agencies = {';'.join(
+                                [x.bank.bic, x.branch_code, x.bank_code]): x
+                            for x in Agency.search([()])}
+                        first_agency = True
+                    clean_line = BanqueDeFranceAgencyLine(line=line)
+                    bic = clean_line.bic
+                    if bic == '':
+                        continue
+                    if bic in existing_banks:
+                        agency_bank = existing_banks[bic]
                     else:
                         continue
-                if addresses_to_create:
-                    self.create_by_slices(Address, addresses_to_create,
-                        self._SAVE_SIZE)
-                if addresses_to_update:
-                    self.write_by_slices(Address, addresses_to_update,
-                        self._SAVE_SIZE)
-                if agencies_to_create:
-                    self.create_by_slices(Agency, agencies_to_create,
-                        self._SAVE_SIZE)
+                    bank_code = clean_line.bank_code
+                    branch_code = clean_line.branch_code
+                    if bank_code == '' or branch_code == '':
+                        continue
+                    agency_name = clean_line.name
+                    agency_street = clean_line.street
+                    agency_zip = clean_line.zip_code
+                    agency_city = clean_line.city
 
-                if agencies_to_update:
-                    self.write_by_slices(Agency, agencies_to_update,
-                        self._SAVE_SIZE)
+                    agency = existing_agencies.get(';'.join([bic,
+                                clean_line.origin_branch_code,
+                                clean_line.origin_bank_code]), None)
+                    if agency:
+                        agency_address = agency.address
+                        agency_address.street = agency_street
+                        agency_address.city = agency_city
+                        agency_address.zip = agency_zip
+                        agency_address.party = agency_bank.party
+                        agency.name = agency_name
+                        agency.bank_code = bank_code
+                        agency.branch_code = branch_code
+                        agency.address = agency_address
+                        agencies_to_update.append(agency)
+                        addresses_to_update.append(agency_address)
+                    else:
+                        if (agency_zip == '' or agency_city == ''
+                                or agency_street == ''):
+                            agency_address = agency_bank.address
+                        else:
+                            agency_address = Address(
+                                street=agency_street,
+                                city=agency_city,
+                                zip=agency_zip,
+                                country=france,
+                                party=agency_bank.party)
+                            addresses_to_create.append(agency_address)
+                        agency = Agency(
+                            bank=agency_bank,
+                            name=agency_name,
+                            bank_code=bank_code,
+                            branch_code=branch_code,
+                            address=agency_address)
+                        agencies_to_create.append(agency)
+                else:
+                    continue
+            if addresses_to_create:
+                self.create_by_slices(Address, addresses_to_create,
+                    self._SAVE_SIZE)
+            if addresses_to_update:
+                self.write_by_slices(Address, addresses_to_update,
+                    self._SAVE_SIZE)
+            if agencies_to_create:
+                self.create_by_slices(Agency, agencies_to_create,
+                    self._SAVE_SIZE)
+
+            if agencies_to_update:
+                self.write_by_slices(Agency, agencies_to_update,
+                    self._SAVE_SIZE)
             return 'end'
         else:
             return super().transition_set_()
