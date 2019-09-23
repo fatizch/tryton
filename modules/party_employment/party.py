@@ -24,8 +24,7 @@ class Employment(model.CoogSQL, model.CoogView):
 
     employee = fields.Many2One('party.party', 'Employee',
         required=True, ondelete='RESTRICT', domain=[('is_person', '=', True)])
-    employer = fields.Many2One('party.party', 'Employer',
-        required=True, ondelete='RESTRICT',
+    employer = fields.Many2One('party.party', 'Employer', ondelete='RESTRICT',
         domain=[('is_person', '=', False), ('has_role', '=', False)])
     entry_date = fields.Date('Entry Date', required=True,
         help='Date of entry in the legal entity')
@@ -108,7 +107,7 @@ class EmploymentVersion(model._RevisionMixin, model.CoogView, model.CoogSQL):
     _parent_name = 'employment'
 
     employment = fields.Many2One('party.employment', 'Employment',
-        select=True, required=True, ondelete='RESTRICT')
+        select=True, required=True, ondelete='CASCADE')
     work_time_type = fields.Many2One('party.employment_work_time_type',
         'Work Time Type', ondelete='RESTRICT')
     gross_salary = fields.Numeric('Annual Gross Salary')

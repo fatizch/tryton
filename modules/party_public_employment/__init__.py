@@ -3,6 +3,7 @@
 from trytond.pool import Pool
 from . import party
 from . import rule_engine
+from . import api
 
 
 def register():
@@ -15,3 +16,7 @@ def register():
         party.EmploymentKind,
         party.Employment,
         module='party_public_employment', type_='model')
+
+    Pool.register(
+        api.APIParty,
+        module='party_public_employment', type_='model', depends=['api'])

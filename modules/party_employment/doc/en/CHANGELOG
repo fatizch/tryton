@@ -1,3 +1,4 @@
+* FEA#12535 Update API to handle employment information
 * FEA#12056 Add withholding data
 * OTH#00000 Add party employment data in rule_engine
 * FEA#11598 Party employment module creation. This module allows to enter
