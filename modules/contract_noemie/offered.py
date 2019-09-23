@@ -6,6 +6,7 @@ from trytond.modules.coog_core import fields
 
 __all__ = [
     'ItemDescription',
+    'Product',
     ]
 
 
@@ -21,4 +22,19 @@ class ItemDescription(metaclass=PoolMeta):
     @fields.depends('kind')
     def on_change_with_is_noemie(self):
         if self.kind != 'person':
+            return False
+
+
+class Product(metaclass=PoolMeta):
+    __name__ = 'offered.product'
+
+    is_noemie = fields.Boolean('Is Noemie Product',
+        states={'invisible': Eval('subscriber_kind') != 'person'},
+        depends=['subscriber_kind'],
+        help='If true, all covered elements for contracts using this product '
+        'will have noemie related information')
+
+    @fields.depends('subscriber_kind')
+    def on_change_with_is_noemie(self):
+        if self.subscriber_kind != 'person':
             return False

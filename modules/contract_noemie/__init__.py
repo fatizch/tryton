@@ -14,6 +14,7 @@ def register():
         contract.Contract,
         contract.CoveredElement,
         batch.ContractNoemieFlowBatch,
+        offered.Product,
         module='contract_noemie', type_='model')
 
     Pool.register(

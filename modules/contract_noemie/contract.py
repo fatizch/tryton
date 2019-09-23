@@ -86,7 +86,8 @@ class CoveredElement(metaclass=PoolMeta):
 
     is_noemie = fields.Function(
         fields.Boolean('Is Noemie'),
-        'on_change_with_is_noemie')
+        'on_change_with_is_noemie',
+        searcher='searcher_is_noemie')
     noemie_status = fields.Function(
         fields.Selection([
             ('', ''), ('waiting', 'Waiting'),
@@ -168,9 +169,20 @@ class CoveredElement(metaclass=PoolMeta):
                         item2.is_noemie == Literal(True)) & (
                         covered_up.party != Null)))
 
-    @fields.depends('item_desc')
+    @fields.depends('item_desc', 'contract')
     def on_change_with_is_noemie(self, name=''):
-        return self.item_desc and self.item_desc.is_noemie
+        return (self.item_desc and self.item_desc.is_noemie) or \
+            (self.contract and self.contract.product.is_noemie)
+
+    @classmethod
+    def searcher_is_noemie(cls, name, clause):
+        return ['OR',
+            [('item_desc.is_noemie',) + tuple(clause[1:])],
+            [('contract.product.is_noemie',) + tuple(clause[1:])]]
+
+    @classmethod
+    def get_all_noemie_covered(cls):
+        return cls.search([('is_noemie', '=', True)])
 
     @fields.depends('noemie_return_code', 'is_noemie')
     def on_change_with_noemie_status(self, name=''):
