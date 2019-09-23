@@ -1,0 +1,1 @@
+This module allows to generate analytics line on contract invoice line and benefit move line

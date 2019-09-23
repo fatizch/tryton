@@ -646,6 +646,36 @@ class InvoiceLine(metaclass=PoolMeta):
         return super(InvoiceLine, cls)._get_origin() + [
             'contract']
 
+    def get_analytic_extra_data_match_date(self):
+        if self.coverage_start:
+            return self.coverage_start
+
+    def _update_extra_data_dict_for_analytic_pattern(self,
+            object, extra_data, date):
+        version_at_date = utils.get_good_version_at_date(object, 'extra_datas',
+            date, start_var_name='date')
+        Contract = Pool().get('contract')
+        if version_at_date:
+            if isinstance(object, Contract):
+                extra_data.update(version_at_date.extra_data_values)
+            else:
+                extra_data.update(version_at_date.current_extra_data)
+
+    def get_extra_data_for_analytic_match(self):
+        date = self.get_analytic_extra_data_match_date()
+        extra_data = {}
+        if self.details:
+            origin_detail = self.details[0]
+            if origin_detail.product:
+                extra_data.update(origin_detail.product.extra_data)
+            if origin_detail.covered_element:
+                self._update_extra_data_dict_for_analytic_pattern(
+                    origin_detail.covered_element, extra_data, date)
+            if origin_detail.option:
+                self._update_extra_data_dict_for_analytic_pattern(
+                    origin_detail.option, extra_data, date)
+        return extra_data
+
 
 class InvoiceTax(metaclass=PoolMeta):
     __name__ = 'account.invoice.tax'

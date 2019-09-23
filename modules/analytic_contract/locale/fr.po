@@ -1,0 +1,20 @@
+#
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:analytic_account.rule,extra_data:"
+msgid "Extra Data"
+msgstr "Données Complémentaires"
+
+msgctxt "field:analytic_account.rule,extra_data_summary:"
+msgid "Extra Data Summary"
+msgstr "Résumé des données complémentaires"
+
+msgctxt "help:analytic_account.rule,extra_data:"
+msgid ""
+"Extra data list used to filter move line based on contract, option, covered "
+"extra_data"
+msgstr ""
+" Liste des données complémentaires utilisées pour filtrer les lignes de "
+"mouvements comptables en fonction des données du contrat, de l'option, de "
+"l'élément couvert"

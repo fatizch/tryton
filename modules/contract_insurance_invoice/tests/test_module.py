@@ -406,7 +406,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
                         billing_mode=freq_month,
                         payment_term=payment_term),
                     self.BillingInformation(date=datetime.date(2018, 8, 19),
-                            billing_mode=freq_quart,
+                        billing_mode=freq_quart,
                         direct_debit_day='5',
                         payment_term=payment_term),
                     ])

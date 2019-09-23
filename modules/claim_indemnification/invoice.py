@@ -113,6 +113,27 @@ class InvoiceLine(metaclass=PoolMeta):
             result.update(dict(cursor.fetchall()))
         return result
 
+    def get_analytic_extra_data_match_date(self):
+        if self.claim_detail:
+            return self.claim_detail.indemnification.start_date
+        return super().get_analytic_extra_data_match_date()
+
+    def get_extra_data_for_analytic_match(self):
+        date = self.get_analytic_extra_data_match_date()
+        extra_data = super().get_extra_data_for_analytic_match()
+        if self.claim_detail and self.claim_detail.service:
+            if self.claim_detail.service.contract:
+                self._update_extra_data_dict_for_analytic_pattern(
+                    self.claim_detail.service.contract, extra_data, date)
+            if self.claim_detail.service.option:
+                self._update_extra_data_dict_for_analytic_pattern(
+                    self.claim_detail.service.option, extra_data, date)
+            if self.claim_detail.service.theoretical_covered_element:
+                self._update_extra_data_dict_for_analytic_pattern(
+                    self.claim_detail.service.theoretical_covered_element,
+                    extra_data, date)
+        return extra_data
+
 
 class ClaimInvoiceLineDetail(model.CoogSQL, model.CoogView):
     'Claim Invoice Line Detail'
