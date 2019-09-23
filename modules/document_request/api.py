@@ -13,7 +13,7 @@ from trytond.pool import PoolMeta, Pool
 
 from trytond.modules.api.api.core import date_for_api
 from trytond.modules.api import APIInputError
-from trytond.modules.coog_core import fields
+from trytond.modules.coog_core import fields, utils
 
 from trytond.modules.offered.api import EXTRA_DATA_VALUES_SCHEMA
 
@@ -197,7 +197,8 @@ class APIParty(metaclass=PoolMeta):
             line_data['status'] = mapping[line.attachment.status] \
                 if line.attachment else 'waiting'
 
-            line_data['reception_date'] = date_for_api(line.reception_date)
+            line_data['reception_date'] = date_for_api(line.reception_date) or \
+                date_for_api(line.first_reception_date)
             line_data['validation_date'] = date_for_api(
                 line.attachment.status_change_date) if line.attachment and \
                 line.attachment.status == 'valid' else ''
@@ -384,6 +385,8 @@ class APIParty(metaclass=PoolMeta):
             name=data['filename'],
             data=data['binary_data'])
         line.attachment = attachment
+        if not line.first_reception_date:
+            line.first_reception_date = utils.today()
 
         DocumentRequestLine.save([line])
         return 'ok'
