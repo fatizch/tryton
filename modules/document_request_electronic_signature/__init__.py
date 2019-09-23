@@ -21,6 +21,7 @@ def register():
     Pool.register(
         extra_data.ExtraData,
         document.OfferedDocumentDescription,
+        signature.SignatureCredential,
         signature.SignatureConfiguration,
         signature.SignatureConfigurationExtraDataRelation,
         module='document_request_electronic_signature', type_='model',

@@ -1,3 +1,4 @@
+* OTH#0000 Rendre la configuration de signature électronique exportable
 * FEA#12321 Possibilité de configurer les paramètres de la signature électronique (fournisseur, type de signature, ...) en fonction du modèle de courrier
 * BUG#12198 Ajout d'information supplémentaire dans le contexte pour pouvoir retrouver le signataire du document électronique dans certains cas
 * BUG#11679 Correction d'un crash lors de la génération des documents

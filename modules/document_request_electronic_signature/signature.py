@@ -8,8 +8,11 @@ from trytond.modules.coog_core import fields
 from trytond.modules.offered.extra_data import with_extra_data_def
 from trytond.modules.offered.extra_data import ExtraDataDefTable
 
+from trytond.modules.coog_core import export
+
 __all__ = [
     'Signature',
+    'SignatureCredential',
     'SignatureConfiguration',
     'SignatureConfigurationExtraDataRelation',
     ]
@@ -29,7 +32,11 @@ class Signature(metaclass=PoolMeta):
         return struct
 
 
-class SignatureConfiguration(
+class SignatureCredential(export.ExportImportMixin):
+    __name__ = 'document.signature.credential'
+
+
+class SignatureConfiguration(export.ExportImportMixin,
         with_extra_data_def('document.signature.configuration-extra_data',
             'conf', 'signature'),
         metaclass=PoolMeta):
