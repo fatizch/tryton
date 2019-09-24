@@ -292,6 +292,8 @@ class ContractOption(metaclass=PoolMeta):
             'monthly_void_premium_incl_tax': Decimal('0.0'),
             'monthly_void_premium_excl_tax': Decimal('0.0'),
             }
+        if not self.coverage.premium_rules:
+            return res
         rule_dict_template = self.coverage.premium_rules[
             0].get_base_premium_dict(self)
         self.init_dict_for_rule_engine(rule_dict_template)

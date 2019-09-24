@@ -1,3 +1,4 @@
+* OTH#00000 Ensure no crash when computing commissions on coverage without premium rule
 * BUG#12166 Fix new cases for commission simulation wizard
 * BUG#11276 get_void_premium: init value with Decimal
 
