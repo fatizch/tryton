@@ -1,3 +1,5 @@
+* OTH#00000 Fix sepa files adresses and remittance tags
+* OTH#00000 Fix payment_working_days chain : missing do_sepa_message
 * FEA#12319 Allow to customize sepa remittance information
 * BUG#12460 Fix sepa batches (files can not be dumped)
 * OTH#00000 Fix some french translations

@@ -28,4 +28,7 @@ chain_step account.payment.process      \
     --conf_code="$CONF_CODE"
 chain_wait account.payment.process || chain_end
 
+chain_step account.payment.do_sepa_messages
+chain_wait account.payment.do_sepa_messages || chain_end
+
 chain_end

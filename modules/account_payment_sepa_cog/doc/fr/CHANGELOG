@@ -1,3 +1,5 @@
+* OTH#00000 Correction des balises adresses et remittance des fichiers sepa
+* OTH#00000 Correction de la chaine payment_working_days: appel à do_sepa_messages manquant
 * FEA#12319 Ajout d'une information sur le journal de paiement sepa
 * BUG#12460 Correction de la génération des fichiers SEPA par batch
 * OTH#00000 Corriger plusieurs traductions françaises

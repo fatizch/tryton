@@ -98,7 +98,7 @@ this repository contains the full copyright notices and license terms. -->
                 <!-- UltmtDbtr -->
                 <!-- Purp -->
                 <RmtInf py:if="payment.sepa_remittance_information">
-                    <Ustrd>${normalize('NFKD', payment.sepa_remittance_information).encode('ascii', 'replace')[:140]}</Ustrd>
+                    <Ustrd>${normalize('NFKD', payment.sepa_remittance_information).encode('ascii', 'replace').decode('ascii')[:140]}</Ustrd>
                     <!-- Strd -->
                 </RmtInf>
             </DrctDbtTxInf>

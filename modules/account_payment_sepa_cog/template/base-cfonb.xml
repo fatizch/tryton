@@ -29,12 +29,12 @@ this repository contains the full copyright notices and license terms. -->
         <!-- AdrTp -->
         <!-- Dept -->
         <!-- SubDept -->
-        <!-- <StrtNm py:if="address.street">${address.street_for_sepa()[:70]}</StrtNm> -->
+        <!-- <StrtNm py:if="address.street_for_sepa()">${address.street_for_sepa()[:70]}</StrtNm> -->
         <!-- BldgNb -->
-        <PstCd py:if="address.zip">${normalize('NFKD', address.zip).encode('ascii', 'replace')[:16]}</PstCd>
-        <TwnNm py:if="address.city">${normalize('NFKD', address.city).encode('ascii', 'replace')[:35]}</TwnNm>
-        <CtrySubDvsn py:if="address.subdivision">${normalize('NFKD',address.subdivision.rec_name).encode('ascii', 'replace')[:35]}</CtrySubDvsn>
-        <Ctry py:if="address.country">${normalize('NFKD', address.country.code).encode('ascii', 'replace')}</Ctry>
+        <PstCd py:if="address.zip">${normalize('NFKD', address.zip).encode('ascii', 'replace').decode('ascii')[:16]}</PstCd>
+        <TwnNm py:if="address.city">${normalize('NFKD', address.city).encode('ascii', 'replace').decode('ascii')[:35]}</TwnNm>
+        <CtrySubDvsn py:if="address.subdivision">${normalize('NFKD',address.subdivision.rec_name).encode('ascii', 'replace').decode('ascii')[:35]}</CtrySubDvsn>
+        <Ctry py:if="address.country">${normalize('NFKD', address.country.code).encode('ascii', 'replace').decode('ascii')}</Ctry>
         <AdrLine py:if="address.sepa_adrline_1">${address.sepa_adrline_1}</AdrLine>
         <AdrLine py:if="address.sepa_adrline_2">${address.sepa_adrline_2}</AdrLine>
     </py:def>

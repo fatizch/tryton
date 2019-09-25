@@ -5,8 +5,8 @@ this repository contains the full copyright notices and license terms. -->
     <!-- only ASCII -->
     <py:def function="PartyIdentification(party, id=True, with_name=True, with_address=True, full_name=False)">
         <!-- EPC limits to 70 instead of 140 -->
-        <Nm py:if="with_name and not full_name">${normalize('NFKD', party.name).encode('ascii', 'replace')[:70]}</Nm>
-        <Nm py:if="with_name and full_name">${normalize('NFKD', party.full_name).encode('ascii', 'replace')[:70]}</Nm>
+        <Nm py:if="with_name and not full_name">${normalize('NFKD', party.name).encode('ascii', 'replace').decode('ascii')[:70]}</Nm>
+        <Nm py:if="with_name and full_name">${normalize('NFKD', party.full_name).encode('ascii', 'replace').decode('ascii')[:70]}</Nm>
         <py:if test="with_address">
             <py:with vars="address = party.address_get()">
                 <PstlAdr py:if="address">
@@ -29,9 +29,9 @@ this repository contains the full copyright notices and license terms. -->
         <!-- CtctDtls -->
     </py:def>
     <py:def function="PostalAddress(address)">
-        <Ctry py:if="address.country">${normalize('NFKD', address.country.code).encode('ascii', 'replace')}</Ctry>
-        <AdrLine py:if="address.street">${normalize('NFKD', address.street).encode('ascii', 'replace')[:70]}</AdrLine>
-        <AdrLine py:if="address.streetbis">${normalize('NFKD', address.streetbis).encode('ascii', 'replace')[:70]}</AdrLine>
+        <Ctry py:if="address.country">${normalize('NFKD', address.country.code).encode('ascii', 'replace').decode('ascii')}</Ctry>
+        <AdrLine py:if="address.street">${normalize('NFKD', address.street).encode('ascii', 'replace').decode('ascii')[:70]}</AdrLine>
+        <AdrLine py:if="address.streetbis">${normalize('NFKD', address.streetbis).encode('ascii', 'replace').decode('ascii')[:70]}</AdrLine>
     </py:def>
     <py:def function="Account(account_number, with_ccy=True)">
         <Id>

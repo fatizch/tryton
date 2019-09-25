@@ -37,10 +37,10 @@ class Address(metaclass=PoolMeta):
             address.extend(self.street.splitlines())
         return unicodedata.normalize('NFKD', ' '.join(
                 [x.strip() for x in address if x.strip()])
-            ).encode('ascii', 'replace')[:70]
+            ).encode('ascii', 'replace').decode('ascii')[:70]
 
     @property
     def sepa_adrline_2(self):
         return unicodedata.normalize('NFKD', ' '.join(
                 [self.zip or '', self.city or '']).strip()
-            ).encode('ascii', 'replace')[:70]
+            ).encode('ascii', 'replace').decode('ascii')[:70]
