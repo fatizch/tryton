@@ -1,3 +1,4 @@
+* BUG#12766 Noemie flow file update and batch adjustment
 * FEA#12749 Allow marking a product for noemisation
 * BUG#12370 Fix Noemie dates
 * FEA#11778 Fix Noemie status management for endorsements

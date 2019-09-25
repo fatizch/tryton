@@ -32,6 +32,15 @@ class ContractNoemieFlowBatch(batch.BatchRootNoSelect):
         return 'contract.covered_element'
 
     @classmethod
+    def treat_file_line(cls, line):
+        # The first 4 characters of each line describes the line's length,
+        # therefore we crop it
+        # In each line, the separator between meaningful sections
+        # is the character '@', therefore we transform each line to a list of
+        # meaningful sections
+        return line[4:].split('@')
+
+    @classmethod
     def select_ids(cls, in_directory=None, out_directory=None):
         if not in_directory and not out_directory:
             raise Exception("'in_directory', 'out_directory' are required")
@@ -41,14 +50,16 @@ class ContractNoemieFlowBatch(batch.BatchRootNoSelect):
         line_140 = None
         for file_name, file_path in files:
             with open(file_path, 'r') as _file:
-                for x in _file:
-                    if x.startswith('000'):
-                        date = x[55:61]
-                    elif x.startswith("140"):
-                        line_140 = x
-                    elif x.startswith("290"):
-                        line_290 = x
-                        all_elements.extend([(date, line_140, line_290)])
+                for line in _file:
+                    line_contents = cls.treat_file_line(line)
+                    for element in line_contents:
+                        if element.startswith('000'):
+                            date = element[55:61]
+                        elif element.startswith("140"):
+                            line_140 = element
+                        elif element.startswith("290"):
+                            line_290 = element
+                            all_elements.extend([(date, line_140, line_290)])
             shutil.move(file_path, out_directory)
 
         return all_elements
