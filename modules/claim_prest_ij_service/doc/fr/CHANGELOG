@@ -1,5 +1,6 @@
 * BUG#12546 Correction du batch pour attendre que tous les fichiers de la transaction soient traités avant de les archiver
 * OTH#00000 Traduire le champs Identification d'un mandat SEPA par RUM
+* BUG#12706 Gestion des filiales en éléments couverts et affiliations dans les traitements prest ij
 * BUG#11890 Annulation de la correction sur les conditions d'inscription automatique
 * BUG#11890 Correction des conditions d'inscription automatique en présence de franchise
 * BUG#11917 Correction de l'affichage des inscriptions dans le cas où il y en a une (régression de 11724)

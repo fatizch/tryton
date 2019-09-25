@@ -15,6 +15,7 @@ from itertools import groupby
 from trytond.pool import Pool
 from trytond.tools import grouped_slice
 from trytond.transaction import Transaction
+from trytond.config import config
 
 from trytond.modules.coog_core import batch, coog_date, fields
 
@@ -43,6 +44,8 @@ class BaseSelectPrestIj(batch.BatchRoot):
     def get_tables(cls, **kwargs):
         pool = Pool()
         party = pool.get('party.party').__table__()
+        covered_element = pool.get('contract.covered_element').__table__()
+        item_desc = pool.get('offered.item.description').__table__()
         contract = pool.get('contract').__table__()
         product = pool.get('offered.product').__table__()
         coverage = pool.get('offered.product-option.description').__table__()
@@ -56,6 +59,8 @@ class BaseSelectPrestIj(batch.BatchRoot):
 
         return {
             'party.party': party,
+            'contract.covered_element': covered_element,
+            'offered.item.description': item_desc,
             'party.party.company': pool.get('party.party').__table__(),
             'claim.ij.subscription.company':
             pool.get('claim.ij.subscription').__table__(),
@@ -76,6 +81,7 @@ class BaseSelectPrestIj(batch.BatchRoot):
         party = tables['party.party']
         benefit = tables['benefit']
         contract = tables['contract']
+        item_desc = tables['offered.item.description']
 
         if kwargs['kind'] == 'company':
             product = tables['offered.product']
@@ -90,11 +96,54 @@ class BaseSelectPrestIj(batch.BatchRoot):
                 ).join(benefit_rel,
                     condition=(option_desc.coverage == benefit_rel.coverage)
                 ).join(benefit,
-                    condition=(benefit_rel.benefit == benefit.id) &
-                    (benefit.prest_ij == Literal(True)))
+                    condition=(benefit_rel.benefit == benefit.id)
+                    & (benefit.prest_ij == Literal(True)))
 
             # TODO: Enhance performance with a subquery to filter contracts
             # 'contract.product.in_([x.id for x in products_subquery])'
+        elif kwargs['kind'] == 'subsidiary':
+            product = tables['offered.product']
+            covered_element = tables['contract.covered_element']
+            option_desc = tables['offered.product-option.description']
+            benefit_rel = tables['option.description-benefit']
+            return contract.join(covered_element,
+                    condition=covered_element.contract == contract.id
+                ).join(item_desc,
+                    condition=((covered_element.item_desc == item_desc.id)
+                        & (item_desc.kind == 'subsidiary'))
+                ).join(party,
+                       condition=covered_element.party == party.id
+                ).join(product,
+                    condition=(contract.product == product.id)
+                ).join(option_desc,
+                    condition=(product.id == option_desc.product)
+                ).join(benefit_rel,
+                    condition=(option_desc.coverage == benefit_rel.coverage)
+                ).join(benefit,
+                    condition=(benefit_rel.benefit == benefit.id)
+                    & (benefit.prest_ij == Literal(True)))
+        elif kwargs['kind'] == 'affiliated':
+            loss = tables['claim.loss']
+            service = tables['claim.service']
+            claim = tables['claim']
+            loss_desc = tables['benefit.loss.description']
+            company = tables['party.party.company']
+            covered_element = tables['contract.covered_element']
+            return loss.join(party, condition=(loss.covered_person == party.id)
+                ).join(claim, condition=(loss.claim == claim.id)
+                ).join(service, condition=(loss.id == service.loss)
+                ).join(contract, condition=(service.contract == contract.id)
+                ).join(covered_element, condition=(
+                        covered_element.contract == contract.id)
+                ).join(item_desc,
+                    condition=((covered_element.item_desc == item_desc.id)
+                        & (item_desc.kind == 'subsidiary'))
+                ).join(company, condition=(covered_element.party == company.id)
+                ).join(benefit, condition=(service.benefit == benefit.id)
+                    & (benefit.prest_ij == Literal(True))
+                ).join(loss_desc, condition=(loss.loss_desc == loss_desc.id)
+                    & (loss_desc.loss_kind == 'std')
+                )
         else:
             loss = tables['claim.loss']
             service = tables['claim.service']
@@ -106,10 +155,10 @@ class BaseSelectPrestIj(batch.BatchRoot):
                 ).join(service, condition=(loss.id == service.loss)
                 ).join(contract, condition=(service.contract == contract.id)
                 ).join(company, condition=(contract.subscriber == company.id)
-                ).join(benefit, condition=(service.benefit == benefit.id) &
-                    (benefit.prest_ij == Literal(True))
-                ).join(loss_desc, condition=(loss.loss_desc == loss_desc.id) &
-                    (loss_desc.loss_kind == 'std')
+                ).join(benefit, condition=(service.benefit == benefit.id)
+                    & (benefit.prest_ij == Literal(True))
+                ).join(loss_desc, condition=(loss.loss_desc == loss_desc.id)
+                    & (loss_desc.loss_kind == 'std')
                 )
 
     @classmethod
@@ -119,12 +168,12 @@ class BaseSelectPrestIj(batch.BatchRoot):
         subscription = tables['claim.ij.subscription']
         operation = kwargs.get('operation', 'cre')
         Operator = fields.SQL_OPERATORS['=' if operation == 'cre' else '!=']
-        if kwargs['kind'] == 'company':
+        if kwargs['kind'] in ('company', 'subsidiary'):
             sub_query = subscription.join(party, 'RIGHT OUTER', condition=(
-                    (subscription.siren == party.siren) &
-                    (subscription.ssn == Null))).select(party.id,
-                where=Operator(subscription.id, Null) &
-                (party.is_person == Literal(False)))
+                    (subscription.siren == party.siren)
+                    & (subscription.ssn == Null))).select(party.id,
+                where=Operator(subscription.id, Null)
+                & (party.is_person == Literal(False)))
             return party.id.in_(sub_query)
         else:
             sub_query = subscription.select(subscription.ssn,
@@ -141,11 +190,11 @@ class BaseSelectPrestIj(batch.BatchRoot):
         kind = kwargs['kind']
 
         cursor = Transaction().connection.cursor()
-        to_select = (party.siren,) if kind == 'company' else (
+        to_select = (party.siren,) if kind in ('company', 'subsidiary') else (
             party.ssn, company.siren)
         cursor.execute(*cls.get_query_table(tables, **kwargs).select(
             *to_select, where=cls.get_where_clause(tables, **kwargs)))
-        if kind == 'company':
+        if kind in ('company', 'subsidiary'):
             return [(x,) for x in {p for p, in cursor.fetchall()}]
         else:
             return [(x, siren)
@@ -161,30 +210,50 @@ class CreatePrestIjSubscription(BaseSelectPrestIj):
     @classmethod
     def parse_params(cls, params):
         params = super(CreatePrestIjSubscription, cls).parse_params(params)
-        assert params.get('kind') in ('company', 'person'), 'Invalid kind'
+        assert params.get('kind') in ('company', 'person', 'subsidiary',
+            'affiliated'), 'Invalid kind'
+        with_subsidiary = config.getboolean(
+            'prest_ij', 'with_subsidiary', default=False)
+        if with_subsidiary:
+            params['kind'] = {
+                'person': 'affiliated',
+                'company': 'subsidiary',
+                }.get(params['kind'],
+                params['kind'])
         return params
 
     @classmethod
     def get_tables(cls, **kwargs):
         tables = super(CreatePrestIjSubscription, cls).get_tables(**kwargs)
-        tables['contract.covered_element'] = Pool().get(
-            'contract.covered_element').__table__()
         tables['contract.covered_element.population'] = Pool().get(
             'contract.covered_element').__table__()
         return tables
 
     @classmethod
     def get_query_table(cls, tables, **kwargs):
-        if kwargs.get('kind') == 'company':
+        subscription = tables['claim.ij.subscription']
+        company = tables['party.party.company']
+        party = tables['party.party']
+        contract = tables['contract']
+        cov_elem = tables['contract.covered_element']
+        population = tables['contract.covered_element.population']
+        item_desc = tables['offered.item.description']
+        if kwargs.get('kind') in ('company', 'subsidiary'):
             return super(CreatePrestIjSubscription, cls).get_query_table(
                 tables, **kwargs)
+        elif kwargs.get('kind') == 'affiliated':
+            return cov_elem.join(party, condition=(
+                    (cov_elem.party == party.id) & (cov_elem.parent != Null))
+                ).join(population, condition=(cov_elem.parent == population.id)
+                ).join(item_desc,
+                       condition=((population.item_desc == item_desc.id)
+                            & (item_desc.kind == 'subsidiary'))
+                ).join(contract, condition=(population.contract == contract.id)
+                ).join(company, condition=(population.party == company.id)
+                ).join(subscription, condition=(
+                        company.siren == subscription.siren) & (
+                        subscription.activated == Literal(True)))
         else:
-            subscription = tables['claim.ij.subscription']
-            company = tables['party.party.company']
-            party = tables['party.party']
-            contract = tables['contract']
-            cov_elem = tables['contract.covered_element']
-            population = tables['contract.covered_element.population']
             return cov_elem.join(party, condition=(
                     (cov_elem.party == party.id) & (cov_elem.parent != Null))
                 ).join(population, condition=(cov_elem.parent == population.id)
@@ -200,7 +269,7 @@ class CreatePrestIjSubscription(BaseSelectPrestIj):
         Subscription = pool.get('claim.ij.subscription')
         for sliced_objects in grouped_slice(objects):
             values = []
-            if kind == 'company':
+            if kind in ('company', 'subsidiary'):
                 for siren, in sliced_objects:
                     if siren:
                         values.append({'siren': siren})
@@ -233,7 +302,6 @@ class SubmitPersonPrestIjSubscription(BaseSelectPrestIj):
         pool = Pool()
         tables = super(SubmitPersonPrestIjSubscription, cls).get_tables(
             **kwargs)
-
         if 'claim.ij.subscription' not in tables:
             tables['claim.ij.subscription'] = pool.get(
                     'claim.ij.subscription').__table__()
@@ -247,6 +315,10 @@ class SubmitPersonPrestIjSubscription(BaseSelectPrestIj):
     def parse_params(cls, params):
         params = super(SubmitPersonPrestIjSubscription, cls).parse_params(
             params)
+        with_subsidiary = config.getboolean(
+            'prest_ij', 'with_subsidiary', default=False)
+        if with_subsidiary:
+            params['kind'] = 'affiliated'
         assert params.get('operation') in ('cre', 'sup'), 'Invalid operation'
         return params
 
@@ -257,17 +329,21 @@ class SubmitPersonPrestIjSubscription(BaseSelectPrestIj):
         request = tables['claim.ij.subscription_request']
         company = tables['party.party.company']
         company_sub = tables['claim.ij.subscription.company']
+        cpy_kwargs = {}
+
+        cpy_kwargs.update(kwargs)
         query_table = super(SubmitPersonPrestIjSubscription, cls
-            ).get_query_table(tables, kind='person', **kwargs
+            ).get_query_table(tables, kind=cpy_kwargs.pop('kind', 'person'),
+                **cpy_kwargs
             ).join(subscription,
-                condition=(party.ssn == subscription.ssn) &
-                (company.siren == subscription.siren))
+                condition=(party.ssn == subscription.ssn)
+                & (company.siren == subscription.siren))
         if kwargs['operation'] == 'cre':
             query_table = query_table.join(company_sub,
-                    condition=(company.siren == company_sub.siren) &
-                    (company_sub.ssn == Null) &
-                    (company_sub.activated == Literal(True)) &
-                    (company_sub.state == 'declaration_confirmed'))
+                    condition=(company.siren == company_sub.siren)
+                    & (company_sub.ssn == Null)
+                    & (company_sub.activated == Literal(True))
+                    & (company_sub.state == 'declaration_confirmed'))
 
         return query_table.join(request, 'LEFT OUTER', condition=(
             request.subscription == subscription.id))
@@ -297,25 +373,25 @@ class SubmitPersonPrestIjSubscription(BaseSelectPrestIj):
         loss = tables['claim.loss']
         operation = kwargs['operation']
         having_clause = Sum(Case((
-                        (request.state == 'unprocessed') &
-                        (request.operation == operation), 1), else_=0)
+                        (request.state == 'unprocessed')
+                        & (request.operation == operation), 1), else_=0)
                 ) == 0
         if operation == 'sup':
             # dont generate request if there are losses without end date and
             # wait for 2 months before sending SUP request
-            having_clause &= (Max(Coalesce(loss.end_date, datetime.date.max)) <
-                min_end_date)
+            having_clause &= (
+                Max(Coalesce(loss.end_date, datetime.date.max)) < min_end_date)
         return having_clause
 
     @classmethod
-    def select_ids(cls, treatment_date, operation):
+    def select_ids(cls, treatment_date, operation, **kwargs):
         '''
         when operation is cre, ids returned are services
         when operation is sup, ids returned are subscription
         '''
         cursor = Transaction().connection.cursor()
         tables = cls.get_tables(treatment_date=treatment_date,
-            operation=operation)
+            operation=operation, **kwargs)
         service = tables['claim.service']
         party = tables['party.party']
         company = tables['party.party.company']
@@ -328,13 +404,14 @@ class SubmitPersonPrestIjSubscription(BaseSelectPrestIj):
             groupby = [party.id, company.id, subscription.id]
 
         query_table = cls.get_query_table(tables,
-            treatment_date=treatment_date, operation=operation)
+            treatment_date=treatment_date, operation=operation, **kwargs)
         where_clause = cls.get_where_clause(tables,
-            treatment_date=treatment_date, operation=operation)
+            treatment_date=treatment_date, operation=operation, **kwargs)
         cursor.execute(*query_table.select(*fields_to_select,
                 where=where_clause,
                 having=cls.get_having_clause(tables,
-                    treatment_date=treatment_date, operation=operation),
+                    treatment_date=treatment_date, operation=operation,
+                    **kwargs),
                 group_by=groupby,
                 order_by=[party.id, company.id]))
         for object_id, in cursor.fetchall():
@@ -352,7 +429,7 @@ class SubmitPersonPrestIjSubscription(BaseSelectPrestIj):
                 yield (object_id, )
 
     @classmethod
-    def execute(cls, objects, ids, treatment_date, operation):
+    def execute(cls, objects, ids, treatment_date, operation, **kwargs):
         Pool().get('claim.ij.subscription').create_subscription_requests(
             objects, operation, treatment_date, kind='person')
 
@@ -376,6 +453,10 @@ class SubmitCompanyPrestIjSubscription(BaseSelectPrestIj):
         params = super(SubmitCompanyPrestIjSubscription, cls).parse_params(
             params)
         assert params.get('operation') in ('cre', 'sup'), 'Invalid operation'
+        with_subsidiary = config.getboolean(
+            'prest_ij', 'with_subsidiary', default=False)
+        if with_subsidiary:
+            params['kind'] = 'subsidiary'
         return params
 
     @classmethod
@@ -396,14 +477,28 @@ class SubmitCompanyPrestIjSubscription(BaseSelectPrestIj):
         request = tables['claim.ij.subscription_request']
         contract = tables['contract']
         party = tables['party.party']
+        item_desc = tables['offered.item.description']
+        kind = kwargs.get('kind', 'company')
+        covered_element = tables['contract.covered_element']
         if kwargs['operation'] == 'cre':
-            query_table = party.join(contract,
-                condition=(contract.subscriber == party.id)
+            if kind == 'company':
+                query_table = party.join(contract,
+                    condition=(contract.subscriber == party.id)
+                    ).join(subscription,
+                        condition=(party.siren == subscription.siren))
+            else:
+                query_table = contract.join(covered_element, condition=(
+                        covered_element.contract == contract.id)
+                ).join(item_desc,
+                    condition=((covered_element.item_desc == item_desc.id)
+                        & (item_desc.kind == 'subsidiary'))
+                ).join(party,
+                    condition=covered_element.party == party.id
                 ).join(subscription,
-                    condition=(party.siren == subscription.siren))
+                       condition=(party.siren == subscription.siren))
         else:
             query_table = super(SubmitCompanyPrestIjSubscription, cls
-                ).get_query_table(tables, kind='company', **kwargs
+                ).get_query_table(tables, kind=kind, **kwargs
                 ).join(subscription,
                     condition=(party.siren == subscription.siren))
         return query_table.join(request, 'LEFT OUTER', condition=(
@@ -421,7 +516,8 @@ class SubmitCompanyPrestIjSubscription(BaseSelectPrestIj):
             where_clause &= (subscription.ssn == Null)
         else:
             where_clause = super(SubmitCompanyPrestIjSubscription, cls
-                ).get_where_clause(tables, kind='company', **kwargs)
+                ).get_where_clause(tables, kwargs.get('kind', 'company'),
+                    **kwargs)
             where_clause &= (subscription.state == 'declaration_confirmed')
             where_clause &= (contract.status == 'terminated')
             where_clause &= (subscription.ssn == Null)
@@ -432,26 +528,27 @@ class SubmitCompanyPrestIjSubscription(BaseSelectPrestIj):
         request = tables['claim.ij.subscription_request']
         operation = kwargs['operation']
         having_clause = Sum(Case((
-                        (request.state == 'unprocessed') &
-                        (request.operation == operation), 1), else_=0)
+                        (request.state == 'unprocessed')
+                        & (request.operation == operation), 1), else_=0)
                 ) == 0
         return having_clause
 
     @classmethod
-    def select_ids(cls, treatment_date, operation):
+    def select_ids(cls, treatment_date, operation, **kwargs):
         cursor = Transaction().connection.cursor()
         tables = cls.get_tables(treatment_date=treatment_date,
-            operation=operation)
+            operation=operation, **kwargs)
         subscription = tables['claim.ij.subscription']
         contract = tables['contract']
         query_table = cls.get_query_table(tables,
-            treatment_date=treatment_date, operation=operation)
+            treatment_date=treatment_date, operation=operation, **kwargs)
         where_clause = cls.get_where_clause(tables,
-            treatment_date=treatment_date, operation=operation)
+            treatment_date=treatment_date, operation=operation, **kwargs)
         cursor.execute(*query_table.select(subscription.id, contract.id,
                 where=where_clause,
                 having=cls.get_having_clause(tables,
-                    treatment_date=treatment_date, operation=operation),
+                    treatment_date=treatment_date, operation=operation,
+                    **kwargs),
                 group_by=[subscription.id, contract.id],
                 order_by=[subscription.id, contract.id]
                 ))
@@ -469,7 +566,7 @@ class SubmitCompanyPrestIjSubscription(BaseSelectPrestIj):
                     continue
 
     @classmethod
-    def execute(cls, objects, ids, treatment_date, operation):
+    def execute(cls, objects, ids, treatment_date, operation, **kwargs):
         Pool().get('claim.ij.subscription').create_subscription_requests(
             objects, operation, treatment_date, kind='company')
 

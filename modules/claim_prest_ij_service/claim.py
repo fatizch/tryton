@@ -799,10 +799,17 @@ class ClaimIjSubscription(CoogProcessFramework, model.CoogView):
                 for key, services in groupby(objects, key=lambda x: (
                             x.loss.covered_person, x.contract.subscriber)):
                     services = list(services)
+                    covered_element = services[-1].theoretical_covered_element
                     covered, subscriber = key
+                    siren_clause = ('siren', '=', subscriber.siren),
+                    if covered_element and covered_element.parent and \
+                            covered_element.parent.item_desc.kind == \
+                            'subsidiary':
+                        siren_clause = (
+                            'siren', '=', covered_element.parent.party.siren)
                     sub, = Pool().get('claim.ij.subscription').search([
                             ('ssn', '=', covered.ssn),
-                            ('siren', '=', subscriber.siren),
+                            siren_clause,
                             ])
                     min_start_date = min(
                         [x.prest_ij_start_date() for x in services])
