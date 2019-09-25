@@ -428,6 +428,10 @@ class CreateExtraPremium(Wizard):
             if (new_extra_premium['manual_start_date'] ==
                     self.select_options.contract.start_date):
                 del new_extra_premium['manual_start_date']
+            for fname, field_ in ExtraPremium._fields.items():
+                if isinstance(field_, fields.Function) and not \
+                        field_.setter and fname in new_extra_premium:
+                    del new_extra_premium[fname]
             to_create.append(new_extra_premium)
         ExtraPremium.create(to_create)
 
