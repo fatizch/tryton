@@ -67,6 +67,12 @@ class Account(export.ExportImportMixin, metaclass=PoolMeta):
         assert self.type == 'distribution_over_extra_details'
         return [(self, amount, {})]
 
+    @classmethod
+    def copy(cls, instances, default=None):
+        default = default.copy() if default else {}
+        default['code'] = 'temp_for_copy'
+        return super(Account, cls).copy(instances, default=default)
+
 
 class AccountDistribution(export.ExportImportMixin, metaclass=PoolMeta):
     __name__ = 'analytic_account.account.distribution'

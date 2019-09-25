@@ -37,10 +37,17 @@ class Rule(export.ExportImportMixin, metaclass=PoolMeta):
         distribution_over_details_accounts = [a.account
             for r in rules
             for a in r.analytic_accounts
-            if a.account.type == 'distribution_over_extra_details']
+            if (a.account and
+                a.account.type == 'distribution_over_extra_details')]
         if distribution_over_details_accounts:
             raise ValidationError(gettext(
                     'analytic_coog.msg_accounts_with_extra_details',
                     accounts='\n'.join(
                         a.rec_name for a in distribution_over_details_accounts)
                     ))
+
+    @classmethod
+    def copy(cls, instances, default=None):
+        default = default.copy() if default else {}
+        default['code'] = 'temp_for_copy'
+        return super(Rule, cls).copy(instances, default=default)

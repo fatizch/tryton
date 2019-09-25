@@ -1,3 +1,5 @@
+OTH#00000 Correction d'un crash lors de la sauvegarde d'une règle d'analytique sans compte défini
+
 Version 2.4 - 2019-04-12
 Version 2.2 - 2018-10-12
 * FEA#9939 Initialisation du schéma du compte analytique en fonction de son type

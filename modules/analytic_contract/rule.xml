@@ -11,5 +11,10 @@ this repository contains the full copyright notices and license terms. -->
             <field name="inherit" ref="analytic_account.rule_view_form"/>
             <field name="name">rule_form</field>
         </record>
+        <record model="ir.ui.view" id="rule_view_list">
+            <field name="model">analytic_account.rule</field>
+            <field name="inherit" ref="analytic_account.rule_view_list"/>
+            <field name="name">rule_list</field>
+        </record>
     </data>
 </tryton>
