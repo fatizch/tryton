@@ -70,36 +70,41 @@ coog_db_demo() { # Create a demo database
 
     Configuration can be controlled with the following env variables :
 
-    - GEN_COOG_USER : User name to connect to (in the case of an existing
+    - GEN_COOG_USER: User name to connect to (in the case of an existing
         database)
-    - GEN_COOG_PASSWORD : User password to use for connection, or password for
+    - GEN_COOG_PASSWORD: User password to use for connection, or password for
         the admin user for a new database, default 'admin'
 
-    - GEN_DB_NAME : The name of the database to work on, default 'generated'
+    - GEN_DB_NAME: The name of the database to work on, default 'generated'
 
-    - GEN_CREATE_NEW_DB : If True, the database will be dropped if it exists,
+    - GEN_CREATE_NEW_DB: If True, the database will be dropped if it exists,
         then recreated from scratch
-    - GEN_RESTORE_DB : If True, the database will be restored from an existing
+    - GEN_RESTORE_DB: If True, the database will be restored from an existing
         template, useful when working on the script
-    - GEN_RESTORE_FROM : The name of the database to restore from
+    - GEN_RESTORE_FROM: The name of the database to restore from
 
-    - GEN_BASIC_INIT : If True, basic initialization of the database will be
+    - GEN_BASIC_INIT: If True, basic initialization of the database will be
         done
-    - GEN_LOAD_ZIP_CODES : If True, zip codes will be loaded from the
+    - GEN_LOAD_ZIP_CODES: If True, zip codes will be loaded from the
         associated test cases
-    - GEN_LOAD_BANKS : If True, banks will be created from the test case
+    - GEN_LOAD_BANKS: If True, banks will be created from the test case
         referential
-    - GEN_LOAD_ACCOUNTING : If True, a default accounting will be created
-    - GEN_CREATE_PROCESSES : If True, processes will be created from scratch
-    - GEN_CREATE_ACTORS : If True, actors (insurer, brokers, etc) will be
+    - GEN_LOAD_ACCOUNTING: If True, a default accounting will be created
+    - GEN_CREATE_PROCESSES: If True, processes will be created from scratch
+    - GEN_CREATE_ACTORS: If True, actors (insurer, brokers, etc) will be
         created
-    - GEN_CREATE_PRODUCTS : If True, some default products will be created
-    - GEN_CREATE_COMMISSION_CONFIG' : If True, commission plans for insurer /
+    - GEN_CREATE_PRODUCTS: If True, some default products will be created
+    - GEN_CREATE_COMMISSION_CONFIG': If True, commission plans for insurer /
         brokers will be generated
-    - GEN_CREATE_CONTRACTS : If True, contracts will be subscribed on all
+    - GEN_CREATE_CONTRACTS: If True, contracts will be subscribed on all
         available products
-    - GEN_BILL_CONTRACTS : If True, contracts will be billed, paid, and
+    - GEN_BILL_CONTRACTS: If True, contracts will be billed, paid, and
         commissionned
+    - GEN_CREATE_CLAIMS: If True, claims will be created, treated and paid
+    - GEN_GENERATE_REPORTINGS: If True, insurer / broker invoices will be
+        generated and associated reports will be run
+    - GEN_TEST_APIS: If True, a default api configuration will be made, and
+        some APIs will be tested
     "
     if [ "$1" = "help" ]; then
         echo -e "$demo_help" && return 1

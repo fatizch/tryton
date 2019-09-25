@@ -411,6 +411,10 @@ msgctxt "model:ir.action,name:act_underwriting_decision_form"
 msgid "Underwriting Decision"
 msgstr "Décision d'analyse risques"
 
+msgctxt "model:ir.message,text:msg_missing_underwriting"
+msgid "The underwriting was not run"
+msgstr "L'analyse de risque n'a pas été effectuée"
+
 msgctxt "model:ir.message,text:msg_postponed"
 msgid "The underwriting decision is postponed."
 msgstr "La décision d'analyse de risques est reportée."

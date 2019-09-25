@@ -250,6 +250,11 @@ class ContractUnderwriting(model.CoogSQL, model.CoogView,
     def init_dict_for_rule_engine(self, args):
         args['underwriting'] = self
 
+    def _underwriting_for_option(self, option):
+        for option_underwriting in self.underwriting_options:
+            if option_underwriting.option == option:
+                return option_underwriting
+
 
 class ContractUnderwritingOption(model.CoogSQL, model.CoogView,
         with_extra_data(['option_underwriting'])):
@@ -394,6 +399,10 @@ class Contract(metaclass=PoolMeta):
             set(['underwritings']))
 
     def check_underwriting_complete(self):
+        if (any(x.coverage.underwriting_rules for x in self.get_all_options())
+                and not self.underwritings):
+            raise ValidationError(gettext(
+                    'contract_underwriting.msg_missing_underwriting'))
         if self.underwritings:
             self.underwritings[-1].check_decision()
 
@@ -446,6 +455,10 @@ class Contract(metaclass=PoolMeta):
             if ExtraData._extra_data_struct(k)['kind']
             != 'contract_underwriting'}
         self.extra_datas[-1].extra_data_values = self.extra_data_values
+
+    def before_activate(self):
+        super(Contract, self).before_activate()
+        self.check_underwriting_complete()
 
 
 class ContractOption(metaclass=PoolMeta):

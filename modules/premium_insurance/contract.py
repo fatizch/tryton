@@ -52,8 +52,11 @@ class ExtraPremium(metaclass=PoolMeta):
             'required': Eval('calculation_kind', '') == 'flat'},
             depends=['calculation_kind'],
             domain=[If(Eval('calculation_kind') == 'rate',
-                ('flat_amount_frequency', '=', ''),
-                ('flat_amount_frequency', '!=', ''))])
+                ['OR',
+                    ('flat_amount_frequency', '=', ''),
+                    ('flat_amount_frequency', '=', None),
+                    ],
+                [('flat_amount_frequency', '!=', '')])])
     premiums = fields.One2Many('contract.premium', 'extra_premium',
         'Premiums', delete_missing=True, target_not_required=True,
         readonly=True)

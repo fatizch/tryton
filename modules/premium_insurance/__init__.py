@@ -4,6 +4,7 @@ from trytond.pool import Pool
 
 from . import offered
 from . import contract
+from . import api
 
 
 def register():
@@ -16,3 +17,8 @@ def register():
         contract.ExtraPremium,
         contract.Premium,
         module='premium_insurance', type_='model')
+
+    Pool.register(
+        api.APIContractUnderwriting,
+        module='premium_insurance', type_='model', depends=['api',
+            'contract_underwriting'])

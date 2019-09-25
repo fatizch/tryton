@@ -1,10 +1,9 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
-from trytond.model import Unique
 from trytond.transaction import Transaction
 from trytond.pool import Pool
 
-from trytond.modules.coog_core import model, fields, coog_string
+from trytond.modules.coog_core import model, fields
 
 
 __all__ = [
@@ -13,29 +12,14 @@ __all__ = [
     ]
 
 
-class ExclusionKind(model.CoogSQL, model.CoogView):
+class ExclusionKind(model.CodedMixin, model.CoogView):
     'Exclusion Kind'
 
     __name__ = 'offered.exclusion'
 
-    name = fields.Char('Name', required=True, translate=True)
-    code = fields.Char('Code', required=True)
     text = fields.Text('Text', translate=True)
     groups = fields.Many2Many('offered.exclusion-res.group',
         'exclusion_kind', 'group', 'Groups', help='Exclusion kind groups')
-
-    @classmethod
-    def __setup__(cls):
-        super(ExclusionKind, cls).__setup__()
-        t = cls.__table__()
-        cls._sql_constraints += [
-            ('code_uniq', Unique(t, t.code), 'The code must be unique!'),
-            ]
-
-    @fields.depends('name', 'code')
-    def on_change_name(self):
-        if not self.code:
-            self.code = coog_string.slugify(self.name)
 
     @classmethod
     def search_rec_name(cls, name, clause):

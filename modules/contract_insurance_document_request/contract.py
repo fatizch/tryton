@@ -63,8 +63,8 @@ class Contract(RemindableInterface, metaclass=PoolMeta):
 
     @classmethod
     def _calculate_methods(cls, product):
-        return super(Contract, cls)._calculate_methods(product) + [('contract',
-                'init_subscription_document_request')]
+        return super(Contract, cls)._calculate_methods(product) + [
+            ('contract', 'init_subscription_document_request')]
 
     @classmethod
     def get_calculated_required_documents(cls, contracts):

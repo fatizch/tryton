@@ -18,6 +18,57 @@ class APIContract(metaclass=PoolMeta):
     __name__ = 'api.contract'
 
     @classmethod
+    def _get_option(cls, contract, data):
+        '''
+            Identifies an option on a contract based on given data.
+
+            The typical use case will have data including a party (for
+            identifiying the covered element) and a coverage.
+        '''
+        pool = Pool()
+        API = pool.get('api')
+
+        if 'id' in data:
+            return API.instantiate_code_object('contract.option',
+                {'id': data['id']})
+        elif 'party' in data:
+            # Identify parent from covered_elements
+            matches = [x for x in contract.covered_elements
+                if x.party == data['party']]
+            if len(matches) == 1:
+                parent = matches[0]
+            elif len(matches) == 0:
+                API.add_input_error({
+                        'type': 'unknown_party_on_contract',
+                        'data': {
+                            'party': data['party'].rec_name,
+                            'contract': contract.rec_name,
+                            },
+                        })
+            else:
+                API.add_input_error({
+                        'type': 'multiple_party_matches_on_contract',
+                        'data': {
+                            'party': data['party'].rec_name,
+                            'contract': contract.rec_name,
+                            },
+                        })
+        else:
+            parent = contract
+
+        for option in parent.options:
+            if option.coverage == data['coverage']:
+                return option
+
+        API.add_input_error({
+                'type': 'unknown_option_on_contract',
+                'data': {
+                    'parent': parent.rec_name,
+                    'option': data['coverage'].name,
+                    },
+                })
+
+    @classmethod
     def _update_contract_parameters(cls, contract_data, created):
         super()._update_contract_parameters(contract_data, created)
         for covered in contract_data.get('covereds', []):

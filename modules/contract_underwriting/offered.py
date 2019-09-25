@@ -1,7 +1,6 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import PoolMeta
-from trytond.model import Unique
 from trytond.pyson import Eval, Or, Bool
 from trytond import backend
 from trytond.transaction import Transaction
@@ -27,14 +26,11 @@ UNDERWRITING_STATUSES = [
     ]
 
 
-class UnderwritingDecision(model.CoogSQL, model.CoogView):
+class UnderwritingDecision(model.CodedMixin, model.CoogView):
     'Underwriting Decision'
 
     __name__ = 'underwriting.decision'
-    _func_key = 'code'
 
-    code = fields.Char('Code', required=True, select=True)
-    name = fields.Char('Name', required=True, translate=True)
     status = fields.Selection(UNDERWRITING_STATUSES, 'Status', required=True)
     status_string = status.translated('status')
     level = fields.Selection([
@@ -76,14 +72,6 @@ class UnderwritingDecision(model.CoogSQL, model.CoogView):
                 "SET status = 'accepted_with_conditions' "
                 "WHERE with_subscriber_validation = 'TRUE' ")
             table.drop_column('with_subscriber_validation')
-
-    @classmethod
-    def __setup__(cls):
-        super(UnderwritingDecision, cls).__setup__()
-        t = cls.__table__()
-        cls._sql_constraints += [
-            ('code_unique', Unique(t, t.code), 'The code must be unique'),
-            ]
 
     def get_rec_name(self, name):
         return self.name
@@ -127,7 +115,7 @@ class OptionDescription(metaclass=PoolMeta):
     __name__ = 'offered.option.description'
 
     underwriting_rules = fields.One2Many(
-        'underwriting.rule', 'coverage', 'Underwriting Rules',
+        'underwriting.rule', 'coverage', 'Underwriting Rules', size=1,
         help='Rule that defines underwriting behavior during option '
         'subscription', delete_missing=True)
 

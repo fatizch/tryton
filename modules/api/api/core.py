@@ -151,10 +151,7 @@ def apify(klass, api_name):
                         if context.get('_validate', False):
                             return True
 
-                    # Second error manager for the few cases where it either is
-                    # not worth to check in the first phase
-                    with api_input_error_manager():
-                        result = function(Model, parameters)
+                    result = function(Model, parameters)
                     return Api.handle_result(
                         Model, api_name, parameters, result)
                 except Exception as e:
@@ -416,9 +413,11 @@ class APIModel(Model):
 
     @classmethod
     def add_input_error(cls, error_data):
-        # For now, we will assume that APIs are properly executed with the
-        # context manager set
-        ServerContext().get('_api_input_errors').append(error_data)
+        errors = ServerContext().get('_api_input_errors', None)
+        if errors is None:
+            raise APIInputError([error_data])
+
+        errors.append(error_data)
 
     @classmethod
     def check_access(cls, klass, api_name):

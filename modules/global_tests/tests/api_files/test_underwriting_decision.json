@@ -1,0 +1,31 @@
+{
+    "contract": {"number": "%(quote_number)s"},
+    "decision": {
+        "code": "contract_accepted_with_conditions"
+    },
+    "options": [
+        {
+            "coverage": {"code": "death_coverage"},
+            "party": {"code": "%(party_code)s"},
+            "decision": {"code": "coverage_accepted_with_conditions"},
+            "exclusions": [
+                {
+                    "type": {"code": "exclusion_1"},
+                    "custom_content": "Bad smoking habit"
+                }
+            ],
+            "extra_premiums": [
+                {
+                    "type": {"code": "extra_premium_1"},
+                    "mode": "rate",
+                    "rate": "0.21"
+                },
+                {
+                    "type": {"code": "extra_premium_2"},
+                    "mode": "flat",
+                    "flat_amount": "120"
+                }
+            ]
+        }
+    ]
+}

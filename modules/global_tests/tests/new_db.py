@@ -72,7 +72,7 @@ CREATE_CONTRACTS = parse_environ('GEN_CREATE_CONTRACTS', True)
 BILL_CONTRACTS = parse_environ('GEN_BILL_CONTRACTS', True)
 CREATE_CLAIMS = parse_environ('GEN_CREATE_CLAIMS', True)
 GENERATE_REPORTINGS = parse_environ('GEN_GENERATE_REPORTINGS', True)
-TEST_APIS = parse_environ('GEN_TEST_APIS', False)
+TEST_APIS = parse_environ('GEN_TEST_APIS', True)
 
 
 assert TESTING or (RESTORE_DB and not CREATE_NEW_DB
@@ -279,6 +279,8 @@ AccountProduct = Model.get('product.product')
 AccountProductTemplate = Model.get('product.template')
 AccountTemplate = Model.get('account.account.template')
 AnalyticAccount = Model.get('analytic_account.account')
+ApiIdentity = Model.get('ir.api.identity')
+ApiToken = Model.get('api.token')
 AverageLoanPremiumRule = Model.get('loan.average_premium_rule')
 Benefit = Model.get('benefit')
 BenefitEligibilityDecision = Model.get('benefit.eligibility.decision')
@@ -307,8 +309,10 @@ Channel = Model.get('distribution.channel')
 DocumentDescription = Model.get('document.description')
 DunningProcedure = Model.get('account.dunning.procedure')
 EventDesc = Model.get('benefit.event.description')
+ExclusionKind = Model.get('offered.exclusion')
 ExtraData = Model.get('extra_data')
 ExtraDetails = Model.get('extra_details.configuration')
+ExtraPremiumKind = Model.get('extra_premium.kind')
 FiscalYear = Model.get('account.fiscalyear')
 Group = Model.get('res.group')
 Indemnification = Model.get('claim.indemnification')
@@ -2196,6 +2200,30 @@ if CREATE_PRODUCTS:  # {{{
         [('code', '=', 'reglement_sinistres_taxes_reduites')])
     # }}}
 
+    do_print('\nCreating exclusion kinds')  # {{{
+    exclusion_1 = ExclusionKind()
+    exclusion_1.name = 'Exclusion 1'
+    exclusion_1.code = 'exclusion_1'
+    exclusion_1.save()
+
+    exclusion_2 = ExclusionKind()
+    exclusion_2.name = 'Exclusion 2'
+    exclusion_2.code = 'exclusion_2'
+    exclusion_2.save()
+    # }}}
+
+    do_print('\nCreating extra premiums kinds')  # {{{
+    extra_premium_1 = ExtraPremiumKind()
+    extra_premium_1.name = 'Extra Premium 1'
+    extra_premium_1.code = 'extra_premium_1'
+    extra_premium_1.save()
+
+    extra_premium_2 = ExtraPremiumKind()
+    extra_premium_2.name = 'Extra Premium 2'
+    extra_premium_2.code = 'extra_premium_2'
+    extra_premium_2.save()
+    # }}}
+
     do_print('\nCreating claim sub status')  # {{{
     non_eligible = ClaimSubStatus()
     non_eligible.code = 'non_eligible'
@@ -3611,6 +3639,8 @@ else:
     option_accepted.decline_option = False
     option_accepted.contract_decisions.append(
         UnderwritingDecision(contract_accepted.id))
+    option_accepted.contract_decisions.append(
+        UnderwritingDecision(contract_accepted_conditions.id))
     option_accepted.save()
 
     option_accepted_conditions = UnderwritingDecision()
@@ -4023,6 +4053,8 @@ else:
         Clause(custom_beneficiary_clause.id))
     death_coverage.default_beneficiary_clause = standard_beneficiary_clause
     death_coverage.benefits.append(Benefit(capital_benefit.id))
+    death_coverage.with_exclusions = True
+    death_coverage.with_extra_premiums = True
     death_coverage.save()
     # }}}
 
@@ -5995,12 +6027,37 @@ if TEST_APIS:  # {{{
     api_user, = User.find([('login', '=', 'coog_api_user')])
     api_user.password = 'poiuytreza'
     api_user.save()
+
+    api_identity = ApiIdentity()
+    api_identity.identifier = 'coog_api_user'
+    api_identity.kind = 'generic'
+    api_identity.user = api_user
+    api_identity.save()
+
+    api_token = ApiToken()
+    api_token.name = 'coog_api_user'
+    api_token.user = api_user
+    api_token.key = '76600ced5ee349d767a0fd838886ab354de929bf991294d0'
+    api_token.save()
+
+    broker_user, = User.find([('login', '=', 'jean.petit')])
+    broker_identity = ApiIdentity()
+    broker_identity.identifier = 'jean.petit'
+    broker_identity.kind = 'generic'
+    broker_identity.user = broker_user
+    broker_identity.save()
+
+    broker_token = ApiToken()
+    broker_token.name = 'jean.petit'
+    broker_token.user = broker_user
+    broker_token.key = '4e277c36d6f75862b33bcddd9db8c482cfb203ebad6b2145'
+    broker_token.save()
     # }}}
 
     do_print('    Creating a contract')  # {{{
     result = run_api(
         'api.contract.subscribe_contracts',
-        'api_files/compute_questionnaire.json',
+        'api_files/subscriber_life_contract.json',
         {
             'part_1_id': questionnaire_sante_prev.parts[0].id,
             'part_2_id': questionnaire_sante_prev.parts[1].id,
@@ -6009,6 +6066,19 @@ if TEST_APIS:  # {{{
 
     # Simply check this is not an error.
     assert_eq('contracts' in result, True)
+
+    # Validate underwriting
+    result = run_api(
+        'api.contract.update_underwriting',
+        'api_files/test_underwriting_decision.json',
+        {
+            'quote_number': result['contracts'][0]['number'],
+            'party_code': Party(result['parties'][0]['id']).code,
+            },
+        {'_debug_server': True})
+
+    # Simply check this is not an error.
+    assert_eq(result, None)
 
     result = run_api(
         'api.contract.subscribe_contracts',

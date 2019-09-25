@@ -212,4 +212,13 @@ this repository contains the full copyright notices and license terms. -->
             <field name="perm_delete" eval="False"/>
         </record>
     </data>
+    <data depends="api">
+        <!-- ############## -->
+        <!-- # API Access # -->
+        <!-- ############## -->
+        <record model="ir.api.access" id="update_underwriting_default_access">
+            <field name="api">api.contract.update_underwriting</field>
+            <field name="group" ref="api.group_default_api"/>
+        </record>
+    </data>
 </tryton>

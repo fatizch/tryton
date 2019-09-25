@@ -202,6 +202,9 @@ class DateClass(metaclass=PoolMeta):
     def today(cls, timezone=None):
         ctx_date = Transaction().context.get('client_defined_date')
         if ctx_date:
+            if isinstance(ctx_date, str):
+                ctx_date = datetime.datetime.strptime(
+                    ctx_date, '%Y-%m-%d').date()
             return ctx_date
         else:
             return super(DateClass, cls).today(timezone=timezone)

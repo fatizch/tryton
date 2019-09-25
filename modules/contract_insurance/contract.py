@@ -2330,9 +2330,11 @@ class ExtraPremium(model.CoogSQL, model.CoogView, ModelCurrency):
         return self.manual_start_date or self.option.initial_start_date
 
     def get_end_date(self, name):
+        calculated = self.calculate_end_date()
+        manual = self.manual_end_date
         if self.manual_end_date:
-            return min(self.manual_end_date, self.calculate_end_date())
-        return self.calculate_end_date()
+            return min(manual, calculated) if calculated else manual
+        return calculated
 
     def get_final_end_date(self, name):
         return self.manual_end_date or (self.option.final_end_date

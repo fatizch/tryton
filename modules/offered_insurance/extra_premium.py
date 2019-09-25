@@ -1,11 +1,10 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
-from trytond.model import Unique
 from trytond.transaction import Transaction
 from trytond.pyson import Eval, Bool
 
-from trytond.modules.coog_core import model, fields, coog_string
+from trytond.modules.coog_core import model, fields
 from trytond.modules.currency_cog import ModelCurrency
 
 __all__ = [
@@ -13,27 +12,16 @@ __all__ = [
     ]
 
 
-class ExtraPremiumKind(model.CoogSQL, model.CoogView, ModelCurrency):
+class ExtraPremiumKind(model.CodedMixin, model.CoogView, ModelCurrency):
     'Extra Premium Kind'
     __name__ = 'extra_premium.kind'
-    _func_key = 'code'
 
     active = fields.Boolean('Active')
-    name = fields.Char('Name', required=True, translate=True)
-    code = fields.Char('Code', required=True)
     is_discount = fields.Boolean('Is Discount')
     max_value = fields.Numeric('Max Value')
     max_rate = fields.Numeric('Max Rate')
     ceiling = fields.Function(fields.Char('Ceiling'),
                         'on_change_with_ceiling')
-
-    @classmethod
-    def __setup__(cls):
-        super(ExtraPremiumKind, cls).__setup__()
-        t = cls.__table__()
-        cls._sql_constraints += [
-            ('code_uniq', Unique(t, t.code), 'The code must be unique!'),
-            ]
 
     @classmethod
     def view_attributes(cls):
@@ -60,11 +48,6 @@ class ExtraPremiumKind(model.CoogSQL, model.CoogView, ModelCurrency):
             Company = Pool().get('company.company')
             company = Company(Transaction().context['company'])
             return company.currency
-
-    @fields.depends('name', 'code')
-    def on_change_name(self):
-        if not self.code:
-            self.code = coog_string.slugify(self.name)
 
     @fields.depends('is_discount')
     def on_change_is_discount(self):

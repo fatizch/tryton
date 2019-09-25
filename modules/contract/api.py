@@ -13,11 +13,30 @@ from trytond.modules.api import APIMixin, date_from_api, APIInputError
 from trytond.modules.api import APIServerError
 from trytond.modules.api import DATE_SCHEMA
 from trytond.modules.coog_core.api import CODED_OBJECT_SCHEMA, OBJECT_ID_SCHEMA
+from trytond.modules.coog_core.api import CODE_SCHEMA
 from trytond.modules.party_cog.api import PARTY_RELATION_SCHEMA
 from trytond.modules.offered.api import EXTRA_DATA_VALUES_SCHEMA
 
 
 logger = logging.getLogger('coog:api')
+
+
+CONTRACT_SCHEMA = {
+    'anyOf': [
+        {
+            'type': 'object',
+            'additionalProperties': False,
+            'properties': {'id': OBJECT_ID_SCHEMA},
+            'required': ['id'],
+            },
+        {
+            'type': 'object',
+            'additionalProperties': False,
+            'properties': {'number': CODE_SCHEMA},
+            'required': ['number'],
+            },
+        ],
+    }
 
 
 __all__ = [
@@ -42,6 +61,55 @@ class APIContract(APIMixin):
                     },
                 },
             )
+
+    @classmethod
+    def _get_contract(cls, data, status_filter=None):
+        '''
+            Returns a contract based on a CONTRACT_SCHEMA input.
+            If status_filter is not None, an error will be raised if the status
+            of the contract does not match the provided value
+        '''
+        pool = Pool()
+        API = pool.get('api')
+        Contract = pool.get('contract')
+
+        contract = None
+
+        key, value = list(data.items())[0]
+        if key == 'id':
+            contract = API.instantiate_code_object('contract',
+                {'id': value})
+        else:
+            assert key == 'number'
+            matches = Contract.search(['OR',
+                    [
+                        ('status', 'in', ('quote', 'declined')),
+                        ('quote_number', '=', value),
+                        ],
+                    [
+                        ('status', 'not in', ('quote', 'declined')),
+                        ('contract_number', '=', value),
+                        ],
+                    ])
+            if not matches or len(matches) > 1:
+                API.add_input_error({
+                        'type': 'cannot_identify_contract',
+                        'data': {
+                            'key': key,
+                            'value': value,
+                            },
+                        })
+            else:
+                contract, = matches
+            if contract and status_filter and contract.status != status_filter:
+                API.add_input_error({
+                        'type': '%s_status_required' % status_filter,
+                        'data': {
+                            'contract': data.rec_name,
+                            'status': data.status,
+                            },
+                        })
+        return contract
 
     @classmethod
     def subscribe_contracts(cls, parameters):

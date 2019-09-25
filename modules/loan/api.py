@@ -14,6 +14,7 @@ from trytond.modules.coog_core.api import REF_ID_SCHEMA
 __all__ = [
     'APIProduct',
     'APIContract',
+    'APIContractUnderwriting',
     ]
 
 
@@ -910,3 +911,96 @@ class APIContract(metaclass=PoolMeta):
                 },
             )
         return examples
+
+
+class APIContractUnderwriting(metaclass=PoolMeta):
+    __name__ = 'api.contract'
+
+    @classmethod
+    def _update_underwriting_extra_premium_schema(cls):
+        schema = super()._update_underwriting_extra_premium_schema()
+        schema['properties']['mode']['enum'] += [
+            'initial_capital_per_mil', 'remaining_capital_per_mil']
+        return schema
+
+    @classmethod
+    def _update_underwriting_convert_option_input(cls, option_data, contract):
+        API = Pool().get('api')
+
+        super()._update_underwriting_convert_option_input(option_data,
+            contract)
+        for extra_premium in option_data['extra_premiums']:
+            if (extra_premium['mode'] in ('initial_capital_per_mil',
+                        'remaining_capital_per_mil') and
+                    not option_data['coverage'].is_loan):
+                API.add_input_error({
+                        'type': 'using_loan_reserved_extra_premium_modes',
+                        'data': {
+                            'coverage': option_data['coverage'].code,
+                            'extra_premium_mode': extra_premium['mode'],
+                            },
+                        })
+
+    @classmethod
+    def _update_underwriting_examples(cls):
+        examples = super()._update_underwriting_examples()
+        examples.append({'input':
+                {
+                    'contract': {'number': '1234567890'},
+                    'decision': {'code': 'accepted_with_conditions'},
+                    'decision_date': '2020-04-06',
+                    'options': [
+                        {
+                            'coverage': {'code': 'ALP'},
+                            'party': {'code': '153242'},
+                            'decision': {'code': 'accepted'},
+                            },
+                        {
+                            'coverage': {'code': 'BET'},
+                            'party': {'code': '153242'},
+                            'decision': {'code': 'accepted_with_conditions'},
+                            'exclusions': [
+                                {
+                                    'type': {'code': 'cardiac_arrest'},
+                                    },
+                                {
+                                    'type': {'code': 'lung_cancer'},
+                                    'custom_content': 'Very heavy smoker',
+                                    },
+                                ],
+                            'extra_premiums': [
+                                {
+                                    'type': {'code': 'medical'},
+                                    'mode': 'rate',
+                                    'rate': '1',
+                                    },
+                                {
+                                    'type': {'code': 'medical'},
+                                    'mode': 'initial_capital_per_mil',
+                                    'rate': '0.0014',
+                                    },
+                                {
+                                    'type': {'code': 'medical'},
+                                    'mode': 'remaining_capital_per_mil',
+                                    'rate': '0.0015',
+                                    },
+                                ],
+                            },
+                        ],
+                    },
+                'output': None,
+                }
+            )
+        return examples
+
+    @classmethod
+    def _update_underwriting_option_extra_premium(cls, extra_premium, data):
+        super()._update_underwriting_option_extra_premium(extra_premium, data)
+        if extra_premium.calculation_kind in ('initial_capital_per_mil',
+                'remaining_capital_per_mil') and not \
+                getattr(extra_premium, 'flat_amount_frequency', None):
+            extra_premium.flat_amount_frequency = 'yearly'
+        if extra_premium.calculation_kind == 'initial_capital_per_mil':
+            extra_premium.capital_per_mil_rate = data.get('rate', None)
+        if extra_premium.calculation_kind == 'remaining_capital_per_mil':
+            extra_premium.remaining_capital_per_mil = data.get('rate', None)

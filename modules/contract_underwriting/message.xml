@@ -13,5 +13,8 @@
         <record model="ir.message" id="msg_postponed">
             <field name="text">The underwriting decision is postponed.</field>
         </record>
+        <record model="ir.message" id="msg_missing_underwriting">
+            <field name="text">The underwriting was not run</field>
+        </record>
     </data>
 </tryton>

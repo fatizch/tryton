@@ -6,7 +6,7 @@
             "name": "API Test",
             "first_name": "Father",
             "gender": "male",
-            "birth_date": "1969-02-15",
+            "birth_date": "1954-02-15",
             "addresses": [
                 {
                     "street": "Somewhere I belong",
@@ -109,7 +109,7 @@
                     "party": {"ref": "1"},
                     "item_descriptor": {"code": "life_person_item_desc"},
                     "extra_data": {
-                        "job_category": "csp1"
+                        "job_category": "csp2"
                     },
                     "coverages": [
                         {
