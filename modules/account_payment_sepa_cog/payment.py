@@ -661,7 +661,7 @@ class Payment(metaclass=PoolMeta):
                     'account_payment_sepa_cog.msg_direct_debit_disbursement'))
         elif self.kind == 'receivable':
             descriptions.append(
-                gettext('account_payment_sepa_cfonb.msg_direct_debit_payment'))
+                gettext('account_payment_sepa_cog.msg_direct_debit_payment'))
         descriptions.append(lang.strftime(self.date, lang.date)
             if self.date else '')
         return ' '.join(descriptions)
