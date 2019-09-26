@@ -15,6 +15,8 @@
     >>> from trytond.modules.party_cog.tests.tools import (
     ...     create_party_person, create_party_company)
     >>> in_directory = tempfile.TemporaryDirectory(prefix='claim_almerys_in')
+    >>> intermediary_directory = tempfile.TemporaryDirectory(
+    ...     prefix='claim_almerys_in', suffix='statement')
     >>> out_directory = tempfile.TemporaryDirectory(prefix='claim_almerys_out')
     >>> error_directory = tempfile.TemporaryDirectory(prefix='claim_almerys_error')
     >>> _ = shutil.copy(
@@ -208,6 +210,9 @@
     >>> in_directory_param, = [
     ...     p for p in launcher.form.parameters if p.code == 'in_directory']
     >>> in_directory_param.value = in_directory.name
+    >>> out_directory_param, = [
+    ...     p for p in launcher.form.parameters if p.code == 'out_directory']
+    >>> out_directory_param.value = intermediary_directory.name
     >>> error_directory_param, = [
     ...     p for p in launcher.form.parameters if p.code == 'error_directory']
     >>> error_directory_param.value = error_directory.name
@@ -232,7 +237,7 @@
     >>> launcher.form.batch = batch
     >>> in_directory_param, = [
     ...     p for p in launcher.form.parameters if p.code == 'in_directory']
-    >>> in_directory_param.value = in_directory.name
+    >>> in_directory_param.value = intermediary_directory.name
     >>> out_directory_param, = [
     ...     p for p in launcher.form.parameters if p.code == 'out_directory']
     >>> out_directory_param.value = out_directory.name

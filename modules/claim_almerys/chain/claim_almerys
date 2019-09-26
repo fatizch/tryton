@@ -3,16 +3,16 @@
 
 CHAIN_NAME=claim_almerys
 
-CHAIN_PARAMETERS=('IN_DIRECTORY', 'OUT_DIRECTORY', 'ERROR_DIRECTORY')
-CHAIN_REQUIRED=('IN_DIRECTORY', 'OUT_DIRECTORY', 'ERROR_DIRECTORY')
+CHAIN_PARAMETERS=('IN_DIRECTORY' 'OUT_DIRECTORY' 'ERROR_DIRECTORY')
+CHAIN_REQUIRED=('IN_DIRECTORY' 'OUT_DIRECTORY' 'ERROR_DIRECTORY')
 
 chain_params "$@"
 chain_begin
 
-chain_step claim.almerys.claim_indemnification --in_directory="$IN_DIRECTORY" --error_directory="$ERROR_DIRECTORY"
+chain_step claim.almerys.claim_indemnification --in_directory="$IN_DIRECTORY" --out_directory="${IN_DIRECTORY}/statement" --error_directory="$ERROR_DIRECTORY"
 chain_wait claim.almerys.claim_indemnification || chain_end
 
-chain_step claim.almerys.statement_creation --in_directory="$IN_DIRECTORY" --out_directory="$OUT_DIRECTORY" --error_directory="$ERROR_DIRECTORY"
+chain_step claim.almerys.statement_creation --in_directory="${IN_DIRECTORY}/statement" --out_directory="$OUT_DIRECTORY" --error_directory="$ERROR_DIRECTORY"
 chain_wait claim.almerys.statement_creation || chain_end
 
 chain_end

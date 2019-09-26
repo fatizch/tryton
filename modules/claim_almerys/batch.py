@@ -129,13 +129,14 @@ class AlmerysXMLBatchMixin(batch.BatchRootNoSelect):
                 })
 
     @classmethod
-    def select_ids(cls, in_directory, error_directory):
+    def select_ids(cls, in_directory, out_directory, error_directory):
         files = cls.get_file_names_and_paths(in_directory)
         handler = AlmerysActuariatHandler()
         claims = []
         for file_name, file_path in files:
             for claim in handler.parse(file_path, cls.kind):
                 claims.append((claim,))
+        cls.archive_treated_files(files, out_directory, utils.today())
         return claims
 
     @classmethod
@@ -162,7 +163,8 @@ class AlmerysClaimIndemnification(AlmerysXMLBatchMixin):
     kind = 'decomptes'
 
     @classmethod
-    def execute(cls, objects, ids, in_directory, error_directory):
+    def execute(cls, objects, ids, in_directory, out_directory,
+            error_directory):
         pool = Pool()
         Indemnification = pool.get('claim.indemnification')
 
@@ -481,43 +483,40 @@ class AlmerysStatementCreation(AlmerysXMLBatchMixin):
     kind = 'paiements'
 
     @classmethod
-    def select_ids(cls, in_directory, out_directory, error_directory):
-        payments = super().select_ids(in_directory, error_directory)
-        files = cls.get_file_names_and_paths(in_directory)
-        cls.archive_treated_files(files, out_directory, utils.today())
-        return payments
-
-    @classmethod
     def execute(cls, objects, ids, in_directory, out_directory,
                 error_directory):
         pool = Pool()
         AlmerysConfig = pool.get('third_party_protocol.almerys.configuration')
         Statement = pool.get('account.statement')
 
-        filename = objects[0]['file'] if objects else ''
-        try:
-            config = AlmerysConfig(1)
-            statements = []
-            for payment in objects:
-                lines = cls.get_statement_lines(payment)
-                if not lines:
-                    continue
-                statement = Statement(
-                    date=utils.today(),
-                    journal=config.claim_statement_journal,
-                    lines=lines,
-                    name=payment['idFlux'],
-                    number_of_lines=len(lines),
-                    )
-                statements.append(statement)
+        def group_by_file(payment):
+            return payment['file']
 
-            if statements:
-                Statement.save(statements)
-                Statement.validate_statement(statements)
-                Statement.post(statements)
-        except Exception as e:
-            tb = traceback.format_exc()
-            cls.log_error(error_directory, filename, e, tb)
+        objects = sorted(objects, key=group_by_file)
+        for filename, payments in itertools.groupby(objects, key=group_by_file):
+            try:
+                config = AlmerysConfig(1)
+                all_lines = []
+                for payment in payments:
+                    lines = cls.get_statement_lines(payment)
+                    if not lines:
+                        continue
+                    else:
+                        all_lines.extend(lines)
+                if all_lines:
+                    statement = Statement(
+                        date=utils.today(),
+                        journal=config.claim_statement_journal,
+                        lines=all_lines,
+                        name=payment['idFlux'],
+                        number_of_lines=len(all_lines),
+                        )
+                    statement.save()
+                    Statement.validate_statement([statement])
+                    Statement.post([statement])
+            except Exception as e:
+                tb = traceback.format_exc()
+                cls.log_error('Relevé', error_directory, filename, e, tb)
 
     @classmethod
     def get_statement_lines(cls, payment):

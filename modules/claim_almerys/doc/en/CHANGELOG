@@ -1,3 +1,4 @@
+* OTH#00000 A few improvements to the batch chain and file handling
 * OTH#00000 Add claim almerys batch chain
 * FEA#12006: Filter statements to include only HTP claims
 * FEA#12006: Add tests
