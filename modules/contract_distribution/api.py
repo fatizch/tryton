@@ -207,3 +207,13 @@ class APIContract(metaclass=PoolMeta):
                 contract_data['commercial_product'] = {
                     'code': 'com_product_%i' % idx}
         return examples
+
+
+class APIParty(metaclass=PoolMeta):
+    __name__ = 'api.party'
+
+    @classmethod
+    def get_product_name(cls, contract):
+        if contract.com_product:
+            return contract.com_product.name
+        return super().get_product_name(contract)

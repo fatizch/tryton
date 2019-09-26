@@ -81,13 +81,18 @@ class APIParty(metaclass=PoolMeta):
             contract = object_.contract
         else:
             return response
+        product_name = cls.get_product_name(contract)
         response['party_data'].update(
             {'contract': {
                     'id': contract.id,
-                    'product': contract.product.rec_name,
+                    'product': product_name,
                     'quote_number': contract.quote_number,
                     'contract_number': contract.contract_number or '',
                     }
                 }
             )
         return response
+
+    @classmethod
+    def get_product_name(cls, contract):
+        return contract.product.name

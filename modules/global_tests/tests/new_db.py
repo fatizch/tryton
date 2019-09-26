@@ -248,6 +248,9 @@ else:
     config.set('dsn', 'apet_etablissement', '5829C')
     config.set('dsn', 'fraction_number', '10')
 
+    config.set('document_api', 'document_token_secret', 'verysecretstuff')
+    config.set('document_api', 'document_token_expiration_minutes', 10000)
+
     import trytond.modules as modules
     from trytond.tests.tools import activate_modules
 
@@ -1375,6 +1378,11 @@ if not champs_technique('loss.covered_person.id'):
     step_documents.code_before[0].technical_kind = 'step_before'
     step_documents.code_before[0].method_name = \
         'init_subscription_document_request'
+    step_documents.code_before.new()
+    step_documents.code_before[1].content = 'method'
+    step_documents.code_before[1].technical_kind = 'step_before'
+    step_documents.code_before[1].method_name = \
+        'generate_required_documents_tokens'
     step_documents.code_after.new()
     step_documents.code_after[0].content = 'method'
     step_documents.code_after[0].technical_kind = 'step_after'
@@ -2261,6 +2269,35 @@ if CREATE_PRODUCTS:  # {{{
     loan_planning.code = 'loan_planning'
     loan_planning.name = "Échéancier des prêts"
     loan_planning.save()
+
+    IrModel = Model.get('ir.model')
+    ReportTemplate = Model.get('report.template')
+    request_line_model, = IrModel.find(['model', '=',
+            'document.request.line'])
+    ExtraData = Model.get('extra_data')
+    question_1 = ExtraData()
+    question_1.type_ = 'char'
+    question_1.kind = 'document_request'
+    question_1.string = 'How do you do?'
+    question_1.string = 'how_do_you_do_'
+    question_1.save()
+    report_template = ReportTemplate()
+    report_template.name = 'Test genshi'
+    report_template.code = 'test_genshi'
+    report_template.on_model = request_line_model
+    report_template.input_kind = 'flat_document'
+    report_template.save()
+    version = report_template.versions.new()
+    Lang = Model.get('ir.lang')
+    version.language, = Lang.find([('code', '=', 'en')])
+    version.name = 'test'
+    report_template.save()
+    question_doc_desc = DocumentDescription()
+    question_doc_desc.code = 'questions'
+    question_doc_desc.name = 'Questions'
+    question_doc_desc.template = report_template
+    question_doc_desc.extra_data_def.append(ExtraData(question_1.id))
+    question_doc_desc.save()
     # }}}
 
     do_print('\nCreating clauses')  # {{{
@@ -4383,6 +4420,9 @@ else:
     loan_product.document_rules[0].documents.new()
     loan_product.document_rules[0].documents[1].document = loan_planning
     loan_product.document_rules[0].documents[1].blocking = True
+    loan_product.document_rules[0].documents.new()
+    loan_product.document_rules[0].documents[2].document = question_doc_desc
+    loan_product.document_rules[0].documents[2].blocking = True
     loan_product.save()
 
     loan_process.for_products.append(loan_product)
@@ -5081,6 +5121,9 @@ if CREATE_CONTRACTS:  # {{{
     process_next(loan_contract)
     loan_contract.document_request_lines[0].received = True
     loan_contract.document_request_lines[1].received = True
+    question = loan_contract.document_request_lines[2]
+    question.extra_data['how_do_you_do_'] = 'fine'
+    question.click('confirm_attachment')
     loan_contract.save()
     process_next(loan_contract)
     loan_contract.billing_informations[0].billing_mode, = BillingMode.find(
@@ -6093,4 +6136,51 @@ if TEST_APIS:  # {{{
     # }}}
 # }}}
 
+
+do_print('\nPrepare DB access For Portal Tests')
+
+Token = Model.get('api.token')
+Identity = Model.get('ir.api.identity')
+User = Model.get('res.user')
+
+full_api_access, = Model.get('res.group').find([('name', '=',
+            'Full API Access')])
+
+admin = User(1)
+admin.groups.append(full_api_access)
+admin.save()
+admin_token = Token(name='admin', user=admin, key='123456789')
+admin_token.save()
+admin_identity = Identity(identifier='admin', kind='generic', user=admin)
+admin_identity.save()
+
+coog_api_user, = User.find([('login', '=', 'coog_api_user')])
+coog_api_token = Token(name='coog_api_user', user=coog_api_user,
+    key='cle_api_user')
+coog_api_token.save()
+coog_api_identity = Identity(identifier='coog_api_user', kind='generic',
+    user=coog_api_user)
+coog_api_identity.save()
+
+jean_petit, = User.find([('login', '=', 'jean.petit')])
+full_api_access, = Model.get('res.group').find([('name', '=',
+            'Full API Access')])
+jean_petit.groups.append(full_api_access)
+jean_petit.save()
+jean_petit_token = Token(name='jean.petit', user=jean_petit,
+    key='cle_jean_petit')
+jean_petit_token.save()
+jean_identity = Identity(identifier='jean.petit', kind='generic',
+    user=jean_petit)
+jean_identity.save()
+
+for res in Model.get('distribution.network').find([]):
+    for chan in Model.get('distribution.channel').find([]):
+        res.authorized_distribution_channels.append(chan)
+    res.save()
+
+for com_prod in Model.get('distribution.commercial_product').find([]):
+    for chan in Model.get('distribution.channel').find([]):
+        com_prod.dist_authorized_channels.append(chan)
+    com_prod.save()
 # vim:fdm=marker

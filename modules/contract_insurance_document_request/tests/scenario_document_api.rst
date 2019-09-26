@@ -18,20 +18,39 @@ Imports::
     >>> from trytond.modules.party_cog.tests.tools import create_party_person
     >>> from trytond.modules.coog_core.test_framework import execute_test_case, \
     ...     switch_user
-    >>> config = activate_modules('contract_insurance_document_request')
+    >>> config = activate_modules(['contract_insurance_document_request',
+    ...         'api'], cache_file_name='contract_insurance_document_request')
     >>> _ = create_country()
     >>> Module = Model.get('ir.module')
     >>> currency = get_currency(code='EUR')
     >>> _ = create_company(currency=currency)
     >>> company = get_company()
     >>> execute_test_case('authorizations_test_case')
-    >>> product = init_insurance_product(user_context=True)
+    >>> Group = Model.get('res.group')
+    >>> privy_group = Group(name='privy')
+    >>> privy_group.save()
+    >>> User = Model.get('res.user')
+    >>> contract_user, = User.find([('login', '=', 'contract_user')])
+    >>> contract_user_privy_id, = User.copy([contract_user], context=config.context)
+    >>> contract_user_privy = User(contract_user_privy_id)
+    >>> contract_user_privy.login = 'contract_user_privy'
+    >>> contract_user_privy.save()
+    >>> privy_group.users.append(contract_user_privy)
+    >>> privy_group.save()
+    >>> api_group = Group(name='api_group')
+    >>> api_group.save()
+    >>> api_user = User(name='api_user', login='api_user')
+    >>> api_user.save()
+    >>> api_group.users.append(api_user)
+    >>> api_group.save()
+    >>> product = init_insurance_product(user_context=False)
     >>> product = add_quote_number_generator(product)
     >>> product.save()
     >>> DocumentDescription = Model.get('document.description')
     >>> subscription_request = DocumentDescription()
     >>> subscription_request.code = 'subscription_request'
     >>> subscription_request.name = "Subscription Request"
+    >>> subscription_request.groups.append(privy_group)
     >>> subscription_request.save()
     >>> _ = product.document_rules.new()
     >>> _ = product.document_rules[0].documents.new()
@@ -54,6 +73,7 @@ Imports::
     >>> report_template.code = 'test_genshi'
     >>> report_template.on_model = request_line_model
     >>> report_template.input_kind = 'flat_document'
+    >>> report_template.format_for_internal_edm = 'original'
     >>> report_template.save()
     >>> version = report_template.versions.new()
     >>> Lang = Model.get('ir.lang')
@@ -65,6 +85,7 @@ Imports::
     >>> question_doc_desc.name = 'Questions'
     >>> question_doc_desc.template = report_template
     >>> question_doc_desc.extra_data_def.append(ExtraData(question_1.id))
+    >>> question_doc_desc.groups.append(Group(privy_group.id))
     >>> question_doc_desc.save()
     >>> _ = product.document_rules[0].documents.new()
     >>> product.document_rules[0].documents[1].document = question_doc_desc
@@ -91,17 +112,26 @@ Imports::
     >>> contract.save()
     >>> Contract.calculate([contract.id], config._context)
     >>> contract.reload()
+    >>> assert len(contract.document_request_lines) == 0
+    >>> config = switch_user('contract_user_privy')
+    >>> Contract = Model.get('contract')
+    >>> contract = Contract(contract.id)
     >>> assert len(contract.document_request_lines) == 2
     >>> by_code = {x.document_desc.code: x for x in contract.document_request_lines}
+    >>> config = switch_user('api_user')
+    >>> Contract = Model.get('contract')
+    >>> contract = Contract(contract.id)
+    >>> assert len(contract.document_request_lines) == 0
     >>> trytond_config.add_section('document_api')
     >>> trytond_config.set('document_api', 'document_token_secret', 'secret')
     >>> trytond_config.set('document_api', 'document_token_expiration_minutes', 10)
+    >>> Contract = Model.get('contract')
     >>> _ = Contract.generate_required_documents_tokens([contract.id], config._context)
     >>> token = contract.document_token
     >>> assert token is not None
     >>> APIParty = Model.get('api.party')
     >>> requests_description = APIParty.token_document_requests(
-    ...     {'document_token': token}, config._context, {})
+    ...     {'document_token': token}, {'_debug_server': True}, {})
     >>> assert len(requests_description['informed_consent']) == 0
     >>> assert len(requests_description['documents_to_fill']) == 1
     >>> assert len(requests_description['documents_to_upload']) == 1
@@ -113,18 +143,24 @@ Imports::
     ...     'some_filename.txt',
     ...     'binary_data': file_data
     ...     }
-    >>> _ = APIParty.token_upload_documents(to_upload, {'_debug_server': True}, {})
+    >>> _ = APIParty.token_upload_documents(to_upload, {'_debug_server': True},
+    ...     config.context)
+    >>> config = switch_user('contract_user_privy')
     >>> RequestLine = Model.get('document.request.line')
     >>> attachment = RequestLine(by_code['subscription_request'].id).attachment
     >>> assert attachment.status == 'waiting_validation'
     >>> assert attachment.data == b'hello'
+    >>> config = switch_user('api_user')
     >>> answer_data = {
     ...     'document_token': token,
     ...     'id': by_code['questions'].id,
     ...     'answers': {'how_do_you_do_': 'Doing all right.'}
     ...     }
+    >>> APIParty = Model.get('api.party')
     >>> _ = APIParty.token_submit_document_answers(answer_data,
     ...     {'_debug_server': True}, {})
+    >>> config = switch_user('contract_user_privy')
+    >>> RequestLine = Model.get('document.request.line')
     >>> answered = RequestLine(by_code['questions'].id)
     >>> assert answered.data_status == 'done'
     >>> assert answered.extra_data == {'how_do_you_do_': 'Doing all right.'}

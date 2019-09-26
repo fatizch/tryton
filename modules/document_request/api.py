@@ -10,6 +10,7 @@ from collections import defaultdict
 from trytond.config import config
 from trytond.model.exceptions import AccessError
 from trytond.pool import PoolMeta, Pool
+from trytond.transaction import Transaction
 
 from trytond.modules.api.api.core import date_for_api
 from trytond.modules.api import APIInputError
@@ -376,19 +377,20 @@ class APIParty(metaclass=PoolMeta):
         DocumentRequestLine = pool.get('document.request.line')
         Attachment = pool.get('ir.attachment')
         line = data['request_line']
-        attachment = Attachment(
-            resource=line.for_object if
-            line.for_object.__name__ == 'contract'
-            else line.for_object.contract,
-            document_desc=line.document_desc,
-            status='waiting_validation',
-            name=data['filename'],
-            data=data['binary_data'])
-        line.attachment = attachment
-        if not line.first_reception_date:
-            line.first_reception_date = utils.today()
 
-        DocumentRequestLine.save([line])
+        with Transaction().set_user(0):
+            attachment = Attachment(
+                resource=line.for_object if
+                line.for_object.__name__ == 'contract'
+                else line.for_object.contract,
+                document_desc=line.document_desc,
+                status='waiting_validation',
+                name=data['filename'],
+                data=data['binary_data'])
+            line.attachment = attachment
+            if not line.first_reception_date:
+                line.first_reception_date = utils.today()
+            DocumentRequestLine.save([line])
         return 'ok'
 
     @classmethod
@@ -463,8 +465,9 @@ class APIParty(metaclass=PoolMeta):
         extra_data = Core._extra_data_convert(parameters['answers'])
         to_be_answered.extra_data = extra_data
         to_be_answered.save()
-        DocumentRequestLine._generate_template_documents(
-            [to_be_answered])
+        with Transaction().set_user(0):
+            DocumentRequestLine._generate_template_documents(
+                [to_be_answered])
         return 'ok'
 
     @classmethod

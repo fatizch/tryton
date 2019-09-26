@@ -34,4 +34,5 @@ def register():
         api.APICore,
         api.APIProduct,
         api.APIContract,
+        api.APIParty,
         module='contract_distribution', type_='model', depends=['api'])

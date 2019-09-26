@@ -160,19 +160,20 @@ class Contract(RemindableInterface, metaclass=PoolMeta):
         documents = self.get_calculated_required_documents([self])[self]
         rule_codes_by_for_object = defaultdict(set)
         existing_codes_by_for_object = defaultdict(list)
+        with Transaction().set_context(remove_document_desc_filter=True):
+            all_codes = {x.code: x.id for x in DocumentDescription.search([])}
+            existing_lines = DocumentRequestLine.search(
+                [('contract', '=', self)],
+                order=[('for_object', 'ASC')])
 
-        existing_lines = DocumentRequestLine.search(
-            [('contract', '=', self)],
-            order=[('for_object', 'ASC')])
         for for_object, grouped_lines in groupby(existing_lines,
                     key=lambda x: x.for_object):
             existing_codes_by_for_object[for_object] = [
                 x.document_desc.code for x in grouped_lines]
 
-        with Transaction().set_context(remove_document_desc_filter=True):
-            for (for_object, rule_source), result in documents.items():
-                rule_codes = result.keys()
-                rule_codes_by_for_object[for_object] |= set(rule_codes)
+        for (for_object, rule_source), result in documents.items():
+            rule_codes = result.keys()
+            rule_codes_by_for_object[for_object] |= set(rule_codes)
 
         to_save = []
         for (for_object, rule_source), rule_result in documents.items():
@@ -180,8 +181,7 @@ class Contract(RemindableInterface, metaclass=PoolMeta):
                 if code in existing_codes_by_for_object[for_object]:
                     continue
                 line = DocumentRequestLine()
-                line.document_desc = DocumentDescription.get_document_per_code(
-                    code)
+                line.document_desc = all_codes[code]
                 line.contract = self
                 line.for_object = str(for_object)
                 for k, v in rule_result_values.items():
@@ -201,12 +201,15 @@ class Contract(RemindableInterface, metaclass=PoolMeta):
         # the rules now return a different result or
         # the configuration has changed
         to_delete = []
-        for request in self.document_request_lines:
-            rule_codes = rule_codes_by_for_object[request.for_object]
-            if request.document_desc.code not in rule_codes \
-                    and not request.send_date and not request.reception_date:
-                to_delete.append(request)
-        DocumentRequestLine.delete(to_delete)
+        with Transaction().set_context(remove_document_desc_filter=True):
+            for request in self.document_request_lines:
+                rule_codes = rule_codes_by_for_object[request.for_object]
+                if request.document_desc.code not in rule_codes \
+                        and not request.send_date and not \
+                        request.reception_date:
+                    to_delete.append(request)
+            if to_delete:
+                DocumentRequestLine.delete(to_delete)
 
     def link_attachments_to_requests(self):
         attachments_grouped = defaultdict(list)
