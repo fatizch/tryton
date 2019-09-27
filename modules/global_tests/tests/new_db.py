@@ -248,6 +248,7 @@ else:
     config.set('dsn', 'apet_etablissement', '5829C')
     config.set('dsn', 'fraction_number', '10')
 
+    config.add_section('document_api')
     config.set('document_api', 'document_token_secret', 'verysecretstuff')
     config.set('document_api', 'document_token_expiration_minutes', 10000)
 
