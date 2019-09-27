@@ -4,5 +4,8 @@
         <record model="ir.message" id="msg_invalid_ssn_insee_code">
             <field name="text">Invalid ssn: invalid insee code.</field>
         </record>
+        <record model="ir.message" id="msg_birth_zip_required_for_insured">
+            <field name="text">Birth zip required for this insured person %(rec_name)s</field>
+        </record>
     </data>
 </tryton>

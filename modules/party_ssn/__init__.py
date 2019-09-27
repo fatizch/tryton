@@ -3,6 +3,7 @@
 from trytond.pool import Pool
 from . import party
 from . import configuration
+from . import offered
 
 from . import api
 
@@ -16,4 +17,9 @@ def register():
     Pool.register(
         api.APICore,
         api.APIParty,
+        api.APIProduct,
         module='party_ssn', type_='model', depends=['api'])
+
+    Pool.register(
+        offered.ItemDescription,
+        module='party_ssn', type_='model', depends=['offered_insurance'])

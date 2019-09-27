@@ -472,6 +472,14 @@ class Contract(Printable):
                 date_ref.day)
         return relativedelta(at_date, birth_date).years
 
+    def check_covered_elements(self):
+        for covered_element in self.covered_elements:
+            covered_element.item_desc.check_covered_element(covered_element)
+
+    def before_activate(self):
+        self.check_covered_elements()
+        super().before_activate()
+
 
 class ContractOption(Printable):
     __name__ = 'contract.option'

@@ -1,3 +1,4 @@
+* FEA#12648 Permet de définir les données requises sur les tiers couverts pour l'activation du contrat.
 * BUG#12757 Correctif du crash lors de création des surprimes / exclusions
 * FEA#12497 Gestion d'exclusions libres
 * BUG#11891 Correction d'un crash lors de l'exécution de l'assistant 'Gestion des options' depuis un élément couvert.

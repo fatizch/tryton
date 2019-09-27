@@ -7,6 +7,7 @@ from trytond.exceptions import UserError
 __name__ = [
     'APICore',
     'APIParty',
+    'APIProduct',
     ]
 
 
@@ -60,3 +61,15 @@ class APIParty(metaclass=PoolMeta):
                             'ssn': data['ssn'],
                             },
                         })
+
+
+class APIProduct(metaclass=PoolMeta):
+    __name__ = 'api.product'
+
+    @classmethod
+    def _describe_item_descriptor_fields(cls, item_desc):
+        description = super()._describe_item_descriptor_fields(item_desc)
+        if item_desc.kind == 'person' and item_desc.ssn_required:
+            description['required'].append('ssn')
+            description['fields'].append('ssn')
+        return description

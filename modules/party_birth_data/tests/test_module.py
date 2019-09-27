@@ -12,7 +12,11 @@ class ModuleTestCase(test_framework.CoogTestCase):
     'Module Test Case'
 
     module = 'party_birth_data'
-    extras = ['country_hexaposte', 'party_ssn']
+    extras = ['country_hexaposte', 'party_ssn', 'offered_insurance']
+
+    @classmethod
+    def fetch_models_for(cls):
+        return ['rule_engine', 'offered']
 
     @classmethod
     def get_models(cls):
@@ -20,6 +24,8 @@ class ModuleTestCase(test_framework.CoogTestCase):
             'ZipCode': 'country.zip',
             'Party': 'party.party',
             'Country': 'country.country',
+            'ItemDesc': 'offered.item.description',
+            'Insurer': 'insurer',
         }
 
     def test0000_testCountryCreation(self):
@@ -112,6 +118,84 @@ class ModuleTestCase(test_framework.CoogTestCase):
             zipcode.save()
             person.birth_zip = "72265"
             self.assertRaises(UserWarning, person.save)
+
+    @test_framework.prepare_test(
+        'offered_insurance.test0010Coverage_creation',
+        'contract_insurance.test0001_testPersonCreation',
+    )
+    def test0200_productDescription(self):
+        pool = Pool()
+        Product = pool.get('offered.product')
+        Coverage = pool.get('offered.option.description')
+        ItemDesc = pool.get('offered.item.description')
+
+        product, = Product.search([('code', '=', 'AAA')])
+        alpha, = Coverage.search([('code', '=', 'ALP')])
+        beta, = Coverage.search([('code', '=', 'BET')])
+        gamma, = Coverage.search([('code', '=', 'GAM')])
+        delta, = Coverage.search([('code', '=', 'DEL')])
+        item_desc, = ItemDesc.search([('code', '=', 'person')])
+        item_desc.ssn_required = True
+        item_desc.birth_zip_required = True
+        item_desc.save()
+        APIProduct = pool.get('api.product')
+        self.assertEqual(
+            APIProduct.describe_products({}, {'_debug_server': True}),
+            [{'id': product.id,
+              'code': 'AAA',
+              'name': 'Awesome Alternative Allowance',
+              'description': '', 'extra_data': [],
+              'coverages': [
+                  {'id': alpha.id,
+                   'code': 'ALP',
+                   'name': 'Alpha Coverage',
+                   'description': '',
+                   'extra_data': [],
+                   'mandatory': True,
+                   'item_desc': 1},
+                  {'id': beta.id,
+                   'code': 'BET',
+                   'name': 'Beta Coverage',
+                   'description': '',
+                   'extra_data': [],
+                   'mandatory': True,
+                   'item_desc': 1},
+                  {'id': gamma.id,
+                   'code': 'GAM',
+                   'name': 'GammaCoverage',
+                   'description': '',
+                   'extra_data': [],
+                   'mandatory': False,
+                   'item_desc': 1},
+                  {'id': delta.id,
+                   'code': 'DEL',
+                   'name': 'Delta Coverage',
+                   'description': '',
+                   'extra_data': [],
+                   'mandatory': True,
+                   'item_desc': None}],
+              'packages': [],
+              'subscriber': {
+                  'model': 'party',
+                  'required': ['name', 'first_name', 'birth_date',
+                      'email', 'addresses'],
+                  'fields': ['name', 'first_name', 'birth_date', 'email',
+                      'phone_number', 'is_person', 'addresses']},
+              'item_descriptors': [
+                  {'id': item_desc.id,
+                   'code': 'person',
+                   'name': 'Person',
+                   'extra_data': [],
+                   'fields': {
+                       'model': 'party',
+                       'conditions': [{
+                           'name': 'is_person',
+                           'operator': '=', 'value': True}],
+                       'required': ['name', 'first_name', 'birth_date',
+                           'email', 'address', 'ssn', 'birth_zip_and_city'],
+                       'fields': ['name', 'first_name', 'birth_date', 'email',
+                           'phone_number', 'address', 'ssn',
+                           'birth_zip_and_city']}}]}])
 
 
 def suite():

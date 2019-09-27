@@ -2,6 +2,8 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
 from . import party
+from . import offered
+from . import api
 
 
 def register():
@@ -16,3 +18,11 @@ def register():
     Pool.register(
         party.PartySSN,
         module='party_birth_data', type_='model', depends=['party_ssn'])
+
+    Pool.register(
+        offered.ItemDescription,
+        module='party_birth_data', type_='model', depends=['offered_insurance'])
+
+    Pool.register(
+        api.APIProduct,
+        module='party_birth_data', type_='model', depends=['api'])

@@ -13,5 +13,8 @@
          <record model="ir.message" id="msg_invalid_ssn_year_or_month_of_birth">
             <field name="text">Invalid SSN : incorrect year or month of birth</field>
         </record>
+        <record model="ir.message" id="msg_ssn_required_for_insured">
+            <field name="text">SSN required for this insured person %(rec_name)s</field>
+        </record>
     </data>
 </tryton>

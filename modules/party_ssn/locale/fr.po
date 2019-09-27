@@ -2,6 +2,10 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "field:offered.item.description,ssn_required:"
+msgid "SSN required"
+msgstr "NIR requis"
+
 msgctxt "field:party.configuration,check_ssn_with_party_information:"
 msgid "Check ssn with party information"
 msgstr "Vérification du NIR avec les informations de la personne"
@@ -21,6 +25,10 @@ msgstr "NIR"
 msgctxt "field:party.party,ssn_required:"
 msgid "SSN Required"
 msgstr "Numéro de SS obligatoire"
+
+msgctxt "help:offered.item.description,ssn_required:"
+msgid "If set to True, SSN will be required"
+msgstr "Si défini à Vrai, le NIR sera requis"
 
 msgctxt "help:party.configuration,check_ssn_with_party_information:"
 msgid ""
@@ -46,3 +54,7 @@ msgctxt "model:ir.message,text:msg_invalid_ssn_year_or_month_of_birth"
 msgid "Invalid SSN : incorrect year or month of birth"
 msgstr ""
 "Les chiffres de 2 à 6 ne correspondent pas à l'année et mois de naissance."
+
+msgctxt "model:ir.message,text:msg_ssn_required"
+msgid "SSN required for the insured person %(rec_name)s"
+msgstr "NIR requis pour l'assuré %(rec_name)s"

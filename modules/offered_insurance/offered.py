@@ -175,6 +175,9 @@ class ItemDescription(model.CodedMixin, model.CoogView,
         self.__class__._check_sub_options_cache.set(self.id, value)
         return value
 
+    def check_covered_element(self, covered_element):
+        pass
+
 
 class ItemDescSubItemDescRelation(model.CoogSQL):
     'Relation between Item Desc and Sub Item Desc'

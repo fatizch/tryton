@@ -1,3 +1,4 @@
+* FEA#12648 Allow to define required covered party data for contract activation.
 * BUG#12757 Prevent crash when creating extra premiums / exclusions
 * FEA#12497 Manage custom exclusions
 * BUG#11891 Fix crash when launching 'manage option' from a covered element
