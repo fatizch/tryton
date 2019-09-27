@@ -94,4 +94,10 @@ this repository contains the full copyright notices and license terms. -->
             <field name="group" ref="contract.group_contract_manage"/>
         </record>
     </data>
+    <data depends="api">
+        <record model="ir.api.access" id="contract_b2b_upload_document_default_access">
+            <field name="api">api.contract.b2b_upload_document</field>
+            <field name="group" ref="api.group_default_api"/>
+        </record>
+    </data>
 </tryton>

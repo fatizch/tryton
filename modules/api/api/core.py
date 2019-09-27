@@ -390,6 +390,8 @@ class APIModel(Model):
                     logging.getLogger('api').error(
                         'Invalid input example for api %s.%s' %
                         (cls.__name__, name))
+                    logging.getLogger('api').error(
+                        'Example is %s' % example['input'])
                     raise
                 try:
                     data['compiled_output_schema'](example['output'])

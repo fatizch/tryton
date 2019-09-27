@@ -91,6 +91,19 @@ Imports::
     >>> product.document_rules[0].documents[1].document = question_doc_desc
     >>> product.document_rules[0].documents[1].blocking = True
     >>> product.save()
+    >>> b2b_doc = DocumentDescription()
+    >>> b2b_doc.code = 'b2b_doc'
+    >>> b2b_doc.name = "B2B Document"
+    >>> b2b_doc.save()
+    >>> coverage = product.coverages[0]
+    >>> Coverage = Model.get('offered.option.description')
+    >>> coverage, = Coverage.find(
+    ...     [('code', '=', 'test_person_coverage')])
+    >>> _ = coverage.document_rules.new()
+    >>> _ = coverage.document_rules[0].documents.new()
+    >>> coverage.document_rules[0].documents[0].document = b2b_doc
+    >>> coverage.document_rules[0].documents[0].blocking = True
+    >>> coverage.save()
     >>> config = switch_user('contract_user')
     >>> ItemDescription = Model.get('offered.item.description')
     >>> company = get_company()
@@ -112,16 +125,16 @@ Imports::
     >>> contract.save()
     >>> Contract.calculate([contract.id], config._context)
     >>> contract.reload()
-    >>> assert len(contract.document_request_lines) == 0
+    >>> assert len(contract.document_request_lines) == 1
     >>> config = switch_user('contract_user_privy')
     >>> Contract = Model.get('contract')
     >>> contract = Contract(contract.id)
-    >>> assert len(contract.document_request_lines) == 2
+    >>> assert len(contract.document_request_lines) == 3
     >>> by_code = {x.document_desc.code: x for x in contract.document_request_lines}
     >>> config = switch_user('api_user')
     >>> Contract = Model.get('contract')
     >>> contract = Contract(contract.id)
-    >>> assert len(contract.document_request_lines) == 0
+    >>> assert len(contract.document_request_lines) == 1
     >>> trytond_config.add_section('document_api')
     >>> trytond_config.set('document_api', 'document_token_secret', 'secret')
     >>> trytond_config.set('document_api', 'document_token_expiration_minutes', 10)
@@ -134,7 +147,7 @@ Imports::
     ...     {'document_token': token}, {'_debug_server': True}, {})
     >>> assert len(requests_description['informed_consent']) == 0
     >>> assert len(requests_description['documents_to_fill']) == 1
-    >>> assert len(requests_description['documents_to_upload']) == 1
+    >>> assert len(requests_description['documents_to_upload']) == 2
     >>> file_data = base64.b64encode(b"hello").decode('utf8')
     >>> to_upload = {
     ...     'id': str(by_code['subscription_request'].id),
@@ -164,3 +177,20 @@ Imports::
     >>> answered = RequestLine(by_code['questions'].id)
     >>> assert answered.data_status == 'done'
     >>> assert answered.extra_data == {'how_do_you_do_': 'Doing all right.'}
+    >>> config = switch_user('api_user')
+    >>> APIContract = Model.get('api.contract')
+    >>> file_data = base64.b64encode(b"hello from b2b").decode('utf8')
+    >>> to_upload = {
+    ...     'contract': {'quote_number': contract.quote_number},
+    ...     'answer_request': 'true',
+    ...     'filename': 'hello_b2b.txt',
+    ...     'covered': {'code': subscriber.code},
+    ...     'document_description': {'code': 'b2b_doc'},
+    ...     'data': file_data,
+    ...     }
+    >>> _ = APIContract.b2b_upload_document(to_upload,
+    ...     {'_debug_server': True}, {})
+    >>> RequestLine = Model.get('document.request.line')
+    >>> attachment = RequestLine(by_code['b2b_doc'].id).attachment
+    >>> assert attachment.status == 'valid'
+    >>> assert attachment.data == b'hello from b2b'

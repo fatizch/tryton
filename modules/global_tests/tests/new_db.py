@@ -6096,6 +6096,30 @@ if TEST_APIS:  # {{{
     broker_token.user = broker_user
     broker_token.key = '4e277c36d6f75862b33bcddd9db8c482cfb203ebad6b2145'
     broker_token.save()
+
+    full_api_access, = Group.find([('name', '=',
+                'Full API Access')])
+    broker_user.groups.append(full_api_access)
+    broker_user.save()
+
+    admin = User(1)
+    admin.groups.append(Group(full_api_access.id))
+    admin.save()
+    admin_token = ApiToken(name='admin', user=admin, key='123456789')
+    admin_token.save()
+    admin_identity = ApiIdentity(identifier='admin', kind='generic', user=admin)
+    admin_identity.save()
+
+    all_chans = Channel.find([])
+    for res in Model.get('distribution.network').find([]):
+        for chan in all_chans:
+            res.authorized_distribution_channels.append(Channel(chan.id))
+        res.save()
+
+    for com_prod in Model.get('distribution.commercial_product').find([]):
+        for chan in all_chans:
+            com_prod.dist_authorized_channels.append(Channel(chan.id))
+        com_prod.save()
     # }}}
 
     do_print('    Creating a contract')  # {{{
@@ -6136,52 +6160,4 @@ if TEST_APIS:  # {{{
     assert_eq('contracts' in result, True)
     # }}}
 # }}}
-
-
-do_print('\nPrepare DB access For Portal Tests')
-
-Token = Model.get('api.token')
-Identity = Model.get('ir.api.identity')
-User = Model.get('res.user')
-
-full_api_access, = Model.get('res.group').find([('name', '=',
-            'Full API Access')])
-
-admin = User(1)
-admin.groups.append(full_api_access)
-admin.save()
-admin_token = Token(name='admin', user=admin, key='123456789')
-admin_token.save()
-admin_identity = Identity(identifier='admin', kind='generic', user=admin)
-admin_identity.save()
-
-coog_api_user, = User.find([('login', '=', 'coog_api_user')])
-coog_api_token = Token(name='coog_api_user', user=coog_api_user,
-    key='cle_api_user')
-coog_api_token.save()
-coog_api_identity = Identity(identifier='coog_api_user', kind='generic',
-    user=coog_api_user)
-coog_api_identity.save()
-
-jean_petit, = User.find([('login', '=', 'jean.petit')])
-full_api_access, = Model.get('res.group').find([('name', '=',
-            'Full API Access')])
-jean_petit.groups.append(full_api_access)
-jean_petit.save()
-jean_petit_token = Token(name='jean.petit', user=jean_petit,
-    key='cle_jean_petit')
-jean_petit_token.save()
-jean_identity = Identity(identifier='jean.petit', kind='generic',
-    user=jean_petit)
-jean_identity.save()
-
-for res in Model.get('distribution.network').find([]):
-    for chan in Model.get('distribution.channel').find([]):
-        res.authorized_distribution_channels.append(chan)
-    res.save()
-
-for com_prod in Model.get('distribution.commercial_product').find([]):
-    for chan in Model.get('distribution.channel').find([]):
-        com_prod.dist_authorized_channels.append(chan)
-    com_prod.save()
 # vim:fdm=marker

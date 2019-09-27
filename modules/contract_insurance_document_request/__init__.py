@@ -29,6 +29,7 @@ def register():
         api.ContractApi,
         api.CoveredElementApi,
         api.APIParty,
+        api.APIContract,
         module='contract_insurance_document_request', type_='model',
         depends=['api'])
 
