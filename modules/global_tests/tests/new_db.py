@@ -6109,17 +6109,6 @@ if TEST_APIS:  # {{{
     admin_token.save()
     admin_identity = ApiIdentity(identifier='admin', kind='generic', user=admin)
     admin_identity.save()
-
-    all_chans = Channel.find([])
-    for res in Model.get('distribution.network').find([]):
-        for chan in all_chans:
-            res.authorized_distribution_channels.append(Channel(chan.id))
-        res.save()
-
-    for com_prod in Model.get('distribution.commercial_product').find([]):
-        for chan in all_chans:
-            com_prod.dist_authorized_channels.append(Channel(chan.id))
-        com_prod.save()
     # }}}
 
     do_print('    Creating a contract')  # {{{
