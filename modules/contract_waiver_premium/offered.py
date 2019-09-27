@@ -129,7 +129,8 @@ class WaiverPremiumRule(get_rule_mixin('duration_rule', 'Duration Rule',
         'waiver_rule', 'tax', 'Taxes')
     account_for_waiver = fields.Many2One('account.account',
         'Account to compensate the Waiver', ondelete='RESTRICT',
-        domain=[('kind', 'not in', ['payable', 'receivable'])])
+        domain=[('type.receivable', '=', False),
+            ('type.payable', '=', False)])
     invoice_line_period_behaviour = fields.Selection([
             ('one_day_overlap', 'One Day Overlap'),
             ('total_overlap', 'Total Overlap'),

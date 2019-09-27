@@ -1,3 +1,4 @@
+* OTH#00000 Correction de la sélection du compte d'éxonération suite au merge 5.2 tryton
 * BUG#11528 Correctif sur les montants d'éxonérations de prime et prise en compte des taxes avec rétro-calcul
 
 Version 2.4 - 2019-04-12
