@@ -105,7 +105,11 @@ class Address(metaclass=PoolMeta):
     @classmethod
     def _format_address_FR(cls, lines):
         lines = super(Address, cls)._format_address_FR(lines)
-        if lines is not None and '4_ligne4' in lines:
+        if (lines is not None and '2_ligne2' in lines
+                and lines['2_ligne2'] == '' and '3_ligne3' in lines
+                and lines['3_ligne3'] == '' and '4_ligne4' in lines
+                and lines['4_ligne4'] == '' and '5_ligne5' in lines
+                and lines['5_ligne5'] == ''):
             lines['4_ligne4'] = (lines['4_ligne4'] or 'ADRESSE INCONNUE'
                 ).replace(',', '')
         return lines

@@ -1,3 +1,4 @@
+* BUG#12797 Do not set unknown address on the address if one of his lines is filled
 * OTH#00000 Fix Almerys default address values
 * OTH#00000 Fix Almerys v3 batch
 * OTH#00000 Remove addresses constraints from register since they are added on setup

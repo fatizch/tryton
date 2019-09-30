@@ -1,3 +1,4 @@
+* BUG#12797 Ne plus mettre d'adresse inconnue sur l'adresse si une des lignes est renseignée
 * OTH#00000 Corriger les valeurs par défaut des adresses pour Almerys
 * OTH#00000 Corriger le batch almerys v3
 * OTH#00000 Retirer les contraintes sur les adresses du register car elles sont à présent définies dans le setup
