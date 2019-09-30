@@ -661,6 +661,30 @@ class ModuleTestCase(test_framework.CoogTestCase):
             option_with_conditions.extra_premiums[1].end_date,
             None)
 
+    @test_framework.prepare_test(
+        'contract_underwriting.test0062_test_api_underwriting_acceptation',
+        )
+    def test0063_test_api_underwriting_subscriber_decision(self):
+        pool = Pool()
+        Contract = pool.get('contract')
+        ContractAPI = pool.get('api.contract')
+        contract = Contract.search([])[-1]
+        self.assertEqual(
+            contract.underwritings[-1].subscriber_decision, 'pending')
+        input_ = {
+            'contract': {
+                'number': contract.quote_number,
+                },
+            'subscriber_decision': "accepted",
+            'decision_date': date_for_api(utils.today()),
+            }
+
+        self.assertEqual(
+            ContractAPI.set_underwriting_subscriber_decision(input_,
+                {'_debug_server': True}), None)
+        self.assertEqual(
+            contract.underwritings[-1].subscriber_decision, 'accepted')
+
 
 def suite():
     suite = trytond.tests.test_tryton.suite()

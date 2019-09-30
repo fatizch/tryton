@@ -28,6 +28,12 @@ class ContractAPI(metaclass=PoolMeta):
                     'public': False,
                     'readonly': False,
                     },
+                'set_underwriting_subscriber_decision': {
+                    'description': 'Update subscriber decision for a '
+                    'contract\'s underwriting',
+                    'public': False,
+                    'readonly': False,
+                    },
                 })
 
     @classmethod
@@ -441,3 +447,76 @@ class ContractAPI(metaclass=PoolMeta):
                 'output': None,
                 },
             ]
+
+    """ ↓↓↓↓ Start Subscriber Decision API Methods ↓↓↓↓ """
+
+    @classmethod
+    def set_underwriting_subscriber_decision(cls, parameters):
+        underwriting = parameters['underwriting']
+        underwriting.subscriber_decision = parameters['subscriber_decision']
+        underwriting.subscriber_decision_date = parameters['decision_date']
+        underwriting.save()
+
+    @classmethod
+    def _set_underwriting_subscriber_decision_schema(cls):
+        return {
+            'type': 'object',
+            'additionalProperties': False,
+            'properties': {
+                'contract': CONTRACT_SCHEMA,
+                'subscriber_decision': {
+                    'type': 'string',
+                    'enum': ['accepted', 'refused']
+                    },
+                'decision_date': DATE_SCHEMA,
+                },
+            'required': ['contract', 'subscriber_decision'],
+            }
+
+    @classmethod
+    def _set_underwriting_subscriber_decision_examples(cls):
+        return [
+            {
+                'input': {
+                    'contract': {'number': '1234567890'},
+                    'subscriber_decision': 'accepted',
+                    'decision_date': '2020-04-06',
+                    },
+                'output': None,
+                }
+            ]
+
+    @classmethod
+    def _set_underwriting_subscriber_decision_convert_input(cls, parameters):
+        pool = Pool()
+        API = pool.get('api')
+        contract = cls._get_contract(parameters['contract'])
+        parameters['contract'] = contract
+        if not contract.underwritings:
+            API.add_input_error({
+                    'type': 'no_underwriting_on_contract',
+                    'data': {
+                        'contract': contract.rec_name
+                        },
+                    })
+
+        parameters['underwriting'] = contract.underwritings[-1]
+
+        if 'decision_date' in parameters:
+            parameters['decision_date'] = date_from_api(
+                parameters['decision_date'])
+        else:
+            parameters['decision_date'] = utils.today()
+
+        if parameters['decision_date'] > utils.today():
+            API.add_input_error({
+                    'type': 'future_decision_date',
+                    'data': {
+                        'decision_date': date_for_api(
+                            parameters['decision_date']),
+                        },
+                    })
+        parameters['decision_date'] = parameters['decision_date']
+        return parameters
+
+    """ *** End Subscriber Decision API Methods *** """

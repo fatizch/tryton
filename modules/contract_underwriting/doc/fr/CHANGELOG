@@ -1,3 +1,4 @@
+* FEA#12790 Ajouter d'un API de saisie de la décision du souscripteur pour l'analyse de risque
 * FEA#12685 Ajout d'une api de saisie de résultat d'analyse de risque
 * FEA#12326 Possibilité de saisir des notes durant le processus d'analyse de risque et seulement visible par la bulle médicale
 
