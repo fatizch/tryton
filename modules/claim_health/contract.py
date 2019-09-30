@@ -50,7 +50,7 @@ class CoveredElement(metaclass=PoolMeta):
         if utils.is_module_installed('contract_insurance_invoice'):
             billing_info = self.contract.billing_information
             if billing_info and billing_info.direct_debit_account:
-                return billing_info.direct_debit_account
+                return billing_info.direct_debit_account.id
         if self.contract.subscriber:
             account = self.contract.subscriber.get_bank_account(utils.today())
             if account:
