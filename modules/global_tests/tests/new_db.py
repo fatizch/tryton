@@ -5120,9 +5120,11 @@ if CREATE_CONTRACTS:  # {{{
         }
     loan_contract.save()
     process_next(loan_contract)
-    loan_contract.document_request_lines[0].received = True
-    loan_contract.document_request_lines[1].received = True
-    question = loan_contract.document_request_lines[2]
+    by_code = {x.document_desc.code:
+        x for x in loan_contract.document_request_lines}
+    by_code['loan_planning'].received = True
+    by_code['subscription_request'].received = True
+    question = by_code['questions']
     question.extra_data['how_do_you_do_'] = 'fine'
     question.click('confirm_attachment')
     loan_contract.save()
