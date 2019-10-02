@@ -29,6 +29,21 @@ Données contrat
 - ``share`` / ``loan_share`` / ``loan.share`` : Une quotité de prêt, autrement
   dit à quel pourcentage un prêt donné est couvert pour une garantie donnée
 
+Données sinistre
+----------------
+
+- ``claim`` : un dossier sinistre
+- ``claim.loss`` / ``loss`` : un événement (ou préjudice) qui s'est produit
+  dans le cadre du sinistre
+- ``benefit.loss_desc`` / ``loss_desc`` : le paramétrage associé au préjudice
+- ``claim.service`` / ``service`` : une prestation qui a été "activée" sur un
+  sinistre
+- ``benefit`` : la définition de la prestation (dans quelle cas elle est
+  appliquée, et comment elle est calculée)
+- ``claim.indemnification`` / ``indemnification`` : un paiement de prestation
+  (un capital unique dans le cas d'une prestation de type capital, une liste de
+  versements dans le cas d'une rente ou d'indemnités journalières)
+
 Données de paramétrage
 ----------------------
 
@@ -44,11 +59,23 @@ Données comptabilité
 - ``invoice`` / ``account.invoice`` : si rattachée à un contrat, une quittance
   à prélever au titre du contrat. Si à un sinistre, un remboursement effectué
   dans le cadre de ce sinistre
+- ``contract.invoice`` : Le lien entre un contrat et une facture. Il comporte
+  notamment les dates de validité de la facture (quelle est la période qui est
+  couverte par la facture)
 - ``invoice_line`` / ``account.invoice.line`` : ligne (élément constituant)
   d'une quittance / facture
+- ``account.invoice.line.detail`` : détail fonctionnel d'une ligne de quittance
+  (partie du contrat l'ayant généré)
+- ``account.invoice.line.claim_detail`` : détail fonctionnel d'une ligne de
+  quittance (partie du sinistre l'ayant généré)
 - ``move`` / ``account.move`` : toute opération comptable. En général (mais pas
   toujours) rattaché à une quittance
 - ``move_line`` / ``account.move.line`` : ligne comptable
+- ``account.move.reconciliation`` / ``reconciliation`` : Réconciliation /
+  Lettrage comptable
+- ``account.payment`` / ``payment`` : Prélèvement / Virement
+- ``account.statement`` / ``statement`` : Bordereau (ensemble) de chèques, ou
+  réception d'argent par virement ou carte bancaire
 - ``commission`` : une ligne de commission, en général rattachée à une ligne de
   quittance
 
