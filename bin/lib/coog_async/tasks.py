@@ -1,3 +1,4 @@
+import sys
 import logging
 import datetime
 import coog_async.broker as async_broker
@@ -31,6 +32,7 @@ def batch_generate(name, params):
     from trytond.pool import Pool
     from trytond.transaction import Transaction
     from trytond.server_context import ServerContext
+    from trytond.modules.coog_core.batch import BatchRoot
     import tryton_init
 
     # Get database from ENV variable
@@ -41,7 +43,15 @@ def batch_generate(name, params):
     res = []
     with Transaction().start(database, 0, readonly=True):
         User = Pool().get('res.user')
-        BatchModel = Pool().get(name)
+        try:
+            BatchModel = Pool().get(name)
+        except KeyError:
+            logger.critical('%s is not a valid model name' % name)
+            sys.exit(1)
+
+        if not issubclass(BatchModel, BatchRoot):
+            logger.critical('%s is not a batch model' % name)
+            sys.exit(1)
 
         admin = User.search([('login', '=', 'admin')])
         company = admin[0].company.id if admin and admin[0].company else None

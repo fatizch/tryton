@@ -90,3 +90,7 @@ coog_celery_report() { # return reports data as json
     [ -z "$1" ] >&2 && echo missing from~to argument
     coog_redis_eval report report "$@"
 }
+
+coog_celery_flower() { # starts an instance of the flower interface
+    flower --broker="$TRYTOND_ASYNC_CELERY" --broker-api="$TRYTOND_ASYNC_CELERY"
+}
