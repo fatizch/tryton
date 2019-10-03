@@ -256,7 +256,7 @@ msgstr "Créé par"
 
 msgctxt "field:report.template,document_desc:"
 msgid "Document Description"
-msgstr "Descripteur de Document"
+msgstr "Type de document"
 
 msgctxt "field:report.template,event_type_actions:"
 msgid "Event Type Actions"

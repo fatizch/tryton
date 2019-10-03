@@ -36,7 +36,7 @@ msgstr "Créé par"
 
 msgctxt "field:document.description-extra_data,doc_desc:"
 msgid "Document Description"
-msgstr "Descripteur de Document"
+msgstr "Type de document"
 
 msgctxt "field:document.description-extra_data,extra_data_def:"
 msgid "Extra Data"
@@ -384,7 +384,7 @@ msgid ""
 "description code as keys."
 msgstr ""
 "La valeur retournée de la règle de document doit être un dictionnaire avec "
-"les code des descripteurs de documents comme clés."
+"les code des types de documents comme clés."
 
 msgctxt "model:ir.ui.menu,name:"
 msgid "Receive Documents"

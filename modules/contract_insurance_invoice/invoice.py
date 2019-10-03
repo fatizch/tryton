@@ -184,9 +184,9 @@ class Invoice(metaclass=PoolMeta):
     def get_currency_symbol(self, name):
         return self.currency.symbol if self.currency else ''
 
-    def get_reference_object_for_edm(self, template):
+    def get_reference_object_for_edm(self):
         return self.contract or super(Invoice,
-            self).get_reference_object_for_edm(template)
+            self).get_reference_object_for_edm()
 
     @classmethod
     def get_fees(cls, invoices, name):

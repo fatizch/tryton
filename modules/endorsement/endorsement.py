@@ -1346,10 +1346,10 @@ class Endorsement(QueueMixin, Workflow, Printable, model.CoogSQL,
         return (self.write_date if self.write_date else self.create_date
             ).replace(microsecond=0)
 
-    def get_reference_object_for_edm(self, template):
+    def get_reference_object_for_edm(self):
         if len(self.contracts) == 1:
             return self.contracts[0]
-        return super(Endorsement, self).get_reference_object_for_edm(template)
+        return super(Endorsement, self).get_reference_object_for_edm()
 
     @fields.depends('application_date')
     def on_change_with_application_date_str(self, name=None):

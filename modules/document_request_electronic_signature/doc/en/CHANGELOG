@@ -1,3 +1,4 @@
+* FEA#12821 Allow to sign a set of documents (mixing request line document and coog generated documents)
 * OTH#0000 Make signature configuration exportable
 * FEA#12321 Allow to customize electronic signature settings based on model desc
 * BUG#12198 Add more information in context when generating a document to find a signer for the electronic signature in some cases

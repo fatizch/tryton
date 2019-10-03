@@ -64,7 +64,7 @@ msgstr "Créé par"
 
 msgctxt "field:document.description-res.group,document_desc:"
 msgid "Document Description"
-msgstr "Descripteur de Document"
+msgstr "Type de document"
 
 msgctxt "field:document.description-res.group,group:"
 msgid "Group"
@@ -128,7 +128,7 @@ msgstr "Créé par"
 
 msgctxt "field:document.reception,document_desc:"
 msgid "Document Description"
-msgstr "Descripteur de Document"
+msgstr "Type de document"
 
 msgctxt "field:document.reception,final_target:"
 msgid "Target Instance"
@@ -164,7 +164,7 @@ msgstr "Identifiant XML"
 
 msgctxt "field:ir.attachment,document_desc:"
 msgid "Document Description"
-msgstr "Descripteur de Document"
+msgstr "Type de document"
 
 msgctxt "field:ir.attachment,func_key:"
 msgid "Functional Key"
@@ -180,7 +180,7 @@ msgstr "Identifiant XML"
 
 msgctxt "model:document.description,name:"
 msgid "Document Description"
-msgstr "Descripteur de Document"
+msgstr "Type de document"
 
 msgctxt "model:document.description-res.group,name:"
 msgid "Document Desc Group relation"
@@ -196,7 +196,7 @@ msgstr "Réception des documents"
 
 msgctxt "model:ir.action,name:act_document_desc"
 msgid "Document Descriptions"
-msgstr "Modèles de document"
+msgstr "Types de document"
 
 msgctxt "model:ir.action,name:act_document_reception"
 msgid "Document Receptions"

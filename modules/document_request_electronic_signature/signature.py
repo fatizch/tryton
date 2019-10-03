@@ -4,17 +4,12 @@ import datetime
 
 from trytond.pool import PoolMeta
 
-from trytond.modules.coog_core import fields
-from trytond.modules.offered.extra_data import with_extra_data_def
-from trytond.modules.offered.extra_data import ExtraDataDefTable
-
 from trytond.modules.coog_core import export
 
 __all__ = [
     'Signature',
     'SignatureCredential',
     'SignatureConfiguration',
-    'SignatureConfigurationExtraDataRelation',
     ]
 
 
@@ -31,24 +26,16 @@ class Signature(metaclass=PoolMeta):
                 datetime.datetime.min.time())
         return struct
 
+    @classmethod
+    def format_url(cls, url, from_object):
+        if hasattr(from_object, 'format_signature_url'):
+            return from_object.format_signature_url(url)
+        return super(Signature, cls).format_url(url, from_object)
 
-class SignatureCredential(export.ExportImportMixin):
+
+class SignatureCredential(export.ExportImportMixin, metaclass=PoolMeta):
     __name__ = 'document.signature.credential'
 
 
-class SignatureConfiguration(export.ExportImportMixin,
-        with_extra_data_def('document.signature.configuration-extra_data',
-            'conf', 'signature'),
-        metaclass=PoolMeta):
+class SignatureConfiguration(export.ExportImportMixin, metaclass=PoolMeta):
     __name__ = 'document.signature.configuration'
-
-
-class SignatureConfigurationExtraDataRelation(ExtraDataDefTable):
-    'Relation between Signature Configuration and Extra Data'
-
-    __name__ = 'document.signature.configuration-extra_data'
-
-    conf = fields.Many2One('document.signature.configuration',
-        'Signature Configuration', ondelete='CASCADE')
-    extra_data_def = fields.Many2One('extra_data', 'Extra Data',
-        ondelete='RESTRICT')

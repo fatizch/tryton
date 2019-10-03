@@ -48,5 +48,6 @@ coog_dep_main() { # install base deps
                 "werkzeug<0.15" \
                 "wrapt" \
                 "pyjwt" \
+                "PyPDF2" \
                 "sqlitebck" # for tests
 }

@@ -78,9 +78,9 @@ class Payment(metaclass=PoolMeta):
     def search_contract(cls, name, clause):
         return [('line.contract',) + tuple(clause[1:])]
 
-    def get_reference_object_for_edm(self, template):
+    def get_reference_object_for_edm(self):
         if not self.line.contract:
-            return super(Payment, self).get_reference_object_for_edm(template)
+            return super(Payment, self).get_reference_object_for_edm()
         return self.line.contract
 
     @classmethod

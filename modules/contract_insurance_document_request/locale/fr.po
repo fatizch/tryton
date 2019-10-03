@@ -181,7 +181,7 @@ msgid ""
 "are : [('blocking', 'blocking'), ('max_reminders', 'max_reminders')] "
 msgstr ""
 "La règle doit retourner un dictionnaire dont les clés sont des codes de "
-"descripteur de documents, et dont les valeurs sont des dictionnaires. Les "
+"type de documents, et dont les valeurs sont des dictionnaires. Les "
 "clés possibles pour ces sous-dictionnaires sont : ['blocking']"
 
 msgctxt "help:offered.option.description,document_rules:"

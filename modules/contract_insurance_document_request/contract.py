@@ -212,15 +212,11 @@ class Contract(RemindableInterface, metaclass=PoolMeta):
                 DocumentRequestLine.delete(to_delete)
 
     def link_attachments_to_requests(self):
-        attachments_grouped = defaultdict(list)
-        for attachment in self.attachments:
-            attachments_grouped[attachment.document_desc].append(attachment)
-        for request in self.document_request_lines:
-            if not (request.document_desc and
-                    len(attachments_grouped[request.document_desc]) == 1):
-                continue
-            request.attachment = attachments_grouped[request.document_desc][0]
-            request.save()
+        DocumentRequestLine = Pool().get('document.request.line')
+        requests = DocumentRequestLine.link_to_attachments(
+            self.document_request_lines, self.attachments)
+        if requests:
+            DocumentRequestLine.save(requests)
 
     @classmethod
     def update_contract_after_import(cls, contracts):

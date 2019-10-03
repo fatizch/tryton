@@ -115,9 +115,9 @@ class Dunning(metaclass=PoolMeta):
         return super(Dunning, cls).process(
             [x for x in dunnings if x.is_contract_main])
 
-    def get_reference_object_for_edm(self, template):
+    def get_reference_object_for_edm(self):
         if not self.contract:
-            return super(Dunning, self).get_reference_object_for_edm(template)
+            return super(Dunning, self).get_reference_object_for_edm()
         return self.contract
 
     def get_object_for_contact(self):

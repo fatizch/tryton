@@ -12,4 +12,8 @@ this repository contains the full copyright notices and license terms. -->
         <label name="signature_credential"/>
         <field name="signature_credential"/>
     </xpath>
+    <xpath expr="/form" position="inside">
+        <field name="signature_coordinates" colspan="1"/>
+        <field name="sub_documents" colspan="3"/>
+    </xpath>
 </data>

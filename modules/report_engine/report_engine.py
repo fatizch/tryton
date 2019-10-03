@@ -521,7 +521,7 @@ class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
         Attachment = pool.get('ir.attachment')
         attachment = Attachment()
         attachment.resource = (report.get('resource') or
-            report['object'].get_reference_object_for_edm(self))
+            report['object'].get_reference_object_for_edm())
         oext, attachment.data = self.convert(
             report['original_data'] or report['data'],
             self.get_extension('format_for_internal_edm'),
@@ -945,7 +945,7 @@ class Printable(ModelSQL):
     def get_doc_template_kind(self):
         return ['']
 
-    def get_reference_object_for_edm(self, template):
+    def get_reference_object_for_edm(self):
         return self
 
     def post_generation(self):

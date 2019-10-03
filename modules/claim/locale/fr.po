@@ -1638,7 +1638,7 @@ msgstr "Numéro de sinistre"
 
 msgctxt "model:ir.test_case.instance,name:document_desc_test_case"
 msgid "Document Desc Test Case"
-msgstr "Jeux d'essai : descripteurs de document"
+msgstr "Jeux d'essai : types de document"
 
 msgctxt "model:ir.test_case.instance,name:event_desc_test_case"
 msgid "Event Desc Test Case"

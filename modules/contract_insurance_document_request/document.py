@@ -2,6 +2,7 @@
 # this repository contains the full copyright notices and license terms.
 from sql import Cast
 from sql.functions import Substring
+from collections import defaultdict
 
 from trytond import backend
 from trytond.pool import PoolMeta, Pool
@@ -80,6 +81,30 @@ class DocumentRequestLine(metaclass=PoolMeta):
     def for_object_models(cls):
         return super(DocumentRequestLine, cls).for_object_models() + \
             ['contract', 'contract.covered_element']
+
+    @classmethod
+    def link_to_attachments(cls, requests, attachments):
+        requests_to_save = []
+        attachments_grouped = defaultdict(list)
+        for attachment in [a for a in attachments if a.status != 'invalid']:
+            attachments_grouped[attachment.document_desc].append(attachment)
+        for request in requests:
+            if not (request.document_desc and
+                    attachments_grouped[request.document_desc]):
+                continue
+            request.attachment = attachments_grouped[request.document_desc][0]
+            requests_to_save.append(request)
+        return requests_to_save
+
+    def get_object_to_print(self, model):
+        if model == 'contract':
+            return self.contract
+        return super(DocumentRequestLine, self).get_object_to_print(model)
+
+    def get_reference_object_for_edm(self):
+        if self.contract:
+            return self.contract
+        return super(DocumentRequestLine, self).get_reference_object_for_edm()
 
 
 class DocumentRequest(metaclass=PoolMeta):

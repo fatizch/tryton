@@ -6,21 +6,115 @@ msgctxt "field:document.description,digital_signature_required:"
 msgid "Digital Signature Required"
 msgstr "Signature électronique requise"
 
-msgctxt "field:document.description,extra_data:"
-msgid "Extra Data"
-msgstr "Paramètres"
-
-msgctxt "field:document.description,extra_data_summary:"
-msgid "Extra Data Summary"
-msgstr "Résumé des paramètres"
-
 msgctxt "field:document.description,signature_configuration:"
 msgid "Signature Configuration"
 msgstr "Configuration du service de signature"
 
+msgctxt "field:document.description,signature_coordinates:"
+msgid "Signature Coordinates"
+msgstr "Coordonnées de la signature"
+
 msgctxt "field:document.description,signature_credential:"
 msgid "Signature Credential"
 msgstr "Authentification pour service de signature"
+
+msgctxt "field:document.description,sub_documents:"
+msgid "Composed Of"
+msgstr "Composé de"
+
+msgctxt "field:document.description.part,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:document.description.part,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:document.description.part,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:document.description.part,doc:"
+msgid "Document Desc"
+msgstr "Type de document"
+
+msgctxt "field:document.description.part,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:document.description.part,parent_doc:"
+msgid "Parent Document"
+msgstr "Document parent"
+
+msgctxt "field:document.description.part,rec_name:"
+msgid "Record Name"
+msgstr "Nom de l'enregistrement"
+
+msgctxt "field:document.description.part,sequence:"
+msgid "Sequence"
+msgstr "Séquence"
+
+msgctxt "field:document.description.part,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:document.description.part,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:document.description.part,xml_id:"
+msgid "XML Id"
+msgstr "XML Id"
+
+msgctxt "field:document.description.signature.coordinate,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:document.description.signature.coordinate,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:document.description.signature.coordinate,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:document.description.signature.coordinate,doc_desc:"
+msgid "Document Description"
+msgstr "Type de document"
+
+msgctxt "field:document.description.signature.coordinate,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:document.description.signature.coordinate,rec_name:"
+msgid "Record Name"
+msgstr "Nom de l'enregistrement"
+
+msgctxt ""
+"field:document.description.signature.coordinate,signature_coordinate_x:"
+msgid "Horizontal signature coordinate"
+msgstr "Coordonnée horizontale de la signature"
+
+msgctxt ""
+"field:document.description.signature.coordinate,signature_coordinate_y:"
+msgid "Vertical signature coordinate"
+msgstr "Coordonnée verticale de la signature"
+
+msgctxt "field:document.description.signature.coordinate,signature_page:"
+msgid "Signature page"
+msgstr "Page de signature"
+
+msgctxt "field:document.description.signature.coordinate,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:document.description.signature.coordinate,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:document.description.signature.coordinate,xml_id:"
+msgid "XML Id"
+msgstr "XML Id"
 
 msgctxt "field:document.request.line,digital_signature_required:"
 msgid "Digital Signature Required"
@@ -30,49 +124,22 @@ msgctxt "field:document.request.line,electronic_signature_icon:"
 msgid "Electronic Signature Icon"
 msgstr "Icône de signature électronique"
 
-msgctxt "field:document.signature.configuration,extra_data_def:"
-msgid "Extra Data"
-msgstr "Paramètres"
-
-msgctxt "field:document.signature.configuration-extra_data,conf:"
-msgid "Signature Configuration"
-msgstr "Configuration du service de signature"
-
-msgctxt "field:document.signature.configuration-extra_data,create_date:"
-msgid "Create Date"
-msgstr "Date de Création"
-
-msgctxt "field:document.signature.configuration-extra_data,create_date_:"
-msgid "Creation date"
-msgstr "Date de Création"
-
-msgctxt "field:document.signature.configuration-extra_data,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:document.signature.configuration-extra_data,extra_data_def:"
-msgid "Extra Data"
-msgstr "Paramètres"
-
-msgctxt "field:document.signature.configuration-extra_data,id:"
-msgid "ID"
-msgstr "Identifiant"
-
-msgctxt "field:document.signature.configuration-extra_data,rec_name:"
-msgid "Record Name"
-msgstr "Nom de l'enregistrement"
-
-msgctxt "field:document.signature.configuration-extra_data,write_date:"
-msgid "Write Date"
-msgstr "Modifié par"
-
-msgctxt "field:document.signature.configuration-extra_data,write_uid:"
-msgid "Write User"
-msgstr "Modifié par"
-
-msgctxt "field:document.signature.configuration-extra_data,xml_id:"
+msgctxt "field:document.signature.configuration,xml_id:"
 msgid "XML Id"
 msgstr "XML Id"
+
+msgctxt "field:document.signature.credential,xml_id:"
+msgid "XML Id"
+msgstr "XML Id"
+
+msgctxt "help:document.description.signature.coordinate,signature_page:"
+msgid "The page on which the signature must appear. 1 is the first and -1 the last"
+msgstr ""
+"La page sur laquelle la signature doit apparaître. 1 est la première et -1 la dernière"
+
+msgctxt "help:document.request.line,details:"
+msgid "Add details about the received document"
+msgstr "Permet d'ajouter des précisions sur le document reçu"
 
 msgctxt "help:document.request.line,received:"
 msgid ""
@@ -82,24 +149,6 @@ msgstr ""
 "Si une signature électronique est requise, le document ne peut être marqué "
 "comme reçu avant d'être signé."
 
-msgctxt "model:document.signature.configuration-extra_data,name:"
-msgid "Relation between Signature Configuration and Extra Data"
-msgstr ""
-"Relation entre la configuration du service de signature et la donnée "
-"complémentaire"
-
-msgctxt "model:extra_data,string:signature_coordinate_x"
-msgid "The horizontal coordinate on the page"
-msgstr "Coordonnée horizontale sur la page"
-
-msgctxt "model:extra_data,string:signature_coordinate_y"
-msgid "The vertical coordinate on the page"
-msgstr "Coordonnée verticale sur la page"
-
-msgctxt "model:extra_data,string:signature_page"
-msgid "The page on which the signature must appear"
-msgstr "La page sur laquelle apparaît la signature"
-
-msgctxt "selection:extra_data,kind:"
-msgid "Electronic Signature"
-msgstr "Signature électronique"
+msgctxt "model:document.description.signature.coordinate,name:"
+msgid "Document Signature Coordinate"
+msgstr "Coordonnées de la signature"

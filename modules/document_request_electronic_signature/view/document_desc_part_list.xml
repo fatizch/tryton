@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!-- This file is part of Coog. The COPYRIGHT file at the top level of
 this repository contains the full copyright notices and license terms. -->
-<data>
-    <xpath expr="/form/field[@name='signature_credential']" position="after">
-        <field name="extra_data" colspan="2" no_command="1"/>
-    </xpath>
-</data>
+<tree editable="bottom" sequence="sequence">
+    <field name="parent_doc"/>
+    <field name="sequence"/>
+    <field name="doc" expand="1"/>
+</tree>

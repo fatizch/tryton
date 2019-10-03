@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<form>
+    <label name="doc_desc"/>
+    <field name="doc_desc"/>
+    <newline/>
+    <label name="signature_coordinate_x"/>
+    <field name="signature_coordinate_x"/>
+    <label name="signature_coordinate_y"/>
+    <field name="signature_coordinate_y"/>
+    <label name="signature_page"/>
+    <field name="signature_page"/>
+</form>

@@ -350,22 +350,7 @@ class DocumentRequestLine(Printable, model.CoogSQL, model.CoogView):
         to_save = []
         for request in requests:
             if not request.attachment and value:
-                attachment = Attachment()
-                attachment.status = Attachment.default_status()
-                attachment.resource = request.for_object
-                attachment.document_desc = request.document_desc
-                if name == 'attachment_data':
-                    attachment.data = value
-                    attachment.name = 'tmp'
-                elif name == 'attachment_name':
-                    attachment.name = request.document_desc.name
-                    if request.matching_attachments:
-                        attachment.name += '_%s' % (
-                            len(request.matching_attachments) + 1)
-                    split_value = value.split('.')
-                    if len(split_value) > 1:
-                        attachment.name += '.' + split_value[-1]
-                    attachment.data = None
+                attachment = request.new_attachment(value, name)
                 attachments.append(attachment)
                 request.attachment = attachment
                 if name == 'attachment_data':
@@ -392,12 +377,32 @@ class DocumentRequestLine(Printable, model.CoogSQL, model.CoogView):
         if attachments:
             Attachment.save(attachments)
 
+    def new_attachment(self, value, name='attachment_data'):
+        Attachment = Pool().get('ir.attachment')
+        attachment = Attachment()
+        attachment.status = Attachment.default_status()
+        attachment.resource = self.get_reference_object_for_edm()
+        attachment.document_desc = self.document_desc
+        attachment.name = self.document_desc.name
+        if name == 'attachment_data':
+            attachment.data = value
+        elif name == 'attachment_name':
+            if self.matching_attachments:
+                attachment.name += '_%s' % (
+                    len(self.matching_attachments) + 1)
+            split_value = value.split('.')
+            if len(split_value) > 1:
+                attachment.name += '.' + split_value[-1]
+            attachment.data = None
+        return attachment
+
     def get_matching_attachments(self, name):
         Attachment = Pool().get('ir.attachment')
         return [x.id for x in Attachment.search([
                     ('resource', 'in',
                         self.get_attachment_possible_resources()),
-                    ('document_desc', '=', self.document_desc)
+                    ('document_desc', '=', self.document_desc),
+                    ('status', '!=', 'invalid'),
                     ]
                 )]
 
@@ -510,24 +515,34 @@ class DocumentRequestLineOffered(
         return received and self.data_status == 'done'
 
     @classmethod
-    def _generate_template_documents(cls, documents):
+    def _generate_template_documents(cls, request_lines):
         pool = Pool()
         Attachment = pool.get('ir.attachment')
         date_today = utils.today()
-        for document in documents:
-            attachments = []
-            if document.document_desc and document.document_desc.template:
+        for request_line in request_lines:
+            attachments = request_line.matching_attachments
+            if (not attachments and request_line.document_desc
+                    and request_line.document_desc.template):
+                object_to_print = request_line.get_object_to_print(
+                    request_line.document_desc.template.on_model.model)
+                assert object_to_print
                 reports, attachments = \
-                    document.document_desc.template.produce_reports([document],
-                        {})
+                    request_line.document_desc.template.produce_reports(
+                        [object_to_print], {})
                 if attachments:
                     Attachment.write([attachments[0]], {
-                        'resource': str(document.for_object),
-                        'document_desc': document.document_desc.id})
-            cls.write([document], {
-                'data_status': 'done',
-                'attachment': attachments[0].id if attachments else None,
-                'reception_date': date_today, })
+                        'resource': str(
+                            request_line.get_reference_object_for_edm()),
+                        'document_desc': request_line.document_desc.id})
+            cls.write([request_line], {
+                    'data_status': 'done',
+                    'attachment': attachments[0].id if attachments else None,
+                    'reception_date': date_today,
+                    })
+
+    def get_object_to_print(self, model):
+        if model == 'document.request.line':
+            return self
 
     @classmethod
     @ModelView.button
