@@ -13,5 +13,15 @@ this repository contains the full copyright notices and license terms. -->
             <field name="long_description">Retourne les documents reçus sur le contrat et leur date de réception</field>
             <field name="parent" ref="contract.te_contract"/>
         </record>
+        <record model="rule_engine.function" id="documents_requested">
+            <field name="translated_technical_name">documents_demandes</field>
+            <field name="description">Documents Demandés</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_documents_requested</field>
+            <field name="long_description">Retourne le dictionnaire des documents demandés pour le contrat</field>
+            <field name="parent" ref="contract.te_contract"/>
+        </record>
     </data>
 </tryton>

@@ -37,3 +37,9 @@ class RuleEngineRuntime(metaclass=PoolMeta):
             for x in args['contract'].document_request_lines
             if x.reception_date and x.document_desc
             }
+
+    @classmethod
+    @check_args('contract')
+    def _re_documents_requested(cls, args):
+        return {d.document_desc.code: {'blocking': d.blocking}
+            for d in args['contract'].document_request_lines}

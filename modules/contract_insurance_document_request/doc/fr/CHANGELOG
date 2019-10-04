@@ -1,3 +1,4 @@
+* FEA#12837 Ajout d'une nouvelle fonction dans le moteur de règles retournant l'ensemble des documents demandés pour un contrat
 * FEA#12764 Ajout d'une API pour téléverser des documents vers un contrat
 * FEA#12064 Les lignes de documents requis peuvent désormais porter sur un élément couvert
 

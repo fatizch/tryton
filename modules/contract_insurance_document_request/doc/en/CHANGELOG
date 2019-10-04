@@ -1,3 +1,4 @@
+* FEA#12837 Add new function to rule engine which returns all requested documents for a contract
 * FEA#12764 Add an API to upload documents to a contract
 * FEA#12064 The document request lines can now target a covered element
 
