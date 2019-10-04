@@ -30,6 +30,8 @@ class BankDataSet(model.CoogView):
             'readonly': True,
             'invisible': True,
             })
+    is_update = fields.Boolean('Update', help='If set to True, '
+        'the existing banks will be updated')
 
     @staticmethod
     def default_use_default():
@@ -81,49 +83,89 @@ class BankDataSetWizard(Wizard):
             (not address.country and not country or
                 address.country.id == country.id))
 
+    def get_address(self, addresses, bank_row, country, party):
+        address = None
+        for cur_address in addresses:
+            if (self.address_compare(cur_address, bank_row, country)):
+                address = cur_address
+                break
+
+        if not address:
+            Address = Pool().get('party.address')
+            address = Address(
+                street=bank_row['address_street'],
+                city=bank_row['address_city'],
+                zip=bank_row['address_zip'],
+                country=country,
+                party=party)
+
+        return address
+
+    def _update_bank(self, bank, party, bank_row, country, addresses):
+        address = self.get_address(addresses, bank_row, country, party)
+        bank.party = party
+        bank.address = address
+        bank.save()
+
     def transition_set_(self):
         pool = Pool()
         Bank = pool.get('bank')
         Party = pool.get('party.party')
-        Address = pool.get('party.address')
         Country = pool.get('country.country')
 
         banks = []
         existing_banks = dict((x.bic, x) for x in Bank.search([]))
-        parties = dict((x.bank_role[0].bic[0:4], [x, list(x.addresses)])
+        parties = dict((x.bank_role[0].bic[0:7], [x, list(x.addresses)])
             for x in Party.search([('is_bank', '=', True)]))
         for bank_row in self.read_resource_file():
             bic = ('%sXXX' % bank_row['bic']
                 if len(bank_row['bic']) == 8 else bank_row['bic'])
-            if bic in existing_banks:
-                continue
-
-            addresses = []
-            address = None
             country = None
             countries = Country.search(
                 [('code', '=', bank_row['address_country'].upper())],
                 limit=1)
             if countries:
                 country = countries[0]
+            if bic in existing_banks:
+                if not self.configuration.is_update:
+                    continue
+                bank = existing_banks[bic]
+                if bank.party.name == bank_row['bank_name']:
+                    continue
+                if bic[0:7] in parties:
+                    party, addresses = parties[bic[0:7]]
+                    if party.name == bank_row['bank_name']:
+                        self._update_bank(bank, party, bank_row, country,
+                        addresses)
+                    else:
+                        existing_party = Party.search(
+                            ['name', '=', bank_row['bank_name']], limit=1)
+                        if existing_party:
+                            party = existing_party[0]
+                            addresses = party.addresses
+                        else:
+                            party = Party(name=bank_row['bank_name'])
+                            addresses = []
+                        self._update_bank(bank, party, bank_row,
+                            country, addresses)
+                        parties[bic[0:7]] = [party, [party.addresses]]
+                else:
+                    party = Party(name=bank_row['bank_name'])
+                    self._update_bank(bank, party,
+                        bank_row, country, [])
+                    parties[bic[0:7]] = [party, [bank.address]]
+                continue
+
+            addresses = []
             try:
-                party, addresses = parties[bic[0:4]]
-                for cur_address in addresses:
-                    if (self.address_compare(cur_address, bank_row, country)):
-                        address = cur_address
-                        break
+                party, addresses = parties[bic[0:7]]
             except KeyError:
                 party = Party(name=bank_row['bank_name'])
-                parties[bic[0:4]] = [party, addresses]
+                parties[bic[0:7]] = [party, addresses]
 
-            if not address:
-                address = Address(
-                    street=bank_row['address_street'],
-                    city=bank_row['address_city'],
-                    zip=bank_row['address_zip'],
-                    country=country,
-                    party=party)
-                parties[bic[0:4]][1].append(address)
+            address = self.get_address(addresses, bank_row, country, party)
+            if address not in addresses:
+                parties[bic[0:7]][1].append(address)
 
             bank = Bank(
                 bic=bank_row['bic'],

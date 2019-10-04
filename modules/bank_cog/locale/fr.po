@@ -74,6 +74,10 @@ msgctxt "field:bank_cog.data.set,id:"
 msgid "ID"
 msgstr "Identifiant"
 
+msgctxt "field:bank_cog.data.set,is_update:"
+msgid "Update"
+msgstr "Mise à jour"
+
 msgctxt "field:bank_cog.data.set,resource:"
 msgid "Resource"
 msgstr "Ressource"
@@ -141,6 +145,10 @@ msgstr "Mis à jour par"
 msgctxt "field:party.synthesis.menu.bank_account,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
+
+msgctxt "help:bank_cog.data.set,is_update:"
+msgid "If set to True, the existing banks will be updated"
+msgstr "Si défini à Vrai, les banques existantes seront mises à jour"
 
 msgctxt "model:bank_cog.data.set,name:"
 msgid "Bank Data Set"

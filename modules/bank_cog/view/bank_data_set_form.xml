@@ -13,4 +13,7 @@ this repository contains the full copyright notices and license terms. -->
     <newline/>
     <label name="resource"/>
     <field name="resource"/>
+    <newline/>
+    <label name="is_update"/>
+    <field name="is_update"/>
 </form>
