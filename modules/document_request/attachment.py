@@ -3,23 +3,27 @@
 from trytond.pool import PoolMeta
 from trytond.pyson import Eval
 from trytond.transaction import Transaction
-from trytond.modules.coog_core import fields, utils
-from trytond.i18n import gettext
+from trytond.modules.coog_core import fields, utils, model
+from trytond.model import Workflow
 
 __all__ = [
     'Attachment',
     ]
 
-ATTACHMENT_STATUSES = (('waiting_validation', 'Waiting Validation'),
-    ('valid', 'Valid'), ('invalid', 'Invalid'))
 BLOCKING_STATUSES = ['invalid']
 
 
-class Attachment(metaclass=PoolMeta):
+class Attachment(Workflow, metaclass=PoolMeta):
     'Attachment'
     __name__ = 'ir.attachment'
 
-    status = fields.Selection('status_get', 'Status', required=True)
+    _transition_state = 'status'
+
+    status = fields.Selection((
+        ('waiting_validation', 'Waiting Validation'),
+        ('valid', 'Valid'),
+        ('invalid', 'Invalid')),
+        'Status', required=True, readonly=True)
     is_conform = fields.Function(
         fields.Boolean('Conform'),
         'on_change_with_is_conform')
@@ -30,13 +34,50 @@ class Attachment(metaclass=PoolMeta):
         )
 
     @classmethod
-    def default_status(cls):
-        return 'valid'
+    def __setup__(cls):
+        super(Attachment, cls).__setup__()
+        cls._transitions |= set((
+                ('waiting_validation', 'valid'),
+                ('waiting_validation', 'invalid'),
+                ('valid', 'waiting_validation'),
+                ('invalid', 'waiting_validation'),
+                ))
+        cls._buttons.update({
+                'valid': {
+                    'invisible': Eval('status').in_(['valid', 'invalid']),
+                    'depends': ['status'],
+                    },
+                'invalid': {
+                    'invisible': Eval('status').in_(['invalid', 'valid']),
+                    'depends': ['status'],
+                    },
+                'waiting': {
+                    'invisible': Eval('status') == 'waiting_validation',
+                    'depends': ['status'],
+                    }
+                })
 
     @classmethod
-    def status_get(cls):
-        return [(x[0], gettext('document_request.msg_' + x[0]))
-            for x in ATTACHMENT_STATUSES]
+    @model.CoogView.button
+    @Workflow.transition('valid')
+    def valid(cls, attachments):
+        pass
+
+    @classmethod
+    @model.CoogView.button
+    @Workflow.transition('invalid')
+    def invalid(cls, attachments):
+        pass
+
+    @classmethod
+    @model.CoogView.button
+    @Workflow.transition('waiting_validation')
+    def waiting(cls, attachments):
+        pass
+
+    @classmethod
+    def default_status(cls):
+        return 'valid'
 
     @classmethod
     def blocking_statuses_get(cls):

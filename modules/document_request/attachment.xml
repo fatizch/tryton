@@ -13,5 +13,29 @@ this repository contains the full copyright notices and license terms. -->
             <field name="inherit" ref="ir.attachment_view_tree"/>
             <field name="name">attachment_list</field>
         </record>
+        <record model="ir.model.button" id="attachment_valid_button">
+            <field name="name">valid</field>
+            <field name="model" search="[('model', '=', 'ir.attachment')]"/>
+        </record>
+        <record model="ir.model.button" id="attachment_invalid_button">
+            <field name="name">invalid</field>
+            <field name="model" search="[('model', '=', 'ir.attachment')]"/>
+        </record>
+        <record model="ir.model.button" id="attachment_waiting_button">
+            <field name="name">waiting</field>
+            <field name="model" search="[('model', '=', 'ir.attachment')]"/>
+        </record>
+        <record model="ir.model.button-res.group" id="button_attachment_valid_group_admin">
+            <field name="button" ref="attachment_valid_button"/>
+            <field name="group" ref="res.group_admin"/>
+        </record>
+        <record model="ir.model.button-res.group" id="button_attachment_invalid_group_admin">
+            <field name="button" ref="attachment_invalid_button"/>
+            <field name="group" ref="res.group_admin"/>
+        </record>
+        <record model="ir.model.button-res.group" id="button_attachment_waiting_group_admin">
+            <field name="button" ref="attachment_waiting_button"/>
+            <field name="group" ref="res.group_admin"/>
+        </record>
     </data>
 </tryton>

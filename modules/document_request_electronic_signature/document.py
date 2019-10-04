@@ -6,7 +6,7 @@ from PyPDF2 import PdfFileMerger
 
 from trytond.modules.coog_core import fields
 from trytond.pool import PoolMeta, Pool
-from trytond.pyson import Eval, Bool
+from trytond.pyson import Eval, Bool, Or
 
 from trytond.modules.coog_core import utils, model
 
@@ -130,8 +130,10 @@ class DocumentRequestLine(metaclass=PoolMeta):
     @classmethod
     def __setup__(cls):
         super(DocumentRequestLine, cls).__setup__()
-        cls.attachment_data.states = {'readonly':
-            Bool(Eval('digital_signature_required'))}
+        attachment_data_readonly = cls.attachment_data.states.get('readonly',
+            False) if cls.attachment_data.states else False
+        cls.attachment_data.states = {'readonly': Or(attachment_data_readonly,
+            Bool(Eval('digital_signature_required')))}
         cls.attachment_data.depends += ['digital_signature_required']
         cls.received.help = 'If a digital signature is required ' \
             + 'the document cannot be marked as received unless signed.'

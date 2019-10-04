@@ -98,7 +98,7 @@ class DocumentTokenMixin(Printable):
 
     def _get_document_token_expiration(self):
         jwt_duration = config.getint('document_api',
-            'document_token_expiration_minutes')
+            'document_token_expiration_minutes') or 60 * 24 * 2
         return datetime.datetime.utcnow() + datetime.timedelta(
             minutes=jwt_duration)
 

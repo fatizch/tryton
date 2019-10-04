@@ -1,3 +1,4 @@
+* FEA#12341 Définition d'un workflow pour le statut des pièces-jointes
 * FEA#12341 Ajout d'APIs sur les lignes de documents requis
 * FEA#12567 Ajout du statut "En attente de validation" sur les pièces jointes
 * BUG#12630 Prise en compte du statut des données uniquement si le type de document le nécessite

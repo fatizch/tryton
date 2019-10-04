@@ -366,18 +366,6 @@ msgctxt "model:ir.message,text:msg_document_request_for"
 msgid "Document Request For %(name)s"
 msgstr "Demande de documents pour %(name)s"
 
-msgctxt "model:ir.message,text:msg_invalid"
-msgid "Invalid"
-msgstr "Non conforme"
-
-msgctxt "model:ir.message,text:msg_valid"
-msgid "Valid"
-msgstr "Conforme"
-
-msgctxt "model:ir.message,text:msg_waiting_validation"
-msgid "Waiting Validation"
-msgstr "En attente de validation"
-
 msgctxt "model:ir.message,text:msg_wrong_documents_rule"
 msgid ""
 "The return value of the document rule must be a dictionary with document "
@@ -414,6 +402,18 @@ msgctxt "selection:extra_data,kind:"
 msgid "Document Request"
 msgstr "Demande de Documents"
 
+msgctxt "selection:ir.attachment,status:"
+msgid "Invalid"
+msgstr "Non conforme"
+
+msgctxt "selection:ir.attachment,status:"
+msgid "Valid"
+msgstr "Valide"
+
+msgctxt "selection:ir.attachment,status:"
+msgid "Waiting Validation"
+msgstr "En attente de validation"
+
 msgctxt "view:document.receive.line:"
 msgid "Lines"
 msgstr "Lignes"
@@ -429,3 +429,15 @@ msgstr "Commentaire"
 msgctxt "view:document.request:"
 msgid "Send Request"
 msgstr "Envoyer la demande"
+
+msgctxt "view:ir.attachment:"
+msgid "Invalidate"
+msgstr "Invalider"
+
+msgctxt "view:ir.attachment:"
+msgid "Put On Hold"
+msgstr "Mettre en attente"
+
+msgctxt "view:ir.attachment:"
+msgid "Validate"
+msgstr "Valider"

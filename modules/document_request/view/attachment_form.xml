@@ -4,7 +4,12 @@ this repository contains the full copyright notices and license terms. -->
 <data>
     <xpath expr="/form/group/field[@name='document_desc']" position="after">
         <label name="status"/>
-        <field name="status"/>
+        <group id="status_buttons" col="4" colspan="1">
+            <field name="status"/>
+            <button name="valid" string="Validate" icon="check"/>
+            <button name="invalid" string="Invalidate" icon="cancel-list"/>
+            <button name="waiting" string="Put On Hold" icon="pause"/>
+        </group>
         <label name="status_change_date"/>
         <field name="status_change_date"/>
     </xpath>
