@@ -35,6 +35,7 @@ def register():
         offered.ProductQuoteNumberSequence,
         offered.ContractDataRule,
         offered.OptionDescriptionEndingRule,
+        offered.OptionDescription,
         contract.ContractSubStatus,
         configuration.Configuration,
         configuration.ConfigurationDefaultQuoteNumberSequence,

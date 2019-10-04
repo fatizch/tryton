@@ -1083,6 +1083,11 @@ class ModuleTestCase(test_framework.CoogTestCase):
         package_a, = Package.search([('code', '=', 'package_a')])
         package_b, = Package.search([('code', '=', 'package_b')])
         package_c, = Package.search([('code', '=', 'package_c')])
+        coverages = self.Coverage.search([('code', 'in',
+                ('DEL', 'BET', 'ALP'))])
+        for coverage in coverages:
+            coverage.allow_subscribe_coverage_multiple_times = True
+            coverage.save()
 
         baby, = self.Party.search([('name', '=', 'Antoine'),
                 ('first_name', '=', 'Jeff')])
@@ -1517,6 +1522,90 @@ class ModuleTestCase(test_framework.CoogTestCase):
                             }
                         ).result,
                     datetime.date(2000, 1, 1))
+
+    @test_framework.prepare_test(
+        'contract_insurance.test0012_testContractCreation',
+        'contract_insurance.test0001_testPersonCreation',
+        )
+    def test001_test_overlapping_options(self):
+        contract = self.Contract.search([])[0]
+        coverage_a, = self.Coverage.search([('code', '=', 'ALP')])
+        coverage_b, = self.Coverage.search([('code', '=', 'BET')])
+        party = self.Party.search([('is_person', '=', True)])[0]
+
+        start_date = contract.start_date
+        ant_date = start_date
+        manual_end_date = ant_date + datetime.timedelta(weeks=1)
+        post_date = manual_end_date + datetime.timedelta(weeks=1)
+        manual_end_date2 = post_date + datetime.timedelta(weeks=1)
+        # post_date2 = manual_end_date2 + datetime.timedelta(weeks=4)
+        current_contract = self.Contract(
+            start_date=start_date,
+            product=contract.product.id,
+            company=contract.product.company.id,
+            appliable_conditions_date=start_date,
+            )
+        current_contract.end_date = contract.end_date
+        covered_element = self.CoveredElement()
+        covered_element.item_desc = coverage_a.item_desc
+        covered_element.contract = current_contract
+        covered_element.product = covered_element.on_change_with_product()
+        covered_element.party = party
+        covered_element.save()
+
+        option_1 = self.Option()
+        option_1.coverage = coverage_a.id
+        option_1.manual_start_date = ant_date
+        option_1.manual_end_date = manual_end_date
+        option_1.covered_element = covered_element
+        option_1.sub_status = option_1.on_change_with_sub_status()
+        option_1.save()
+
+        option_2 = self.Option()
+        option_2.coverage = coverage_b.id
+        option_2.manual_start_date = post_date
+        option_2.manual_start_date = manual_end_date2
+        option_2.covered_element = covered_element
+        option_2.save()
+        current_contract.covered_elements = [covered_element.id]
+        current_contract.save()
+        current_contract.activate_contract()
+
+        def test_error(object, msg):
+            try:
+                object.activate_contract()
+                raise Exception('Expected error was not raised')
+            except UserError as error:
+                self.assertEqual(error.message, msg)
+
+        # Second Contract
+        current_contract_1 = self.Contract(
+            start_date=start_date,
+            product=contract.product.id,
+            company=contract.product.company.id,
+            appliable_conditions_date=start_date,
+        )
+        covered_element_b = self.CoveredElement()
+        covered_element_b.item_desc = coverage_a.item_desc
+        covered_element_b.contract = current_contract_1
+        covered_element_b.product = covered_element_b.on_change_with_product()
+        covered_element_b.party = party
+        covered_element_b.save()
+
+        option_1 = self.Option()
+        option_1.coverage = coverage_a.id
+        option_1.manual_start_date = ant_date
+        option_1.covered_element = covered_element_b
+        option_1.save()
+
+        current_contract_1.covered_elements = [covered_element_b.id]
+        current_contract_1.save()
+        test_error(current_contract_1, 'There are overlapping coverages for '
+            'Mr. ANTOINE Jeff.')
+        coverage_a.allow_subscribe_coverage_multiple_times = True
+        coverage_a.save()
+        current_contract_1.contract_number = '1234'
+        current_contract_1.activate_contract()
 
 
 def suite():

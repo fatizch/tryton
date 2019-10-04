@@ -824,6 +824,16 @@ class ContractOption(Printable):
             if option.coverage.code == coverage_code:
                 return option
 
+    def _get_search_domain_parent_string(self):
+        if self.covered_element and self.covered_element.party:
+            return (
+                [('covered_element.party', '=', self.covered_element.party.id),
+                ('coverage', '=', self.coverage.id),
+                ('parent_contract.status', 'in',
+                    ('active', 'hold', 'terminated'))
+                ], self.covered_element.rec_name)
+        return super()._get_search_domain_parent_string()
+
 
 class ContractOptionVersion(metaclass=PoolMeta):
     __name__ = 'contract.option.version'

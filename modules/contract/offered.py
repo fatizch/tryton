@@ -22,6 +22,7 @@ __all__ = [
     'ProductQuoteNumberSequence',
     'ContractDataRule',
     'OptionDescriptionEndingRule',
+    'OptionDescription',
     ]
 
 
@@ -175,3 +176,27 @@ class OptionDescriptionEndingRule(metaclass=PoolMeta):
         required=True, ondelete='RESTRICT',
         help='Automatic sub status which will be applied on automatilcally '
         'terminated options')
+
+
+class OptionDescription(metaclass=PoolMeta):
+    __name__ = 'offered.option.description'
+
+    allow_subscribe_coverage_multiple_times = fields.Boolean(
+        'Allow subscribe coverage multiple times', help='If set, you '
+        'will be allowed to cover an element that was already '
+        'covered with the same options at the same date on different contracts')
+
+    @classmethod
+    def __register__(cls, module_name):
+        # Migration from 2.4 allow_subscribe_coverage_multiple_times
+        TableHandler = backend.get('TableHandler')
+        cursor = Transaction().connection.cursor()
+        coverage_h = TableHandler(cls, module_name)
+        migrate = not coverage_h.column_exist(
+            'allow_subscribe_coverage_multiple_times')
+        super().__register__(module_name)
+        if migrate:
+            to_update = cls.__table__()
+            cursor.execute(*to_update.update(
+                columns=[to_update.allow_subscribe_coverage_multiple_times],
+                values=[True]))

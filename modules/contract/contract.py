@@ -1903,7 +1903,6 @@ class ContractOption(model.CoogSQL, model.CoogView, with_extra_data(['option'],
                 )
 
         ordered_options = sorted(options, key=order_by_coverage_and_date)
-
         for _, lines in groupby(ordered_options,
                 key=lambda x: x.coverage.id):
             prev_end = None
@@ -2333,7 +2332,25 @@ class ContractOption(model.CoogSQL, model.CoogView, with_extra_data(['option'],
             (at_date >= (self.initial_start_date or datetime.date.min) and
                 at_date <= (self.final_end_date or datetime.date.max))
 
+    def _get_search_domain_parent_string(self):
+        return (
+            [('coverage', '=', self.coverage.id),
+            ('parent_contract.subscriber', '=',
+                self.parent_contract.subscriber),
+            ('parent_contract.status', 'in', ('active', 'hold', 'terminated'))
+            ], self.parent_contract.rec_name)
+
+    def _check_overlap_option(self):
+        Option = Pool().get(self.__class__.__name__)
+        domain, parent_string = self._get_search_domain_parent_string()
+        options = Option.search(domain)
+        if self not in options:
+            options.append(self)
+        Option.check_overlap(options, parent_string)
+
     def activate(self):
+        if not self.coverage.allow_subscribe_coverage_multiple_times:
+            self._check_overlap_option()
         pool = Pool()
         Warning = pool.get('res.user.warning')
         if self.status == 'declined':
