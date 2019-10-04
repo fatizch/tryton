@@ -2,7 +2,8 @@
 # this repository contains the full copyright notices and license terms.
 import functools
 import os
-import imp
+from importlib.machinery import SourceFileLoader
+
 
 from trytond.transaction import Transaction
 from trytond.tests.test_tryton import DB_NAME, USER, CONTEXT, ModuleTestCase
@@ -28,7 +29,7 @@ def test_values_against_model(model_, expected_values):
 def get_module_test_case(module_name):
     filename = os.path.abspath(os.path.join(os.path.normpath(__file__),
             '..', '..', module_name, 'tests', 'test_module.py'))
-    return imp.load_source(module_name, filename)
+    return SourceFileLoader(module_name, filename).load_module()
 
 
 def launch_function(module_name, method_name):

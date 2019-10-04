@@ -9,7 +9,6 @@ import uuid
 import itertools
 
 from trytond import backend
-from trytond.config import config
 from trytond.pool import Pool
 from trytond.transaction import Transaction
 from trytond.model import ModelView, ModelSQL, Model, fields
@@ -19,18 +18,6 @@ from . import model
 from . import coog_string
 
 DatabaseOperationalError = backend.get('DatabaseOperationalError')
-
-try:
-    import coog_async.broker as async_broker
-    if config.get('async', 'celery', default=None) is not None:
-        async_broker.set_module('celery')
-    elif config.get('async', 'rq', default=None) is not None:
-        async_broker.set_module('rq')
-    else:
-        raise Exception('no async broker')
-except Exception as error:
-    logging.getLogger(__name__).error(error)
-    async_broker = None
 
 
 __all__ = [
@@ -297,8 +284,8 @@ class BatchRoot(ModelView):
 
     @classmethod
     def _enqueue(cls, records, params, **kwargs):
-        assert async_broker
-        broker = async_broker.get_module()
+        assert model.async_broker
+        broker = model.async_broker.get_module()
         assert broker
         broker.enqueue(cls.__name__, 'batch_exec', (cls.__name__, records,
                 cls.serializable_params(params)), **kwargs)

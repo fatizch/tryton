@@ -42,6 +42,11 @@ from . import coog_sql
 from . import utils
 from . import coog_string
 
+
+class MissingAsyncBrokerException(Exception):
+    pass
+
+
 try:
     import coog_async.broker as async_broker
     if config.get('async', 'celery', default=None) is not None:
@@ -49,8 +54,10 @@ try:
     elif config.get('async', 'rq', default=None) is not None:
         async_broker.set_module('rq')
     else:
-        raise Exception('no async broker')
-except Exception:
+        raise MissingAsyncBrokerException
+except MissingAsyncBrokerException:
+    logging.getLogger(__name__).warning('No async broker configuration '
+        'found, batches will be unavailable')
     async_broker = None
 
 
@@ -1197,7 +1204,7 @@ class MethodDefinition(CoogSQL, CoogView):
             # Check it is a method !
             if not callable(attr):
                 continue
-            args = inspect.getargspec(attr)
+            args = inspect.getfullargspec(attr)
             arg_names = args[0]
             # Check for instance method
             if not arg_names:
