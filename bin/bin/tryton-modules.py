@@ -72,6 +72,9 @@ def modules_status(args):
         for row in get_module_list(conn):
             if row[0] == module_name:
                 print('%s -> %s' % (row[0], row[1]))
+                break
+        else:
+            print('%s -> %s' % (module_name, 'unknown'))
 
 
 def modules_list(args):

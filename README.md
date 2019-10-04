@@ -149,6 +149,15 @@ Start / Stop / Kill the client:
 coog client start / stop / kill
 ```
 
+Start tests on a module:
+
+```bash
+coog test manual -- <module_name> [module_2] ...
+
+# Use /tmp/test_cache for caching test databases
+DB_NAME=/tmp/test_cache coog test manual -- <module_name> [module_2] ...
+```
+
 ### Batches
 
 Start celery workers:
@@ -161,6 +170,12 @@ Exec a batch:
 
 ```bash
 coog batch exec <batch_name> <params>
+```
+
+Exec chain `chain_name` if module `module_name` is active:
+
+```bash
+coog chain -- <module_name> <chain_name> [chain_params]
 ```
 
 Check tasks of a batch:
@@ -221,3 +236,40 @@ pip install flower
 coog celery flower
 ```
 
+### Other
+
+Check a module status in the database:
+
+```bash
+coog module status <module_name>
+```
+
+Check the environment variables which are loaded by Coog:
+
+```bash
+coog env
+```
+
+Run a command in the context in which Coog will be loaded:
+
+```bash
+coog env run <my_command>
+
+# Typical use case
+coog env run python
+```
+
+Use proteus to connect to a running server:
+
+```python
+from proteus import config, set_xmlrpc
+
+# Format: http://<login>:<password>@<host>:<port>/<db>/
+conf = config.set_xmlrpc('http://admin:admin@localhost:8000/coog/')
+
+Contract = Model.get('contract)
+contracts = Contract.find([('status', '=', 'active')])
+
+# From here it's business as usual
+print(contracts[0].product.rec_name)
+```
