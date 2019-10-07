@@ -6,6 +6,24 @@ from trytond.pool import PoolMeta, Pool
 
 from trytond.modules.coog_core.api import OBJECT_ID_SCHEMA
 
+BANK_ACCOUNT_REFERENCE = {
+    'type': 'object',
+    'additionalProperties': False,
+    'properties': {
+        'number': {'type': 'string'},
+        'id': OBJECT_ID_SCHEMA,
+        },
+    'oneOf': [
+        {
+            'required': ['number'],
+            },
+        {
+            'required': ['id'],
+            },
+        ],
+    }
+
+
 __all__ = [
     'APICore',
     'APIParty',
@@ -116,6 +134,7 @@ class APIParty(metaclass=PoolMeta):
                         'number': data['number'],
                         },
                     })
+        data['number'] = iban.compact(data['number'])
 
     @classmethod
     def _bank_from_identifier(cls, data):
@@ -194,3 +213,16 @@ class APIParty(metaclass=PoolMeta):
             bank=data['bank'],
             numbers=[{'type': 'iban', 'number': data['number']}]
             )
+
+    @classmethod
+    def _find_party_bank_account(cls, party, data):
+        # Reverse just in case the same accounts is linked multiple times with
+        # differnt dates, in which case we probably want the last one
+        for account in reversed(party.bank_accounts):
+            if 'id' in data:
+                if account.id == data['id']:
+                    return account
+            else:
+                assert 'number' in data
+                if account.numbers[0].number_compact == data['number']:
+                    return account

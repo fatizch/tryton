@@ -1,11 +1,13 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+from trytond.pool import Pool
+
 from . import endorsement
 from . import offered
 from . import wizard
 from . import configuration
 from . import batch
-from trytond.pool import Pool
+from . import api
 
 
 def register():
@@ -42,3 +44,13 @@ def register():
     Pool.register(
         wizard.StartEndorsement,
         module='endorsement_insurance_invoice', type_='wizard')
+
+    Pool.register(
+        api.APIConfiguration,
+        api.APIEndorsement,
+        module='endorsement_insurance_invoice', type_='model', depends=['api'])
+
+    Pool.register(
+        api.APIClaimEndorsement,
+        module='endorsement_insurance_invoice', type_='model',
+        depends=['api', 'claim'])

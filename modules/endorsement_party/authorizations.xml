@@ -150,4 +150,17 @@ this repository contains the full copyright notices and license terms. -->
             <field name="group" ref="party_cog.group_party_manage"/>
         </record>
     </data>
+    <data depends="api">
+        <!-- ############## -->
+        <!-- # API Access # -->
+        <!-- ############## -->
+        <record model="ir.api.access" id="change_party_addresses_default_access">
+            <field name="api">api.endorsement.change_party_addresses</field>
+            <field name="group" ref="api.group_default_api"/>
+        </record>
+        <record model="ir.api.access" id="update_party_addresses_default_access">
+            <field name="api">api.endorsement.update_party_addresses</field>
+            <field name="group" ref="api.group_default_api"/>
+        </record>
+    </data>
 </tryton>

@@ -1,7 +1,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import PoolMeta, Pool
-from trytond.model import Unique, fields as tryton_fields
+from trytond.model import ModelSingleton, Unique, fields as tryton_fields
 from trytond.config import config
 
 from trytond.modules.coog_core import model, fields, coog_string
@@ -147,12 +147,19 @@ IDENTIFIER_KINDS = [
     ]
 
 __all__ = [
+    'APIConfiguration',
     'APIAccess',
     'APIIdentity',
     'APIResource',
     'API',
     'APICore',
     ]
+
+
+class APIConfiguration(ModelSingleton, model.CoogSQL, model.CoogView):
+    'Api Configuration'
+
+    __name__ = 'api.configuration'
 
 
 class APIAccess(metaclass=PoolMeta):

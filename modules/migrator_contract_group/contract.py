@@ -166,8 +166,8 @@ class MigratorContractGroup(BaseMigratorContractGroup):
         pool = Pool()
         Endorsement = pool.get('endorsement')
         Definition = pool.get('endorsement.definition')
-        termination = Definition.get_definition_by_code('stop_contract')
-        reactivate = Definition.get_definition_by_code('reactivate_contract')
+        termination = Definition.get_instance_from_code('stop_contract')
+        reactivate = Definition.get_instance_from_code('reactivate_contract')
         for history in contract.activation_history:
             if history.start_date == activation_history['start_date']:
                 if activation_history['end_date'] != contract.end_date \

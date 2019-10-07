@@ -117,20 +117,9 @@ Create Change Start Date Endorsement::
     ...     EndorsementDefinitionPartRelation(endorsement_part=change_start_date_part))
     >>> change_start_date.save()
 
-Create Void Endorsement::
+Fetch Void Endorsement::
 
-    >>> void_contract_part = EndorsementPart()
-    >>> void_contract_part.name = 'Change Start Date'
-    >>> void_contract_part.code = 'void_contract'
-    >>> void_contract_part.kind = 'contract'
-    >>> void_contract_part.view = 'void_contract'
-    >>> void_contract_part.save()
-    >>> void_contract = EndorsementDefinition()
-    >>> void_contract.name = 'Void Contract'
-    >>> void_contract.code = 'void_contract'
-    >>> void_contract.ordered_endorsement_parts.append(
-    ...     EndorsementDefinitionPartRelation(endorsement_part=void_contract_part))
-    >>> void_contract.save()
+    >>> void_contract, = EndorsementDefinition.find([('code', '=', 'void_contract')])
 
 Create Terminate Endorsement::
 

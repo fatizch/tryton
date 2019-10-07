@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<!-- This file is part of Tryton.  The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data depends="api">
+        <record model="ir.ui.view" id="api_configuration_view_form">
+            <field name="model">api.configuration</field>
+            <field name="inherit" ref="coog_core.api_configuration_view_form"/>
+            <field name="name">api_configuration_form</field>
+        </record>
+        <record model="api.configuration" id="coog_core.api_configuration_instance">
+            <field name="change_party_addresses_definition" ref="modify_party_address_definition"/>
+        </record>
+    </data>
+</tryton>

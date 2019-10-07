@@ -72,6 +72,8 @@ CREATE_CONTRACTS = parse_environ('GEN_CREATE_CONTRACTS', True)
 BILL_CONTRACTS = parse_environ('GEN_BILL_CONTRACTS', True)
 CREATE_CLAIMS = parse_environ('GEN_CREATE_CLAIMS', True)
 GENERATE_REPORTINGS = parse_environ('GEN_GENERATE_REPORTINGS', True)
+RUN_BATCHES = parse_environ('GEN_RUN_BATCHES', True)
+TEST_APIS = parse_environ('GEN_TEST_APIS', False)
 TEST_APIS = parse_environ('GEN_TEST_APIS', True)
 
 
@@ -98,17 +100,19 @@ def test_error(error_class, func, *func_args, **func_kwargs):
 
 
 do_print('\nDefining constants')  # {{{
+
+_base_year = 2018
 _base_date = datetime.date(2000, 1, 1)
-_base_contract_date = datetime.date(2018, 1, 1)
-_contract_rebill_date = datetime.date(2018, 7, 1)
-_contract_rebill_post_date = datetime.date(2018, 6, 1)
-_contract_payment_date = datetime.date(2018, 5, 1)
-_death_claim_date = datetime.date(2018, 7, 12)
-_illness_claim_date = datetime.date(2018, 5, 12)
-_illness_claim_end_date_1 = datetime.date(2018, 7, 12)
-_illness_claim_end_date_2 = datetime.date(2018, 7, 26)
-_commission_invoice_date = datetime.date(2018, 7, 31)
-_slip_generation_date = datetime.date(2018, 9, 1)
+_base_contract_date = datetime.date(_base_year, 1, 1)
+_contract_rebill_date = datetime.date(_base_year, 7, 1)
+_contract_rebill_post_date = datetime.date(_base_year, 6, 1)
+_contract_payment_date = datetime.date(_base_year, 5, 1)
+_death_claim_date = datetime.date(_base_year, 7, 12)
+_illness_claim_date = datetime.date(_base_year, 5, 12)
+_illness_claim_end_date_1 = datetime.date(_base_year, 7, 12)
+_illness_claim_end_date_2 = datetime.date(_base_year, 7, 26)
+_commission_invoice_date = datetime.date(_base_year, 7, 31)
+_slip_generation_date = datetime.date(_base_year, 9, 1)
 _account_chart_code = 'PCS'
 _default_receivable_code = '4117'
 _default_payable_code = '467'
@@ -5585,8 +5589,8 @@ if CREATE_CLAIMS:  # {{{
     # Second indemnification period (paid to the party, with pasrau) {{{
     # Create fake pasrau value for testing
     default_pasrau = DefaultPasrauRate()
-    default_pasrau.start_date = datetime.date(2018, 1, 1)
-    default_pasrau.end_date = datetime.date(2019, 1, 1)
+    default_pasrau.start_date = datetime.date(_base_year, 1, 1)
+    default_pasrau.end_date = datetime.date(_base_year + 1, 1, 1)
     default_pasrau.income_lower_bound = Decimal(0)
     default_pasrau.income_higher_bound = Decimal(1000000)  # Arbitrarly high
     default_pasrau.region = 'metropolitan'
@@ -6045,6 +6049,20 @@ if GENERATE_REPORTINGS:  # {{{
         to_reject.reload()
         assert_eq(to_reject.state, 'failed')
         # }}}
+# }}}
+
+if RUN_BATCHES:  # {{{
+    do_print('\nRunning batches')
+
+    batch_date = datetime.date(_base_year, 12, 31)
+
+    do_print('    Renewing contracts')  # {{{
+    launcher = Wizard('batch.launcher')
+    renew_batch, = IrModel.find([('model', '=', 'contract.renew')])
+    launcher.form.batch = renew_batch
+    launcher.form.treatment_date = batch_date
+    launcher.execute('process')
+    # }}}
 # }}}
 
 if TEST_APIS:  # {{{

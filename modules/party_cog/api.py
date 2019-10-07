@@ -673,20 +673,32 @@ class APIParty(APIMixin):
 
     @classmethod
     def _update_party_addresses(cls, party, data, options):
+        Address = Pool().get('party.address')
+
         party.addresses = getattr(party, 'addresses', [])
         if data.get('addresses', None):
-            # For now, the rules for update if multiple addresses are given are
-            # not known
-            # TODO: Maybe add options to define alternative behaviours
-            # (always_append, always_replace, etc...)
-            assert len(data['addresses']) == 1
+            if party.addresses:
+                # For now, the rules for update if multiple addresses are given
+                # are not known
+                # TODO: Maybe add options to define alternative
+                # behaviours (always_append, always_replace, etc...)
+                assert len(data['addresses']) == 1
 
-            address_data = data['addresses'][0]
-            address = cls._find_party_address(party, address_data)
-            address.street = address_data['street']
-            address.zip = address_data['zip']
-            address.city = address_data['city']
-            address.country = address_data['country']
+                address_data = data['addresses'][0]
+                address = cls._find_party_address(party, address_data)
+                cls._update_party_address(address, address_data, options)
+            else:
+                for address_data in data['addresses']:
+                    address = Address()
+                    cls._update_party_address(address, address_data, options)
+                    party.addresses += (address,)
+
+    @classmethod
+    def _update_party_address(cls, address, data, options):
+        address.street = data['street']
+        address.zip = data['zip']
+        address.city = data['city']
+        address.country = data['country']
 
     @classmethod
     def _update_party_identifiers(cls, party, data, options):

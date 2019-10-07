@@ -49,7 +49,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
         relation_parent.save()
 
     def test0002_testCountryCreation(self):
-        self.Country(
+        Pool().get('country.country')(
             code='FR',
             code3='FRA',
             name='France',

@@ -9,6 +9,7 @@ from . import document
 from . import party
 from . import group
 from . import rule_engine
+from . import api
 
 
 def register():
@@ -80,3 +81,8 @@ def register():
         event.EventLog,
         module='endorsement', type_='model',
         depends=['event_log'])
+
+    Pool.register(
+        api.APIConfiguration,
+        api.APIEndorsement,
+        module='endorsement', type_='model', depends=['api'])

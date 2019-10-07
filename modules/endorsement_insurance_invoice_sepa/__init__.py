@@ -3,6 +3,7 @@
 from trytond.pool import Pool
 from . import endorsement
 from . import wizard
+from . import api
 
 
 def register():
@@ -13,3 +14,9 @@ def register():
         wizard.ChangeBillingInformation,
         wizard.ChangeDirectDebitAccount,
         module='endorsement_insurance_invoice_sepa', type_='model')
+
+    Pool.register(
+        api.APIParty,
+        api.APIEndorsement,
+        module='endorsement_insurance_invoice_sepa', type_='model',
+        depends=['api'])

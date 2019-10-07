@@ -5,7 +5,6 @@ from trytond.pool import PoolMeta, Pool
 from trytond.model import Unique
 from trytond.wizard import StateView
 from trytond.transaction import Transaction
-from trytond.cache import Cache
 from trytond.pyson import Eval, If, Bool
 
 from trytond.modules.coog_core import model, fields, coog_string
@@ -32,14 +31,11 @@ __all__ = [
     ]
 
 
-class EndorsementDefinition(model.CoogSQL, model.CoogView):
+class EndorsementDefinition(model.CodedMixin, model.CoogView):
     'Endorsement Definition'
 
     __name__ = 'endorsement.definition'
-    _func_key = 'code'
 
-    code = fields.Char('Code', required=True)
-    name = fields.Char('Name', required=True, translate=True)
     ordered_endorsement_parts = fields.One2Many(
         'endorsement.definition-endorsement.part', 'definition',
         'Endorsement Parts', delete_missing=True)
@@ -81,27 +77,10 @@ class EndorsementDefinition(model.CoogSQL, model.CoogView):
         help="If checked, the application will be handled by a background  "
         "process. The user can then come back later and check the result")
 
-    _endorsement_by_code_cache = Cache('endorsement_definition_by_code')
-
     @classmethod
     def __setup__(cls):
         super(EndorsementDefinition, cls).__setup__()
         cls._order = [('name', 'ASC')]
-
-    @classmethod
-    def create(cls, *args, **kwargs):
-        cls._endorsement_by_code_cache.clear()
-        return super(EndorsementDefinition, cls).create(*args, **kwargs)
-
-    @classmethod
-    def write(cls, *args, **kwargs):
-        cls._endorsement_by_code_cache.clear()
-        return super(EndorsementDefinition, cls).write(*args, **kwargs)
-
-    @classmethod
-    def delete(cls, *args, **kwargs):
-        cls._endorsement_by_code_cache.clear()
-        return super(EndorsementDefinition, cls).delete(*args, **kwargs)
 
     @classmethod
     def _export_skips(cls):
@@ -126,12 +105,6 @@ class EndorsementDefinition(model.CoogSQL, model.CoogView):
             if not StepMixin.is_multi_instance():
                 return False
         return True
-
-    @fields.depends('name', 'code')
-    def on_change_with_code(self):
-        if self.code:
-            return self.code
-        return coog_string.slugify(self.name)
 
     @classmethod
     def get_endorsement_parts(cls, definitions, name):
@@ -170,15 +143,6 @@ class EndorsementDefinition(model.CoogSQL, model.CoogView):
 
         return [('ordered_endorsement_parts.endorsement_part.view', operator,
                 'dummy_step')]
-
-    @classmethod
-    def get_definition_by_code(cls, code):
-        value = cls._endorsement_by_code_cache.get(None, None)
-        if value is not None:
-            return cls(value[code])
-        cls._endorsement_by_code_cache.set(None, {x.code: x.id
-                for x in cls.search([('active', 'in', [True, False])])})
-        return cls.get_definition_by_code(code)
 
     @classmethod
     def get_preview_states(cls):

@@ -6,6 +6,7 @@ from . import offered
 from . import wizard
 from . import event
 from . import party
+from . import api
 
 
 def register():
@@ -45,3 +46,8 @@ def register():
         wizard.StartEndorsementSSN,
         depends=['party_ssn'],
         module='endorsement_party', type_='wizard')
+
+    Pool.register(
+        api.APIConfiguration,
+        api.APIEndorsement,
+        module='endorsement_party', type_='model', depends=['api'])

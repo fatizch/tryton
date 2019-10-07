@@ -1681,8 +1681,12 @@ class Endorsement(QueueMixin, Workflow, Printable, model.CoogSQL,
 
     @classmethod
     def run_methods(cls, endorsements, kind):
-        Method = Pool().get('ir.model.method')
-        RuleEngine = Pool().get('rule_engine')
+        pool = Pool()
+
+        Method = pool.get('ir.model.method')
+        RuleEngine = pool.get('rule_engine')
+        Endorsement = pool.get('endorsement')
+
         if kind == 'apply':
             method_name = 'get_methods_for_model'
         elif kind == 'draft':
@@ -1690,8 +1694,8 @@ class Endorsement(QueueMixin, Workflow, Printable, model.CoogSQL,
         else:
             raise NotImplementedError
         # Force reload endorsement list
-        for idx, endorsement in enumerate(cls.browse(
-                    [x.id for x in endorsements])):
+        for idx, endorsement in enumerate(
+                Endorsement.browse([x.id for x in endorsements])):
             endorsements[idx] = endorsement
         endorsements_per_model = cls.group_per_model(endorsements)
         for model_name in cls.apply_order():

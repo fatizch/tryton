@@ -3,6 +3,24 @@
 this repository contains the full copyright notices and license terms. -->
 <tryton>
     <data depends="api">
+        <!-- ##################### -->
+        <!-- # API Configuration # -->
+        <!-- ##################### -->
+        <record model="ir.ui.view" id="api_configuration_view_form">
+            <field name="model">api.configuration</field>
+            <field name="type">form</field>
+            <field name="name">api_configuration_form</field>
+        </record>
+        <record model="ir.action.act_window" id="act_api_configuration">
+            <field name="name">api Configuration</field>
+            <field name="res_model">api.configuration</field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_api_configuration_view">
+            <field name="sequence" eval="1"/>
+            <field name="view" ref="api_configuration_view_form"/>
+            <field name="act_window" ref="act_api_configuration"/>
+        </record>
+        <menuitem id="menu_api_conf" name="API Configuration" parent="ir.menu_administration" icon="tryton-settings" action="act_api_configuration"/>
         <!-- ################## -->
         <!-- # API Identity # -->
         <!-- ################## -->
@@ -83,5 +101,8 @@ this repository contains the full copyright notices and license terms. -->
             <field name="model">res.user,-1</field>
             <field name="action" ref="act_open_user_api_identity"/>
         </record>
+    </data>
+    <data depends="api" noupdate="1">
+        <record model="api.configuration" id="api_configuration_instance"/>
     </data>
 </tryton>

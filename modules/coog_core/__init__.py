@@ -148,6 +148,7 @@ def register():
         module='coog_core', type_='wizard')
 
     Pool.register(
+        api.APIConfiguration,
         api.APIAccess,
         api.APIIdentity,
         api.APIResource,

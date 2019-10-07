@@ -8,8 +8,8 @@ from itertools import groupby
 from collections import namedtuple
 from dateutil.relativedelta import relativedelta
 from collections import defaultdict
+from sql import Null, Literal, Column
 from sql.aggregate import Max
-from sql import Null, Literal
 from sql.conditionals import Coalesce
 
 import genshi
@@ -25,6 +25,8 @@ from trytond.model.exceptions import (
 from trytond.transaction import Transaction
 from trytond.pyson import Eval, Or, Bool, If
 from trytond.pool import PoolMeta, Pool
+from trytond.tools import grouped_slice
+
 from trytond.modules.coog_core import fields, coog_date, utils, model
 from trytond.modules.coog_core import coog_string
 from .sepa_handler import CAMT054Coog
@@ -82,10 +84,14 @@ class Mandate(model.CoogSQL, model.CoogView):
         depends=['state', 'identification', 'start_date', 'party'],
         ondelete='RESTRICT',
         select=True)
+    amended_by = fields.Function(
+        fields.Many2One('account.payment.sepa.mandate', 'Amended By'),
+        'getter_amended_by', searcher='search_amended_by')
 
     @classmethod
     def __setup__(cls):
         super(Mandate, cls).__setup__()
+        # TODO : Maybe add a unique constraint on amendment_of?
         cls.identification.select = True
 
     @classmethod
@@ -115,6 +121,48 @@ class Mandate(model.CoogSQL, model.CoogView):
         super(Mandate, cls).validate(mandates)
         with model.error_manager():
             cls.check_no_duplicates(mandates)
+
+    @classmethod
+    def getter_amended_by(cls, instances, name):
+        table = cls.__table__()
+        amended_by = cls.__table__()
+
+        cursor = Transaction().connection.cursor()
+
+        query = table.join(amended_by, 'LEFT OUTER',
+            condition=(table.id == amended_by.amendment_of)
+            )
+
+        result = {}
+        for slice in grouped_slice(instances):
+            cursor.execute(*query.select(table.id, amended_by.id,
+                    where=table.id.in_([x.id for x in slice])
+                    ))
+
+            result.update(dict(cursor.fetchall()))
+
+        return result
+
+    @classmethod
+    def search_amended_by(cls, name, clause):
+        key, operator, value = clause
+        Operator = fields.SQL_OPERATORS[operator]
+
+        if '.' in key:
+            # Not supported for now
+            raise NotImplementedError
+
+        table = cls.__table__()
+        amended_by = cls.__table__()
+
+        column = Column(amended_by,
+            'id' if isinstance(value, int) else 'identification')
+
+        query = table.join(amended_by, 'LEFT OUTER',
+            condition=(table.id == amended_by.amendment_of)
+            ).select(table.id, where=Operator(column, value))
+
+        return [('id', 'in', query)]
 
     def _get_origin(self):
         if self.amendment_of:
