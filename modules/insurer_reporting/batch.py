@@ -31,8 +31,6 @@ class InsurerReportContractBatch(batch.BatchRoot):
     @classmethod
     def parse_params(cls, params):
         params = super(InsurerReportContractBatch, cls).parse_params(params)
-        assert params.get('job_size', None) == 1, \
-            'Job size for this batch must be 1'
         return params
 
     @classmethod
@@ -93,9 +91,10 @@ class InsurerReportContractBatch(batch.BatchRoot):
     @classmethod
     def execute(cls, objects, ids, treatment_date, **kwargs):
         create_reports = cls.get_reporting_wizard()
-        for template in cls.get_templates_to_print(objects):
-            create_reports.configure_report.insurer = objects[0]
-            create_reports.configure_report.template = template
-            create_reports.configure_report.at_date = treatment_date
-            create_reports.default_result(None)
+        for object_ in objects:
+            for template in cls.get_templates_to_print([object_]):
+                create_reports.configure_report.insurer = object_
+                create_reports.configure_report.template = template
+                create_reports.configure_report.at_date = treatment_date
+                create_reports.default_result(None)
         return ids

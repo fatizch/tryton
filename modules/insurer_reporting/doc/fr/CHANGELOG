@@ -1,3 +1,5 @@
+* OTH#00000 Le batch de génération des stock assureur doit pouvoir être forcé non-parallelisable
+
 Version 2.4 - 2019-04-12
 Version 2.2 - 2018-10-12
 * BUG#9752 Correctif d'une erreur dans le cas où il n'y a aucune données à imprimer

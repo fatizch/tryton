@@ -1,3 +1,5 @@
+*OTH#00000 The insurer stock reporting batch should be allowed to be non-parallelisable
+
 Version 2.4 - 2019-04-12
 Version 2.2 - 2018-10-12
 * BUG#9752 Fix crash when there is no contract data to print
