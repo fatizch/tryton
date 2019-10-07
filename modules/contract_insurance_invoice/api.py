@@ -1,14 +1,21 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+from decimal import Decimal
+
 from trytond.pool import PoolMeta, Pool
 from trytond.server_context import ServerContext
 
+from trytond.modules.api import DATE_SCHEMA
+from trytond.modules.api.api.core import AMOUNT_SCHEMA, amount_for_api
+from trytond.modules.api.api.core import date_for_api
 from trytond.modules.coog_core.api import OBJECT_ID_SCHEMA, CODE_SCHEMA
 from trytond.modules.coog_core.api import MODEL_REFERENCE
 from trytond.modules.coog_core.api import CODED_OBJECT_SCHEMA
+from trytond.modules.contract.api import CONTRACT_SCHEMA
 from trytond.modules.party_cog.api import PARTY_RELATION_SCHEMA
 
-__name__ = [
+
+__all__ = [
     'APIProduct',
     'APIContract',
     ]
@@ -138,6 +145,11 @@ class APIContract(metaclass=PoolMeta):
                     'readonly': True,
                     'description': 'Compute updated available billing modes '
                     'based on the quotation informations'
+                    },
+                'payment_schedule': {
+                    'public': False,
+                    'readonly': True,
+                    'description': 'Returns the payment schedule for contracts',
                     },
                 },
             )
@@ -430,6 +442,352 @@ class APIContract(metaclass=PoolMeta):
                                 },
                             ],
                         }
+                    ],
+                },
+            ]
+
+    @classmethod
+    def payment_schedule(cls, parameters):
+        return [cls._payment_schedule_from_contract(contract) for contract in
+            parameters['contracts']]
+
+    @classmethod
+    def _payment_schedule_from_contract(cls, contract):
+        invoices = contract.get_future_invoices(contract)
+        result = {
+            'contract': {
+                'id': contract.id,
+                'number': contract.rec_name,
+                },
+            'schedule': [
+                cls._payment_schedule_format_invoice(invoice)
+                for invoice in invoices
+                ],
+            }
+        total_amount, total_fee = Decimal(0), Decimal(0)
+        total_tax, total_total = Decimal(0), Decimal(0)
+
+        for invoice_data in invoices:
+            total_amount += invoice_data['amount']
+            total_fee += invoice_data['fee']
+            total_tax += invoice_data['tax_amount']
+            total_total += invoice_data['total_amount']
+
+        result['total_premium'] = amount_for_api(total_amount)
+        result['total_fee'] = amount_for_api(total_fee)
+        result['total_tax'] = amount_for_api(total_tax)
+        result['total'] = amount_for_api(total_total)
+        return result
+
+    @classmethod
+    def _payment_schedule_format_invoice(cls, invoice):
+        return {
+            'premium': amount_for_api(invoice['amount']),
+            'currency_symbol': invoice['currency_symbol'],
+            'details': [
+                cls._payment_schedule_format_invoice_detail(detail)
+                for detail in invoice['details']
+                ],
+            'end': date_for_api(invoice['end']),
+            'fee': amount_for_api(invoice['fee']),
+            'start': date_for_api(invoice['start']),
+            'tax': amount_for_api(invoice['tax_amount']),
+            'total': amount_for_api(invoice['total_amount']),
+        }
+
+    @classmethod
+    def _payment_schedule_format_invoice_detail(cls, detail):
+        detail_json = {
+            'premium': amount_for_api(detail['amount']),
+            'end': date_for_api(detail['end']),
+            'fee': amount_for_api(detail['fee']),
+            'name': detail['name'],
+            'start': date_for_api(detail['start']),
+            'tax': amount_for_api(detail['tax_amount']),
+            'total': amount_for_api(detail['total_amount']),
+            'origin': cls._payment_schedule_invoice_detail_origin(detail),
+            }
+
+        return detail_json
+
+    @classmethod
+    def _payment_schedule_invoice_detail_origin(cls, detail):
+        result = {}
+        option = None
+
+        if detail['premium'].option:
+            option = detail['premium'].option
+        elif detail['premium'].extra_premium:
+            option = detail['premium'].extra_premium.option
+            result['extra_premium'] = {
+                'id': detail['premium'].extra_premium.motive.id,
+                'code': detail['premium'].extra_premium.motive.code,
+                }
+        if option is not None:
+            result['option'] = {
+                'id': option.id,
+                'coverage': {
+                    'code': option.coverage.code,
+                    'id': option.coverage.id,
+                    },
+                }
+            if option.covered_element:
+                result['covered'] = {
+                    'id': option.covered_element.id,
+                    }
+                if option.covered_element.party:
+                    result['covered']['party'] = {
+                        'id': option.covered_element.party.id,
+                        'code': option.covered_element.party.code,
+                        'name': option.covered_element.party.full_name,
+                        }
+        if detail['premium'].fee:
+            result['fee'] = {
+                'id': detail['premium'].fee.id,
+                'code': detail['premium'].fee.code,
+                }
+        return result
+
+    @classmethod
+    def _payment_schedule_convert_input(cls, parameters):
+        parameters['contracts'] = [
+            cls._get_contract(x) for x in parameters['contracts']]
+        return parameters
+
+    @classmethod
+    def _payment_schedule_schema(cls):
+        return {
+            'type': 'object',
+            'additionalProperties': False,
+            'properties': {
+                'contracts': {
+                    'type': 'array',
+                    'additionalItems': False,
+                    'items': CONTRACT_SCHEMA,
+                    'minItems': 1,
+                    }
+                },
+            'required': ['contracts'],
+            }
+
+    @classmethod
+    def _payment_schedule_output_schema(cls):
+        return {
+            'type': 'array',
+            'additionalItems': False,
+            'items': {
+                'type': 'object',
+                'additionalProperties': False,
+                'properties': {
+                    'contract': {
+                        'type': 'object',
+                        'additionalProperties': False,
+                        'properties': {
+                            'id': OBJECT_ID_SCHEMA,
+                            'number': CODE_SCHEMA,
+                            }
+                        },
+                    'schedule': {
+                        'type': 'array',
+                        'additionalItems': False,
+                        'items': cls._payment_schedule_invoice_schema(),
+                        },
+                    'total_premium': AMOUNT_SCHEMA,
+                    'total_fee': AMOUNT_SCHEMA,
+                    'total_tax': AMOUNT_SCHEMA,
+                    'total': AMOUNT_SCHEMA,
+                    },
+                },
+            }
+
+    @classmethod
+    def _payment_schedule_invoice_schema(cls):
+        return {
+            'type': 'object',
+            'additionalProperties': False,
+            'properties': {
+                'currency_symbol': {'type': 'string'},
+                'details': {
+                    'type': 'array',
+                    'additionalItems': False,
+                    'items': cls._payment_schedule_invoice_detail_schema(),
+                    },
+                'end': DATE_SCHEMA,
+                'fee': AMOUNT_SCHEMA,
+                'premium': AMOUNT_SCHEMA,
+                'start': DATE_SCHEMA,
+                'tax': AMOUNT_SCHEMA,
+                'total': AMOUNT_SCHEMA,
+                },
+            }
+
+    @classmethod
+    def _payment_schedule_invoice_detail_schema(cls):
+        return {
+            'type': 'object',
+            'additionalProperties': False,
+            'properties': {
+                'end': DATE_SCHEMA,
+                'fee': AMOUNT_SCHEMA,
+                'name': {'type': 'string'},
+                'premium': AMOUNT_SCHEMA,
+                'start': DATE_SCHEMA,
+                'tax': AMOUNT_SCHEMA,
+                'total': AMOUNT_SCHEMA,
+                'origin': cls._payment_schedule_detail_origin_schema(),
+                },
+            }
+
+    @classmethod
+    def _payment_schedule_detail_origin_schema(cls):
+        return {
+            'type': 'object',
+            'additionalProperties': False,
+            'properties': {
+                'covered': {
+                    'type': 'object',
+                    'additionalProperties': False,
+                    'required': ['id'],
+                    'properties': {
+                        'id': OBJECT_ID_SCHEMA,
+                        'party': {
+                            'type': 'object',
+                            'additionalProperties': False,
+                            'properties': {
+                                'id': OBJECT_ID_SCHEMA,
+                                'code': CODE_SCHEMA,
+                                'name': {'type': 'string'},
+                                },
+                            },
+                        },
+                    },
+                'option': {
+                    'type': 'object',
+                    'additionalProperties': False,
+                    'required': ['id', 'coverage'],
+                    'properties': {
+                        'id': OBJECT_ID_SCHEMA,
+                        'coverage': {
+                            'type': 'object',
+                            'additionalProperties': False,
+                            'properties': {
+                                'id': OBJECT_ID_SCHEMA,
+                                'code': CODE_SCHEMA,
+                                },
+                            },
+                        },
+                    },
+                'extra_premium': {
+                    'type': 'object',
+                    'additionalProperties': False,
+                    'properties': {
+                        'id': OBJECT_ID_SCHEMA,
+                        'code': CODE_SCHEMA,
+                        },
+                    },
+                'fee': {
+                    'type': 'object',
+                    'additionalProperties': False,
+                    'properties': {
+                        'id': OBJECT_ID_SCHEMA,
+                        'code': CODE_SCHEMA,
+                        },
+                    },
+                },
+            }
+
+    @classmethod
+    def _payment_schedule_examples(cls):
+        return [
+            {
+                'input': {
+                    'contracts': [{'id': 1}],
+                    },
+                'output': [
+                    {
+                        'contract': {
+                            'id': 1,
+                            'number': '1',
+                            },
+                        'schedule': [
+                            {
+                                'currency_symbol': '€',
+                                'details': [
+                                    {
+                                        'end': '2019-12-31',
+                                        'fee': '0',
+                                        'name': 'Fire Damage',
+                                        'origin': {
+                                            'covered': {'id': 1},
+                                            'option': {
+                                                'coverage': {
+                                                    'code': 'fire_coverage',
+                                                    'id': 2,
+                                                    },
+                                                'id': 2,
+                                                },
+                                            },
+                                        'premium': '1323.00',
+                                        'start': '2019-01-01',
+                                        'tax': '0.00',
+                                        'total': '1323.00',
+                                        },
+                                    {
+                                        'end': '2019-12-31',
+                                        'fee': '0',
+                                        'name': 'Fire Damage 10%',
+                                        'origin': {
+                                            'covered': {'id': 1},
+                                            'extra_premium': {
+                                                'id': 10,
+                                                'code': 'earthquakes',
+                                                },
+                                            'option': {
+                                                'coverage': {
+                                                    'code': 'fire_coverage',
+                                                    'id': 2,
+                                                    },
+                                                'id': 2,
+                                                },
+                                            },
+                                        'premium': '132.30',
+                                        'start': '2019-01-01',
+                                        'tax': '0.00',
+                                        'total': '132.30',
+                                        },
+                                    {
+                                        'end': '2019-12-31',
+                                        'fee': '0',
+                                        'name': 'Water Damage',
+                                        'origin': {
+                                            'covered': {'id': 1},
+                                            'option': {
+                                                'coverage': {
+                                                    'code': 'water_coverage',
+                                                    'id': 1,
+                                                    },
+                                                'id': 1,
+                                                },
+                                            },
+                                        'premium': '56.26',
+                                        'start': '2019-01-01',
+                                        'tax': '0.00',
+                                        'total': '56.26',
+                                        },
+                                    ],
+                                'end': '2019-12-31',
+                                'fee': '0',
+                                'premium': '1511.56',
+                                'start': '2019-01-01',
+                                'tax': '0.00',
+                                'total': '1511.56',
+                                },
+                            ],
+                        'total': '1511.56',
+                        'total_fee': '0',
+                        'total_premium': '1511.56',
+                        'total_tax': '0.00',
+                        },
                     ],
                 },
             ]

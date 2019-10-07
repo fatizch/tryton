@@ -369,5 +369,9 @@ this repository contains the full copyright notices and license terms. -->
             <field name="api">api.contract.compute_billing_modes</field>
             <field name="group" ref="api.group_default_api"/>
         </record>
+        <record model="ir.api.access" id="payment_schedule_default_access">
+            <field name="api">api.contract.payment_schedule</field>
+            <field name="group" ref="api.group_default_api"/>
+        </record>
     </data>
 </tryton>

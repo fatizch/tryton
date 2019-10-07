@@ -5,6 +5,7 @@ from . import contract
 from . import offered
 from . import invoice
 from . import future_payments
+from . import api
 
 
 def register():
@@ -24,3 +25,7 @@ def register():
     Pool.register(
         future_payments.ShowAllInvoices,
         module='contract_loan_invoice', type_='wizard')
+    Pool.register(
+        api.APIContract,
+        module='contract_loan_invoice', type_='model',
+        depends=['api'])

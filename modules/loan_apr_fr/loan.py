@@ -156,6 +156,8 @@ class Loan(metaclass=PoolMeta):
         '''
             Calculate TAEG
             http://en.wikipedia.org/wiki/Annual_percentage_rate#European_Union
+
+            https://eur-lex.europa.eu/legal-content/FR/TXT/PDF/?uri=CELEX:31998L0007&from=EN
         '''
 
         def fx(x):
@@ -166,4 +168,5 @@ class Loan(metaclass=PoolMeta):
                 result -= float(capital) / ((1 + x) ** float(nb_year))
             return result
 
-        return Decimal(find_dec_root(fx, 0.1, 0.02, 1e-7))
+        return Decimal(find_dec_root(fx, 0.1, 0.02,
+                1e-7)).quantize(Decimal('1e-7'))

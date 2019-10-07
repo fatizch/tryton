@@ -1566,8 +1566,8 @@ class Contract(metaclass=PoolMeta):
                     'premium': premium,
                     'currency_digits': invoice.currency.digits,
                     'currency_symbol': invoice.currency.symbol,
-                    'amount': amount if not premium.fee else 0,
-                    'fee': amount if premium.fee else 0,
+                    'amount': amount if not premium.fee else Decimal(0),
+                    'fee': amount if premium.fee else Decimal(0),
                     'tax_amount': tax_amount,
                     'total_amount': amount + tax_amount,
                     })
