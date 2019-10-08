@@ -1,3 +1,5 @@
+* BUG#12907 Fix error when changing payment terms
+
 Version 2.4 - 2019-04-12
 Version 2.2 - 2018-10-12
 * FEA#8226 Adapt reconciliation to tryton's improvement on reconcile method
