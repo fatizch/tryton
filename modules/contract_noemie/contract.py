@@ -9,6 +9,7 @@ from sql.aggregate import Max, Min
 from sql.conditionals import Coalesce, Greatest, NullIf
 
 from trytond import backend
+from trytond.config import config
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval
 from trytond.transaction import Transaction
@@ -127,7 +128,8 @@ class CoveredElement(metaclass=PoolMeta):
         TableHandler = backend.get('TableHandler')
         table_handler = TableHandler(cls)
         cursor = Transaction().connection.cursor()
-        migrate_dates = not table_handler.column_exist('noemie_start_date')
+        migrate_dates = not table_handler.column_exist('noemie_start_date') \
+            and not config.getboolean('env', 'testing')
         super().__register__(module_name)
         if migrate_dates:
             option = Option.__table__()
