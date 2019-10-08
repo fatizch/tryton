@@ -43,7 +43,7 @@ class ShowAllInvoices(Wizard):
             'fee': sum(x['fee'] for x in future_invoices),
             'total_amount': sum(x['total_amount'] for x in future_invoices),
             'contract': contract.id,
-            'contract.rec_name': contract.rec_name,
+            'contract.': {'rec_name': contract.rec_name},
             }
 
 
@@ -99,8 +99,8 @@ class ShowAllInvoicesLine(model.CoogView):
         for sub_detail in detail.get('details', []):
             cls.update_detail_for_display(sub_detail)
         if detail['premium'] is not None:
-            detail['premium.rec_name'] = detail['premium'].rec_name
+            detail['premium.'] = {'rec_name': detail['premium'].rec_name}
             detail['premium'] = detail['premium'].id
         if detail['loan'] is not None:
-            detail['loan.rec_name'] = detail['loan'].rec_name
+            detail['loan.'] = {'rec_name': detail['loan'].rec_name}
             detail['loan'] = detail['loan'].id

@@ -32,7 +32,7 @@ class IndemnificationValidateElement(metaclass=PoolMeta):
         covered_person = indemnification.service.get_covered_person()
         if covered_person:
             res['covered_person'] = covered_person.id
-            res['covered_person.rec_name'] = covered_person.rec_name
+            res['covered_person.'] = {'rec_name': covered_person.rec_name}
         return res
 
 
@@ -50,7 +50,7 @@ class IndemnificationControlElement(metaclass=PoolMeta):
         covered_person = indemnification.service.get_covered_person()
         if covered_person:
             res['covered_person'] = covered_person.id
-            res['covered_person.rec_name'] = covered_person.rec_name
+            res['covered_person.'] = {'rec_name': covered_person.rec_name}
         return res
 
 

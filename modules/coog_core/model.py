@@ -371,7 +371,7 @@ def dictionarize(instance, field_names=None, set_rec_names=False):
             if isinstance(instance._fields[k], tryton_fields.Reference):
                 res[k] = '%s,%s' % (v.__name__, v.id)
             if set_rec_names:
-                res[k + '.rec_name'] = getattr(v, 'rec_name', '')
+                res[k + '.'] = {'rec_name': getattr(v, 'rec_name', '')}
         elif isinstance(v, (list, tuple)):
             res[k] = [dictionarize(x, field_names, set_rec_names) for x in v]
     return res
