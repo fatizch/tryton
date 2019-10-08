@@ -21,6 +21,7 @@ class Contract(metaclass=PoolMeta):
     def init_invoicing_end_date(self):
         if self.product.billing_rules:
             args = {}
+            args['date'] = self.initial_start_date
             self.init_dict_for_rule_engine(args)
             invoicing_end_date = self.product.billing_rules[0].\
                 calculate_invoicing_end_rule(args)
@@ -32,8 +33,8 @@ class Contract(metaclass=PoolMeta):
 
     @classmethod
     def _calculate_methods(cls, product):
-        return [('contract', 'init_invoicing_end_date')] + \
-            super(Contract, cls)._calculate_methods(product)
+        return super(Contract, cls)._calculate_methods(product) + \
+            [('contract', 'init_invoicing_end_date')]
 
     def _calculate_final_invoice_end_date(self):
         end_date = super()._calculate_final_invoice_end_date()
