@@ -149,6 +149,14 @@ msgstr ""
 "Si une signature électronique est requise, le document ne peut être marqué "
 "comme reçu avant d'être signé."
 
+msgctxt "model:event.type,name:event_signature_completed"
+msgid "Signature Completed"
+msgstr "Finalisation du processus de signature"
+
+msgctxt "model:event.type,name:event_signature_failed"
+msgid "Signature Failed"
+msgstr "Echec du processus de signature"
+
 msgctxt "model:document.description.signature.coordinate,name:"
 msgid "Document Signature Coordinate"
 msgstr "Coordonnées de la signature"

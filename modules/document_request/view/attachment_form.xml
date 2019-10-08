@@ -12,5 +12,7 @@ this repository contains the full copyright notices and license terms. -->
         </group>
         <label name="status_change_date"/>
         <field name="status_change_date"/>
+        <label name="request_line"/>
+        <field name="request_line"/>
     </xpath>
 </data>

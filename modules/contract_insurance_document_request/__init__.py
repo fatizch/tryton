@@ -8,6 +8,7 @@ from . import report_engine
 from . import rule_engine
 from . import wizard
 from . import api
+from . import event
 
 
 def register():
@@ -24,6 +25,11 @@ def register():
         rule_engine.RuleEngineRuntime,
         document.DocumentRequestLine,
         module='contract_insurance_document_request', type_='model')
+
+    Pool.register(
+        event.EventLog,
+        module='contract_insurance_document_request', type_='model',
+        depends=['event_log'])
 
     Pool.register(
         api.ContractApi,

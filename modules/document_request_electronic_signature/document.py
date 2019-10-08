@@ -221,3 +221,11 @@ class DocumentRequestLine(metaclass=PoolMeta):
         if self.contract:
             return self.contract.format_signature_url(url)
         return super(DocumentRequestLine, self).format_signature_url(url)
+
+    def notify_signature_completed(self, signature):
+        Event = Pool().get('event')
+        Event.notify_events([self], 'signature_completed')
+
+    def notify_signature_failed(self, signature):
+        Event = Pool().get('event')
+        Event.notify_events([self], 'signature_failed')

@@ -30,8 +30,12 @@ class Attachment(Workflow, metaclass=PoolMeta):
     status_change_date = fields.Date('Status Change Date',
         states={'invisible': Eval('status') == 'waiting_validation',
             'readonly': True},
-        depends=['status'], help="Date of Last Status Change"
-        )
+        depends=['status'], help="Date of Last Status Change")
+    request_lines = fields.One2Many('document.request.line', 'attachment',
+        'Request Lines')
+    request_line = fields.Function(
+        fields.Many2One('document.request.line', 'Request Line'),
+        'getter_request_line')
 
     @classmethod
     def __setup__(cls):
@@ -82,6 +86,9 @@ class Attachment(Workflow, metaclass=PoolMeta):
     @classmethod
     def blocking_statuses_get(cls):
         return BLOCKING_STATUSES
+
+    def getter_request_line(self, name):
+        return self.request_lines[0].id if self.request_lines else None
 
     @fields.depends('status', 'status_change_date')
     def on_change_status(self):

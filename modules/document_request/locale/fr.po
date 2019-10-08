@@ -282,6 +282,14 @@ msgctxt "field:ir.attachment,status:"
 msgid "Status"
 msgstr "Statut"
 
+msgctxt "field:ir.attachment,request_line:"
+msgid "Request Line"
+msgstr "Ligne de demande de document"
+
+msgctxt "field:ir.attachment,request_lines:"
+msgid "Request Lines"
+msgstr "Lignes de demande de document"
+
 msgctxt "field:ir.attachment,status_change_date:"
 msgid "Status Change Date"
 msgstr "Date de changement de statut"

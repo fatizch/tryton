@@ -166,4 +166,6 @@ class EventLog(metaclass=PoolMeta):
             return [object_.parent_contract]
         if object_.__name__ == 'report_production.request':
             return cls.get_related_instances(object_.object_, 'contract')
+        if hasattr(object_, 'contract'):
+            return [object_.contract]
         return []

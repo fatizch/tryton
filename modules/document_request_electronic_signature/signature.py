@@ -32,6 +32,16 @@ class Signature(metaclass=PoolMeta):
             return from_object.format_signature_url(url)
         return super(Signature, cls).format_url(url, from_object)
 
+    def notify_signature_completed(self):
+        super(Signature, self).notify_signature_completed()
+        if self.attachment and self.attachment.request_line:
+            self.attachment.request_line.notify_signature_completed(self)
+
+    def notify_signature_failed(self):
+        super(Signature, self).notify_signature_failed()
+        if self.attachment and self.attachment.request_line:
+            self.attachment.request_line.notify_signature_failed(self)
+
 
 class SignatureCredential(export.ExportImportMixin, metaclass=PoolMeta):
     __name__ = 'document.signature.credential'
