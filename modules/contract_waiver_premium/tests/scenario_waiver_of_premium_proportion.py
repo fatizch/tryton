@@ -278,6 +278,7 @@ coverage.item_desc = item_description
 coverage.start_date = product_start_date
 coverage.account_for_billing = product_account
 coverage.taxes.append(tax1)
+coverage.allow_subscribe_coverage_multiple_times = True
 coverage.save()
 waiver_rule = WaiverPremiumRule()
 waiver_rule.invoice_line_period_behaviour = 'proportion'

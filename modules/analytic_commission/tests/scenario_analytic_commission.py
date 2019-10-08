@@ -161,6 +161,8 @@ offered_product = add_premium_rules(offered_product)
 offered_product = add_invoice_configuration(offered_product, accounts)
 offered_product = add_insurer_to_product(offered_product)
 offered_product.fees.append(broker_fee)
+offered_product.coverages[0].allow_subscribe_coverage_multiple_times = True
+offered_product.coverages[0].save()
 offered_product.save()
 
 # #Comment# #Create a second Product
@@ -202,6 +204,8 @@ for coverage in offered_product2.coverages:
 insurer, = Model.get('insurer').find([])
 for coverage in offered_product2.coverages:
     coverage.insurer = insurer
+    coverage.allow_subscribe_coverage_multiple_times = True
+    coverage.save()
 offered_product2.save()
 
 config = switch_user('commission_user')

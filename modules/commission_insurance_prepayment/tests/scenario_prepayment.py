@@ -491,6 +491,8 @@ contract.contract_number = '1234567890'
 DistributionNetwork = Model.get('distribution.network')
 contract.dist_network = DistributionNetwork(broker.id)
 contract.agent = agent_broker
+contract.options[0].coverage.allow_subscribe_coverage_multiple_times = True
+contract.options[0].coverage.save()
 contract.save()
 Wizard('contract.activate', models=[contract]).execute('apply')
 

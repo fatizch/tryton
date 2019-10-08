@@ -657,6 +657,8 @@ class ModuleTestCase(test_framework.CoogTestCase):
             return contract
 
         def create_option(coverage, covered_element, base_date):
+            coverage.allow_subscribe_coverage_multiple_times = True
+            coverage.save()
             option = self.Option(
                 start_date=base_date + datetime.timedelta(weeks=10),
                 coverage=coverage.id,

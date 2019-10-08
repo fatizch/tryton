@@ -401,6 +401,8 @@ Create payment for the first due contract invoice::
     ...         payer=subscriber.id,
     ...         payment_term=BillingMode(direct_monthly.id).allowed_payment_terms[0]))
     >>> contract.contract_number = 'test_2'
+    >>> contract.options[0].coverage.allow_subscribe_coverage_multiple_times = True
+    >>> contract.options[0].coverage.save()
     >>> contract.save()
     >>> Wizard('contract.activate', models=[contract]).execute('apply')
     >>> contract.billing_information.direct_debit is True

@@ -1013,6 +1013,11 @@ class ModuleTestCase(test_framework.CoogTestCase):
         pool = Pool()
         Contract = pool.get('contract')
         ContractAPI = pool.get('api.contract')
+        coverages = self.Coverage.search([('code', 'in',
+                ('BET', 'ALP'))])
+        for coverage in coverages:
+            coverage.allow_subscribe_coverage_multiple_times = True
+            coverage.save()
         data_ref = {
             'parties': [
                 {

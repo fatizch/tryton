@@ -137,6 +137,8 @@ Local Methods::
     ...     contract.subscriber = subscriber
     ...     contract.start_date = start_date
     ...     contract.product = product
+    ...     contract.options[0].coverage.allow_subscribe_coverage_multiple_times = True
+    ...     contract.options[0].coverage.save()
     ...     contract.billing_informations.append(BillingInformation(date=None,
     ...             billing_mode=monthly_direct_debit,
     ...             payment_term=monthly_direct_debit.allowed_payment_terms[0],

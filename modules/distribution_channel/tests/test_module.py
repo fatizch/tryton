@@ -166,6 +166,11 @@ class ModuleTestCase(test_framework.CoogTestCase):
         channel_3, = Channel.search([('code', '=', 'channel_3')])
         node_1, = DistNetwork.search([('code', '=', 'node_1')])
         node_1_1, = DistNetwork.search([('code', '=', 'node_1_1')])
+        coverages = self.Coverage.search([('code', 'in',
+                ('BET', 'ALP'))])
+        for coverage in coverages:
+            coverage.allow_subscribe_coverage_multiple_times = True
+            coverage.save()
 
         data_ref = {
             'parties': [
