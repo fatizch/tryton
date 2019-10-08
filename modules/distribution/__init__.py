@@ -25,3 +25,8 @@ def register():
         api.APIIdentity,
         api.APICore,
         module='distribution', type_='model', depends=['api'])
+
+    Pool.register(
+        api.DistributionNetwork,
+        module='distribution', type_='model', depends=['api',
+            'web_configuration'])

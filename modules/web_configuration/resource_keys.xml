@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data depends="web_configuration">
+        <record model="web.ui.resource.key" id="key_helper">
+            <field name="name">Helper</field>
+            <field name="code">helper</field>
+        </record>
+        <record model="web.ui.resource.key" id="key_markdown_formatted_text">
+            <field name="name">Markdown Formatted Text</field>
+            <field name="code">markdown_formatted_text</field>
+        </record>
+        <record model="web.ui.resource.key" id="key_title">
+            <field name="name">Title</field>
+            <field name="code">title</field>
+        </record>
+        <record model="web.ui.resource.key" id="key_widget">
+            <field name="name">Widget</field>
+            <field name="code">widget</field>
+        </record>
+        <record model="web.ui.resource.key" id="key_format">
+            <field name="name">Format</field>
+            <field name="code">format</field>
+        </record>
+        <record model="web.ui.resource.key" id="key_theme">
+            <field name="name">Theme</field>
+            <field name="code">theme</field>
+        </record>
+     </data>
+</tryton>

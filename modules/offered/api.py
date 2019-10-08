@@ -6,11 +6,11 @@ from decimal import Decimal, InvalidOperation
 
 from trytond.pool import PoolMeta, Pool
 
-from trytond.modules.coog_core.api import APIResourceMixin, OBJECT_ID_SCHEMA
+from trytond.modules.coog_core.api import OBJECT_ID_SCHEMA
 from trytond.modules.coog_core.api import CODED_OBJECT_ARRAY_SCHEMA, CODE_SCHEMA
 from trytond.modules.coog_core.api import MODEL_REFERENCE
 from trytond.modules.api import APIMixin, DEFAULT_INPUT_SCHEMA
-
+from trytond.modules.web_configuration.resource import WebUIResourceMixin
 
 EXTRA_DATA_VALUES_SCHEMA = {
     'type': 'object',
@@ -27,7 +27,6 @@ EXTRA_DATA_VALUES_SCHEMA = {
 __all__ = [
     'APICore',
     'APIProduct',
-    'APIResource',
     'ExtraData',
     ]
 
@@ -781,34 +780,14 @@ class APIProduct(APIMixin):
             }
 
 
-class APIResource(metaclass=PoolMeta):
-    __name__ = 'api.resource'
-
-    @classmethod
-    def create(cls, vlist):
-        created = super().create(vlist)
-        Pool().get('extra_data')._extra_data_cache.clear()
-        return created
-
-    @classmethod
-    def delete(cls, ids):
-        super().delete(ids)
-        Pool().get('extra_data')._extra_data_cache.clear()
-
-    @classmethod
-    def write(cls, *args):
-        super().write(*args)
-        Pool().get('extra_data')._extra_data_cache.clear()
-
-
-class ExtraData(APIResourceMixin):
+class ExtraData(WebUIResourceMixin):
     __name__ = 'extra_data'
 
     def _get_structure(self):
         res = super()._get_structure()
-        if self.api_resources:
+        if self.web_ui_resources:
             res['custom_resources'] = {
                 x.key: x.value
-                for x in self.api_resources
+                for x in self.web_ui_resources
                 }
         return res

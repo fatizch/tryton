@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data depends="web_configuration">
+         <record model="ir.model-web.ui.resource.key" id="key_helper">
+            <field name="web_ui_res_key" ref="web_configuration.key_helper"/>
+            <field name="on_model" search="[('model', '=', 'extra_data')]"/>
+         </record>
+        <record model="ir.model-web.ui.resource.key" id="key_markdown_formatted">
+            <field name="web_ui_res_key" ref="web_configuration.key_markdown_formatted_text"/>
+            <field name="on_model" search="[('model', '=', 'extra_data')]"/>
+         </record>
+        <record model="ir.model-web.ui.resource.key" id="key_widget">
+            <field name="web_ui_res_key" ref="web_configuration.key_widget"/>
+            <field name="on_model" search="[('model', '=', 'extra_data')]"/>
+         </record>
+        <record model="ir.model-web.ui.resource.key" id="key_title">
+            <field name="web_ui_res_key" ref="web_configuration.key_title"/>
+            <field name="on_model" search="[('model', '=', 'extra_data')]"/>
+         </record>
+        <record model="ir.model-web.ui.resource.key" id="key_format">
+            <field name="web_ui_res_key" ref="web_configuration.key_format"/>
+            <field name="on_model" search="[('model', '=', 'extra_data')]"/>
+         </record>
+    </data>
+</tryton>

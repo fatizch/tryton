@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data depends="web_configuration">
+         <record model="ir.model-web.ui.resource.key" id="key_theme">
+            <field name="web_ui_res_key" ref="web_configuration.key_theme"/>
+            <field name="on_model" search="[('model', '=', 'distribution.network')]"/>
+         </record>
+    </data>
+</tryton>

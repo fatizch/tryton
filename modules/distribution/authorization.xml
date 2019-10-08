@@ -20,6 +20,14 @@ this repository contains the full copyright notices and license terms. -->
             <field name="perm_create" eval="False"/>
             <field name="perm_delete" eval="False"/>
         </record>
+        <record model="ir.model.access" id="access_distribution_network_global_config">
+            <field name="group" ref="coog_core.group_global_config"/>
+            <field name="model" search="[('model', '=', 'distribution.network')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
     </data>
     <data depends="api">
         <!-- ############## -->

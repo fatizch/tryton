@@ -2,50 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "field:api.resource,create_date:"
-msgid "Create Date"
-msgstr "Date de Création"
-
-msgctxt "field:api.resource,create_date_:"
-msgid "Creation date"
-msgstr "Date de Création"
-
-msgctxt "field:api.resource,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:api.resource,id:"
-msgid "ID"
-msgstr "Identifiant"
-
-msgctxt "field:api.resource,key:"
-msgid "Key"
-msgstr "Clé"
-
-msgctxt "field:api.resource,origin:"
-msgid "Origin"
-msgstr "Origine"
-
-msgctxt "field:api.resource,rec_name:"
-msgid "Record Name"
-msgstr "Nom"
-
-msgctxt "field:api.resource,value:"
-msgid "Value"
-msgstr "Valeur"
-
-msgctxt "field:api.resource,write_date:"
-msgid "Write Date"
-msgstr "Modifié par"
-
-msgctxt "field:api.resource,write_uid:"
-msgid "Write User"
-msgstr "Modifié par"
-
-msgctxt "field:api.resource,xml_id:"
-msgid "XML Id"
-msgstr "XML Id"
-
 msgctxt "field:async.task,create_date:"
 msgid "Create Date"
 msgstr "Date de Création"

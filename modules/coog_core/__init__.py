@@ -151,7 +151,6 @@ def register():
         api.APIConfiguration,
         api.APIAccess,
         api.APIIdentity,
-        api.APIResource,
         api.API,
         api.APICore,
         module='coog_core', type_='model', depends=['api'])

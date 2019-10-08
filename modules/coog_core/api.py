@@ -150,7 +150,6 @@ __all__ = [
     'APIConfiguration',
     'APIAccess',
     'APIIdentity',
-    'APIResource',
     'API',
     'APICore',
     ]
@@ -206,47 +205,6 @@ class APIIdentity(model.CoogSQL, model.CoogView):
                     },
                 }
         return {}
-
-
-class APIResource(model.CoogSQL, model.CoogView):
-    'API Resource'
-    __name__ = 'api.resource'
-
-    origin = fields.Reference('Origin', 'select_resource_models',
-        required=True, help='The record to which this resource will be linked')
-    key = fields.Char('Key', required=True, help='The identifier for this '
-        'particular resource for this origin')
-    value = fields.Text('Value', help='The value for this origin / key pair')
-
-    @classmethod
-    def __setup__(cls):
-        super().__setup__()
-        t = cls.__table__()
-        cls._sql_constraints += [
-            ('key_unique', Unique(t, t.origin, t.key),
-                'The origin / key pair must be unique'),
-            ]
-
-    @classmethod
-    def select_resource_models(cls):
-        pool = Pool()
-        all_models = pool.get('ir.attachment').get_models()
-        result = []
-        for model_name, translation in all_models:
-            if not issubclass(pool.get(model_name), APIResourceMixin):
-                continue
-            result.append((model_name, translation))
-        return result
-
-
-class APIResourceMixin(model.CoogSQL):
-    '''
-        A Model inheriting this Mixin will have a list of api_resources that
-        will be available to easily set custom properties
-    '''
-    api_resources = fields.One2Many('api.resource', 'origin', 'API Resources',
-        delete_missing=True, target_not_indexed=True,
-        help='A list of resources which will only be used through the APIs')
 
 
 class API(metaclass=PoolMeta):

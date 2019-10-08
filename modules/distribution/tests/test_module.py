@@ -16,6 +16,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
     Test Coog module.
     '''
     module = 'distribution'
+    extras = ['web_configuration']
 
     @classmethod
     def fetch_models_for(cls):
@@ -27,7 +28,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
     def test0002_dist_network_creation(self):
         company, = self.Company.search([('party.name', '=', 'World Company')])
         DistNetwork = Pool().get('distribution.network')
-        root = DistNetwork(name='Root', code='root')
+        root = DistNetwork(name='Root', code='root', company=company)
         root.save()
 
         node_1 = DistNetwork(name='Node 1', code='node_1', parent=root,
@@ -140,14 +141,29 @@ class ModuleTestCase(test_framework.CoogTestCase):
     def test9001_identity_context_api(self):
         pool = Pool()
         DistNetwork = pool.get('distribution.network')
+        distNetwork = DistNetwork()
         User = pool.get('res.user')
         APIIdentity = pool.get('ir.api.identity')
         APICore = pool.get('api.core')
-
+        WebUIResourceKey = pool.get('web.ui.resource.key')
         node_1, = DistNetwork.search([('code', '=', 'node_1')])
+        key_id = WebUIResourceKey.search([('code', '=', 'theme')])
+        node_1.web_ui_resources = [
+                {
+                    'key': key_id[0],
+                    'value': '"some value"',
+                    'origin_resource': distNetwork,
+                }]
+
         admin = User(1)
 
-        test_user = User(login='test', dist_network=node_1.id)
+        api_user, = User.search([('login', '=', 'coog_api_user')])
+        api_user.main_company = node_1.company
+        api_user.save()
+
+        test_user = User(login='test', dist_network=node_1.id,
+            main_company=node_1.company.id)
+        test_user.companies = [node_1.company]
         test_user.save()
 
         identity = APIIdentity()

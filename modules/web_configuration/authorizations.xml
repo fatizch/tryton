@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- Web Resources Key Consultation -->
+        <record model="res.group" id="group_web_configuration_read">
+            <field name="name">Coog Web Configuration Consultation</field>
+        </record>
+        <!-- Web Configuration read -->
+        <record model="ir.ui.menu-res.group" id="menu_web_configuration_read">
+            <field name="menu" ref="web_configuration.menu_web_ui_resource"/>
+            <field name="group" ref="group_web_configuration_read"/>
+        </record>
+        <!-- Web Resources Key Management -->
+        <record model="res.group" id="group_web_configuration_manage">
+            <field name="name">Coog Web Configuration management</field>
+        </record>
+        <!-- Web Configuration manage -->
+        <record model="ir.ui.menu-res.group" id="menu_web_configuration_manage">
+            <field name="menu" ref="web_configuration.menu_web_ui_resource"/>
+            <field name="group" ref="group_web_configuration_manage"/>
+        </record>
+        <!-- Users -->
+        <record model="res.user-res.group" id="user_admin_group_web_configuration_read">
+            <field name="user" ref="res.user_admin"/>
+            <field name="group" ref="group_web_configuration_read"/>
+        </record>
+        <record model="res.user-res.group" id="user_admin_group_web_configuration_manage">
+            <field name="user" ref="res.user_admin"/>
+            <field name="group" ref="group_web_configuration_manage"/>
+        </record>
+        <!-- Default Access -->
+        <record model="ir.model.access" id="access_web_configuration_default">
+            <field name="model" search="[('model', '=', 'web.ui.resource')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_web_configuration_group_read">
+            <field name="model" search="[('model', '=', 'web.ui.resource')]"/>
+            <field name="group" ref="group_web_configuration_read"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_web_configuration_group_manage">
+            <field name="model" search="[('model', '=', 'web.ui.resource')]"/>
+            <field name="group" ref="group_web_configuration_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+    </data>
+</tryton>

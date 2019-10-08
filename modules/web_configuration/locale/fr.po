@@ -1,0 +1,220 @@
+#
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:ir.model-web.ui.resource.key,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:ir.model-web.ui.resource.key,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:ir.model-web.ui.resource.key,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:ir.model-web.ui.resource.key,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:ir.model-web.ui.resource.key,on_model:"
+msgid "On Model"
+msgstr "Modèle"
+
+msgctxt "field:ir.model-web.ui.resource.key,rec_name:"
+msgid "Record Name"
+msgstr "Nom"
+
+msgctxt "field:ir.model-web.ui.resource.key,web_ui_res_key:"
+msgid "Web UI Resource Key"
+msgstr "Clé d'une ressource web"
+
+msgctxt "field:ir.model-web.ui.resource.key,web_ui_resources:"
+msgid "Web UI Resources"
+msgstr "Ressources web"
+
+msgctxt "field:ir.model-web.ui.resource.key,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:ir.model-web.ui.resource.key,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:ir.model-web.ui.resource.key,xml_id:"
+msgid "XML Id"
+msgstr "XML Id"
+
+msgctxt "field:web.ui.resource,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:web.ui.resource,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:web.ui.resource,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:web.ui.resource,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:web.ui.resource,ir_model_resource:"
+msgid "IR Model Resource Key"
+msgstr "Modèle Coog de la clé"
+
+msgctxt "field:web.ui.resource,key:"
+msgid "Key"
+msgstr "Clé"
+
+msgctxt "field:web.ui.resource,origin_resource:"
+msgid "Origin"
+msgstr "Origine"
+
+msgctxt "field:web.ui.resource,rec_name:"
+msgid "Record Name"
+msgstr "Nom de l'enregistrement"
+
+msgctxt "field:web.ui.resource,value:"
+msgid "Value"
+msgstr "Valeur"
+
+msgctxt "field:web.ui.resource,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:web.ui.resource,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:web.ui.resource,xml_id:"
+msgid "XML Id"
+msgstr "XML Id"
+
+msgctxt "field:web.ui.resource.key,code:"
+msgid "Code"
+msgstr "Code"
+
+msgctxt "field:web.ui.resource.key,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:web.ui.resource.key,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:web.ui.resource.key,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:web.ui.resource.key,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:web.ui.resource.key,ir_model_resource_key:"
+msgid "IR Model Resource Key"
+msgstr "Modèle Coog de la clé"
+
+msgctxt "field:web.ui.resource.key,filter_model:"
+msgid "Filter Model"
+msgstr "Filtre du modèle"
+
+msgctxt "field:web.ui.resource.key,model_description:"
+msgid "Model Description"
+msgstr "Description du modèle"
+
+msgctxt "field:web.ui.resource.key,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:web.ui.resource.key,rec_name:"
+msgid "Record Name"
+msgstr "Nom de l'enregistrement"
+
+msgctxt "field:web.ui.resource.key,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:web.ui.resource.key,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:web.ui.resource.key,xml_id:"
+msgid "XML Id"
+msgstr "XML Id"
+
+msgctxt "help:ir.model-web.ui.resource.key,web_ui_resources:"
+msgid "A list of resources which will only be used through the APIs"
+msgstr "Une liste de ressources qui ne seront utilisées que par les API"
+
+msgctxt "help:web.ui.resource,key:"
+msgid "Link to the description of this resource for this origin"
+msgstr "Lien vers la description de cette ressource pour cette origine"
+
+msgctxt "help:web.ui.resource,origin_resource:"
+msgid "The record to which this resource will be linked"
+msgstr "L'enregistrement auquel cette ressource sera liée"
+
+msgctxt "help:web.ui.resource,value:"
+msgid "The value for this origin / key pair"
+msgstr "La valeur pour cette paire origine / clé"
+
+msgctxt "help:web.ui.resource.key,code:"
+msgid ""
+"The string that will be used to identify this record across the "
+"configuration. It should not be modified without checking first if it is "
+"used somewhere"
+msgstr ""
+"L'identifiant pour cet enregistrement dans la configuration. Il ne doit pas "
+"être modifié sans s'assurer au préalable des endroits y faisant référence"
+
+msgctxt "help:web.ui.resource.key,name:"
+msgid "The name that will be displayed to the end user"
+msgstr "Nom qui sera affiché à l'utilisateur"
+
+msgctxt "model:ir.action,name:act_web_ui_resource_for_keyword_window"
+msgid "Web Resources"
+msgstr "Ressources Web"
+
+msgctxt "model:ir.action,name:act_web_ui_resource_window"
+msgid "Web Resources"
+msgstr "Ressources Web"
+
+msgctxt "model:ir.action,name:domain_act_web_ui_resource_key_window"
+msgid "Web Resources Keys"
+msgstr "Clés des ressources web "
+
+msgctxt "model:ir.model-web.ui.resource.key,name:"
+msgid "Relation Web UI Resource Key IR Model"
+msgstr "Relation entre les clés web et les modèles Coog"
+
+msgctxt "model:ir.ui.menu,name:menu_ui_resouce_key1"
+msgid "Web Resources"
+msgstr "Ressources Web"
+
+msgctxt "model:ir.ui.menu,name:menu_web_ui_resource"
+msgid "Web configuration"
+msgstr "Configuration Web "
+
+msgctxt "model:ir.ui.menu,name:web_resources_keys"
+msgid "Web Resources Keys"
+msgstr "Clefs des ressources web"
+
+msgctxt "model:res.group,name:group_web_configuration_manage1"
+msgid "Coog Web Configuration management"
+msgstr "Gestion de la configuration Web Coog"
+
+msgctxt "model:res.group,name:group_web_configuration_read1"
+msgid "Coog Web Configuration Consultation"
+msgstr "Consultation de configuration Web Coog"
+
+msgctxt "model:web.ui.resource,name:"
+msgid "Web UI Resource"
+msgstr "Ressources web"
+
+msgctxt "model:web.ui.resource.key,name:"
+msgid "Web UI Resource Key"
+msgstr "Clés"

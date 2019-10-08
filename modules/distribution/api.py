@@ -4,11 +4,13 @@ from trytond.pool import PoolMeta, Pool
 
 from trytond.modules.api import api_context
 from trytond.modules.coog_core.api import CODED_OBJECT_SCHEMA, OBJECT_ID_SCHEMA
+from trytond.modules.web_configuration.resource import WebUIResourceMixin
 from trytond.modules.party_cog.api import PARTY_RELATION_SCHEMA
 
 __all__ = [
     'APIIdentity',
     'APICore',
+    'DistributionNetwork',
     ]
 
 
@@ -19,6 +21,14 @@ class APIIdentity(metaclass=PoolMeta):
         context = super().get_api_context()
         if self.user and self.user.dist_network:
             context['dist_network'] = self.user.dist_network.id
+            parent = self.user.dist_network
+            while parent:
+                for parent_web_ui_resouce in parent.web_ui_resources:
+                    if parent_web_ui_resouce.key.code == 'theme':
+                        context['theme'] = parent.web_ui_resources.key.value
+                        parent = False
+                else:
+                    parent = parent.parent
         return context
 
 
@@ -328,3 +338,16 @@ class APICore(metaclass=PoolMeta):
         schema = super()._identity_context_output_schema()
         schema['properties']['dist_network'] = {'type': 'integer'}
         return schema
+
+
+class DistributionNetwork(WebUIResourceMixin):
+    __name__ = 'distribution.network'
+
+    def _get_structure(self):
+        res = super()._get_structure()
+        if self.web_ui_resources:
+            res['custom_resources'] = {
+                x.key: x.value
+                for x in self.web_ui_resources
+                }
+        return res

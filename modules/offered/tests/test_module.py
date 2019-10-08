@@ -17,6 +17,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
     Test Offered Module
     '''
     module = 'offered'
+    extras = ['web_configuration']
 
     @classmethod
     def fetch_models_for(cls):
@@ -658,6 +659,18 @@ class ModuleTestCase(test_framework.CoogTestCase):
         Product = pool.get('offered.product')
         Coverage = pool.get('offered.option.description')
         Package = pool.get('offered.package')
+        extra_data = self.ExtraData()
+        WebUIResourceKey = pool.get('web.ui.resource.key')
+
+        key_id = WebUIResourceKey.search([('code', '=', 'helper')])
+        key_id2 = WebUIResourceKey.search([('code', '=', 'title')])
+
+        extra_data.name = 'analyse_forcee'
+        extra_data.string = 'Analyse forcée'
+        extra_data.kind = 'contract'
+        extra_data.type_ = 'selection'
+        extra_data.save()
+        extra_data.web_ui_resources = [{'key': key_id[0], 'value': 'test'}]
 
         product_a, = Product.search([('code', '=', 'AAA')])
         coverage_a, = Coverage.search([('code', '=', 'ALP')])
@@ -668,14 +681,16 @@ class ModuleTestCase(test_framework.CoogTestCase):
         # Add some API resources on extra_data
         contract_1, = pool.get('extra_data').search(
             [('name', '=', 'contract_1')])
-        contract_1.api_resources = [
+        contract_1.web_ui_resources = [
             {
-                'key': 'test',
+                'key': key_id[0],
                 'value': '"some value"',
+                'origin_resource': extra_data,
                 },
             {
-                'key': 'other_test',
+                'key': key_id2[0],
                 'value': '1234',
+                'origin_resource': extra_data,
                 },
             ]
         contract_1.save()
@@ -697,8 +712,8 @@ class ModuleTestCase(test_framework.CoogTestCase):
                             'sequence': 1,
                             'digits': 2,
                             'custom_resources': {
-                                'other_test': '1234',
-                                'test': '"some value"',
+                                key_id2[0]: '1234',
+                                key_id[0]: '"some value"',
                                 },
                             },
                         {

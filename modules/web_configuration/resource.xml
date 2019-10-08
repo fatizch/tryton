@@ -1,0 +1,76 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- ############################ -->
+        <!-- ## Web Configuration menu ## -->
+        <!-- ############################ -->
+        <record model="ir.ui.view" id="web_ui_resource_view_form">
+            <field name="model">web.ui.resource</field>
+            <field name="type">form</field>
+            <field name="name">web_ui_resource_form</field>
+        </record>
+        <record model="ir.ui.view" id="web_ui_resource_view_list">
+            <field name="model">web.ui.resource</field>
+            <field name="type">tree</field>
+            <field name="name">web_ui_resource_list</field>
+        </record>
+        <!-- #### act_window web Resources ####### -->
+        <record model="ir.action.act_window" id="act_web_ui_resource_window">
+            <field name="name">Web Resources</field>
+            <field name="res_model">web.ui.resource</field>
+        </record>
+        <!-- #### act_window web Resources ####### -->
+        <record model="ir.action.act_window" id="act_web_ui_resource_for_keyword_window">
+            <field name="name">Web Resources</field>
+            <field name="res_model">web.ui.resource</field>
+            <field name="domain" eval="[('origin_resource', '=', (Eval('active_model'),Eval('active_id')))]" pyson="1"/>
+        </record>
+        <!-- #### act_window_view web Resources ####### -->
+        <record model="ir.action.act_window.view" id="act_ui_resource_form_window_view">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="web_ui_resource_view_form"/>
+            <field name="act_window" ref="act_web_ui_resource_window"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_ui_resource_list_window_view">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="web_ui_resource_view_list"/>
+            <field name="act_window" ref="act_web_ui_resource_window"/>
+        </record>
+        <!-- #### Menu Web configuration & Web Resources ####### -->
+        <menuitem name="Web configuration" parent="ir.menu_administration" sequence="301" id="menu_web_ui_resource"/>
+        <menuitem name="Web Resources" parent="menu_web_ui_resource" sequence="302" id="menu_ui_resouce_key1" action="act_web_ui_resource_window"/>
+         <!-- ############################ -->
+        <!-- ####### Key Resources ####### -->
+        <!-- ############################ -->
+        <record model="ir.ui.view" id="web_ui_resource_key_view_form">
+            <field name="model">web.ui.resource.key</field>
+            <field name="type">form</field>
+            <field name="name">web_ui_resource_key_form</field>
+        </record>
+        <record model="ir.ui.view" id="web_ui_resource_key_view_list">
+            <field name="model">web.ui.resource.key</field>
+            <field name="type">tree</field>
+            <field name="name">web_ui_resource_key_list</field>
+        </record>
+        <!-- #### act_window Key Resources ####### -->
+        <record model="ir.action.act_window" id="domain_act_web_ui_resource_key_window">
+            <field name="name">Web Resources Keys</field>
+            <field name="res_model">web.ui.resource.key</field>
+        </record>
+        <!-- #### act_window_view Key Resources ####### -->
+        <record model="ir.action.act_window.view" id="act_ui_resource_key_window_list_view">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="web_ui_resource_key_view_list"/>
+            <field name="act_window" ref="domain_act_web_ui_resource_key_window"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_ui_resource_key_window_form_view">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="web_ui_resource_key_view_form"/>
+            <field name="act_window" ref="domain_act_web_ui_resource_key_window"/>
+        </record>
+        <!-- #### Menu Key Resources ####### -->
+        <menuitem name="Web Resources Keys" parent="menu_web_ui_resource" sequence="303" id="web_resources_keys" action="domain_act_web_ui_resource_key_window"/>
+    </data>
+</tryton>
