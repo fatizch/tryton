@@ -778,7 +778,7 @@ class APICore(APIMixin):
                     'type': 'object',
                     'properties': {
                         'description': {'type': 'string'},
-                        'description_api': 'string',
+                        'description_api': {'type': 'string'},
                         'model': {'type': 'string'},
                         'name': {'type': 'string'},
                         'input_schema': {},
