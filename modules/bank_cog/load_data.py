@@ -115,7 +115,7 @@ class BankDataSetWizard(Wizard):
 
         banks = []
         existing_banks = dict((x.bic, x) for x in Bank.search([]))
-        parties = dict((x.bank_role[0].bic[0:7], [x, list(x.addresses)])
+        parties = dict((x.bank_role[0].bic[0:8], [x, list(x.addresses)])
             for x in Party.search([('is_bank', '=', True)]))
         for bank_row in self.read_resource_file():
             bic = ('%sXXX' % bank_row['bic']
@@ -132,8 +132,8 @@ class BankDataSetWizard(Wizard):
                 bank = existing_banks[bic]
                 if bank.party.name == bank_row['bank_name']:
                     continue
-                if bic[0:7] in parties:
-                    party, addresses = parties[bic[0:7]]
+                if bic[0:8] in parties:
+                    party, addresses = parties[bic[0:8]]
                     if party.name == bank_row['bank_name']:
                         self._update_bank(bank, party, bank_row, country,
                         addresses)
@@ -148,24 +148,24 @@ class BankDataSetWizard(Wizard):
                             addresses = []
                         self._update_bank(bank, party, bank_row,
                             country, addresses)
-                        parties[bic[0:7]] = [party, [party.addresses]]
+                        parties[bic[0:8]] = [party, [party.addresses]]
                 else:
                     party = Party(name=bank_row['bank_name'])
                     self._update_bank(bank, party,
                         bank_row, country, [])
-                    parties[bic[0:7]] = [party, [bank.address]]
+                    parties[bic[0:8]] = [party, [bank.address]]
                 continue
 
             addresses = []
             try:
-                party, addresses = parties[bic[0:7]]
+                party, addresses = parties[bic[0:8]]
             except KeyError:
                 party = Party(name=bank_row['bank_name'])
-                parties[bic[0:7]] = [party, addresses]
+                parties[bic[0:8]] = [party, addresses]
 
             address = self.get_address(addresses, bank_row, country, party)
             if address not in addresses:
-                parties[bic[0:7]][1].append(address)
+                parties[bic[0:8]][1].append(address)
 
             bank = Bank(
                 bic=bank_row['bic'],

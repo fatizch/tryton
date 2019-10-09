@@ -1,3 +1,4 @@
+* OTH#0000 Fix typo in bic code
 * BUG#12637 Bics link to wrong bank in Coog with Coog import default file
 * OTH#0000 Fix bank data generation using default coog file
 
