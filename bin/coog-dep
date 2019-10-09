@@ -15,7 +15,7 @@ coog_dep_main() { # install base deps
                 "celery" \
                 "chardet" \
                 "dateutils" \
-                "fastjsonschema" \
+                "fastjsonschema==2.13" \
                 "filelock" \
                 "hiredis" \
                 "intervaltree" \
