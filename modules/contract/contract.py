@@ -2183,6 +2183,8 @@ class ContractOption(model.CoogSQL, model.CoogView, with_extra_data(['option'],
         if self.automatic_end_date and \
                 self.automatic_end_date < new_start_date:
             self.automatic_end_date = None
+        if self.manual_start_date == self.parent_contract.start_date:
+            self.manual_start_date = None
 
     @classmethod
     def check_dates(cls, options):

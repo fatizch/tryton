@@ -1,3 +1,7 @@
+* BUG#11805 Remove manual start date of an option when changing contract start
+date and the option had a manual start date equal to the previous contract
+start date
+
 Version 2.4 - 2019-04-12
 * BUG#11400 Add missing migration for history table of covered elements
 * BUG#10693 Fix order of elements of the default insured management endorsement
