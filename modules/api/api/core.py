@@ -517,8 +517,8 @@ class APIModel(Model):
                     'description': error.description,
                     'code': error.code,
                     })
-        # TODO: Trigger sentry if it is available + dump the trace somewhere in
-        # the log
+        # TODO: Trigger sentry if it is available
+        api_logger.exception(error)
         return APIServerError(error)
 
     @classmethod

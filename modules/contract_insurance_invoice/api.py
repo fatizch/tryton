@@ -543,8 +543,8 @@ class APIContract(metaclass=PoolMeta):
                         }
         if detail['premium'].fee:
             result['fee'] = {
-                'id': detail['premium'].fee.id,
-                'code': detail['premium'].fee.code,
+                'id': detail['premium'].fee.fee.id,
+                'code': detail['premium'].fee.fee.code,
                 }
         return result
 

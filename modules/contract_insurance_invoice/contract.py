@@ -1568,8 +1568,8 @@ class Contract(metaclass=PoolMeta):
                     'currency_symbol': invoice.currency.symbol,
                     'amount': amount if not premium.fee else Decimal(0),
                     'fee': amount if premium.fee else Decimal(0),
-                    'tax_amount': tax_amount,
-                    'total_amount': amount + tax_amount,
+                    'tax_amount': tax_amount or Decimal(0),
+                    'total_amount': (amount + tax_amount) or Decimal(0),
                     })
             displayer['tax_amount'] += tax_amount
             displayer['total_amount'] += amount + tax_amount
