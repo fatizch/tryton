@@ -236,6 +236,7 @@ if not TESTING:
         user=COOG_USER,
         config_file=os.environ['TRYTOND_CONFIG'],
         )
+
 else:
     from trytond.config import config
     config.set('database', 'language', 'fr')
@@ -5243,7 +5244,7 @@ if CREATE_CONTRACTS:  # {{{
             employee.name = subsidiary.name
             employee.first_name = 'Employé %i' % (jdx + 1)
             employee.gender = {0: 'male', 1: 'female'}[jdx % 2]
-            employee.code = 'CODE_PARTY_' + str(jdx + 1)
+            employee.code = 'CODE_PARTY_%i_%i' % (idx + 1, jdx + 1)
             employee.birth_date = datetime.date(
                 1960, idx + 1, (jdx + 1) * 3 + idx)
             ssn = {'male': '1', 'female': '2'}[employee.gender] +\
