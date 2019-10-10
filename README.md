@@ -80,7 +80,7 @@ mkdir conf
 coog dep
 
 # Init default configuration
-coog conf
+coog init conf
 
 # Link modules
 coog repo link
