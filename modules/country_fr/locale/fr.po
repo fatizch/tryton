@@ -2,12 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:country.zip:"
-msgid "This city, zipcode, line5 combination already exists for this country!"
-msgstr ""
-"Cette combinaison de commune, code postale, ligne 5 existe déjà pour ce pays"
-" !"
-
 msgctxt "field:country.zip,line5:"
 msgid "Line 5"
 msgstr "Ligne 5"

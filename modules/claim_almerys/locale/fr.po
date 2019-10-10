@@ -8,7 +8,7 @@ msgstr ""
 
 msgctxt "field:account.invoice.line,almerys_services:"
 msgid "Almerys Services"
-msgstr ""
+msgstr "Services Almerys"
 
 msgctxt "field:benefit,delegation:"
 msgid "Delegation"

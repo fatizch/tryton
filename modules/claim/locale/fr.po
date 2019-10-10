@@ -1505,6 +1505,14 @@ msgctxt "model:ir.message,text:msg_benefit_information"
 msgid "Benefit Information"
 msgstr "Information sur la prestation"
 
+msgctxt "model:ir.message,text:msg_clearing_empty_origin"
+msgid "Clearing empty origin."
+msgstr "Suppression de l'origine vide."
+
+msgctxt "model:ir.message,text:msg_clearing_origin"
+msgid "Clearing origin!"
+msgstr "Suppression de l'origine!"
+
 msgctxt "model:ir.message,text:msg_code_unique"
 msgid "The number must be unique."
 msgstr "Le numéro doit être unique"
@@ -1580,14 +1588,6 @@ msgstr ""
 msgctxt "model:ir.message,text:msg_origin_required"
 msgid "The \"origin\" field is required to proceed."
 msgstr "Le champ \"Prestation d'origine\" doit être renseigné pour continuer."
-
-msgctxt "model:ir.message,text:msg_clearing_origin"
-msgid "Clearing empty origin."
-msgstr "Suppression de l'origine vide."
-
-msgctxt "model:ir.message,text:msg_clearing_origin"
-msgid "Clearing origin!"
-msgstr "Suppression de l'origine!"
 
 msgctxt "model:ir.message,text:msg_other_enum"
 msgid "Other"

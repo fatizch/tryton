@@ -598,10 +598,6 @@ msgctxt "field:contract.option.exclusion,comment:"
 msgid "Comment"
 msgstr "Commentaire"
 
-msgctxt "help:contract.option.exclusion,comment:"
-msgid "A free-input field to detail why the exclusion was added"
-msgstr "Un champ de saisie libre pour expliquer pourquoi l'exclusion a été ajoutée"
-
 msgctxt "field:contract.option.exclusion,create_date:"
 msgid "Create Date"
 msgstr "Date de Création"
@@ -872,6 +868,11 @@ msgstr ""
 msgctxt "help:contract.covered_element,all_parents:"
 msgid "All parents of the covered element linked to the same contract"
 msgstr "Tous les parents de l'élément couvert liés au même contrat"
+
+msgctxt "help:contract.option.exclusion,comment:"
+msgid "A free-input field to detail why the exclusion was added"
+msgstr ""
+"Un champ de saisie libre pour expliquer pourquoi l'exclusion a été ajoutée"
 
 msgctxt "model:contract,name:"
 msgid "Contract"

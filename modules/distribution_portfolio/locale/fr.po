@@ -186,6 +186,62 @@ msgstr ""
 "Il s'agit du portefeuille par défaut dans le cas où l'utilisateur n'est pas "
 "assigné à un réseau de distribution rattaché à un portefeuille."
 
+msgctxt "model:ir.rule.group,name:rule_group_portfolio_claim"
+msgid "In user's portfolios"
+msgstr "Dans le portefeuille de l'utilisateur"
+
+msgctxt "model:ir.rule.group,name:rule_group_portfolio_commission"
+msgid "In the user's portfolios"
+msgstr "Dans le portefeuille de l'utilisateur"
+
+msgctxt "model:ir.rule.group,name:rule_group_portfolio_commission_aggregated"
+msgid "In the user's portfolios"
+msgstr "Dans le portefeuille de l'utilisateur"
+
+msgctxt "model:ir.rule.group,name:rule_group_portfolio_contact_mechanism"
+msgid "In user's portfolios"
+msgstr "Dans le portefeuille de l'utilisateur"
+
+msgctxt "model:ir.rule.group,name:rule_group_portfolio_contract"
+msgid "In user's portfolios"
+msgstr "Dans le portefeuille de l'utilisateur"
+
+msgctxt "model:ir.rule.group,name:rule_group_portfolio_invoice"
+msgid "In user's portfolios"
+msgstr "Dans le portefeuille de l'utilisateur"
+
+msgctxt "model:ir.rule.group,name:rule_group_portfolio_loss"
+msgid "In user's portfolios"
+msgstr "Dans le portefeuille de l'utilisateur"
+
+msgctxt "model:ir.rule.group,name:rule_group_portfolio_mandate"
+msgid "In user(s portfolios"
+msgstr "Dans le portefeuille de l'utilisateur"
+
+msgctxt "model:ir.rule.group,name:rule_group_portfolio_merged_payment"
+msgid "In user's portfolios"
+msgstr "Dans le portefeuille de l'utilisateur"
+
+msgctxt "model:ir.rule.group,name:rule_group_portfolio_move_line"
+msgid "In user's portfolios"
+msgstr "Dans le portefeuille de l'utilisateur"
+
+msgctxt "model:ir.rule.group,name:rule_group_portfolio_party"
+msgid "In user's portfolios"
+msgstr "Dans le portefeuille de l'utilisateur"
+
+msgctxt "model:ir.rule.group,name:rule_group_portfolio_payment"
+msgid "In user's portfolios"
+msgstr "Dans le portefeuille de l'utilisateur"
+
+msgctxt "model:ir.rule.group,name:rule_group_portfolio_relation"
+msgid "In user's portfolios"
+msgstr "Dans le portefeuille de l'utilisateur"
+
+msgctxt "model:ir.rule.group,name:rule_group_portfolio_statement_line_group"
+msgid "In user's portfolios"
+msgstr "Dans le portefeuille de l'utilisateur"
+
 msgctxt "model:ir.ui.menu,name:menu_distribution_configuration"
 msgid "Configuration"
 msgstr "Configuration"

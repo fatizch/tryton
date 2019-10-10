@@ -86,6 +86,14 @@ msgctxt "field:account.move,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:account.move.line,account_payable:"
+msgid "Account Payable"
+msgstr "Compte à payer"
+
+msgctxt "field:account.move.line,account_receivable:"
+msgid "Account Receivable"
+msgstr "Compte à recevoir"
+
 msgctxt "field:account.move.line,color:"
 msgid "Color"
 msgstr "Couleur"

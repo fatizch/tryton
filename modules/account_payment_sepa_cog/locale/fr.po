@@ -104,6 +104,10 @@ msgctxt "field:account.payment.payment_creation.start,payer:"
 msgid "Account Owner"
 msgstr "Titulaire du compte"
 
+msgctxt "field:account.payment.sepa.mandate,amended_by:"
+msgid "Amended By"
+msgstr "Amendé par"
+
 msgctxt "field:account.payment.sepa.mandate,amendment_of:"
 msgid "Amendment Of"
 msgstr "Amendement de"

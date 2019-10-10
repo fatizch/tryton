@@ -26,10 +26,6 @@ msgctxt "field:claim.loss.health,act_coefficient:"
 msgid "Medical Act Coefficient"
 msgstr "Coefficient de l'acte médical"
 
-msgctxt "field:claim.loss.health,ccam_act_code:"
-msgid "CCAM act code"
-msgstr "Code de l'acte CCAM"
-
 msgctxt "field:claim.loss.health,is_care_access_contract:"
 msgid "Belongs To Care Access Contract"
 msgstr "Contrat d'accès aux soins"

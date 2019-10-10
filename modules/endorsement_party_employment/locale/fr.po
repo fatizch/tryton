@@ -2,46 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:endorsement.party.employment.manage_party_employment:"
-msgid "This action is not valid because party has no employment"
-msgstr "Cet avenant est non valide car cette personne ne possède pas d'emplois"
-
-msgctxt "error:endorsement.party.employment.manage_party_employment:"
-msgid "This action should be applied on one physical person"
-msgstr "Cet avenant doit être appliqué sur une personne physique"
-
-msgctxt "error:endorsement.party.employment.manage_party_employment:"
-msgid "This action should be started from a party"
-msgstr "Cet avenant doit être appliqué sur un tiers"
-
-msgctxt "error:endorsement.party.employment.manage_party_employment:"
-msgid "This action should be started from physical person"
-msgstr "Cet avenant doit être appliqué sur une personne physique"
-
-msgctxt "error:endorsement.party.employment.version:"
-msgid "New version"
-msgstr "Nouvelle version"
-
-msgctxt "error:endorsement.party.employment.version:"
-msgid "Remove version of"
-msgstr "Suppression de la version"
-
-msgctxt "error:endorsement.party.employment.version:"
-msgid "Update %s"
-msgstr "Mise à jour de %s"
-
-msgctxt "error:endorsement.party.employment:"
-msgid "New version"
-msgstr "Nouvelle version"
-
-msgctxt "error:endorsement.party.employment:"
-msgid "Remove version of"
-msgstr "Suppression de la version"
-
-msgctxt "error:endorsement.party.employment:"
-msgid "Update %s"
-msgstr "Mise à jour de %s"
-
 msgctxt "field:endorsement.party,employments:"
 msgid "Endorsements"
 msgstr "Avenants"
@@ -361,9 +321,21 @@ msgctxt "model:endorsement.party.employment.version.field,name:"
 msgid "Endorsement Party Employment Version Field"
 msgstr "Version "
 
-msgctxt "selection:endorsement.part,kind:"
-msgid "Party Employment"
-msgstr "Avenant sur les emplois d'une personne"
+msgctxt "model:ir.message,text:msg_invalid_active_ids"
+msgid "This action should be applied on one physical person"
+msgstr "Cette action devrait s'appliquer à une personne physique"
+
+msgctxt "model:ir.message,text:msg_invalid_op"
+msgid "This action is not valid because party has no employment"
+msgstr "Cette action n'est pas valide car la personne n'a pas d'emploi"
+
+msgctxt "model:ir.message,text:msg_invalid_type"
+msgid "This action should be started from physical person"
+msgstr "Cette action devrait être lancée depuis une personne physique"
+
+msgctxt "model:ir.message,text:msg_new_employment"
+msgid "New Employment"
+msgstr "Nouvel emploi"
 
 msgctxt "selection:endorsement.party.employment,action:"
 msgid "Add"

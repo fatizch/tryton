@@ -278,10 +278,6 @@ msgctxt "field:ir.attachment,is_conform:"
 msgid "Conform"
 msgstr "Conforme"
 
-msgctxt "field:ir.attachment,status:"
-msgid "Status"
-msgstr "Statut"
-
 msgctxt "field:ir.attachment,request_line:"
 msgid "Request Line"
 msgstr "Ligne de demande de document"
@@ -289,6 +285,10 @@ msgstr "Ligne de demande de document"
 msgctxt "field:ir.attachment,request_lines:"
 msgid "Request Lines"
 msgstr "Lignes de demande de document"
+
+msgctxt "field:ir.attachment,status:"
+msgid "Status"
+msgstr "Statut"
 
 msgctxt "field:ir.attachment,status_change_date:"
 msgid "Status Change Date"

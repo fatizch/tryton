@@ -2,6 +2,10 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "field:api.endorsement,id:"
+msgid "ID"
+msgstr "Identifiant"
+
 msgctxt "field:contract,current_log:"
 msgid "Current Log"
 msgstr "Trace Courante"
@@ -1943,6 +1947,19 @@ msgstr ""
 "Si coché, l'application serait faite en tâche de fond. L'utilisateur peut "
 "revenir plus tard et voir le résultat."
 
+msgctxt "help:endorsement.definition,code:"
+msgid ""
+"The string that will be used to identify this record across the "
+"configuration. It should not be modified without checking first if it is "
+"used somewhere"
+msgstr ""
+"L'identifiant pour cet enregistrement dans la configuration. Il ne doit pas "
+"être modifié sans s'assurer au préalable des endroits y faisant référence"
+
+msgctxt "help:endorsement.definition,name:"
+msgid "The name that will be displayed to the end user"
+msgstr "Nom qui sera affiché à l'utilisateur"
+
 msgctxt "help:endorsement.definition,start_rule:"
 msgid ""
 "This rule will be executed when the user tries to start an endorsement. You "
@@ -1957,6 +1974,10 @@ msgstr ""
 msgctxt "help:offered.product,endorsement_definitions:"
 msgid "Endorsements available on a contract linked to this product"
 msgstr "Avenants disponibles sur un contrat lié à ce produit"
+
+msgctxt "model:api.endorsement,name:"
+msgid "Endorsement APIs"
+msgstr "APIs d'avenant"
 
 msgctxt "model:contract.manage_options,name:"
 msgid "Manage Options"
@@ -2656,6 +2677,10 @@ msgstr "Décliné"
 msgctxt "selection:rule_engine,type_:"
 msgid "Endorsement Start"
 msgstr "Lancement d'avenant"
+
+msgctxt "view:api.configuration:"
+msgid "Endorsements Bindings"
+msgstr "Avenants liés"
 
 msgctxt "view:contract.manage_options.option_displayer:"
 msgid "Option"

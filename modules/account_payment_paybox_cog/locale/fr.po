@@ -2,39 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:account.payment.creation:"
-msgid "The email is required on the party %(party)s"
-msgstr "L'email est requis pour le tiers %(party)s"
-
-msgctxt "error:account.payment.creation:"
-msgid ""
-"The paybox payment must have a payment date less or equal than today "
-"(payment date: %(payment_date)s)"
-msgstr ""
-"Le paiement paybox doit avoir une date inférieure ou égale à aujourd'hui "
-"(date de paiement: %s(payment_date)s)"
-
-msgctxt "error:account.payment:"
-msgid "Multiple parties is not supported"
-msgstr "La création du paiement avec plusieurs tiers n'est pas supportée"
-
-msgctxt "error:contract:"
-msgid "Invoices number should be positive"
-msgstr "Le nombre de quittances doit être positif"
-
-msgctxt "error:contract:"
-msgid "Lines to pay number should be strictily positive"
-msgstr "Le nombre de lignes à payer doit être strictement positif"
-
-msgctxt "error:paybox_payment.create:"
-msgid ""
-"Could not create paybox payments. There is at least one another validated or"
-" processing payment with the same line for the selection (%(selection)s)"
-msgstr ""
-"Impossible de créer les paiements paybox. Il existe d'autre(s) paiement(s) "
-"validé(s) ou en traitement associé(s) à la même ligne comptable pour la "
-"sélection (%(selection)s)"
-
 msgctxt "field:account.configuration,paybox_direct_debit_journal:"
 msgid "Paybox Direct Debit Journal"
 msgstr "Journal de paiement automatique Paybox"
@@ -96,6 +63,14 @@ msgstr "Groupes Paybox"
 msgctxt "model:ir.message,text:msg_email_required"
 msgid "The email is required on the party %(party)s."
 msgstr "L'email est requis pour le tiers %(party)s."
+
+msgctxt "model:ir.message,text:msg_invalid_nb_invoices"
+msgid "Invoices number should be positive"
+msgstr "Le nombre de quittances doit être positif"
+
+msgctxt "model:ir.message,text:msg_invalid_nb_lines_to_pay"
+msgid "Lines to pay number should be strictly positive"
+msgstr "Le nombre de lignes doit être positif"
 
 msgctxt "model:ir.message,text:msg_invalid_paybox_payment_date"
 msgid ""

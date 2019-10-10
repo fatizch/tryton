@@ -60,8 +60,7 @@ msgstr "Clauses bénéficiaires disponibles à la souscription de la garantie"
 
 msgctxt "help:offered.option.description,default_beneficiary_clause:"
 msgid "Beneficiaries default clause used when initializing the subscription"
-msgstr ""
-"Clause bénéficaire par défaut utilisée à l'initialisation du contrat"
+msgstr "Clause bénéficaire par défaut utilisée à l'initialisation du contrat"
 
 msgctxt ""
 "model:ir.action.act_window.domain,name:act_model_clause_domain_beneficiary"

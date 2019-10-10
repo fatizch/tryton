@@ -2,6 +2,10 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "field:api.configuration,change_party_addresses_definition:"
+msgid "Change Party Addresses Definition"
+msgstr "Définition du changement d'adresse"
+
 msgctxt "field:endorsement,parties:"
 msgid "Parties"
 msgstr "Tiers"
@@ -679,6 +683,14 @@ msgstr "Tiers"
 msgctxt "field:endorsement.start.select_endorsement,possible_parties:"
 msgid "Parties"
 msgstr "Tiers"
+
+msgctxt "help:api.configuration,change_party_addresses_definition:"
+msgid ""
+"The endorsement definition that will be bound to endorsements generated from"
+" the change_party_addresses API"
+msgstr ""
+"La définition d'avenant qui sera utilisée par les avenants générés par l'API "
+"change_party_addresses"
 
 msgctxt "model:endorsement.definition,name:modify_birth_date_party_definition"
 msgid "Change Party Birth Date"

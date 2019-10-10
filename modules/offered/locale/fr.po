@@ -6,10 +6,6 @@ msgctxt "field:api.product,id:"
 msgid "ID"
 msgstr "Identifiant"
 
-msgctxt "field:extra_data,api_resources:"
-msgid "API Resources"
-msgstr "Resources API"
-
 msgctxt "field:extra_data,create_date:"
 msgid "Create Date"
 msgstr "Date de Création"
@@ -881,10 +877,6 @@ msgstr "Mis à jour par"
 msgctxt "field:report.template-offered.product,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
-
-msgctxt "help:extra_data,api_resources:"
-msgid "A list of resources which will only be used through the APIs"
-msgstr ""
 
 msgctxt "help:extra_data,domain:"
 msgid "Example: [[\"my_code\", \">=\", 5], [\"my_code\", \"<\", 12]]"

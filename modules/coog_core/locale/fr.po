@@ -2,6 +2,38 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "field:api.configuration,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:api.configuration,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:api.configuration,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:api.configuration,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:api.configuration,rec_name:"
+msgid "Record Name"
+msgstr "Nom de l'enregistrement"
+
+msgctxt "field:api.configuration,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:api.configuration,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:api.configuration,xml_id:"
+msgid "XML Id"
+msgstr "XML Id"
+
 msgctxt "field:async.task,create_date:"
 msgid "Create Date"
 msgstr "Date de Création"
@@ -1366,18 +1398,6 @@ msgctxt "field:wizard.persistent_data.view,json_context:"
 msgid "JSON Context"
 msgstr "Contexte JSON"
 
-msgctxt "help:api.resource,key:"
-msgid "The identifier for this particular resource for this origin"
-msgstr "L'identifiant de cette resource pour cette origine"
-
-msgctxt "help:api.resource,origin:"
-msgid "The record to which this resource will be linked"
-msgstr "L'objet auquel la resource sera lié"
-
-msgctxt "help:api.resource,value:"
-msgid "The value for this origin / key pair"
-msgstr "La valeur correspondant à ce couple origine / clé"
-
 msgctxt "help:event.type,groups:"
 msgid ""
 "If the user belongs to one of the groups linked to the event type, he can "
@@ -1447,9 +1467,9 @@ msgid ""
 msgstr ""
 "Le nom de la méthode utilisé pour décider si le jeux d'essai doit être lancé"
 
-msgctxt "model:api.resource,name:"
-msgid "API Resource"
-msgstr "Resource API"
+msgctxt "model:api.configuration,name:"
+msgid "Api Configuration"
+msgstr "Configuration API"
 
 msgctxt "model:async.task,name:"
 msgid "Coog Async Task"
@@ -1535,6 +1555,14 @@ msgctxt "model:global_search.set,name:"
 msgid "Global Search Set"
 msgstr "Configurer la recherche globale"
 
+msgctxt "model:ir.action,name:"
+msgid "API Identities"
+msgstr "Ressources API"
+
+msgctxt "model:ir.action,name:act_api_configuration"
+msgid "api Configuration"
+msgstr "Configuration API"
+
 msgctxt "model:ir.action,name:act_display_access_field_rights"
 msgid "User Field Access Rights Monitoring"
 msgstr "Visualisation des droits d'accès utilisateur sur les champs"
@@ -1578,10 +1606,6 @@ msgstr "Configuration des détails"
 msgctxt "model:ir.action,name:act_open_api_identity"
 msgid "API Identities"
 msgstr "Identités API"
-
-msgctxt "model:ir.action,name:act_open_api_resources"
-msgid "API Resources"
-msgstr "Resources API"
 
 msgctxt "model:ir.action,name:act_open_user_api_identity"
 msgid "API Identity"
@@ -1895,6 +1919,10 @@ msgstr "Mise à jour de la recherche globale"
 msgctxt "model:ir.ui.menu,name:language_translatable_menu"
 msgid "Update translatable languages"
 msgstr "Mise à jour des langues traduisibles"
+
+msgctxt "model:ir.ui.menu,name:menu_api_conf"
+msgid "API Configuration"
+msgstr "Configuration API"
 
 msgctxt "model:ir.ui.menu,name:menu_event"
 msgid "Event"

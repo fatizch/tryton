@@ -4,7 +4,7 @@ msgstr "Content-Type: text/plain; charset=utf-8\n"
 
 msgctxt "field:offered.item.description,birth_zip_required:"
 msgid "Birth zip required"
-msgstr "Commune de naissance requis"
+msgstr "Commune de naissance requise"
 
 msgctxt "field:party.party,birth_city:"
 msgid "Birth City"
@@ -24,11 +24,13 @@ msgstr "Commune de naissance"
 
 msgctxt "help:offered.item.description,birth_zip_required:"
 msgid "If set to True, birth zip and city will be required"
-msgstr "Si défini à Vrai, la commune de naissance sera requis"
+msgstr "Si défini à Vrai, la commune de naissance sera requise"
 
-msgctxt "model:ir.message,text:msg_birth_zip_required"
+msgctxt "model:ir.message,text:msg_birth_zip_required_for_insured"
 msgid "Birth zip required for this insured person %(rec_name)s"
-msgstr "La commune de naissance est requis pour l'assuré %(rec_name)s"
+msgstr ""
+"La commune de naissance est requise pour la personne assurée "
+"%(rec_name)s"
 
 msgctxt "model:ir.message,text:msg_invalid_ssn_insee_code"
 msgid "Invalid ssn: invalid insee code."

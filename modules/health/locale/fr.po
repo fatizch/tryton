@@ -2,9 +2,17 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "field:contract,document_token:"
+msgid "Document Token"
+msgstr "Jeton de document"
+
 msgctxt "field:contract,is_health:"
 msgid "Is Health"
 msgstr "Santé"
+
+msgctxt "field:contract.covered_element,document_token:"
+msgid "Document Token"
+msgstr "Jeton de document"
 
 msgctxt "field:contract.covered_element,health_complement:"
 msgid "Health Complement"
@@ -77,6 +85,18 @@ msgstr "Régime Obligatoire Santé"
 msgctxt "field:party.party,health_contract:"
 msgid "Health Contract"
 msgstr "Contrat Santé"
+
+msgctxt "help:contract,document_token:"
+msgid "This token allows to retrieve document requests linked to the holder"
+msgstr ""
+"Ce jeton permet de retrouver les demandes de documents liées au porteur du "
+"jeton."
+
+msgctxt "help:contract.covered_element,document_token:"
+msgid "This token allows to retrieve document requests linked to the holder"
+msgstr ""
+"Ce jeton permet de retrouver les demandes de documents liées au porteur du "
+"jeton."
 
 msgctxt "model:health.party_complement,name:"
 msgid "Health Party Complement"

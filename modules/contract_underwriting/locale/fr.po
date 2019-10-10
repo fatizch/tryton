@@ -2,6 +2,10 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "field:contract,medical_notes:"
+msgid "Medical Notes"
+msgstr "Notes médicales"
+
 msgctxt "field:contract,underwritings:"
 msgid "Underwritings"
 msgstr "Analyse de risques"
@@ -383,6 +387,19 @@ msgid "Rule that defines underwriting behavior during option subscription"
 msgstr ""
 "Règle définissant le comportement de l'analyse de risque à la souscription"
 
+msgctxt "help:underwriting.decision,code:"
+msgid ""
+"The string that will be used to identify this record across the "
+"configuration. It should not be modified without checking first if it is "
+"used somewhere"
+msgstr ""
+"L'identifiant pour cet enregistrement dans la configuration. Il ne doit pas "
+"être modifié sans s'assurer au préalable des endroits y faisant référence"
+
+msgctxt "help:underwriting.decision,name:"
+msgid "The name that will be displayed to the end user"
+msgstr "Nom qui sera affiché à l'utilisateur"
+
 msgctxt "help:underwriting.rule,accepted_decision:"
 msgid ""
 "If set and the rule returns true, this would be the accepted decision for "
@@ -430,6 +447,10 @@ msgstr "L'analyse de risques est refusée par l'assureur."
 msgctxt "model:ir.message,text:msg_underwriting_still_in_progress"
 msgid "The underwriting process is still in progress."
 msgstr "Le processus d'analyse de risques est toujours en cours."
+
+msgctxt "model:ir.note.type,name:medical"
+msgid "Medical"
+msgstr "Médical"
 
 msgctxt "model:ir.ui.menu,name:menu_underwriting_decision_form"
 msgid "Underwriting Decision"

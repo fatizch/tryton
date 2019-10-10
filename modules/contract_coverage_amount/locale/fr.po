@@ -161,7 +161,7 @@ msgstr "Règle de montant de couverture par tranches"
 
 msgctxt ""
 "model:rule_engine.rule_parameter,string:coverage_amount_list_parameter"
-msgid "Coverage Amount List Separate by ;"
+msgid "Coverage Amount List Separated by ;"
 msgstr "Liste des montants de couverture séparés par ;"
 
 msgctxt "model:rule_engine.rule_parameter,string:coverage_amount_range"

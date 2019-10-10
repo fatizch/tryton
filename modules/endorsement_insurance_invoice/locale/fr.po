@@ -2,6 +2,10 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "field:api.configuration,change_bank_account_definition:"
+msgid "Change Bank Account Definition"
+msgstr "Définition du changement de coordonnées bancaires"
+
 msgctxt "field:contract.billing_information,direct_debit_account_selector:"
 msgid "Bank Account"
 msgstr "Compte Bancaire"
@@ -312,6 +316,14 @@ msgstr "Total de prime précédent"
 msgctxt "field:offered.configuration,split_invoices_on_endorsement_dates:"
 msgid "Split Invoices on Endorsement Dates"
 msgstr "Découper les quittances aux dates des avenants"
+
+msgctxt "help:api.configuration,change_bank_account_definition:"
+msgid ""
+"The endorsement definition that will be bound to endorsements generated from"
+" the change_direct_debit_account API"
+msgstr ""
+"La définition d'avenant qui sera utilisée par les avenants générés par l'API "
+"change_direct_debit_account"
 
 msgctxt "model:contract.billing_information.change,name:"
 msgid "Change Billing Information"
