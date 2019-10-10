@@ -35,6 +35,7 @@ _modules_to_ignore = [
     'endorsement_set',  # We do not test it so far
     'third_party_protocol_almerys',  # Incompatible with bank tests case
     'claim_almerys',  # Requires third_party_protocol_almerys
+    'user_analytics',  # Unused, causes a lot of transaction errors
     ]
 
 
