@@ -65,19 +65,25 @@ class Attachment(Workflow, metaclass=PoolMeta):
     @model.CoogView.button
     @Workflow.transition('valid')
     def valid(cls, attachments):
-        pass
+        cls.update_status_change_date(attachments)
 
     @classmethod
     @model.CoogView.button
     @Workflow.transition('invalid')
     def invalid(cls, attachments):
-        pass
+        cls.update_status_change_date(attachments)
 
     @classmethod
     @model.CoogView.button
     @Workflow.transition('waiting_validation')
     def waiting(cls, attachments):
-        pass
+        cls.update_status_change_date(attachments)
+
+    @classmethod
+    def update_status_change_date(cls, attachments):
+        for attachment in attachments:
+            attachment.status_change_date = utils.today()
+        cls.save(attachments)
 
     @classmethod
     def default_status(cls):
@@ -89,13 +95,6 @@ class Attachment(Workflow, metaclass=PoolMeta):
 
     def getter_request_line(self, name):
         return self.request_lines[0].id if self.request_lines else None
-
-    @fields.depends('status', 'status_change_date')
-    def on_change_status(self):
-        if self.status != 'waiting_validation':
-            self.status_change_date = utils.today()
-        else:
-            self.status_change_date = None
 
     @fields.depends('status')
     def on_change_with_is_conform(self, name=None):
