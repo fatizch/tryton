@@ -62,21 +62,7 @@ subscriber = create_party_person()
 Endorsement = Model.get('endorsement')
 EndorsementContract = Model.get('endorsement.contract')
 EndorsementDefinition = Model.get('endorsement.definition')
-EndorsementDefinitionPartRelation = Model.get(
-    'endorsement.definition-endorsement.part')
-EndorsementPart = Model.get('endorsement.part')
-renew_contract_part = EndorsementPart()
-renew_contract_part.name = 'Renew Contract'
-renew_contract_part.code = 'renew_contract'
-renew_contract_part.kind = 'contract'
-renew_contract_part.view = 'renew_contract'
-renew_contract_part.save()
-renew_contract = EndorsementDefinition()
-renew_contract.name = 'Renew Contract'
-renew_contract.code = 'renew_contract'
-renew_contract.ordered_endorsement_parts.append(
-    EndorsementDefinitionPartRelation(endorsement_part=renew_contract_part))
-renew_contract.save()
+renew_contract, = EndorsementDefinition.find([('code', '=', 'renew_contract')])
 
 # #Comment# #Constants
 today = datetime.date.today()
