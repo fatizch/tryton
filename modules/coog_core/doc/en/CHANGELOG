@@ -1,3 +1,4 @@
+* BUG#12968 Crash when importing json file from entry point 'import file'
 * BUG#12958 Fix processes Import / export
 * OTH#00000 Fix invalid tag in icons
 * FEA#12410 Allow to enforce readonly behaviour in sub-views of O2M fields

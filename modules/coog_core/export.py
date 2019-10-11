@@ -593,8 +593,7 @@ class FileSelector(ModelView):
             return ''
         else:
             file_buffer = self.selected_file
-            values = str(file_buffer)
-            values = json.loads(values, object_hook=JSONDecoder())
+            values = json.loads(file_buffer, object_hook=JSONDecoder())
             instances = {}
             for value in values:
                 if not value['__name__'] in instances:
@@ -626,8 +625,7 @@ class ImportWizard(Wizard):
             raise ValidationError(gettext(
                     'coog_core.msg_no_file_selected'))
         file_buffer = self.file_selector.selected_file
-        values = str(file_buffer)
-        ExportImportMixin.import_json(values)
+        ExportImportMixin.import_json(file_buffer)
         return 'end'
 
 
