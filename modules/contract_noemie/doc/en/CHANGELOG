@@ -1,3 +1,4 @@
+Version 2.6 - 2019-10-11
 * BUG#12766 Noemie flow file update and batch adjustment
 * FEA#12749 Allow marking a product for noemisation
 * BUG#12370 Fix Noemie dates

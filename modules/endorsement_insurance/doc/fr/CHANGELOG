@@ -1,3 +1,4 @@
+Version 2.6 - 2019-10-11
 * BUG#11805 Suppression de la date de début manuelle d'une garantie lors d'un
 changement de date d'effet du contrat, lorsque la garantie a une date d'effet
 manuelle égale à la date d'effet du contrat

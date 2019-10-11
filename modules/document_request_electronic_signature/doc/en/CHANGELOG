@@ -1,3 +1,4 @@
+Version 2.6 - 2019-10-11
 * FEA#12876 Trigger an event when signature is complete
 * FEA#12821 Allow to sign a set of documents (mixing request line document and coog generated documents)
 * OTH#0000 Make signature configuration exportable

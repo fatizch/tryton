@@ -1,3 +1,4 @@
+Version 2.6 - 2019-10-11
 * OTH#00000 Remove error if testing mode when no subdivision found during zip code import
 * FEA#11926 Initialize zipcode subdivision when integrating hexapost zipcode
 * OTH#00000 Fix missing return in zip code get_rec_name

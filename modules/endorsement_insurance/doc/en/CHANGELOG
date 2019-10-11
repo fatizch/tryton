@@ -1,3 +1,4 @@
+Version 2.6 - 2019-10-11
 * BUG#11805 Remove manual start date of an option when changing contract start
 date and the option had a manual start date equal to the previous contract
 start date

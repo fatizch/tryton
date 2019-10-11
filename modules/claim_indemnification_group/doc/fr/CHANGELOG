@@ -1,3 +1,4 @@
+Version 2.6 - 2019-10-11
 * OTH#00000 Le montant de base et la revalorisation de l'assureur précédent doivent être évalués en date de début de l'indemnisation et non pas du préjudice car ces deux dates peuvent être différentes
 * BUG#11529 Ne pas rendre obligatoire la prestation d'origine sauf si nécessaire
 * OTH#00000 Ouverture de l'assistant de transfert en tant que nouvel onglet au lieu d'une fenêtre modale

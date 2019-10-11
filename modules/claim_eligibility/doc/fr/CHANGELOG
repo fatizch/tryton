@@ -1,3 +1,4 @@
+Version 2.6 - 2019-10-11
 Version 2.4 - 2019-04-12
 * BUG#10422 Plusieurs règles d'éligibilité peuvent être ajoutées à une prestation mais seule la première est utilisée
 * BUG#10335 Correctif du crash sur le calcul de la date de fin de franchise utilisant les données d'éligibilité

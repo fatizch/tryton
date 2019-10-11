@@ -1,3 +1,4 @@
+Version 2.6 - 2019-10-11
 * FEA#12790 Add underwriting subscriber decision API
 * FEA#12685 Add underwriting reception API
 * FEA#12326 Allow to add medical notes only visible to a specific group during underwriting

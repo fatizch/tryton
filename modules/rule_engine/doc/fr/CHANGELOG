@@ -1,3 +1,4 @@
+Version 2.6 - 2019-10-11
 * BUG#12447 Premettre d'utiliser les erreurs dans une règle utilisée par une autre sans que cela génère d'erreur technique
 * BUG#10976 Création automatique d'un warning name unique lors d'ajout des warning dans le moteur de règle
 * OTH#00000 Mise à jour de l'appel à execute dans ws_execute_rule

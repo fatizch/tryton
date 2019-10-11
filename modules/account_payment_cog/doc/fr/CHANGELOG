@@ -1,3 +1,4 @@
+Version 2.6 - 2019-10-11
 * OTH#00000 Corriger le comportement de la méthode de succès des groupes de paiement pour appeler le bon comportement en fonction de la date de paiement
 * BUG#11103 La date de paiement n'était pas supprimée lors du rejet si le paiement était utilisé pour payer une ligne différente de la ligne originale
 

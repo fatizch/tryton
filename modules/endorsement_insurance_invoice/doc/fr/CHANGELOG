@@ -1,3 +1,4 @@
+Version 2.6 - 2019-10-11
 * BUG#12266 L'application d'un avenant de résiliation ne devrait déclencher un requittancement qu'à la date d'effet plus un jour
 * BUG#11726 Alimentations des payeurs possibles avenant de modification des paramètres de quittancement
 

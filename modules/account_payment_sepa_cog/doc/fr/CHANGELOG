@@ -1,3 +1,4 @@
+Version 2.6 - 2019-10-11
 * OTH#00000 Correction des balises adresses et remittance des fichiers sepa
 * OTH#00000 Correction de la chaine payment_working_days: appel à do_sepa_messages manquant
 * FEA#12319 Ajout d'une information sur le journal de paiement sepa

@@ -1,3 +1,4 @@
+Version 2.6 - 2019-10-11
 * OTH#00000 Previous insurer base amount and revaluation should be evaluated on indemnification start date not loss start date as the two dates can be different
 * BUG#11529 Only require origin service when necessary
 * OTH#00000 Open tranfer wizard as new tab instead of modal window

@@ -1,3 +1,4 @@
+Version 2.6 - 2019-10-11
 * FEA#12341 Define a workflow for attachment status
 * FEA#12341 Add APIs on document request lines
 * FEA#12567 Add "Waiting Validation" status on attachments

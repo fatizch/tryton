@@ -1,3 +1,4 @@
+Version 2.6 - 2019-10-11
 * BUG#12447 Allow using errors in a rule used by another without tehcnical error generated
 * BUG#10976 Make add warning in rule engine create unique warning name
 * OTH#00000 Update call to execute in ws_execute_rule

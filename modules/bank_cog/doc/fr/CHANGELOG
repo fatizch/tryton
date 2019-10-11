@@ -1,3 +1,4 @@
+Version 2.6 - 2019-10-11
 * OTH#0000 Correction d'une erreur sur la taille du code bic
 * BUG#12637 BICS lié aux fausses banques
 * OTH#0000 Correction de la génération de données bancaires en utilisant le fichier coog par défaut

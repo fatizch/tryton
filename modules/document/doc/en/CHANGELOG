@@ -1,3 +1,4 @@
+Version 2.6 - 2019-10-11
 * OTH#00000 Bypass custom access rights when user is root
 * BUG#11531 Fix documents research according to the rights and the action
 

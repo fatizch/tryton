@@ -1,3 +1,4 @@
+Version 2.6 - 2019-10-11
 Version 2.4 - 2019-04-12
 * BUG#10446 Correction d'un crash lors de la génération d'un document lors d'un renouvellement sur un ensemble de contrats dont un des contrats est sans effet.
 

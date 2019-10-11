@@ -1,3 +1,4 @@
+Version 2.6 - 2019-10-11
 * FEA#12282 Manage claim_bank_account in API
 * FEA#11832 Use an identifier at the bank account for refund of benefits
 * BUG#11471 Fix Method Resolution Order of the object Claim

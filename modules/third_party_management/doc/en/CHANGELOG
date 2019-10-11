@@ -1,2 +1,3 @@
+Version 2.6 - 2019-10-11
 * OTH#00000: Fix missing classmethod decorator for party.non_customer_clause method
 * FEA#11374: Module Creation

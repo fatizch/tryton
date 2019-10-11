@@ -1,3 +1,4 @@
+Version 2.6 - 2019-10-11
 * FEA#12435 Ajout des resources API personalisées dans la description des données complémentaires
 * FEA#11920 Amélioration de la fonctionnalité Formule sur un produit. Les formules peuvent être définie au global sur un contrat ou par élément couvert. De plus, les données complémentaires du contrat/des éléments couverts/options peuvent être prédéfinies au niveau d'une formule.
 * BUG#12020 Correction de l'aide sur le champ Domaine sur la définition de la donnée complémentaire

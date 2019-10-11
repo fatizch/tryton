@@ -1,3 +1,4 @@
+Version 2.6 - 2019-10-11
 Version 2.4 - 2019-04-12
 * FEA#10753: handle several identifiers, rename module from contract_external_number to contract_identifiers
 

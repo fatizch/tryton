@@ -1,3 +1,4 @@
+Version 2.6 - 2019-10-11
 * OTH#00000 Fix account selection in waiver coverage configuration following 5.2 tryton merge
 * BUG#11528 Fix on waiver of premium's amount computation and handle taxes with reverse compute
 

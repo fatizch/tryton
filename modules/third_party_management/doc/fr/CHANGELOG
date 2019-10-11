@@ -1,2 +1,3 @@
+Version 2.6 - 2019-10-11
 * OTH#00000: Ajout du décorateur classmethod pour la méthode party.non_customer_clause
 * FEA#11374: Création du module

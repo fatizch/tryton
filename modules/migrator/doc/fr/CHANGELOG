@@ -1,3 +1,4 @@
+Version 2.6 - 2019-10-11
 Version 2.4 - 2019-04-12
 * BUG#10381 Correction de l'initialisation des paramètres d'un batch
 * FEA#10153 Ajout de l'option de délimiteur dans la configuration et définition du point-virgule comme valeur par défaut

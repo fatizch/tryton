@@ -1,3 +1,4 @@
+Version 2.6 - 2019-10-11
 * FEA#12435 Add custom resources in extra data api description
 * FEA#11920 Improve package functionnality. Packages can be defined to be selected at contract level or covered element level. Contract/covered/option extra data can be pre-defined in package
 * BUG#12020 Fix helper on the field domain of the extra data definition

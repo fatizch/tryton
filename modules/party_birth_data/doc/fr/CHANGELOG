@@ -1,3 +1,4 @@
+Version 2.6 - 2019-10-11
 * BUG#12044 Mise à jour du pays de naissance depuis le NIR
 * FEA#11631 Ajout des tests unitaires si le module party_ssn est installé
 * FEA#11631 Ajout de la commune de naissance pour une partie

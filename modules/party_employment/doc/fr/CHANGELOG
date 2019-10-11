@@ -1,3 +1,4 @@
+Version 2.6 - 2019-10-11
 * FEA#12535 Mettre à jour l'API pour gérer les informations sur l'emploi
 * FEA#12056 Ajout des données de précompte
 * OTH#00000 Ajout des données profesionnelles dans le moteur de règles

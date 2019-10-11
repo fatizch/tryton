@@ -1,3 +1,4 @@
+Version 2.6 - 2019-10-11
 * BUG#12036 Vérifier qu’une relation existe dans la liste des relations du tiers, sinon renvoyer 0
 * OTH#0000 L'affichage du rang de naissance est déplacé après la saisie du numéro de sécurité sociale.
 

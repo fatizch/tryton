@@ -1,3 +1,4 @@
+Version 2.6 - 2019-10-11
 * BUG#12044 Update birth country from SSN
 * FEA#11631 Add unit tests if party_ssn is installed
 * FEA#11631 Add birth town on person record

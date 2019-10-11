@@ -1,3 +1,4 @@
+Version 2.6 - 2019-10-11
 * FEA#12428 Add SSN check validation based on person data
 Version 2.4 - 2019-04-12
 * BUG#10981 Fix crash when erasing a party

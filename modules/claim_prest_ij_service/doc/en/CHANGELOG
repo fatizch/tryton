@@ -1,3 +1,4 @@
+Version 2.6 - 2019-10-11
 * BUG#12546 Fix batch to wait until all files in the transaction are successfully processed before archiving it
 * OTH#00000 Translate Mandate identification to RUM
 * BUG#12706 Handle properly subsidiaries as covered elements and affiliations in the prest ij batch processing

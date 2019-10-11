@@ -1,3 +1,4 @@
+Version 2.6 - 2019-10-11
 * BUG#12493 Fix reverse sign on regularization debit amount S21.G00.56.007
 * BUG#12462 Pasrau amount must be rounded to the closest euro
 * BUG#12365 Declare zero to avoid a negative Pasrau amount S21.G00.20.005

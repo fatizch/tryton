@@ -1,3 +1,4 @@
+Version 2.6 - 2019-10-11
 * BUG#12493 Correction du signe inversé sur le montant de la régularisation S21.G00.56.007
 * BUG#12462 Le montant Pasrau doit être arrondi à l'euro le plus proche
 * BUG#12365 Déclarer zéro pour évter un montant Pasrau négatif S21.G00.20.005

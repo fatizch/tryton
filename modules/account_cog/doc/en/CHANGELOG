@@ -1,3 +1,4 @@
+Version 2.6 - 2019-10-11
 * OTH#00000 Fix payment date display following merge with 5.2 (payment date was always hidden)
 * BUG#12602 Fix crash due to merge with 5.2
 * OTH#00000 Remove not null constraint on kind deprecated on account following tryton merge

@@ -1,3 +1,4 @@
+Version 2.6 - 2019-10-11
 * BUG#11993 Add 'active' field in covered element overlapping checks
 * BUG#11862 Improve subsidiaries label in the organization hierarchy
 * BUG#11766 Use contract field of organization's covered elements to determine whether it is terminated or not

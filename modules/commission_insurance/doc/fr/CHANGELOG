@@ -1,3 +1,4 @@
+Version 2.6 - 2019-10-11
 * OTH#00000 Correctif pour éviter un crash lors du calcul des commission sur une garantie qui n'a pas de règle de tarification
 * BUG#12166 Correction de nouveaux cas pour le simulateur de commission
 * BUG#11276 get_void_premium: Initialiser les valeurs avec Decimal

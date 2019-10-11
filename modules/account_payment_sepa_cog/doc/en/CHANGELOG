@@ -1,3 +1,4 @@
+Version 2.6 - 2019-10-11
 * OTH#00000 Fix sepa files adresses and remittance tags
 * OTH#00000 Fix payment_working_days chain : missing do_sepa_message
 * FEA#12319 Allow to customize sepa remittance information

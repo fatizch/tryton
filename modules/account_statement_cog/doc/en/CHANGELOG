@@ -1,3 +1,4 @@
+Version 2.6 - 2019-10-11
 * FEA#12298 Refactor statement line group cancelation
 * BUG#12277 Statement creation wizard crashes when launched
 * BUG#11627 Fix the disappearance of the invoice on the bank deposit when entering the amount because that account on the statement line is changed

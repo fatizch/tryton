@@ -1,3 +1,4 @@
+Version 2.6 - 2019-10-11
 * OTH#00000 Fix typo following merge
 * BUG#11431 When payback method is immediate on an unpaid cancelled indemnification, all payment lines linked to indemnifications of the related claim should be blocked
 * BUG#11266 Separate initial deductible creation from service initialization

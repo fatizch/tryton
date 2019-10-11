@@ -1,3 +1,4 @@
+Version 2.6 - 2019-10-11
 * OTH#00000 Ajout de la donnée date d'entrée dans la fonction publique dans le moteur de règle
 * FEA#12056 Ajout des données de précompte
 * FEA#11979 Masquer la durée de travail si l'employé est retraité

@@ -1,3 +1,4 @@
+Version 2.6 - 2019-10-11
 * BUG#12730 Handle Banque de France external files
 * OTH#00000 Fix bank loader: handle case same BIC is redundant in banks file
 * BUG#12296 Export get bank from iban api

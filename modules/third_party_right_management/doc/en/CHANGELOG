@@ -1,3 +1,4 @@
+Version 2.6 - 2019-10-11
 * BUG#12476 Endorsements cancellations do not restore third party periods
 * OTH#00000 Fix period management for endorsements
 * OTH#00000 Fix date overlap validation for third party periods

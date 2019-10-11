@@ -1,3 +1,4 @@
+Version 2.6 - 2019-10-11
 * BUG#12546 Correction du batch pour attendre que tous les fichiers de la transaction soient traités avant de les archiver
 * OTH#00000 Traduire le champs Identification d'un mandat SEPA par RUM
 * BUG#12706 Gestion des filiales en éléments couverts et affiliations dans les traitements prest ij

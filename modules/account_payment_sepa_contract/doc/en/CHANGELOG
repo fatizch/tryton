@@ -1,3 +1,4 @@
+Version 2.6 - 2019-10-11
 Version 2.4 - 2019-04-12
 * BUG#11068 Only force Sepa payment without mandate state to draft when it is receivable
 * BUG#10116 Mettre le statut d'un nouveau paiement à brouillon si aucun mandat n'est trouvé
