@@ -153,6 +153,7 @@ def register():
         api.APIIdentity,
         api.API,
         api.APICore,
+        res.GroupWithApi,
         module='coog_core', type_='model', depends=['api'])
 
     Pool.register_post_init_hooks(cache_fields_get, module='ir')

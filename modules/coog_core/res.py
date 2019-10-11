@@ -5,6 +5,7 @@ from trytond.transaction import Transaction
 from trytond.cache import Cache
 from trytond.server_context import ServerContext
 from trytond.modules import get_module_info
+from trytond.pool import PoolMeta
 
 from trytond.modules.coog_core import fields
 
@@ -16,6 +17,7 @@ __all__ = [
     'User',
     'UserGroup',
     'ResUserWarning',
+    'GroupWithApi',
     ]
 
 
@@ -95,3 +97,13 @@ class ResUserWarning(ExportImportMixin):
         if ServerContext().get('auto_accept_warnings', False):
             return False
         return super(ResUserWarning, cls).check(warning_name)
+
+
+class GroupWithApi(metaclass=PoolMeta):
+
+    __name__ = 'res.group'
+
+    @classmethod
+    def _export_skips(cls):
+        return super(GroupWithApi, cls)._export_skips() | {'api_access',
+            'buttons'}
