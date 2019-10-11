@@ -124,12 +124,13 @@ class OptionSubscription(model.CoogWizard):
         return updated_options
 
     def transition_start(self):
-        Contract = Pool().get('contract')
-        contract = Contract(Transaction().context.get('active_id'))
-        if contract.product.packages:
-            return 'select_package'
-        else:
-            return 'options_displayer'
+        contract = self.get_contract()
+        if contract.status == 'quote':
+            if contract.product.packages:
+                return 'select_package'
+            else:
+                return 'options_displayer'
+        raise UserError(gettext('contract.msg_unallowed_manage_options'))
 
     def transition_update_options(self):
         contract = self.options_displayer.contract

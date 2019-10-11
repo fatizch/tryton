@@ -1,3 +1,4 @@
+* BUG#12971 crash and visibility correction of manage options wizard
 * BUG#12759 Raise error when covered person is covered under the same options at same date
 * FEA#12470 Handle subscription through packages in APIs
 * BUG#12556 Quote number undefined when subscription is made by API V1

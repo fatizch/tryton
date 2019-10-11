@@ -72,6 +72,18 @@ class OptionSubscription(metaclass=PoolMeta):
     'Option Subscription'
     __name__ = 'contract.wizard.option_subscription'
 
+    def get_contract(self):
+        if (Transaction().context.get('active_model') ==
+                'contract.covered_element'):
+            CoveredElement = Pool().get('contract.covered_element')
+            covered_element = CoveredElement(Transaction().context.get(
+                'active_id'))
+            contract = covered_element.contract
+        else:
+            contract = super().get_contract()
+
+        return contract
+
     def default_select_package(self, values):
         contract = self.get_contract()
         if not contract:
@@ -122,6 +134,8 @@ class OptionSubscription(metaclass=PoolMeta):
             contract = self.get_contract()
             if contract.covered_elements:
                 covered_element = contract.covered_elements[0]
+        if contract:
+            res['contract'] = contract.id
         if covered_element:
             res['covered_element'] = covered_element.id
             res['party'] = (covered_element.party.id

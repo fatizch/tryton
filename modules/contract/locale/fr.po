@@ -1735,6 +1735,12 @@ msgstr ""
 "Impossible de changer la date de début, il existe plusieurs période "
 "d'activation."
 
+msgctxt "model:ir.message,text:msg_unallowed_manage_options"
+msgid "You're not allowed to manage options if the contract status not quote."
+msgstr ""
+"Vous n'êtes pas autorisé à gérer les options si le statut du contrat n'est "
+"pas Devis"
+
 msgctxt "model:ir.rule.group,name:rule_group_contract"
 msgid "User in company"
 msgstr "Utilisateur dans le société"

@@ -1,3 +1,4 @@
+* BUG#12971 correction crash et visibilité de wizard gestion des options
 * BUG#12759 lancer une Erreur lorsque la personne couverte est couverte par les mêmes options à la même date
 * FEA#12470 Gestion de la souscription par formule dans les APIs
 * BUG#12556 Numéro de devis non définit lors d'une souscription via API V1

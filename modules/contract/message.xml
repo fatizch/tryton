@@ -97,5 +97,8 @@
         <record model="ir.message" id="msg_coverage_overlap">
             <field name="text">There are overlapping coverages for %(parent)s.</field>
         </record>
+        <record model="ir.message" id="msg_unallowed_manage_options">
+            <field name="text">You're not allowed to manage options if the contract status not quote.</field>
+        </record>
     </data>
 </tryton>

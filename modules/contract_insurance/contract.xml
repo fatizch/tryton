@@ -123,11 +123,6 @@ this repository contains the full copyright notices and license terms. -->
             <field name="wiz_name">contract.wizard.option_subscription</field>
             <field name="model">contract.covered_element</field>
         </record>
-        <record model="ir.action.keyword" id="manage_options_keyword">
-            <field name="keyword">form_action</field>
-            <field name="model">contract.covered_element,-1</field>
-            <field name="action" ref="manage_options"/>
-        </record>
         <!-- ################# -->
         <!-- # Extra Premium # -->
         <!-- ################# -->
