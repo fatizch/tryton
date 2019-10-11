@@ -1,3 +1,5 @@
+* BUG#12910 Correction d'un cas à la marge sur le calcul des montants d'échéance
+
 Version 2.6 - 2019-10-11
 * BUG#12968 Crash lors de l'importation du fichier JSON à partir du point d'entrée 'Importer un fichier'
 * BUG#12958 Correctif de l'import / export des processus

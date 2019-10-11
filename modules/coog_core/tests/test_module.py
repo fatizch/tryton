@@ -1346,7 +1346,9 @@ class ModuleTestCase(test_framework.CoogTestCase):
 
         for period, res_value in (
                 ((date(2016, 11, 29), date(2017, 11, 28)), Decimal(2400)),
-                ((date(2016, 11, 29), date(2017, 2, 28)), Decimal(600)),
+                ((date(2016, 11, 29), date(2017, 2, 27)), Decimal(600)),
+                ((date(2016, 11, 29), date(2017, 2, 28)),
+                    Decimal(600) + Decimal(200) / Decimal(29)),
                 ):
             self.assertEqual(utils.get_prorated_amount_on_period(*period,
                     frequency=frequency, value=value, sync_date=sync_date,
@@ -1358,7 +1360,9 @@ class ModuleTestCase(test_framework.CoogTestCase):
 
         for period, res_value in (
                 ((date(2016, 11, 30), date(2017, 11, 29)), Decimal(2400)),
-                ((date(2016, 11, 30), date(2017, 2, 28)), Decimal(600)),
+                ((date(2016, 11, 30), date(2017, 2, 27)), Decimal(600)),
+                ((date(2016, 11, 30), date(2017, 2, 28)),
+                    Decimal(600) + Decimal(200) / Decimal(31)),
                 ):
             self.assertEqual(utils.get_prorated_amount_on_period(*period,
                     frequency=frequency, value=value, sync_date=sync_date,
@@ -1475,6 +1479,10 @@ class ModuleTestCase(test_framework.CoogTestCase):
                     frequency=frequency, value=value, sync_date=sync_date,
                     interval_start=interval_start, proportion=proportion,
                     recursion=recursion), res_value)
+
+        self.assertEqual(utils.get_prorated_amount_on_period(
+                date(2019, 9, 30), date(2020, 8, 31), 'monthly', Decimal(1),
+                sync_date=date(2019, 9, 30), proportion=False), Decimal(12))
 
     def test0200_get_latest_anniversary(self):
         # case of 02/29 as original date evaluated on a non leap year

@@ -690,18 +690,23 @@ class CustomRrule(object):
         assert start
         assert end
         start = start.date()
-        end = end.date() if not self._end else min(end.date(),
-            self._end + datetime.timedelta(1))
+        # We remove two days because the call to "between" is meant for a
+        # standard rrule, which will only consider that a period is included if
+        # the start of the next one is strictly before the "end" parameter
+        #
+        # Here, we want "end" to be the end of the last included period
+        end = (
+            (end.date() - relativedelta(days=2))
+            if not self._end
+            else min(end.date(), self._end + datetime.timedelta(1)))
         cur_date = self._base_date
         result = []
         i = self._base_iter_pos
-        while cur_date < end:
+        while cur_date <= end:
             if cur_date > start:
                 # If the date matches the end of the month and end is the end
                 # of the month, we want the final date to be end + 1 in order
                 # to be consistent with the rrule API
-                if cur_date == coog_date.get_end_of_month(cur_date):
-                    cur_date = cur_date + relativedelta(days=1)
                 result.append(datetime.datetime.combine(cur_date,
                         datetime.time()))
             cur_date = coog_date.add_month(self._base_date, self._interval * i,
