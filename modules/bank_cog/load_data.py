@@ -83,9 +83,9 @@ class BankDataSetWizard(Wizard):
             (not address.country and not country or
                 address.country.id == country.id))
 
-    def get_address(self, addresses, bank_row, country, party):
+    def get_address(self, bank_row, country, party):
         address = None
-        for cur_address in addresses:
+        for cur_address in party.addresses:
             if (self.address_compare(cur_address, bank_row, country)):
                 address = cur_address
                 break
@@ -97,15 +97,14 @@ class BankDataSetWizard(Wizard):
                 city=bank_row['address_city'],
                 zip=bank_row['address_zip'],
                 country=country,
-                party=party)
+                party=None)
 
         return address
 
-    def _update_bank(self, bank, party, bank_row, country, addresses):
-        address = self.get_address(addresses, bank_row, country, party)
+    def _update_bank(self, bank, party, bank_row, country):
+        address = self.get_address(bank_row, country, party)
         bank.party = party
         bank.address = address
-        bank.save()
 
     def transition_set_(self):
         pool = Pool()
@@ -115,17 +114,25 @@ class BankDataSetWizard(Wizard):
 
         banks = []
         existing_banks = dict((x.bic, x) for x in Bank.search([]))
-        parties = dict((x.bank_role[0].bic[0:8], [x, list(x.addresses)])
-            for x in Party.search([('is_bank', '=', True)]))
+        parties = {x.bank_role[0].bic[0:8]: x
+            for x in Party.search([('is_bank', '=', True)])}
+        country_cache = {}
+
+        parties_to_save = list(parties.values())
         for bank_row in self.read_resource_file():
             bic = ('%sXXX' % bank_row['bic']
                 if len(bank_row['bic']) == 8 else bank_row['bic'])
             country = None
-            countries = Country.search(
-                [('code', '=', bank_row['address_country'].upper())],
-                limit=1)
-            if countries:
-                country = countries[0]
+
+            country_code = bank_row['address_country'].upper()
+            if country_code in country_cache:
+                country = country_cache[country_code]
+            else:
+                countries = Country.search([('code', '=', country_code)])
+                if countries:
+                    country_cache[country_code] = countries[0]
+                    country = countries[0]
+
             if bic in existing_banks:
                 if not self.configuration.is_update:
                     continue
@@ -133,39 +140,37 @@ class BankDataSetWizard(Wizard):
                 if bank.party.name == bank_row['bank_name']:
                     continue
                 if bic[0:8] in parties:
-                    party, addresses = parties[bic[0:8]]
+                    party = parties[bic[0:8]]
                     if party.name == bank_row['bank_name']:
-                        self._update_bank(bank, party, bank_row, country,
-                        addresses)
+                        self._update_bank(bank, party, bank_row, country)
                     else:
                         existing_party = Party.search(
                             ['name', '=', bank_row['bank_name']], limit=1)
                         if existing_party:
                             party = existing_party[0]
-                            addresses = party.addresses
                         else:
-                            party = Party(name=bank_row['bank_name'])
-                            addresses = []
-                        self._update_bank(bank, party, bank_row,
-                            country, addresses)
-                        parties[bic[0:8]] = [party, [party.addresses]]
+                            party = Party(name=bank_row['bank_name'],
+                                addresses=[], all_addresses=None)
+                            parties_to_save.append(party)
+                        self._update_bank(bank, party, bank_row, country)
+                        parties[bic[0:8]] = party
                 else:
-                    party = Party(name=bank_row['bank_name'])
-                    self._update_bank(bank, party,
-                        bank_row, country, [])
-                    parties[bic[0:8]] = [party, [bank.address]]
+                    party = Party(name=bank_row['bank_name'], addresses=[],
+                        all_addresses=None)
+                    self._update_bank(bank, party, bank_row, country)
+                    parties[bic[0:8]] = party
+                    parties_to_save.append(party)
                 continue
 
-            addresses = []
             try:
-                party, addresses = parties[bic[0:8]]
+                party = parties[bic[0:8]]
             except KeyError:
-                party = Party(name=bank_row['bank_name'])
-                parties[bic[0:8]] = [party, addresses]
+                party = Party(name=bank_row['bank_name'], addresses=[],
+                    all_addresses=None)
+                parties_to_save.append(party)
+                parties[bic[0:8]] = party
 
-            address = self.get_address(addresses, bank_row, country, party)
-            if address not in addresses:
-                parties[bic[0:8]][1].append(address)
+            address = self.get_address(bank_row, country, party)
 
             bank = Bank(
                 bic=bank_row['bic'],
@@ -174,6 +179,17 @@ class BankDataSetWizard(Wizard):
                 address=address)
             banks.append(bank)
             existing_banks[bank.bic] = bank
+
+        Party.save(parties_to_save)
+
+        addresses_to_save = []
+        for bank in banks:
+            if bank.address.party is None:
+                bank.address.party = bank.party
+                addresses_to_save.append(bank.address)
+
+        if addresses_to_save:
+            pool.get('party.address').save(addresses_to_save)
 
         Bank.save(banks)
         return 'end'

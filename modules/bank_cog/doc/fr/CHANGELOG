@@ -1,3 +1,5 @@
+* OTH#00000 Amélioration des performances du chargement des banques
+
 Version 2.6 - 2019-10-11
 * OTH#0000 Correction d'une erreur sur la taille du code bic
 * BUG#12637 BICS lié aux fausses banques

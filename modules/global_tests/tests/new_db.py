@@ -539,6 +539,9 @@ if LOAD_BANKS:  # {{{
     company_bank_account.bank = Bank.find([('bic', '=', _company_bank_bic)])[0]
     company_bank_account.owners.append(Party(company_party.id))
     company_bank_account.save()
+
+    do_print('\nLoading some bank agencies')
+    run_test_cases(['agencies_test_case'])
     # }}}
 # }}}
 
