@@ -787,7 +787,7 @@ class ExtraData(WebUIResourceMixin):
         res = super()._get_structure()
         if self.web_ui_resources:
             res['custom_resources'] = {
-                x.key: x.value
+                x.key.code: x.value
                 for x in self.web_ui_resources
                 }
         return res
