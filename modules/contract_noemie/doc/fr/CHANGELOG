@@ -1,3 +1,5 @@
+* BUG#12991 Extension des codes noémie supportés dans le batch de flux 929
+
 Version 2.6 - 2019-10-11
 * BUG#12766 Mise à jour du flux Noemie et du batch en conséquent
 * FEA#12749 Autoriser le marquage pour noémisation sur les produits

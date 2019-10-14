@@ -63,13 +63,37 @@ NOEMIE_CODE = [
     ('40', '[40] Matrix Id Change: XXXXX XX XXX XXX'),
     ('41', '[41] Change Birth Date. Benefit: XX/XX/XX'),
     ('43', '[43] Mutual Beneficiary Cancellation'),
+    ('53', '[53] Contracts overlap'),
+    ('55', '[55] CMU Contract update not allowed'),
+    ('56', '[56] Over with CMU contract'),
+    ('59', '[59] Only insured number update allowed'),
+    ('60', '[60] CMU contract creation known insured'),
+    ('61', '[61] CMU contract extension'),
+    ('62', '[62] CMU contract update'),
+    ('63', '[63] CMU contract creation'),
+    ('64', '[64] CMU contract voided'),
+    ('65', '[65] CMU contract creation CPAM renewal'),
+    ('66', '[66] CMU contract creation OC renewal'),
+    ('67', '[67] Rejected - two existing contracts'),
+    ('72', '[72] OC data updated by CPAM'),
+    ('73', '[73] OC data creation by CPAM'),
+    ('74', '[74] OC data cancellled by CPAM'),
+    ('75', '[75] OC identifier update'),
+    ('78', '[78] Contract end dat mandatory 85, 87, 88'),
+    ('80', '[80] Inconsistent contract type with history'),
+    ('81', '[81] Contract 85/87/88 overlap forbidden'),
+    ('82', '[82] Existing contract 85, 87, 88'),
+    ('84', '[84] Contract type change'),
+    ('85', '[85] OC transposition not processed'),
     ]
 
 ACQUITEMENT_CODES = ['32', '33', '34']
-REPORTED_CODES = ['13', '19', '27', '38', '40', '41', '43']
+REPORTED_CODES = ['13', '19', '27', '38', '40', '41', '43', '53', '60', '61',
+     '62', '63', '64', '65', '66', '72', '73', '74', '75', '84']
 REJECTED_CODES = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10',
     '11', '14', '15', '16', '17', '18', '20', '21', '22', '23', '24', '25',
-    '26', '28', '29', '30', '31', '35']
+    '26', '28', '29', '30', '31', '35', '55', '56', '59', '67', '78', '80',
+    '81', '82', '85']
 
 
 class Contract(metaclass=PoolMeta):

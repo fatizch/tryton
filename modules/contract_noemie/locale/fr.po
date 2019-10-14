@@ -234,6 +234,94 @@ msgctxt "selection:contract.covered_element,noemie_return_code:"
 msgid "[43] Mutual Beneficiary Cancellation"
 msgstr "[43] Annulation Bénéficiaire Mutualiste"
 
+msgctxt "selection:contract.covered_element,noemie_return_code:"
+msgid "[53] Contracts overlap"
+msgstr "Chevauchement contrat"
+
+msgctxt "selection:contract.covered_element,noemie_return_code:"
+msgid "[55] CMU Contract update not allowed"
+msgstr "Non autorisé à mettre à jour contrat CMU"
+
+msgctxt "selection:contract.covered_element,noemie_return_code:"
+msgid "[56] Over with CMU contract"
+msgstr "Contrat CMU déjà en cours"
+
+msgctxt "selection:contract.covered_element,noemie_return_code:"
+msgid "[59] Only insured number update allowed"
+msgstr "Seulement autorisé à modifier N° adhérent"
+
+msgctxt "selection:contract.covered_element,noemie_return_code:"
+msgid "[60] CMU contract creation known insured"
+msgstr "Création contrat CMU adhérent connu"
+
+msgctxt "selection:contract.covered_element,noemie_return_code:"
+msgid "[61] CMU contract extension"
+msgstr "Prolongation contrat CMU"
+
+msgctxt "selection:contract.covered_element,noemie_return_code:"
+msgid "[62] CMU contract update"
+msgstr "Modification contrat CMU"
+
+msgctxt "selection:contract.covered_element,noemie_return_code:"
+msgid "[63] CMU contract creation"
+msgstr "Création contrat CMU"
+
+msgctxt "selection:contract.covered_element,noemie_return_code:"
+msgid "[64] CMU contract voided"
+msgstr "Annulation contrat CMU"
+
+msgctxt "selection:contract.covered_element,noemie_return_code:"
+msgid "[65] CMU contract creation CPAM renewal"
+msgstr "Création CT CMU renouvlt CPAM"
+
+msgctxt "selection:contract.covered_element,noemie_return_code:"
+msgid "[66] CMU contract creation OC renewal"
+msgstr "Création CT CMU renouvlt O.C."
+
+msgctxt "selection:contract.covered_element,noemie_return_code:"
+msgid "[67] Rejected - two existing contracts"
+msgstr "Information refusée - 2 contrats déjà en cours"
+
+msgctxt "selection:contract.covered_element,noemie_return_code:"
+msgid "[72] OC data updated by CPAM"
+msgstr "Modification info O.C. par CPAM"
+
+msgctxt "selection:contract.covered_element,noemie_return_code:"
+msgid "[73] OC data creation by CPAM"
+msgstr "Création info O.C. par CPAM"
+
+msgctxt "selection:contract.covered_element,noemie_return_code:"
+msgid "[74] OC data cancellled by CPAM"
+msgstr "Annulation info O.C. par CPAM"
+
+msgctxt "selection:contract.covered_element,noemie_return_code:"
+msgid "[75] OC identifier update"
+msgstr "Changt. identifiant O.C."
+
+msgctxt "selection:contract.covered_element,noemie_return_code:"
+msgid "[78] Contract end dat mandatory 85, 87, 88"
+msgstr "Date fin contrat 85, 87, 88 obligatoire"
+
+msgctxt "selection:contract.covered_element,noemie_return_code:"
+msgid "[80] Inconsistent contract type with history"
+msgstr "Incomp. type contrat/Historique rubrique"
+
+msgctxt "selection:contract.covered_element,noemie_return_code:"
+msgid "[81] Contract 85/87/88 overlap forbidden"
+msgstr "Chevauchement contrat 85/87/88 interdit"
+
+msgctxt "selection:contract.covered_element,noemie_return_code:"
+msgid "[82] Existing contract 85, 87, 88"
+msgstr "Contrat 85, 87 ou 88 en cours"
+
+msgctxt "selection:contract.covered_element,noemie_return_code:"
+msgid "[84] Contract type change"
+msgstr "Changement type de contrat XX en YY"
+
+msgctxt "selection:contract.covered_element,noemie_return_code:"
+msgid "[85] OC transposition not processed"
+msgstr "Transposition non effectuée OC"
+
 msgctxt "selection:contract.covered_element,noemie_status:"
 msgid ""
 msgstr " "

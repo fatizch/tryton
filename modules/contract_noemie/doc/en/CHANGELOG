@@ -1,3 +1,5 @@
+* BUG#12991 Extend set of supported noemie codes for Flow 929 batch
+
 Version 2.6 - 2019-10-11
 * BUG#12766 Noemie flow file update and batch adjustment
 * FEA#12749 Allow marking a product for noemisation
