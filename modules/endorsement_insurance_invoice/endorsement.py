@@ -262,4 +262,5 @@ class EndorsementBillingInformation(relation_mixin(
     @classmethod
     def _ignore_fields_for_matching(cls):
         return super(EndorsementBillingInformation,
-            cls)._ignore_fields_for_matching() | {'contract'}
+            cls)._ignore_fields_for_matching() | {'contract',
+                'direct_debit_day_selector'}

@@ -597,6 +597,11 @@ def values_mixin(value_model):
             # and the corresponding field in the added record
             # was set at endorsement application according to the
             # reverse One2Many on the parent object.
+            # Nonetheless, the problematic field might be a function field with
+            # a settervoid (especially since the 5.2 tryton version merge),
+            # therefore, please make sure to overload
+            # _ignore_fields_for_matching method with any function field
+            # with a settervoid in the crashing endorsement definition
 
             if record.__name__ != self._model_name:
                 return False
