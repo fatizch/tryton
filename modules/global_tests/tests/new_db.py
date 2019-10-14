@@ -24,7 +24,7 @@ def parse_environ(name, default):
 
 
 _modules_to_ignore = [
-    'test',  # Trytond test modules
+    'tests',  # Trytond test modules
     'account_per_product',  # Breaks everything
     'endorsement_process',  # To use endorsements without processes
     'endorsement_party_process',  # To use endorsements without processes
@@ -2170,9 +2170,13 @@ if CREATE_ACTORS:  # {{{
         broker.is_broker = True
         broker.save()
 
+    backoffice, web = Channel.find([('code', 'in', ('backoffice', 'web'))],
+        order=[('code', 'ASC')])
     for distributor in DistributionNetwork.find([('code', 'like', 'C101010%')]):
         distributor.is_distributor = True
-        distributor.authorized_distribution_channels.append(Channel.find([])[0])
+        distributor.authorized_distribution_channels.append(
+            Channel(backoffice.id))
+        distributor.authorized_distribution_channels.append(Channel(web.id))
         distributor.save()
     # }}}
 
@@ -2216,6 +2220,8 @@ if CREATE_PRODUCTS:  # {{{
         [('code', '=', 'reglement_sinistres_taxes')])
     claim_product_reduced_taxed, = AccountProduct.find(
         [('code', '=', 'reglement_sinistres_taxes_reduites')])
+    web_channel, = Channel.find([('code', '=', 'web')])
+    back_channel, = Channel.find([('code', '=', 'backoffice')])
     # }}}
 
     do_print('\nCreating exclusion kinds')  # {{{
@@ -4338,6 +4344,10 @@ else:
     house_product.com_products[0].start_date = _base_date
     house_product.com_products[0].dist_networks.append(
         DistributionNetwork.find([('code', '=', 'C1')])[0])
+    house_product.com_products[0].dist_authorized_channels.append(
+        Channel(back_channel.id))
+    house_product.com_products[0].dist_authorized_channels.append(
+        Channel(web_channel.id))
     house_product.document_rules.new()
     house_product.document_rules[0].documents.new()
     house_product.document_rules[0].documents[0].document = subscription_request
@@ -4380,7 +4390,9 @@ else:
     life_product.com_products[0].dist_networks.append(
         DistributionNetwork.find([('code', '=', 'C1')])[0])
     life_product.com_products[0].dist_authorized_channels.append(
-        Channel.find([])[0])
+        Channel(back_channel.id))
+    life_product.com_products[0].dist_authorized_channels.append(
+        Channel(web_channel.id))
     life_product.document_rules.new()
     life_product.document_rules[0].documents.new()
     life_product.document_rules[0].documents[0].document = subscription_request
@@ -4421,6 +4433,10 @@ else:
     loan_product.com_products[0].start_date = _base_date
     loan_product.com_products[0].dist_networks.append(
         DistributionNetwork.find([('code', '=', 'C1')])[0])
+    loan_product.com_products[0].dist_authorized_channels.append(
+        Channel(back_channel.id))
+    loan_product.com_products[0].dist_authorized_channels.append(
+        Channel(web_channel.id))
     loan_product.extra_data_def.append(ExtraData(reduction_libre.id))
     loan_product.extra_data = {'libelle_editique': 'Prêt / voyez tout'}
     loan_product.document_rules.new()
@@ -4465,6 +4481,10 @@ else:
     funeral_product.com_products[0].start_date = _base_date
     funeral_product.com_products[0].dist_networks.append(
         DistributionNetwork.find([('code', '=', 'C1')])[0])
+    funeral_product.com_products[0].dist_authorized_channels.append(
+        Channel(back_channel.id))
+    funeral_product.com_products[0].dist_authorized_channels.append(
+        Channel(web_channel.id))
     funeral_product.document_rules.new()
     funeral_product.document_rules[0].documents.new()
     funeral_product.document_rules[0].documents[0].document = \
@@ -6091,6 +6111,7 @@ if TEST_APIS:  # {{{
             ('code', '=', 'sante_et_prevoyance_mpd')])
     network, = DistributionNetwork.find([('code', '=', 'C1010102')])
     lender, = Party.find([('name', '=', _lender_name)])
+    web_channel, = Channel.find([('code', '=', 'web')])
     # }}}
 
     do_print('    Updating API User')  # {{{
@@ -6123,8 +6144,7 @@ if TEST_APIS:  # {{{
     broker_token.key = '4e277c36d6f75862b33bcddd9db8c482cfb203ebad6b2145'
     broker_token.save()
 
-    full_api_access, = Group.find([('name', '=',
-                'Full API Access')])
+    full_api_access, = Group.find([('name', '=', 'Full API Access')])
     broker_user.groups.append(full_api_access)
     broker_user.save()
 
@@ -6145,7 +6165,8 @@ if TEST_APIS:  # {{{
             'part_1_id': questionnaire_sante_prev.parts[0].id,
             'part_2_id': questionnaire_sante_prev.parts[1].id,
             },
-        {'_debug_server': True, 'dist_network': network.id})
+        {'_debug_server': True, 'dist_network': network.id,
+            'distribution_channel': web_channel.id})
 
     # Simply check this is not an error.
     assert_eq('contracts' in result, True)
@@ -6169,7 +6190,8 @@ if TEST_APIS:  # {{{
         {
             'lender_address_id': lender.addresses[0].id,
             },
-        {'_debug_server': True, 'dist_network': network.id})
+        {'_debug_server': True, 'dist_network': network.id,
+            'distribution_channel': web_channel.id})
 
     # Simply check this is not an error.
     assert_eq('contracts' in result, True)
