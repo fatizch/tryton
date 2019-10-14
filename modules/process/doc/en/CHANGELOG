@@ -1,3 +1,5 @@
+* BUG#12999 Make process transition authorizations work again
+
 Version 2.6 - 2019-10-11
 Version 2.4 - 2019-04-12
 * BUG#10229 Properly set the context when running a process

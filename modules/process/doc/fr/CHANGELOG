@@ -1,3 +1,5 @@
+* BUG#12999 Réparation de la gestion des droits sur les processus par transitions
+
 Version 2.6 - 2019-10-11
 Version 2.4 - 2019-04-12
 * BUG#10229 Correction du contexte lors de l'exécution d'un processus

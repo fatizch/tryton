@@ -878,10 +878,12 @@ class ProcessTransition(ModelSQL, ModelView):
         return False
 
     def get_pyson_authorizations(self):
-        if not (hasattr(self, 'authorizations') and self.authorizations):
+        if not getattr(self, 'authorizations', []):
             return 'True'
-        auth_ids = [x.id for x in self.authorizations]
-        return "Eval('groups', []).contains(%s)" % auth_ids
+        auths = []
+        for elem in self.authorizations:
+            auths.append(Bool(Eval('groups', []).contains(elem.id)))
+        return Or(*auths) if len(auths) > 1 else auths[0]
 
     def get_pyson_readonly(self):
         pyson = None if not self.pyson else self.pyson

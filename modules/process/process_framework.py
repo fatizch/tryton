@@ -1,10 +1,9 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 from trytond.i18n import gettext
-from trytond.pool import PoolMeta, Pool
+from trytond.pool import Pool
 from trytond.rpc import RPC
 from trytond.transaction import Transaction
-from trytond.exceptions import UserError
 from trytond.model import ModelView, ModelSQL, model
 from trytond.model.exceptions import RequiredValidationError, ValidationError
 from trytond.pyson import Eval
@@ -353,7 +352,7 @@ class ProcessFramework(ModelSQL, ModelView, metaclass=ClassAttr):
         good_transition = TransitionDesc(transition_id)
         auth_pyson = good_transition.get_pyson_authorizations()
         ro_pyson = good_transition.get_pyson_readonly()
-        res = '(%s) and (%s)' % (auth_pyson, ro_pyson)
+        res = 'Not(%s) | (%s)' % (auth_pyson, ro_pyson)
         states = {}
         if res:
             states['readonly'] = utils.pyson_encode(res, True)
