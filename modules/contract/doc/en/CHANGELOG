@@ -1,3 +1,5 @@
+* BUG#12942 Fix clearing of status of options when reactivating contract
+
 Version 2.6 - 2019-10-11
 * BUG#12971 crash and visibility correction of manage options wizard
 * BUG#12759 Raise error when covered person is covered under the same options at same date

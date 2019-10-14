@@ -1,3 +1,5 @@
+* BUG#12942 Correction de la réinitialisation du status des garanties à la réactivation
+
 Version 2.6 - 2019-10-11
 * BUG#12971 correction crash et visibilité de wizard gestion des options
 * BUG#12759 lancer une Erreur lorsque la personne couverte est couverte par les mêmes options à la même date

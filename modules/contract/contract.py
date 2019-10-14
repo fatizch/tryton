@@ -2357,9 +2357,15 @@ class ContractOption(model.CoogSQL, model.CoogView, with_extra_data(['option'],
         Warning = pool.get('res.user.warning')
         if self.status == 'declined':
             return
-        if self.status == 'void' or not self.final_end_date:
+
+        # We can not distinguish options that were manually voided
+        # So, our choice is to always reactivate void options
+        if self.status == 'void' or not self.manual_end_date:
             self.status = 'active'
             self.sub_status = None
+        elif not self.final_end_date:
+            return
+
         elif self.initial_start_date < self.final_end_date < utils.today():
             SubStatus = Pool().get('contract.sub_status')
             self.sub_status = SubStatus.get_sub_status('reached_end_date')
