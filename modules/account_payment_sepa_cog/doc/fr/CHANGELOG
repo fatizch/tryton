@@ -1,3 +1,5 @@
+* FEA#12943 Ajout d'une contrainte sur la date de signature de mandat SEPA
+
 Version 2.6 - 2019-10-11
 * OTH#00000 Correction des balises adresses et remittance des fichiers sepa
 * OTH#00000 Correction de la chaine payment_working_days: appel à do_sepa_messages manquant

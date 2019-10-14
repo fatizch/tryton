@@ -23,7 +23,7 @@ from trytond.config import config
 from trytond.model.exceptions import (
     ValidationError, AccessError, RequiredValidationError)
 from trytond.transaction import Transaction
-from trytond.pyson import Eval, Or, Bool, If
+from trytond.pyson import Eval, Or, Bool, If, Date
 from trytond.pool import PoolMeta, Pool
 from trytond.tools import grouped_slice
 
@@ -93,6 +93,9 @@ class Mandate(model.CoogSQL, model.CoogView):
         super(Mandate, cls).__setup__()
         # TODO : Maybe add a unique constraint on amendment_of?
         cls.identification.select = True
+        cls.signature_date.domain = ['OR',
+            ('signature_date', '<=', Date()),
+            ('signature_date', '=', None)]
 
     @classmethod
     @model.CoogView.button
