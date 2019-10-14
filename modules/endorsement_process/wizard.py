@@ -213,7 +213,7 @@ class AskNextEndorsement(model.CoogWizard):
                 Button('Generate', 'apply_with_generate', 'tryton-go-next',
                     default=True)])
     apply_without_generate = StateTransition()
-    apply_with_generate = StateAction('endorsement.act_open_generated')
+    apply_with_generate = StateTransition()
 
     def get_endorsement(self):
         active_model = Transaction().context.get('active_model', None)
@@ -249,12 +249,11 @@ class AskNextEndorsement(model.CoogWizard):
                 Endorsement.apply([endorsement])
                 return 'end'
 
-    def do_apply_with_generate(self, action):
+    def transition_apply_with_generate(self):
         with ServerContext().set_context(force_contracts_to_endorse=True):
             with Transaction().set_context(force_synchronous=True):
                 Pool().get('endorsement').apply([self.get_endorsement()])
-                return action, {
-                    'model': Transaction().context.get('active_model'),
-                    'id': Transaction().context.get('active_id'),
-                    'ids': [Transaction().context.get('active_id')]
-                    }
+                return 'end'
+
+    def end(self):
+        return 'reload'

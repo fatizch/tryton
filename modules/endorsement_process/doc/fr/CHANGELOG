@@ -1,3 +1,5 @@
+* BUG#12985 Restauration du comportement de l'assitance de choix pour les avenants générés
+
 Version 2.6 - 2019-10-11
 * OTH#0000 Hotfix d'un crash du client en raison de domain non respecté
 

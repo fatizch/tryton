@@ -1,8 +1,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
-from trytond.pool import PoolMeta, Pool
+from trytond.pool import PoolMeta
 from trytond.server_context import ServerContext
-from trytond.transaction import Transaction
 from trytond.pyson import Eval, Bool, If
 
 from trytond.modules.coog_core import fields
@@ -39,9 +38,6 @@ class AskNextEndorsement(metaclass=PoolMeta):
         return res
 
     def transition_apply_with_generate(self):
-        with ServerContext().set_context(force_contracts_to_endorse=True,
+        with ServerContext().set_context(
                 contracts_to_endorse=self.choice.contracts):
-            with Transaction().set_context(force_synchronous=True):
-                Pool().get('endorsement').apply([self.get_endorsement()])
-                return 'end'
-        return super().transition_apply_with_generate()
+            return super().transition_apply_with_generate()
