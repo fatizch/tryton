@@ -227,9 +227,8 @@ class AskNextEndorsement(model.CoogWizard):
 
     def transition_detect(self):
         endorsement = self.get_endorsement()
-        if (endorsement is None
-                or endorsement.definition.next_endorsement is None):
-            return 'end'
+        if not endorsement.definition.next_endorsement:
+            return 'apply_without_generate'
         return 'choice'
 
     def default_choice(self, name):

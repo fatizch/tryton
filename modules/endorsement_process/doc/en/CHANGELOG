@@ -1,3 +1,4 @@
+* BUG#13002 Fix application of initial endorsement in next endorsements wizard
 * BUG#12985 Restore behavior of wizard asking for generation of endorsements
 
 Version 2.6 - 2019-10-11

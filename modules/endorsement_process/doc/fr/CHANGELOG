@@ -1,3 +1,4 @@
+* BUG#13002 Correction de l'application de l'avenant original dans l'assistant de avenants générés
 * BUG#12985 Restauration du comportement de l'assitance de choix pour les avenants générés
 
 Version 2.6 - 2019-10-11
