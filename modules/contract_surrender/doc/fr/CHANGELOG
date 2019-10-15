@@ -1,3 +1,5 @@
+* BUG#13005 Forcer le recalcul des primes en cas d'annulation de rachat sur un contrat non résilié
+
 Version 2.6 - 2019-10-11
 Version 2.4 - 2019-04-12
 * BUG#10166 Modification de la valeur de la date de facturation sur les quittances de rachats en leur attribuant la date de rachat

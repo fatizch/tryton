@@ -290,14 +290,23 @@ class Contract(metaclass=PoolMeta):
             to_rebill = [x for x in contracts
                 if x.surrender_invoice_state in ('posted', 'paid')]
             cls._cancel_surrender_invoices(contracts)
+            to_recalculate = []
             for contract in contracts:
                 # Contracts whose surrender was planned will still be active at
                 # the time of cancellation
                 if contract.status != 'active':
                     contract.activate_contract()
+                else:
+                    # We need to recalculate prices since we planned the
+                    # termination
+                    to_recalculate.append(contract)
                 contract._clean_contract_sub_status()
 
             cls.save(contracts)
+
+            for contract in to_recalculate:
+                cls.calculate_prices([contract], start=coog_date.add_day(
+                        surrender_dates[contract.id], -1))
             for contract in to_rebill:
                 # Rebill one day before, in order to make sure we cancel /
                 # recreate the full period invoice
