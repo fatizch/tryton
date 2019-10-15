@@ -753,9 +753,9 @@ class TableCell(ModelSQL, ModelView):
             for i in range(1, DIMENSION_MAX + 1):
                 dimension_field = 'dimension%s' % i
                 dimension_name = 'dimension_name%s' % i
-                if dimension_field in result:
-                    result[dimension_field]['string'] = \
-                        getattr(table_definition, dimension_name)
+                string_ = getattr(table_definition, dimension_name)
+                if dimension_field in result and string_:
+                    result[dimension_field]['string'] = string_
 
         return result
 
