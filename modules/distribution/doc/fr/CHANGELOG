@@ -1,4 +1,6 @@
-Version 2.6 - 2019-10-11
+* BUG#13006 Fix des classes API des réseaux de distribution
+
+Version 3.6 - 2019-10-11
 * FEA#12221 Ajout d'une API de création de réseau de distribution
 
 Version 2.4 - 2019-04-12

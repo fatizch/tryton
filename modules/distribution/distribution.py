@@ -138,7 +138,8 @@ class DistributionNetwork(model.CoogSQL, model.CoogView):
 
     def get_parents(self, name=None):
         return [x.id for x in
-            self.search([('left', '<', self.left), ('right', '>', self.right)])
+            self.search([('left', '<', self.left), ('right', '>', self.right)],
+                order=[('left', 'DESC')])
             ]
 
     def get_all_children(self, name):

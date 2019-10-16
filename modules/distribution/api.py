@@ -9,6 +9,7 @@ from trytond.modules.party_cog.api import PARTY_RELATION_SCHEMA
 
 __all__ = [
     'APIIdentity',
+    'APIIdentityWebResources',
     'APICore',
     'DistributionNetwork',
     ]
@@ -21,14 +22,21 @@ class APIIdentity(metaclass=PoolMeta):
         context = super().get_api_context()
         if self.user and self.user.dist_network:
             context['dist_network'] = self.user.dist_network.id
-            parent = self.user.dist_network
-            while parent:
-                for parent_web_ui_resouce in parent.web_ui_resources:
-                    if parent_web_ui_resouce.key.code == 'theme':
-                        context['theme'] = parent.web_ui_resources.key.value
-                        parent = False
-                else:
-                    parent = parent.parent
+        return context
+
+
+class APIIdentityWebResources(metaclass=PoolMeta):
+    __name__ = 'ir.api.identity'
+
+    def get_api_context(self):
+        context = super().get_api_context()
+        if self.user and self.user.dist_network:
+            for parent in self.user.dist_network.parents:
+                try:
+                    context['theme'] = parent.get_web_resource_by_key('theme')
+                    return context
+                except KeyError:
+                    pass
         return context
 
 

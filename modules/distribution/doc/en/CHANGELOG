@@ -1,3 +1,5 @@
+* BUG#13006 Fix distribution network API classes
+
 Version 2.6 - 2019-10-11
 * FEA#12221 Add a create_distribution_networks API
 

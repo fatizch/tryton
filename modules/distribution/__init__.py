@@ -28,5 +28,6 @@ def register():
 
     Pool.register(
         api.DistributionNetwork,
-        module='distribution', type_='model', depends=['api',
-            'web_configuration'])
+        api.APIIdentityWebResources,
+        module='distribution', type_='model',
+        depends=['api', 'web_configuration'])

@@ -106,6 +106,12 @@ class WebUIResourceMixin(model.CoogSQL):
         'Web UI Resources', delete_missing=True, target_not_indexed=True,
         help='A list of resources which will only be used through the APIs')
 
+    def get_web_resource_by_key(self, key):
+        for x in self.web_ui_resources:
+            if x.key.code == key:
+                return x.value
+        raise KeyError
+
 
 class RelationWebUIResourceKeyIRModel(model.CoogSQL, model.CoogView):
     'Relation Web UI Resource Key IR Model'
