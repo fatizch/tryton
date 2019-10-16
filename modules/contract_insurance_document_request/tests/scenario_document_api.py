@@ -231,7 +231,7 @@ APIContract = Model.get('api.contract')
 
 file_data = base64.b64encode(b"hello from b2b").decode('utf8')
 to_upload = {
-    'contract': {'quote_number': contract.quote_number},
+    'contract': {'number': contract.quote_number},
     'answer_request': 'true',
     'filename': 'hello_b2b.txt',
     'covered': {'code': subscriber.code},

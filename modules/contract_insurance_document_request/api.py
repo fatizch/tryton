@@ -8,6 +8,7 @@ from trytond.config import config
 
 from trytond.modules.coog_core import utils
 from trytond.modules.coog_core.api import CODED_OBJECT_SCHEMA
+from trytond.modules.contract.api import CONTRACT_SCHEMA
 from trytond.modules.api import APIInputError
 
 
@@ -124,7 +125,7 @@ class APIContract(metaclass=PoolMeta):
         return [
             {
                 'input': {
-                    'contract': {'contract_number': '12'},
+                    'contract': {'number': '12'},
                     'answer_request': 'false',
                     'filename': 'toto.pdf',
                     'data': 'Ym9uam91cgo='
@@ -133,7 +134,7 @@ class APIContract(metaclass=PoolMeta):
             },
             {
                 'input': {
-                    'contract': {'id': '12'},
+                    'contract': {'id': 12},
                     'answer_request': 'true',
                     'document_description': {'code': 'paper'},
                     'filename': 'toto.pdf',
@@ -143,7 +144,7 @@ class APIContract(metaclass=PoolMeta):
             },
             {
                 'input': {
-                    'contract': {'quote_number': '12'},
+                    'contract': {'number': '12'},
                     'covered': {'code': '12'},
                     'answer_request': 'true',
                     'document_description': {'code': 'paper'},
@@ -155,42 +156,14 @@ class APIContract(metaclass=PoolMeta):
         ]
 
     @classmethod
-    def _b2b_upload_document_contract_schema(cls):
-        return {
-            'anyOf': [
-                {
-                    'type': 'object',
-                    'additionalProperties': False,
-                    'properties': {'id': {"type": "string"}},
-                    'required': ['id'],
-                    },
-                {
-                    'type': 'object',
-                    'additionalProperties': False,
-                    'properties': {
-                        'contract_number': {"type": "string"}},
-                    'required': ['contract_number'],
-                    },
-                {
-                    'type': 'object',
-                    'additionalProperties': False,
-                    'properties': {
-                        'quote_number': {"type": "string"}},
-                    'required': ['quote_number'],
-                    },
-                ],
-            }
-
-    @classmethod
     def _b2b_upload_document_schema(cls):
-        contract_schema = cls._b2b_upload_document_contract_schema()
         return {
             'oneOf': [
                     {
                         'type': 'object',
                         'additionalProperties': False,
                         'properties': {
-                            'contract': contract_schema,
+                            'contract': CONTRACT_SCHEMA,
                             'answer_request': {'const': 'false'},
                             'data': {'type': 'string'},
                             'filename': {'type': 'string'},
@@ -202,7 +175,7 @@ class APIContract(metaclass=PoolMeta):
                         'type': 'object',
                         'additionalProperties': False,
                         'properties': {
-                            'contract': contract_schema,
+                            'contract': CONTRACT_SCHEMA,
                             'answer_request': {'const': 'true'},
                             'document_description': CODED_OBJECT_SCHEMA,
                             'data': {'type': 'string'},
@@ -215,7 +188,7 @@ class APIContract(metaclass=PoolMeta):
                         'type': 'object',
                         'additionalProperties': False,
                         'properties': {
-                            'contract': contract_schema,
+                            'contract': CONTRACT_SCHEMA,
                             'covered': CODED_OBJECT_SCHEMA,
                             'answer_request': {'const': 'true'},
                             'document_description': CODED_OBJECT_SCHEMA,
@@ -259,7 +232,6 @@ class APIContract(metaclass=PoolMeta):
     def _b2b_upload_document_convert_input(cls, parameters):
         pool = Pool()
         API = pool.get('api')
-        Contract = pool.get('contract')
         DocumentRequestLine = pool.get('document.request.line')
         CoveredElement = pool.get('contract.covered_element')
         base_parameters = parameters.copy()
@@ -269,12 +241,7 @@ class APIContract(metaclass=PoolMeta):
             'false': False
             }[parameters['answer_request']]
 
-        (field_, value), = tuple(parameters['contract'].items())
-        contract = Contract.search([(field_, '=', value)])
-        if len(contract) != 1:
-            raise APIInputError([{'type': 'Wrong contract identifier',
-                    'data': parameters['contract']}])
-        contract = contract[0]
+        contract = cls._get_contract(parameters['contract'])
         parameters['contract'] = contract
 
         for k, model_ in (('covered', 'party.party'),
