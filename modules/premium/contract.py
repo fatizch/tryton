@@ -604,6 +604,9 @@ class Premium(model.CoogSQL, model.CoogView):
         return value
 
     def get_rec_name(self, name):
+        if self.option.covered_element:
+            return f'{self.parent.rec_name}' \
+                f'({self.option.covered_element.rec_name})'
         return self.parent.rec_name
 
     def get_taxes(self, name):

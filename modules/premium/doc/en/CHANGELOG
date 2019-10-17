@@ -1,3 +1,4 @@
+* FEA#12906 Display covered information in premium list view
 Version 2.6 - 2019-10-11
 * BUG#12448 Generate error when two premiums with amount defined are saved on the same rated entity
 * BUG#12463 Fix premium period computation when coverage is defined with an end rule and product has term and renewal rule defined
