@@ -1,3 +1,5 @@
+* BUG#13048 Correction du chargement des banques: si le tiers change sur une adresse, il faut créer une nouvelle adresse et non pas mettre le tiers à jour sur l'addresse existante
+
 Version 2.6 - 2019-10-11
 * BUG#12730 Gestion des fichiers Banque de France externes
 * OTH#00000 Correction du chargement des banques: gestion du cas où un même BIC est redondant dans un fichier de banques

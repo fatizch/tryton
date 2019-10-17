@@ -250,7 +250,8 @@ class BankDataSetWizard(metaclass=PoolMeta):
                     agency = existing_agencies.get(';'.join([bic,
                                 clean_line.origin_branch_code,
                                 clean_line.origin_bank_code]), None)
-                    if agency:
+                    if agency and agency.address and \
+                            agency.address.party == agency_bank.party:
                         agency_address = agency.address
                         agency_address.street = agency_street
                         agency_address.city = agency_city
