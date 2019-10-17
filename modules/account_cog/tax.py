@@ -1,5 +1,6 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+from trytond.pyson import Eval
 from trytond.modules.coog_core import export
 
 
@@ -14,6 +15,20 @@ __all__ = [
 
 class Tax(export.ExportImportMixin):
     __name__ = 'account.tax'
+
+    @classmethod
+    def __setup__(cls):
+        super(Tax, cls).__setup__()
+        cls.invoice_account.domain = ['OR',
+            cls.invoice_account.domain,
+            [('company', '=', Eval('company')),
+                ('type.statement', '=', 'off-balance'),
+                ('closed', '!=', True)]]
+        cls.credit_note_account.domain = ['OR',
+            cls.credit_note_account.domain,
+            [('company', '=', Eval('company')),
+                ('type.statement', '=', 'off-balance'),
+                ('closed', '!=', True)]]
 
     @classmethod
     def is_master_object(cls):

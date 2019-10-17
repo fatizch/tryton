@@ -1,3 +1,5 @@
+* OTH#00000 Autoriser des comptes hors balances sur les taxes
+
 Version 2.6 - 2019-10-11
 * OTH#00000 Correction de l'affichage de la date de paiement suite au merge 5.2 (la date était toujours invisible)
 * BUG#12602 Correctif d'un crash suite au merge 5.2
