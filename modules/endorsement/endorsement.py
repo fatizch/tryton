@@ -224,13 +224,17 @@ class EndorsementRoot(object):
         return self.is_null()
 
     def set_applied_on(self, at_datetime):
-        self.applied_on = at_datetime
+        table_ = self.__table__()
+        transaction = Transaction()
+        cursor = transaction.connection.cursor()
+        cursor.execute(*table_.update(
+                columns=[table_.applied_on],
+                values=[at_datetime],
+                where=table_.id == self.id))
         for fname, _ in self._endorsement_tree.values():
-            values, new_values = getattr(self, fname, ()), []
+            values = getattr(self, fname, ())
             for elem in values:
                 elem.set_applied_on(at_datetime)
-                new_values.append(elem)
-            setattr(self, fname, new_values)
 
 
 def values_mixin(value_model):
@@ -2076,7 +2080,7 @@ class EndorsementContract(values_mixin('endorsement.contract.field'),
                 contract_endorsement.set_applied_on(
                     contract_endorsement.endorsement.rollback_date)
             else:
-                contract_endorsement.set_applied_on(datetime.datetime.now())
+                contract_endorsement.set_applied_on(CurrentTimestamp())
             contract_endorsement.clean_up_before_write()
             values = contract_endorsement.apply_values()
             Contract.write([contract], values)

@@ -642,7 +642,7 @@ class ModifyCoveredElement(EndorsementWizardStepMixin):
             contract = contract_endorsement.contract
             utils.apply_dict(contract, contract_endorsement.apply_values())
             contract.covered_elements = [x for x in contract.covered_elements
-                if getattr(x, 'id', 0) > 0]
+                if (getattr(x, 'id', 0) or 0) > 0]
             contract_endorsements[contract.id] = contract
 
         for parent, new_covered_elements in per_parent.items():

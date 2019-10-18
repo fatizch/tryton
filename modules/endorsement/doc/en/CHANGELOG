@@ -1,3 +1,5 @@
+* BUG#13039 Endorsement summary did not display records deleted by endorsement
+
 Version 2.6 - 2019-10-11
 * FEA#12704 Add administrative modifications APIs
 * OTH#00000 Fix product documentation generation

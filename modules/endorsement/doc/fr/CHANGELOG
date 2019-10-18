@@ -1,3 +1,5 @@
+* BUG#13039 Le résumé d'avenant n'affichait pas les enregistrements supprimés par l'avenant
+
 Version 2.6 - 2019-10-11
 * FEA#12704 Ajout des APIs d'avenant administratif
 * OTH#00000 Correction de la génération des documents

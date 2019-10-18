@@ -1,12 +1,11 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
-import datetime
-
 from trytond.i18n import gettext
 from trytond.model.exceptions import ValidationError
 from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
 from trytond.pyson import Eval
+from sql.functions import CurrentTimestamp
 
 from trytond.modules.coog_core import fields, model, utils
 from trytond.modules.endorsement.endorsement import values_mixin, \
@@ -267,11 +266,7 @@ class EndorsementParty(values_mixin('endorsement.party.field'),
 
         relation_summary = []
         for relation in self.relations:
-            if relation.action == 'remove':
-                relation_summary.append(
-                    (gettext('endorsement.msg_remove_version'), ''))
-            else:
-                relation_summary.append(relation.get_diff('party.relation',
+            relation_summary.append(relation.get_diff('party.relation',
                     relation.relationship))
         if relation_summary:
             result[1].append([
@@ -352,7 +347,7 @@ class EndorsementParty(values_mixin('endorsement.party.field'),
                 p_endorsement.set_applied_on(
                     p_endorsement.endorsement.rollback_date)
             else:
-                p_endorsement.set_applied_on(datetime.datetime.now())
+                p_endorsement.set_applied_on(CurrentTimestamp())
             values = p_endorsement.apply_values()
             Party.write([party], values)
             p_endorsement.save()
