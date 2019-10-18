@@ -1,3 +1,4 @@
+* BUG#13013 Add method to be plugged in endorsement process to test the application of the endorsement
 * BUG#13002 Fix application of initial endorsement in next endorsements wizard
 * BUG#12985 Restore behavior of wizard asking for generation of endorsements
 

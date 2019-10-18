@@ -51,6 +51,16 @@ class Endorsement(CoogProcessFramework, metaclass=ClassAttr):
                         % (self.__name__, self.id))])]
 
     @classmethod
+    def test_application(cls, endorsements):
+        # This method is intended to be used in processes
+        with Transaction().new_transaction() as transaction:
+            try:
+                with Transaction().set_context(will_be_rollbacked=True):
+                    cls.apply(endorsements)
+            finally:
+                transaction.rollback()
+
+    @classmethod
     def endorse_contracts(cls, contracts, endorsement_definition, origin=None):
         pool = Pool()
         Process = pool.get('process')
