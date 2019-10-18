@@ -803,7 +803,7 @@ class Reconcile(metaclass=PoolMeta):
                 for origin_line in self.show.lines
                 for x in origin_line.reconciliation.lines
                 if x.move.state == 'draft'
-                and x.move.journal == self.show.journal
+                and x.move.journal == self.show.write_off.journal
                 and x.move.date == self.show.date
                 ))
         if new_moves:

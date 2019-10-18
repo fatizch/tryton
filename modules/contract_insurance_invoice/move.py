@@ -1,7 +1,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 from trytond import backend
-from trytond.pyson import Bool, Eval, If, And, Or
+from trytond.pyson import Bool, Eval, And, Or
 from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
 from trytond.config import config
@@ -193,8 +193,7 @@ class ReconcileShow(metaclass=PoolMeta):
             ],
         'Remaining Repartition Method', states={
             'required': Bool(Eval('write_off_amount', False)),
-            'invisible': If(~Eval('write_off_amount', 0), 0,
-                Eval('write_off_amount', 0)) >= 0
+            'readonly': Eval('write_off_amount', 0) > 0,
             },
         depends=['write_off_amount'])
     repartition_method_string = remaining_repartition_method.translated(
@@ -227,9 +226,28 @@ class ReconcileShow(metaclass=PoolMeta):
     def default_remaining_repartition_method(cls):
         return 'set_on_party'
 
-    @fields.depends('contract', 'description', 'party',
-        'remaining_repartition_method')
+    @fields.depends(methods=['update_method_and_description'])
+    def on_change_lines(self):
+        self.update_method_and_description()
+
+    @fields.depends('remaining_repartition_method',
+        methods=['update_method_and_description'])
     def on_change_remaining_repartition_method(self):
+        self.update_description()
+
+    @fields.depends('contract', 'currency_digits', 'description', 'lines',
+        'party', 'remaining_repartition_method', 'write_off_amount')
+    def update_method_and_description(self):
+        self.write_off_amount = self.on_change_with_write_off_amount()
+        if (self.write_off_amount or -1) >= 0:
+            self.contract = None
+            self.remaining_repartition_method = 'write_off'
+        else:
+            self.remaining_repartition_method = 'set_on_party'
+        self.update_description()
+
+    @fields.depends(methods=['update_method_and_description'])
+    def update_description(self):
         pool = Pool()
         Contract = pool.get('contract')
         # line below is to prevent test_fields_methods crash
@@ -245,16 +263,6 @@ class ReconcileShow(metaclass=PoolMeta):
         self.description = '%s - %s' % (self.repartition_method_string,
             self.contract.rec_name if self.contract
             else self.party.rec_name if self.party else '')
-
-    @fields.depends('contract', 'party',
-        'remaining_repartition_method', 'write_off_amount')
-    def on_change_write_off_amount(self):
-        if (self.write_off_amount or -1) >= 0:
-            self.contract = None
-            self.remaining_repartition_method = 'write_off'
-        else:
-            self.remaining_repartition_method = 'set_on_party'
-        self.on_change_remaining_repartition_method()
 
 
 class Reconcile(metaclass=PoolMeta):

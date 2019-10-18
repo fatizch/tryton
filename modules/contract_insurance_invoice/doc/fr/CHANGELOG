@@ -1,3 +1,5 @@
+* BUG#13014 La méthode de répartition n'était pas renseigné à "Pertes et Profits" dans l'assistant de lettrage quand le reste était supérieur à zéro.
+
 Version 2.6 - 2019-10-11
 * FEA#12531 Limite pour les frais par quittance
 * BUG#12474 La méthode invoice_to_end_date ne doit pas tomber en erreur si il n'y a pas de date de fin sur le contrat

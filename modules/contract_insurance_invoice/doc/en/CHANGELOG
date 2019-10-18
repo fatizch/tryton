@@ -1,3 +1,5 @@
+* BUG#13014 The remaning repartition method was not set to Write Off when the write off amount is superior to zero
+
 Version 2.6 - 2019-10-11
 * FEA#12531 Add a threshold for per_invoice fees
 * BUG#12474 invoice_to_end_date must not crash if contract has no end date
