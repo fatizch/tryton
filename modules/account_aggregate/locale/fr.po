@@ -2,6 +2,10 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "field:account.configuration,header_in_aggregate_move_file:"
+msgid "Header in aggregate move file"
+msgstr "En-tête dans le fichier des mouvements comptables agrégés"
+
 msgctxt "field:account.configuration,snapshot_sequence:"
 msgid "Snapshot Sequence"
 msgstr "Séquence des instantanés"
@@ -198,6 +202,10 @@ msgctxt "field:account.move.snapshot.take,id:"
 msgid "ID"
 msgstr "ID"
 
+msgctxt "help:account.configuration,header_in_aggregate_move_file:"
+msgid "If set to True, the file will be exported with header"
+msgstr "Si défini à Vrai, le fichier sera exporté avec en-tête."
+
 msgctxt "help:account.fiscalyear,export_moves:"
 msgid ""
 "If not ticked, will filter all moves on this fiscal year out of snapshot "
@@ -250,9 +258,47 @@ msgctxt "model:ir.action,name:act_snapshot"
 msgid "Take a Snapshot of Moves"
 msgstr "Prendre un instantané des mouvements"
 
+msgctxt "model:ir.message,text:msg_aggregated"
+msgid "Aggregated move"
+msgstr "Mouvement agrégé"
+
 msgctxt "model:ir.message,text:msg_always"
 msgid "Always"
 msgstr "Toujours"
+
+msgctxt "model:ir.message,text:msg_bank_code"
+msgid "Bank code"
+msgstr "Code du compte comptable"
+
+msgctxt "model:ir.message,text:msg_credit"
+msgid "Credit"
+msgstr "Crédit"
+
+msgctxt "model:ir.message,text:msg_date"
+msgid "Date"
+msgstr "Date"
+
+msgctxt "model:ir.message,text:msg_debit"
+msgid "Debit"
+msgstr "Débit"
+
+msgctxt "model:ir.message,text:msg_description"
+msgid "Description"
+msgstr "Déscription"
+
+msgctxt "model:ir.message,text:msg_journal_code"
+msgid "Journal code"
+msgstr "Code du journal comptable"
+
+msgctxt "model:ir.message,text:msg_move_direction"
+msgid "Move direction"
+msgstr "Sens de l'écriture"
+
+msgctxt "model:ir.message,text:msg_multiple_running_processes"
+msgid "Can't extract header with multiple processes running"
+msgstr ""
+"Impossible d’extraire le fichier avec l’en-tête et plusieurs processus en "
+"cours d’exécution"
 
 msgctxt "model:ir.message,text:msg_never"
 msgid "Never"
@@ -294,6 +340,10 @@ msgstr "Agrégat comptable"
 msgctxt "model:ir.ui.menu,name:menu_snapshot"
 msgid "Take a Snapshot of Moves"
 msgstr "Prendre un instantané des mouvements"
+
+msgctxt "view:account.configuration:"
+msgid "Accounting extraction"
+msgstr "Extraction comptable"
 
 msgctxt "view:account.move.line.aggregated:"
 msgid "Credit"

@@ -16,5 +16,32 @@
         <record model="ir.message" id="msg_snapshot_uniq_name">
             <field name="text">The name on shapshot must be unique.</field>
         </record>
+        <record model="ir.message" id="msg_multiple_running_processes">
+            <field name="text">Can't extract header with multiple processes running</field>
+        </record>
+        <record model="ir.message" id="msg_journal_code">
+            <field name="text">Journal code</field>
+        </record>
+        <record model="ir.message" id="msg_date">
+            <field name="text">Date</field>
+        </record>
+        <record model="ir.message" id="msg_aggregated">
+            <field name="text">Aggregated move</field>
+        </record>
+        <record model="ir.message" id="msg_bank_code">
+            <field name="text">Bank code</field>
+        </record>
+        <record model="ir.message" id="msg_description">
+            <field name="text">Description</field>
+        </record>
+        <record model="ir.message" id="msg_debit">
+            <field name="text">Debit</field>
+        </record>
+        <record model="ir.message" id="msg_credit">
+            <field name="text">Credit</field>
+        </record>
+        <record model="ir.message" id="msg_move_direction">
+            <field name="text">Move direction</field>
+        </record>
     </data>
 </tryton>

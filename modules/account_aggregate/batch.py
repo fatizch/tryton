@@ -10,6 +10,8 @@ from trytond.pool import Pool
 from trytond.modules.coog_core import batch
 from trytond.transaction import Transaction
 from trytond.server_context import ServerContext
+from trytond.exceptions import UserError
+from trytond.i18n import gettext
 
 from trytond.modules.report_engine_flow import batch as flow_batch
 
@@ -75,7 +77,26 @@ class ExtractAggregatedMove(flow_batch.BaseMassFlowBatch):
         return value
 
     @classmethod
+    def get_header_value(cls, *args, **kwargs):
+        return [
+            gettext('account_aggregate.msg_journal_code'),
+            gettext('account_aggregate.msg_date'),
+            gettext('account_aggregate.msg_aggregated'),
+            gettext('account_aggregate.msg_bank_code'),
+            gettext('account_aggregate.msg_description'),
+            gettext('account_aggregate.msg_debit'),
+            gettext('account_aggregate.msg_credit'),
+            gettext('account_aggregate.msg_move_direction'),
+            ]
+
+    @classmethod
     def select_ids(cls, *args, **kwargs):
+        with_header = Pool().get('account.configuration')(
+            1).header_in_aggregate_move_file
+        if with_header and ServerContext().get(
+                'job_size'):
+            UserError(gettext(
+                'account_aggregate.msg_multiple_running_processes'))
         cls.check_mandatory_parameters(*args, **kwargs)
         cursor = Transaction().connection.cursor()
         treatment_date = datetime.datetime.strftime(kwargs.get(
@@ -155,6 +176,12 @@ class ExtractAggregatedMove(flow_batch.BaseMassFlowBatch):
     @classmethod
     def execute(cls, objects, ids, *args, **kwargs):
         # We are not processing huge amount of data
+        with_header = Pool().get('account.configuration')(
+            1).header_in_aggregate_move_file
+        # Check if there is only one process running
+        # Extraction of header won't work if it wasn't the case
+        if with_header and not ServerContext().get('job_size'):
+            cls.write_header(*args, **kwargs)
         objects = list(objects)
         super(ExtractAggregatedMove, cls).execute(objects, ids, *args,
             **kwargs)

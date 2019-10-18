@@ -172,6 +172,9 @@ class Configuration(CompanyMultiValueMixin, metaclass=PoolMeta):
             'Snapshot Sequence', required=True, domain=[
                 ('code', '=', 'account.move.snapshot'),
                 ]))
+    header_in_aggregate_move_file = fields.Boolean(
+        'Header in aggregate move file',
+        help='If set to True, the file will be exported with header')
 
     @classmethod
     def default_snapshot_sequence(cls, **pattern):

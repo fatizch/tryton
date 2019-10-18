@@ -7,11 +7,14 @@ class BaseMassFlowBatch(batch.MemorySavingBatch):
     @classmethod
     def write_header(cls, *args, **kwargs):
         filename = cls.get_filename(*args, **kwargs)
-        header_values = [x[0]
-                for x in cls.object_fields_mapper(*args, **kwargs)]
-        with utils.safe_open(filename, 'ab') as fo_:
+        header_values = cls.get_header_value(*args, **kwargs)
+        with utils.safe_open(filename, 'a') as fo_:
             fo_.write(cls.line_definition(*args, **kwargs) %
                     tuple(header_values) + '\n')
+
+    @classmethod
+    def get_header_value(cls, *args, **kwargs):
+        return [x[0] for x in cls.object_fields_mapper(*args, **kwargs)]
 
     @classmethod
     def check_mandatory_parameters(cls, *args, **kwargs):

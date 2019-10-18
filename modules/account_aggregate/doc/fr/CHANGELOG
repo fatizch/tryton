@@ -1,3 +1,4 @@
+* FEA#12939 Permettre la génération d'un fichier comptable avec le nom des colonnes
 Version 2.6 - 2019-10-11
 * BUG#12367 Suppression de l'appel à l'encodage dans l'export
 

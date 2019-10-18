@@ -8,4 +8,10 @@ this repository contains the full copyright notices and license terms. -->
         <field name="snapshot_sequence"/>
         <newline/>
     </xpath>
+     <xpath expr="/form/separator[@id='invoice']" position="before">
+         <separator id="accounting_extraction" string="Accounting extraction" colspan="4"/>
+         <label name="header_in_aggregate_move_file"/>
+         <field name="header_in_aggregate_move_file"/>
+         <newline/>
+     </xpath>
 </data>
