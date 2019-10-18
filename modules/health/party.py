@@ -37,6 +37,13 @@ class Party(metaclass=PoolMeta):
         return utils.get_good_version_at_date(self, 'health_complement',
             at_date, start_var_name='date')
 
+    @fields.depends('is_person', 'birth_order')
+    def on_change_is_person(self):
+        if self.is_person and not self.birth_order:
+            self.birth_order = 1
+        else:
+            self.birth_order = None
+
 
 class HealthPartyComplement(model._RevisionMixin, model.CoogSQL,
         model.CoogView):
