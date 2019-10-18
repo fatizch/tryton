@@ -1,5 +1,6 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+import datetime
 from sql import Literal, Window
 from sql.aggregate import Min
 from sql.conditionals import Coalesce
@@ -56,7 +57,12 @@ class Product(model.CodedMixin, model.CoogView, Printable,
     company = fields.Many2One('company.company', 'Company', required=True,
         ondelete='RESTRICT')
     start_date = fields.Date('Start Date', required=True)
-    end_date = fields.Date('End Date')
+    end_date = fields.Date('End Date',
+        domain=['OR',
+            ('start_date', '=', None),
+            ('end_date', '=', None),
+            ('end_date', '>', Eval('start_date', datetime.date.min))],
+        depends=['start_date'])
     description = fields.Text('Description', translate=True)
     coverages = fields.Many2Many('offered.product-option.description',
         'product', 'coverage', 'Option Descriptions', domain=[

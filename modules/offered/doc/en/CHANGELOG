@@ -1,3 +1,4 @@
+* BUG#12957 Check that product end date is superior to product start_date
 * BUG#13000 APIs should use code of web resources for identification
 
 Version 2.6 - 2019-10-11
