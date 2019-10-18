@@ -2,26 +2,39 @@
 <!-- This file is part of Coog. The COPYRIGHT file at the top level of
 this repository contains the full copyright notices and license terms. -->
 <form>
-    <label name="name"/>
-    <field name="name"/>
-    <label name="code"/>
-    <field name="code"/>
-    <label name="pyson_condition"/>
-    <field name="pyson_condition" colspan="3"/>
-    <label name="action"/>
-    <field name="action"/>
+
+    <group col="4" colspan="4" id="name_code">
+        <label name="name"/>
+        <field name="name"/>
+        <label name="code"/>
+        <field name="code"/>
+    </group>
     <newline/>
-    <label name="priority"/>
-    <field name="priority"/>
-    <label name="at_commit"/>
-    <field name="at_commit"/>
-    <newline/>
-    <label name="active"/>
-    <field name="active"/>
-    <separator name="descriptor" colspan="4"/>
-    <field name="descriptor" colspan="4" yexpand="0"/>
-    <label name="treatment_kind"/>
-    <field name="treatment_kind"/>
-    <field name="handles_asynchronous" colspan="4"/>
+    <separator colspan="4" string="If this events are generated" id="separator_if"/>
     <field name="event_types" colspan="4"/>
+    <separator colspan="4" string="Application terms" id="separator_terms"/>
+    <group col="4" id="pyson_od">
+        <label name="pyson_condition"/>
+        <field name="pyson_condition" colspan="3"/>
+        <separator name="descriptor" colspan="4"/>
+        <field name="descriptor" colspan="4" yexpand="0"/>
+    </group>
+    <newline/>
+    <group col="10" id="pri_act">
+        <label name="priority"/>
+        <field name="priority"/>
+        <label name="active"/>
+        <field name="active"/>
+        <label name="at_commit"/>
+        <field name="at_commit"/>
+    </group>
+    <newline/>
+    <separator colspan="4" string="Then this action will be realized" id="separator_action"/>
+    <group id="action" colspan="2" col="2">
+        <label name="action" colspan="1"/>
+        <field name="action" colspan="1"/>
+        <label name="treatment_kind"/>
+        <field name="treatment_kind"/>
+        <field name="handles_asynchronous" colspan="4"/>
+    </group>
 </form>

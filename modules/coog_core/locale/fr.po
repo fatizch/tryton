@@ -2129,6 +2129,18 @@ msgid "Prev"
 msgstr "Précédent"
 
 msgctxt "view:event.type.action:"
+msgid "Application terms"
+msgstr "Conditions d'application"
+
+msgctxt "view:event.type.action:"
+msgid "If this events are generated"
+msgstr "Si ces évenements sont générés"
+
+msgctxt "view:event.type.action:"
+msgid "Then this action will be realized"
+msgstr "Alors cette action est réalisée"
+
+msgctxt "view:event.type.action:"
 msgid "Event Type Action"
 msgstr "Action par type d'événement"
 

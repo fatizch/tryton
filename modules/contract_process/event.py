@@ -54,3 +54,11 @@ class EventTypeAction(metaclass=PoolMeta):
             for notification in notifications:
                 notification.current_state = state
         return notifications
+
+    def filter_objects(self, objects):
+        if self.action != 'fast_forward_attached_process':
+            return super(EventTypeAction, self).filter_objects(objects)
+        contracts = []
+        for o in objects:
+            contracts.extend(self.get_contracts_from_object(o))
+        return super(EventTypeAction, self).filter_objects(contracts)

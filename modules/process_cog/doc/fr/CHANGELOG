@@ -1,3 +1,5 @@
+* FEA#12761 Permet d'activer automatiquement un contrat une fois que la confirmation de signature requise est envoyée à Coog.
+
 Version 2.6 - 2019-10-11
 Version 2.4 - 2019-04-12
 * FEA#11004 Ajout de la date de début du processus à la vue liste de tâches

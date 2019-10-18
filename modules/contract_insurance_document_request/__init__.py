@@ -24,6 +24,7 @@ def register():
         rule_engine.RuleEngine,
         rule_engine.RuleEngineRuntime,
         document.DocumentRequestLine,
+        event.EventTypeAction,
         module='contract_insurance_document_request', type_='model')
 
     Pool.register(

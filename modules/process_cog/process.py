@@ -24,6 +24,7 @@ from trytond.server_context import ServerContext
 from trytond.wizard import StateTransition
 
 from trytond.modules.coog_core import utils, model, fields
+from trytond.modules.coog_core.queue import QueueMixin
 from trytond.modules.process import ProcessFramework
 
 
@@ -284,7 +285,8 @@ class ProcessLog(model.CoogSQL, model.CoogView):
         return self.task.get_rec_name(name)
 
 
-class CoogProcessFramework(ProcessFramework, model.CoogSQL, model.CoogView):
+class CoogProcessFramework(QueueMixin, ProcessFramework, model.CoogSQL,
+            model.CoogView):
     'Cog Process Framework'
 
     logs = fields.One2Many('process.log', 'task', 'Task', delete_missing=True,
@@ -310,6 +312,9 @@ class CoogProcessFramework(ProcessFramework, model.CoogSQL, model.CoogView):
                 'fast_forward_process': RPC(readonly=False, instantiate=0),
                 'attach_to_process': RPC(readonly=False, instantiate=0),
                 })
+        cls._async_methods.append(
+            ('fast_forward_process_async', None),
+            )
 
     @classmethod
     def _export_skips(cls):
@@ -366,6 +371,12 @@ class CoogProcessFramework(ProcessFramework, model.CoogSQL, model.CoogView):
                 if raise_error:
                     raise
                 break
+
+    @classmethod
+    def fast_forward_process_async(cls, objects):
+        assert len(set([x.__name__ for x in objects])) == 1
+        for x in objects:
+            return x.fast_forward_process()
 
     @classmethod
     @model.CoogView.button_action('process_cog.act_resume_process')

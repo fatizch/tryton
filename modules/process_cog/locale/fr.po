@@ -539,6 +539,10 @@ msgctxt "model:ir.message,text:msg_clear_process"
 msgid "Clear Process"
 msgstr "Supprimer le processus en courant"
 
+msgctxt "model:ir.message,text:msg_fast_forward_attached_process"
+msgid "Fast Forward Attached Process"
+msgstr "Avancer le processus métier"
+
 msgctxt "model:ir.message,text:msg_initiate_process"
 msgid "Initiate Process"
 msgstr "Initier un processus"

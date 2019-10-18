@@ -31,6 +31,9 @@
         <record model="ir.message" id="msg_clear_process">
             <field name="text">Clear Process</field>
         </record>
+        <record model="ir.message" id="msg_fast_forward_attached_process">
+            <field name="text">Fast Forward Attached Process</field>
+        </record>
         <record model="ir.message" id="msg_no_process">
             <field name="text">No process was found for the selected element</field>
         </record>

@@ -1,3 +1,5 @@
+* FEA#12761 Allow to automaticaly activate a contrat once the required document signature confirmation is sent to Coog
+
 Version 2.6 - 2019-10-11
 Version 2.4 - 2019-04-12
 * FEA#11004 Add process start date to the process log tree view

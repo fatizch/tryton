@@ -37,6 +37,16 @@ class EventTypeAction(metaclass=PoolMeta):
                 Eval('action') != 'initiate_process')},
         depends=['pyson_condition', 'action'])
 
+    @classmethod
+    def __setup__(cls):
+        super(EventTypeAction, cls).__setup__()
+        cls.treatment_kind.domain = [If(
+            Eval('action') == 'fast_forward_attached_process',
+                ('treatment_kind', '=', 'asynchronous_queue'),
+                (),
+                )]
+        cls.treatment_kind.depends = ['action']
+
     @fields.depends('process_to_initiate', 'step_to_start')
     def on_change_process_to_initiate(self):
         if not self.process_to_initiate:
@@ -46,7 +56,20 @@ class EventTypeAction(metaclass=PoolMeta):
     def get_action_types(cls):
         return super(EventTypeAction, cls).get_action_types() + [
             ('initiate_process', gettext('process_cog.msg_initiate_process')),
-            ('clear_process', gettext('process_cog.msg_clear_process'))]
+            ('clear_process', gettext('process_cog.msg_clear_process')),
+            ('fast_forward_attached_process',
+                gettext('process_cog.msg_fast_forward_attached_process'))]
+
+    @classmethod
+    def possible_asynchronous_actions(cls):
+        return super(EventTypeAction, cls).possible_asynchronous_actions() + \
+               ['fast_forward_attached_process']
+
+    @fields.depends('action', 'treatment_kind')
+    def on_change_action(self):
+        super(EventTypeAction, self).on_change_action()
+        if self.action == 'fast_forward_attached_process':
+            self.treatment_kind = 'asynchronous_queue'
 
     @classmethod
     def _export_light(cls):
@@ -72,6 +95,12 @@ class EventTypeAction(metaclass=PoolMeta):
             process_objects = objects
         return super(EventTypeAction, self).filter_objects(process_objects)
 
+    def _action_fast_forward_attached_process(self, objects, event_code,
+          description, **kwargs):
+        with Transaction().set_context(task_triggered_from_event=True):
+            assert len(set([x.__name__ for x in objects])) == 1
+            objects[0].__class__.fast_forward_process_async(objects)
+
     def execute(self, objects, event_code, description=None, **kwargs):
         if self.action == 'clear_process':
             return self._action_clear_process(objects, event_code, description,
@@ -79,6 +108,9 @@ class EventTypeAction(metaclass=PoolMeta):
         elif self.action == 'initiate_process':
             return self._action_initiate_process(objects, event_code,
                 description, **kwargs)
+        elif self.action == 'fast_forward_attached_process':
+            return self._action_fast_forward_attached_process(objects,
+                event_code, description, **kwargs)
         else:
             return super(EventTypeAction, self).execute(objects, event_code,
                 description, **kwargs)

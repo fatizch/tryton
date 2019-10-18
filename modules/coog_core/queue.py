@@ -164,12 +164,11 @@ class QueueMixin(object):
         """
 
         def build_async_function(func):
-
             # TODO: use wrapt.decorator to make it universal
             @wraps(func)
             def wrapper(cls, instances, *args, **kwargs):
-
                 pool = Pool()
+                Warning = pool.get('res.user.warning')
                 AsyncTask = pool.get('async.task')
                 context = Transaction().context
                 if condition:
@@ -191,9 +190,9 @@ class QueueMixin(object):
                     # or succeeded tasks
                     AsyncTask.delete_from_records(instances)
                     return res
-
                 key = 'async_job_%s' % [str(x) for x in instances]
-                if Warning.check(key):
+                if Warning.check(key) and not \
+                        context.get('task_triggered_from_event'):
                     raise UserWarning(key,
                         gettext('coog_core.msg_async_job'))
 
