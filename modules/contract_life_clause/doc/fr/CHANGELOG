@@ -1,3 +1,5 @@
+* FEA#12911 supprimer accepting par défaut
+
 Version 2.6 - 2019-10-11
 Version 2.4 - 2019-04-12
 * BUG#10206 Rendre les bénéficiaires non éditables si le statut du contrat est autre que devis

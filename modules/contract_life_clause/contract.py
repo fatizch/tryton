@@ -214,10 +214,6 @@ class Beneficiary(model.CoogSQL, model.CoogView):
         fields.Char('Contract Status'),
         'on_change_with_contract_status')
 
-    @staticmethod
-    def default_accepting():
-        return True
-
     @fields.depends('party', 'reference')
     def on_change_with_rec_name(self, name=None):
         return self.get_rec_name(name)
