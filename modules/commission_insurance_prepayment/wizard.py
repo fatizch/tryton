@@ -192,7 +192,7 @@ class SimulateCommissionsParameters(metaclass=PoolMeta):
     def add_commissions(self, line, invoice, contract):
         commissions = super(SimulateCommissionsParameters,
             self).add_commissions(line, invoice, contract)
-        if contract.with_prepayment:
+        if contract.has_prepayment:
             for commission in line.get_option(contract).compute_prepayment(
                     False, contract.start_date, contract.end_date):
                 commission.redeemed_prepayment = None

@@ -29,6 +29,12 @@ class Package(model.CodedMixin, model.CoogView, with_extra_data([
         'package', 'Option Relations', delete_missing=True)
 
     @classmethod
+    def copy(cls, instances, default=None):
+        default = default.copy() if default else {}
+        default.setdefault('options', None)
+        return super(Package, cls).copy(instances, default=default)
+
+    @classmethod
     def _export_skips(cls):
         return super(Package, cls)._export_skips() | {'options'}
 

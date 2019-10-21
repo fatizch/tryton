@@ -419,7 +419,8 @@ class ErrorManager(object):
         return value
 
     def format_errors(self):
-        return '\n'.join((e.message for e, f in self._errors))
+        return '\n'.join(((e if isinstance(e, str) else e.message
+                    for e, f in self._errors)))
 
     @property
     def _do_raise(self):

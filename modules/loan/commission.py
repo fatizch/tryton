@@ -15,6 +15,7 @@ class SimulateCommissionsParameters(metaclass=PoolMeta):
             product)
         contract.is_loan = contract.on_change_with_is_loan()
         contract.used_loans = []
+        contract.ordered_loans = []
         return contract
 
     def mock_option(self, coverage, parent_contract, contract=None,

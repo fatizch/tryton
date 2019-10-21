@@ -1,3 +1,5 @@
+* OTH#0000 Various fix 2.6
+
 Version 2.6 - 2019-10-11
 Version 2.4 - 2019-04-12
 * BUG#11146 The reduction date should be an invoice period end rather than start
