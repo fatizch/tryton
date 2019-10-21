@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<NormePivotIndus xmlns="http://www.almerys.com/">
+  <entete>
+    <idFlux>40</idFlux>
+    <nomFlux>INDUS_COOPENGO_20190901_20190906</nomFlux>
+    <versionSchema>1.1</versionSchema>
+    <dtEmission>2019-09-06</dtEmission>
+    <dtExtraction>2019-09-06</dtExtraction>
+    <dtValeur>2019-09-06</dtValeur>
+  </entete>
+  <indus>
+    <numFacture>3835428364</numFacture>
+    <numContrat>CT{year}{month}00021</numContrat>
+    <mtTotalRemboursementRC>15.00</mtTotalRemboursementRC>
+    <mtTotalDepenseReelle>16.00</mtTotalDepenseReelle>
+    <montantTotIndu>15.00000</montantTotIndu>
+    <actes>
+      <numLigneFacture>1</numLigneFacture>
+      <codeActe>PREM</codeActe>
+      <lblActe>Préservatif Masculin</lblActe>
+      <cdRegrpmtActePoste>X</cdRegrpmtActePoste>
+      <lblRegrpmtActePoste>libellé inconnu</lblRegrpmtActePoste>
+      <cdRegrpmtActeFamille>XXX</cdRegrpmtActeFamille>
+      <lblRegrpmtActeFamille>libelle inconnu</lblRegrpmtActeFamille>
+      <mtRemboursementRC>150.00</mtRemboursementRC>
+      <Beneficiaire>
+        <idBeneficiaire>2592</idBeneficiaire>
+        <nom>MONACO</nom>
+        <prenom>Michaël</prenom>
+        <sexe>I</sexe>
+        <dtNaiss>1996-05-28</dtNaiss>
+        <rgNaiss>1</rgNaiss>
+        <numSSKey>5960599999999</numSSKey>
+        <keySS>90</keySS>
+        <departement>75008</departement>
+        <cdBeneficiaire>A</cdBeneficiaire>
+      </Beneficiaire>
+      <codeProduit>heyme-esr-niv1</codeProduit>
+      <indu>
+        <refIndu>19090419823</refIndu>
+        <mtTotalIndu>5.00000</mtTotalIndu>
+        <mtIndu>5.00000</mtIndu>
+        <dtCreaIndu>2019-09-04</dtCreaIndu>
+        <commentIndu></commentIndu>
+        <causeIndu>Facture annulée</causeIndu>
+        <modeDetection>Contact PS</modeDetection>
+        <respIndu>PS</respIndu>
+        <modeRecuperation>Virement / Chèque</modeRecuperation>
+        <apGestAno></apGestAno>
+        <refTicketAno></refTicketAno>
+        <typeIndu>HTP</typeIndu>
+      </indu>
+    </actes>
+  </indus>
+  <indus>
+    <numFacture>3835428364</numFacture>
+    <numContrat>CT{year}{month}00023</numContrat>
+    <mtTotalRemboursementRC>16.00</mtTotalRemboursementRC>
+    <mtTotalDepenseReelle>16.00</mtTotalDepenseReelle>
+    <montantTotIndu>16.00000</montantTotIndu>
+    <actes>
+      <numLigneFacture>2</numLigneFacture>
+      <codeActe>PREM</codeActe>
+      <lblActe>Préservatif Masculin</lblActe>
+      <cdRegrpmtActePoste>X</cdRegrpmtActePoste>
+      <lblRegrpmtActePoste>libellé inconnu</lblRegrpmtActePoste>
+      <cdRegrpmtActeFamille>XXX</cdRegrpmtActeFamille>
+      <lblRegrpmtActeFamille>libelle inconnu</lblRegrpmtActeFamille>
+      <mtRemboursementRC>15.00</mtRemboursementRC>
+      <Beneficiaire>
+        <idBeneficiaire>2578</idBeneficiaire>
+        <nom>BRUXELLES</nom>
+        <prenom>AXELLE</prenom>
+        <sexe>I</sexe>
+        <dtNaiss>2000-09-11</dtNaiss>
+        <rgNaiss>1</rgNaiss>
+        <numSSKey>2050991999999</numSSKey>
+        <keySS>32</keySS>
+        <departement>69001</departement>
+        <cdBeneficiaire>A</cdBeneficiaire>
+      </Beneficiaire>
+      <codeProduit>heyme-esr-niv3</codeProduit>
+      <indu>
+        <refIndu>19090525487</refIndu>
+        <mtTotalIndu>4.0000</mtTotalIndu>
+        <mtIndu>4.00000</mtIndu>
+        <dtCreaIndu>2019-09-05</dtCreaIndu>
+        <commentIndu></commentIndu>
+        <causeIndu>Facture annulée</causeIndu>
+        <modeDetection>Contact PS</modeDetection>
+        <respIndu>PS</respIndu>
+        <modeRecuperation>Virement / Chèque</modeRecuperation>
+        <apGestAno></apGestAno>
+        <refTicketAno></refTicketAno>
+        <typeIndu>HTP</typeIndu>
+      </indu>
+    </actes>
+  </indus>
+</NormePivotIndus>

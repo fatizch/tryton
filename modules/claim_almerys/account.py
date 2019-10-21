@@ -22,6 +22,6 @@ class InvoiceLine(metaclass=PoolMeta):
     almerys_services = fields.One2Many(
         'claim.service', 'third_party_invoice_line', "Almerys Services",
         readonly=True)
-    almerys_canceled_services = fields.One2Many(
-        'claim.service', 'third_party_invoice_line_cancel',
-        "Almerys Canceled Services", readonly=True)
+    almerys_payback_services = fields.One2Many(
+        'claim.service', 'third_party_invoice_line_payback',
+        "Almerys Payback Services", readonly=True)

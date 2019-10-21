@@ -1962,7 +1962,7 @@ msgstr "Par planification"
 
 msgctxt "selection:claim.indemnification,status:"
 msgid "Annule"
-msgstr "Annuler"
+msgstr "Annulé"
 
 msgctxt "selection:claim.indemnification,status:"
 msgid "Calculated"

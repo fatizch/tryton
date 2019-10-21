@@ -24,4 +24,5 @@ def register():
         offered.OptionDescription,
         test_case.TestCaseModel,
         test_case.TestCaseAlmerysInsurer,
+        batch.AlmerysPaybackCreation,
         module='claim_almerys', type_='model')

@@ -2,9 +2,9 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "field:account.invoice.line,almerys_canceled_services:"
-msgid "Almerys Canceled Services"
-msgstr ""
+msgctxt "field:account.invoice.line,almerys_payback_services:"
+msgid "Almerys Payback Services"
+msgstr "Services d'indus Almerys"
 
 msgctxt "field:account.invoice.line,almerys_services:"
 msgid "Almerys Services"
@@ -27,6 +27,10 @@ msgid "Third Party Payment"
 msgstr ""
 
 msgctxt "field:claim.almerys.claim_indemnification,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:claim.almerys.payback_creation,id:"
 msgid "ID"
 msgstr "Identifiant"
 
@@ -70,9 +74,9 @@ msgctxt "field:claim.service,third_party_invoice_line:"
 msgid "Third Party Invoice Line"
 msgstr ""
 
-msgctxt "field:claim.service,third_party_invoice_line_cancel:"
-msgid "Third Party Invoice Line Cancel"
-msgstr ""
+msgctxt "field:claim.service,third_party_invoice_line_payback:"
+msgid "Third Party Invoice Line Payback"
+msgstr "Line d'indu de quittance délégataire"
 
 msgctxt "field:ir.test_case,almerys_benefit_start_date:"
 msgid "Almerys Benefit Start Date"
@@ -155,6 +159,10 @@ msgctxt "model:claim.almerys.claim_indemnification,name:"
 msgid "Almerys Claim Indemnification"
 msgstr ""
 
+msgctxt "model:claim.almerys.payback_creation,name:"
+msgid "Payback Almerys Batch"
+msgstr "Batch d'indus Almerys"
+
 msgctxt "model:claim.almerys.statement_creation,name:"
 msgid "Almerys Statement Creation"
 msgstr "Création d'un relevé Almerys"
@@ -189,7 +197,7 @@ msgstr "Prestation"
 
 msgctxt "selection:benefit,delegation:"
 msgid "Prestation & Reimbursement"
-msgstr "Prestation et remboursement"
+msgstr "Prestation et Indemnisation"
 
 msgctxt "view:account.invoice.line:"
 msgid "Almerys Services"

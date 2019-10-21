@@ -2,6 +2,7 @@
     >>> import shutil
     >>> import os
     >>> import tempfile
+    >>> from decimal import Decimal
     >>> from proteus import Model, Wizard
     >>> from trytond.tests.tools import activate_modules
     >>> from trytond.modules.account.tests.tools import (
@@ -15,13 +16,22 @@
     >>> from trytond.modules.party_cog.tests.tools import (
     ...     create_party_person, create_party_company)
     >>> in_directory = tempfile.TemporaryDirectory(prefix='claim_almerys_in')
+    >>> indus_in_directory = tempfile.TemporaryDirectory(
+    ...     prefix='claim_almerys_indus_in')
     >>> intermediary_directory = tempfile.TemporaryDirectory(
     ...     prefix='claim_almerys_in', suffix='statement')
     >>> out_directory = tempfile.TemporaryDirectory(prefix='claim_almerys_out')
+    >>> indus_out_directory = tempfile.TemporaryDirectory(
+    ...     prefix='claim_almerys_indus_out')
     >>> error_directory = tempfile.TemporaryDirectory(prefix='claim_almerys_error')
+    >>> indus_error_directory = tempfile.TemporaryDirectory(
+    ...     prefix='claim_almerys_indus_error')
     >>> _ = shutil.copy(
     ...     os.path.join(os.path.dirname(__file__), 'test_flow.xml'),
     ...     in_directory.name)
+    >>> _ = shutil.copy(
+    ...     os.path.join(os.path.dirname(__file__), 'test_indus.xml'),
+    ...     indus_in_directory.name)
     >>> def check_error():
     ...     for name in os.listdir(error_directory.name):
     ...         with open(os.path.join(error_directory.name, name)) as fp:
@@ -222,12 +232,45 @@
     >>> len(Claim.find([]))
     2
     >>> Indemnification = Model.get('claim.indemnification')
-    >>> len(Indemnification.find([]))
+    >>> indemnifications = Indemnification.find([])
+    >>> len(indemnifications)
     2
+
+ In xml file, we have a::
+
+
+ (numFacture, numLigneFacture, mtRemboursementRC)::
+
+
+ Equal to (3835428364, 1, 150.00) and (3835428364, 2, 15.00)::
+
+    >>> expected_indemn_res = [
+    ...     ('3835428364-1', Decimal('150.00'), 'paid'),
+    ...     ('3835428364-2', Decimal('15.00'), 'paid')]
+    >>> [(i.service.loss.code, i.amount, i.status) for i in indemnifications] == \
+    ...     expected_indemn_res
+    True
     >>> Invoice = Model.get('account.invoice')
     >>> invoices = Invoice.find([])
     >>> len(invoices)
     2
+
+ In xml file, we have a total 165.00 invoice for claim 3835428364::
+
+
+ due to third party statement and a total of 165.00 claim invoice::
+
+
+ (150.00 + 15.00) due to claims indemnifications of claim::
+
+
+ 3835428364::
+
+    >>> expected_inv_res = [
+    ...     ('claim_invoice', Decimal('165.00')),
+    ...     ('third_party_management', Decimal('165.00'))]
+    >>> [(i.business_kind, i.total_amount) for i in invoices] == expected_inv_res
+    True
     >>> sum(i.total_amount for i in invoices)
     Decimal('330.00')
     >>> batch, = IrModel.find([
@@ -250,6 +293,69 @@
     >>> statement, = Statement.find([])
     >>> len(statement.lines)
     1
+    >>> batch, = IrModel.find([
+    ...         ('model', '=', 'claim.almerys.payback_creation')])
+    >>> launcher = Wizard('batch.launcher')
+    >>> launcher.form.batch = batch
+    >>> in_directory_param, = [
+    ...     p for p in launcher.form.parameters if p.code == 'in_directory']
+    >>> in_directory_param.value = indus_in_directory.name
+    >>> out_directory_param, = [
+    ...     p for p in launcher.form.parameters if p.code == 'out_directory']
+    >>> out_directory_param.value = indus_out_directory.name
+    >>> error_directory_param, = [
+    ...     p for p in launcher.form.parameters if p.code == 'error_directory']
+    >>> error_directory_param.value = indus_error_directory.name
+    >>> launcher.execute('process')
+    >>> check_error()
+    >>> Claim = Model.get('claim')
+    >>> len(Claim.find([]))
+    2
+    >>> Indemnification = Model.get('claim.indemnification')
+    >>> indemnifications = Indemnification.find([()])
+
+ In test_indus.xml file we have a payback of 5.00 for loss::
+
+
+ '3835428364-1' and of 4.00 for loss '3835428364-2'::
+
+
+ Therefore old indemnifications of these claims will be::
+
+
+ cancelled and new ones taking payback into account created::
+
+
+ 145.00 = 150.00 -5.00 and 11.00 = 15.00 - 4.00::
+
+    >>> new_expected_indemn_res = [
+    ...     ('3835428364-1', Decimal('145.00000'), 'paid'),
+    ...     ('3835428364-1', Decimal('150.00'), 'cancel_paid'),
+    ...     ('3835428364-2', Decimal('11.0000'), 'paid'),
+    ...     ('3835428364-2', Decimal('15.00'), 'cancel_paid')]
+    >>> non_cancelled_indemnifications = [i for i in indemnifications
+    ...     if 'cancel' not in i.status]
+    >>> len(non_cancelled_indemnifications)
+    2
+    >>> Invoice = Model.get('account.invoice')
+    >>> invoices = Invoice.find([()])
+    >>> new_expected_inv_res = [
+    ...     ('claim_invoice', Decimal('-4.00'), 'posted'),
+    ...     ('claim_invoice', Decimal('-5.00'), 'posted'),
+    ...     ('claim_invoice', Decimal('165.00'), 'paid'),
+    ...     ('third_party_management', Decimal('165.00'), 'posted')]
+
+ Newly created invoices contain payback amounts::
+
+    >>> [(i.business_kind, i.total_amount, i.state) for i in invoices] == \
+    ...     new_expected_inv_res
+    True
+    >>> sum(i.total_amount for i in invoices)
+    Decimal('321.00')
     >>> in_directory.cleanup()
     >>> out_directory.cleanup()
     >>> error_directory.cleanup()
+    >>> intermediary_directory.cleanup()
+    >>> indus_in_directory.cleanup()
+    >>> indus_out_directory.cleanup()
+    >>> indus_error_directory.cleanup()

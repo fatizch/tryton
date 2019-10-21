@@ -1,5 +1,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+import csv
+import datetime
 import itertools
 import os.path
 import traceback
@@ -7,15 +9,43 @@ from dateutil.parser import parse
 from decimal import Decimal
 from functools import lru_cache
 from lxml import etree
+from collections import defaultdict
 
 from trytond.pool import Pool
-from trytond.modules.coog_core import batch, utils
+from trytond.modules.coog_core import batch, utils, coog_string
 from trytond.transaction import Transaction
 
 
 NAMESPACES = {
     'a': "http://www.almerys.com/",
     }
+
+__all__ = [
+    'AlmerysClaimIndemnification',
+    'AlmerysStatementCreation',
+    'AlmerysPaybackCreation',
+    ]
+
+
+ALMERYS_PAYBACK_REASONS = (
+    'almerys_erreur_de_taux',
+    'almerys_facture_annulee',
+    'almerys_trop_percu',
+    'almerys_prestations_non_realisees',
+    'almerys_erreur_destinataire_de_paiement',
+    'almerys_erreur_beneficiaire',
+    'almerys_100_ro',
+    'almerys_cmu',
+    'almerys_erreur_de_valorisation',
+    'almerys_l’adherent_a_regle',
+    'almerys_pas_de_droit_tp_pour_cette_prestation',
+    'almerys_facture_acte_payee_deux_fois',
+    'almerys_utilisation_carte_tp_perimee',
+    'almerys_erreur_technique',
+    'almerys_non_respect_de_la_convention',
+    'almerys_facture_payee_sous_deux_identifications_differentes',
+    'almerys_facture_payee_sous_deux_numeros_de_facture_differents'
+    )
 
 
 def get_text(path, element):
@@ -72,6 +102,8 @@ class AlmerysActuariatHandler:
             return self.get_claim_data(element)
         elif self.kind == tag.localname == 'paiements':
             return self.get_statement_data(element)
+        elif self.kind == tag.localname == 'indus':
+            return self.get_payback_data(element)
 
     def _get_data(self, element, specs):
         data = {}
@@ -112,6 +144,25 @@ class AlmerysActuariatHandler:
                 })
         return data
 
+    def get_payback_data(self, element):
+        parent = self._get_data(element, {'numFacture', 'montantTotIndu',
+                'mtTotalRemboursementRC',
+                })
+        parent['actes'] = []
+        for loss_e in element.xpath('./a:actes', namespaces=NAMESPACES):
+            loss = self._get_data(loss_e, {
+                    'numLigneFacture', 'mtRemboursementRC',
+                    })
+            loss['paybacks'] = []
+            for payback_e in element.xpath('./a:actes/a:indu',
+                    namespaces=NAMESPACES):
+                payback = self._get_data(payback_e, {
+                        'mtIndu', 'commentIndu', 'causeIndu', 'typeIndu'
+                        })
+                loss['paybacks'].append(payback)
+            parent['actes'].append(loss)
+        return parent
+
 
 class AlmerysError(Exception):
     pass
@@ -144,17 +195,16 @@ class AlmerysXMLBatchMixin(batch.BatchRootNoSelect):
         return [x[0] for x in ids]
 
     @classmethod
-    def log_error(cls, directory, filename, error, traceback):
-        error_fn = os.path.join(directory, filename + '.error')
+    def log_error(cls, label, directory, filename, error, traceback):
+        error_fn = os.path.join(directory, filename + '.error.csv')
         # The file must exists to be locked
         if not os.path.exists(error_fn):
             with open(error_fn, 'a'):
                 pass
         with utils.FileLocker(error_fn, 'a') as file:
-            file.write(str(error))
-            file.write('\n')
-            file.write(traceback)
-            file.write('\n')
+            error_csv_writer = csv.writer(file, delimiter=';')
+            error_csv_writer.writerow([label,
+                    str(error) + '\n' + traceback])
 
 
 class AlmerysClaimIndemnification(AlmerysXMLBatchMixin):
@@ -172,6 +222,7 @@ class AlmerysClaimIndemnification(AlmerysXMLBatchMixin):
             try:
                 claim = cls.get_claim(claim_e)
                 claim.save()
+
                 cls.deliver_services(claim)
                 if claim.third_party_payment:
                     cls.create_tp_invoices(claim, claim_e)
@@ -179,10 +230,13 @@ class AlmerysClaimIndemnification(AlmerysXMLBatchMixin):
                     indemnifications = cls.get_indemnifications(claim, claim_e)
                     Indemnification.do_calculate(indemnifications)
                     Indemnification.save(indemnifications)
+                    Indemnification.control_indemnification(indemnifications)
+                    Indemnification.validate_indemnification(indemnifications)
                     Indemnification.invoice(indemnifications)
             except Exception as e:
                 tb = traceback.format_exc()
-                cls.log_error(error_directory, claim_e['file'], e, tb)
+                cls.log_error('Sinistre ' + claim_e['idDecompte'],
+                    error_directory, claim_e['file'], e, tb)
 
     @classmethod
     def get_claim(cls, claim_e):
@@ -225,7 +279,7 @@ class AlmerysClaimIndemnification(AlmerysXMLBatchMixin):
                 loss_e['topDepassement'])
             health_loss.almerys_depassement_amount = get_amount(
                 loss_e['mtDepassement'])
-            health_loss.almerys_num_dents = int(loss_e['numDents'] or 0)
+            health_loss.almerys_num_dent = loss_e['numDents'] or ''
             health_loss.act_coefficient = get_amount(loss_e['coefActe'])
             health_loss.is_off_care_pathway = not get_bool(
                 loss_e['topParcoursSoin'])
@@ -273,8 +327,6 @@ class AlmerysClaimIndemnification(AlmerysXMLBatchMixin):
         contract, = Contract.search([
                 ('contract_number', '=', contract_number),
                 ])
-        if claim.claimant != contract.subscriber:
-            raise AlmerysError("Claimant different than subscriber")
         claim.main_contract = contract
         claim.status = 'closed'
         claim.sub_status = ModelData.get_id(
@@ -353,7 +405,7 @@ class AlmerysClaimIndemnification(AlmerysXMLBatchMixin):
         indemnifications = []
         loss2amount, loss2prescriber = {}, {}
         for loss in element['actes']:
-            code = element['idDecompte'] + '-' + loss['numLigneFacture']
+            code = element['numFacture'] + '-' + loss['numLigneFacture']
             loss2amount[code] = get_amount(loss['mtRemboursementRC'])
             loss2prescriber[code] = loss['prescriber']
         for loss in claim.losses:
@@ -410,7 +462,7 @@ class AlmerysClaimIndemnification(AlmerysXMLBatchMixin):
             type='line',
             quantity=1,
             product=product,
-            almerys_cancelled_services=negative_services
+            almerys_payback_services=negative_services
             )
         n_line.on_change_product()
         n_line.unit_price = negative_amount
@@ -481,6 +533,14 @@ class AlmerysStatementCreation(AlmerysXMLBatchMixin):
     "Almerys Statement Creation"
     __name__ = 'claim.almerys.statement_creation'
     kind = 'paiements'
+
+    @classmethod
+    def __setup__(cls):
+        super().__setup__()
+        cls._default_config_items.update({
+                'split': False,
+                'job_size': 0,
+                })
 
     @classmethod
     def execute(cls, objects, ids, in_directory, out_directory,
@@ -556,3 +616,185 @@ Designation Bancaire: {designationBancaire}
                 "Amount does not match invoices for claim '%s'" % claim.name)
 
         return lines
+
+
+class AlmerysPaybackCreation(AlmerysXMLBatchMixin):
+    'Payback Almerys Batch'
+    __name__ = 'claim.almerys.payback_creation'
+    kind = 'indus'
+
+    @classmethod
+    def __setup__(cls):
+        super().__setup__()
+        cls._default_config_items.update({
+                'split': False,
+                'job_size': 1,
+                })
+
+    @classmethod
+    def get_last_indemnification(cls, loss):
+        loss_paid_indemnifications = sorted([indemn
+                for service in loss.services
+                for indemn in service.indemnifications
+                if indemn.status == 'paid'
+                and not all(d.kind == 'deductible' for d in indemn.details)],
+            key=lambda x: (x.end_date or x.start_date or datetime.date.min),
+            reverse=True)
+        if not loss_paid_indemnifications:
+            raise AlmerysError("No paid indemnifications have been found for "
+                "loss with code '{}'".format(loss.code))
+            return
+        return loss_paid_indemnifications[0]
+
+    @classmethod
+    def create_indemnification(cls, payback, loss, last_indemn_amount):
+        Indemnification = Pool().get('claim.indemnification')
+        service, = loss.services
+        journal, = service.benefit.payment_journals
+        health_loss, = loss.health_loss
+        currency = service.get_currency()
+        amount = last_indemn_amount - get_amount(payback['mtIndu'])
+        indemnification = Indemnification(
+            journal=journal,
+            service=service,
+            start_date=health_loss.act_date,
+            end_date=health_loss.act_end_date,
+            forced_base_amount=amount,
+            currency=currency,
+            beneficiary=loss.covered_person,
+            manual=True,
+            status='controlled',
+            control_reason='',
+            note=payback['commentIndu'] or '' + '\n',
+            payback_method='immediate',
+            payment_term=None,
+            product=service.benefit.products[0],
+            local_currency=currency,
+            local_currency_amount=amount,
+            )
+        Indemnification.update_product(indemnification)
+        return indemnification
+
+    @classmethod
+    def create_tp_invoice(cls):
+        pool = Pool()
+        Invoice = pool.get('account.invoice')
+        AlmerysConfig = pool.get('third_party_protocol.almerys.configuration')
+        Company = pool.get('company.company')
+        config = AlmerysConfig(1)
+        party = config.invoiced_party
+        company = Company(Transaction().context['company'])
+        return Invoice(
+            business_kind='third_party_management',
+            type='in',
+            company=company.id,
+            journal=config.claim_journal,
+            party=party,
+            invoice_address=party.address_get(type='invoice'),
+            currency=company.currency,
+            account=party.account_payable_used,
+            payment_term=party.supplier_payment_term,
+            invoice_date=utils.today(),
+            currency_date=utils.today()
+            )
+
+    @classmethod
+    def create_tp_invoice_line(cls, payback, loss, invoice, last_indemn_amount):
+        pool = Pool()
+        InvoiceLine = pool.get('account.invoice.line')
+        amount = -(last_indemn_amount - get_amount(payback['mtIndu']))
+        service, = loss.services
+        product = service.benefit.products[0]
+        invoice_line = InvoiceLine(
+            invoice=invoice,
+            type='line',
+            quantity=1,
+            product=product,
+            almerys_payback_services=[service])
+        invoice_line.on_change_product()
+        invoice_line.unit_price = amount
+        return invoice_line
+
+    @classmethod
+    def finalize_indemnifications(cls, indemnifications_to_cancel,
+            payback_indemnifications):
+        pool = Pool()
+        Indemnification = Pool().get('claim.indemnification')
+        PaybackReason = pool.get('claim.indemnification.payback_reason')
+        payback_reasons = {p.code: p for p in
+            PaybackReason.search([('code', 'in', ALMERYS_PAYBACK_REASONS)])
+            }
+        cancelled_indemnifications = []
+        for key, value in indemnifications_to_cancel.items():
+            payback_reason = (payback_reasons[key]
+                if key in ALMERYS_PAYBACK_REASONS else None)
+            Indemnification.cancel_indemnification(value,
+                payback_reason=payback_reason)
+            cancelled_indemnifications.extend(value)
+        Indemnification.do_calculate(payback_indemnifications)
+        Indemnification.save(payback_indemnifications)
+        Indemnification.control_indemnification(payback_indemnifications +
+            cancelled_indemnifications)
+        Indemnification.validate_indemnification(payback_indemnifications +
+            cancelled_indemnifications)
+        Indemnification.invoice(payback_indemnifications +
+            cancelled_indemnifications)
+
+    @classmethod
+    def execute(cls, objects, ids, in_directory, out_directory,
+            error_directory):
+        pool = Pool()
+        Loss = Pool().get('claim.loss')
+        Invoice = pool.get('account.invoice')
+        for parent_e in objects:
+            tp_invoice_lines = []
+            indemnifications_to_cancel = defaultdict(list)
+            payback_indemnifications = []
+            try:
+                losses_e = parent_e['actes']
+                losses_codes = [parent_e['numFacture'] + '-' +
+                    l['numLigneFacture'] for l in parent_e['actes']]
+                losses = {l.code: l
+                    for l in Loss.search([('code', 'in', losses_codes)])}
+                tp_invoice = cls.create_tp_invoice()
+                for loss_e in losses_e:
+                    loss_code = parent_e['numFacture'] + '-' + \
+                        loss_e['numLigneFacture']
+                    if not losses.get(loss_code, None):
+                        raise AlmerysError("No loss has been found with code "
+                            "'{}'".format(loss_code))
+                        continue
+                    loss = losses[loss_code]
+                    last_indemn_amount = cls.get_last_indemnification(
+                        loss).amount
+                    for payback in loss_e['paybacks']:
+                        if not payback:
+                            raise AlmerysError(
+                                "No tag 'indu' found for loss with "
+                                "code '{}'".format(loss_code))
+                        payback_reason_code = 'almerys_' + coog_string.slugify(
+                            payback['causeIndu'] or '')
+                        if payback['typeIndu'] == 'HTP':
+                            to_cancel = [indemn for service in loss.services
+                                for indemn in service.indemnifications
+                                if not ('cancel' in indemn.status)]
+                            indemnifications_to_cancel[
+                                payback_reason_code].extend(to_cancel)
+                            payback_indemnifications.append(
+                                cls.create_indemnification(
+                                    payback, loss, last_indemn_amount))
+                        elif payback['typeIndu'] == 'TP':
+                            tp_invoice_lines.append(cls.create_tp_invoice_line(
+                                    payback, loss, tp_invoice,
+                                    last_indemn_amount))
+                if payback_indemnifications:
+                    cls.finalize_indemnifications(indemnifications_to_cancel,
+                        payback_indemnifications)
+                if tp_invoice_lines:
+                    tp_invoice.lines = tp_invoice_lines
+                    tp_invoice.save()
+                    Invoice.post([tp_invoice])
+            except Exception as e:
+                tb = traceback.format_exc()
+                cls.log_error('Facture ' + parent_e['file'], error_directory,
+                    parent_e['file'], e, tb)

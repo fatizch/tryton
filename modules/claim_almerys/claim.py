@@ -2,6 +2,8 @@
 # this repository contains the full copyright notices and license terms.
 from sql.conditionals import Case
 
+from trytond import backend
+
 from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
 from trytond.tools import grouped_slice, reduce_ids
@@ -86,8 +88,19 @@ class Service(metaclass=PoolMeta):
 
     third_party_invoice_line = fields.Many2One('account.invoice.line',
         "Third Party Invoice Line", ondelete='RESTRICT')
-    third_party_invoice_line_cancel = fields.Many2One('account.invoice.line',
-        "Third Party Invoice Line Cancel", ondelete='RESTRICT')
+    third_party_invoice_line_payback = fields.Many2One('account.invoice.line',
+        "Third Party Invoice Line Payback", ondelete='RESTRICT')
+
+    @classmethod
+    def __register__(cls, module):
+        TableHandler = backend.get('TableHandler')
+        handler = TableHandler(cls, module)
+        # Migrate from 2.5 rename third_party_invoice_line_cancel to
+        # third_party_invoice_line_payback
+        if handler.column_exist('third_party_invoice_line_cancel'):
+            handler.column_rename('third_party_invoice_line_cancel',
+                'third_party_invoice_line_payback')
+        super().__register__(module)
 
 
 class Benefit(metaclass=PoolMeta):

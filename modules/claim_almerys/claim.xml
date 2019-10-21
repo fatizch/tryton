@@ -34,5 +34,93 @@
             <field name="inherit" ref="third_party_protocol_almerys.third_party_protocol_almerys_configuration_view_form"/>
             <field name="name">third_party_protocol_almerys_configuration_view_form</field>
         </record>
+        <!-- ############################################# -->
+        <!-- # Indemnification Actuariat Payback Reasons # -->
+        <!-- ############################################# -->
+        <record model="claim.indemnification.payback_reason" id="almerys_erreur_de_taux_payback_reason">
+            <field name="code">almerys_erreur_de_taux</field>
+            <field name="name">Erreur de taux</field>
+            <field name="active">True</field>
+        </record>
+        <record model="claim.indemnification.payback_reason" id="almerys_facture_annulee_payback_reason">
+            <field name="code">almerys_facture_annulee</field>
+            <field name="name">Facture annulée</field>
+            <field name="active">True</field>
+        </record>
+        <record model="claim.indemnification.payback_reason" id="almerys_trop_percu_payback_reason">
+            <field name="code">almerys_trop_percu</field>
+            <field name="name">Trop perçu</field>
+            <field name="active">True</field>
+        </record>
+        <record model="claim.indemnification.payback_reason" id="almerys_prestations_non_realisees_payback_reason">
+            <field name="code">almerys_prestations_non_realisees</field>
+            <field name="name">Prestations non réalisées</field>
+            <field name="active">True</field>
+        </record>
+        <record model="claim.indemnification.payback_reason" id="almerys_erreur_destinataire_de_paiement_payback_reason">
+            <field name="code">almerys_erreur_destinataire_de_paiement</field>
+            <field name="name">Erreur destinataire de paiement</field>
+            <field name="active">True</field>
+        </record>
+        <record model="claim.indemnification.payback_reason" id="almerys_erreur_beneficiaire_payback_reason">
+            <field name="code">almerys_erreur_beneficiaire</field>
+            <field name="name">Erreur bénéficiaire</field>
+            <field name="active">True</field>
+        </record>
+        <record model="claim.indemnification.payback_reason" id="almerys_100_ro_payback_reason">
+            <field name="code">almerys_100_ro</field>
+            <field name="name">100% RO</field>
+            <field name="active">True</field>
+        </record>
+        <record model="claim.indemnification.payback_reason" id="almerys_cmu_payback_reason">
+            <field name="code">almerys_cmu</field>
+            <field name="name">CMU</field>
+            <field name="active">True</field>
+        </record>
+        <record model="claim.indemnification.payback_reason" id="almerys_erreur_de_valorisation_payback_reason">
+            <field name="code">almerys_erreur_de_valorisation</field>
+            <field name="name">Erreur de valorisation</field>
+            <field name="active">True</field>
+        </record>
+        <record model="claim.indemnification.payback_reason" id="almerys_l’adherent_a_regle_payback_reason">
+            <field name="code">almerys_l’adherent_a_regle</field>
+            <field name="name">L’adhérent a réglé</field>
+            <field name="active">True</field>
+        </record>
+        <record model="claim.indemnification.payback_reason" id="almerys_pas_de_droit_tp_pour_cette_prestation_payback_reason">
+            <field name="code">almerys_pas_de_droit_tp_pour_cette_prestation</field>
+            <field name="name">Pas de droit TP pour cette prestation</field>
+            <field name="active">True</field>
+        </record>
+        <record model="claim.indemnification.payback_reason" id="almerys_facture_acte_payee_deux_fois_payback_reason">
+            <field name="code">almerys_facture_acte_payee_deux_fois</field>
+            <field name="name">Facture / acte payée deux fois</field>
+            <field name="active">True</field>
+        </record>
+        <record model="claim.indemnification.payback_reason" id="almerys_utilisation_carte_tp_perimee_payback_reason">
+            <field name="code">almerys_utilisation_carte_tp_perimee</field>
+            <field name="name">Utilisation carte TP périmée</field>
+            <field name="active">True</field>
+        </record>
+        <record model="claim.indemnification.payback_reason" id="almerys_erreur_technique_payback_reason">
+            <field name="code">almerys_erreur_technique</field>
+            <field name="name">Erreur technique</field>
+            <field name="active">True</field>
+        </record>
+        <record model="claim.indemnification.payback_reason" id="almerys_non_respect_de_la_convention_payback_reason">
+            <field name="code">almerys_non_respect_de_la_convention</field>
+            <field name="name">Non respect de la convention</field>
+            <field name="active">True</field>
+        </record>
+        <record model="claim.indemnification.payback_reason" id="almerys_facture_payee_sous_deux_identifications_differentes_payback_reason">
+            <field name="code">almerys_facture_payee_sous_deux_identifications_differentes</field>
+            <field name="name">Facture payée sous deux identifications différentes</field>
+            <field name="active">True</field>
+        </record>
+        <record model="claim.indemnification.payback_reason" id="almerys_facture_payee_sous_deux_numeros_de_facture_differents_payback_reason">
+            <field name="code">almerys_facture_payee_sous_deux_numeros_de_facture_differents</field>
+            <field name="name">Facture payée sous deux numéros de facture différents</field>
+            <field name="active">True</field>
+        </record>
     </data>
 </tryton>

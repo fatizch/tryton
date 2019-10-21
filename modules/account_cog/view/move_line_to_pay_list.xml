@@ -5,7 +5,7 @@ this repository contains the full copyright notices and license terms. -->
     <field name="date"/>
     <field name="maturity_date"/>
     <field name="party"/>
-    <field name="debit"/>
+    <field name="amount"/>
     <field name="reconciliation"/>
     <field name="state"/>
 </tree>
