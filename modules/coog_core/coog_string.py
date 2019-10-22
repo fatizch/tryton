@@ -83,17 +83,15 @@ def generate_summary(desc, level=0):
 
 
 def translate_label(instance, var_name, lang=None):
-    Translation = Pool().get('ir.translation')
     language = lang.code if lang else Transaction().language
     field = instance._fields[var_name]
-    return field.definition(instance.__class__, language=language)['string']
+    return field.definition(instance, language=language)['string']
 
 
 def translate_help(instance, var_name, lang=None):
-    Translation = Pool().get('ir.translation')
     language = lang.code if lang else Transaction().language
     field = instance._fields[var_name]
-    return field.definition(instance.__class__, language=language)['help']
+    return field.definition(instance, language=language)['help']
 
 
 def translate_value(instance, var_name, lang=None):
