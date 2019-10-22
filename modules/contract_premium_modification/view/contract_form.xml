@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<data>
+    <xpath expr="/form" position="inside">
+        <group id="premium_modification_buttons" string="">
+            <newline/>
+            <field name="with_waiver_of_premium"/>
+            <button name="create_waivers" string="Create Waivers"/>
+            <button name="create_discounts" string="Create Discounts"/>
+        </group>
+    </xpath>
+    <xpath expr="/form/notebook/page[@id='invoicing']" position="inside">
+        <field name="waivers" colspan="4"/>
+        <field name="discounts" colspan="4"/>
+    </xpath>
+</data>

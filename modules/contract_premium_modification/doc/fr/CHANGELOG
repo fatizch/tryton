@@ -1,0 +1,28 @@
+* FEA#12796 Ajout support des réductions commerciales
+
+Version 2.6 - 2019-10-11
+* OTH#00000 Correction de la sélection du compte d'éxonération suite au merge 5.2 tryton
+* BUG#11528 Correctif sur les montants d'éxonérations de prime et prise en compte des taxes avec rétro-calcul
+
+Version 2.4 - 2019-04-12
+* BUG#10612 Ajout d'une vérification lorsque des exonérations se chevauchent sur une même option
+
+Version 2.2 - 2018-10-12
+* BUG#9550 Correction du calcul du prorata proportionnel en cas de période entièrement exonérées
+* BUG#9358 Correction d'un cas aux limites en cas de combinaison de primes non proratées et d'exonération proratées
+* BUG#8879 Ajout d'un domain sur le compte des exonérations (pas à payer ni à recevoir) et changement de la valeur par défault
+
+Version 2.0 - 2018-04-13
+* FEA#8101 Ajout d'un batch de création en masse de périodes d'exonération
+* FEA#7672 Ajout de la gestion du prorata sur les exonérations de primes. Lorsque ce comportement est selectionné, ce comportement permet de faire un prorata sur la fréquence de niveau inférieur afin d'obtenir une seule quittance avec le montant à payer. Par exemple, si la fréquence de quittancement est trimestrielle et que nous avons une quittance dont deux des trois mois sont exonérés, alors la quittance affichera le montant à payer pour un seul mois.
+* BUG#7643 La création automatique d'exonérations de primes n'est faite que pour les options qui possèdent une exonération de prime
+
+Version 1.14 - 2017-11-09
+* FEA#7383 Possibilité de configurer des périodes d'exonération de prime automatique avec un taux (par exemple 50% de réduction pendant les 3 premiers mois du contrat). Ajout d'un compte de charge de compensation dans le cas où l'exonération n'est pas prise en charge par l'assureur.
+
+Version 1.12 - 2017-04-28
+
+Version 1.10 - 2016-11-02
+
+Version 1.8 - 2016-07-06
+* FEA#0000 Module Creation

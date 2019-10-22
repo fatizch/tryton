@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <record model="ir.ui.view" id="premium_waiver_view_list">
+            <field name="model">contract.waiver_premium</field>
+            <field name="type">tree</field>
+            <field name="name">premium_waiver_list</field>
+        </record>
+        <record model="ir.ui.view" id="premium_waiver_view_form">
+            <field name="model">contract.waiver_premium</field>
+            <field name="type">form</field>
+            <field name="name">premium_waiver_form</field>
+        </record>
+        <record model="ir.ui.view" id="premium_waiver_option_view_list">
+            <field name="model">contract.waiver_premium-contract.option</field>
+            <field name="type">tree</field>
+            <field name="name">premium_waiver_option_list</field>
+        </record>
+        <record model="ir.ui.view" id="premium_waiver_option_view_form">
+            <field name="model">contract.waiver_premium-contract.option</field>
+            <field name="type">form</field>
+            <field name="name">premium_waiver_option_form</field>
+        </record>
+        <record model="ir.model.button" id="button_contract_waiver_premium_end_waiver">
+            <field name="name">end_waiver</field>
+            <field name="model" search="[('model', '=', 'contract.waiver_premium')]"/>
+        </record>
+        <record model="ir.model.button" id="button_contract_waiver_premium_end_discount">
+            <field name="name">end_discount</field>
+            <field name="model" search="[('model', '=', 'contract.waiver_premium')]"/>
+        </record>
+    </data>
+</tryton>

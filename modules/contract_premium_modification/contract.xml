@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <record model="ir.ui.view" id="contract_view_form">
+            <field name="model">contract</field>
+            <field name="inherit" ref="contract.contract_view_form"/>
+            <field name="name">contract_form</field>
+        </record>
+        <record model="ir.ui.view" id="contract_view_list">
+            <field name="model">contract</field>
+            <field name="inherit" ref="contract.contract_view_tree"/>
+            <field name="name">contract_list</field>
+        </record>
+        <record model="ir.action.act_window" id="act_show_waivers_of_premium">
+            <field name="name">Waivers of Premium</field>
+            <field name="res_model">contract.waiver_premium</field>
+            <field name="domain" eval="[('contract', 'in', Eval('active_ids'))]" pyson="1"/>
+        </record>
+        <record model="ir.action.keyword" id="act_show_waivers_of_premium_keyword1">
+            <field name="keyword">form_relate</field>
+            <field name="model">contract,-1</field>
+            <field name="action" ref="act_show_waivers_of_premium"/>
+        </record>
+        <record model="ir.action.act_window" id="act_show_discounts_of_premium">
+            <field name="name">Discounts of Premium</field>
+            <field name="res_model">contract.premium_modification.discount</field>
+            <field name="domain" eval="[('contract', 'in', Eval('active_ids'))]" pyson="1"/>
+        </record>
+        <record model="ir.action.keyword" id="act_show_discounts_of_premium_keyword">
+            <field name="keyword">form_relate</field>
+            <field name="model">contract,-1</field>
+            <field name="action" ref="act_show_discounts_of_premium"/>
+        </record>
+
+        <record model="ir.model.button" id="button_contract_create_waivers">
+            <field name="name">create_waivers</field>
+            <field name="model" search="[('model', '=', 'contract')]"/>
+        </record>
+        <record model="ir.model.button" id="button_contract_create_discounts">
+            <field name="name">create_discounts</field>
+            <field name="model" search="[('model', '=', 'contract')]"/>
+        </record>
+    </data>
+</tryton>

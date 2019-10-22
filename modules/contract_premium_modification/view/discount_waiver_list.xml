@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<tree>
+    <field name="commercial_discount"/>
+    <field name="invoice_line_period_behaviour"/>
+    <field name="rate"/>
+    <field name="account_for_modification"/>
+    <field name="automatic"/>
+</tree>

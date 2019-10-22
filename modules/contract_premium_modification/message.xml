@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<tryton>
+    <data group="1">
+        <record model="ir.message" id="msg_waiver_line">
+            <field name="text">Waiver of Premium</field>
+        </record>
+        <record model="ir.message" id="msg_waiver_overlaps">
+            <field name="text">You are trying to create overlapping waivers.</field>
+        </record>
+        <record model="ir.message" id="msg_overlapping_waivers">
+            <field name="text">The option %(option)s has overlapping waivers.</field>
+        </record>
+        <record model="ir.message" id="msg_too_many_waivers">
+            <field name="text">The option %(option)s has too many waivers on the period [%(start)s - %(end)s].</field>
+        </record>
+        <record model="ir.message" id="msg_waiver_discount_coverage">
+            <field name="text">A coverage can not use both a waiver and discount rules</field>
+        </record>
+    </data>
+</tryton>

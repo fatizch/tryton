@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<form>
+    <label name="commercial_discount"/>
+    <field name="commercial_discount"/>
+    <newline/>
+    <label name="invoice_line_period_behaviour"/>
+    <field name="invoice_line_period_behaviour"/>
+    <label name="rate"/>
+    <group name="rate" string="">
+        <field name="rate" xexpand="0" factor="100"/>
+        <label string="%" name="rate" xexpand="0" xalign="0"/>
+    </group>
+    <label name="automatic"/>
+    <field name="automatic"/>
+    <newline/>
+    <label name="account_for_modification"/>
+    <field name="account_for_modification"/>
+    <field name="taxes" colspan="4"/>
+    <field name="coverages" colspan="4"/>
+</form>

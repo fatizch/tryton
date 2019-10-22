@@ -1181,6 +1181,8 @@ class Contract(metaclass=PoolMeta):
             if invoices_to_post:
                 Invoice.post(invoices_to_post)
 
+            return invoices_to_post
+
     def is_invoiced_to_end(self):
         return self.last_invoice_end and self.last_invoice_end >= self.end_date
 
@@ -2295,18 +2297,14 @@ class ContractInvoice(model.CoogSQL, model.CoogView):
 
     @classmethod
     def reinvoice(cls, contract_invoices):
-        pool = Pool()
-        Contract = pool.get('contract')
-        for contract_invoice in contract_invoices:
-            assert contract_invoice.invoice_state != 'cancel'
+        invoices = [i for i in contract_invoices if i.invoice_state != 'cancel']
+        invoices.sort(key=lambda i: i.contract)
         cls.cancel(contract_invoices)
-        periods = defaultdict(list)
-        for contract_invoice in contract_invoices:
-            contract = contract_invoice.contract
-            for period in contract.get_invoice_periods(contract_invoice.end,
-                    contract_invoice.start):
-                periods[period].append(contract)
-        return Contract.invoice_periods(periods)
+
+        for contract, contract_invoices in groupby(
+                invoices, lambda i: i.contract):
+            contract_invoices = list(contract_invoices)
+            contract.rebill(contract.start_date, contract.end_date)
 
     @classmethod
     @model.CoogView.button

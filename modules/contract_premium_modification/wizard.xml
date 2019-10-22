@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <record model="ir.ui.view" id="create_premium_modification_choice_view">
+            <field name="model">contract.premium_modification.create.choice</field>
+            <field name="type">form</field>
+            <field name="name">create_premium_modification_choice</field>
+        </record>
+        <record model="ir.action.wizard" id="act_create_waivers_wizard">
+            <field name="name">Create Waivers</field>
+            <field name="wiz_name">contract.premium_modification.create_waivers</field>
+        </record>
+        <record model="ir.action.wizard" id="act_create_discounts_wizard">
+            <field name="name">Create Discounts</field>
+            <field name="wiz_name">contract.premium_modification.create_discounts</field>
+        </record>
+        <record model="ir.ui.view" id="set_premium_mod_end_date_choice_view">
+            <field name="model">contract.premium_modification.set_end_date.choice</field>
+            <field name="type">form</field>
+            <field name="name">set_waiver_end_date_choice</field>
+        </record>
+        <record model="ir.action.wizard" id="act_set_premium_modification_end_date_wizard">
+            <field name="name">Set Premium Modification End Date</field>
+            <field name="wiz_name">contract.premium_modification.set_end_date</field>
+        </record>
+        <record model="ir.action.keyword" id="end_date_waiver_keyword">
+            <field name="keyword">form_action</field>
+            <field name="model">contract.waiver_premium,-1</field>
+            <field name="action" ref="act_set_premium_modification_end_date_wizard"/>
+        </record>
+        <record model="ir.action.keyword" id="end_date_discount_keyword">
+            <field name="keyword">form_action</field>
+            <field name="model">contract.premium_modification.discount,-1</field>
+            <field name="action" ref="act_set_premium_modification_end_date_wizard"/>
+        </record>
+    </data>
+</tryton>
