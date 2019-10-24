@@ -272,9 +272,11 @@ class RuleEngineRuntime(metaclass=PoolMeta):
         cls.append_error(args, 'deprecated_method')
 
     @classmethod
-    @check_args('option')
     def _re_option_code(cls, args):
-        return args['option'].coverage.code
+        if 'option' in args:
+            return args['option'].coverage.code
+        elif 'coverage' in args:
+            return args['coverage'].code
 
     @classmethod
     @check_args('option', 'contract')

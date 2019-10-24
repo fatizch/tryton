@@ -132,6 +132,7 @@ Create Test Contract::
     >>> product = Product(product.id)
     >>> contract = Contract()
     >>> contract.company = company
+    >>> contract.initial_start_date = contract_start_date
     >>> contract.start_date = contract_start_date
     >>> contract.product = product
     >>> contract.contract_number = '1111'

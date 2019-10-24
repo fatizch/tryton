@@ -1689,8 +1689,11 @@ class CoveredElement(Printable,
             else:
                 available_coverages.remove(elem.coverage)
         Option = Pool().get('contract.option')
+        args = {'date': self.contract.initial_start_date}
+        self.init_dict_for_rule_engine(args)
         for elem in available_coverages:
-            if elem.subscription_behaviour == 'optional':
+            if (elem.get_subscription_behaviour(args)['behaviour'] in (
+                    'optional', 'not_subscriptable')):
                 continue
             new_options.append(Option.new_option_from_coverage(elem,
                     self.product, self.contract.start_date,
@@ -1729,11 +1732,14 @@ class CoveredElement(Printable,
                     self, 'options', [])))
         good_options = []
         OptionModel = Pool().get('contract.option')
+        args = {'date': start_date}
+        self.init_dict_for_rule_engine(args)
         for coverage in self.get_coverages(product, self.item_desc):
             good_opt = None
             if coverage in existing:
                 good_opt = existing[coverage]
-            elif coverage.subscription_behaviour == 'mandatory':
+            elif (coverage.get_subscription_behaviour(args)
+                    ['behaviour'] == 'mandatory'):
                 good_opt = OptionModel.new_option_from_coverage(coverage,
                     product, start_date)
             if good_opt:
@@ -1894,7 +1900,7 @@ class CoveredElement(Printable,
         raise KeyError
 
     def init_dict_for_rule_engine(self, args):
-        args = args if args else {}
+        args = args if args is not None else {}
         if self.parent:
             self.parent.init_dict_for_rule_engine(args)
         elif self.contract:

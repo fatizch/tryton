@@ -28,12 +28,18 @@ this repository contains the full copyright notices and license terms. -->
         <page string="Rules" id="managers">
             <notebook>
                 <page string="Subscription" id="subscription">
+                    <label name="use_subscription_behavior_rule"/>
+                    <field name="use_subscription_behavior_rule"/>
+                    <newline/>
                     <label name="subscription_behaviour"/>
                     <field name="subscription_behaviour"/>
                     <newline/>
+                    <label name="subscription_rule"/>
+                    <field name="subscription_rule" colspan="3"/>
+                    <field name="subscription_rule_extra_data" no_command="1" colspan="4"/>
+                    <newline/>
                     <field name="options_required" colspan="2"/>
                     <field name="options_excluded" colspan="2"/>
-                    <newline/>
                 </page>
                 <page string="Ending" id="ending">
                     <field name="ending_rule" mode="form" colspan="4"/>

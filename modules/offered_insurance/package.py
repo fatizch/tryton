@@ -28,7 +28,7 @@ class Package(metaclass=PoolMeta):
 
     def update_covered_options(self, covered):
         covered.options = self.clean_and_add_options(
-            covered.contract, covered.options, False)
+            covered.contract, covered.options, covered, False)
         return covered
 
     def update_contract_options(self, contract):

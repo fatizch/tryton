@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <record model="rule_engine" id="default_subscription_rule">
+            <field name="name">Default Subscription Behavior Rule</field>
+            <field name="short_name">default_subscription_rule</field>
+            <field name="algorithm">return {'behaviour': param_subscription_behaviour(),
+    'options_required': param_required_options().split(','),
+    'options_excluded': param_excluded_options().split(',')}</field>
+            <field name="status">validated</field>
+            <field name="type_">subscription_behaviour</field>
+            <field name="context" ref="rule_engine.default_context"/>
+        </record>
+        <record model="rule_engine.rule_parameter" id="subscription_behaviour">
+            <field name="name">subscription_behaviour</field>
+            <field name="type_">selection</field>
+            <field name="string">Subscription Behavior</field>
+            <field name="selection">mandatory:Mandatory
+defaulted:Defaulted
+optional:Optional
+</field>
+            <field name="sequence_order" eval="1"/>
+            <field name="parent_rule" ref="default_subscription_rule"/>
+        </record>
+        <record model="rule_engine.rule_parameter" id="excluded_options">
+            <field name="name">excluded_options</field>
+            <field name="type_">char</field>
+            <field name="string">Excluded Option (separate by ',')</field>
+            <field name="sequence_order" eval="2"/>
+            <field name="parent_rule" ref="default_subscription_rule"/>
+        </record>
+        <record model="rule_engine.rule_parameter" id="required_options">
+            <field name="name">required_options</field>
+            <field name="type_">char</field>
+            <field name="string">Required Option (separate by ',')</field>
+            <field name="sequence_order" eval="3"/>
+            <field name="parent_rule" ref="default_subscription_rule"/>
+        </record>
+    </data>
+</tryton>

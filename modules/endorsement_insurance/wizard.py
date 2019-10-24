@@ -162,10 +162,13 @@ class RemoveOption(EndorsementWizardStepMixin):
                                     option.id,
                                 })
                     selectors.append(selector)
+            args = {'date': effective_date}
+            endorsement.contract.init_dict_for_rule_engine(args)
             for option in updated_struct['options']:
                 selector = None
                 if not hasattr(option, 'get_endorsed_record'):
-                    if option.coverage.subscription_behaviour != 'mandatory':
+                    if option.coverage.get_subscription_behaviour(args)[
+                            'behavior'] != 'mandatory':
                         selector = template.copy()
                         selector.update({'covered_element': None,
                                 'option': option.id,
@@ -298,9 +301,12 @@ class RemoveOption(EndorsementWizardStepMixin):
             # Only end mandatory option if all options on covered_element
             # are also ended
             for ce_id, ce_endorsement in ce_endorsements.items():
+                args = {'date': effective_date}
+                ce_endorsement.contract_endorsement.contract.\
+                    init_dict_for_rule_engine(args)
                 if [x for x in ce_endorsement.options if
-                        (x.option.coverage.subscription_behaviour ==
-                            'mandatory')]:
+                        (x.option.coverage.get_subscription_behaviour(args)
+                        ['behaviour'] == 'mandatory')]:
                     if (set([x.option for x in ce_endorsement.options]) !=
                             set(CoveredElement(ce_id).options)):
                         raise ValidationError(gettext(
@@ -1016,6 +1022,7 @@ class CoveredElementDisplayer(model.CoogView):
         covered.name = self.name
         covered.versions = [self.to_version()]
         covered.contract = self.contract
+        covered.parent = None
         covered.product = self.contract.product
         covered.update_default_options()
         if covered.options:

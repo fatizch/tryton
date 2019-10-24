@@ -25,5 +25,8 @@
         <record model="ir.message" id="msg_package_only_on_subscription">
             <field name="text">Subscribe by package is only available on quote</field>
         </record>
+        <record model="ir.message" id="msg_wrong_rule_format">
+            <field name="text">The return value of the rule must be a dictionnary.</field>
+        </record>
     </data>
 </tryton>

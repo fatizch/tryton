@@ -176,7 +176,7 @@ class OptionsDisplayer(model.CoogView):
             [c for c in self.contract.product.coverages
                 if c.is_contract_option()])
 
-    @fields.depends('options', 'package')
+    @fields.depends('contract', 'options', 'package')
     def on_change_options(self):
         if self.package:
             return
@@ -184,9 +184,15 @@ class OptionsDisplayer(model.CoogView):
             if (elem.is_selected and getattr(elem, 'coverage', None))]
         excluded = []
         required = []
+        args = {}
+        if self.contract:
+            args['date'] = self.contract.initial_start_date
+            self.contract.init_dict_for_rule_engine(args)
         for x in selected:
-            excluded += x.coverage.options_excluded
-            required += x.coverage.options_required
+            subscription_behaviour = x.coverage.get_subscription_behaviour(
+                args)
+            excluded += subscription_behaviour['options_excluded']
+            required += subscription_behaviour['options_required']
         for x in [x for x in self.options if getattr(x, 'coverage', None)]:
             if x.coverage in excluded:
                 is_selected = False
@@ -209,18 +215,36 @@ class OptionsDisplayer(model.CoogView):
     def update_options(self, initial_options, coverages):
         Displayer = Pool().get(
             'contract.wizard.option_subscription.options_displayer.option')
+        # intialize subscription behaviour for all coverages
+        subscription_behaviours = {}
+        for option in initial_options:
+            args = {'date': option.initial_start_date}
+            option.init_dict_for_rule_engine(args)
+            subscription_behaviours[option.coverage] = \
+                option.coverage.get_subscription_behaviour(args)
+        for coverage in coverages:
+            if coverage not in subscription_behaviours:
+                args = {'date': self.contract.initial_start_date}
+                self.contract.init_dict_for_rule_engine(args)
+                subscription_behaviours[coverage] = \
+                    coverage.get_subscription_behaviour(args)
+
         options = []
         excluded = []
         for option in initial_options:
-            excluded += option.coverage.options_excluded
+            excluded += subscription_behaviours[option.coverage][
+                'options_excluded']
         for coverage in coverages:
             existing_option = None
             for option in initial_options:
                 if option.coverage == coverage:
                     existing_option = option
                     break
+            if (subscription_behaviours[coverage]['behaviour'] ==
+                    'not_subscriptable'):
+                continue
             selection = 'manual'
-            if coverage.subscription_behaviour == 'mandatory':
+            if subscription_behaviours[coverage]['behaviour'] == 'mandatory':
                 selection = 'mandatory'
             elif not self.package and coverage in excluded:
                 selection = 'automatic'
@@ -229,10 +253,12 @@ class OptionsDisplayer(model.CoogView):
                     coog_string.translate_value(coverage,
                         'subscription_behaviour')),
                 is_selected=((not self.package and (bool(existing_option) or
-                            coverage.subscription_behaviour != 'optional'))
+                            subscription_behaviours[coverage]['behaviour']
+                            != 'optional'))
                     or (self.package and coverage in
-                        [o.option for o in self.package.option_relations])),
-                coverage_behaviour=coverage.subscription_behaviour,
+            [o.option for o in self.package.option_relations])),
+                coverage_behaviour=subscription_behaviours[coverage][
+                    'behaviour'],
                 coverage=coverage, selection=selection, option=existing_option,
                 )
             options.append(option)

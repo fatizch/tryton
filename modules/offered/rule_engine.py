@@ -80,6 +80,8 @@ class RuleEngine(metaclass=PoolMeta):
     def __setup__(cls):
         super(RuleEngine, cls).__setup__()
         cls.type_.selection.append(('ending', 'Ending'))
+        cls.type_.selection.append(('subscription_behaviour',
+                'Subscription Behaviour'))
 
     @fields.depends('type_')
     def on_change_with_result_type(self, name=None):

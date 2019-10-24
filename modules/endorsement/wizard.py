@@ -798,7 +798,7 @@ class ManageOptions(EndorsementWizardStepMixin):
         self.update_possible_coverages()
 
     @fields.depends('current_options', 'current_parent', 'effective_date',
-        'possible_coverages')
+        'possible_coverages', 'contract')
     def on_change_current_options(self):
         if not self.current_parent:
             return
@@ -842,8 +842,12 @@ class ManageOptions(EndorsementWizardStepMixin):
             if x.action != 'void'
             and x.start_date <= self.effective_date
             and (not x.end_date or x.end_date >= self.effective_date)}
+        args = {'date': self.effective_date}
+        self.contract.init_dict_for_rule_engine(args)
         exclusions = set(sum([
-                    list(x.options_excluded) for x in current_coverages], []))
+                    list(x.get_subscription_behaviour(args)[
+                        'options_excluded'])
+                    for x in current_coverages], []))
         self.possible_coverages = list(
             self.get_all_possible_coverages(self._parent) - current_coverages
             - exclusions)

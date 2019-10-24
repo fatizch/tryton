@@ -9,14 +9,16 @@ from sql.functions import RowNumber
 from trytond.i18n import gettext
 from trytond.pool import Pool
 from trytond.model import Unique
+from trytond.exceptions import UserError
 from trytond.model.exceptions import ValidationError
-from trytond.pyson import Eval
+from trytond.pyson import Eval, Bool
 from trytond.transaction import Transaction
 from trytond import backend
 
 from trytond.modules.report_engine import Printable
 from trytond.modules.coog_core import model, utils, fields, coog_string
 from trytond.modules.currency_cog import ModelCurrency
+from trytond.modules.rule_engine import get_rule_mixin
 
 from .extra_data import with_extra_data_def, with_extra_data
 from .extra_data import ExtraDataDefTable
@@ -311,7 +313,9 @@ class OptionDescription(model.CodedMixin, model.CoogView,
         with_extra_data_def('offered.option.description-extra_data',
             'coverage', 'option'),
         with_extra_data(['product'], field_string='Offered Kind'),
-        model.TaggedMixin):
+        model.TaggedMixin,
+        get_rule_mixin('subscription_rule', 'Subscription Rule',
+            extra_string='Subscription Rule Extra Data')):
     'OptionDescription'
 
     __name__ = 'offered.option.description'
@@ -333,20 +337,25 @@ class OptionDescription(model.CodedMixin, model.CoogView,
     subscription_behaviour = fields.Selection(SUBSCRIPTION_BEHAVIOUR,
         'Subscription Behaviour', sort=False,
         help='Define how the option is initialized and required at '
-        'subscription')
+        'subscription', depends=['use_subscription_behavior_rule'],
+        states={'invisible': Bool(Eval('use_subscription_behavior_rule'))})
     options_required = fields.Many2Many('offered.option.description.required',
         'from_option_desc', 'to_option_desc', 'Options Required', domain=[
             ('id', '!=', Eval('id')),
             ('id', 'not in', Eval('options_excluded')),
-            ], depends=['id', 'options_excluded'], help='Options required in '
-            'order to subscribe this option')
+            ],
+        depends=['id', 'options_excluded', 'use_subscription_behavior_rule'],
+        states={'invisible': Bool(Eval('use_subscription_behavior_rule'))},
+        help='Options required in order to subscribe this option')
     options_excluded = fields.Many2Many('offered.option.description.excluded',
         'from_option_desc', 'to_option_desc', 'Options Excluded', domain=[
             ('id', '!=', Eval('id')),
             ('id', 'not in', Eval('options_required')),
-            ], depends=['id', 'options_required'], help='If one of these '
-            'options is already subscribed, it will not be possible to '
-            'subscribe this option')
+            ],
+        depends=['id', 'options_required', 'use_subscription_behavior_rule'],
+        states={'invisible': Bool(Eval('use_subscription_behavior_rule'))},
+        help='If one of these options is already subscribed, it will not be '
+        'possible to subscribe this option')
     products = fields.Many2Many('offered.product-option.description',
         'coverage', 'product', 'Products', domain=[
             ('currency', '=', Eval('currency')),
@@ -363,6 +372,9 @@ class OptionDescription(model.CodedMixin, model.CoogView,
     ending_rule = fields.One2Many('offered.option.description.ending_rule',
         'coverage', 'Ending Rule', help='Rule that returns a date which '
         'defines when the contract will end', size=1, delete_missing=True)
+    use_subscription_behavior_rule = fields.Function(
+        fields.Boolean('Use subscription behavior rule engine'),
+        'on_change_with_use_subscription_behavior_rule', 'setter_void')
 
     @classmethod
     def __setup__(cls):
@@ -373,6 +385,20 @@ class OptionDescription(model.CodedMixin, model.CoogView,
         cls.extra_data_def.help = 'List of extra data that will be requested '\
             'for subscribing this option. These data can be used in rule '\
             'engine and will be versioned and stored on the subscribed option.'
+        cls.subscription_rule.domain = [
+            ('type_', '=', 'subscription_behaviour')]
+        cls.subscription_rule.help = 'Result is a dictionnary with following ' \
+            'keys: \n behaviour: define the behaviour at subscription (value ' \
+            'can be mandatory, defaulted, optional, not_subscriptable)\n' \
+            'options_required: list of required coverage code \n' \
+            'options_excluded: list of excluded coverage code \n'
+        cls.subscription_rule.states['invisible'] = \
+            ~Eval('use_subscription_behavior_rule')
+        cls.subscription_rule.depends.append('use_subscription_behavior_rule')
+        cls.subscription_rule_extra_data.states['invisible'] = \
+            ~Eval('use_subscription_behavior_rule')
+        cls.subscription_rule_extra_data.depends.append(
+            'use_subscription_behavior_rule')
 
     @classmethod
     def __register__(cls, module_name):
@@ -458,6 +484,30 @@ class OptionDescription(model.CodedMixin, model.CoogView,
             return [('products', '=', instance.product.id)] + date_clause
         return date_clause
 
+    def get_subscription_behaviour(self, context):
+        if self.subscription_rule:
+            self.init_dict_for_rule_engine(context)
+            res = self.calculate_subscription_rule(context,
+                crash_on_missing_arguments=False)
+            if not res:
+                return {
+                    'behaviour': 'not_subscriptable',
+                    'options_required': [],
+                    'options_excluded': [],
+                    }
+            if type(res) != dict or 'behaviour' not in res:
+                raise UserError(gettext('msg_wrong_rule_format'))
+            if 'options_required' not in res:
+                res['options_required'] = []
+            if 'options_excluded' not in res:
+                res['options_excluded'] = []
+            return res
+        return {
+            'behaviour': self.subscription_behaviour,
+            'options_required': self.options_required,
+            'options_excluded': self.options_excluded,
+            }
+
     def get_currency(self):
         return self.currency
 
@@ -500,6 +550,19 @@ class OptionDescription(model.CodedMixin, model.CoogView,
     @fields.depends('currency')
     def on_change_with_currency_symbol(self, name=None):
         return self.currency.symbol if self.currency else ''
+
+    @fields.depends('subscription_rule')
+    def on_change_with_use_subscription_behavior_rule(self, name=None):
+        if self.subscription_rule:
+            return True
+        return False
+
+    @fields.depends('subscription_rule', 'subscription_rule_extra_data',
+        'use_subscription_behavior_rule')
+    def on_change_use_subscription_behavior_rule(self, name=None):
+        if not self.use_subscription_behavior_rule:
+            self.subscription_rule = None
+            self.subscription_rule_extra_data = {}
 
     def init_dict_for_rule_engine(self, args):
         args['coverage'] = self

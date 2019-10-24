@@ -44,6 +44,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
             'SubStatus': 'contract.sub_status',
             'ContactType': 'contract.contact.type',
             'ContractAPI': 'api.contract',
+            'RuleEngine': 'rule_engine',
             }
 
     def createContactTypes(self):
@@ -589,6 +590,64 @@ class ModuleTestCase(test_framework.CoogTestCase):
         void_reason, = self.SubStatus.search([('code', '=', 'error')])
         self.Contract.void(contracts, void_reason)
         self.assertEqual(option.status, 'void')
+
+    @test_framework.prepare_test(
+        'contract.test0001_testPersonCreation',
+        'offered.test0030_testProductCoverageRelation',
+        )
+    def test0090_testSubscriptionBehavior(self):
+        product, = self.Product.search([
+                ('code', '=', 'AAA'),
+                ])
+        coverage_a, = self.Coverage.search([('code', '=', 'ALP')])
+        coverage_b, = self.Coverage.search([('code', '=', 'BET')])
+        rule, = self.RuleEngine.search([
+                ('short_name', '=', 'default_subscription_rule')])
+        coverage_a.subscription_rule = rule
+        coverage_a.subscription_rule_extra_data = {
+            'subscription_behaviour': 'mandatory',
+            'required_options': '',
+            'excluded_options': '',
+            }
+        coverage_a.save()
+        coverage_b.subscription_rule = rule
+        coverage_b.subscription_rule_extra_data = {
+            'subscription_behaviour': 'defaulted',
+            'required_options': 'ALP',
+            'excluded_options': '',
+            }
+        coverage_b.save()
+        start_date = product.start_date + datetime.timedelta(weeks=4)
+        contract = self.Contract(
+            product=product.id,
+            company=product.company.id,
+            start_date=start_date,
+            appliable_conditions_date=start_date,
+            quote_number='1111111',
+            )
+        contract.save()
+        contract.init_from_product(product)
+        self.assertEqual([o.coverage.code for o in contract.options],
+            ['ALP', 'BET'])
+
+        coverage_b.subscription_rule = rule
+        coverage_b.subscription_rule_extra_data = {
+            'subscription_behaviour': 'optional',
+            'required_options': 'ALP',
+            'excluded_options': '',
+            }
+        coverage_b.save()
+
+        contract = self.Contract(
+            product=product.id,
+            company=product.company.id,
+            start_date=start_date,
+            appliable_conditions_date=start_date,
+            quote_number='1111112',
+            )
+        contract.save()
+        contract.init_from_product(product)
+        self.assertEqual([o.coverage.code for o in contract.options], ['ALP'])
 
     @test_framework.prepare_test(
         'offered.test0030_testProductCoverageRelation',

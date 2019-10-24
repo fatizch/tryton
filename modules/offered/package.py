@@ -39,15 +39,19 @@ class Package(model.CodedMixin, model.CoogView, with_extra_data([
         return super(Package, cls)._export_skips() | {'options'}
 
     def clean_and_add_options(self, contract, options_to_update,
-            is_contract_option):
+            context, is_contract_option):
         Option = Pool().get('contract.option')
+        args = {'date': contract.initial_start_date}
+        context.init_dict_for_rule_engine(args)
+        coverage_subscribable = [x.option for x in self.option_relations
+            if x.option.get_subscription_behaviour(args)['behaviour'] !=
+            'not_subscriptable']
         # Keep existing option
         new_options = [o for o in options_to_update
                 if is_contract_option == o.coverage.is_contract_option() and
-                o.coverage in [o.option for o in self.option_relations]]
+                o.coverage in coverage_subscribable]
         # Add new option
-        for option_relation in self.option_relations:
-            coverage = option_relation.option
+        for coverage in coverage_subscribable:
             if (is_contract_option != coverage.is_contract_option() or
                     coverage in [o.coverage for o in options_to_update]):
                 # option already managed
@@ -62,7 +66,7 @@ class Package(model.CodedMixin, model.CoogView, with_extra_data([
 
     def update_contract_options(self, contract):
         contract.options = self.clean_and_add_options(
-            contract, contract.options, True)
+            contract, contract.options, contract, True)
         return contract
 
     @property

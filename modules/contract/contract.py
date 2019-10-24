@@ -788,7 +788,8 @@ class Contract(model.CoogSQL, model.CoogView, with_extra_data(['contract'],
             return self.initial_start_date
 
     @fields.depends('product', 'options', 'start_date', 'extra_datas',
-        'signature_date', 'appliable_conditions_date')
+        'signature_date', 'appliable_conditions_date',
+        'initial_start_date')
     def on_change_product(self):
         self.init_from_product(self.product)
         if self.product:
@@ -1231,7 +1232,9 @@ class Contract(model.CoogSQL, model.CoogView, with_extra_data(['contract'],
         cur_dict['contract'] = self
         cur_dict['appliable_conditions_date'] = self.appliable_conditions_date
         self.product.init_dict_for_rule_engine(cur_dict)
-        cur_dict['subscriber'] = self.get_policy_owner()
+        policy_owner = self.get_policy_owner()
+        if policy_owner:
+            cur_dict['subscriber'] = policy_owner
 
     def get_new_contract_number(self):
         with ServerContext().set_context(sequence_substitutions={
@@ -1475,7 +1478,10 @@ class Contract(model.CoogSQL, model.CoogView, with_extra_data(['contract'],
                 coverages.remove(opt.coverage)
 
         for coverage in coverages:
-            if coverage.subscription_behaviour != 'optional':
+            args = {'date': self.initial_start_date}
+            self.init_dict_for_rule_engine(args)
+            if (coverage.get_subscription_behaviour(args)['behaviour'] not in
+                    ('optional', 'not_subscriptable')):
                 options.append(Option.new_option_from_coverage(
                     coverage, self.product, self.start_date))
                 options[-1].contract = self
