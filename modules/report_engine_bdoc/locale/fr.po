@@ -1,3 +1,39 @@
 #
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:report.template,BDOC_production_format:"
+msgid "BDOC production format"
+msgstr "Format de production du BDOC"
+
+msgctxt "field:report.template,BDOC_template_domain:"
+msgid "BDOC template domain"
+msgstr "Domaine modèle BDOC"
+
+msgctxt "help:report.template,BDOC_production_format:"
+msgid "The bdoc file will be generated in this format"
+msgstr "Le fichier bdoc sera généré dans ce format."
+
+msgctxt "help:report.template,BDOC_template_domain:"
+msgid "The domain of the report template"
+msgstr "Le domaine du modèle de courrier BDOC"
+
+msgctxt "selection:report.template,BDOC_production_format:"
+msgid " HTML_EMAIL"
+msgstr "Html E-mail"
+
+msgctxt "selection:report.template,BDOC_production_format:"
+msgid "DOCX"
+msgstr "Docx"
+
+msgctxt "selection:report.template,BDOC_production_format:"
+msgid "HTML"
+msgstr "Html"
+
+msgctxt "selection:report.template,BDOC_production_format:"
+msgid "PDF"
+msgstr "Pdf"
+
+msgctxt "selection:report.template,BDOC_production_format:"
+msgid "PDFA"
+msgstr "Pdfa"

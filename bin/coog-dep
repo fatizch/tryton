@@ -49,5 +49,7 @@ coog_dep_main() { # install base deps
                 "wrapt" \
                 "pyjwt" \
                 "PyPDF2" \
+                "zeep" \
+                "requests-mock" \
                 "sqlitebck" # for tests
 }

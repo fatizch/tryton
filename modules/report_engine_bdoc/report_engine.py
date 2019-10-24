@@ -1,11 +1,22 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
-from trytond.pool import PoolMeta
+from zeep import Client
+import base64
+import logging
+
+from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval
 from trytond.config import config
 
 from trytond.modules.coog_core import fields
 
+BDOC_FORMAT = [
+    ('docx', 'DOCX'),
+    ('pdf', 'PDF'),
+    ('pdfa', 'PDFA'),
+    ('html', 'HTML'),
+    ('html_email', ' HTML_EMAIL')
+    ]
 __all__ = [
     'ReportTemplate',
     'ReportGenerate',
@@ -15,6 +26,16 @@ __all__ = [
 
 class ReportTemplate(metaclass=PoolMeta):
     __name__ = 'report.template'
+
+    BDOC_production_format = fields.Selection(BDOC_FORMAT,
+        'BDOC production format',
+        states={'invisible': Eval('input_kind') != 'bdoc',
+            'required': Eval('input_kind') == 'bdoc'},
+        help='The bdoc file will be generated in this format')
+    BDOC_template_domain = fields.Char('BDOC template domain',
+        states={'invisible': Eval('input_kind') != 'bdoc',
+            'required': Eval('input_kind') == 'bdoc'},
+        help='The domain of the report template')
 
     @classmethod
     def __setup__(cls):
@@ -63,9 +84,39 @@ class ReportTemplate(metaclass=PoolMeta):
 class ReportGenerate(metaclass=PoolMeta):
     __name__ = 'report.generate'
 
+    logger = logging.getLogger(__name__)
+
+    @classmethod
+    def __post_setup__(cls):
+        super(ReportGenerate, cls).__post_setup__()
+        if not config.get('bdoc', 'bdoc_web_wsdl'):
+            cls.logger.warning('Configuration not found for bdoc wsdl')
+
     @classmethod
     def process_bdoc(cls, ids, data):
-        return cls.process_shared_genshi_template(ids, data)
+        wsdl_url = config.get('bdoc', 'bdoc_web_wsdl')
+        report_template = Pool().get('report.template')(data['doc_template'][0])
+        # Compute xml file
+        _, xml_file, _, filename = cls.process_shared_genshi_template(
+            ids, data)
+        # Call BDOC generation web service
+        client = Client(wsdl_url)
+        # arg0: BDOC_template_domain of the report template;
+        # arg1: Code of the report template;
+        # arg2: User; arg4: Stream encoded in base 64;
+        # arg6: BDOC Production format
+        response = client.service.generation(
+            report_template.BDOC_template_domain,
+            report_template.code,
+            '',
+            '',
+            base64.b64encode(xml_file),
+            '',
+            {'key': 'bwFormat', 'value': report_template.BDOC_production_format}
+            )
+        return (report_template.BDOC_production_format,
+            response['documents'][0]['document'],
+            False, filename)
 
 
 class ReportTemplateVersion(metaclass=PoolMeta):
