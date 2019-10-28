@@ -539,11 +539,6 @@ class Premium(model.CoogSQL, model.CoogView):
 
     @classmethod
     def get_main_contract(cls, premiums, name):
-        # We usually never work on premiums of multiple contracts, and when
-        # there are thousonds of premiums this can save a lot of time
-        main_contract = ServerContext().get('_force_premium_contract', -1)
-        if main_contract != -1:
-            return {x.id: main_contract for x in premiums}
         return {x.id: x._get_main_contract() for x in premiums}
 
     def _get_main_contract(self):

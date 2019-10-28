@@ -1122,10 +1122,8 @@ class Contract(metaclass=PoolMeta):
 
     def compute_invoice_lines(self, start, end):
         lines = []
-        # Force set main_contract to avoid the getter cost
-        with ServerContext().set_context(_force_premium_contract=self):
-            for premium in self._search_premium_intervals(self, start, end):
-                lines.extend(premium.get_invoice_lines(start, end))
+        for premium in self._search_premium_intervals(self, start, end):
+            lines.extend(premium.get_invoice_lines(start, end))
         return lines
 
     def get_rebill_end_date(self):
