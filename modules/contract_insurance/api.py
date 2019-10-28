@@ -149,13 +149,14 @@ class APIContract(metaclass=PoolMeta):
         return cls._create_option(option_data, contract, created)
 
     @classmethod
-    def _contract_convert(cls, data, options, parameters):
+    def _contract_convert(cls, data, options, parameters, minimum=False):
         API = Pool().get('api')
 
-        super()._contract_convert(data, options, parameters)
+        super()._contract_convert(data, options, parameters, minimum=minimum)
 
         for covered_data in data.get('covereds', []):
-            cls._contract_covered_convert(covered_data, options, parameters)
+            cls._contract_covered_convert(covered_data, options, parameters,
+                minimum=minimum)
 
         # Super call made sure that if there was a package on the product, the
         # configuration was consistent. We just need to check that if there is
@@ -213,7 +214,8 @@ class APIContract(metaclass=PoolMeta):
         return super()._contract_apply_package(data)
 
     @classmethod
-    def _contract_covered_convert(cls, data, options, parameters):
+    def _contract_covered_convert(cls, data, options, parameters,
+            minimum=False):
         pool = Pool()
         API = pool.get('api')
         Core = pool.get('api.core')
@@ -237,7 +239,7 @@ class APIContract(metaclass=PoolMeta):
         data['coverages'] = data.get('coverages', [])
         for coverage_data in data['coverages']:
             cls._contract_option_convert(coverage_data, options, parameters,
-                package=data['package'])
+                package=data['package'], minimum=minimum)
 
         extra_data = data.get('extra_data', {})
 

@@ -46,7 +46,7 @@ __all__ = [
     'InvoiceContractStart',
     'DisplayContractPremium',
     'ContractSubStatus',
-    'PremiumTaxRuleCountry',
+    'ContractTaxRuleCountry',
     ]
 
 FREQUENCIES = [
@@ -1122,10 +1122,10 @@ class Contract(metaclass=PoolMeta):
 
     def compute_invoice_lines(self, start, end):
         lines = []
-        for premium in self._search_premium_intervals(self, start, end):
-            # Force set main_contract to avoid the getter cost
-            premium.main_contract = self
-            lines.extend(premium.get_invoice_lines(start, end))
+        # Force set main_contract to avoid the getter cost
+        with ServerContext().set_context(_force_premium_contract=self):
+            for premium in self._search_premium_intervals(self, start, end):
+                lines.extend(premium.get_invoice_lines(start, end))
         return lines
 
     def get_rebill_end_date(self):
@@ -1287,7 +1287,7 @@ class Contract(metaclass=PoolMeta):
         if getattr(self, 'billing_informations', None):
             return
         BillingInformation = Pool().get('contract.billing_information')
-        default_billing_mode = self.product.billing_rules[0].billing_modes[0]
+        default_billing_mode = self.product.get_default_billing_mode()
         if default_billing_mode.direct_debit:
             days = default_billing_mode.get_allowed_direct_debit_days()
             direct_debit_day = days[0][0]
@@ -1463,7 +1463,8 @@ class Contract(metaclass=PoolMeta):
         if isinstance(contract, int):
             contract = cls(contract)
         cached = cls._future_invoices_cache.get(contract.id, {}) or {}
-        sub_key = hash(cls._future_invoices_cache_key(from_date, to_date))
+        sub_key = hash(cls._future_invoices_cache_key(
+                contract.start_date, contract.end_date or to_date))
         if sub_key in cached:
             invoices = cls.load_from_cached_invoices(cached[sub_key])
         else:
@@ -1587,29 +1588,6 @@ class Contract(metaclass=PoolMeta):
         super(Contract, self).before_activate()
         limit_date = self.initial_start_date - datetime.timedelta(days=1)
         self.clean_up_contract_invoices(contracts=[self], to_date=limit_date)
-
-    def _get_tax_rule_pattern(self):
-        from_country = from_subdivision = to_country = to_subdivision = None
-        company_address = self.company.party.main_address
-        if company_address:
-            from_country = company_address.country
-            from_subdivision = company_address.subdivision
-        if self.subscriber:
-            subscriber_address = self.subscriber.main_address
-            if subscriber_address:
-                to_country = subscriber_address.country
-                to_subdivision = \
-                    subscriber_address.subdivision or \
-                    (subscriber_address.zip_and_city.subdivision if
-                        subscriber_address.zip_and_city else None)
-        return {
-            'from_country': from_country.id if from_country else None,
-            'from_subdivision': (
-                from_subdivision.id if from_subdivision else None),
-            'to_country': to_country.id if to_country else None,
-            'to_subdivision': (
-                to_subdivision.id if to_subdivision else None),
-            }
 
 
 class ContractFee(metaclass=PoolMeta):
@@ -2258,14 +2236,13 @@ class ContractInvoice(model.CoogSQL, model.CoogView):
             assert all([(x.payment_date == date for x in
                     self.invoice.lines_to_pay)])
             return date
-        with Transaction().set_context({'contract_revision_date':
-                    self.invoice.start}):
-            billing_info = self.contract.billing_information
-            return billing_info.get_direct_debit_planned_date({
-                    'maturity_date': self.invoice.start or datetime.date.min,
-                    'party': billing_info.payer,
-                    'contract': self.contract,
-                    })
+        billing_info = self.contract._billing_information_at_date(
+            self.invoice.start)
+        return billing_info.get_direct_debit_planned_date({
+                'maturity_date': self.invoice.start or datetime.date.min,
+                'party': billing_info.payer,
+                'contract': self.contract,
+                })
 
     @classmethod
     def search_invoice_state(cls, name, domain):
@@ -2402,10 +2379,31 @@ class ContractSubStatus(metaclass=PoolMeta):
         states={'invisible': Eval('status') != 'hold'})
 
 
-class PremiumTaxRuleCountry(metaclass=PoolMeta):
-    __name__ = 'contract.premium'
+class ContractTaxRuleCountry(metaclass=PoolMeta):
+    __name__ = 'contract'
 
     def _get_tax_rule_pattern(self):
-        if self.main_contract:
-            return self.main_contract._get_tax_rule_pattern()
-        return super(PremiumTaxRuleCountry, self)._get_tax_rule_pattern()
+        result = super()._get_tax_rule_pattern()
+
+        from_country = from_subdivision = to_country = to_subdivision = None
+        company_address = self.company.party.main_address
+        if company_address:
+            from_country = company_address.country
+            from_subdivision = company_address.subdivision
+        if self.subscriber:
+            subscriber_address = self.subscriber.main_address
+            if subscriber_address:
+                to_country = subscriber_address.country
+                to_subdivision = \
+                    subscriber_address.subdivision or \
+                    (subscriber_address.zip_and_city.subdivision if
+                        subscriber_address.zip_and_city else None)
+        result.update({
+                'from_country': from_country.id if from_country else None,
+                'from_subdivision': (
+                    from_subdivision.id if from_subdivision else None),
+                'to_country': to_country.id if to_country else None,
+                'to_subdivision': (
+                    to_subdivision.id if to_subdivision else None),
+                })
+        return result

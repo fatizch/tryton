@@ -100,6 +100,6 @@ def register():
         depends=['api'])
 
     Pool.register(
-        contract.PremiumTaxRuleCountry,
+        contract.ContractTaxRuleCountry,
         module='contract_insurance_invoice', type_='model',
         depends=['account_tax_rule_country'])

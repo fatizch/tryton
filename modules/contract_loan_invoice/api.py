@@ -1,6 +1,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
-from trytond.pool import PoolMeta
+from trytond.pool import PoolMeta, Pool
+
 from trytond.modules.coog_core.api import CODE_SCHEMA, OBJECT_ID_SCHEMA
 
 
@@ -130,3 +131,53 @@ class APIContract(metaclass=PoolMeta):
                 },
             )
         return examples
+
+    @classmethod
+    def _simulate_prepare_contracts(cls, contracts, parameters):
+        Contract = Pool().get('contract')
+
+        super()._simulate_prepare_contracts(contracts, parameters)
+
+        loan_contracts = [x for x in contracts if x.is_loan]
+        if loan_contracts:
+            Contract.calculate_prices(loan_contracts)
+
+    @classmethod
+    def _simulate_parse_created(cls, created):
+        super()._simulate_parse_created(created)
+        if 'loans' in created:
+            created['loan_ref_per_id'] = {
+                x['id']: x['ref'] for x in created['loans']}
+
+    @classmethod
+    def _simulate_cleanup_schedule_detail(cls, detail, created):
+        super()._simulate_cleanup_schedule_detail(detail, created)
+        if 'loan' in detail:
+            detail['loan'] = {
+                'ref': created['loan_ref_per_id'][detail['loan']['id']],
+                }
+
+    @classmethod
+    def _simulate_convert_input(cls, parameters):
+        Party = Pool().get('party.party')
+
+        # Look for a default lender (with a valid address!)
+        default_lender_address = Party.search([
+                ('is_lender', '=', True),
+                ('addresses.id', '!=', None),
+                ], limit=1)[0].addresses[0]
+
+        result = super()._simulate_convert_input(parameters)
+        if 'loans' in parameters:
+            for loan_data in parameters['loans']:
+                if 'lender_address' not in loan_data:
+                    # Add a random lender for compatibility
+                    loan_data['lender_address'] = default_lender_address
+        return result
+
+    @classmethod
+    def _simulate_update_schedule_detail_output_schema(cls, base):
+        super()._simulate_update_schedule_detail_output_schema(base)
+        base['properties']['loan']['properties'] = {
+            'ref': {'type': 'string'},
+            }

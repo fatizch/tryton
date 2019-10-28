@@ -6,11 +6,12 @@ from collections import defaultdict
 from trytond.pool import PoolMeta
 from trytond.cache import Cache
 
-from trytond.modules.coog_core import coog_date
+from trytond.modules.coog_core import coog_date, fields
 
 
 __all__ = [
     'Contract',
+    'ContractLoan',
     ]
 
 
@@ -79,3 +80,14 @@ class Contract(metaclass=PoolMeta):
                     [x['max_insured'] for x in list(loan_data.values())]),
                 }
         return ratios
+
+
+class ContractLoan(metaclass=PoolMeta):
+    __name__ = 'contract-loan'
+
+    taea = fields.Function(
+        fields.Numeric('TAEA', digits=(6, 4)),
+        'getter_taea')
+
+    def getter_taea(self, name):
+        return self.loan.get_taea_for_contract(self.contract)

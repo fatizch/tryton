@@ -178,7 +178,7 @@ class QueueMixin(object):
                 from_async_worker = context.get('async_worker', False)
                 from_batch = context.get('from_batch', False)
                 force_synchronous = context.get('force_synchronous', False)
-                rollback = context.get('will_be_rollbacked', False)
+                rollback = context.get('_will_be_rollbacked', False)
 
                 cls.check_pending_task(instances)
 

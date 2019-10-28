@@ -23,8 +23,7 @@ class User(metaclass=PoolMeta):
 
     def get_network_distributors(self, name):
         if self.dist_network:
-            res = [x.id for x in self.dist_network.all_children
-                if x.is_distributor]
+            res = [x.id for x in self.dist_network.distributors]
         else:
             res = Pool().get('distribution.network').get_all_distributors()
         return res

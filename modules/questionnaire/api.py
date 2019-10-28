@@ -476,12 +476,13 @@ class APIContract(metaclass=PoolMeta):
                     contract_data['questionnaire']['ref']]
 
     @classmethod
-    def _subscribe_contracts_convert_input(cls, parameters):
+    def _subscribe_contracts_convert_input(cls, parameters, minimum=False):
         options = parameters.get('options', {})
         for questionnaire in parameters.get('questionnaires', []):
             cls._questionnaire_convert(questionnaire, options, parameters)
 
-        return super()._subscribe_contracts_convert_input(parameters)
+        return super()._subscribe_contracts_convert_input(parameters,
+            minimum=minimum)
 
     @classmethod
     def _questionnaire_convert(cls, data, options, parameters):

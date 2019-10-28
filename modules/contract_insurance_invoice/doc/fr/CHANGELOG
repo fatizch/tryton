@@ -1,3 +1,4 @@
+* FEA#12980 Ajout d'une API de tarification dans le backoffice
 * BUG#13014 La méthode de répartition n'était pas renseigné à "Pertes et Profits" dans l'assistant de lettrage quand le reste était supérieur à zéro.
 
 Version 2.6 - 2019-10-11

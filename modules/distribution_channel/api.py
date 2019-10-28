@@ -129,12 +129,12 @@ class APIContract(metaclass=PoolMeta):
         return contract
 
     @classmethod
-    def _contract_convert(cls, data, options, parameters):
+    def _contract_convert(cls, data, options, parameters, minimum=False):
         pool = Pool()
         API = pool.get('api')
         Core = pool.get('api.core')
 
-        super()._contract_convert(data, options, parameters)
+        super()._contract_convert(data, options, parameters, minimum=minimum)
         channel = Core._get_dist_channel()
 
         if channel is None:

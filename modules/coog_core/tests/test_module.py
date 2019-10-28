@@ -784,6 +784,17 @@ class ModuleTestCase(test_framework.CoogTestCase):
         parent = self.ExportTest(parent.id)
         self.assertEqual(len(parent.one2many), 2)
 
+    def test0085_check_event_rollback(self):
+        Event = Pool().get('event')
+
+        # Should fail because event code does not exist
+        self.assertRaises(ValueError, Event.notify_events, [1, 2, 3, 4],
+            'non_existing_event_code')
+
+        with Transaction().set_context(_will_be_rollbacked=True):
+            # It's alright, the code will not be triggered anyway
+            Event.notify_events([1, 2, 3, 4], 'non_existing_event_code')
+
     def test0090_save_writes(self):
         existing = '/tmp/existing'
         new = '/tmp/new'

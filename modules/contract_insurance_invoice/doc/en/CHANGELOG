@@ -1,3 +1,4 @@
+* FEA#12980 Add a backend API for quotations
 * BUG#13014 The remaning repartition method was not set to Write Off when the write off amount is superior to zero
 
 Version 2.6 - 2019-10-11

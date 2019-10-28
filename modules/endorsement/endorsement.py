@@ -1650,7 +1650,7 @@ class Endorsement(QueueMixin, Workflow, Printable, model.CoogSQL,
         cls.run_methods(endorsements, 'apply')
         if cls.should_generate_next_endorsement():
             cls.generate_next_endorsements(endorsements)
-        if not Transaction().context.get('will_be_rollbacked', False):
+        if not Transaction().context.get('_will_be_rollbacked', False):
             Event.notify_events(endorsements, 'apply_endorsement')
 
     @classmethod
@@ -1736,7 +1736,7 @@ class Endorsement(QueueMixin, Workflow, Printable, model.CoogSQL,
     @classmethod
     def soft_apply(cls, endorsements):
         with Transaction().set_context(endorsement_soft_apply=True,
-                will_be_rollbacked=True):
+                _will_be_rollbacked=True):
             cls.apply(endorsements)
 
     @classmethod
@@ -1774,7 +1774,7 @@ class Endorsement(QueueMixin, Workflow, Printable, model.CoogSQL,
             # Apply endorsement in a sandboxed transaction
             with Transaction().new_transaction() as transaction:
                 try:
-                    with Transaction().set_context(will_be_rollbacked=True):
+                    with Transaction().set_context(_will_be_rollbacked=True):
                         applied_self = self.__class__(self.id)
                         self.apply_for_preview([applied_self])
                         for unitary_endorsement in \

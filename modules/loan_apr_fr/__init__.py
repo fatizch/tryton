@@ -10,6 +10,7 @@ from . import api
 def register():
     Pool.register(
         contract.Contract,
+        contract.ContractLoan,
         loan.Loan,
         module='loan_apr_fr', type_='model')
     Pool.register(

@@ -1,16 +1,32 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+from collections import defaultdict
 from trytond.pool import PoolMeta, Pool
 
 from trytond.modules.coog_core.api import CODED_OBJECT_SCHEMA, OBJECT_ID_SCHEMA
-from trytond.modules.coog_core.api import CODED_OBJECT_ARRAY_SCHEMA
+from trytond.modules.coog_core.api import CODED_OBJECT_ARRAY_SCHEMA, CODE_SCHEMA
 
 
 __all__ = [
+    'APIIdentity',
     'APICore',
     'APIProduct',
     'APIContract',
     ]
+
+
+class APIIdentity(metaclass=PoolMeta):
+    __name__ = 'ir.api.identity'
+
+    def get_api_context(self):
+        context = super().get_api_context()
+        main_network = context.get('dist_network', None)
+        if main_network is not None:
+            Network = Pool().get('distribution.network')
+            distributors = Network(main_network).distributors
+            if distributors:
+                context['distributors'] = [x.id for x in distributors]
+        return context
 
 
 class APICore(metaclass=PoolMeta):
@@ -47,6 +63,17 @@ class APICore(metaclass=PoolMeta):
                     x)
                 for x in data['commercial_products']]
 
+    @classmethod
+    def _identity_context_output_schema(cls):
+        schema = super()._identity_context_output_schema()
+        schema['properties']['distributors'] = {
+            'type': 'array',
+            'additionalItems': False,
+            'items': OBJECT_ID_SCHEMA,
+            'minItems': 1,
+            }
+        return schema
+
 
 class APIProduct(metaclass=PoolMeta):
     __name__ = 'api.product'
@@ -60,20 +87,39 @@ class APIProduct(metaclass=PoolMeta):
     def _describe_products_update_commercial_products(cls, results):
         pool = Pool()
         Core = pool.get('api.core')
+        Network = pool.get('distribution.network')
 
         network = Core._get_dist_network()
-        if network is None:
-            return results
+
+        # We want to return all products for which at least one distributor
+        # "under" the current network is authorized
+        commercial_per_product = defaultdict(lambda: defaultdict(list))
+        products_per_ids = {x['id']: x for x in results}
+
+        for distributor in (network.distributors
+                if network else Network.search(
+                    [('is_distributor', '=', True)])):
+            for com_product in distributor.all_com_products:
+                if com_product.product.id not in products_per_ids:
+                    continue
+                commercial_per_product[com_product.product.id][
+                    com_product].append(distributor)
 
         new_results = []
-        for product_data in results:
-            com_products = [x for x in network.all_com_products
-                if x.product.id == product_data['id']]
-            if com_products:
-                product_data['commercial_products'] = [
-                    cls._describe_commercial_product(x)
-                    for x in com_products]
-                new_results.append(product_data)
+        for product, commercial_products in commercial_per_product.items():
+            com_products = []
+            for com_product, distributors in commercial_products.items():
+                com_data = cls._describe_commercial_product(com_product)
+                com_data['distributors'] = sorted([
+                        cls._describe_distributor(x) for x in distributors],
+                    key=lambda x: x['code'])
+                com_products.append(com_data)
+
+            data = products_per_ids[product]
+            data['commercial_products'] = sorted(com_products,
+                key=lambda x: x['code'])
+            new_results.append(data)
+
         return new_results
 
     @classmethod
@@ -82,6 +128,15 @@ class APIProduct(metaclass=PoolMeta):
             'id': commercial_product.id,
             'code': commercial_product.code,
             'name': commercial_product.name,
+            }
+
+    @classmethod
+    def _describe_distributor(cls, distributor):
+        return {
+            'id': distributor.id,
+            'code': distributor.code,
+            'name': (distributor.party.full_name if distributor.party
+                else distributor.name),
             }
 
     @classmethod
@@ -101,7 +156,26 @@ class APIProduct(metaclass=PoolMeta):
             'additionalProperties': False,
             'properties': {
                 'id': OBJECT_ID_SCHEMA,
-                'code': {'type': 'string'},
+                'code': CODE_SCHEMA,
+                'name': {'type': 'string'},
+                'distributors': {
+                    'type': 'array',
+                    'additionalItems': False,
+                    'minItems': 1,
+                    'items': cls._describe_distributor_schema(),
+                    },
+                },
+            'required': ['id', 'code', 'name', 'distributors'],
+            }
+
+    @classmethod
+    def _describe_distributor_schema(cls):
+        return {
+            'type': 'object',
+            'additionalProperties': False,
+            'properties': {
+                'id': OBJECT_ID_SCHEMA,
+                'code': CODE_SCHEMA,
                 'name': {'type': 'string'},
                 },
             'required': ['id', 'code', 'name'],
@@ -115,11 +189,25 @@ class APIProduct(metaclass=PoolMeta):
                 'id': 1,
                 'code': 'com_product_1',
                 'name': 'Commercial Product 1',
+                'distributors': [
+                    {
+                        'id': 13,
+                        'code': '4125',
+                        'name': 'My distributor',
+                        },
+                    ],
                 },
             {
                 'id': 2,
                 'code': 'com_product_2',
                 'name': 'Commercial Product 2',
+                'distributors': [
+                    {
+                        'id': 321,
+                        'code': '3512',
+                        'name': 'My other distributor',
+                        },
+                    ],
                 },
             ]
         return examples
@@ -138,12 +226,12 @@ class APIContract(metaclass=PoolMeta):
         return contract
 
     @classmethod
-    def _contract_convert(cls, data, options, parameters):
+    def _contract_convert(cls, data, options, parameters, minimum=False):
         pool = Pool()
         API = pool.get('api')
         Core = pool.get('api.core')
 
-        super()._contract_convert(data, options, parameters)
+        super()._contract_convert(data, options, parameters, minimum=minimum)
         network = Core._get_dist_network()
 
         if network is None:
@@ -154,8 +242,11 @@ class APIContract(metaclass=PoolMeta):
         else:
             data['dist_network'] = network
 
-        data['commercial_product'] = API.instantiate_code_object(
-            'distribution.commercial_product', data['commercial_product'])
+        if minimum is False or 'commercial_product' in data:
+            data['commercial_product'] = API.instantiate_code_object(
+                'distribution.commercial_product', data['commercial_product'])
+        else:
+            data['commercial_product'] = None
 
     @classmethod
     def _validate_contract_input(cls, data):
@@ -187,7 +278,8 @@ class APIContract(metaclass=PoolMeta):
     def _contract_schema(cls, minimum=False):
         schema = super()._contract_schema(minimum=minimum)
         schema['properties']['commercial_product'] = CODED_OBJECT_SCHEMA
-        schema['required'].append('commercial_product')
+        if not minimum:
+            schema['required'].append('commercial_product')
         return schema
 
     @classmethod
@@ -202,6 +294,15 @@ class APIContract(metaclass=PoolMeta):
     @classmethod
     def _compute_billing_modes_examples(cls):
         examples = super()._compute_billing_modes_examples()
+        for example in examples:
+            for idx, contract_data in enumerate(example['input']['contracts']):
+                contract_data['commercial_product'] = {
+                    'code': 'com_product_%i' % idx}
+        return examples
+
+    @classmethod
+    def _simulate_examples(cls):
+        examples = super()._simulate_examples()
         for example in examples:
             for idx, contract_data in enumerate(example['input']['contracts']):
                 contract_data['commercial_product'] = {

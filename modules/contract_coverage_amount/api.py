@@ -50,8 +50,10 @@ class APIContract(metaclass=PoolMeta):
         return schema
 
     @classmethod
-    def _contract_option_convert(cls, data, options, parameters, package=None):
-        super()._contract_option_convert(data, options, parameters, package)
+    def _contract_option_convert(cls, data, options, parameters, package=None,
+            minimum=False):
+        super()._contract_option_convert(data, options, parameters, package,
+            minimum=minimum)
 
         if 'coverage_amount' in data:
             data['coverage_amount'] = amount_from_api(data['coverage_amount'])

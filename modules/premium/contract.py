@@ -11,6 +11,7 @@ from trytond.pool import PoolMeta, Pool
 from trytond import backend
 from trytond.config import config
 from trytond.pyson import Eval, If
+from trytond.server_context import ServerContext
 from trytond.transaction import Transaction
 from trytond.rpc import RPC
 from trytond.model import dualmethod
@@ -29,6 +30,7 @@ __all__ = [
     'ContractOption',
     'ContractFee',
     'Premium',
+    'ContractTaxRuleCountry',
     'PremiumTaxRuleCountry',
     ]
 
@@ -495,7 +497,7 @@ class Premium(model.CoogSQL, model.CoogView):
     frequency_string = frequency.translated('frequency')
     taxes = fields.Function(
         fields.Many2Many('account.tax', None, None, 'Taxes'),
-        'get_taxes')
+        'getter_taxes')
     main_contract = fields.Function(
         fields.Many2One('contract', 'Contract'),
         'get_main_contract', searcher='search_main_contract')
@@ -537,6 +539,11 @@ class Premium(model.CoogSQL, model.CoogView):
 
     @classmethod
     def get_main_contract(cls, premiums, name):
+        # We usually never work on premiums of multiple contracts, and when
+        # there are thousonds of premiums this can save a lot of time
+        main_contract = ServerContext().get('_force_premium_contract', -1)
+        if main_contract != -1:
+            return {x.id: main_contract for x in premiums}
         return {x.id: x._get_main_contract() for x in premiums}
 
     def _get_main_contract(self):
@@ -609,10 +616,15 @@ class Premium(model.CoogSQL, model.CoogView):
                 f'({self.option.covered_element.rec_name})'
         return self.parent.rec_name
 
-    def get_taxes(self, name):
-        if self.rated_entity.__name__ != 'offered.option.description':
-            return []
-        return self.rated_entity._get_taxes()
+    @classmethod
+    def getter_taxes(cls, premiums, name):
+        result = {}
+        for premium in premiums:
+            if premium.rated_entity.__name__ != 'offered.option.description':
+                result[premium.id] = []
+            else:
+                result[premium.id] = premium.rated_entity._get_taxes()
+        return result
 
     @classmethod
     def search_main_contract(cls, name, clause):
@@ -696,28 +708,8 @@ class Premium(model.CoogSQL, model.CoogView):
             return (self.rated_entity, self.start or datetime.date.min)
 
 
-class PremiumTaxRuleCountry(metaclass=PoolMeta):
-    __name__ = 'contract.premium'
-
-    def get_taxes(self, name):
-        pool = Pool()
-        Tax = pool.get('account.tax')
-        if self.rated_entity.__name__ != 'offered.option.description':
-            return []
-        taxes = []
-        pattern = self._get_tax_rule_pattern()
-        account_config = pool.get('account.configuration').get_singleton()
-        tax_rule = (self.main_contract.subscriber.customer_tax_rule
-            if self.main_contract and self.main_contract.subscriber else None
-            ) or account_config.default_customer_tax_rule
-        for tax in Tax.browse(self.rated_entity._get_taxes()):
-            if tax_rule:
-                tax_ids = tax_rule.apply(tax, pattern)
-                if tax_ids:
-                    taxes.extend(tax_ids)
-            else:
-                taxes.append(tax.id)
-        return taxes
+class ContractTaxRuleCountry(metaclass=PoolMeta):
+    __name__ = 'contract'
 
     def _get_tax_rule_pattern(self):
         return {
@@ -726,3 +718,47 @@ class PremiumTaxRuleCountry(metaclass=PoolMeta):
             'to_country': None,
             'to_subdivision': None,
             }
+
+
+class PremiumTaxRuleCountry(metaclass=PoolMeta):
+    __name__ = 'contract.premium'
+
+    @classmethod
+    def getter_taxes(cls, premiums, name):
+        pool = Pool()
+        Tax = pool.get('account.tax')
+        account_config = pool.get('account.configuration').get_singleton()
+
+        result = super().getter_taxes(premiums, name)
+
+        premiums_per_id = {}
+        premiums_per_contract = defaultdict(list)
+        tax_per_id = {}
+
+        for premium in premiums:
+            premiums_per_id[premium.id] = premium
+            premiums_per_contract[premium.main_contract].append(premium)
+
+        for contract, premiums in premiums_per_contract.items():
+            if not contract:
+                continue
+            tax_rule = (contract.subscriber.customer_tax_rule
+                if contract.subscriber else None
+                ) or account_config.default_customer_tax_rule
+            if not tax_rule:
+                continue
+
+            pattern = contract._get_tax_rule_pattern()
+            tax_cache = defaultdict(list)
+            for premium in premiums:
+                taxes = []
+                for tax_id in result[premium.id]:
+                    if tax_id not in tax_per_id:
+                        tax_per_id[tax_id] = Tax(tax_id)
+                    if tax_id not in tax_cache:
+                        tax = tax_per_id[tax_id]
+                        tax_cache[tax_id] = (tax_rule.apply(tax, pattern)
+                            or [tax_id])
+                    taxes += tax_cache[tax_id]
+                result[premium.id] = taxes
+        return result

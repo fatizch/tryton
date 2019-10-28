@@ -4,8 +4,11 @@ from decimal import Decimal
 
 from trytond.pool import PoolMeta, Pool
 from trytond.server_context import ServerContext
+from trytond.transaction import Transaction
 
-from trytond.modules.api import DATE_SCHEMA
+from trytond.modules.coog_core import coog_date
+
+from trytond.modules.api import DATE_SCHEMA, api_input_error_manager
 from trytond.modules.api.api.core import AMOUNT_SCHEMA, amount_for_api
 from trytond.modules.api.api.core import date_for_api
 from trytond.modules.coog_core.api import OBJECT_ID_SCHEMA, CODE_SCHEMA
@@ -13,6 +16,9 @@ from trytond.modules.coog_core.api import MODEL_REFERENCE
 from trytond.modules.coog_core.api import CODED_OBJECT_SCHEMA
 from trytond.modules.contract.api import CONTRACT_SCHEMA
 from trytond.modules.party_cog.api import PARTY_RELATION_SCHEMA
+
+
+DEFAULT_BANK_ACCOUNT_NUMBER_FOR_QUOTATION = 'NL39RABO4220533664'
 
 
 __all__ = [
@@ -151,6 +157,12 @@ class APIContract(metaclass=PoolMeta):
                     'readonly': True,
                     'description': 'Returns the payment schedule for contracts',
                     },
+                'simulate': {
+                    'public': False,
+                    'readonly': True,
+                    'description': 'Compute predicted payments amounts based '
+                    'on provided informations',
+                    },
                 },
             )
 
@@ -177,8 +189,12 @@ class APIContract(metaclass=PoolMeta):
                     for x in contract_data['billing']['payer'].bank_accounts
                     if x.numbers[0].number_compact ==
                     contract_data['billing']['bank_account_number']]
-            else:
+            elif contract_data['billing']['payer'].bank_accounts:
                 account = contract_data['billing']['payer'].bank_accounts[-1]
+            else:
+                # When computing premiums, the billing account may not yet be
+                # available
+                account = None
             billing_information.direct_debit_account = account
             billing_information.direct_debit_day = contract_data['billing'][
                 'direct_debit_day']
@@ -188,9 +204,12 @@ class APIContract(metaclass=PoolMeta):
     @classmethod
     def _update_contract_parameters(cls, contract_data, created):
         super()._update_contract_parameters(contract_data, created)
-        if 'ref' in contract_data['billing']['payer']:
+        if (isinstance(contract_data['billing']['payer'], dict) and
+                    'ref' in contract_data['billing']['payer']):
             contract_data['billing']['payer'] = created['parties'][
                 contract_data['billing']['payer']['ref']]
+        elif contract_data['billing']['payer'] is None:
+            contract_data['billing']['payer'] = contract_data['subscriber']
 
     @classmethod
     def _check_updated_contract_parameters(cls, contract_data):
@@ -238,20 +257,29 @@ class APIContract(metaclass=PoolMeta):
                         })
 
     @classmethod
-    def _contract_convert(cls, data, options, parameters):
+    def _contract_convert(cls, data, options, parameters, minimum=False):
         pool = Pool()
         API = pool.get('api')
         PartyAPI = pool.get('api.party')
 
-        super()._contract_convert(data, options, parameters)
+        super()._contract_convert(data, options, parameters, minimum=minimum)
 
-        if 'billing' in data:
+        if minimum is False or 'billing' in data:
             data['billing']['billing_mode'] = API.instantiate_code_object(
                 'offered.billing_mode', data['billing']['billing_mode'])
-            payer = PartyAPI._party_from_reference(data['billing']['payer'],
-                parties=parameters['parties'])
+            if 'payer' not in data['billing']:
+                data['billing']['payer'] = data['subscriber']
+
+            payer = PartyAPI._party_from_reference(
+                data['billing']['payer'], parties=parameters['parties'])
+            # Only if already exists
             if payer:
                 data['billing']['payer'] = payer
+        else:
+            data['billing'] = {
+                'payer': None,  # Will be set from the subscriber later on
+                'billing_mode': data['product'].get_default_billing_mode(),
+                }
 
     @classmethod
     def _validate_contract_input(cls, data):
@@ -318,7 +346,7 @@ class APIContract(metaclass=PoolMeta):
                 'direct_debit_day': {'type': 'integer'},
                 'bank_account_number': {'type': 'string'},
                 },
-            'required': ['billing_mode', 'payer'],
+            'required': ['billing_mode'],
             }
 
     @classmethod
@@ -364,7 +392,7 @@ class APIContract(metaclass=PoolMeta):
 
     @classmethod
     def _compute_billing_modes_convert_input(cls, parameters):
-        return cls._subscribe_contracts_convert_input(parameters)
+        return cls._subscribe_contracts_convert_input(parameters, minimum=True)
 
     @classmethod
     def _compute_billing_modes_schema(cls):
@@ -448,12 +476,20 @@ class APIContract(metaclass=PoolMeta):
 
     @classmethod
     def payment_schedule(cls, parameters):
-        return [cls._payment_schedule_from_contract(contract) for contract in
-            parameters['contracts']]
+        return [cls._payment_schedule_from_contract(contract)
+            for contract in parameters['contracts']]
 
     @classmethod
     def _payment_schedule_from_contract(cls, contract):
-        invoices = contract.get_future_invoices(contract)
+        if contract.end_date:
+            to_date = contract.end_date
+        else:
+            # Contract without an end date, we arbitrarly decide that we will
+            # compute one year worth of invoices
+            to_date = coog_date.add_day(
+                coog_date.add_year(contract.initial_start_date, 1), -1)
+
+        invoices = contract.get_future_invoices(contract, to_date=to_date)
         result = {
             'contract': {
                 'id': contract.id,
@@ -647,7 +683,6 @@ class APIContract(metaclass=PoolMeta):
                 'covered': {
                     'type': 'object',
                     'additionalProperties': False,
-                    'required': ['id'],
                     'properties': {
                         'id': OBJECT_ID_SCHEMA,
                         'party': {
@@ -664,7 +699,7 @@ class APIContract(metaclass=PoolMeta):
                 'option': {
                     'type': 'object',
                     'additionalProperties': False,
-                    'required': ['id', 'coverage'],
+                    'required': ['coverage'],
                     'properties': {
                         'id': OBJECT_ID_SCHEMA,
                         'coverage': {
@@ -787,6 +822,337 @@ class APIContract(metaclass=PoolMeta):
                         'total_fee': '0',
                         'total_premium': '1511.56',
                         'total_tax': '0.00',
+                        },
+                    ],
+                },
+            ]
+
+    @classmethod
+    def simulate(cls, parameters):
+        with Transaction().new_transaction() as transaction:
+            with Transaction().set_context(_will_be_rollbacked=True,
+                    _disable_validations=True):
+                with Transaction().set_user(0):
+                    try:
+                        created = cls._simulate_create_contracts(
+                            parameters)
+
+                        cls._simulate_parse_created(created)
+                        contracts = created['contract_instances']
+                        cls._simulate_prepare_contracts(contracts,
+                            parameters)
+
+                        results = []
+                        for contract in contracts:
+                            result = cls._simulate_get_schedule(
+                                contract, parameters, created)
+                            result.pop('contract')
+                            result['ref'] = created['contract_ref_per_id'][
+                                contract.id]
+                            results.append(result)
+                        return results
+                    finally:
+                        transaction.rollback()
+
+    @classmethod
+    def _simulate_parse_created(cls, created):
+        Contract = Pool().get('contract')
+        created['party_ref_per_id'] = {
+            x['id']: x['ref'] for x in created['parties']}
+        created['contract_ref_per_id'] = {
+            x['id']: x['ref'] for x in created['contracts']}
+        created['contract_instances'] = Contract.browse(
+            [x['id'] for x in created['contracts']])
+
+    @classmethod
+    def _simulate_create_contracts(cls, parameters):
+        # Make sure we do not inadvertently activate the contract :)
+        parameters['options'] = {}
+
+        # Hardcore
+        with api_input_error_manager():
+            Pool().get('api').ignore_input_errors('missing_bank_account')
+
+            return getattr(cls.subscribe_contracts, '__origin_function')(
+                cls, parameters)
+
+    @classmethod
+    def _simulate_prepare_contracts(cls, contracts, parameters):
+        Contract = Pool().get('contract')
+        Contract.calculate(contracts)
+
+    @classmethod
+    def _simulate_get_schedule(cls, contract, parameters, created):
+        schedule_data = cls._payment_schedule_from_contract(contract)
+        cls._simulate_cleanup_schedule(schedule_data, created)
+        return schedule_data
+
+    @classmethod
+    def _simulate_cleanup_schedule(cls, schedule_data, created):
+        for invoice_data in schedule_data['schedule']:
+            for detail_data in invoice_data['details']:
+                cls._simulate_cleanup_schedule_detail(
+                    detail_data, created)
+
+    @classmethod
+    def _simulate_cleanup_schedule_detail(cls, detail, created):
+        if 'option' in detail['origin']:
+            del detail['origin']['option']['id']
+        if 'covered' in detail['origin']:
+            del detail['origin']['covered']['id']
+            if 'party' in detail['origin']['covered']:
+                party_id = detail['origin']['covered']['party']['id']
+                if party_id in created['party_ref_per_id']:
+                    del detail['origin']['covered']['party']['id']
+                    del detail['origin']['covered']['party']['code']
+                    detail['origin']['covered']['party']['ref'] = created[
+                        'party_ref_per_id'][party_id]
+
+    @classmethod
+    def _simulate_schema(cls):
+        schema = cls._subscribe_contracts_schema(minimum=True)
+        for kind in schema['properties']['parties']['items']['oneOf']:
+            kind['required'] = ['ref']
+        return schema
+
+    @classmethod
+    def _simulate_convert_input(cls, parameters):
+        cls._simulate_convert_input_parties(parameters)
+        result = cls._subscribe_contracts_convert_input(parameters,
+            minimum=True)
+        cls._simulate_convert_contract_input(parameters)
+        return result
+
+    @classmethod
+    def _simulate_convert_input_parties(cls, parameters):
+        for party_data in parameters.get('parties', []):
+            if 'name' not in party_data:
+                party_data['name'] = 'Temp Name %s' % party_data['ref']
+            if 'is_person' in party_data:
+                if 'first_name' not in party_data:
+                    party_data['first_name'] = \
+                        'Temp First Name %s' % party_data['ref']
+                if 'gender' not in party_data:
+                    party_data['gender'] = 'male'
+
+    @classmethod
+    def _simulate_convert_contract_input(cls, parameters):
+        for contract_data in parameters['contracts']:
+            if 'direct_debit_day' in contract_data['billing']:
+                continue
+            billing_mode = contract_data['billing']['billing_mode']
+            if billing_mode.direct_debit:
+                if billing_mode.allowed_direct_debit_days:
+                    contract_data['billing']['direct_debit_day'] = \
+                        billing_mode.get_allowed_direct_debit_days()[0][0]
+                else:
+                    contract_data['billing']['direct_debit_day'] = '1'
+
+    @classmethod
+    def _simulate_output_schema(cls):
+        base = cls._payment_schedule_output_schema()
+        del base['items']['properties']['contract']
+        base['items']['properties']['ref'] = {'type': 'string'}
+
+        cls._simulate_update_schedule_output_schema(base)
+        return base
+
+    @classmethod
+    def _simulate_update_schedule_output_schema(cls, base):
+        detail_schema = base['items']['properties']['schedule']['items'][
+            'properties']['details']['items']
+        cls._simulate_update_schedule_detail_output_schema(
+            detail_schema)
+
+    @classmethod
+    def _simulate_update_schedule_detail_output_schema(cls,
+            base):
+        origin = base['properties']['origin']['properties']
+        del origin['option']['properties']['id']
+        del origin['covered']['properties']['id']
+        del origin['covered']['properties']['party']['properties']['id']
+        del origin['covered']['properties']['party']['properties']['code']
+        origin['covered']['properties']['party']['properties']['ref'] = {
+            'type': 'string'}
+
+    @classmethod
+    def _simulate_examples(cls):
+        return [
+            {
+                'input': {
+                    'parties': [
+                        {
+                            'ref': '1',
+                            'is_person': True,
+                            'birth_date': '1954-02-15',
+                            },
+                        {
+                            'ref': '2',
+                            'is_person': True,
+                            'birth_date': '1992-01-12',
+                            }
+                        ],
+                    'contracts': [
+                        {
+                            'ref': '1',
+                            'subscriber': {
+                                'ref': '1',
+                                },
+                            'product': {
+                                'code': 'life_product',
+                                },
+                            'extra_data': {
+                                'analyse_forcee': 'non',
+                                },
+                            'covereds': [
+                                {
+                                    'party': {
+                                        'ref': '1',
+                                        },
+                                    'item_descriptor': {
+                                        'code': 'life_person_item_desc',
+                                        },
+                                    'extra_data': {
+                                        'job_category': 'csp2',
+                                        },
+                                    'coverages': [
+                                        {
+                                            'coverage': {
+                                                'code': 'death_coverage',
+                                                },
+                                            'extra_data': {
+                                                'double_for_accidents': True,
+                                                },
+                                            },
+                                        ],
+                                    },
+                                {
+                                    'party': {
+                                        'ref': '2',
+                                        },
+                                    'item_descriptor': {
+                                        'code': 'life_person_item_desc',
+                                        },
+                                    'extra_data': {
+                                        'job_category': 'csp2',
+                                        },
+                                    'coverages': [
+                                        {
+                                            'coverage': {
+                                                'code': 'death_coverage',
+                                                },
+                                            'extra_data': {
+                                                'double_for_accidents': True,
+                                                },
+                                            },
+                                        {
+                                            'coverage': {
+                                                'code': 'unemployment_coverage',
+                                                },
+                                            'extra_data': {
+                                                'deductible_duration': '30',
+                                                'per_day_amount': '150',
+                                                },
+                                            },
+                                        ],
+                                    },
+                                ],
+                            },
+                        ],
+                    },
+                'output': [
+                    {
+                        'schedule': [
+                            {
+                                'premium': '254.59',
+                                'currency_symbol': '€',
+                                'details': [
+                                    {
+                                        'premium': '22.99',
+                                        'end': '2020-10-10',
+                                        'fee': '0',
+                                        'name': 'Death',
+                                        'start': '2019-10-11',
+                                        'tax': '0.00',
+                                        'total': '22.99',
+                                        'origin': {
+                                            'option': {
+                                                'coverage': {
+                                                    'code': 'death_coverage',
+                                                    'id': 3,
+                                                    },
+                                                },
+                                            'covered': {
+                                                'party': {
+                                                    'name': 'M. TEMP NAME 1 '
+                                                    'Temp First Name 1',
+                                                    'ref': '1',
+                                                    },
+                                                },
+                                            },
+                                        },
+                                    {
+                                        'premium': '70.90',
+                                        'end': '2020-10-10',
+                                        'fee': '0',
+                                        'name': 'Death',
+                                        'start': '2019-10-11',
+                                        'tax': '0.00',
+                                        'total': '70.90',
+                                        'origin': {
+                                            'option': {
+                                                'coverage': {
+                                                    'code': 'death_coverage',
+                                                    'id': 3,
+                                                    },
+                                                },
+                                            'covered': {
+                                                'party': {
+                                                    'name': 'M. TEMP NAME 2 '
+                                                    'Temp First Name 2',
+                                                    'ref': '2',
+                                                    },
+                                                },
+                                            },
+                                        },
+                                    {
+                                        'premium': '160.70',
+                                        'end': '2020-10-10',
+                                        'fee': '0',
+                                        'name': 'Unemployment',
+                                        'start': '2019-10-11',
+                                        'tax': '0.00',
+                                        'total': '160.70',
+                                        'origin': {
+                                            'option': {
+                                                'coverage': {
+                                                    'code':
+                                                    'unemployment_coverage',
+                                                    'id': 5,
+                                                    },
+                                                },
+                                            'covered': {
+                                                'party': {
+                                                    'name': 'M. TEMP NAME 2 '
+                                                    'Temp First Name 2',
+                                                    'ref': '2',
+                                                    },
+                                                },
+                                            },
+                                        },
+                                    ],
+                                'end': '2020-10-10',
+                                'fee': '0',
+                                'start': '2019-10-11',
+                                'tax': '0.00',
+                                'total': '254.59',
+                                },
+                            ],
+                        'total_premium': '254.59',
+                        'total_fee': '0',
+                        'total_tax': '0.00',
+                        'total': '254.59',
+                        'ref': '1',
                         },
                     ],
                 },

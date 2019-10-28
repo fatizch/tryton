@@ -308,9 +308,8 @@ class Invoice(metaclass=PoolMeta):
             return
         contract_revision_date = max(line.maturity_date,
             utils.today(), self.contract.initial_start_date or utils.today())
-        with Transaction().set_context(
-                contract_revision_date=contract_revision_date):
-            billing_information = self.contract.billing_information
+        billing_information = self.contract._billing_information_at_date(
+            contract_revision_date)
         if billing_information.suspended:
             return
         term_change = ServerContext().context.get('_payment_term_change', False)

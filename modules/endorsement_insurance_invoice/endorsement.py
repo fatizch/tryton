@@ -74,7 +74,7 @@ class Contract(metaclass=PoolMeta):
     def _future_invoices_cache_key(cls, from_date, to_date):
         return super(Contract, cls)._future_invoices_cache_key(
             from_date, to_date) + (Transaction().context.get(
-                'will_be_rollbacked', False),)
+                '_will_be_rollbacked', False),)
 
     def rebill_endorsement_dates(self):
         pool = Pool()
@@ -130,7 +130,7 @@ class Contract(metaclass=PoolMeta):
 
     @classmethod
     def rebill_after_endorsement(cls, contracts, caller=None):
-        if Transaction().context.get('will_be_rollbacked', False):
+        if Transaction().context.get('_will_be_rollbacked', False):
             return
         if not isinstance(caller, (tuple, list)):
             caller = [caller]
@@ -149,7 +149,7 @@ class Contract(metaclass=PoolMeta):
 
     @classmethod
     def reconcile_after_endorsement(cls, contracts, caller=None):
-        if Transaction().context.get('will_be_rollbacked', False):
+        if Transaction().context.get('_will_be_rollbacked', False):
             return
         if not isinstance(caller, (tuple, list)):
             caller = [caller]

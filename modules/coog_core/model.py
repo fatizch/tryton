@@ -520,13 +520,6 @@ class CoogSQL(export.ExportImportMixin, FunctionalErrorMixIn,
                         'field for field %s of %s' % (
                             field_name, cls.__name__))
                     do_exit = True
-            elif isinstance(field, tryton_fields.MultiValue):
-                if getattr(cls, 'default_' + field_name, None) is not None:
-                    logging.getLogger('fields').critical(
-                        'Field %s of %s ' % (field_name, field.model_name) +
-                        'has a default method but it is useless since '
-                        'Property fields ignore defaults')
-                    do_exit = True
         if do_exit:
             logging.getLogger('coog').critical('Stopping the server')
             sys.exit(1)
@@ -1826,3 +1819,14 @@ class AutoReadonlyViews(ModelView):
             for sub_view_data in field_data['views'].values():
                 pool.get(model_name).__set_view_fields_readonly(sub_view_data,
                     force_readonly=force_nested_views)
+
+
+class ContextualValidationDisable(ModelStorage):
+    '''
+        Disable validations through the context
+    '''
+    @classmethod
+    def _validate(cls, records, field_names=None):
+        if Transaction().context.get('_disable_validations', False):
+            return
+        super()._validate(records, field_names=field_names)

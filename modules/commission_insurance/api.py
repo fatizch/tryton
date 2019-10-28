@@ -100,14 +100,17 @@ class APIContract(metaclass=PoolMeta):
         return contract
 
     @classmethod
-    def _contract_convert(cls, data, options, parameters):
+    def _contract_convert(cls, data, options, parameters, minimum=False):
         pool = Pool()
         API = pool.get('api')
 
-        super()._contract_convert(data, options, parameters)
+        super()._contract_convert(data, options, parameters, minimum=minimum)
 
-        data['agent'] = API.instantiate_code_object('commission.agent',
-            data['agent'])
+        if minimum is False or 'agent' in data:
+            data['agent'] = API.instantiate_code_object('commission.agent',
+                data['agent'])
+        else:
+            data['agent'] = None
 
     @classmethod
     def _validate_contract_input(cls, data):
@@ -144,7 +147,8 @@ class APIContract(metaclass=PoolMeta):
     def _contract_schema(cls, minimum=False):
         schema = super()._contract_schema(minimum=minimum)
         schema['properties']['agent'] = CODED_OBJECT_SCHEMA
-        schema['required'].append('agent')
+        if not minimum:
+            schema['required'].append('agent')
         return schema
 
     @classmethod
@@ -158,6 +162,14 @@ class APIContract(metaclass=PoolMeta):
     @classmethod
     def _compute_billing_modes_examples(cls):
         examples = super()._compute_billing_modes_examples()
+        for example in examples:
+            for contract_data in example['input']['contracts']:
+                contract_data['agent'] = {'code': 'agent_007'}
+        return examples
+
+    @classmethod
+    def _simulate_examples(cls):
+        examples = super()._simulate_examples()
         for example in examples:
             for contract_data in example['input']['contracts']:
                 contract_data['agent'] = {'code': 'agent_007'}

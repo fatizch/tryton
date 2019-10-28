@@ -115,15 +115,20 @@ class APIContract(APIMixin):
     def subscribe_contracts(cls, parameters):
         options = parameters.get('options', {})
         created = {}
-        for cur_model in cls._subscribe_contracts_create_priorities():
-            getattr(cls, '_subscribe_contracts_create_%s' % cur_model)(
-                parameters, created, options)
+        cls._subscribe_contracts_create_instances(parameters, created, options)
         cls._subscribe_contracts_execute(created, options)
         return cls._subscribe_contracts_result(created)
 
     @classmethod
     def _subscribe_contracts_create_priorities(cls):
         return ['parties', 'relations', 'contracts']
+
+    @classmethod
+    def _subscribe_contracts_create_instances(cls, parameters, created,
+            options):
+        for cur_model in cls._subscribe_contracts_create_priorities():
+            getattr(cls, '_subscribe_contracts_create_%s' % cur_model)(
+                parameters, created, options)
 
     @classmethod
     def _subscribe_contracts_create_parties(cls, parameters, created, options):
@@ -269,7 +274,7 @@ class APIContract(APIMixin):
         return result
 
     @classmethod
-    def _subscribe_contracts_convert_input(cls, parameters):
+    def _subscribe_contracts_convert_input(cls, parameters, minimum=False):
         pool = Pool()
         PartyAPI = pool.get('api.party')
 
@@ -282,11 +287,12 @@ class APIContract(APIMixin):
         for relation in parameters.get('relations', []):
             PartyAPI._relation_convert(relation, options, parameters)
         for contract in parameters['contracts']:
-            cls._contract_convert(contract, options, parameters)
+            cls._contract_convert(contract, options, parameters,
+                minimum=minimum)
         return parameters
 
     @classmethod
-    def _contract_convert(cls, data, options, parameters):
+    def _contract_convert(cls, data, options, parameters, minimum=False):
         pool = Pool()
         API = pool.get('api')
         Core = pool.get('api.core')
@@ -320,7 +326,7 @@ class APIContract(APIMixin):
         data['coverages'] = data.get('coverages', [])
         for coverage_data in data['coverages']:
             cls._contract_option_convert(coverage_data, options, parameters,
-                package=data['package'])
+                package=data['package'], minimum=minimum)
 
         if data['package']:
             cls._contract_apply_package(data)
@@ -330,7 +336,8 @@ class APIContract(APIMixin):
         data['extra_data'] = extra_data
 
     @classmethod
-    def _contract_option_convert(cls, data, options, parameters, package=None):
+    def _contract_option_convert(cls, data, options, parameters, package=None,
+            minimum=False):
         pool = Pool()
         API = pool.get('api')
         Core = pool.get('api.core')

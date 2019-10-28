@@ -443,6 +443,13 @@ class Product(metaclass=PoolMeta):
         doc['rules'].append(coog_string.doc_for_rules(self, 'billing_rules'))
         return doc
 
+    def get_default_billing_mode(self):
+        if not self.billing_rules:
+            return None
+        if not self.billing_rules[0].billing_modes:
+            return None
+        return self.billing_rules[0].billing_modes[0]
+
     @fields.depends('billing_rules')
     def on_change_with_billing_behavior(self, name=None):
         if self.billing_rules:
@@ -710,12 +717,8 @@ class OptionDescriptionPremiumRule(metaclass=PoolMeta):
         contract = lines[0].contract if lines else None
         if not contract:
             return lines
-        pool = Pool()
-        ContractBillingInformation = pool.get('contract.billing_information')
-        ContractBillingMode = pool.get('offered.billing_mode')
-        contract_billing_mode = ContractBillingInformation.get_values(
-            [contract], date=date,)['billing_mode'][contract.id]
-        new_frequency = ContractBillingMode(contract_billing_mode).frequency
+        new_frequency = contract._billing_information_at_date(
+            date).billing_mode.frequency
         for line in lines:
             factor = self.convert_premium_frequency(line.frequency,
                 new_frequency)

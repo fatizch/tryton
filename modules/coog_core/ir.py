@@ -1,5 +1,6 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+import random
 import logging
 import datetime
 import polib
@@ -154,6 +155,13 @@ class Sequence(ExportImportMixin, model.TaggedMixin, metaclass=PoolMeta):
         result.add('number_next_internal')
         return result
 
+    @classmethod
+    def _get_sequence(cls, sequence):
+        if (Transaction().context.get('_will_be_rollbacked', False) and
+                sequence.type == 'incremental'):
+            return '%%0-%sd' % sequence.padding % random.randint(1, 10000000)
+        return super()._get_sequence(sequence)
+
     def get_func_key(self, values):
         return '|'.join((self.code, self.name))
 
@@ -200,14 +208,22 @@ class DateClass(metaclass=PoolMeta):
 
     @classmethod
     def today(cls, timezone=None):
-        ctx_date = Transaction().context.get('client_defined_date')
+        transaction = Transaction()
+        ctx_date = transaction.context.get('client_defined_date')
         if ctx_date:
             if isinstance(ctx_date, str):
                 ctx_date = datetime.datetime.strptime(
                     ctx_date, '%Y-%m-%d').date()
             return ctx_date
         else:
-            return super(DateClass, cls).today(timezone=timezone)
+            if getattr(transaction, '_cached_today', -1) == -1:
+                transaction._cached_today = {}
+            cached = transaction._cached_today.get(timezone, None)
+            if cached is not None:
+                return cached
+            result = super(DateClass, cls).today(timezone=timezone)
+            transaction._cached_today[timezone] = result
+            return result
 
     @staticmethod
     def system_today():

@@ -89,9 +89,12 @@ class Loan(metaclass=PoolMeta):
         contract_id = Transaction().context.get('contract', None)
         if contract_id:
             contract = pool.get('contract')(contract_id)
+            return self.get_taea_for_contract(contract)
         else:
             return 0
 
+    def get_taea_for_contract(self, contract):
+        pool = Pool()
         Fee = pool.get('account.fee')
 
         rule = contract.product.average_loan_premium_rule

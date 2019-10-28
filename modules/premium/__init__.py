@@ -29,6 +29,7 @@ def register():
         module='premium', type_='model')
 
     Pool.register(
+        contract.ContractTaxRuleCountry,
         contract.PremiumTaxRuleCountry,
         module='premium', type_='model', depends=['account_tax_rule_country'])
 

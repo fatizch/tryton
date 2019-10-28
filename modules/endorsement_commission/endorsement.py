@@ -27,7 +27,7 @@ class Contract(metaclass=PoolMeta):
     @classmethod
     def update_commissions_after_endorsement(cls, contracts, endorsements,
             kind):
-        if Transaction().context.get('will_be_rollbacked', False):
+        if Transaction().context.get('_will_be_rollbacked', False):
             return
         if not isinstance(endorsements, (tuple, list)):
             endorsements = [endorsements]

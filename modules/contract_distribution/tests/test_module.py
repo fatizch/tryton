@@ -34,6 +34,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
         product, = Product.search([('code', '=', 'AAA')])
         node_1, = DistNetwork.search([('code', '=', 'node_1')])
         node_1_1, = DistNetwork.search([('code', '=', 'node_1_1')])
+        node_2_1, = DistNetwork.search([('code', '=', 'node_2_1')])
 
         com_product_1 = ComProduct()
         com_product_1.code = 'com_product_1'
@@ -56,12 +57,18 @@ class ModuleTestCase(test_framework.CoogTestCase):
         node_1.commercial_products = [com_product_1]
         node_1.save()
         node_1_1.commercial_products = [com_product_2]
+        node_1_1.is_distributor = True
         node_1_1.save()
+
+        node_2_1.commercial_products = [com_product_1, com_product_3]
+        node_2_1.is_distributor = True
+        node_2_1.save()
 
         self.assertEqual({x.code for x in node_1.all_com_products},
             {'com_product_1'})
         self.assertEqual({x.code for x in node_1_1.all_com_products},
             {'com_product_1', 'com_product_2'})
+        self.assertEqual([x.id for x in node_1.distributors], [node_1_1.id])
 
     @test_framework.prepare_test(
         'contract_distribution.test0002_test_commercial_products',
@@ -76,8 +83,10 @@ class ModuleTestCase(test_framework.CoogTestCase):
         product_a, = Product.search([('code', '=', 'AAA')])
         node_1, = DistNetwork.search([('code', '=', 'node_1')])
         node_1_1, = DistNetwork.search([('code', '=', 'node_1_1')])
+        node_2_1, = DistNetwork.search([('code', '=', 'node_2_1')])
         com_product_1, = ComProduct.search([('code', '=', 'com_product_1')])
         com_product_2, = ComProduct.search([('code', '=', 'com_product_2')])
+        com_product_3, = ComProduct.search([('code', '=', 'com_product_3')])
 
         self.maxDiff = None
 
@@ -172,6 +181,49 @@ class ModuleTestCase(test_framework.CoogTestCase):
                     'fields': ['name', 'first_name', 'birth_date',
                         'email', 'phone_number', 'is_person', 'addresses'],
                     },
+                'commercial_products': [
+                    {
+                        'code': 'com_product_1',
+                        'name': 'Commercial Product 1',
+                        'id': com_product_1.id,
+                        'distributors': [
+                            {
+                                'code': 'node_1_1',
+                                'name': 'Node 1 1',
+                                'id': node_1_1.id,
+                                },
+                            {
+                                'code': 'node_2_1',
+                                'name': 'Node 2 1',
+                                'id': node_2_1.id,
+                                },
+                            ],
+                        },
+                    {
+                        'code': 'com_product_2',
+                        'name': 'Commercial Product 2',
+                        'id': com_product_2.id,
+                        'distributors': [
+                            {
+                                'code': 'node_1_1',
+                                'name': 'Node 1 1',
+                                'id': node_1_1.id,
+                                },
+                            ],
+                        },
+                    {
+                        'code': 'com_product_3',
+                        'name': 'Commercial Product 3',
+                        'id': com_product_3.id,
+                        'distributors': [
+                            {
+                                'code': 'node_2_1',
+                                'name': 'Node 2 1',
+                                'id': node_2_1.id,
+                                },
+                            ],
+                        },
+                    ],
                 },
             ]
 
@@ -180,22 +232,31 @@ class ModuleTestCase(test_framework.CoogTestCase):
 
         self.assertEqual(APIProduct.describe_products(
                 {}, {'_debug_server': True, 'dist_network': node_1.id})[0][
-                'commercial_products'], [{
+                'commercial_products'], [
+                {
                     'code': 'com_product_1',
                     'id': com_product_1.id,
                     'name': 'Commercial Product 1',
+                    'distributors': [
+                        {
+                            'code': 'node_1_1',
+                            'name': 'Node 1 1',
+                            'id': node_1_1.id,
+                            },
+                        ],
+                    },
+                {
+                    'code': 'com_product_2',
+                    'id': com_product_2.id,
+                    'name': 'Commercial Product 2',
+                    'distributors': [
+                        {
+                            'code': 'node_1_1',
+                            'name': 'Node 1 1',
+                            'id': node_1_1.id,
+                            },
+                        ],
                     }])
-
-        self.assertEqual(
-            sorted(APIProduct.describe_products({}, {'_debug_server': True,
-                        'dist_network': node_1_1.id})[0]['commercial_products'],
-                key=lambda x: x['code']),
-            [
-                {'code': 'com_product_1', 'id': com_product_1.id,
-                    'name': 'Commercial Product 1'},
-                {'code': 'com_product_2', 'id': com_product_2.id,
-                    'name': 'Commercial Product 2'},
-                ])
 
     @test_framework.prepare_test(
         'contract_distribution.test0002_test_commercial_products',

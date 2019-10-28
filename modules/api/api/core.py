@@ -92,7 +92,8 @@ def api_context():
 @contextmanager
 def api_input_error_manager():
     api_input_errors = []
-    with ServerContext().set_context(_api_input_errors=api_input_errors):
+    with ServerContext().set_context(_api_input_errors=api_input_errors,
+            _api_ignored_input_errors=set()):
         try:
             yield
         finally:
@@ -419,7 +420,22 @@ class APIModel(Model):
         if errors is None:
             raise APIInputError([error_data])
 
-        errors.append(error_data)
+        if error_data.get('type', None) not in ServerContext().get(
+                '_api_ignored_input_errors'):
+            errors.append(error_data)
+
+    @classmethod
+    def ignore_input_errors(cls, error_type):
+        errors = ServerContext().get('_api_input_errors')
+        error_count = len(errors)
+
+        # We must filter in place so that we do not need to re-set the context
+        # (which would invalidate it)
+        for idx, error in enumerate(reversed(errors), 1):
+            if 'type' in error and error['type'] == error_type:
+                errors.pop(error_count - idx)
+
+        ServerContext().get('_api_ignored_input_errors').add(error_type)
 
     @classmethod
     def check_access(cls, klass, api_name):

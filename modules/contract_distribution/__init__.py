@@ -31,6 +31,7 @@ def register():
         depends=['contract_process'])
 
     Pool.register(
+        api.APIIdentity,
         api.APICore,
         api.APIProduct,
         api.APIContract,

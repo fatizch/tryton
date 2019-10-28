@@ -67,19 +67,45 @@ class ModuleTestCase(test_framework.CoogTestCase):
         'company_cog.test0001_testCompanyCreation',
         )
     def test0004_create_accounts(self):
-        company, = self.Company.search([('party.name', '=', 'World Company')])
-        account_kind, = self.AccountKind.create([{
+        pool = Pool()
+        Company = pool.get('company.company')
+        AccountKind = pool.get('account.account.type')
+        Account = pool.get('account.account')
+
+        company, = Company.search([('party.name', '=', 'World Company')])
+        account_kind, = AccountKind.create([{
                     'name': 'Product',
                     'company': company.id,
                     'statement': 'income',
                     'revenue': True,
                     }])
-        account, = self.Account.create([{
+        account, = Account.create([{
                     'name': 'Account for Product',
                     'code': 'account_product',
                     'company': company.id,
                     'type': account_kind.id,
                     }])
+
+        party_account_kind, = AccountKind.create([{
+                    'name': 'Party',
+                    'company': company.id,
+                    'statement': 'balance',
+                    'payable': True,
+                    'receivable': True,
+                    }])
+        party_account, = Account.create([{
+                    'name': 'Account for Parties',
+                    'code': '411',
+                    'company': company.id,
+                    'type': party_account_kind.id,
+                    'party_required': True,
+                    'reconcile': True,
+                    }])
+
+        with Transaction().set_context(company=company.id):
+            configuration = pool.get('account.configuration')(1)
+            configuration.default_account_receivable = party_account
+            configuration.save()
 
     @test_framework.prepare_test(
         'offered_insurance.test0001_testFunctionalRuleCreation',
@@ -135,17 +161,29 @@ class ModuleTestCase(test_framework.CoogTestCase):
         'offered_insurance.test0005_testInsurerCreation',
         )
     def test0006_prepare_product_for_subscription(self):
-        currency, = self.Currency.search([], limit=1)
-        company, = self.Company.search([('party.name', '=', 'World Company')])
-        insurer, = self.Insurer.search([])
-        generator, = self.Sequence.search([('code', '=', 'contract')])
-        quote_generator, = self.Sequence.search([('code', '=', 'quote')])
-        monthly, = self.BillingMode.search([('code', '=', 'monthly')])
-        quarterly, = self.BillingMode.search([('code', '=', 'quarterly')])
-        item_desc, = self.ItemDesc.search([('code', '=', 'person')])
-        account, = self.Account.search([('code', '=', 'account_product')])
-        rule, = self.RuleEngine.search(
+        pool = Pool()
+        Currency = pool.get('currency.currency')
+        Company = pool.get('company.company')
+        Insurer = pool.get('insurer')
+        Sequence = pool.get('ir.sequence')
+        BillingMode = pool.get('offered.billing_mode')
+        ItemDesc = pool.get('offered.item.description')
+        Account = pool.get('account.account')
+        RuleEngine = pool.get('rule_engine')
+
+        currency, = Currency.search([], limit=1)
+        company, = Company.search([('party.name', '=', 'World Company')])
+        insurer, = Insurer.search([])
+        generator, = Sequence.search([('code', '=', 'contract')])
+        quote_generator, = Sequence.search([('code', '=', 'quote')])
+        monthly, = BillingMode.search([('code', '=', 'monthly')])
+        quarterly, = BillingMode.search([('code', '=', 'quarterly')])
+        item_desc, = ItemDesc.search([('code', '=', 'person')])
+        account, = Account.search([('code', '=', 'account_product')])
+        rule, = RuleEngine.search(
             [('short_name', '=', 'filter_billing_modes_rule')])
+        premium_rule, = RuleEngine.search([
+                ('short_name', '=', 'simple_premium_rule')])
 
         coverage_alpha = self.Coverage()
         coverage_alpha.company = company
@@ -155,6 +193,11 @@ class ModuleTestCase(test_framework.CoogTestCase):
         coverage_alpha.name = 'Alpha'
         coverage_alpha.account_for_billing = account
         coverage_alpha.item_desc = item_desc
+        coverage_alpha.premium_rules = [{
+                'rule': premium_rule,
+                'rule_extra_data': {'premium_amount': Decimal(10)},
+                'frequency': 'monthly',
+                }]
         coverage_alpha.save()
 
         coverage_beta = self.Coverage()
@@ -165,6 +208,11 @@ class ModuleTestCase(test_framework.CoogTestCase):
         coverage_beta.name = 'Beta'
         coverage_beta.account_for_billing = account
         coverage_beta.item_desc = item_desc
+        coverage_beta.premium_rules = [{
+                'rule': premium_rule,
+                'rule_extra_data': {'premium_amount': Decimal(100)},
+                'frequency': 'monthly',
+                }]
         coverage_beta.save()
 
         product = self.Product()
@@ -182,7 +230,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
         product.save()
 
     @test_framework.prepare_test('company_cog.test0001_testCompanyCreation')
-    def test_contract_get_invoice_periods(self):
+    def test0007_contract_get_invoice_periods(self):
         'Test Contract get_invoice_periods'
 
         company, = self.Company.search([
@@ -445,7 +493,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
                     (date(2014, 6, 15), date(2014, 6, 30), billing_info),
                     ])
 
-    def test_get_direct_debit_day(self):
+    def test0008_get_direct_debit_day(self):
         current_date = date(2014, 9, 1)
         with Transaction().set_context(client_defined_date=current_date):
             payment_journal = self.PaymentJournal()
@@ -1281,6 +1329,248 @@ class ModuleTestCase(test_framework.CoogTestCase):
                     },
                 ]
             )
+
+    @test_framework.prepare_test(
+        'bank_cog.test0010bank',
+        'contract_insurance_invoice.test0006_prepare_product_for_subscription',
+        'contract.test0002_testCountryCreation',
+        )
+    def test0100_test_payment_schedule_API(self):
+        pool = Pool()
+        ContractAPI = pool.get('api.contract')
+        data_ref = {
+            'parties': [
+                {
+                    'ref': '1',
+                    'is_person': True,
+                    'name': 'Doe',
+                    'first_name': 'Mother',
+                    'birth_date': '1978-01-14',
+                    'gender': 'female',
+                    'bank_accounts': [{
+                            'number': 'FR7615970003860000690570007',
+                            'bank': {'bic': 'ABCDEFGHXXX'},
+                            },
+                        ],
+                    'addresses': [
+                        {
+                            'street': 'Somewhere along the street',
+                            'zip': '75002',
+                            'city': 'Paris',
+                            'country': 'fr',
+                            },
+                        ],
+                    },
+                {
+                    'ref': '2',
+                    'is_person': True,
+                    'name': 'Doe',
+                    'first_name': 'Father',
+                    'birth_date': '1978-06-12',
+                    'gender': 'male',
+                    },
+                ],
+            'contracts': [
+                {
+                    'ref': '1',
+                    'product': {'code': 'AAA'},
+                    'subscriber': {'ref': '1'},
+                    'extra_data': {},
+                    'start': '2020-01-01',
+                    'billing': {
+                        'payer': {'ref': '1'},
+                        'billing_mode': {'code': 'quarterly'},
+                        'direct_debit_day': 4,
+                        },
+                    'covereds': [
+                        {
+                            'party': {'ref': '1'},
+                            'item_descriptor': {'code': 'person'},
+                            'coverages': [
+                                {
+                                    'coverage': {'code': 'ALP'},
+                                    'extra_data': {},
+                                    },
+                                {
+                                    'coverage': {'code': 'BET'},
+                                    'extra_data': {},
+                                    },
+                                ],
+                            },
+                        {
+                            'party': {'ref': '2'},
+                            'item_descriptor': {'code': 'person'},
+                            'coverages': [
+                                {
+                                    'coverage': {'code': 'ALP'},
+                                    'extra_data': {},
+                                    },
+                                {
+                                    'coverage': {'code': 'BET'},
+                                    'extra_data': {},
+                                    },
+                                ],
+                            },
+                        ],
+                    },
+                ],
+            'options': {
+                'activate': True,
+                },
+            }
+
+        result = ContractAPI.subscribe_contracts(
+            data_ref, {'_debug_server': True})
+
+        schedule = ContractAPI.payment_schedule(
+            {
+                'contracts': [{'number': result['contracts'][0]['number']}],
+                },
+            {'_debug_server': True})
+        self.maxDiff = None
+
+        self.assertEqual(len(schedule), 1)
+        self.assertEqual(schedule[0]['contract']['id'],
+            result['contracts'][0]['id'])
+
+        # Quarterly billing, default schedule is 1 year
+        self.assertEqual(len(schedule[0]['schedule']), 4)
+
+        # Coverage A is 10 per month, 12 months + 2 covereds = 240
+        # Coverage B is 100 per month, 12 months + 2 covereds = 2400
+        self.assertEqual(schedule[0]['total'], '2640.00')
+
+        self.assertEqual([(x['start'], x['end'], x['total'])
+                    for x in schedule[0]['schedule']],
+                [
+                    ('2020-01-01', '2020-03-31', '660.00'),
+                    ('2020-04-01', '2020-06-30', '660.00'),
+                    ('2020-07-01', '2020-09-30', '660.00'),
+                    ('2020-10-01', '2020-12-31', '660.00'),
+                    ])
+
+    @test_framework.prepare_test(
+        'contract_insurance_invoice.test0006_prepare_product_for_subscription',
+        )
+    def test0110_test_simulate_API(self):
+        pool = Pool()
+        ContractAPI = pool.get('api.contract')
+        data_ref = {
+            'parties': [
+                {
+                    'ref': '1',
+                    'is_person': True,
+                    'birth_date': '1978-01-14',
+                    },
+                {
+                    'ref': '2',
+                    'is_person': True,
+                    'birth_date': '1978-06-12',
+                    },
+                ],
+            'contracts': [
+                {
+                    'ref': '1',
+                    'product': {'code': 'AAA'},
+                    'subscriber': {'ref': '1'},
+                    'extra_data': {},
+                    'start': '2020-01-01',
+                    'covereds': [
+                        {
+                            'party': {'ref': '1'},
+                            'item_descriptor': {'code': 'person'},
+                            'coverages': [
+                                {
+                                    'coverage': {'code': 'ALP'},
+                                    'extra_data': {},
+                                    },
+                                {
+                                    'coverage': {'code': 'BET'},
+                                    'extra_data': {},
+                                    },
+                                ],
+                            },
+                        {
+                            'party': {'ref': '2'},
+                            'item_descriptor': {'code': 'person'},
+                            'coverages': [
+                                {
+                                    'coverage': {'code': 'ALP'},
+                                    'extra_data': {},
+                                    },
+                                {
+                                    'coverage': {'code': 'BET'},
+                                    'extra_data': {},
+                                    },
+                                ],
+                            },
+                        ],
+                    },
+                ],
+            }
+
+        # We have to commit here because simulate is executed in a new
+        # transaction, which cannot have access to the contents of the testing
+        # transaction
+        Transaction().commit()
+
+        data_dict = copy.deepcopy(data_ref)
+        schedule = ContractAPI.simulate(
+            data_dict, {'_debug_server': True})
+
+        self.maxDiff = None
+
+        self.assertEqual(len(schedule), 1)
+        self.assertEqual(schedule[0]['ref'], '1')
+
+        # Monthly billing (default value for the product), default schedule is
+        # 1 year
+        self.assertEqual(len(schedule[0]['schedule']), 12)
+
+        # Coverage A is 10 per month, 12 months + 2 covereds = 240
+        # Coverage B is 100 per month, 12 months + 2 covereds = 2400
+        self.assertEqual(schedule[0]['total'], '2640.00')
+
+        self.assertEqual([(x['start'], x['end'], x['total'])
+                    for x in schedule[0]['schedule']],
+                [
+                    ('2020-01-01', '2020-01-31', '220.00'),
+                    ('2020-02-01', '2020-02-29', '220.00'),
+                    ('2020-03-01', '2020-03-31', '220.00'),
+                    ('2020-04-01', '2020-04-30', '220.00'),
+                    ('2020-05-01', '2020-05-31', '220.00'),
+                    ('2020-06-01', '2020-06-30', '220.00'),
+                    ('2020-07-01', '2020-07-31', '220.00'),
+                    ('2020-08-01', '2020-08-31', '220.00'),
+                    ('2020-09-01', '2020-09-30', '220.00'),
+                    ('2020-10-01', '2020-10-31', '220.00'),
+                    ('2020-11-01', '2020-11-30', '220.00'),
+                    ('2020-12-01', '2020-12-31', '220.00'),
+                    ])
+
+        data_dict = copy.deepcopy(data_ref)
+        data_dict['contracts'][0]['billing'] = {
+            'billing_mode': {'code': 'quarterly'},
+            }
+        schedule = ContractAPI.simulate(
+            data_dict, {'_debug_server': True})
+
+        self.maxDiff = None
+
+        self.assertEqual(len(schedule), 1)
+        self.assertEqual(schedule[0]['ref'], '1')
+
+        # Quarterly billing
+        self.assertEqual(len(schedule[0]['schedule']), 4)
+        self.assertEqual(schedule[0]['total'], '2640.00')
+        self.assertEqual([(x['start'], x['end'], x['total'])
+                    for x in schedule[0]['schedule']],
+                [
+                    ('2020-01-01', '2020-03-31', '660.00'),
+                    ('2020-04-01', '2020-06-30', '660.00'),
+                    ('2020-07-01', '2020-09-30', '660.00'),
+                    ('2020-10-01', '2020-12-31', '660.00'),
+                    ])
 
 
 def suite():

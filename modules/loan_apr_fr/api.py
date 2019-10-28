@@ -16,17 +16,19 @@ class APIContract(metaclass=PoolMeta):
     @classmethod
     def _payment_schedule_from_contract(cls, contract):
         result = super()._payment_schedule_from_contract(contract)
-        result['taea'] = [
-            cls._payment_schedule_taea(loan) for loan in contract.loans]
+        if contract.is_loan:
+            result['taea'] = [
+                cls._payment_schedule_taea(contract_loan)
+                for contract_loan in contract.ordered_loans]
         return result
 
     @classmethod
-    def _payment_schedule_taea(cls, loan):
+    def _payment_schedule_taea(cls, contract_loan):
         return {
-            'taea': amount_for_api(loan.taea),
+            'taea': amount_for_api(contract_loan.taea),
             'loan': {
-                'id': loan.id,
-                'number': loan.number,
+                'id': contract_loan.loan.id,
+                'number': contract_loan.loan.number,
                 },
             }
 
@@ -67,3 +69,19 @@ class APIContract(metaclass=PoolMeta):
                 },
             ]
         return examples
+
+    @classmethod
+    def _simulate_cleanup_schedule(cls, schedule_data, created):
+        super()._simulate_cleanup_schedule(schedule_data, created)
+        for taea_data in schedule_data.get('taea', []):
+            taea_data['loan'] = {
+                'ref': created['loan_ref_per_id'][taea_data['loan']['id']],
+                }
+
+    @classmethod
+    def _simulate_update_schedule_output_schema(cls, base):
+        super()._simulate_update_schedule_output_schema(base)
+        base['items']['properties']['taea']['items']['properties']['loan'][
+            'properties'] = {
+            'ref': {'type': 'string'},
+            }

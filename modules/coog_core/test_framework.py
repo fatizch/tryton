@@ -33,12 +33,12 @@ def get_module_test_case(module_name):
 
 
 def launch_function(module_name, method_name):
-    master = Transaction().context.get('master', None)
+    master = Transaction().context.get('_master_test', None)
     if not(master and '%s,%s' % (module_name, method_name)
             in master._executed):
         module_file = get_module_test_case(module_name)
         test_class = module_file.ModuleTestCase
-        test_class._models = Transaction().context.get('master')._models
+        test_class._models = Transaction().context.get('_master_test')._models
         getattr(test_class(method_name), method_name)()
         master._executed.append('%s,%s' % (module_name, method_name))
 
@@ -48,14 +48,14 @@ def prepare_test(*_args):
     def decorator(f, forced=False):
         def wrap(*args, **kwargs):
             if not (Transaction() and Transaction().context and
-                    'master' in Transaction().context):
+                    '_master_test' in Transaction().context):
                 with Transaction().start(DB_NAME, USER, context=CONTEXT):
                     # Run all tests as root. Access management tests should
                     # manually set the user in the transaction
                     with Transaction().new_transaction() as transaction, \
                             Transaction().set_user(0):
                         try:
-                            with transaction.set_context(master=args[0]):
+                            with transaction.set_context(_master_test=args[0]):
                                 args[0]._executed = []
                                 for arg in _args:
                                     module_name, method_name = arg.split('.')

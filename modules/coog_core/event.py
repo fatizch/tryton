@@ -7,6 +7,7 @@ from trytond.model import Model, Unique
 from trytond.model.exceptions import ValidationError
 from trytond.rpc import RPC
 from trytond.cache import Cache
+from trytond.transaction import Transaction
 
 from . import model
 from . import fields
@@ -32,6 +33,25 @@ class Event(Model):
     def __setup__(cls):
         super(Event, cls).__setup__()
         cls.__rpc__.update({'ws_notify_events': RPC(readonly=False)})
+
+    @classmethod
+    def __post_setup__(cls):
+        super().__post_setup__()
+
+        # We do not want to trigger events (which may call other systems, write
+        # logs to the filesystem, etc...) when the transaction will be
+        # rollbacked anyway
+        #
+        # We have to do this that way so that even if the method is overriden,
+        # the check occurs before anything else is actually done
+        old_notify = cls.notify_events
+
+        def notify_events(*args, **kwargs):
+            if Transaction().context.get('_will_be_rollbacked', False):
+                return
+            old_notify(*args, **kwargs)
+
+        cls.notify_events = notify_events
 
     @classmethod
     @model.with_pre_commit_keyword_argument()

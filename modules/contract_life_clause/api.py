@@ -61,21 +61,29 @@ class APIContract(metaclass=PoolMeta):
         return option
 
     @classmethod
-    def _contract_option_convert(cls, data, options, parameters, package=None):
-        super()._contract_option_convert(data, options, parameters, package)
+    def _contract_option_convert(cls, data, options, parameters, package=None,
+            minimum=False):
+        super()._contract_option_convert(data, options, parameters, package,
+            minimum=minimum)
 
         pool = Pool()
         API = pool.get('api')
         PartyAPI = pool.get('api.party')
 
         coverage = data['coverage']
-        if coverage.beneficiaries_clauses and 'beneficiary_clause' not in data:
-            API.add_input_error({
-                    'type': 'missing_beneficiary_clause',
-                    'data': {
-                        'coverage': coverage.code,
-                        },
-                    })
+        if (coverage.beneficiaries_clauses and
+                'beneficiary_clause' not in data):
+            if len(coverage.beneficiaries_clauses) == 1:
+                data['beneficiary_clause'] = {
+                    'clause': {'code': coverage.beneficiaries_clauses[0].code},
+                    }
+            elif not minimum:
+                API.add_input_error({
+                        'type': 'missing_beneficiary_clause',
+                        'data': {
+                            'coverage': coverage.code,
+                            },
+                        })
 
         if 'beneficiary_clause' in data:
             allowed_beneficiary_clauses = {

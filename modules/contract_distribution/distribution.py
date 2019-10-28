@@ -31,6 +31,10 @@ class DistributionNetwork(metaclass=PoolMeta):
         fields.Many2Many('distribution.commercial_product', None, None,
             'All Commercial Products'),
         'get_all_commercial_products_id')
+    distributors = fields.Function(
+        fields.Many2Many('distribution.network', None, None, 'Distributors',
+            help='All distributors "below" this network'),
+        'getter_distributors')
 
     _get_all_distributors_cache = Cache('get_all_distributors')
 
@@ -59,6 +63,13 @@ class DistributionNetwork(metaclass=PoolMeta):
     def get_all_commercial_products_id(self, name):
         return [x.id for x in set(
                 self.commercial_products + self.parent_com_products)]
+
+    def getter_distributors(self, name):
+        return [x.id for x in self.search([
+                    ('left', '>=', self.left),
+                    ('right', '<=', self.right),
+                    ('is_distributor', '=', True),
+                    ])]
 
     @classmethod
     def _export_skips(cls):

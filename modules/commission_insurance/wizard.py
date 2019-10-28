@@ -190,7 +190,7 @@ class SimulateCommissionsParameters(model.CoogView,
     def refresh(self):
         with Transaction().new_transaction() as transaction:
             try:
-                with transaction.set_context(will_be_rollbacked=True):
+                with transaction.set_context(_will_be_rollbacked=True):
                     self.calculate_commissions(self.mock(self.product))
                     # Used for not rollbacking those values
                     dummy = self._changed_values  # NOQA

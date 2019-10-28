@@ -4,6 +4,8 @@ from decimal import Decimal
 
 from trytond.pool import PoolMeta, Pool
 
+from trytond.modules.coog_core import utils
+
 from trytond.modules.api.api.core import amount_for_api, date_for_api
 from trytond.modules.api.api.core import amount_from_api, date_from_api
 from trytond.modules.api.api.core import DATE_SCHEMA, AMOUNT_SCHEMA, RATE_SCHEMA
@@ -202,8 +204,7 @@ class APIContract(metaclass=PoolMeta):
                 'deferral': {'type': 'string', 'enum': ['partially', 'fully']},
                 'lender_address': {'type': 'integer'},
                 },
-            'required': ['ref', 'kind', 'amount', 'funds_release_date',
-                'duration'],
+            'required': ['ref', 'kind', 'amount', 'duration'],
             'dependencies': {
                 'deferral_duration': {'required': ['deferral']},
                 },
@@ -333,8 +334,11 @@ class APIContract(metaclass=PoolMeta):
     def _create_loan_convert_input(cls, loan_data):
         API = Pool().get('api')
         loan_data['amount'] = amount_from_api(loan_data['amount'])
-        loan_data['funds_release_date'] = date_from_api(
-            loan_data['funds_release_date'])
+        if 'funds_release_date' in loan_data:
+            loan_data['funds_release_date'] = date_from_api(
+                loan_data['funds_release_date'])
+        else:
+            loan_data['funds_release_date'] = utils.today()
         if 'first_payment_date' in loan_data:
             loan_data['first_payment_date'] = date_from_api(
                 loan_data['first_payment_date'])
@@ -648,8 +652,9 @@ class APIContract(metaclass=PoolMeta):
                             loan_share['loan']['ref']]
 
     @classmethod
-    def _subscribe_contracts_convert_input(cls, parameters):
-        parameters = super()._subscribe_contracts_convert_input(parameters)
+    def _subscribe_contracts_convert_input(cls, parameters, minimum=False):
+        parameters = super()._subscribe_contracts_convert_input(parameters,
+            minimum=minimum)
 
         if 'loans' in parameters:
             parameters['loans'] = [cls._create_loan_convert_input(x)
@@ -657,8 +662,10 @@ class APIContract(metaclass=PoolMeta):
         return parameters
 
     @classmethod
-    def _contract_option_convert(cls, data, options, parameters, package=None):
-        super()._contract_option_convert(data, options, parameters, package)
+    def _contract_option_convert(cls, data, options, parameters, package=None,
+            minimum=False):
+        super()._contract_option_convert(data, options, parameters, package,
+            minimum=minimum)
 
         pool = Pool()
         API = pool.get('api')
@@ -751,7 +758,7 @@ class APIContract(metaclass=PoolMeta):
         schema['properties']['loans'] = {
             'type': 'array',
             'additionalItems': False,
-            'items': cls._loan_schema(mode='full'),
+            'items': cls._loan_schema(mode='compute' if minimum else 'full'),
             }
         return schema
 

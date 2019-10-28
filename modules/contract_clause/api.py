@@ -34,8 +34,8 @@ class APIContract(metaclass=PoolMeta):
         return contract
 
     @classmethod
-    def _contract_convert(cls, data, options, parameters):
-        super()._contract_convert(data, options, parameters)
+    def _contract_convert(cls, data, options, parameters, minimum=False):
+        super()._contract_convert(data, options, parameters, minimum=minimum)
 
         API = Pool().get('api')
 
