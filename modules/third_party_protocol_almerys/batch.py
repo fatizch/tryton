@@ -121,7 +121,11 @@ class AlmerysProtocolBatch(batch.BatchRoot):
             'spouse': 'CJ',
             }
 
-        perimetre_service = E.PERIMETRE_SERVICE()
+        offreur_service = E.OFFREUR_SERVICE(
+            E.LIBELLE_OS(config.customer_label),
+            E.NUM_OS(config.customer_number)
+            )
+
         document = E.FICHIER(
             E.ENTETE(
                 E.NUM_FICHIER(sequence),
@@ -129,15 +133,12 @@ class AlmerysProtocolBatch(batch.BatchRoot):
                 E.VERSION_NORME(config.protocol_version),
                 E.NUM_OS_EMETTEUR(config.customer_number),
                 ),
-            E.OFFREUR_SERVICE(
-                E.LIBELLE_OS(config.customer_label),
-                E.NUM_OS(config.customer_number),
-                perimetre_service
-                )
-            )
+            offreur_service)
 
         for _, periods in groupby(
                 objects, lambda p: p.protocol.almerys_ss_groupe):
+            perimetre_service = E.PERIMETRE_SERVICE()
+            offreur_service.extend([perimetre_service])
             periods = list(periods)
             protocol = periods[0].protocol
             perimetre_service.extend([
@@ -206,6 +207,13 @@ class AlmerysProtocolBatch(batch.BatchRoot):
                             ))
                     else:
                         party_address = None
+                    ssn = ''
+                    if contract.subscriber.social_security_dependent:
+                        ssn = (contract.subscriber.main_insured_ssn[:13]
+                            if contract.subscriber.main_insured_ssn else '')
+                    else:
+                        ssn = (contract.subscriber.ssn_no_key[:13]
+                            if contract.subscriber.ssn_no_key else '')
                     membre = E.MEMBRE_CONTRAT(
                         E.SOUSCRIPTEUR('true'),
                         E.POSITION('01'),
@@ -249,14 +257,7 @@ class AlmerysProtocolBatch(batch.BatchRoot):
                         E.AUTONOME(
                             'true' if config.autonomous else 'false'),
                         # MODE_PAIEMENT
-                        E.NNI(contract.subscriber.ssn_no_key[:13]
-                            if contract.subscriber.ssn_no_key else
-                            contract.subscriber.main_insured_ssn[:13]
-                            if contract.subscriber.main_insured_ssn else ''),
-                        E.NNI_RATT(
-                            contract.subscriber.main_insured_ssn[:13]
-                            if contract.subscriber.main_insured_ssn and
-                            contract.subscriber.ssn_no_key else ''),
+                        E.NNI(ssn),
                         )
                     membre.extend([
                             E.VIP('false'),

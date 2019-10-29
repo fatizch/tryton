@@ -1,3 +1,5 @@
+* OTH#00000 Correction du ssn et du perimetre service dans le batch
+
 Version 2.6 - 2019-10-11
 * BUG#12797 Ne plus mettre d'adresse inconnue sur l'adresse si une des lignes est renseignée
 * OTH#00000 Corriger les valeurs par défaut des adresses pour Almerys
