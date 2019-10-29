@@ -1010,7 +1010,8 @@ class LoanIncrement(model.CoogSQL, model.CoogView, ModelCurrency):
         depends=['currency_digits'])
     loan_state = fields.Function(
         fields.Char('Loan State'),
-        'get_loan_state')
+        'get_loan_state', searcher='searcher_loan_state',
+        setter='setter_void')
 
     @classmethod
     def __setup__(cls):
@@ -1273,6 +1274,10 @@ class LoanIncrement(model.CoogSQL, model.CoogView, ModelCurrency):
 
     def get_loan_state(self, name):
         return self.loan.state if self.loan else None
+
+    @classmethod
+    def searcher_loan_state(cls, name, clause):
+        return [('loan.state',) + tuple(clause[1:])]
 
 
 class LoanPayment(model.CoogSQL, model.CoogView, ModelCurrency):

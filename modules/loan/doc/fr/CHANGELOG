@@ -1,3 +1,5 @@
+* OTH#00000 Ajout d'un searcher requis sur l'état du prêt depuis les incréments
+
 Version 2.6 - 2019-10-11
 * FEA#12327 Ajout d'une synthèse du dossier (personne couverte et montants assurés) pour que la bulle médicale puisse en prendre connaissance rapidement pendant le processus d'analyse de risque
 * FEA#12229 Gestion des contrats emprunteurs dans les API de souscription
