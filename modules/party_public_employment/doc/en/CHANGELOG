@@ -1,3 +1,5 @@
+* BUG#13193 Set the administrative_situation_sub_status data to null when the administrative_situation data is modified
+
 Version 2.6 - 2019-10-11
 * OTH#00000 Add civil_service_employment_entry_date data in rule engine
 * FEA#12056 Add withholding data

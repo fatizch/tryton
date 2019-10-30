@@ -1,3 +1,5 @@
+* BUG#13193 Mettre à null la donnée administrative_situation_sub_status lorsque la donnée administrative_situation est modifiée
+
 Version 2.6 - 2019-10-11
 * OTH#00000 Ajout de la donnée date d'entrée dans la fonction publique dans le moteur de règle
 * FEA#12056 Ajout des données de précompte

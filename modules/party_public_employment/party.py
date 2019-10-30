@@ -160,6 +160,15 @@ class EmploymentVersion(metaclass=PoolMeta):
             'administrative_situation_sub_status', 'increased_index',
             'gross_index', 'work_country', 'work_subdivision']
 
+    @fields.depends('administrative_situation',
+        'administrative_situation_sub_status')
+    def on_change_administrative_situation(self):
+        if self.administrative_situation and \
+                self.administrative_situation_sub_status and \
+                self.administrative_situation != \
+                self.administrative_situation_sub_status.situation:
+            self.administrative_situation_sub_status = None
+
 
 class AdminSituationSubStatus(model.CodedMixin, model.CoogView):
     'Administrative Situation Sub Status'
