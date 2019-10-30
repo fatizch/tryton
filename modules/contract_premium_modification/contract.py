@@ -70,7 +70,7 @@ class Contract(metaclass=PoolMeta):
     @classmethod
     def view_attributes(cls):
         return super(Contract, cls).view_attributes() + [(
-                '/form/group[@id="waiver_buttons"]',
+                '/form/group[@id="premium_modification_buttons"]',
                 'states',
                 {'invisible': True}
                 )]
