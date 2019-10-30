@@ -1,3 +1,4 @@
+* BUG#13091 Requittancer à la dernière quittance si nécessaire lors de l'annulation d'une mise en réduction
 * OTH#0000 Fix divers pour la 2.6
 
 Version 2.6 - 2019-10-11

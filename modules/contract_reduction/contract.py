@@ -224,7 +224,14 @@ class Contract(metaclass=PoolMeta):
                     contract.sub_status = None
                 cls.save([contract])
                 if utils.is_module_installed('contract_insurance_invoice'):
-                    contract.rebill(reduction_date)
+                    # Small fix because before issue #11146 the rebill ended
+                    # one day before the reduction_date
+                    if contract.last_invoice_end and coog_date.add_day(
+                            contract.last_invoice_end, 1) == reduction_date:
+                        rebill_date = contract.last_invoice_end
+                    else:
+                        rebill_date = reduction_date
+                    contract.rebill(rebill_date)
                     contract.reconcile()
             Event.notify_events(contracts, 'contract_reduction_cancelling')
 

@@ -1,3 +1,4 @@
+* BUG#13091 Rebill on the last invoice date if needed when cancelling a reduction
 * OTH#0000 Various fix 2.6
 
 Version 2.6 - 2019-10-11
