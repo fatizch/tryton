@@ -720,7 +720,7 @@ class EndorsementLoanIncrement(relation_mixin(
                 'number_of_payments', 'calculated_amount', 'payment_amount',
                 'end_date', 'begin_balance', 'currency', 'currency_symbol',
                 'currency_digits', 'start_date', 'early_repayment',
-                'first_payment_end_balance', 'manual'}
+                'first_payment_end_balance', 'manual', 'loan_state'}
 
 
 class EndorsementContractLoan(relation_mixin(

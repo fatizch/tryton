@@ -450,7 +450,8 @@ Create Test Contract II: Yearly contract with prorated waiver::
 
 Test Waiver Creation Wizard::
 
-    >>> create_wizard = Wizard('contract.premium_modification.create_waivers', [contract])
+    >>> create_wizard = Wizard(
+    ...     'contract.premium_modification.create_waivers', [contract])
     >>> len(create_wizard.form.options) == 1
     True
     >>> create_wizard.form.options[0].coverage.code == 'test_coverage'
