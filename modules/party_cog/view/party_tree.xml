@@ -11,6 +11,7 @@ this repository contains the full copyright notices and license terms. -->
         <field name="is_person" tree_invisible="1"/>
         <field name="main_address"/>
         <field name="is_anonymized" tree_invisible="1"/>
+        <field name="active" tree_invisible="1"/>
         <field name="planned_anonymization_date"/>
         <button name="button_extract_gdpr_data" string="Extract GDPR Data" tree_invisible="1"/>
     </xpath>

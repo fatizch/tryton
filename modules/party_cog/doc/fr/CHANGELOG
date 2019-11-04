@@ -1,3 +1,5 @@
+* BUG#00000 Rendre possile la recherche de tiers inactifs
+
 Version 2.6 - 2019-10-11
 * FEA#11960 Ajout d'une API pour la définition des tiers
 * BUG#11676 La hauteur du champ adresse devient fixe sur la vue formulaire d'un tiers

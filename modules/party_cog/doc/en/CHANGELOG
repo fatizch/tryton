@@ -1,3 +1,5 @@
+* BUG#00000 Enable inactive parties search
+
 Version 2.6 - 2019-10-11
 * FEA#11960 Add api for party definition
 * BUG#11676 Set fix height to addresses field on party view form
