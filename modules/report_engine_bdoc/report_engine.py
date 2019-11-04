@@ -11,6 +11,7 @@ from trytond.config import config
 from trytond.modules.coog_core import fields
 
 BDOC_FORMAT = [
+    ('', ''),
     ('docx', 'DOCX'),
     ('pdf', 'PDF'),
     ('pdfa', 'PDFA'),
