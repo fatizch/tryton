@@ -601,11 +601,15 @@ msgstr "[ERR_CPI_00000034] Périmètre de service"
 
 msgctxt "selection:return.almerys,error_code:"
 msgid "[ERR_CPI_00000047] Perimeter of service"
-msgstr "[ERR_CPI_00000047] Perimetre de service"
+msgstr "[ERR_CPI_00000047] Périmètre de service"
+
+msgctxt "selection:return.almerys,error_code:"
+msgid "[N/A] Unknown Code"
+msgstr "[N.D.] Code non reconnu"
 
 msgctxt "selection:return.almerys,error_code:"
 msgid "[ERR_CPI_00000048] Perimeter of service"
-msgstr "[ERR_CPI_00000048] Perimetre de service"
+msgstr "[ERR_CPI_00000048] Périmètre de service"
 
 msgctxt "selection:return.almerys,error_code:"
 msgid "[ERR_GEN_00000001] The length of the fields in the flow"

@@ -14,7 +14,7 @@ from trytond.transaction import Transaction
 from trytond.modules.coog_core import batch
 from trytond.tools import grouped_slice
 
-from . import return_almerys_hundler
+from . import return_almerys_handler
 
 
 __all__ = [
@@ -620,7 +620,7 @@ class AlmerysReturnBatch(batch.BatchRootNoSelect):
 
     @classmethod
     def get_file_handler(cls):
-        return return_almerys_hundler.AlmerysV3ReturnHandler()
+        return return_almerys_handler.AlmerysV3ReturnHandler()
 
     @classmethod
     def select_ids(cls, in_path, archive_path):

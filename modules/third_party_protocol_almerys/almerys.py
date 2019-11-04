@@ -129,6 +129,7 @@ ERROR_CODE = [
     ('ERR_CPI_00000012', '[ERR_CPI_00000012] client number'),
     ('ERR_CPI_00000047', '[ERR_CPI_00000047] Perimeter of service'),
     ('ERR_CPI_00000048', '[ERR_CPI_00000048] Perimeter of service'),
+    ('UNKNOWN_CODE', '[N/A] Unknown Code'),
     ]
 
 

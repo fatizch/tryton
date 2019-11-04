@@ -3,6 +3,7 @@
 from lxml import etree
 import xml.etree.ElementTree as ET
 
+from . import almerys
 
 __all__ = [
     'AlmerysV3ReturnHandler',
@@ -12,6 +13,7 @@ __all__ = [
 class AlmerysV3ReturnHandler(object):
 
     def handle_file(self, file):
+        known_codes = {x[0]: x[0] for x in almerys.ERROR_CODE}
         result = []
         tree = etree.parse(file)
         root = tree.getroot()
@@ -27,7 +29,7 @@ class AlmerysV3ReturnHandler(object):
             if rejet.tag == link + 'CONTRAT':
                 contract = rejet[0].text
             elif rejet.tag == link + 'ERREUR':
-                code_error = rejet[0].text
+                code_error = known_codes.get(rejet[0].text, 'UNKNOWN_CODE')
                 label_error = rejet[1].text
                 result.append((f_nbre, contract, code_error, label_error,))
         return result

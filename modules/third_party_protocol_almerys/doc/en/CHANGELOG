@@ -1,3 +1,4 @@
+* OTH#00000 Handle unknown error codes in Almerys feedback batch
 * OTH#00000 Fix ssn and perimetre service in batch
 
 Version 2.6 - 2019-10-11
