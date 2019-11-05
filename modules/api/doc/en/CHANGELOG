@@ -1,3 +1,5 @@
+* OTH#00000 Return a user-friendly error when API context is missing
+
 Version 2.6 - 2019-10-11
 * OTH#00000 Properly rollback transaction in case of late error
 * OTH#00000 Fix tests following json schema updates

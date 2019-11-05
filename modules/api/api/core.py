@@ -127,7 +127,12 @@ def apify(klass, api_name):
         # Required for super calls to decorated functions
         transaction_context, api_context, supered = {}, {}, False
         if context is None:
-            assert ServerContext().get('_api_context')
+            if not ServerContext().get('_api_context'):
+                return APIInputError({
+                        'type': 'missing_api_context',
+                        'data': {},
+                        })
+
             context = {}
             supered = True
         else:

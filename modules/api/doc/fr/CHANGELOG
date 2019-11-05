@@ -1,3 +1,5 @@
+* OTH#00000 Renvoyer une erreur propre si le contexte de l'API est absent
+
 Version 2.6 - 2019-10-11
 * OTH#00000 Rollback de la transaction explicite dans le cas d'erreurs tardives
 * OTH#00000 Correction des tests suite à la mise à jour des schemas
