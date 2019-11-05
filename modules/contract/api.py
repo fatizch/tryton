@@ -199,6 +199,7 @@ class APIContract(APIMixin):
         contract.subscriber = contract_data['subscriber']
         contract.signature_date = contract_data['signature_date']
         contract.start_date = contract_data['start']
+        contract.appliable_conditions_date = contract_data['conditions_date']
 
         contract.extra_datas = [
             {'date': None, 'extra_data_values': contract_data['extra_data']},
@@ -312,6 +313,11 @@ class APIContract(APIMixin):
             data['signature_date'] = date_from_api(data['signature_date'])
         else:
             data['signature_date'] = data['start_date']
+
+        if 'conditions_date' in data:
+            data['conditions_date'] = date_from_api(data['conditions_data'])
+        else:
+            data['conditions_date'] = data['signature_date']
 
         subscriber = PartyAPI._party_from_reference(data['subscriber'],
             parties=parameters['parties'])
