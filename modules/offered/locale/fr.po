@@ -1414,6 +1414,10 @@ msgctxt "view:extra_data:"
 msgid "Sub Data"
 msgstr "Sous Donnée"
 
+msgctxt "view:extra_data:"
+msgid "Web Resources"
+msgstr "Ressources Web"
+
 msgctxt "view:offered.configuration:"
 msgid "Offered Configuration"
 msgstr "Administration produit"

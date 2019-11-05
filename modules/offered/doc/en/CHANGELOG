@@ -1,3 +1,4 @@
+* FEA#13174 Add a tab in extra data to display the list of web resources
 * FEA#12073 Add subscription behaviour rule in order to be able to define if a coverage is mandatory or optional based on rule engine information (for example: it's now possible to define that a coverage is not mandatory if the subscriber is older than 40)
 * BUG#12957 Check that product end date is superior to product start_date
 * BUG#13000 APIs should use code of web resources for identification

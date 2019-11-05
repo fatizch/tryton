@@ -1,3 +1,4 @@
+* FEA#13174 Ajout d'un onglet dans données complémentaires pour afficher la liste des resources web
 * FEA#12073 Ajout d'une règle de comportement à la souscription afin de définir si une garantie est obligatoire ou optionnelle en fonction d'un algorithme paramétré (par exemple: il devient possible de rendre un garantie optionnelle ou obligatoire en fonction de l'âge du souscritpeur)
 * BUG#12957 Vérifiez que la date de fin du produit est supérieure à celle du produit start_date
 * BUG#13000 Les resources web doivent être identifiées par leur code dans les appels API

@@ -45,4 +45,14 @@ this repository contains the full copyright notices and license terms. -->
             <field name="name">extra_data-sub_extra_data_tree</field>
         </record>
     </data>
+    <data depends="web_configuration">
+        <!-- ############################################### -->
+        <!-- ########### Extra Data Web Resources ########## -->
+        <!-- ############################################### -->
+        <record model="ir.ui.view" id="web_resource_extra_data_view_form">
+            <field name="model">extra_data</field>
+            <field name="inherit" ref="extra_data_view_form"/>
+            <field name="name">web_resource_extra_data_form</field>
+        </record>
+    </data>
 </tryton>
