@@ -1,3 +1,4 @@
+* OTH#0000 Add child number function in rule engine
 * FEA#13248 API, handle party birth order
 * FEA#12909 initialize the birth rank to 1
 
