@@ -6051,6 +6051,8 @@ if GENERATE_REPORTINGS:  # {{{
             if not message_line and not control_line:
                 continue
             section, content = message_line.split(',')
+            if section == "S10.G00.00.003":  # Software Version
+                continue
             if section in ("S20.G00.05.007", "S21.G00.50.001"):
                 # file date and reconciliation date
                 today_str = datetime.date.today().strftime('%d%m%Y')
