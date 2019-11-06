@@ -202,7 +202,8 @@ class DocumentRequestLine(metaclass=PoolMeta):
                 continue
             merger = PdfFileMerger()
             for attachment in attachments_grouped[request.document_desc]:
-                merger.append(BytesIO(attachment.data))
+                # Set import bookmarks to False to avoid crash.
+                merger.append(BytesIO(attachment.data), import_bookmarks=False)
             content = BytesIO()
             merger.write(content)
             request.attachment_data = content.getvalue()

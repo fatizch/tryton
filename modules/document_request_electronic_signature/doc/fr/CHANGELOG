@@ -1,3 +1,5 @@
+* BUG#13271 Correctif d'un crash de la librairie PY2PDF lorsqu'il y à des bookmarks
+
 Version 2.6 - 2019-10-11
 * FEA#12876 Emission d'un évenement quand le processus de signature électronique est finalisé avec succès
 * FEA#12821 Possibilité de signer une liasse de document : Les services de signature électronique en ligne facturant au document, il peut être interessant de fusionner les différents modèles de courrier à signer avant envoi au service de signature électronique. Il est notamment possible de fusionner à la fois des documents générés par Coog mais également des documents requis fournis par le client (ex : formalités médicales)
