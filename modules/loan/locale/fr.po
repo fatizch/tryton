@@ -831,8 +831,9 @@ msgstr ""
 "continuer"
 
 msgctxt "model:ir.message,text:msg_loan_not_eligible"
-msgid "Loan %(loan_share)s is not eligible"
-msgstr "La quotité %(loan_share)s n'est pas éligible"
+msgid "Coverage %(coverage)s for the loan %(loan_share)s is not eligible"
+msgstr ""
+"La garantie %(coverage)s pour le prêt %(loan_share)s n'est pas éligible"
 
 msgctxt "model:ir.message,text:msg_missing_loan_sequence_config"
 msgid "No sequence defined for loan numbers in offered configuration."

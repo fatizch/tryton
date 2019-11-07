@@ -424,6 +424,7 @@ class ContractOption(metaclass=PoolMeta):
             if not self.coverage.check_eligibility(exec_context):
                 self.append_functional_error(
                     ValidationError(gettext('loan.msg_loan_not_eligible',
+                        coverage=self.coverage.name,
                         loan_share=loan_share.rec_name)))
 
     def check_eligibility(self):

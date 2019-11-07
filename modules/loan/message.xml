@@ -32,7 +32,7 @@
             <field name="text">Loan %(loan)s must be calculated before proceeding.</field>
         </record>
         <record model="ir.message" id="msg_loan_not_eligible">
-            <field name="text">Loan %(loan_share)s is not eligible</field>
+            <field name="text">Coverage %(coverage)s for the loan %(loan_share)s is not eligible</field>
         </record>
         <record model="ir.message" id="msg_no_option_for_loan">
             <field name="text">Loan %(loan)s does not have an option.</field>

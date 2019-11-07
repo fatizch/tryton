@@ -324,8 +324,9 @@ Create Test Contract::
     >>> second = contract.ordered_loans.new()
     >>> second.loan = loan_2
     >>> contract.save()
-    >>> "'Loan [1] Fixed Rate 4.50% €250,000.00 (70.0%) is not eligible'" == test_error(
-    ...     UserError, Contract.button_calculate, [contract.id], {})
+    >>> expected = ("'Coverage Test Coverage for the loan [1] Fixed Rate 4.50% " +
+    ...     "€250,000.00 (70.0%) is not eligible'")
+    >>> expected == test_error(UserError, Contract.button_calculate, [contract.id], {})
     True
     >>> contract = Contract(contract.id)
     >>> coverage = OptionDescription(coverage.id)
@@ -338,8 +339,9 @@ Create Test Contract::
     >>> loan_2.amount = Decimal('150000')
     >>> loan_2.save()
     >>> contract.save()
-    >>> "'Loan [2] Fixed Rate 3.00% €150,000.00 (90.0%) is not eligible'" == test_error(
-    ...     UserError, Contract.button_calculate, [contract.id], {})
+    >>> expected = ("'Coverage Test Coverage for the loan [2] Fixed Rate 3.00% " +
+    ...     "€150,000.00 (90.0%) is not eligible'")
+    >>> expected == test_error(UserError, Contract.button_calculate, [contract.id], {})
     True
     >>> contract = Contract(contract.id)
     >>> coverage = OptionDescription(coverage.id)
