@@ -104,6 +104,13 @@ coog module update
 # needed
 ```
 
+The automatic way, which will automatically build a usable database named
+`generated`:
+
+```bash
+GEN_CREATE_NEW_DB=1 coog db demo
+```
+
 ## Coog command cheat sheet
 
 **Warning: All commands should be executed in an activated virtual
