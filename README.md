@@ -104,11 +104,10 @@ coog module update
 # needed
 ```
 
-The automatic way, which will automatically build a usable database named
-`generated`:
+The automatic way, which will automatically build a usable database:
 
 ```bash
-GEN_CREATE_NEW_DB=1 coog db demo
+GEN_CREATE_NEW_DB=1 GEN_DB_NAME=coog coog db demo
 ```
 
 ## Coog command cheat sheet
