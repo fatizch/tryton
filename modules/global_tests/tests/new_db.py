@@ -302,6 +302,7 @@ ClaimClosingReason = Model.get('claim.closing_reason')
 ClaimConfiguration = Model.get('claim.configuration')
 ClaimSubStatus = Model.get('claim.sub_status')
 Clause = Model.get('clause')
+CommercialDiscount = Model.get('commercial_discount')
 CommercialProduct = Model.get('distribution.commercial_product')
 CommissionAgent = Model.get('commission.agent')
 CommissionPlan = Model.get('commission.plan')
@@ -4109,6 +4110,15 @@ else:
     death_coverage.with_exclusions = True
     death_coverage.with_extra_premiums = True
     death_coverage.save()
+
+    discount = CommercialDiscount()
+    discount.name = 'Welcome Discount'
+    discount_rule = discount.rules.new()
+    discount_rule.rate = Decimal('0.25')
+    discount_rule.account_for_modification = death_coverage_account
+    discount_rule.invoice_line_period_behaviour = 'one_day_overlap'
+    discount_rule.coverages.append(Coverage(death_coverage.id))
+    discount.save()
     # }}}
 
     do_print('    Creating Loan Death Coverage')  # {{{
@@ -4141,6 +4151,7 @@ else:
         Clause(custom_beneficiary_clause.id))
     loan_death_coverage.default_beneficiary_clause = loan_beneficiary_clause
     loan_death_coverage.save()
+
     # }}}
 
     do_print('    Creating Unemployment Coverage')  # {{{

@@ -251,6 +251,10 @@ class OptionDescription(metaclass=PoolMeta):
             coog_string.doc_for_rules(self, 'waiver_premium_rule'))
         return structure
 
+    def is_discount_allowed(self, discount):
+        return discount in {rule.commercial_discount
+            for rule in self.discount_rules}
+
 
 class WaiverPremiumRule(
         PremiumModificationRuleMixin, model.CoogSQL, model.CoogView):

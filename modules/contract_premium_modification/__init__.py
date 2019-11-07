@@ -10,6 +10,7 @@ from . import wizard
 from . import invoice
 from . import discount
 from . import batch
+from . import api
 
 
 def register():
@@ -42,3 +43,7 @@ def register():
         wizard.CreateDiscounts,
         wizard.SetPremiumModificationEndDate,
         module='contract_premium_modification', type_='wizard')
+
+    Pool.register(
+        api.APIContract,
+        module='contract_premium_modification', type_='model', depends=['api'])
