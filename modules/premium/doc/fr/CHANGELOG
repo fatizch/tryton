@@ -1,3 +1,4 @@
+* BUG#12444 La Règle "Date de prime" a maintenant le type Booléen associé
 * FEA#12906 Afficher le nom de la personne couverte lorsque cela est possible dans la vue des primes dans le champ nom
 Version 2.6 - 2019-10-11
 * BUG#12448 Générer une erreur si deux tarifs avec des montants non nulls sont sauvegardés pour le même élément facturé

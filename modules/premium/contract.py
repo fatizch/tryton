@@ -11,7 +11,6 @@ from trytond.pool import PoolMeta, Pool
 from trytond import backend
 from trytond.config import config
 from trytond.pyson import Eval, If
-from trytond.server_context import ServerContext
 from trytond.transaction import Transaction
 from trytond.rpc import RPC
 from trytond.model import dualmethod
