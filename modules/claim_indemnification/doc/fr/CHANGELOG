@@ -1,3 +1,5 @@
+* BUG#13304 Ne pas vérifier la quote part pour les indemnisations refusées
+
 Version 2.6 - 2019-10-11
 * OTH#00000 Correction d'une typo suite au merge tryton
 * BUG#11431 Lorsque la méthode de régularisation d'une indemnisation annulée non payée est immédiate, toutes les lignes de paiement de l'ensemble des indemnisations sur le même sinistre devraient être bloquées

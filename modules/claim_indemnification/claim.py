@@ -270,7 +270,9 @@ class Loss(metaclass=PoolMeta):
                                 total_share=str(int(total_share * 100)))))
 
     def total_share_valid(self, service):
-        total_share = sum(x.share for x in service.indemnifications)
+        total_share = sum(x.share for x in service.indemnifications
+            if x.status not in ['rejected', 'cancelled',
+                'cancel_scheduled', 'cancel_validated', 'cancel_controlled'])
         return total_share == 1, total_share
 
     @classmethod
