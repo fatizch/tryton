@@ -6,6 +6,7 @@ from itertools import groupby
 
 from sql import Table, Column, Literal, Null
 
+from trytond.model.exceptions import ValidationError
 from trytond.modules.migrator import migrator
 from trytond.modules.migrator import tools
 from trytond.pool import Pool
@@ -347,7 +348,7 @@ class MigratorPartyRelation(migrator.Migrator):
         super(MigratorPartyRelation, cls).__setup__()
         cls.table = Table('party_relation')
         cls.transcoding = {'type': {}}
-        cls.func_key = 'from_'
+        cls.func_key = 'uid'
         cls.model = 'party.relation'
         cls.columns = {k: k for k in ('from_', 'to', 'type')}
         cls.error_messages.update({
@@ -361,10 +362,13 @@ class MigratorPartyRelation(migrator.Migrator):
             ('code', ), ('code', [r['from_'] for r in rows] +
                 [r['to'] for r in rows]))
         cls.cache_obj['relation_type'] = tools.cache_from_query(
-            'party_relation_type', ('code', ))
+            'party_relation_type', ('code', ),
+            ('code', [r['type'] for r in rows]))
+        super(MigratorPartyRelation, cls).init_cache(rows)
 
     @classmethod
     def populate(cls, row):
+        row['uid'] = '_'.join([row['from_'], row['to'], row['type']])
         if row['from_'] in cls.cache_obj['party']:
             cls.resolve_key(row, 'from_', 'party')
         else:
@@ -375,6 +379,64 @@ class MigratorPartyRelation(migrator.Migrator):
             cls.raise_error(row, 'inexisting_party', (row['to'],))
         cls.resolve_key(row, 'type', 'relation_type')
         return row
+
+    @classmethod
+    def select(cls, **kwargs):
+        select_keys = [
+            Column(cls.table, 'from_'),
+            Column(cls.table, 'to'),
+            Column(cls.table, 'type')
+        ]
+        select = cls.table.select(*select_keys)
+        return select, cls.func_key
+
+    @classmethod
+    def query_data(cls, ids):
+        select = cls.table.select(*cls.select_columns())
+        if ids:
+            from_ids = [id.split('_')[0] for id in ids]
+            to_ids = [id.split('_')[1] for id in ids]
+            type_ids = [id.split('_')[2] for id in ids]
+            select.where = (Column(cls.table, 'from_').in_(from_ids) &
+                            Column(cls.table, 'to').in_(to_ids) &
+                            Column(cls.table, 'type').in_(type_ids))
+        return select
+
+    @classmethod
+    def select_extract_ids(cls, select_key, rows):
+        ids = []
+        for row in rows:
+            ids.append('{}_{}_{}'.format(
+                row.get('from_'),
+                row.get('to'),
+                row.get('type'),
+            ))
+        return set(ids)
+
+    @classmethod
+    def select_remove_ids(cls, ids, excluded, **kwargs):
+        table_name = cls.model.replace('.', '_')
+        existing_ids = list(tools.cache_from_query(table_name,
+            ('from_', 'to', 'type')).keys())
+        existing_ids = {'%s_%s_%s' % (x[0], x[1], x[2]) for x in existing_ids}
+        return list(set(ids) - set(excluded) - set(existing_ids))
+
+    @classmethod
+    def parse_params(cls, params):
+        # update init cache is not managed because of the inverted relations
+        # also need to be managed
+        params = super(MigratorPartyRelation, cls).parse_params(params)
+        if 'update' in params and params['update'] is True:
+            raise ValidationError('Migration with update=True is not allowed ')
+        params['update'] = False
+        return params
+
+    @classmethod
+    def execute(cls, objects, ids, **kwargs):
+        if 'with_date' in kwargs and kwargs['with_date']:
+            cls.columns.update(
+                {'start_date': 'start_date', 'end_date': 'end_date'})
+        super(MigratorPartyRelation, cls).execute(objects, ids, **kwargs)
 
 
 class MigratorInterlocutor(migrator.Migrator):
