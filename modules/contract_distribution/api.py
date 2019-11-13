@@ -5,6 +5,7 @@ from trytond.pool import PoolMeta, Pool
 
 from trytond.modules.coog_core.api import CODED_OBJECT_SCHEMA, OBJECT_ID_SCHEMA
 from trytond.modules.coog_core.api import CODED_OBJECT_ARRAY_SCHEMA, CODE_SCHEMA
+from trytond.modules.web_configuration.resource import WebUIResourceMixin
 
 
 __all__ = [
@@ -318,3 +319,7 @@ class APIParty(metaclass=PoolMeta):
         if contract.com_product:
             return contract.com_product.name
         return super().get_product_name(contract)
+
+
+class CommercialProductWithWebResources(WebUIResourceMixin):
+    __name__ = 'distribution.commercial_product'

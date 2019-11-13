@@ -53,7 +53,6 @@ CONTRACT_PARTY_SCHEMA = {
 __all__ = [
     'APICore',
     'APIProduct',
-    'ExtraData',
     ]
 
 
@@ -902,6 +901,7 @@ class APIProduct(APIMixin):
                     'additionalItems': False,
                     'items': cls._describe_package_schema(),
                     },
+                'custom_resources': {},
                 },
             'required': ['id', 'code', 'name', 'description', 'coverages',
                 'extra_data', 'subscriber', 'packages'],
@@ -962,7 +962,7 @@ class APIProduct(APIMixin):
             }
 
 
-class ExtraData(WebUIResourceMixin):
+class ExtraDataWithWebResources(WebUIResourceMixin):
     __name__ = 'extra_data'
 
     def _get_structure(self):
@@ -973,3 +973,27 @@ class ExtraData(WebUIResourceMixin):
                 for x in self.web_ui_resources
                 }
         return res
+
+
+class ProductWithWebResources(WebUIResourceMixin):
+    __name__ = 'offered.product'
+
+
+class APIProductWebConfiguration(metaclass=PoolMeta):
+    __name__ = 'api.product'
+
+    @classmethod
+    def _describe_product_schema(cls):
+        schema = super()._describe_product_schema()
+        schema['properties']['custom_resources'] = {}
+        return schema
+
+    @classmethod
+    def _describe_product(cls, product):
+        description = super()._describe_product(product)
+        description['custom_resources'] = {
+                x.key.code: x.value if x.technical_kind != 'binary'
+                else 'binary_data'
+                for x in product.web_ui_resources
+                }
+        return description

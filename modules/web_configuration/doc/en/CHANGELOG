@@ -1,2 +1,4 @@
+* FEA#13159 Allow binary values for web UI resources
+
 Version 2.6 - 2019-10-11
 * FEA#12675 Add description, helper, widget, format on API datas

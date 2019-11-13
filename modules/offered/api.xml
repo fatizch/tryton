@@ -11,5 +11,10 @@ this repository contains the full copyright notices and license terms. -->
             <field name="model">extra_data,-1</field>
             <field name="action" ref="web_configuration.act_web_ui_resource_for_keyword_window"/>
         </record>
+        <record model="ir.ui.view" id="web_configuration_product_view_form">
+            <field name="model">offered.product</field>
+            <field name="inherit" ref="offered.product_view_form"/>
+            <field name="name">web_configuration_product_form</field>
+        </record>
     </data>
 </tryton>

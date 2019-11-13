@@ -4,10 +4,14 @@ this repository contains the full copyright notices and license terms. -->
 <form>
     <label name="origin_resource"/>
     <field name="origin_resource"/>
+    <label name="technical_kind"/>
+    <field name="technical_kind"/>
     <newline/>
     <label name="key"/>
     <field name="key" colspan="3"/>
     <label name="value"/>
     <field name="value" colspan="3"/>
+    <label name="binary_value"/>
+    <field name="binary_value" colspan="3"/>
     <field name="ir_model_resource" invisible="1"/>
 </form>

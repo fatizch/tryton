@@ -3,6 +3,7 @@
 from trytond.pool import Pool
 
 from . import resource
+from . import api
 
 
 def register():
@@ -10,5 +11,6 @@ def register():
         resource.WebUIResource,
         resource.WebUIResourceKey,
         resource.RelationWebUIResourceKeyIRModel,
+        api.APICore,
         module='web_configuration', type_='model',
     )

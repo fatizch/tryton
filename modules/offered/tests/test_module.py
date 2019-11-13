@@ -785,6 +785,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
                             'mandatory': True,
                             },
                         ],
+                    'custom_resources': {},
                     'packages': [
                         {
                             'id': package_a.id,

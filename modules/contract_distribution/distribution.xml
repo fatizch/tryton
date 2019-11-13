@@ -87,4 +87,11 @@ this repository contains the full copyright notices and license terms. -->
             <field name="perm_delete" eval="True"/>
         </record>
     </data>
+    <data depends="web_configuration">
+        <record model="ir.ui.view" id="web_configuration_commercial_product_view_form">
+            <field name="model">distribution.commercial_product</field>
+            <field name="inherit" ref="commercial_product_view_form"/>
+            <field name="name">web_configuration_commercial_product_form</field>
+        </record>
+    </data>
 </tryton>

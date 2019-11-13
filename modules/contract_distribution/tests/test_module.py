@@ -175,12 +175,56 @@ class ModuleTestCase(test_framework.CoogTestCase):
                     ],
                 'packages': [],
                 'subscriber': {
-                    'model': 'party',
-                    'required': ['name', 'first_name', 'birth_date',
-                        'email', 'addresses'],
-                    'fields': ['name', 'first_name', 'birth_date',
-                        'email', 'phone_number', 'is_person', 'addresses'],
-                    },
+                        'model': 'party',
+                        'domains': {
+                            'quotation': [
+                                {
+                                    'fields': [],
+                                },
+                            ],
+                            'subscription': [
+                                {
+                                    'conditions': [
+                                        {'name': 'is_person', 'operator': '=',
+                                            'value': True},
+                                        ],
+                                    'fields': [
+                                        {'code': 'addresses',
+                                            'required': True},
+                                        {'code': 'birth_date',
+                                            'required': True},
+                                        {'code': 'email',
+                                            'required': False},
+                                        {'code': 'first_name',
+                                            'required': True},
+                                        {'code': 'is_person',
+                                            'required': False},
+                                        {'code': 'name',
+                                            'required': True},
+                                        {'code': 'phone',
+                                            'required': False},
+                                    ],
+                                },
+                                {
+                                    'conditions': [
+                                        {'name': 'is_person', 'operator': '=',
+                                            'value': False},
+                                        ],
+                                    'fields': [
+                                        {'code': 'addresses',
+                                            'required': True},
+                                        {'code': 'email',
+                                            'required': False},
+                                        {'code': 'is_person',
+                                            'required': False},
+                                        {'code': 'name',
+                                            'required': True},
+                                        {'code': 'phone',
+                                            'required': False},
+                                    ],
+                                },
+                            ]
+                        }},
                 'commercial_products': [
                     {
                         'code': 'com_product_1',

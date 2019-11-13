@@ -3,7 +3,10 @@
 this repository contains the full copyright notices and license terms. -->
 <tree editable="bottom">
     <field name="key"/>
+    <field name="technical_kind"/>
     <field name="origin_resource"/>
     <field name="value"/>
+    <field name="binary_value"/>
+    <field name="filename"/>
     <field name="ir_model_resource" tree_invisible="1"/>
 </tree>

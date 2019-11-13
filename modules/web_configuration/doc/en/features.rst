@@ -1,0 +1,1 @@
+- **Ressources UI Web** Configurer l'apparence des objets métiers présentés dans une interface web.

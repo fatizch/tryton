@@ -23,12 +23,33 @@ class WebUIResource(model.CoogSQL, model.CoogView):
 
     origin_resource = fields.Reference('Origin', 'select_resource_models',
         required=True, help='The record to which this resource will be linked')
+    technical_kind = fields.Selection([
+            ('text', 'Text'),
+            ('binary', 'Binary')
+            ], 'Technical Kind', required=True)
     key = fields.Many2One('web.ui.resource.key', 'Key', required=True,
         ondelete='RESTRICT', help='Link to the description of this resource'
             ' for this origin',
         domain=[('ir_model_resource_key', '=', Eval('ir_model_resource'))],
         depends=['ir_model_resource'])
-    value = fields.Text('Value', help='The value for this origin / key pair')
+    value = fields.Text('Value',
+        states={
+            'readonly': Eval('technical_kind') != 'text',
+            'invisible': Eval('technical_kind') != 'text',
+            'required': Eval('technical_kind') == 'text',
+            }, depends=['technical_kind'],
+        help='The value for this origin / key pair')
+    binary_value = fields.Binary('Binary Value', filename='filename',
+        states={
+            'invisible': Eval('technical_kind') != 'binary',
+            'readonly': Eval('technical_kind') != 'binary',
+            }, depends=['technical_kind'],
+        help='The binary value for this origin / key pair')
+    filename = fields.Char('File Name',
+        states={
+            'invisible': Eval('technical_kind') != 'binary',
+            'readonly': True,
+            }, depends=['technical_kind'])
     ir_model_resource = fields.Function(
         fields.Many2One('ir.model', 'IR Model Resource Key',
             states={'invisible': True}), 'on_change_with_ir_model_resource')
@@ -48,6 +69,18 @@ class WebUIResource(model.CoogSQL, model.CoogView):
         TableHandler = backend.get('TableHandler')
         if TableHandler.table_exist('api_resource'):
             TableHandler.drop_table('api.resource', 'api_resource')
+
+    @staticmethod
+    def default_technical_kind():
+        return 'text'
+
+    @fields.depends('technical_kind', 'value', 'binary_value')
+    def on_change_technical_kind(self):
+        if self.technical_kind == 'text':
+            self.binary_value = None
+            self.filename = None
+        elif self.technical_kind == 'binary':
+            self.value = None
 
     @fields.depends('origin_resource')
     def on_change_with_ir_model_resource(self, name=None):
@@ -106,10 +139,10 @@ class WebUIResourceMixin(model.CoogSQL):
         'Web UI Resources', delete_missing=True, target_not_indexed=True,
         help='A list of resources which will only be used through the APIs')
 
-    def get_web_resource_by_key(self, key):
+    def get_web_resource_by_key(self, key, instance=False):
         for x in self.web_ui_resources:
             if x.key.code == key:
-                return x.value
+                return x.value if not instance else x
         raise KeyError
 
 

@@ -37,3 +37,8 @@ def register():
         api.APIContract,
         api.APIParty,
         module='contract_distribution', type_='model', depends=['api'])
+
+    Pool.register(
+        api.CommercialProductWithWebResources,
+        module='contract_distribution', type_='model',
+        depends=['web_configuration'])
