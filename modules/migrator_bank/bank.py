@@ -242,7 +242,14 @@ class MigratorBankAccount(migrator.Migrator):
                 cls.logger.error(e)
                 continue
             if not kwargs.get('update', False):
-                to_upsert[row[cls.func_key]] = row
+                if row[cls.func_key] in to_upsert:
+                    old_owners, =  to_upsert[row[cls.func_key]]['owners']
+                    owners = old_owners[1]
+                    owners.append(cls.cache_obj['party'][row[
+                        'party']].id)
+                    to_upsert[row[cls.func_key]]['owners'] = [('add', owners)]
+                else:
+                    to_upsert[row[cls.func_key]] = row
             else:
                 keys = (row[cls.func_key], row['party'])
                 key = ':'.join(keys)
