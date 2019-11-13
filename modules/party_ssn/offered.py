@@ -22,6 +22,7 @@ class ItemDescription(metaclass=PoolMeta):
         states={'invisible': Eval('kind') != 'person'})
 
     def check_covered_element(self, covered_element):
+        super().check_covered_element(covered_element)
         if self.ssn_required and not covered_element.party.ssn:
             raise UserError(gettext('party_ssn.msg_ssn_required_for_insured',
                 rec_name=covered_element.party.rec_name))

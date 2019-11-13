@@ -139,6 +139,31 @@ FIELD_SCHEMA = {
         ],
     }
 
+SIMPLE_FIELD_SCHEMA = {
+    'type': 'object',
+    'properties': {
+        'code': {'type': 'string'},
+        'required': {'type': 'boolean'},
+        'visible': {'type': 'boolean'},
+        },
+    'required': ['code'],
+    'additionalProperties': False,
+    }
+
+DOMAIN_SCHEMA = {
+    'type': 'object',
+    'properties': {
+        'fields': {
+            'type': 'array',
+            'additionalItems': False,
+            'items': SIMPLE_FIELD_SCHEMA,
+            },
+        'conditions': FIELD_CONDITIONS,
+        },
+    'required': ['fields'],
+    'additionalProperties': False,
+    }
+
 IDENTIFIER_KINDS = [
     ('generic', 'Generic'),
     ('google', 'Google'),

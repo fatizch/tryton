@@ -38,11 +38,11 @@ class APIProduct(metaclass=PoolMeta):
 
         if product.is_health and result['item_descriptors']:
             for item_desc in result['item_descriptors']:
-                item_desc['fields']['required'] += ['hc_system',
-                    'insurance_fund_number']
-                item_desc['fields']['fields'] += ['hc_system',
-                    'insurance_fund_number']
-
+                for domain_ in item_desc['party']['domains']['subscription']:
+                    domain_['fields'] += [
+                            {'code': 'hc_system', 'required': True},
+                            {'code': 'insurance_fund_number', 'required': True}
+                            ]
         return result
 
 

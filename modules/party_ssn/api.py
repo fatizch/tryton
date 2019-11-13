@@ -67,9 +67,8 @@ class APIProduct(metaclass=PoolMeta):
     __name__ = 'api.product'
 
     @classmethod
-    def _describe_item_descriptor_fields(cls, item_desc):
-        description = super()._describe_item_descriptor_fields(item_desc)
+    def _update_covered_party_domains_from_item_desc(cls, item_desc, domains):
+        super()._update_covered_party_domains_from_item_desc(item_desc, domains)
         if item_desc.kind == 'person' and item_desc.ssn_required:
-            description['required'].append('ssn')
-            description['fields'].append('ssn')
-        return description
+            domains['subscription']['person_domain']['fields'].append(
+                {'code': 'ssn', 'required': True})

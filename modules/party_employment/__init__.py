@@ -4,6 +4,7 @@ from trytond.pool import Pool
 from . import party
 from . import rule_engine
 from . import api
+from . import offered
 
 
 def register():
@@ -14,9 +15,11 @@ def register():
         party.EmploymentVersion,
         party.EmploymentWorkTimeType,
         rule_engine.RuleEngineRuntime,
+        offered.ItemDescription,
         party.PartyWorkSection,
         module='party_employment', type_='model')
 
     Pool.register(
         api.APIParty,
+        api.APIProduct,
         module='party_employment', type_='model', depends=['api'])

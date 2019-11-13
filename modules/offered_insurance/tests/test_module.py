@@ -537,30 +537,115 @@ return True'''
                         {
                             'code': 'person',
                             'extra_data': [],
-                            'fields': {
-                                'conditions': [
-                                    {'name': 'is_person', 'operator': '=',
-                                        'value': True},
-                                    ],
-                                'fields': ['name', 'first_name', 'birth_date',
-                                    'email', 'phone_number', 'address'],
+                            'party': {
                                 'model': 'party',
-                                'required': ['name', 'first_name', 'birth_date',
-                                    'email', 'address']},
+                                'domains': {
+                                    'quotation': [
+                                        {
+                                            'fields': [
+                                                {
+                                                    'code': 'birth_date',
+                                                    'required': True
+                                                }
+                                            ],
+                                            'conditions': [
+                                                {
+                                                    'name': 'is_person',
+                                                    'operator': '=',
+                                                    'value': True
+                                                },
+                                            ]
+                                        },
+                                    ],
+                                    'subscription': [
+                                        {
+                                            'conditions': [
+                                                {
+                                                    'name': 'is_person',
+                                                    'operator': '=',
+                                                    'value': True
+                                                },
+                                            ],
+                                            'fields': [
+                                                {'code': 'addresses',
+                                                    'required': True},
+                                                {'code': 'birth_date',
+                                                    'required': True},
+                                                {'code': 'email',
+                                                    'required': False},
+                                                {'code': 'first_name',
+                                                    'required': True},
+                                                {'code': 'is_person',
+                                                    'required': False},
+                                                {'code': 'name',
+                                                    'required': True},
+                                                {'code': 'phone',
+                                                    'required': False},
+                                            ],
+                                        },
+                                    ]
+                                }},
                             'id': item_desc.id,
-                            'name': 'Person'}],
+                            'name': 'Person'}
+                            ],
                     'name': 'Awesome Alternative Allowance',
                     'packages': [],
                     'subscriber': {
-                        'fields': ['name', 'first_name', 'birth_date', 'email',
-                            'phone_number', 'is_person', 'addresses'],
                         'model': 'party',
-                        'required': ['name', 'first_name', 'birth_date',
-                            'email', 'addresses'],
-                        },
+                        'domains': {
+                            'quotation': [
+                                {
+                                    'fields': [],
+                                },
+                            ],
+                            'subscription': [
+                                {
+                                    'conditions': [
+                                        {'name': 'is_person', 'operator': '=',
+                                            'value': True},
+                                        ],
+                                    'fields': [
+                                        {'code': 'addresses',
+                                            'required': True},
+                                        {'code': 'birth_date',
+                                            'required': True},
+                                        {'code': 'email',
+                                            'required': False},
+                                        {'code': 'first_name',
+                                            'required': True},
+                                        {'code': 'is_person',
+                                            'required': False},
+                                        {'code': 'name',
+                                            'required': True},
+                                        {'code': 'phone',
+                                            'required': False},
+                                    ],
+                                },
+                                {
+                                    'conditions': [
+                                        {'name': 'is_person', 'operator': '=',
+                                            'value': False},
+                                        ],
+                                    'fields': [
+                                        {'code': 'addresses',
+                                            'required': True},
+                                        {'code': 'email',
+                                            'required': False},
+                                        {'code': 'is_person',
+                                            'required': False},
+                                        {'code': 'name',
+                                            'required': True},
+                                        {'code': 'phone',
+                                            'required': False},
+                                    ],
+                                },
+                            ]
+                        }
+                    },
                     },
                 ]
             )
+        # work here : last test to fix
         item_desc.kind = ''
         item_desc.save()
         self.assertEqual(
@@ -568,7 +653,7 @@ return True'''
                 )[0]['item_descriptors'][0], {
                 'code': 'person',
                 'extra_data': [],
-                'fields': {},
+                'party': {},
                 'id': item_desc.id,
                 'name': 'Person',
                 })
@@ -714,16 +799,46 @@ return True'''
                                     'sequence': 3,
                                     'type': 'selection'},
                                 ],
-                            'fields': {
-                                'conditions': [
-                                    {'name': 'is_person', 'operator': '=',
-                                        'value': True},
-                                    ],
-                                'fields': ['name', 'first_name', 'birth_date',
-                                    'email', 'phone_number', 'address'],
+                            'party': {
                                 'model': 'party',
-                                'required': ['name', 'first_name', 'birth_date',
-                                    'email', 'address']},
+                                'domains': {
+                                    'quotation': [
+                                        {
+                                            'conditions': [
+                                                {'name': 'is_person',
+                                                    'operator': '=',
+                                                    'value': True},
+                                                ],
+                                            'fields': [{'code': 'birth_date',
+                                                    'required': True}],
+                                        },
+                                    ],
+                                    'subscription': [
+                                        {
+                                            'conditions': [
+                                                {'name': 'is_person',
+                                                    'operator': '=',
+                                                    'value': True},
+                                                ],
+                                            'fields': [
+                                                {'code': 'addresses',
+                                                    'required': True},
+                                                {'code': 'birth_date',
+                                                    'required': True},
+                                                {'code': 'email',
+                                                    'required': False},
+                                                {'code': 'first_name',
+                                                    'required': True},
+                                                {'code': 'is_person',
+                                                    'required': False},
+                                                {'code': 'name',
+                                                    'required': True},
+                                                {'code': 'phone',
+                                                    'required': False},
+                                            ],
+                                        },
+                                    ]
+                                }},
                             'id': item_desc.id,
                             'name': 'Person'}],
                     'name': 'Awesome Alternative Allowance',
@@ -802,12 +917,57 @@ return True'''
                             },
                         ],
                     'subscriber': {
-                        'fields': ['name', 'first_name', 'birth_date', 'email',
-                            'phone_number', 'is_person', 'addresses'],
                         'model': 'party',
-                        'required': ['name', 'first_name', 'birth_date',
-                            'email', 'addresses'],
-                        },
+                        'domains': {
+                            'quotation': [
+                                {
+                                    'fields': [],
+                                },
+                            ],
+                            'subscription': [
+                                {
+                                    'conditions': [
+                                        {'name': 'is_person', 'operator': '=',
+                                            'value': True},
+                                        ],
+                                    'fields': [
+                                        {'code': 'addresses',
+                                            'required': True},
+                                        {'code': 'birth_date',
+                                            'required': True},
+                                        {'code': 'email',
+                                            'required': False},
+                                        {'code': 'first_name',
+                                            'required': True},
+                                        {'code': 'is_person',
+                                            'required': False},
+                                        {'code': 'name',
+                                            'required': True},
+                                        {'code': 'phone',
+                                            'required': False},
+                                    ],
+                                },
+                                {
+                                    'conditions': [
+                                        {'name': 'is_person', 'operator': '=',
+                                            'value': False},
+                                        ],
+                                    'fields': [
+                                        {'code': 'addresses',
+                                            'required': True},
+                                        {'code': 'email',
+                                            'required': False},
+                                        {'code': 'is_person',
+                                            'required': False},
+                                        {'code': 'name',
+                                            'required': True},
+                                        {'code': 'phone',
+                                            'required': False},
+                                    ],
+                                },
+                            ]
+                        }
+                    },
                     },
                 ]
             )

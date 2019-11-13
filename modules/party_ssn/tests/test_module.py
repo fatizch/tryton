@@ -156,6 +156,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
         'contract_insurance.test0001_testPersonCreation',
         )
     def test0200_productDescription(self):
+        self.maxDiff = None
         pool = Pool()
         Product = pool.get('offered.product')
         Coverage = pool.get('offered.option.description')
@@ -172,60 +173,150 @@ class ModuleTestCase(test_framework.CoogTestCase):
         APIProduct = pool.get('api.product')
         self.assertEqual(
             APIProduct.describe_products({}, {'_debug_server': True}),
-            [{'id': product.id,
-              'code': 'AAA',
-              'name': 'Awesome Alternative Allowance',
-              'description': '', 'extra_data': [],
-              'coverages': [
-                  {'id': alpha.id,
-                   'code': 'ALP',
-                   'name': 'Alpha Coverage',
-                   'description': '',
-                   'extra_data': [],
-                   'mandatory': True,
-                   'item_desc': 1},
-                  {'id': beta.id,
-                   'code': 'BET',
-                   'name': 'Beta Coverage',
-                   'description': '',
-                   'extra_data': [],
-                   'mandatory': True,
-                   'item_desc': 1},
-                  {'id': gamma.id,
-                   'code': 'GAM',
-                   'name': 'GammaCoverage',
-                   'description': '',
-                   'extra_data': [],
-                   'mandatory': False,
-                   'item_desc': 1},
-                  {'id': delta.id,
-                   'code': 'DEL',
-                   'name': 'Delta Coverage',
-                   'description': '',
-                   'extra_data': [],
-                   'mandatory': True,
-                   'item_desc': None}],
-              'packages': [],
-              'subscriber': {
-                  'model': 'party',
-                  'required': ['name', 'first_name', 'birth_date',
-                      'email', 'addresses'],
-                  'fields': ['name', 'first_name', 'birth_date', 'email',
-                      'phone_number', 'is_person', 'addresses']},
-              'item_descriptors': [
-                  {'id': item_desc.id,
-                   'code': 'person',
-                   'name': 'Person',
-                   'extra_data': [],
-                   'fields': {
-                       'model': 'party',
-                       'conditions': [{
-                           'name': 'is_person',
-                           'operator': '=', 'value': True}],
-                       'required': ['name', 'first_name', 'birth_date',
-                           'email', 'address', 'ssn'],
-                       'fields': ['name', 'first_name', 'birth_date', 'email',
-                           'phone_number', 'address', 'ssn']}}]}])
+            [{
+                    'id': product.id,
+                    'code': 'AAA',
+                    'name': 'Awesome Alternative Allowance',
+                    'description': '', 'extra_data': [],
+                    'coverages': [
+                        {'id': alpha.id,
+                            'code': 'ALP',
+                            'name': 'Alpha Coverage',
+                            'description': '',
+                            'extra_data': [],
+                            'mandatory': True,
+                            'item_desc': 1},
+                        {'id': beta.id,
+                            'code': 'BET',
+                            'name': 'Beta Coverage',
+                            'description': '',
+                            'extra_data': [],
+                            'mandatory': True,
+                            'item_desc': 1},
+                        {'id': gamma.id,
+                            'code': 'GAM',
+                            'name': 'GammaCoverage',
+                            'description': '',
+                            'extra_data': [],
+                            'mandatory': False,
+                            'item_desc': 1},
+                        {'id': delta.id,
+                            'code': 'DEL',
+                            'name': 'Delta Coverage',
+                            'description': '',
+                            'extra_data': [],
+                            'mandatory': True,
+                            'item_desc': None}],
+                    'packages': [],
+                    'subscriber': {
+                        'model': 'party',
+                        'domains': {
+                            'quotation': [
+                                {
+                                    'fields': [],
+                                },
+                            ],
+                            'subscription': [
+                                {
+                                    'conditions': [
+                                        {'name': 'is_person', 'operator': '=',
+                                            'value': True},
+                                        ],
+                                    'fields': [
+                                        {'code': 'addresses',
+                                            'required': True},
+                                        {'code': 'birth_date',
+                                            'required': True},
+                                        {'code': 'email',
+                                            'required': False},
+                                        {'code': 'first_name',
+                                            'required': True},
+                                        {'code': 'is_person',
+                                            'required': False},
+                                        {'code': 'name',
+                                            'required': True},
+                                        {'code': 'phone',
+                                            'required': False},
+                                    ],
+                                },
+                                {
+                                    'conditions': [
+                                        {'name': 'is_person', 'operator': '=',
+                                            'value': False},
+                                        ],
+                                    'fields': [
+                                        {'code': 'addresses',
+                                            'required': True},
+                                        {'code': 'email',
+                                            'required': False},
+                                        {'code': 'is_person',
+                                            'required': False},
+                                        {'code': 'name',
+                                            'required': True},
+                                        {'code': 'phone',
+                                            'required': False},
+                                    ],
+                                },
+                            ]
+                        }
+                    },
+                    'item_descriptors': [
+                        {'id': item_desc.id,
+                            'code': 'person',
+                            'name': 'Person',
+                            'extra_data': [],
+                            'party': {
+                                'model': 'party',
+                                'domains': {
+                                    'quotation': [
+                                        {
+                                            'fields': [
+                                                {
+                                                    'code': 'birth_date',
+                                                    'required': True
+                                                }
+                                            ],
+                                            'conditions': [
+                                                {
+                                                    'name': 'is_person',
+                                                    'operator': '=',
+                                                    'value': True
+                                                },
+                                            ]
+                                        },
+                                    ],
+                                    'subscription': [
+                                        {
+                                            'conditions': [
+                                                {
+                                                    'name': 'is_person',
+                                                    'operator': '=',
+                                                    'value': True
+                                                },
+                                            ],
+                                            'fields': [
+                                                {'code': 'addresses',
+                                                    'required': True},
+                                                {'code': 'birth_date',
+                                                    'required': True},
+                                                {'code': 'email',
+                                                    'required': False},
+                                                {'code': 'first_name',
+                                                    'required': True},
+                                                {'code': 'is_person',
+                                                    'required': False},
+                                                {'code': 'name',
+                                                    'required': True},
+                                                {'code': 'phone',
+                                                    'required': False},
+                                                {'code': 'ssn',
+                                                    'required': True},
+                                            ],
+                                        },
+                                    ]
+                                }}
+                            }
+                        ]}])
 
 
 def suite():

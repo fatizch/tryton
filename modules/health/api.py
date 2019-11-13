@@ -4,27 +4,9 @@ from trytond.pool import PoolMeta, Pool
 
 
 __name__ = [
-    'APIProduct',
     'APIParty',
     'APIContract',
     ]
-
-
-class APIProduct(metaclass=PoolMeta):
-    __name__ = 'api.product'
-
-    @classmethod
-    def _describe_product(cls, product):
-        result = super()._describe_product(product)
-
-        # Maybe some day there will be some sort of "ssn_required" on item
-        # descs
-        if product.is_health and result['item_descriptors']:
-            for item_desc in result['item_descriptors']:
-                item_desc['fields']['required'].append('ssn')
-                item_desc['fields']['fields'].append('ssn')
-
-        return result
 
 
 class APIParty(metaclass=PoolMeta):

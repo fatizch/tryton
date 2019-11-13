@@ -5,7 +5,7 @@ from trytond.pool import PoolMeta, Pool
 from trytond.modules.api import DEFAULT_INPUT_SCHEMA
 from trytond.modules.coog_core.api import OBJECT_ID_SCHEMA, CODE_SCHEMA
 from trytond.modules.coog_core.api import OBJECT_ID_NULL_SCHEMA
-from trytond.modules.coog_core.api import MODEL_REFERENCE
+from trytond.modules.offered.api import CONTRACT_PARTY_SCHEMA
 
 
 __all__ = [
@@ -47,40 +47,89 @@ class APIProduct(metaclass=PoolMeta):
             'name': item_desc.name,
             'extra_data': ApiCore._extra_data_structure(
                 item_desc.extra_data_def),
-            'fields': cls._describe_item_descriptor_fields(item_desc),
+            'party': {
+                'model': 'party',
+                'domains': cls._get_covered_party_domains(item_desc)
+                } if item_desc.kind else {},
             }
 
     @classmethod
-    def _describe_item_descriptor_fields(cls, item_desc):
+    def _init_covered_party_domains(cls):
+        # The keys of this represent a context
+        # and the values are dictionnaries with named domains as keys
+        domains = {
+            'quotation': {},
+            'subscription': {},
+            }
+        return domains
+
+    @classmethod
+    def _get_covered_party_domains(cls, item_desc):
+        domains = cls._init_covered_party_domains()
+        cls._update_covered_party_domains_from_item_desc(item_desc, domains)
+        domain_descriptions = cls._format_party_domains(domains)
+        return domain_descriptions
+
+    @classmethod
+    def _update_covered_party_domains_from_item_desc(cls, item_desc, domains):
+        person_conditions = [
+            {'name': 'is_person', 'operator': '=', 'value': True}]
+        company_conditions = [
+            {'name': 'is_person', 'operator': '=', 'value': False}]
+
+        person_quotation_domain = {
+            'conditions': list(person_conditions),
+            'fields': [
+                {'code': 'birth_date', 'required': True}
+                ],
+            }
+
+        company_quotation_domain = {
+            'conditions': list(company_conditions),
+            'fields': [],
+            }
+
+        person_subscription_domain = {
+            'conditions': list(person_conditions),
+            'fields': [
+                {'code': 'addresses', 'required': True},
+                {'code': 'birth_date', 'required': True},
+                {'code': 'email', 'required': False},
+                {'code': 'first_name', 'required': True},
+                {'code': 'is_person', 'required': False},
+                {'code': 'name', 'required': True},
+                {'code': 'phone', 'required': False},
+                ]
+            }
+
+        company_subscription_domain = {
+            'conditions': list(company_conditions),
+            'fields': [
+                {'code': 'addresses', 'required': True},
+                {'code': 'email', 'required': False},
+                {'code': 'is_person', 'required': False},
+                {'code': 'name', 'required': True},
+                {'code': 'phone', 'required': False},
+                ]
+            }
+
         if item_desc.kind == 'person':
-            return {
-                'model': 'party',
-                'conditions': [
-                    {'name': 'is_person', 'operator': '=', 'value': True},
-                    ],
-                'required': ['name', 'first_name', 'birth_date', 'email',
-                    'address'],
-                'fields': ['name', 'first_name', 'birth_date', 'email',
-                    'phone_number', 'address'],
-                }
+            domains['quotation']['person_domain'] = person_quotation_domain
+            domains['subscription']['person_domain'] = \
+                person_subscription_domain
         elif item_desc.kind == 'company':
-            return {
-                'model': 'party',
-                'conditions': [
-                    {'name': 'is_person', 'operator': '=', 'value': False},
-                    ],
-                'required': ['name', 'email', 'address'],
-                'fields': ['name', 'email', 'phone_number', 'address'],
-                }
+            domains['quotation']['company_domain'] = company_quotation_domain
+            domains['subscription']['company_domain'] = \
+                company_subscription_domain
         elif item_desc.kind == 'party':
-            return {
-                'model': 'party',
-                'required': ['name', 'first_name', 'birth_date', 'email',
-                    'address'],
-                'fields': ['name', 'first_name', 'birth_date', 'email',
-                    'phone_number', 'is_person', 'address'],
-                }
-        return {}
+            domains['quotation']['person_domain'] = person_quotation_domain
+            domains['quotation']['company_domain'] = company_quotation_domain
+            domains['subscription']['person_domain'] = \
+                person_subscription_domain
+            domains['subscription']['company_domain'] = \
+                company_subscription_domain
+        else:
+            raise NotImplementedError
 
     @classmethod
     def _describe_product_schema(cls):
@@ -111,11 +160,11 @@ class APIProduct(metaclass=PoolMeta):
                 'code': CODE_SCHEMA,
                 'name': {'type': 'string'},
                 'extra_data': Pool().get('api.core')._extra_data_schema(),
-                'fields': {
-                    'oneOf': [MODEL_REFERENCE, DEFAULT_INPUT_SCHEMA],
+                'party': {
+                    'oneOf': [CONTRACT_PARTY_SCHEMA, DEFAULT_INPUT_SCHEMA],
                     },
                 },
-            'required': ['id', 'code', 'name', 'extra_data', 'fields'],
+            'required': ['id', 'code', 'name', 'extra_data', 'party'],
             }
 
     @classmethod
@@ -129,7 +178,19 @@ class APIProduct(metaclass=PoolMeta):
                         'code': 'item_desc_1',
                         'name': 'Item Descriptor 1',
                         'extra_data': [],
-                        'fields': {},
+                        'party': {
+                            'model': 'party',
+                            'domains': {
+                                'quotation': [{
+                                    'conditions': [],
+                                    'fields': []
+                                    }],
+                                'subscription': [{
+                                    'conditions': [],
+                                    'fields': []
+                                    }],
+                                }
+                            }
                         },
                     ]
                 for coverage in description['coverages']:

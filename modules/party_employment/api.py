@@ -114,3 +114,16 @@ class APIParty(metaclass=PoolMeta):
                 },
             }
         return super()._create_party_examples() + [example_party_employment]
+
+
+class APIProduct(metaclass=PoolMeta):
+    __name__ = 'api.product'
+
+    @classmethod
+    def _update_covered_party_domains_from_item_desc(cls, item_desc, domains):
+        super()._update_covered_party_domains_from_item_desc(item_desc, domains)
+        if item_desc.kind == 'person' and item_desc.employment_required:
+            domains['subscription']['person_domain']['fields'].append(
+                {'code': 'employments', 'required': True})
+            domains['quotation']['person_domain']['fields'].append(
+                {'code': 'employments', 'required': True})

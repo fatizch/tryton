@@ -2,6 +2,10 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "field:offered.item.description,employment_required:"
+msgid "Employment Information Required"
+msgstr "Données professionnelles requises"
+
 msgctxt "field:party.employment,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
@@ -250,6 +254,14 @@ msgctxt "field:party.work_section,xml_id:"
 msgid "XML Id"
 msgstr "XML Id"
 
+msgctxt "help:offered.item.description,employment_required:"
+msgid ""
+"If set to True, employment informations will be required for the covered "
+"elements"
+msgstr ""
+"Si coché, les données professionnelles seront requises pour les personnes "
+"couvertes"
+
 msgctxt "help:party.employment,employment_identifier:"
 msgid "The identifier of the employee in his company"
 msgstr "Matricule Employé (n° liaison administratif)"
@@ -297,6 +309,10 @@ msgstr "Service gestionnaire"
 msgctxt "model:ir.action,name:act_work_time_type"
 msgid "Work Time Type"
 msgstr "Type de durée de travail"
+
+msgctxt "model:ir.message,text:msg_employment_required"
+msgid "Employment informations are required for %(party)s"
+msgstr "Les données professionnelles sont requises pour %(party)s"
 
 msgctxt "model:ir.ui.menu,name:menu_configuration_profession"
 msgid "Employment Kind"

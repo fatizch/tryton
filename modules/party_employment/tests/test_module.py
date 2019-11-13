@@ -4,6 +4,8 @@ from decimal import Decimal
 
 import trytond.tests.test_tryton
 from trytond.modules.coog_core import test_framework
+from trytond.modules.party_employment.offered import \
+    EmploymentDataValidationError
 from trytond.pool import Pool
 
 
@@ -11,6 +13,10 @@ class ModuleTestCase(test_framework.CoogTestCase):
     'Module Test Case'
 
     module = 'party_employment'
+
+    @classmethod
+    def fetch_models_for(cls):
+        return ['offered_insurance']
 
     def test0001_testEmploymentKindCreation(self):
         EmploymentKind = Pool().get('party.employment_kind')
@@ -77,6 +83,59 @@ class ModuleTestCase(test_framework.CoogTestCase):
             datetime.date(2023, 2, 2))
         self.assertEqual(test_update.employments[1].versions[0].gross_salary,
             Decimal('40000'))
+
+    @test_framework.prepare_test('party_employment.'
+        'test0060_party_API',
+        'offered_insurance.test0010Coverage_creation',
+        'contract.test0005_PrepareProductForSubscription')
+    def test0070_contract_activation(self):
+        pool = Pool()
+        Product = pool.get('offered.product')
+        Contract = pool.get('contract')
+        Coverage = pool.get('offered.option.description')
+        Option = pool.get('contract.option')
+        CoveredElement = pool.get('contract.covered_element')
+        Party = pool.get('party.party')
+        product, = Product.search([
+                ('code', '=', 'AAA'),
+                ])
+        coverage_a, = Coverage.search([('code', '=', 'ALP')])
+        desc = coverage_a.item_desc
+        desc.employment_required = True
+        desc.save()
+        start_date = product.start_date + datetime.timedelta(weeks=4)
+
+        def test_contract(subscriber):
+            contract = Contract(
+                start_date=start_date,
+                product=product.id,
+                company=product.company.id,
+                appliable_conditions_date=start_date,
+                subscriber=subscriber,
+                )
+            contract.save()
+            covered_element = CoveredElement()
+            covered_element.item_desc = coverage_a.item_desc
+            covered_element.contract = contract
+            covered_element.party = contract.subscriber
+            covered_element.save()
+            option_cov_ant = Option()
+            option_cov_ant.coverage = coverage_a.id
+            option_cov_ant.covered_element = covered_element
+            option_cov_ant.save()
+            contract.activate_contract()
+
+        daisy, = Party.search([('name', '=', 'Doe'),
+            ('first_name', '=', 'Daisy')])
+        test_contract(daisy)
+
+        no_employment_data_party = Party(name='no',
+            first_name='employment data', is_person=True,
+            birth_date=datetime.date(1980, 1, 1),
+            gender='male')
+        no_employment_data_party.save()
+        self.assertRaises(EmploymentDataValidationError, test_contract,
+            no_employment_data_party)
 
 
 def suite():

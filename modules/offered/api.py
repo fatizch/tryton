@@ -8,7 +8,7 @@ from trytond.pool import PoolMeta, Pool
 
 from trytond.modules.coog_core.api import OBJECT_ID_SCHEMA
 from trytond.modules.coog_core.api import CODED_OBJECT_ARRAY_SCHEMA, CODE_SCHEMA
-from trytond.modules.coog_core.api import MODEL_REFERENCE
+from trytond.modules.coog_core.api import DOMAIN_SCHEMA
 from trytond.modules.api import APIMixin, DEFAULT_INPUT_SCHEMA
 from trytond.modules.web_configuration.resource import WebUIResourceMixin
 
@@ -21,6 +21,32 @@ EXTRA_DATA_VALUES_SCHEMA = {
             },
         },
     'additionalProperties': False,
+    }
+
+CONTRACT_PARTY_SCHEMA = {
+    'type': 'object',
+    'additionalProperties': False,
+    'properties': {
+        'model': {'type': 'string'},
+        'domains': {
+            'type': 'object',
+            'properties': {
+                'quotation': {
+                    'type': 'array',
+                    'additionalItems': False,
+                    'items': DOMAIN_SCHEMA,
+                },
+                'subscription': {
+                    'type': 'array',
+                    'additionalItems': False,
+                    'items': DOMAIN_SCHEMA,
+                    }
+                },
+            'required': ['quotation', 'subscription'],
+            'additionalProperties': False
+            },
+        },
+    'required': ['model', 'domains'],
     }
 
 
@@ -449,34 +475,80 @@ class APIProduct(APIMixin):
 
     @classmethod
     def _describe_subscriber(cls, product):
+        return {
+            'model': 'party',
+            'domains': cls._get_subscriber_domains(product)
+            }
+
+    @classmethod
+    def _get_subscriber_domains(cls, product):
+        domains = cls._init_subscriber_domains()
+        cls._update_subscriber_domains_from_product(product, domains)
+
+        # The format methods will change the named domains to a list of domains
+        # (dropping the name). Named Domains are used to allow for fine control
+        # when overloading the description. For example, we may want to only
+        # change the list of fields for persons (when is_person is True), hence
+        # the named domain 'person_domain'
+
+        domain_descriptions = cls._format_party_domains(domains)
+        return domain_descriptions
+
+    @classmethod
+    def _init_subscriber_domains(cls):
+        # The keys of this represent a context
+        # and the values are dictionnaries with named domains as keys
+        domains = {
+            'quotation': {},
+            'subscription': {},
+            }
+        return domains
+
+    @classmethod
+    def _format_party_domains(cls, domains):
+        description = {}
+        for context_, named_domains in domains.items():
+            description[context_] = list(named_domains.values())
+        return description
+
+    @classmethod
+    def _update_subscriber_domains_from_product(cls, product, domains):
+        person_conditions = [
+            {'name': 'is_person', 'operator': '=', 'value': True}]
+        company_conditions = [
+            {'name': 'is_person', 'operator': '=', 'value': False}]
+        domains['quotation']['base_domain'] = {'fields': []}
+        person_domain = {
+                'conditions': list(person_conditions),
+                'fields': [
+                    {'code': 'addresses', 'required': True},
+                    {'code': 'birth_date', 'required': True},
+                    {'code': 'email', 'required': False},
+                    {'code': 'first_name', 'required': True},
+                    {'code': 'is_person', 'required': False},
+                    {'code': 'name', 'required': True},
+                    {'code': 'phone', 'required': False},
+                    ]
+                }
+        company_domain = {
+                'conditions': list(company_conditions),
+                'fields': [
+                    {'code': 'addresses', 'required': True},
+                    {'code': 'email', 'required': False},
+                    {'code': 'is_person', 'required': False},
+                    {'code': 'name', 'required': True},
+                    {'code': 'phone', 'required': False},
+                    ]
+                }
         if product.subscriber_kind == 'person':
-            return {
-                'model': 'party',
-                'conditions': [
-                    {'name': 'is_person', 'operator': '=', 'value': True},
-                    ],
-                'required': ['name', 'first_name', 'birth_date', 'email',
-                    'addresses'],
-                'fields': ['name', 'first_name', 'birth_date', 'email',
-                    'phone_number', 'addresses'],
-                }
+            domains['subscription']['person_domain'] = person_domain
         elif product.subscriber_kind == 'company':
-            return {
-                'model': 'party',
-                'conditions': [
-                    {'name': 'is_person', 'operator': '=', 'value': False},
-                    ],
-                'required': ['name', 'email', 'addresses'],
-                'fields': ['name', 'email', 'phone_number', 'addresses'],
-                }
-        if product.subscriber_kind == 'all':
-            return {
-                'model': 'party',
-                'required': ['name', 'first_name', 'birth_date', 'email',
-                    'addresses'],
-                'fields': ['name', 'first_name', 'birth_date', 'email',
-                    'phone_number', 'is_person', 'addresses'],
-                }
+            domains['subscription']['company_domain'] = company_domain
+        elif product.subscriber_kind == 'all':
+            domains['subscription']['person_domain'] = person_domain
+            domains['subscription']['company_domain'] = company_domain
+        else:
+            raise NotImplementedError
 
     @classmethod
     def _describe_products_convert_input(cls, parameters):
@@ -549,11 +621,49 @@ class APIProduct(APIMixin):
                             ],
                         'subscriber': {
                             'model': 'party',
-                            'required': ['name', 'first_name', 'birth_date',
-                                'email'], 'fields': ['name', 'first_name',
-                                'birth_date', 'email', 'phone_number',
-                                'is_person'],
-                            },
+                            'domains': {
+                                'quotation': [
+                                    {
+                                        'fields': [
+                                            {'code': 'name',
+                                                'required': False},
+                                            {'code': 'first_name',
+                                                'required': True},
+                                            {'code': 'birth_date',
+                                                'required': False},
+                                            {'code': 'email',
+                                                'required': False},
+                                            {'code': 'phone',
+                                                'required': False},
+                                            {'code': 'is_person',
+                                                'required': False},
+                                            {'code': 'addresses',
+                                                'required': False}
+                                        ]
+                                    },
+                                ],
+                                'subscription': [
+                                    {
+                                        'fields': [
+                                            {'code': 'name',
+                                                'required': True},
+                                            {'code': 'first_name',
+                                                'required': True},
+                                            {'code': 'birth_date',
+                                                'required': True},
+                                            {'code': 'email',
+                                                'required': False},
+                                            {'code': 'phone',
+                                                'required': False},
+                                            {'code': 'is_person',
+                                                'required': False},
+                                            {'code': 'addresses',
+                                                'required': True}
+                                        ],
+                                    },
+                                ]
+                            }
+                        },
                         'packages': [],
                         },
                     ],
@@ -619,11 +729,49 @@ class APIProduct(APIMixin):
                             ],
                         'subscriber': {
                             'model': 'party',
-                            'required': ['name', 'first_name', 'birth_date',
-                                'email'], 'fields': ['name', 'first_name',
-                                'birth_date', 'email', 'phone_number',
-                                'is_person'],
-                            },
+                            'domains': {
+                                'quotation': [
+                                    {
+                                        'fields': [
+                                            {'code': 'name',
+                                                'required': False},
+                                            {'code': 'first_name',
+                                                'required': True},
+                                            {'code': 'birth_date',
+                                                'required': False},
+                                            {'code': 'email',
+                                                'required': False},
+                                            {'code': 'phone',
+                                                'required': False},
+                                            {'code': 'is_person',
+                                                'required': False},
+                                            {'code': 'addresses',
+                                                'required': False}
+                                        ]
+                                    },
+                                ],
+                                'subscription': [
+                                    {
+                                        'fields': [
+                                            {'code': 'name',
+                                                'required': True},
+                                            {'code': 'first_name',
+                                                'required': True},
+                                            {'code': 'birth_date',
+                                                'required': True},
+                                            {'code': 'email',
+                                                'required': False},
+                                            {'code': 'phone',
+                                                'required': False},
+                                            {'code': 'is_person',
+                                                'required': False},
+                                            {'code': 'addresses',
+                                                'required': True}
+                                        ],
+                                    },
+                                ]
+                            }
+                        },
                         'packages': [],
                         },
                     {
@@ -644,15 +792,49 @@ class APIProduct(APIMixin):
                             ],
                         'subscriber': {
                             'model': 'party',
-                            'conditions': [
-                                {'name': 'is_person', 'operator': '=', 'value':
-                                    True},
+                            'domains': {
+                                'quotation': [
+                                    {
+                                        'fields': [
+                                            {'code': 'name',
+                                                'required': False},
+                                            {'code': 'first_name',
+                                                'required': True},
+                                            {'code': 'birth_date',
+                                                'required': False},
+                                            {'code': 'email',
+                                                'required': False},
+                                            {'code': 'phone',
+                                                'required': False},
+                                            {'code': 'is_person',
+                                                'required': False},
+                                            {'code': 'addresses',
+                                                'required': False}
+                                        ]
+                                    },
                                 ],
-                            'required': ['name', 'first_name', 'birth_date',
-                                'email'],
-                            'fields': ['name', 'first_name', 'birth_date',
-                                'email', 'phone_number'],
-                            },
+                                'subscription': [
+                                    {
+                                        'fields': [
+                                            {'code': 'name',
+                                                'required': True},
+                                            {'code': 'first_name',
+                                                'required': True},
+                                            {'code': 'birth_date',
+                                                'required': True},
+                                            {'code': 'email',
+                                                'required': False},
+                                            {'code': 'phone',
+                                                'required': False},
+                                            {'code': 'is_person',
+                                                'required': False},
+                                            {'code': 'addresses',
+                                                'required': True}
+                                        ],
+                                    },
+                                ]
+                            }
+                        },
                         'packages': [
                             {
                                 'id': 1,
@@ -714,7 +896,7 @@ class APIProduct(APIMixin):
                     'items': cls._describe_coverage_schema(),
                     },
                 'extra_data': Pool().get('api.core')._extra_data_schema(),
-                'subscriber': MODEL_REFERENCE,
+                'subscriber': CONTRACT_PARTY_SCHEMA,
                 'packages': {
                     'type': 'array',
                     'additionalItems': False,

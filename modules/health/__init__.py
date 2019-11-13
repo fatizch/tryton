@@ -25,7 +25,6 @@ def register():
         module='health', type_='wizard')
 
     Pool.register(
-        api.APIProduct,
         api.APIParty,
         api.APIContract,
         module='health', type_='model', depends=['api'])

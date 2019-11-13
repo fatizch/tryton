@@ -4,6 +4,7 @@ from trytond.pool import Pool
 from . import party
 from . import rule_engine
 from . import api
+from . import offered
 
 
 def register():
@@ -15,6 +16,7 @@ def register():
         rule_engine.RuleEngineRuntime,
         party.EmploymentKind,
         party.Employment,
+        offered.ItemDescription,
         module='party_public_employment', type_='model')
 
     Pool.register(
