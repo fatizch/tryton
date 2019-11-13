@@ -10,4 +10,5 @@ def register():
         bank.MigratorBank,
         bank.MigratorBankAccount,
         bank.MigratorBankAgency,
+        bank.MigratorSepaMandat,
         module='migrator_bank', type_='model')

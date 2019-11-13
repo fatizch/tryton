@@ -146,8 +146,6 @@ class MigratorBankAccount(migrator.Migrator):
             'end_date': 'end_date',
             'iban': 'iban',
             'bic': 'bic',
-            'identification': 'identification',
-            'signature_date': 'signature_date',
             }
 
     @classmethod
@@ -258,7 +256,9 @@ class MigratorBankAccount(migrator.Migrator):
             ibans = [r['iban'] for r in rows if r['iban']]
             cls.cache_obj['account'] = tools.cache_from_search('bank.account',
                 'number', ('number', 'in', ibans))
-        cls.migrate_sepa_mandate(rows)
+
+        if 'with_sepa_mandate' in kwargs and kwargs['with_sepa_mandate']:
+            cls.migrate_sepa_mandate(rows)
         return to_upsert
 
     @classmethod
@@ -314,3 +314,48 @@ class MigratorBankAccount(migrator.Migrator):
             ids = [res[r]['iban'] for r in res]
             clause = Column(cls.table, cls.func_key).in_(ids)
             cls.delete_rows(tools.CONNECT_SRC, cls.table, clause)
+
+    @classmethod
+    def execute(cls, objects, ids, **kwargs):
+        if 'with_sepa_mandate' in kwargs and kwargs['with_sepa_mandate']:
+            cls.columns['identification'] = 'identification'
+            cls.columns['signature_date'] = 'signature_date'
+        super(MigratorBankAccount, cls).execute(objects, ids, kwargs)
+
+
+class MigratorSepaMandat(migrator.Migrator):
+    """Migrator Sepa Mandat"""
+
+    __name__ = 'migrator.sepa_mandat'
+
+    @classmethod
+    def __setup__(cls):
+        super(MigratorSepaMandat, cls).__setup__()
+        cls.table = Table('sepa_mandat')
+        cls.model = 'account.payment.sepa.mandate'
+        cls.func_key = 'identification'
+        cls.columns = {
+            'party': 'party',
+            'signature_date': 'signature_date',
+            'identification': 'identification',
+            'account_number': 'iban',
+            }
+
+    @classmethod
+    def init_cache(cls, rows, **kwargs):
+        super(MigratorSepaMandat, cls).init_cache(rows, **kwargs)
+        ibans = [r['account_number'] for r in rows]
+        cls.cache_obj['account_number'] = tools.cache_from_search(
+            'bank.account.number', 'number_compact',
+            ('number_compact', 'in', ibans))
+        parties = [r['party'] for r in rows]
+        cls.cache_obj['party'] = tools.cache_from_search('party.party',
+            'code', ('code', 'in', parties))
+
+    @classmethod
+    def populate(cls, row):
+        row = super(MigratorSepaMandat, cls).populate(row)
+        row['account_number'] = cls.cache_obj['account_number'][row[
+            'account_number']].id
+        row['party'] = cls.cache_obj['party'][row['party']].id
+        return row
