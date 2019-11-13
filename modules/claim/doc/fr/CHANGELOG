@@ -1,3 +1,5 @@
+* OTH#00000 Amélioration de la vue de l'onglet administration sur une prestation pour afficher plus largement les préjudices
+
 Version 2.6 - 2019-10-11
 * FEA#12282 Gestion du compte bancaire sinistre dans les APIs
 * FEA#11832 Identifier au niveau du tiers le compte bancaire à utiliser pour les remboursements de prestations

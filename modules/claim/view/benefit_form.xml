@@ -26,7 +26,7 @@ this repository contains the full copyright notices and license terms. -->
             </notebook>
         </page>
         <page string="Administration" id="admin" col="2">
-            <group id="left">
+            <group id="left" yexpand="1">
                 <label name="beneficiary_kind"/>
                 <field name="beneficiary_kind"/>
                 <label name="several_delivered"/>
@@ -40,7 +40,7 @@ this repository contains the full copyright notices and license terms. -->
                 <label name="company"/>
                 <field name="company"/>
             </group>
-            <group id="insurer" colspan="2" col="4">
+            <group id="insurer" colspan="2">
                 <label name="insurer"/>
                 <field name="insurer"/>
             </group>
