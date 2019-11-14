@@ -87,4 +87,4 @@ class Configuration(metaclass=PoolMeta):
     __name__ = 'account.configuration'
 
     broker_analytic_account_to_use = fields.Many2One('analytic_account.account',
-        'Broker Analytic Account To Use')
+        'Broker Analytic Account To Use', ondelete='RESTRICT')

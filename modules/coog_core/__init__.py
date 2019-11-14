@@ -128,6 +128,9 @@ def register():
             models_for_tests.TestRevisionModel,
             models_for_tests.TestModelWithReverseField,
             models_for_tests.TestSubTransactionModel,
+            models_for_tests.TestConfiguration1,
+            models_for_tests.TestConfiguration2,
+            models_for_tests.TestConfiguration3,
             module='coog_core', type_='model')
 
         Pool.register(

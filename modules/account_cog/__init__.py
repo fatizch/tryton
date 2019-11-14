@@ -31,6 +31,8 @@ def register():
         account.FiscalYear,
         account.Period,
         account.Configuration,
+        account.ConfigurationDefaultAccount,
+        account.DefaultTaxRule,
         company.Company,
         tax.Tax,
         tax.TaxTemplate,

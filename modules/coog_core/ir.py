@@ -142,7 +142,8 @@ TREE_ATTRIBUTES = """
 """
 
 
-class Sequence(ExportImportMixin, model.TaggedMixin, metaclass=PoolMeta):
+class Sequence(model.ConfigurationMixin, ExportImportMixin, model.TaggedMixin,
+        metaclass=PoolMeta):
     __name__ = 'ir.sequence'
     _func_key = 'func_key'
 
@@ -446,29 +447,15 @@ class ActionKeyword(ExportImportMixin, metaclass=PoolMeta):
     __name__ = 'ir.action.keyword'
 
 
-class IrModule(metaclass=PoolMeta):
+class IrModule(model.ConfigurationMixin):
     __name__ = 'ir.module'
-
-    _is_module_installed_cache = Cache('is_module_installed')
 
     @classmethod
     def is_module_installed(cls, module_name):
-        module_installed = cls._is_module_installed_cache.get(module_name,
-            default=-1)
-        if module_installed != -1:
-            return module_installed
-        if cls._is_module_installed_cache.get('_check_initialized', False):
-            # Cache was initialized, module does not exist
+        module = cls.search([('name', '=', module_name)])
+        if not module:
             return False
-        cls._is_module_installed_cache.clear()
-        cursor = Transaction().connection.cursor()
-        module = cls.__table__()
-        cursor.execute(*module.select(module.name, module.state))
-        for name, state in cursor.fetchall():
-            cls._is_module_installed_cache.set(name,
-                state in ('activated', 'to upgrade', 'to activate'))
-        cls._is_module_installed_cache.set('_check_initialized', True)
-        return cls._is_module_installed_cache.get(module_name, False)
+        return module[0].state in ('activated', 'to upgrade', 'to activate')
 
     @classmethod
     def view_attributes(cls):

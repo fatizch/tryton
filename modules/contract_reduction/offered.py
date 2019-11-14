@@ -27,7 +27,7 @@ class OptionDescription(metaclass=PoolMeta):
         return structure
 
 
-class OptionDescriptionReductionRule(model.CoogSQL, model.CoogView,
+class OptionDescriptionReductionRule(model.ConfigurationMixin, model.CoogView,
         get_rule_mixin('rule', 'Rule', extra_string='Rule Extra Data'),
         get_rule_mixin('eligibility_rule', 'Eligibility Rule',
             extra_string='Eligibility Rule Extra Data')):

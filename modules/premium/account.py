@@ -3,7 +3,6 @@
 from decimal import Decimal
 
 from trytond.pool import Pool
-from trytond.model import Unique
 from trytond.transaction import Transaction
 from trytond.pyson import Eval, If
 
@@ -23,7 +22,7 @@ __all__ = [
     ]
 
 
-class Fee(model.CoogSQL, model.CoogView, ModelCurrency):
+class Fee(model.CodedMixin, model.CoogView, ModelCurrency):
     'Fee'
 
     __name__ = 'account.fee'
@@ -34,8 +33,6 @@ class Fee(model.CoogSQL, model.CoogView, ModelCurrency):
             ('id', If(Eval('context', {}).contains('company'), '=', '!='),
                 Eval('context', {}).get('company', -1)),
             ], select=True, ondelete='RESTRICT')
-    name = fields.Char('Name', required=True, translate=True)
-    code = fields.Char('Code', required=True)
     frequency = fields.Selection(FEE_FREQUENCIES, 'Frequency', states={
             'invisible': Eval('type', '') != 'fixed',
             'required': Eval('type', '') == 'fixed'})
@@ -75,14 +72,6 @@ class Fee(model.CoogSQL, model.CoogView, ModelCurrency):
     def is_master_object(cls):
         return True
 
-    @classmethod
-    def __setup__(cls):
-        super(Fee, cls).__setup__()
-        t = cls.__table__()
-        cls._sql_constraints += [
-            ('code_uniq', Unique(t, t.code), 'The code must be unique'),
-            ]
-
     @staticmethod
     def default_company():
         return Transaction().context.get('company')
@@ -109,12 +98,6 @@ class Fee(model.CoogSQL, model.CoogView, ModelCurrency):
     def on_change_with_invoice_amount_threshold(self):
         if self.frequency != 'once_per_invoice':
             return None
-
-    @fields.depends('code', 'name')
-    def on_change_with_code(self):
-        if self.code:
-            return self.code
-        return coog_string.slugify(self.name)
 
     def get_currency(self):
         return self.company.currency if self.company else None

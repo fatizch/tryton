@@ -50,6 +50,11 @@ class Product(CompanyMultiValueMixin, metaclass=PoolMeta):
         delete_missing=True, size=1)
 
     @classmethod
+    def __setup__(cls):
+        super().__setup__()
+        cls._function_auto_cache_fields.append('quote_number_sequence')
+
+    @classmethod
     def __register__(cls, module_name):
         pool = Pool()
         QuoteNumberSequence = pool.get('offered.product.quote_number_sequence')
@@ -110,7 +115,7 @@ class Product(CompanyMultiValueMixin, metaclass=PoolMeta):
         return doc
 
 
-class ProductQuoteNumberSequence(model.CoogSQL, CompanyValueMixin):
+class ProductQuoteNumberSequence(model.ConfigurationMixin, CompanyValueMixin):
     'Product Quote Number Sequence'
     __name__ = 'offered.product.quote_number_sequence'
 
@@ -145,7 +150,7 @@ class ProductQuoteNumberSequence(model.CoogSQL, CompanyValueMixin):
 
 class ContractDataRule(
         get_rule_mixin('rule', 'Rule Engine', extra_string='Rule Extra Data'),
-        model.CoogSQL, model.CoogView):
+        model.ConfigurationMixin, model.CoogView):
     'Contract Data Rule'
     __name__ = 'contract.data.rule'
 

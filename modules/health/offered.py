@@ -16,6 +16,11 @@ class Product(metaclass=PoolMeta):
         fields.Boolean('Is Health', states={'invisible': True}),
         'get_is_health_product', searcher='search_is_health')
 
+    @classmethod
+    def __setup__(cls):
+        super().__setup__()
+        cls._function_auto_cache_fields.append('is_health')
+
     def get_is_health_product(self, name):
         for coverage in self.coverages:
             if coverage.is_health:
@@ -46,6 +51,7 @@ class OptionDescription(metaclass=PoolMeta):
     def __setup__(cls):
         super(OptionDescription, cls).__setup__()
         cls.family.selection.append(('health', 'Health'))
+        cls._function_auto_cache_fields.append('is_health')
 
     def get_is_health_coverage(self, name):
         return self.family == 'health'

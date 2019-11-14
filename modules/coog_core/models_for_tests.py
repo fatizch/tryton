@@ -32,6 +32,9 @@ __all__ = [
     'TestLoaderUpdater',
     'TestLocalMpttMaster',
     'TestLocalMptt',
+    'TestConfiguration1',
+    'TestConfiguration2',
+    'TestConfiguration3',
     'TestAPIs',
     ]
 
@@ -327,6 +330,73 @@ class TestSubTransactionModel(model.CoogSQL, model._RevisionMixin):
     'Test Sub Transaction Model'
     __name__ = 'coog_core.test_model_sub_transaction'
     value = fields.Integer('Value')
+
+
+class TestConfiguration1(model.ConfigurationMixin):
+    'Test Configuration 1'
+    __name__ = 'coog_core.test_configuration_1'
+
+    value = fields.Integer('Value')
+    m2o_configuration = fields.Many2One('coog_core.test_configuration_2',
+        'M2O Configuration', ondelete='CASCADE')
+    m2o_no_configuration = fields.Many2One('coog_core.test_configuration_3',
+        'M2O No Configuration', ondelete='CASCADE')
+    o2m_configuration = fields.One2Many('coog_core.test_configuration_2',
+        'configuration_1', 'O2M Configuration', delete_missing=True,
+        target_not_required=True)
+    o2m_no_configuration = fields.One2Many('coog_core.test_configuration_3',
+        'configuration_1', 'O2M No Configuration', delete_missing=True,
+        target_not_required=True)
+    func_configuration = fields.Function(
+        fields.Integer('Func Configuration'),
+        'getter_func_configuration')
+    func_no_configuration = fields.Function(
+        fields.Integer('Func No Configuration'),
+        'getter_func_no_configuration')
+    function_field = fields.Function(
+        fields.Integer('Calculated Value'),
+        'getter_function_field', searcher='searcher_function_field')
+
+    def getter_func_configuration(self, name):
+        return self.m2o_configuration.value
+
+    def getter_func_no_configuration(self, name):
+        return self.m2o_no_configuration.value
+
+    def getter_function_field(self, name):
+        return self.value
+
+    @classmethod
+    def searcher_function_field(cls, name, clause):
+        return [('value',) + tuple(clause[1:])]
+
+
+class TestConfiguration2(model.ConfigurationMixin):
+    'Test Configuration 2'
+    __name__ = 'coog_core.test_configuration_2'
+
+    value = fields.Integer('Value')
+    configuration_1 = fields.Many2One('coog_core.test_configuration_1',
+        'Configuration 1', ondelete='CASCADE', select=True)
+    function_field = fields.Function(
+        fields.Integer('Calculated Value'),
+        'getter_function_field', searcher='searcher_function_field')
+
+    def getter_function_field(self, name):
+        return self.value
+
+    @classmethod
+    def searcher_function_field(cls, name, clause):
+        return [('value',) + tuple(clause[1:])]
+
+
+class TestConfiguration3(model.CoogSQL):
+    'Test Configuration 3'
+    __name__ = 'coog_core.test_configuration_3'
+
+    value = fields.Integer('Value')
+    configuration_1 = fields.Many2One('coog_core.test_configuration_1',
+        'Configuration 1', ondelete='CASCADE', select=True)
 
 
 class TestAPIs(APIMixin):

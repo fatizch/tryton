@@ -27,7 +27,8 @@ __all__ = [
 
 class PremiumModificationRuleMixin(
         get_rule_mixin('duration_rule', 'Duration Rule',
-            extra_string='Duration Rule Extra Data')):
+            extra_string='Duration Rule Extra Data'),
+        model.ConfigurationMixin):
 
     automatic = fields.Boolean("Automatic")
     rate = fields.Numeric("Rate", digits=(16, 4),
@@ -209,6 +210,13 @@ class OptionDescription(metaclass=PoolMeta):
         readonly=True)
 
     @classmethod
+    def __setup__(cls):
+        super().__setup__()
+        cls._function_auto_cache_fields.append('with_waiver_of_premium')
+        cls._function_auto_cache_fields.append('with_discount_of_premium')
+        cls._function_auto_cache_fields.append('with_modifications_of_premium')
+
+    @classmethod
     def validate(cls, coverages):
         super().validate(coverages)
         cls.check_waiver_discounts()
@@ -371,7 +379,7 @@ class WaiverPremiumRule(
         return True
 
 
-class WaiverPremiumRuleTaxRelation(model.CoogSQL):
+class WaiverPremiumRuleTaxRelation(model.ConfigurationMixin):
     'Option Description Tax Relation For Waiver'
 
     __name__ = 'waiver_premium.rule-account.tax'
@@ -465,7 +473,7 @@ class CommercialDiscountModificationRule(
         return self.commercial_discount
 
 
-class DiscountRuleTax(model.CoogSQL):
+class DiscountRuleTax(model.ConfigurationMixin):
     "Commercial Discount Rule - Taxes"
     __name__ = 'commercial_discount.rule-account.tax'
 
@@ -476,7 +484,7 @@ class DiscountRuleTax(model.CoogSQL):
         ondelete='RESTRICT')
 
 
-class DiscountRuleOption(model.CoogSQL):
+class DiscountRuleOption(model.ConfigurationMixin):
     "Commercial Discount Rule - Contract Option"
     __name__ = 'commercial_discount.rule-option.description'
 

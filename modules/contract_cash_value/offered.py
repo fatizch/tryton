@@ -18,6 +18,11 @@ class Product(metaclass=PoolMeta):
         fields.Boolean('Is Cash Value', states={'invisible': True}),
         'getter_is_cash_value')
 
+    @classmethod
+    def __setup__(cls):
+        super().__setup__()
+        cls._function_auto_cache_fields.append('is_cash_value')
+
     def getter_is_cash_value(self, name):
         for coverage in self.coverages:
             if coverage.is_cash_value:
@@ -37,6 +42,7 @@ class OptionDescription(get_rule_mixin('buyback_rule', 'Buyback Rule',
     def __setup__(cls):
         super(OptionDescription, cls).__setup__()
         cls.family.selection.append(('cash_value', 'Cash Value'))
+        cls._function_auto_cache_fields.append('is_cash_value')
 
     @fields.depends('family')
     def on_change_family(self):

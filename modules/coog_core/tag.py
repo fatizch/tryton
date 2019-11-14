@@ -8,7 +8,7 @@ __all__ = [
     ]
 
 
-class Tag(model.CoogSQL, model.CoogView):
+class Tag(model.ConfigurationMixin, model.CoogView):
     'Tag'
 
     __name__ = 'tag'
@@ -39,7 +39,7 @@ class Tag(model.CoogSQL, model.CoogView):
         return coog_string.slugify(self.name)
 
 
-class TagObjectRelation(model.CoogSQL, model.CoogView):
+class TagObjectRelation(model.ConfigurationMixin, model.CoogView):
     'Relation tag to object'
 
     __name__ = 'tag-object'

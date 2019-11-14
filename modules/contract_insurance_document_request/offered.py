@@ -21,7 +21,7 @@ __all__ = [
 
 class DocumentRule(
         get_rule_mixin('rule', 'Rule Engine', extra_string='Rule Extra Data'),
-        model.CoogSQL, model.CoogView):
+        model.ConfigurationMixin, model.CoogView):
     'Document Managing Rule'
 
     __name__ = 'document.rule'
@@ -110,7 +110,7 @@ class DocumentRule(
         return res
 
 
-class RuleDocumentDescriptionRelation(model.CoogSQL, model.CoogView):
+class RuleDocumentDescriptionRelation(model.ConfigurationMixin, model.CoogView):
     'Rule to Document Description Relation'
 
     __name__ = 'document.rule-document.description'

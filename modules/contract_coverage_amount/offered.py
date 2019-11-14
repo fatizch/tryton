@@ -35,7 +35,7 @@ class OptionDescription(metaclass=PoolMeta):
 
 class CoverageAmountRule(
         get_rule_mixin('rule', 'Rule Engine', extra_string='Rule Extra Data'),
-        model.CoogSQL, model.CoogView):
+        model.ConfigurationMixin, model.CoogView):
     'Coverage Amount Rule'
 
     __name__ = 'offered.coverage_amount.rule'

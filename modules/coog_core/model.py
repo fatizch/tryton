@@ -11,7 +11,7 @@ import sys
 from functools import wraps
 from genshi.template import NewTextTemplate
 
-from sql import Union, Column, Literal, Window, Null, Table
+from sql import Union, Column, Literal, Window, Null, Table, Expression
 from sql.aggregate import Max
 from sql.conditionals import Coalesce
 
@@ -32,6 +32,7 @@ from trytond.wizard import Wizard, StateAction
 from trytond.tools import reduce_ids, cursor_dict, memoize
 from trytond.config import config
 from trytond.pyson import Or
+from trytond.cache import freeze
 
 from .cache import CoogCache, get_cache_holder
 from . import fields
@@ -60,6 +61,12 @@ except MissingAsyncBrokerException:
         'found, batches will be unavailable')
     async_broker = None
 
+cache_logger = logging.getLogger('trytond:autocache')
+
+auto_read_cache_enabled = config.getboolean('cache', 'enable_auto_read_cache',
+    default=True)
+auto_search_cache_enabled = config.getboolean('cache',
+    'enable_auto_search_cache', default=True)
 
 _dictionarize_fields_cache = Cache('dictionarize_fields', context=False)
 
@@ -657,20 +664,6 @@ class CoogSQL(export.ExportImportMixin, FunctionalErrorMixIn,
                 & (Column(tmp_table, '__id') == Column(tmp_table, '__max__id'))
                 # create_date = Null => Elem deleted
                 & (tmp_table.create_date != Null)))
-
-    @classmethod
-    def search(cls, domain, offset=0, limit=None, order=None, count=False,
-            query=False):
-        # Set your class here to see the domain on the search
-        # if cls.__name__ == 'rule_engine':
-        #     print domain
-        try:
-            return super(CoogSQL, cls).search(domain=domain, offset=offset,
-                limit=limit, order=order, count=count, query=query)
-        except Exception:
-            logging.getLogger('root').debug('Bad domain on model %s : %r' % (
-                    cls.__name__, domain))
-            raise
 
     def _get_creation_date(self, name):
         if not (hasattr(self, 'create_date') and self.create_date):
@@ -1362,6 +1355,292 @@ def is_class_or_dual_method(method):
         isinstance(method.__self__, PoolMeta))
 
 
+class ConfigurationMixin(CoogSQL):
+    '''
+        Mixin to add "configuration" behaviour.
+
+        The goal of this mixin is to provide a way to clear all caches linked
+        to a configuration when any model inheriting from it is modified.
+
+        It also add some auto-caching of non-function fields, with the
+        possibility to opt-in for some function fields.
+
+        For performance purposes, each model will have a reference to all the
+        caches that should be cleared everytime it is modified (to avoid
+        parsing the model everytime).
+
+        Each model can manually add caches to auto clear by adding them to the
+        _caches_to_auto_clear variable
+    '''
+
+    _auto_read_caches = {}
+    _auto_search_caches = {}
+
+    @classmethod
+    def __setup__(cls):
+        super().__setup__()
+
+        # can be overriden to add function fields that are part of the
+        # configuration
+        cls._function_auto_cache_fields = []
+
+        # Add non-automatic caches that we want to clear at the same time than
+        # the automatic caches
+        cls._caches_to_auto_clear = []
+
+    @classmethod
+    def __post_setup__(cls):
+        pool = Pool()
+
+        super().__post_setup__()
+
+        if not auto_read_cache_enabled or not auto_search_cache_enabled:
+            return
+
+        # Create cache instances if needed. We will manually handle the context
+        # when generating the keys
+        if auto_read_cache_enabled:
+            if cls.__name__ not in cls._auto_read_caches:
+                cls._auto_read_caches[cls.__name__] = Cache(
+                    'auto_read_cache_%s' % cls.__name__, context=False)
+        if auto_search_cache_enabled:
+            if cls.__name__ not in cls._auto_search_caches:
+                cls._auto_search_caches[cls.__name__] = Cache(
+                    'auto_search_cache_%s' % cls.__name__, context=False)
+
+        # Auto detect which fields will be automatically cached. A field will
+        # be cached if:
+        #   - It is a "basic" (non-relational) field
+        #   - It is a relation field whose target also inherit from
+        #   ConfigurationMixin
+        #   - It is a function field that was explicitely added to the
+        #   _function_auto_cache_fields class variable
+        cls._auto_cache_fields = set()
+        for fname, field in [x for x in cls._fields.items()
+                if not isinstance(x[1], tryton_fields.Function)]:
+            target_model = None
+            if isinstance(field, tryton_fields.One2Many):
+                target_model = field.model_name
+            elif isinstance(field, tryton_fields.Many2Many):
+                target_model = field.relation_name
+            if target_model is None or issubclass(pool.get(target_model),
+                    ConfigurationMixin):
+                cls._auto_cache_fields.add(fname)
+
+        # We probably want this
+        if isinstance(cls.rec_name, tryton_fields.Function):
+            cls._function_auto_cache_fields.append('rec_name')
+
+        cls._auto_cache_fields |= set(cls._function_auto_cache_fields)
+
+    # Override Create / Write / Delete methods to clear all the automatic
+    # caches. We disable the caches when calling super so that validation calls
+    # do not use the cache when all the modifications may not yet be made
+    @classmethod
+    def create(cls, vlist):
+        cls._clear_all_caches()
+        with ServerContext().set_context(disable_auto_cache=True):
+            instances = super().create(vlist)
+        return instances
+
+    @classmethod
+    def write(cls, *args):
+        cls._clear_all_caches()
+        with ServerContext().set_context(disable_auto_cache=True):
+            super().write(*args)
+
+    @classmethod
+    def delete(cls, instances):
+        cls._clear_all_caches()
+        with ServerContext().set_context(disable_auto_cache=True):
+            super().delete(instances)
+
+    @classmethod
+    def _clear_all_caches(cls):
+        for cache in cls._all_configuration_caches():
+            cache.clear()
+
+    @classmethod
+    def _all_configuration_caches(cls):
+        caches = getattr(cls, '_clear_caches', -1)
+        if caches != -1:
+            return caches
+        caches = []
+        for _, klass in Pool().iterobject():
+            if not issubclass(klass, ConfigurationMixin):
+                continue
+            caches += klass._caches_to_auto_clear
+            if auto_read_cache_enabled:
+                caches.append(cls._auto_read_caches[klass.__name__])
+            if auto_search_cache_enabled:
+                caches.append(cls._auto_search_caches[klass.__name__])
+        cls._clear_caches = caches
+        return caches
+
+    @classmethod
+    def _auto_read_cache(cls):
+        return cls._auto_read_caches[cls.__name__]
+
+    @classmethod
+    def _auto_search_cache(cls):
+        return cls._auto_search_caches[cls.__name__]
+
+    @staticmethod
+    def _key(key):
+        # Add relevant parts of the transaction context. user / company for
+        # access rights consistency, language for translated fields values
+        transaction = Transaction()
+        return freeze((key, transaction.user,
+                transaction.context.get('language', None),
+                transaction.context.get('company', None)))
+
+    @classmethod
+    def search(cls, domain, offset=0, limit=None, order=None, count=False,
+            **kwargs):
+        # We only want to handle the case of basic search / order queries
+        if (not auto_search_cache_enabled or not domain or offset or limit or
+                count or kwargs or
+                ServerContext().get('disable_auto_cache', False)):
+            return super().search(domain, offset=offset, limit=limit,
+                order=order, count=count, **kwargs)
+
+        key = cls._key((domain, order))
+        cached = cls._auto_search_cache().get(key, -1)
+        if cached != -1:
+            return cls.browse(cached) if cached else []
+
+        result = super().search(domain, order=order)
+
+        # There should not be a lot of cases where the domain is not cachable,
+        # so the check overhead is worth it
+        if cls._cachable_domain(domain):
+            cls._auto_search_cache().set(key, [x.id for x in result])
+        else:
+            if cache_logger.isEnabledFor(logging.DEBUG):
+                cache_logger.debug('Cache miss %s for search on %s' %
+                    (cls.__name__, str(domain)))
+
+        return result
+
+    @classmethod
+    def _cachable_domain(cls, domain):
+        '''
+            Returns True if the domain is cachable, meaning its values are
+            static, and the fields it depends on are in the ConfigurationMixin
+            model subset
+        '''
+        if domain[0] in ['OR', 'AND']:
+            return all(cls._cachable_domain(x) for x in domain[1:])
+        if isinstance(domain[0], (tuple, list)):
+            return all(cls._cachable_domain(x) for x in domain)
+        if isinstance(domain[2], Expression):
+            return False
+
+        if '.' in domain[0]:
+            field_name, remaining = domain[0].split('.', 1)
+            if field_name in cls._auto_cache_fields:
+                # Assume it is a relation
+                field = cls._fields[field_name]
+                if isinstance(field, tryton_fields.Function):
+                    field = field._field
+                if isinstance(field, (tryton_fields.Many2One,
+                            tryton_fields.One2Many)):
+                    target_model = field.model_name
+                else:
+                    # Assume Many2Many
+                    target_model = Pool().get(field.relation_name)._fields[
+                        field.target].model_name
+                TargetModel = Pool().get(target_model)
+                if issubclass(TargetModel, ConfigurationMixin):
+                    return TargetModel._cachable_domain(
+                        (remaining,) + tuple(domain[1:]))
+                else:
+                    return False
+            else:
+                return False
+        elif 'where' in domain[1]:
+            # TODO: Handle this, not that often to worth the complexity
+            return False
+        else:
+            return domain[0] in cls._auto_cache_fields
+
+    @classmethod
+    def read(cls, ids, fields_names=None):
+        # Do not bother with read(*)
+        if (not auto_read_cache_enabled or fields_names is None or not ids or
+                ServerContext().get('disable_auto_cache', False)):
+            return super().read(ids, fields_names=fields_names)
+
+        # Identify which fields can be cached, and which cannot
+        cached, to_read = set(), []
+        for x in fields_names:
+            if x in cls._auto_cache_fields:
+                cached.add(x)
+            else:
+                to_read.append(x)
+
+        cached_values, key = [], None
+        if cached:
+            # Maybe in case of many misses consider splitting the cache by ids,
+            # but it's probably unnecessary
+            key = cls._key(ids)
+            cached_values = cls._auto_read_cache().get(key, -1)
+            if cached_values == -1:
+                # Cache is empty, we should read all cached field once, then
+                # add them in the cache
+                to_read += list(cls._auto_cache_fields)
+
+        if not to_read:
+            # If all fields are in the cache, no need to call super :)
+            return [
+                {k: v for k, v in elem.items()
+                    if k in cached or k == 'id'}
+                for elem in cached_values
+                ]
+
+        # Avoid recursive cache initialisation by disabling it if we are
+        # actually initializing
+        with ServerContext().set_context(**({'disable_auto_cache': True}
+                    if cached_values == -1 else {})):
+            # At this time, to_read is the list of requested non cachable
+            # fields, plus, if the cache was empty, the list of all cachable
+            # fields
+            read_values = super().read(ids, fields_names=to_read)
+
+            # super call is not garanteed to maintain the order, so we must
+            # enforce a consistent order on its results (so that merging the
+            # cached and non-cached value is easy)
+            read_values = list(sorted(read_values, key=lambda x: x['id']))
+
+        if cached_values == -1:
+            # Cache was empty, we set it
+            cached_values = [
+                {fname: row[fname]
+                    for fname in list(cls._auto_cache_fields) + ['id']}
+                for row in read_values]
+            cls._auto_read_cache().set(key, cached_values)
+
+            # We only leave  the 'id' and the not cached fields, so the loading
+            # of the cache leaves read_values in the same state as when the
+            # cache will be warm
+            read_values = [
+                {fname: row[fname]
+                    for fname in row if fname not in cls._auto_cache_fields
+                    or fname == 'id'}
+                for row in read_values]
+        else:
+            if cache_logger.isEnabledFor(logging.DEBUG):
+                for fname in to_read:
+                    cache_logger.debug('Cache miss %s for read on %s' %
+                        (cls.__name__, fname))
+
+        # Merge cached / non-cached values
+        for result, cache in zip(read_values, cached_values):
+            result.update({k: v for k, v in cache.items()
+                    if k in cached})
+        return read_values
+
+
 class Saver(object):
     def __init__(self, model, threshold=None):
         self.model = model
@@ -1614,7 +1893,7 @@ def history_versions(instance, start, end):
     return result
 
 
-class CodedMixin(CoogSQL):
+class CodedMixin(ConfigurationMixin):
     '''
         Mixin class to provide properly defined name / code fields
     '''
@@ -1627,8 +1906,6 @@ class CodedMixin(CoogSQL):
         'configuration. It should not be modified without checking first if '
         'it is used somewhere')
 
-    _instance_from_code_cache = {}
-
     @classmethod
     def __setup__(cls):
         super().__setup__()
@@ -1637,42 +1914,18 @@ class CodedMixin(CoogSQL):
             ('code_uniq', Unique(t, t.code), 'The code must be unique!'),
             ]
 
-    @classmethod
-    def __post_setup__(cls):
-        super().__post_setup__()
-        if cls.__name__ not in cls._instance_from_code_cache:
-            cls._instance_from_code_cache[cls.__name__] = Cache(
-                'instance_from_code_%s' % cls.__name__)
-
-    @classmethod
-    def create(cls, vlist):
-        res = super().create(vlist)
-        cls._instance_from_code_cache[cls.__name__].clear()
-        return res
-
-    @classmethod
-    def write(cls, *args):
-        super().write(*args)
-        cls._instance_from_code_cache[cls.__name__].clear()
-
-    @classmethod
-    def delete(cls, instances):
-        super().delete(instances)
-        cls._instance_from_code_cache[cls.__name__].clear()
-
     @fields.depends('code', 'name')
     def on_change_with_code(self):
         return self.code if self.code else coog_string.slugify(self.name)
 
     @classmethod
     def get_instance_from_code(cls, code):
-        cached = cls._instance_from_code_cache[cls.__name__].get(
-            None, -1)
-        if cached != -1:
-            return cls(cached[code])
-        cache = {x.code: x.id for x in cls.search([])}
-        cls._instance_from_code_cache[cls.__name__].set(None, cache)
-        return cls(cache[code])
+        # The search will be cached through ConfigurationMixin. We still raise
+        # a KeyError for backward compatibility
+        try:
+            return cls.search([('code', '=', code)])[0]
+        except IndexError:
+            raise KeyError
 
 
 class IconMixin(Model):

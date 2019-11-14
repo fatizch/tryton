@@ -38,7 +38,7 @@ __all__ = [
 
 class ProductPremiumDate(
     get_rule_mixin('rule', 'Rule Engine', extra_string='Rule Extra Data'),
-        model.CoogSQL, model.CoogView):
+        model.ConfigurationMixin, model.CoogView):
     'Product Premium Dates'
 
     __name__ = 'offered.product.premium_date'
@@ -207,7 +207,7 @@ class Product(metaclass=PoolMeta):
         return doc
 
 
-class ProductFeeRelation(model.CoogSQL):
+class ProductFeeRelation(model.ConfigurationMixin):
     'Product Fee Relation'
 
     __name__ = 'offered.product-account.fee'
@@ -220,7 +220,7 @@ class ProductFeeRelation(model.CoogSQL):
 
 class OptionDescriptionPremiumRule(
         get_rule_mixin('rule', 'Rule Engine', extra_string='Rule Extra Data'),
-        MatchMixin, model.CoogSQL, model.CoogView):
+        MatchMixin, model.ConfigurationMixin, model.CoogView):
     'Option Description Premium Rule'
 
     __name__ = 'offered.option.description.premium_rule'
@@ -239,6 +239,7 @@ class OptionDescriptionPremiumRule(
         super(OptionDescriptionPremiumRule, cls).__setup__()
         cls.rule.required = True
         cls.rule.domain = [('type_', '=', 'premium')]
+        cls._function_auto_cache_fields.append('premium_base')
 
     @classmethod
     def __post_setup__(cls):
@@ -404,7 +405,7 @@ class OptionDescription(metaclass=PoolMeta):
         return structure
 
 
-class OptionDescriptionFeeRelation(model.CoogSQL):
+class OptionDescriptionFeeRelation(model.ConfigurationMixin):
     'Option Description Fee Relation'
 
     __name__ = 'offered.option.description-account.fee'
@@ -415,7 +416,7 @@ class OptionDescriptionFeeRelation(model.CoogSQL):
         required=True)
 
 
-class OptionDescriptionTaxRelation(model.CoogSQL):
+class OptionDescriptionTaxRelation(model.ConfigurationMixin):
     'Option Description Tax Relation'
 
     __name__ = 'offered.option.description-account.tax'

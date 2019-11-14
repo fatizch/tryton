@@ -92,7 +92,7 @@ class RuleEngine(metaclass=PoolMeta):
 
 class OptionDescriptionEndingRule(
         get_rule_mixin('rule', 'Rule Engine', extra_string='Rule Extra Data'),
-        model.CoogSQL, model.CoogView):
+        model.ConfigurationMixin, model.CoogView):
     'Option Description Ending Rule'
 
     __name__ = 'offered.option.description.ending_rule'

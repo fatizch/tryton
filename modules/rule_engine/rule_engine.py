@@ -703,7 +703,7 @@ class FunctionFinder(ast.NodeVisitor):
         return super(FunctionFinder, self).visit(node)
 
 
-class RuleEngineTable(model.CoogSQL):
+class RuleEngineTable(model.ConfigurationMixin):
     'Rule_Engine - Table'
 
     __name__ = 'rule_engine-table'
@@ -734,7 +734,7 @@ class RuleEngineTable(model.CoogSQL):
                     cur_rule_parameter['the_table']]]))
 
 
-class RuleEngineRuleEngine(model.CoogSQL):
+class RuleEngineRuleEngine(model.ConfigurationMixin):
     'Rule Engine - Rule Engine'
 
     __name__ = 'rule_engine-rule_engine'
@@ -765,7 +765,8 @@ class RuleEngineRuleEngine(model.CoogSQL):
                     cur_rule_parameter['the_rule']]]))
 
 
-class RuleParameter(model.CoogDictSchema, model.CoogSQL, model.CoogView):
+class RuleParameter(model.CoogDictSchema, model.ConfigurationMixin,
+        model.CoogView):
     'Rule Parameter'
 
     __name__ = 'rule_engine.rule_parameter'
@@ -860,7 +861,7 @@ class RuleParameter(model.CoogDictSchema, model.CoogSQL, model.CoogView):
 
 
 @model.genshi_evaluated_fields('description')
-class RuleEngine(model.CoogSQL, model.CoogView, model.TaggedMixin):
+class RuleEngine(model.ConfigurationMixin, model.CoogView, model.TaggedMixin):
     "Rule"
     _history = True
     __name__ = 'rule_engine'
@@ -931,6 +932,7 @@ class RuleEngine(model.CoogSQL, model.CoogView, model.TaggedMixin):
             ('code_unique', Unique(t, t.short_name),
                 'The code must be unique'),
             ]
+        cls._function_auto_cache_fields.append('execution_code')
 
     @classmethod
     def __register__(cls, module_name):
@@ -974,7 +976,10 @@ class RuleEngine(model.CoogSQL, model.CoogView, model.TaggedMixin):
     def write(cls, *args):
         cls._prepare_context_cache.clear()
         super(RuleEngine, cls).write(*args)
-        cls.update_functions_used(sum(args[0::2], []))
+
+        # We disable auto cache to avoid inifinite recusion
+        with ServerContext().set_context(disable_auto_cache=True):
+            cls.update_functions_used(sum(args[0::2], []))
 
     @classmethod
     def update_functions_used(cls, rules):
@@ -1672,7 +1677,7 @@ class RuleEngine(model.CoogSQL, model.CoogView, model.TaggedMixin):
                 }
 
 
-class Context(ModelView, ModelSQL, model.TaggedMixin):
+class Context(ModelView, model.ConfigurationMixin, model.TaggedMixin):
     "Context"
     __name__ = 'rule_engine.context'
 
@@ -1720,7 +1725,7 @@ class Context(ModelView, ModelSQL, model.TaggedMixin):
         return result
 
 
-class RuleFunction(ModelView, ModelSQL):
+class RuleFunction(ModelView, model.ConfigurationMixin):
     'Rule Engine Function'
     __name__ = 'rule_engine.function'
     _rec_name = 'description'
@@ -1874,7 +1879,7 @@ class RuleFunction(ModelView, ModelSQL):
         return res
 
 
-class ContextRuleFunction(ModelSQL):
+class ContextRuleFunction(model.ConfigurationMixin):
     'Context Rule Function'
     __name__ = 'rule_engine.context-function'
 
@@ -1884,7 +1889,7 @@ class ContextRuleFunction(ModelSQL):
         required=True, ondelete='CASCADE')
 
 
-class RuleEngineFunctionRelation(ModelSQL):
+class RuleEngineFunctionRelation(model.ConfigurationMixin):
     'Rule Engine Function Relation'
 
     __name__ = 'rule_engine-rule_function'

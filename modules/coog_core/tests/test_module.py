@@ -57,6 +57,9 @@ class ModuleTestCase(test_framework.CoogTestCase):
             'User': 'res.user',
             'APICore': 'api.core',
             'APIIdentity': 'ir.api.identity',
+            'Configuration1': 'coog_core.test_configuration_1',
+            'Configuration2': 'coog_core.test_configuration_2',
+            'Configuration3': 'coog_core.test_configuration_3',
             }
 
     def test0010class_injection(self):
@@ -1194,6 +1197,233 @@ class ModuleTestCase(test_framework.CoogTestCase):
             less_than_key=key_func, compare_key=key_func, inclusive=True)
 
         self.assertEqual(r, only_duplicates[-1])
+
+    def test_0130_test_auto_caches_searches(self):
+        # Conf 1 and Conf 2 inherit from auto cache, conf 3 does not
+        conf_4 = self.Configuration2(value=4)
+        conf_4.save()
+
+        conf_5 = self.Configuration3(value=5)
+        conf_5.save()
+
+        conf_2 = self.Configuration2(value=2)
+        conf_3 = self.Configuration3(value=3)
+        conf_1 = self.Configuration1(value=1, o2m_configuration=[conf_2],
+            o2m_no_configuration=[conf_3], m2o_configuration=conf_4,
+            m2o_no_configuration=conf_5)
+        conf_1.save()
+
+        # Just to make sure we do not return everything we find :)
+        self.Configuration1().save()
+
+        self.assertEqual(
+            self.Configuration1._auto_cache_fields,
+            {'id', 'create_uid', 'create_date', 'write_uid', 'write_date',
+                'value', 'm2o_configuration', 'm2o_no_configuration',
+                'o2m_configuration', 'rec_name'})
+        self.assertEqual(
+            self.Configuration2._auto_cache_fields,
+            {'id', 'create_uid', 'create_date', 'write_uid', 'write_date',
+                'value', 'configuration_1', 'rec_name'})
+
+        # Test search on cached field
+        self.assertEqual(
+            self.Configuration1.search([('value', '=', 1)]),
+            [conf_1])
+        self.assertEqual(
+            self.Configuration1.search([('value', '=', 12345)]),
+            [])
+        with mock.patch.object(model.CoogSQL, 'search') as search_super:
+            self.assertEqual(
+                self.Configuration1.search([('value', '=', 1)]),
+                [conf_1])
+            self.assertEqual(
+                self.Configuration1.search([('value', '=', 12345)]),
+                [])
+            # Real search was never called, because previous assert populated
+            # the cache
+            self.assertEqual(search_super.call_count, 0)
+
+        # Test search on cached field of cached relation
+        self.assertEqual(
+            self.Configuration1.search([
+                    ('m2o_configuration.value', '=', 4)]),
+            [conf_1])
+        self.assertEqual(
+            self.Configuration1.search([
+                    ('m2o_configuration.value', '=', 1234)]),
+            [])
+        with mock.patch.object(model.CoogSQL, 'search') as search_super:
+            self.assertEqual(
+                self.Configuration1.search([
+                        ('m2o_configuration.value', '=', 4)]),
+                [conf_1])
+            self.assertEqual(
+                self.Configuration1.search([
+                        ('m2o_configuration.value', '=', 1234)]),
+                [])
+            self.assertEqual(search_super.call_count, 0)
+
+        # Test search on un-cached field
+        self.assertEqual(
+            self.Configuration1.search([('function_field', '=', 1)]),
+            [conf_1])
+        with mock.patch.object(model.CoogSQL, 'search') as search_super:
+            search_super.return_value = [conf_1]
+            self.assertEqual(
+                self.Configuration1.search([('function_field', '=', 1)]),
+                [conf_1])
+            self.assertEqual(search_super.call_count, 1)
+
+        # Test search on un-cached field of cached relation
+        self.assertEqual(
+            self.Configuration1.search([
+                    ('m2o_configuration.function_field', '=', 4)]),
+            [conf_1])
+        with mock.patch.object(model.CoogSQL, 'search') as search_super:
+            search_super.return_value = [conf_1]
+            self.assertEqual(
+                self.Configuration1.search([
+                        ('m2o_configuration.function_field', '=', 4)]),
+                [conf_1])
+            self.assertEqual(search_super.call_count, 1)
+
+        # Invalidate Cache
+        conf_4.value = 40
+        conf_4.save()
+
+        with mock.patch.object(model.CoogSQL, 'search') as search_super:
+            search_super.side_effect = [
+                [conf_1], [], [conf_1], [], [conf_1], [conf_1]]
+            self.assertEqual(
+                self.Configuration1.search([('value', '=', 1)]),
+                [conf_1])
+            self.assertEqual(
+                self.Configuration1.search([('value', '=', 12345)]),
+                [])
+            self.assertEqual(
+                self.Configuration1.search([
+                        ('m2o_configuration.value', '=', 4)]),
+                [conf_1])
+            self.assertEqual(
+                self.Configuration1.search([
+                        ('m2o_configuration.value', '=', 1234)]),
+                [])
+            self.assertEqual(
+                self.Configuration1.search([('function_field', '=', 1)]),
+                [conf_1])
+            self.assertEqual(
+                self.Configuration1.search([
+                        ('m2o_configuration.function_field', '=', 4)]),
+                [conf_1])
+
+            # Each call triggered a real search
+            self.assertEqual(search_super.call_count, 6)
+
+        with mock.patch.object(model.CoogSQL, 'search') as search_super:
+            search_super.side_effect = [[conf_1], [conf_1]]
+            self.assertEqual(
+                self.Configuration1.search([('value', '=', 1)]),
+                [conf_1])
+            self.assertEqual(
+                self.Configuration1.search([('value', '=', 12345)]),
+                [])
+            self.assertEqual(
+                self.Configuration1.search([
+                        ('m2o_configuration.value', '=', 4)]),
+                [conf_1])
+            self.assertEqual(
+                self.Configuration1.search([
+                        ('m2o_configuration.value', '=', 1234)]),
+                [])
+            self.assertEqual(
+                self.Configuration1.search([('function_field', '=', 1)]),
+                [conf_1])
+            self.assertEqual(
+                self.Configuration1.search([
+                        ('m2o_configuration.function_field', '=', 4)]),
+                [conf_1])
+
+            # But not the second time (except for those function fields)
+            self.assertEqual(search_super.call_count, 2)
+
+        # My responsability, but if I know what I am doing...
+        self.Configuration1._auto_cache_fields.add('function_field')
+        self.assertEqual(
+            self.Configuration1.search([('function_field', '=', 1)]),
+            [conf_1])
+        with mock.patch.object(model.CoogSQL, 'search') as search_super:
+            self.assertEqual(
+                self.Configuration1.search([('function_field', '=', 1)]),
+                [conf_1])
+            self.assertEqual(search_super.call_count, 0)
+        self.Configuration1._auto_cache_fields.remove('function_field')
+
+    def test_0140_test_auto_caches_reads(self):
+        # Conf 1 and Conf 2 inherit from auto cache, conf 3 does not
+        conf_4 = self.Configuration2(value=4)
+        conf_4.save()
+
+        conf_5 = self.Configuration3(value=5)
+        conf_5.save()
+
+        conf_2 = self.Configuration2(value=2)
+        conf_3 = self.Configuration3(value=3)
+        conf_1 = self.Configuration1(value=1, o2m_configuration=[conf_2],
+            o2m_no_configuration=[conf_3], m2o_configuration=conf_4,
+            m2o_no_configuration=conf_5)
+        conf_1.save()
+
+        # Test read on cached field
+        self.assertEqual(
+            self.Configuration1.read([conf_1.id], fields_names=['value']),
+            [{'id': conf_1.id, 'value': 1}])
+        with mock.patch.object(model.CoogSQL, 'read') as read_super:
+            self.assertEqual(
+                self.Configuration1.read([conf_1.id], fields_names=['value']),
+                [{'id': conf_1.id, 'value': 1}])
+            # Real search was never called, because previous assert populated
+            # the cache
+            self.assertEqual(read_super.call_count, 0)
+
+        # Test read on un-cached field
+        self.assertEqual(
+            self.Configuration1.read([conf_1.id],
+                fields_names=['function_field']),
+            [{'id': conf_1.id, 'function_field': 1}])
+        with mock.patch.object(model.CoogSQL, 'read') as read_super:
+            read_super.return_value = [
+                {'id': conf_1.id, 'function_field': 1}]
+            self.assertEqual(
+                self.Configuration1.read([conf_1.id],
+                    fields_names=['function_field']),
+                [{'id': conf_1.id, 'function_field': 1}])
+            self.assertEqual(read_super.call_count, 1)
+
+        # Test read on mixed fields
+        self.assertEqual(
+            self.Configuration1.read([conf_1.id],
+                fields_names=['value', 'function_field']),
+            [{'id': conf_1.id, 'function_field': 1, 'value': 1}])
+        with mock.patch.object(model.CoogSQL, 'read') as read_super:
+            read_super.return_value = [{'id': conf_1.id, 'function_field': 1}]
+            self.assertEqual(
+                self.Configuration1.read([conf_1.id],
+                    fields_names=['value', 'function_field']),
+                [{'id': conf_1.id, 'function_field': 1, 'value': 1}])
+            read_super.assert_called_once_with([conf_1.id],
+                    fields_names=['function_field'])
+
+        self.assertEqual(
+            len(self.Configuration1._auto_read_cache()._get_cache()), 1)
+
+        # Invalidate Cache
+        conf_4.value = 40
+        conf_4.save()
+
+        # Check length of cache
+        self.assertEqual(
+            len(self.Configuration1._auto_read_cache()._get_cache()), 0)
 
     def test_string_replace(self):
         s = 'café-THÉ:20$'

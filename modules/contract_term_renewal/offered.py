@@ -36,7 +36,7 @@ class Product(metaclass=PoolMeta):
 
 class ProductTermRenewalRule(
         get_rule_mixin('rule', 'Rule Engine', extra_string='Rule Extra Data'),
-        model.CoogSQL, model.CoogView):
+        model.ConfigurationMixin, model.CoogView):
     'Product Term Renewal Rule'
 
     __name__ = 'offered.product.term_renewal_rule'

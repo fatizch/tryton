@@ -106,7 +106,7 @@ class Package(model.CodedMixin, model.CoogView, with_extra_data([
         return contract
 
 
-class PackageOptionDescriptionRelation(model.CoogSQL, model.CoogView,
+class PackageOptionDescriptionRelation(model.ConfigurationMixin, model.CoogView,
         with_extra_data(['option'])):
     'Package - Option Description Relation'
 
@@ -123,7 +123,7 @@ class PackageOptionDescriptionRelation(model.CoogSQL, model.CoogView,
             ) | {'option'}
 
 
-class ProductPackageRelation(model.CoogSQL):
+class ProductPackageRelation(model.ConfigurationMixin):
     'Product - Package Relation'
 
     __name__ = 'offered.product-package'

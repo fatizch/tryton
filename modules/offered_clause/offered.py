@@ -23,7 +23,7 @@ class Product(metaclass=PoolMeta):
         return doc
 
 
-class ProductClauseRelation(model.CoogSQL):
+class ProductClauseRelation(model.ConfigurationMixin):
     'Product Clause Relation'
 
     __name__ = 'offered.product-clause'

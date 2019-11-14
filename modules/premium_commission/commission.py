@@ -21,7 +21,7 @@ class CommissionPlan(metaclass=PoolMeta):
         'Fees')
 
 
-class CommissionPlanFee(model.CoogSQL):
+class CommissionPlanFee(model.ConfigurationMixin):
     'Commission Plan Fee'
 
     __name__ = 'commission.plan-account.fee'

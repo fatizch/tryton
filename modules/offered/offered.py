@@ -319,7 +319,6 @@ class OptionDescription(model.CodedMixin, model.CoogView,
     'OptionDescription'
 
     __name__ = 'offered.option.description'
-    _func_key = 'code'
 
     company = fields.Many2One('company.company', 'Company', required=True,
         ondelete='RESTRICT')
@@ -385,6 +384,7 @@ class OptionDescription(model.CodedMixin, model.CoogView,
         cls.extra_data_def.help = 'List of extra data that will be requested '\
             'for subscribing this option. These data can be used in rule '\
             'engine and will be versioned and stored on the subscribed option.'
+        cls._function_auto_cache_fields.append('is_service')
         cls.subscription_rule.domain = [
             ('type_', '=', 'subscription_behaviour')]
         cls.subscription_rule.help = 'Result is a dictionnary with following ' \
@@ -618,7 +618,8 @@ class OptionDescriptionExtraDataRelation(ExtraDataDefTable):
         ondelete='RESTRICT')
 
 
-class ProductOptionDescriptionRelation(model.CoogSQL, model.CoogView):
+class ProductOptionDescriptionRelation(model.ConfigurationMixin,
+        model.CoogView):
     'Product to Option Description Relation'
 
     __name__ = 'offered.product-option.description'

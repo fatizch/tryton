@@ -89,7 +89,8 @@ class UnderwritingDecision(model.CodedMixin, model.CoogView):
                 self.name))
 
 
-class UnderwritingDecisionUnderwritingDecision(model.CoogSQL, model.CoogView):
+class UnderwritingDecisionUnderwritingDecision(model.ConfigurationMixin,
+        model.CoogView):
     'Underwriting Decision to Underwriting Decision Relation'
 
     __name__ = 'underwriting.decision-underwriting.decision'
@@ -165,7 +166,7 @@ class OptionDescription(metaclass=PoolMeta):
 
 class UnderwritingRule(
         get_rule_mixin('rule', 'Rule Engine', extra_string='Rule Extra Data'),
-        model.CoogSQL, model.CoogView):
+        model.ConfigurationMixin, model.CoogView):
     'Underwriting Rule'
 
     __name__ = 'underwriting.rule'
@@ -231,7 +232,7 @@ class UnderwritingRule(
             ]
 
 
-class UnderwritingRuleUnderwritingDecision(model.CoogSQL):
+class UnderwritingRuleUnderwritingDecision(model.ConfigurationMixin):
     'Underwriting Rule to Underwriting Decision Relation'
 
     __name__ = 'underwriting.rule-underwriting.decision'

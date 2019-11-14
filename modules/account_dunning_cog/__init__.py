@@ -19,6 +19,8 @@ def register():
         batch.DunningTreatmentBatch,
         party.Party,
         party.PartyDunningProcedure,
+        account.Configuration,
+        account.ConfigurationDefaultDunningProcedure,
         account.MoveLine,
         module='account_dunning_cog', type_='model')
     Pool.register(

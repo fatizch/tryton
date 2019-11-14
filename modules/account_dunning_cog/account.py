@@ -3,11 +3,26 @@
 from trytond.pool import PoolMeta
 from trytond.pyson import Eval
 
-from trytond.modules.coog_core import fields
+from trytond.modules.coog_core import fields, model
 
 __all__ = [
+    'Configuration',
+    'ConfigurationDefaultDunningProcedure',
     'MoveLine',
     ]
+
+
+class Configuration(metaclass=PoolMeta):
+    __name__ = 'account.configuration'
+
+    @classmethod
+    def __setup__(cls):
+        super().__setup__()
+        cls._function_auto_cache_fields.append('default_dunning_procedure')
+
+
+class ConfigurationDefaultDunningProcedure(model.ConfigurationMixin):
+    __name__ = 'account.configuration.default_dunning_procedure'
 
 
 class MoveLine(metaclass=PoolMeta):

@@ -65,7 +65,6 @@ CONVERSION_TABLE = {
 class BillingMode(model.CodedMixin, model.CoogView):
     'Billing Mode'
     __name__ = 'offered.billing_mode'
-    _func_key = 'code'
 
     frequency = fields.Selection(FREQUENCIES, 'Invoice Frequency',
         required=True, sort=False)
@@ -108,9 +107,11 @@ class BillingMode(model.CodedMixin, model.CoogView):
         'getter_products', searcher='search_products')
     fees = fields.Many2Many('offered.billing_mode-account.fee', 'billing_mode',
         'fee', 'Fees')
-    billing_rules = fields.Many2Many('offered.product-offered.billing_mode',
-        'billing_mode', 'billing_rule', 'Billing Rules',
-        help="Billing rules using this billing mode")
+
+    @classmethod
+    def __setup__(cls):
+        super().__setup__()
+        cls._function_auto_cache_fields.append('direct_debit')
 
     @classmethod
     def __register__(cls, module_name):
@@ -290,7 +291,7 @@ class BillingMode(model.CodedMixin, model.CoogView):
         return list(set(Journal.process_method.selection + [('sepa', 'SEPA')]))
 
 
-class BillingModeFeeRelation(model.CoogSQL):
+class BillingModeFeeRelation(model.ConfigurationMixin):
     'Billing Mode Fee Relation'
 
     __name__ = 'offered.billing_mode-account.fee'
@@ -405,6 +406,7 @@ class Product(metaclass=PoolMeta):
         cls.coverages.domain.extend([('taxes_included_in_premium', '=',
             Eval('taxes_included_in_premium'))])
         cls.coverages.depends.extend(['taxes_included_in_premium'])
+        cls._function_auto_cache_fields.append('billing_behavior')
 
     @classmethod
     def default_billing_rules(cls):
@@ -462,7 +464,7 @@ class Product(metaclass=PoolMeta):
 
 class ProductBillingRule(
         get_rule_mixin('rule', 'Rule Engine', extra_string='Rule Extra Data'),
-        model.CoogSQL, model.CoogView):
+        model.ConfigurationMixin, model.CoogView):
     'ProductBilling Rule'
 
     __name__ = 'offered.product.billing_rule'
@@ -561,7 +563,7 @@ class ProductBillingRule(
         return res
 
 
-class ProductBillingModeRelation(model.CoogSQL, model.CoogView):
+class ProductBillingModeRelation(model.ConfigurationMixin, model.CoogView):
     'Product Billing Mode Relation'
 
     __name__ = 'offered.product-offered.billing_mode'
@@ -592,7 +594,7 @@ class ProductBillingModeRelation(model.CoogSQL, model.CoogView):
             product_billing.drop_column('product')
 
 
-class BillingModePaymentTermRelation(model.CoogSQL, model.CoogView):
+class BillingModePaymentTermRelation(model.ConfigurationMixin, model.CoogView):
     'Billing Mode Payment Term Relation'
 
     __name__ = 'offered.billing.mode-account.invoice.payment_term'

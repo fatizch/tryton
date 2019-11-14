@@ -32,7 +32,7 @@ class OptionDescription(metaclass=PoolMeta):
         return structure
 
 
-class CoverageExtraDetails(model.CoogSQL, model.CoogView,
+class CoverageExtraDetails(model.ConfigurationMixin, model.CoogView,
         get_rule_mixin('rule', 'Rule Engine', extra_string='Rule Extra Data')):
     'Coverage Extra Details'
     __name__ = 'offered.option.description.extra_detail_rule'

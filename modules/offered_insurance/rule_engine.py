@@ -30,7 +30,7 @@ __all__ = [
     ]
 
 
-class RuleEngineExtraData(model.CoogSQL):
+class RuleEngineExtraData(model.ConfigurationMixin):
     'Rule Engine - Extra Data'
 
     __name__ = 'rule_engine-extra_data'

@@ -7,9 +7,9 @@ from trytond.server_context import ServerContext
 from trytond.modules import get_module_info
 from trytond.pool import PoolMeta
 
-from trytond.modules.coog_core import fields
-
-from .export import ExportImportMixin
+from . import model
+from . import fields
+from . import export
 
 
 __all__ = [
@@ -21,7 +21,7 @@ __all__ = [
     ]
 
 
-class Group(ExportImportMixin):
+class Group(model.ConfigurationMixin, export.ExportImportMixin):
     __name__ = 'res.group'
     func_key = 'name'
 
@@ -41,7 +41,7 @@ class Group(ExportImportMixin):
         return set(['menu_access'])
 
 
-class User(ExportImportMixin):
+class User(model.ConfigurationMixin, export.ExportImportMixin):
     __name__ = 'res.user'
     _func_key = 'login'
 
@@ -85,11 +85,11 @@ class User(ExportImportMixin):
             'applications'}
 
 
-class UserGroup(ExportImportMixin):
+class UserGroup(model.ConfigurationMixin, export.ExportImportMixin):
     __name__ = 'res.user-res.group'
 
 
-class ResUserWarning(ExportImportMixin):
+class ResUserWarning(export.ExportImportMixin):
     __name__ = 'res.user.warning'
 
     @classmethod

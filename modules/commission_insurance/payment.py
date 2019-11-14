@@ -14,10 +14,10 @@ class Configuration(metaclass=PoolMeta):
     __name__ = 'account.configuration'
 
     broker_bank_transfer_journal = fields.Many2One('account.payment.journal',
-        'Broker Bank Transfer Journal',
+        'Broker Bank Transfer Journal', ondelete='RESTRICT',
         domain=[('process_method', '!=', 'manual')])
     broker_check_journal = fields.Many2One('account.payment.journal',
-        'Broker Check Journal')
+        'Broker Check Journal', ondelete='RESTRICT')
     commission_invoice_payment_term = fields.Many2One(
         'account.invoice.payment_term', 'Commission Invoice Payment Term',
         ondelete='SET NULL')

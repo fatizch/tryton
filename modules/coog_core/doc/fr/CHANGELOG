@@ -1,3 +1,4 @@
+* FEA#13062 Ajout d'un cache intelligent sur les objets de configuration
 * BUG#12910 Correction d'un cas à la marge sur le calcul des montants d'échéance
 
 Version 2.6 - 2019-10-11

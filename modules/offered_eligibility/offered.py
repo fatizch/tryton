@@ -35,7 +35,7 @@ class OptionDescription(metaclass=PoolMeta):
 
 class OptionDescriptionEligibilityRule(
         get_rule_mixin('rule', 'Rule Engine', extra_string='Rule Extra Data'),
-        model.CoogSQL, model.CoogView):
+        model.ConfigurationMixin, model.CoogView):
     'Option Description Eligibility Rule'
 
     __name__ = 'offered.option.description.eligibility_rule'

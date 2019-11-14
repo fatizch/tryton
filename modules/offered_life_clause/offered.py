@@ -26,7 +26,7 @@ class OptionDescription(metaclass=PoolMeta):
         depends=['beneficiaries_clauses'], ondelete='RESTRICT')
 
 
-class OptionDescriptionBeneficiaryClauseRelation(model.CoogSQL):
+class OptionDescriptionBeneficiaryClauseRelation(model.ConfigurationMixin):
     'Relation Option Description To Beneficiary Clause'
     __name__ = 'offered.option.description-beneficiary_clause'
 

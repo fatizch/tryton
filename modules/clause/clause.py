@@ -12,7 +12,6 @@ class Clause(model.CodedMixin, model.CoogView):
     'Clause'
 
     __name__ = 'clause'
-    _func_key = 'code'
 
     kind = fields.Selection([('specific', 'Specific')], 'Kind')
     kind_string = kind.translated('kind')

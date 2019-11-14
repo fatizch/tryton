@@ -21,6 +21,8 @@ __all__ = [
     'FiscalYear',
     'Period',
     'Configuration',
+    'ConfigurationDefaultAccount',
+    'DefaultTaxRule',
     'ThirdPartyBalance',
     'MoveTemplate',
     'MoveTemplateKeyword',
@@ -338,9 +340,18 @@ class Period(export.ExportImportMixin):
     _func_key = 'code'
 
 
-class Configuration(export.ExportImportMixin):
+class Configuration(model.ConfigurationMixin):
     __name__ = 'account.configuration'
     _func_key = 'id'
+
+    @classmethod
+    def __setup__(cls):
+        super().__setup__()
+        cls._function_auto_cache_fields.append('default_account_receivable')
+        cls._function_auto_cache_fields.append('default_account_payable')
+        cls._function_auto_cache_fields.append('default_customer_tax_rule')
+        cls._function_auto_cache_fields.append('default_supplier_tax_rule')
+        cls._function_auto_cache_fields.append('tax_rounding')
 
     def export_json(self, skip_fields=None, already_exported=None,
             output=None, main_object=None, configuration=None):
@@ -366,6 +377,14 @@ class Configuration(export.ExportImportMixin):
             values[fname] = account.id
 
         return super(Configuration, cls)._import_json(values, main_object)
+
+
+class ConfigurationDefaultAccount(model.ConfigurationMixin):
+    __name__ = 'account.configuration.default_account'
+
+
+class DefaultTaxRule(model.ConfigurationMixin):
+    __name__ = 'account.configuration.default_tax_rule'
 
 
 class ThirdPartyBalance(metaclass=PoolMeta):

@@ -561,7 +561,7 @@ class AggregatedCommission(model.CoogSQL, model.CoogView):
             group_by=klass.get_group_by(tables))
 
 
-class Plan(model.CoogSQL, model.CoogView, model.TaggedMixin):
+class Plan(model.ConfigurationMixin, model.CoogView, model.TaggedMixin):
     __name__ = 'commission.plan'
     _func_key = 'code'
 
@@ -600,6 +600,7 @@ class Plan(model.CoogSQL, model.CoogView, model.TaggedMixin):
             '. If "On Payment And Accounted"' \
             ' is selected, a commission is due after its invoice\'s' \
             ' accounting date, if the invoice is paid.'
+        cls._function_auto_cache_fields.append('commissioned_products')
 
     @classmethod
     def create(cls, vlist):
@@ -713,7 +714,7 @@ class Plan(model.CoogSQL, model.CoogView, model.TaggedMixin):
         return sorted(list(all_dates))
 
 
-class PlanLines(model.CoogSQL, model.CoogView):
+class PlanLines(model.ConfigurationMixin, model.CoogView):
     __name__ = 'commission.plan.line'
 
     options = fields.Many2Many(
@@ -784,7 +785,7 @@ class PlanLines(model.CoogSQL, model.CoogView):
         return self.options_extract
 
 
-class PlanLinesCoverageRelation(model.CoogSQL, model.CoogView):
+class PlanLinesCoverageRelation(model.ConfigurationMixin, model.CoogView):
     'Commission Plan Line - Offered Option Description'
 
     __name__ = 'commission.plan.lines-offered.option.description'
@@ -795,7 +796,7 @@ class PlanLinesCoverageRelation(model.CoogSQL, model.CoogView):
         ondelete='RESTRICT')
 
 
-class PlanRelation(model.CoogSQL, model.CoogView):
+class PlanRelation(model.ConfigurationMixin, model.CoogView):
     'Commission Plan - Commission Plan'
 
     __name__ = 'commission_plan-commission_plan'
@@ -804,7 +805,7 @@ class PlanRelation(model.CoogSQL, model.CoogView):
     to = fields.Many2One('commission.plan', 'Plan', ondelete='RESTRICT')
 
 
-class PlanCalculationDate(model.CoogSQL, model.CoogView):
+class PlanCalculationDate(model.ConfigurationMixin, model.CoogView):
     'Plan Calculation Date'
 
     __name__ = 'commission.plan.date'

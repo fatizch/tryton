@@ -5,7 +5,6 @@ import logging
 
 from trytond.i18n import gettext
 from trytond.pyson import Eval
-from trytond.model import Unique
 from trytond.transaction import Transaction
 from trytond import backend
 from trytond.cache import Cache
@@ -30,31 +29,13 @@ __all__ = [
     ]
 
 
-class ClosingReason(model.CoogSQL, model.CoogView):
+class ClosingReason(model.CodedMixin, model.CoogView):
     'Closing Reason'
 
     __name__ = 'claim.closing_reason'
-    _func_key = 'code'
-
-    name = fields.Char('Name', required=True)
-    code = fields.Char('Code', required=True)
-
-    @classmethod
-    def __setup__(cls):
-        super(ClosingReason, cls).__setup__()
-        t = cls.__table__()
-        cls._sql_constraints += [
-            ('code_unique', Unique(t, t.code), 'The code must be unique'),
-            ]
-
-    @fields.depends('name', 'code')
-    def on_change_with_code(self):
-        if not self.code:
-            return coog_string.slugify(self.name)
-        return self.code
 
 
-class LossDescriptionClosingReason(model.CoogSQL):
+class LossDescriptionClosingReason(model.ConfigurationMixin):
     'Relation between Loss Description and Closing Reason'
 
     __name__ = 'loss.description-claim.closing_reason'
@@ -66,14 +47,11 @@ class LossDescriptionClosingReason(model.CoogSQL):
         select=True)
 
 
-class EventDescription(model.CoogSQL, model.CoogView):
+class EventDescription(model.CodedMixin, model.CoogView):
     'Event Description'
 
     __name__ = 'benefit.event.description'
-    _func_key = 'code'
 
-    code = fields.Char('Code', required=True)
-    name = fields.Char('Name', translate=True)
     loss_descs = fields.Many2Many('benefit.event.description-loss.description',
         'event_desc', 'loss_desc', 'Loss Descriptions',
         domain=[('company', '=', Eval('company'))],
@@ -86,10 +64,6 @@ class EventDescription(model.CoogSQL, model.CoogView):
     def __setup__(cls):
         super(EventDescription, cls).__setup__()
         cls._order.insert(0, ('sequence', 'ASC'))
-        t = cls.__table__()
-        cls._sql_constraints += [
-            ('code_unique', Unique(t, t.code), 'The code must be unique'),
-            ]
 
     @classmethod
     def _export_light(cls):
@@ -107,22 +81,13 @@ class EventDescription(model.CoogSQL, model.CoogView):
     def default_company(cls):
         return Transaction().context.get('company', None)
 
-    @fields.depends('code', 'name')
-    def on_change_with_code(self):
-        if self.code:
-            return self.code
-        return coog_string.slugify(self.name)
 
-
-class LossDescription(model.CoogSQL, model.CoogView, with_extra_data_def(
+class LossDescription(model.CodedMixin, model.CoogView, with_extra_data_def(
             'benefit.loss.description-extra_data', 'loss_desc', 'loss')):
     'Loss Description'
 
     __name__ = 'benefit.loss.description'
-    _func_key = 'code'
 
-    code = fields.Char('Code', required=True)
-    name = fields.Char('Name', translate=True)
     event_descs = fields.Many2Many(
         'benefit.event.description-loss.description', 'loss_desc',
         'event_desc', 'Events Descriptions',
@@ -143,14 +108,6 @@ class LossDescription(model.CoogSQL, model.CoogView, with_extra_data_def(
         'sub status.')
 
     _get_loss_description_cache = Cache('get_loss_description')
-
-    @classmethod
-    def __setup__(cls):
-        super(LossDescription, cls).__setup__()
-        t = cls.__table__()
-        cls._sql_constraints += [
-            ('code_unique', Unique(t, t.code), 'The code must be unique'),
-            ]
 
     @classmethod
     def __register__(cls, module):
@@ -216,7 +173,7 @@ class LossDescriptionExtraDataRelation(ExtraDataDefTable):
         ondelete='RESTRICT')
 
 
-class EventDescriptionLossDescriptionRelation(model.CoogSQL):
+class EventDescriptionLossDescriptionRelation(model.ConfigurationMixin):
     'Event Description - Loss Description Relation'
 
     __name__ = 'benefit.event.description-loss.description'
@@ -227,19 +184,16 @@ class EventDescriptionLossDescriptionRelation(model.CoogSQL):
         ondelete='RESTRICT')
 
 
-class Benefit(model.CoogSQL, model.CoogView,
+class Benefit(model.CodedMixin, model.CoogView,
         with_extra_data_def('benefit-extra_data', 'benefit', 'benefit'),
         with_extra_data(['product'], field_string='Offered Kind'),
         model.TaggedMixin):
     'Benefit'
 
     __name__ = 'benefit'
-    _func_key = 'code'
 
     logger = logging.getLogger(__name__)
 
-    code = fields.Char('Code', required=True)
-    name = fields.Char('Name', required=True, translate=True)
     company = fields.Many2One('company.company', 'Company', required=True,
         ondelete='RESTRICT')
     start_date = fields.Date('Start Date', required=True)
@@ -272,10 +226,6 @@ class Benefit(model.CoogSQL, model.CoogView,
     @classmethod
     def __setup__(cls):
         super(Benefit, cls).__setup__()
-        t = cls.__table__()
-        cls._sql_constraints += [
-            ('code_uniq', Unique(t, t.code), 'The code must be unique!'),
-            ]
         cls.extra_data.help = 'Extra data to characterize the benefit. These '\
             'extra data are available in rule engine.'
         cls.extra_data_def.help = 'List of extra data that will be requested '\
@@ -351,10 +301,6 @@ class Benefit(model.CoogSQL, model.CoogView,
     def is_master_object(cls):
         return True
 
-    @fields.depends('code', 'name')
-    def on_change_with_code(self):
-        return self.code if self.code else coog_string.slugify(self.name)
-
     def get_documentation_structure(self):
         structure = {
             'name': self.name,
@@ -379,7 +325,7 @@ class Benefit(model.CoogSQL, model.CoogView,
         return structure
 
 
-class BenefitLossDescriptionRelation(model.CoogSQL):
+class BenefitLossDescriptionRelation(model.ConfigurationMixin):
     'Benefit Loss Description Relation'
 
     __name__ = 'benefit-loss.description'
@@ -389,7 +335,7 @@ class BenefitLossDescriptionRelation(model.CoogSQL):
         ondelete='RESTRICT')
 
 
-class OptionDescriptionBenefitRelation(model.CoogSQL):
+class OptionDescriptionBenefitRelation(model.ConfigurationMixin):
     'Option Description to Benefit Relation'
 
     __name__ = 'option.description-benefit'

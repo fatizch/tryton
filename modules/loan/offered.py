@@ -63,6 +63,11 @@ class Product(metaclass=PoolMeta):
         fields.Boolean('Is Loan', states={'invisible': True}),
         'get_is_loan_product')
 
+    @classmethod
+    def __setup__(cls):
+        super().__setup__()
+        cls._function_auto_cache_fields.append('is_loan')
+
     def get_is_loan_product(self, name):
         for coverage in self.coverages:
             if coverage.is_loan:
@@ -101,6 +106,7 @@ class OptionDescription(metaclass=PoolMeta):
     def __setup__(cls):
         super(OptionDescription, cls).__setup__()
         cls.family.selection.append(('loan', 'Loan'))
+        cls._function_auto_cache_fields.append('is_loan')
 
     @classmethod
     def default_insured_outstanding_balance(cls):

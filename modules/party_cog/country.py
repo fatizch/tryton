@@ -42,7 +42,8 @@ class Country(metaclass=PoolMeta):
         return address_lines
 
 
-class CountryAddressLine(model.CoogDictSchema, model.CoogSQL, model.CoogView):
+class CountryAddressLine(model.CoogDictSchema, model.ConfigurationMixin,
+        model.CoogView):
     'Country Address Line'
 
     __name__ = 'country.address.line'

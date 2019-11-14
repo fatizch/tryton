@@ -27,7 +27,7 @@ __all__ = [
     ]
 
 
-class ExtraData(model.CoogDictSchema, model.CoogSQL, model.CoogView,
+class ExtraData(model.CoogDictSchema, model.ConfigurationMixin, model.CoogView,
         model.TaggedMixin):
     'Extra Data'
 
@@ -95,6 +95,8 @@ class ExtraData(model.CoogDictSchema, model.CoogSQL, model.CoogView,
         cls.__rpc__.update({'get_default_value_selection': RPC(instantiate=0)})
         cls._order = [('kind', 'ASC'), ('string', 'ASC')]
         cls._extra_data_providers = getattr(cls, '_extra_data_providers', {})
+        cls._function_auto_cache_fields.append('selection_json')
+        cls._function_auto_cache_fields.append('default_value_selection')
 
     @classmethod
     def __register__(cls, module_name):
@@ -483,7 +485,7 @@ class ExtraData(model.CoogDictSchema, model.CoogSQL, model.CoogView,
             }
 
 
-class ExtraDataSubExtraDataRelation(model.CoogSQL, model.CoogView):
+class ExtraDataSubExtraDataRelation(model.ConfigurationMixin, model.CoogView):
     'Extra Data to Sub Extra Data Relation'
 
     __name__ = 'extra_data-sub_extra_data'
@@ -510,7 +512,7 @@ class ExtraDataSubExtraDataRelation(model.CoogSQL, model.CoogView):
         Pool().get('extra_data')._extra_data_structure_cache.clear()
 
 
-class ExtraDataDefTable(model.CoogSQL):
+class ExtraDataDefTable(model.ConfigurationMixin):
     '''
         This should be used when creating a M2M intermediate table in order to
         make sure the cache is properly cleaned up when adding / removing
