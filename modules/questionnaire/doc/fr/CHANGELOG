@@ -1,3 +1,5 @@
+* FEA#13077 Ajout de groupes de données complémentaires dans les parties de questionnaires
+
 Version 2.6 - 2019-10-11
 * FEA#12674 Le résultat de la règle de questionnaire peut inclure le code du package
 * OTH#00000 Le questionnaire est requis dans le processus de recueil de besoin

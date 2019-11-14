@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<form>
+    <label name="title"/>
+    <field name="title"/>
+    <label name="sequence_order"/>
+    <field name="sequence_order"/>
+    <label name="description"/>
+    <field name="description"/>
+    <label name="tooltip"/>
+    <field name="tooltip"/>
+    <notebook>
+        <page id="extra_data" string="Extra Data">
+            <field name="extra_data"/>
+        </page>
+        <page id="sub_groups" string="Sub-groups">
+            <field name="sub_groups"/>
+        </page>
+    </notebook>
+</form>

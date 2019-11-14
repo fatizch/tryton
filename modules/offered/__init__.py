@@ -42,7 +42,10 @@ def register():
         module='offered', type_='model', depends=['api'])
 
     Pool.register(
+        api.APICoreWebConfiguration,
+        api.APIProductWebConfiguration,
         api.ExtraDataWithWebResources,
         api.ProductWithWebResources,
-        api.APIProductWebConfiguration,
+        extra_data.ExtraDataGroup,
+        extra_data.ExtraDataGroupExtraDataRelation,
         module='offered', type_='model', depends=['web_configuration'])

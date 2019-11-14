@@ -104,7 +104,7 @@ msgstr "Type technique"
 
 msgctxt "field:extra_data,web_ui_resources:"
 msgid "Web UI Resources"
-msgstr "Ressources Web"
+msgstr "Ressources web"
 
 msgctxt "field:extra_data,write_date:"
 msgid "Write Date"
@@ -161,6 +161,110 @@ msgstr "Mis à jour par"
 msgctxt "field:extra_data-sub_extra_data,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
+
+msgctxt "field:extra_data.group,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:extra_data.group,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:extra_data.group,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:extra_data.group,description:"
+msgid "Description"
+msgstr "Description"
+
+msgctxt "field:extra_data.group,extra_data:"
+msgid "Extra Data"
+msgstr "Données complémentaires"
+
+msgctxt "field:extra_data.group,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:extra_data.group,parent_group:"
+msgid "Parent Group"
+msgstr "Groupe parent"
+
+msgctxt "field:extra_data.group,parent_model:"
+msgid "Parent Model"
+msgstr "Modèle parent"
+
+msgctxt "field:extra_data.group,rec_name:"
+msgid "Record Name"
+msgstr "Nom de l'enregistrement"
+
+msgctxt "field:extra_data.group,sequence_order:"
+msgid "Sequence Order"
+msgstr "Ordre de séquence"
+
+msgctxt "field:extra_data.group,sub_groups:"
+msgid "Sub-groups"
+msgstr "Sous-groupes"
+
+msgctxt "field:extra_data.group,title:"
+msgid "Title"
+msgstr "Titre"
+
+msgctxt "field:extra_data.group,tooltip:"
+msgid "Tooltip"
+msgstr "Infobulle"
+
+msgctxt "field:extra_data.group,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:extra_data.group,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:extra_data.group,xml_id:"
+msgid "XML Id"
+msgstr "XML Id"
+
+msgctxt "field:extra_data.group-extra_data,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:extra_data.group-extra_data,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:extra_data.group-extra_data,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:extra_data.group-extra_data,extra_data:"
+msgid "Extra Data"
+msgstr "Données complémentaires"
+
+msgctxt "field:extra_data.group-extra_data,group:"
+msgid "Extra Data Group"
+msgstr "Groupe de données complémentaires"
+
+msgctxt "field:extra_data.group-extra_data,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:extra_data.group-extra_data,rec_name:"
+msgid "Record Name"
+msgstr "Nom de l'enregistrement"
+
+msgctxt "field:extra_data.group-extra_data,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:extra_data.group-extra_data,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:extra_data.group-extra_data,xml_id:"
+msgid "XML Id"
+msgstr "XML Id"
 
 msgctxt "field:ir.test_case,main_company_name:"
 msgid "Main Company Name"
@@ -928,6 +1032,19 @@ msgctxt "help:extra_data,web_ui_resources:"
 msgid "A list of resources which will only be used through the APIs"
 msgstr "Une liste de ressources qui ne seront utilisées que par les APIs"
 
+msgctxt "help:extra_data.group,extra_data:"
+msgid "The list of extra data that will be displayed with this group"
+msgstr ""
+"La liste des données complémentaires qui seront affichées avec ce groupe"
+
+msgctxt "help:extra_data.group,parent_model:"
+msgid "Model with extra data"
+msgstr "Modèle avec des données complémentaires"
+
+msgctxt "help:extra_data.group,sub_groups:"
+msgid "Children groups of extra data"
+msgstr "Groupes de données complémentaires enfants"
+
 msgctxt "help:offered.configuration,use_default_style:"
 msgid ""
 "If checked, the report templates will use Coog's default style if there is "
@@ -1106,6 +1223,14 @@ msgctxt "model:extra_data-sub_extra_data,name:"
 msgid "Extra Data to Sub Extra Data Relation"
 msgstr "Données Complémentaires Récursives"
 
+msgctxt "model:extra_data.group,name:"
+msgid "Extra Data Group"
+msgstr "Groupe de données complémentaires"
+
+msgctxt "model:extra_data.group-extra_data,name:"
+msgid "Extra Data Group - Extra Data"
+msgstr "Groupe de données complémentaires - Données complémentaires"
+
 msgctxt "model:ir.action,name:"
 msgid "Packages"
 msgstr "Formules"
@@ -1121,6 +1246,10 @@ msgstr "Garanties"
 msgctxt "model:ir.action,name:act_model_extra_data"
 msgid "Extra Data"
 msgstr "Données Complémentaires"
+
+msgctxt "model:ir.action,name:act_model_extra_data_group"
+msgid "Extra Data Group"
+msgstr "Groupe de données complémentaires"
 
 msgctxt "model:ir.action,name:act_package"
 msgid "Package"
@@ -1421,6 +1550,14 @@ msgstr "Relation"
 msgctxt "view:extra_data-sub_extra_data:"
 msgid "Relations"
 msgstr "Relations"
+
+msgctxt "view:extra_data.group:"
+msgid "Extra Data"
+msgstr "Données complémentaires"
+
+msgctxt "view:extra_data.group:"
+msgid "Sub-groups"
+msgstr "Sous-groupes"
 
 msgctxt "view:extra_data:"
 msgid "Main"

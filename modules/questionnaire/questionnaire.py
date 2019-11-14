@@ -12,6 +12,7 @@ from trytond.modules.coog_core import model, fields
 from trytond.modules.rule_engine import get_rule_mixin
 from trytond.modules.offered.extra_data import with_extra_data_def
 from trytond.modules.offered.extra_data import ExtraDataDefTable
+from trytond.modules.offered.extra_data import WithExtraDataGroups
 
 __all__ = [
     'Questionnaire',
@@ -181,6 +182,12 @@ class QuestionnairePart(model.CoogSQL, model.CoogView, model.SequenceMixin,
         if not codes:
             return True
         return result['product'] in codes
+
+
+class WebConfigurationQuestionnnairePart(WithExtraDataGroups):
+    'Questionnaire Part with Extra Data Groups'
+
+    __name__ = 'questionnaire.part'
 
 
 class ProductQuestionnaireRuleRelation(model.CoogSQL):

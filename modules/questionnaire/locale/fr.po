@@ -342,6 +342,10 @@ msgctxt "field:questionnaire.part,extra_data_def:"
 msgid "Extra Data"
 msgstr "Questions"
 
+msgctxt "field:questionnaire.part,extra_data_groups:"
+msgid "Extra Data Groups"
+msgstr "Groupe de données complémentaires"
+
 msgctxt "field:questionnaire.part,id:"
 msgid "ID"
 msgstr "Identifiant"

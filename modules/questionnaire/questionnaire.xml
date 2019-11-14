@@ -49,4 +49,14 @@ this repository contains the full copyright notices and license terms. -->
         </record>
         <menuitem name="Questionnaires" parent="offered.menu_product_configuration" id="menu_questionnaire" sequence="200" icon="questionnaire" action="act_questionnaire_form"/>
     </data>
+    <data depends="web_configuration">
+        <!-- ######################################## -->
+        <!-- # Questionnaire Part Web Configuration # -->
+        <!-- ######################################## -->
+        <record model="ir.ui.view" id="web_configuration_questionnaire_part_view_form">
+            <field name="model">questionnaire.part</field>
+            <field name="inherit" ref="questionnaire_part_view_form"/>
+            <field name="name">web_configuration_questionnaire_part_form</field>
+        </record>
+    </data>
 </tryton>

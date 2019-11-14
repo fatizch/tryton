@@ -83,3 +83,8 @@ def register():
         api.APIContractDistribution,
         module='questionnaire', type_='model', depends=['api',
             'contract_distribution'])
+
+    Pool.register(
+        api.APICoreWebConfiguration,
+        questionnaire.WebConfigurationQuestionnnairePart,
+        module='questionnaire', type_='model', depends=['web_configuration'])

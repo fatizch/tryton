@@ -1,3 +1,5 @@
+* FEA#13077 Add extra data group in questionnaire parts
+
 Version 2.6 - 2019-10-11
 * FEA#12674 The questionnaire rule result can also include the package code
 * OTH#00000 Questionnaire is required in questionnaire wizard

@@ -14,6 +14,7 @@ from trytond.modules.offered.api import EXTRA_DATA_VALUES_SCHEMA
 __all__ = [
     'APICore',
     'APICoreDistribution',
+    'APICoreWebConfiguration',
     'APIContract',
     'APIContractDistribution',
     ]
@@ -65,7 +66,7 @@ class APICore(metaclass=PoolMeta):
                     'sequence': x.sequence,
                     'description': x.rule.description,
                     'questions': cls._extra_data_structure(x.extra_data_def),
-                    }
+                }
                 for x in questionnaire.parts],
             }
 
@@ -403,6 +404,95 @@ class APICoreDistribution(metaclass=PoolMeta):
             for part in example['output']['parts']:
                 for result in part['results']:
                     result['commercial_product'] = 'my_com_product'
+        return examples
+
+
+class APICoreWebConfiguration(metaclass=PoolMeta):
+    __name__ = 'api.core'
+
+    @classmethod
+    def _questionnaire_definition(cls, questionnaire):
+        definition = super()._questionnaire_definition(questionnaire)
+        for part_def in definition['parts']:
+            part = next(x for x in questionnaire.parts
+                if part_def['id'] == x.id)
+            extra_data_groups = getattr(part, 'extra_data_groups', None)
+            if extra_data_groups is None:
+                continue
+            part_def.update({'groups': cls._extra_data_group_structure(
+                        extra_data_groups
+                    )})
+        return definition
+
+    @classmethod
+    def _list_questionnaires_output_schema(cls):
+        schema = super()._list_questionnaires_output_schema()
+        schema['items']['properties']['parts']['items']['properties'][
+            'groups'] = cls._extra_data_group_schema()
+        return schema
+
+    @classmethod
+    def _list_questionnaires_examples(cls):
+        examples = super()._list_questionnaires_examples()
+        group_example = {
+            'input': {
+                'questionnaires': [{'code': 'life_health'}],
+                },
+            'output': [
+                {
+                    'id': 1,
+                    'code': 'life_health',
+                    'title': 'Life / Health mixed offer',
+                    'description': 'Enjoy our new Life / Health offer',
+                    'parts': [
+                        {
+                            'id': 10,
+                            'title': 'Health',
+                            'sequence': 1,
+                            'description': 'All your health needs',
+                            'questions': [],
+                            'groups': [
+                                {
+                                    'extra_data': [{
+                                            'code': 'refund_question',
+                                            'name': 'Question on refund',
+                                            'type': 'boolean',
+                                            'sequence': 1,
+                                            }],
+                                    'title': 'Couverture globale',
+                                    'description': '',
+                                    },
+                                {
+                                    'extra_data': [
+                                        {
+                                            'code': 'question_1',
+                                            'name': 'First question',
+                                            'type': 'char',
+                                            'sequence': 1,
+                                            },
+                                        {
+                                            'code': 'question_2',
+                                            'name': 'Second question',
+                                            'type': 'datetime',
+                                            'sequence': 2,
+                                            },
+                                        {
+                                            'code': 'question_3',
+                                            'name': 'Third question',
+                                            'type': 'integer',
+                                            'sequence': 3,
+                                            },
+                                    ],
+                                    'title': 'Optique',
+                                    'description': 'Vos besoins en matière \
+                                    d\'optique',
+                                    },
+                            ]},
+                        ],
+                    },
+                ]
+            }
+        examples.append(group_example)
         return examples
 
 

@@ -22,6 +22,8 @@ from trytond.modules.coog_core import fields, model, coog_string
 __all__ = [
     'ExtraData',
     'ExtraDataSubExtraDataRelation',
+    'ExtraDataGroup',
+    'ExtraDataGroupExtraDataRelation',
     ]
 
 
@@ -531,9 +533,71 @@ class ExtraDataDefTable(model.CoogSQL):
         Pool().get('extra_data')._extra_data_structure_cache.clear()
 
 
+class ExtraDataGroup(model.CoogSQL, model.CoogView):
+    'Extra Data Group'
+
+    __name__ = 'extra_data.group'
+
+    parent_model = fields.Reference('Parent Model',
+        selection='models_with_extra_data_get',
+        readonly=True, required=True, select=True,
+        help='Model with extra data')
+    parent_group = fields.Many2One('extra_data.group', 'Parent Group',
+        ondelete='CASCADE', select=True)
+    sub_groups = fields.One2Many('extra_data.group', 'parent_group',
+        'Sub-groups', delete_missing=True, target_not_required=True,
+        help='Children groups of extra data')
+    title = fields.Char('Title', required=True)
+    description = fields.Char('Description')
+    tooltip = fields.Char('Tooltip')
+    sequence_order = fields.Integer('Sequence Order')
+    extra_data = fields.Many2Many('extra_data.group-extra_data',
+        'group', 'extra_data', 'Extra Data', required=True,
+        help='The list of extra data that will be displayed with this group')
+
+    @classmethod
+    def __setup__(cls):
+        super().__setup__()
+        cls._order = [('sequence_order', 'ASC')]
+
+    @staticmethod
+    def models_with_extra_data_get():
+        pool = Pool()
+        Model = pool.get('ir.model')
+        model_names = []
+        for _, klass in pool.iterobject():
+            if not issubclass(klass, HasExtraDataDef):
+                continue
+            model_names.append(klass.__name__)
+        return [(m.model, m.name) for m in Model.search([('model', 'in',
+                        model_names)])]
+
+
+class ExtraDataGroupExtraDataRelation(model.CoogSQL):
+    'Extra Data Group - Extra Data'
+
+    __name__ = 'extra_data.group-extra_data'
+
+    extra_data = fields.Many2One('extra_data', 'Extra Data', required=True,
+        ondelete='CASCADE', select=True)
+    group = fields.Many2One('extra_data.group', 'Extra Data Group',
+        required=True, ondelete='RESTRICT', select=True)
+
+
+class HasExtraDataDef(Model):
+    ''' Allows to recognize models inheriting from with_extra_data_def '''
+    pass
+
+
+class WithExtraDataGroups(HasExtraDataDef):
+    ''' Registered if web_configuration module is loaded '''
+    extra_data_groups = fields.One2Many('extra_data.group', 'parent_model',
+        'Extra Data Groups', delete_missing=True)
+
+
 def with_extra_data_def(reverse_model_name, reverse_field_name, kind,
         getter=None):
-    class WithExtraDataDefMixin(Model):
+    class WithExtraDataDefMixin(HasExtraDataDef):
         '''
             Mixin to add extra data definitions (i.e. to define a list of
             extra_data to automatically set on linked objects)

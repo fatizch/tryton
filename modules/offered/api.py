@@ -52,6 +52,7 @@ CONTRACT_PARTY_SCHEMA = {
 
 __all__ = [
     'APICore',
+    'APICoreWebConfiguration',
     'APIProduct',
     ]
 
@@ -391,6 +392,43 @@ class APICore(metaclass=PoolMeta):
                     continue
                 result[code] = value
         return result
+
+
+class APICoreWebConfiguration(metaclass=PoolMeta):
+    __name__ = 'api.core'
+
+    @classmethod
+    def _extra_data_group_structure(cls, extra_data_group_list):
+        return [{
+                'extra_data': cls._extra_data_structure(x.extra_data),
+                'title': x.title,
+                'description': x.description,
+                'tooltip': x.tooltip,
+                'groups': cls._extra_data_group_structure(x.sub_groups),
+                } for x in extra_data_group_list]
+
+    @classmethod
+    def _extra_data_group_schema(cls):
+        return {
+            'type': 'array',
+            'items': {
+                'type': 'object',
+                'additionalProperties': False,
+                'properties': {
+                    'extra_data': cls._extra_data_schema(),
+                    'title': {'type': 'string'},
+                    'description': {'type': 'string'},
+                    'tooltip': {'type': 'string'},
+                    'groups': {
+                        'type': 'array',
+                        'items': {},
+                        'additionalItems': False,
+                        }
+                    },
+                'required': ['extra_data', 'title'],
+                },
+            'additionalItems': False,
+            }
 
 
 class APIProduct(APIMixin):
