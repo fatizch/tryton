@@ -1,3 +1,5 @@
+* BUG#11342 Allow endorsements on contracts on hold
+
 Version 2.6 - 2019-10-11
 * BUG#12709 Do not create endorsement party object if there is no endorsement party part
 * BUG#00000 Fix address endorsement party initalization

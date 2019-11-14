@@ -1,3 +1,4 @@
+* BUG#11342 Allow endorsements on contracts on hold
 * BUG#13039 Endorsement summary did not display records deleted by endorsement
 
 Version 2.6 - 2019-10-11

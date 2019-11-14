@@ -1,3 +1,5 @@
+* BUG#11342 Permettre les avenants sur les contrats suspendus
+
 Version 2.6 - 2019-10-11
 * BUG#12709 Ne pas créer d'objet avenant de tiers si l'avenant ne le requiert pas.
 * BUG#00000 Corriger l'initialisation des tiers

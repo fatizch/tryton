@@ -356,7 +356,7 @@ class EndorsementParty(values_mixin('endorsement.party.field'),
     def contracts_to_update(self):
         pool = Pool()
         Contract = pool.get('contract')
-        return Contract.search([('status', '=', 'active'),
+        return Contract.search([('status', 'in', ['active', 'hold']),
                 ['OR',
                     ('subscriber', '=', self.party),
                     ('covered_elements.party', '=', self.party)]])

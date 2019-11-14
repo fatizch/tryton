@@ -1,3 +1,4 @@
+* BUG#11342 Permettre les avenants sur les contrats suspendus
 * BUG#13039 Le résumé d'avenant n'affichait pas les enregistrements supprimés par l'avenant
 
 Version 2.6 - 2019-10-11

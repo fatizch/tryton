@@ -230,7 +230,8 @@ class EndorsementWizardStepMixin(model.CoogView):
                 or not any(isinstance(x[0], ActiveContractRequired)
                     for x in error_manager._errors)):
             if (not cls.allow_inactive_contracts() and
-                    any([x.status != 'active' for x in contracts])):
+                    any([x.status not in ['active', 'hold']
+                            for x in contracts])):
                 Endorsement.append_functional_error(
                     ActiveContractRequired(gettext(
                             'endorsement.msg_active_contract_required')))
