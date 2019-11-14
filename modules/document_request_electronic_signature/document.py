@@ -207,6 +207,7 @@ class DocumentRequestLine(metaclass=PoolMeta):
             content = BytesIO()
             merger.write(content)
             request.attachment_data = content.getvalue()
+            request.attachment_name = '.pdf'
             merger.close()
             requests_to_save.append(request)
         return requests_to_save

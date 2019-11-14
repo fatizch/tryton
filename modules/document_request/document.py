@@ -534,7 +534,7 @@ class DocumentRequestLineOffered(
                 assert object_to_print
                 reports, attachments = \
                     request_line.document_desc.template.produce_reports(
-                        [object_to_print], {})
+                        [object_to_print], {}, request_line.document_desc)
                 if attachments:
                     Attachment.write([attachments[0]], {
                         'resource': str(
@@ -556,7 +556,7 @@ class DocumentRequestLineOffered(
         cls._generate_template_documents(documents)
 
     def get_contact(self):
-        return None
+        return self.for_object.get_contact()
 
     def get_address(self):
         return None

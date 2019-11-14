@@ -605,7 +605,7 @@ class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
             reports.append(self._generate_report(objects, context_))
         return reports
 
-    def produce_reports(self, objects, context_=None):
+    def produce_reports(self, objects, context_=None, doc_desc=None):
         assert self.on_model
         objects = Pool().get(self.on_model.model).browse(objects)
         if context_ is None:

@@ -1,3 +1,4 @@
+* OTH#0000 Use good document desc to initiate signature process
 * BUG#13271 Fix PY2PDF merger crash when bookmarks are set
 
 Version 2.6 - 2019-10-11
