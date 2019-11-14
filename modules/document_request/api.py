@@ -10,6 +10,7 @@ from collections import defaultdict
 from trytond.config import config
 from trytond.model.exceptions import AccessError
 from trytond.pool import PoolMeta, Pool
+from trytond.server_context import ServerContext
 from trytond.transaction import Transaction
 
 from trytond.modules.api.api.core import date_for_api
@@ -20,6 +21,7 @@ from trytond.modules.offered.api import EXTRA_DATA_VALUES_SCHEMA
 
 __all__ = [
     'APIParty',
+    'APIPartyWebConfiguration',
     ]
 # TODO: properly manage preriquisite
 
@@ -507,3 +509,23 @@ class APIParty(metaclass=PoolMeta):
     def _token_submit_document_answers_convert_input(cls, parameters):
         return cls._common_document_token_conversion(parameters)
     """*** End Submit Document Form API Methods ***"""
+
+
+class APIPartyWebConfiguration(metaclass=PoolMeta):
+    __name__ = 'api.party'
+
+    @classmethod
+    def _build_request_line_data(cls, line):
+        line_data = super()._build_request_line_data(line)
+        with ServerContext().set_context(genshi_context={'record': line}):
+            line_data['custom_resources'] = {
+                x.key.code: x.genshi_evaluated_value
+                for x in line.document_desc.web_ui_resources
+                }
+            return line_data
+
+    @classmethod
+    def _schema_for_single_document_request(cls):
+        schema = super()._schema_for_single_document_request()
+        schema['properties']['custom_resources'] = {}
+        return schema

@@ -133,4 +133,14 @@ this repository contains the full copyright notices and license terms. -->
             <field name="name">document_description_form_depend_offered</field>
         </record>
     </data>
+    <data depends="web_configuration">
+        <!-- ############################################ -->
+        <!-- # Relate DocumentDescription WebUIResource # -->
+        <!-- ############################################ -->
+        <record model="ir.action.keyword" id="act_open_doc_desc_web_res_keyword">
+            <field name="keyword">form_relate</field>
+            <field name="model">document.description,-1</field>
+            <field name="action" ref="web_configuration.act_web_ui_resource_for_keyword_window"/>
+        </record>
+    </data>
 </tryton>

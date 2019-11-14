@@ -38,3 +38,7 @@ def register():
     Pool.register(
         api.APIParty,
         module='document_request', type_='model', depends=['api', 'offered'])
+    Pool.register(
+        api.APIPartyWebConfiguration,
+        document.DocumentDescriptionWebConfiguration,
+        module='document_request', type_='model', depends=['web_configuration'])

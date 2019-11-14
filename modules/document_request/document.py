@@ -21,11 +21,13 @@ from trytond.modules.report_engine import Printable
 from trytond.modules.rule_engine import get_rule_mixin
 from trytond.modules.offered.extra_data import with_extra_data, \
     with_extra_data_def, ExtraDataDefTable
+from trytond.modules.web_configuration.resource import WebUIResourceMixin
 
 
 __all__ = [
     'DocumentDescription',
     'DocumentDescriptionOffered',
+    'DocumentDescriptionWebConfiguration',
     'DocumentRequestLine',
     'DocumentRequestLineOffered',
     'DocumentRequest',
@@ -79,6 +81,10 @@ class DocumentDescriptionOffered(
     def on_change_template(self):
         if not self.template:
             self.extra_data_def = None
+
+
+class DocumentDescriptionWebConfiguration(WebUIResourceMixin):
+    __name__ = 'document.description'
 
 
 class DocumentDescription(metaclass=PoolMeta):

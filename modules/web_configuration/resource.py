@@ -17,6 +17,7 @@ __all__ = [
     ]
 
 
+@model.genshi_evaluated_fields('value')
 class WebUIResource(model.CoogSQL, model.CoogView):
     'Web UI Resource'
     __name__ = 'web.ui.resource'

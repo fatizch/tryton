@@ -1,3 +1,5 @@
+* FEA#13350 Ajout de ressources web évaluées dynamiquement sur les descriptions de documents
+
 Version 2.6 - 2019-10-11
 * FEA#12341 Définition d'un workflow pour le statut des pièces-jointes
 * FEA#12341 Ajout d'APIs sur les lignes de documents requis
