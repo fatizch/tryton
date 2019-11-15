@@ -13,7 +13,7 @@ class User(metaclass=PoolMeta):
     __name__ = 'res.user'
 
     dist_network = fields.Many2One('distribution.network',
-        'Distribution Network')
+        'Distribution Network', ondelete='RESTRICT')
 
     @classmethod
     def __setup__(cls):
