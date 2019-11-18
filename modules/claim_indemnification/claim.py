@@ -398,6 +398,30 @@ class ClaimService(metaclass=PoolMeta):
             having=Operator(Max(indemnification.end_date), value))
         return [('id', 'in', query_table)]
 
+    def _get_benefits_covered_indemnificated_amount(self, start_date, end_date):
+        start_date_domain = [('loss.start_date', '=', None)]
+        if start_date is not None:
+            start_date_domain = ['OR',
+                start_date_domain,
+                [('loss.start_date', '>=', start_date)]]
+        end_date_domain = [('loss.end_date', '=', None)]
+        if end_date is not None:
+            end_date_domain = ['OR',
+                end_date_domain,
+                ('loss.end_date', '<=', end_date)]
+        domain = ['AND',
+            start_date_domain,
+            end_date_domain, [
+                ('loss.covered_person', '=', self.loss.covered_person.id),
+                ('benefit', '=', self.benefit.id)]]
+        Service = Pool().get('claim.service')
+        filtered_services = Service.search(domain)
+        return sum([
+                i.total_amount
+                for s in filtered_services
+                for i in s.indemnifications
+                if i.status in ['validated', 'paid']])
+
     def calculate(self):
         cur_dict = {}
         self.init_dict_for_rule_engine(cur_dict)

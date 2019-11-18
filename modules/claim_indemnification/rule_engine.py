@@ -1,6 +1,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 import copy
+import datetime
 from dateutil import rrule
 from decimal import Decimal
 
@@ -248,3 +249,11 @@ class RuleEngineRuntime(metaclass=PoolMeta):
         beneficiary, = [x for x in args['service'].beneficiaries
             if x.party == args['indemnification'].beneficiary]
         return beneficiary.documents_reception_date
+
+    @classmethod
+    @check_args('service')
+    def _re_benefit_covered_indemnificated_amount_term(cls, args):
+        service = args.get('service')
+        return service._get_benefits_covered_indemnificated_amount(
+            service.contract.start_date or datetime.date.min,
+            service.contract.end_date or datetime.date.max)

@@ -240,5 +240,15 @@ dernier document requis pour le bénéficiaire</field>
             <field name="name">_re_beneficiary_documents_reception_date</field>
             <field name="parent" ref="claim.dossier_sinistre"/>
         </record>
+        <record model="rule_engine.function" id="benefit_covered_indemnificated_amount_term">
+            <field name="translated_technical_name">montant_indemnise_prestation_assure_terme</field>
+            <field name="description">Montant indemnise pour la prestation et l'assure sur le terme courant</field>
+            <field name="long_description">Retourne le montant total indemnisé pour la prestation et l'assuré sur le terme courant</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_benefit_covered_indemnificated_amount_term</field>
+            <field name="parent" ref="claim.dossier_sinistre"/>
+        </record>
     </data>
 </tryton>
