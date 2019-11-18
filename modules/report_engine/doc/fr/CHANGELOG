@@ -1,3 +1,5 @@
+* BUG#13140 Correction d'un crash lors de la génération de rapports ayant une pièce jointe avec formattage pour la GED interne
+
 Version 2.6 - 2019-10-11
 * FEA#12161 Gestion de BDOC
 * BUG#11815 Décalage de l'écriture des fichiers au commit de la transaction

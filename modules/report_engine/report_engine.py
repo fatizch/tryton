@@ -529,7 +529,10 @@ class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
         os_extsep = os.extsep if oext else ''
         attachment.name = report['report_name_wo_ext'] + os_extsep + oext
         attachment.document_desc = self.document_desc
-        attachment.origin = report.get('origin', None)
+        try:
+            attachment.origin = report.get('origin', None)
+        except TypeError:
+            pass
         return attachment
 
     def save_reports_in_edm(self, reports):
