@@ -976,6 +976,10 @@ msgctxt "selection:loan,kind:"
 msgid "Intermediate"
 msgstr "Relais"
 
+msgctxt "selection:loan,kind:"
+msgid "Variable Rate"
+msgstr "Taux variable"
+
 msgctxt "selection:loan,payment_frequency:"
 msgid "Half-year"
 msgstr "Semestre"

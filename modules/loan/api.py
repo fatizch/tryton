@@ -228,7 +228,8 @@ class APIContract(metaclass=PoolMeta):
     @classmethod
     def _loan_fixed_rate_schema(cls, mode='full'):
         schema = cls._loan_base_schema(mode=mode)
-        schema['properties']['kind'] = {'const': 'fixed_rate'}
+        schema['properties']['kind'] = {'type': 'string',
+            'enum': ['fixed_rate', 'variable_rate']}
         schema['properties']['rate'] = RATE_SCHEMA
         schema['required'].append('rate')
         return schema

@@ -172,8 +172,8 @@ class MigratorLoan(migrator.Migrator):
             row['duration_unit'] = 'month'
         row = super(MigratorLoan, cls).sanitize(row)
         # Check that selection values are known
-        if row['kind'] not in ('fixed_rate', 'interest_free', 'intermediate',
-                'balloon'):
+        if row['kind'] not in ('fixed_rate', 'variable_rate', 'interest_free',
+                'intermediate', 'balloon'):
             err = cls.error_message('unknown_kind') % (
                 row[cls.func_key], row['kind'])
         if row['payment_frequency'] not in ('month', 'quarter', 'half_year',

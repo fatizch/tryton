@@ -32,6 +32,7 @@ __all__ = [
 
 LOAN_KIND = [
     ('fixed_rate', 'Fixed Rate'),
+    ('variable_rate', 'Variable Rate'),
     ('interest_free', 'Interest Free Loan'),
     ('graduated', 'Graduated'),
     ('intermediate', 'Intermediate'),
@@ -130,12 +131,13 @@ class Loan(Workflow, model.CoogSQL, model.CoogView, with_extra_data(['loan'])):
     rate = fields.Numeric('Annual Rate', digits=(16, 4),
         states={
             'required': Eval('kind').in_(
-                ['fixed_rate', 'intermediate', 'balloon']),
+                ['fixed_rate', 'variable_rate', 'intermediate', 'balloon']),
             'readonly':
                 (Eval('state') != 'draft') | (Eval('kind') == 'interest_free'),
             },
         domain=[If(
-                Eval('kind').in_(['fixed_rate', 'intermediate', 'balloon']),
+                Eval('kind').in_(['fixed_rate', 'variable_rate', 'intermediate',
+                        'balloon']),
                 ['OR', ('rate', '>', 0), ('rate', '=', None)],
                 [],
                 )],
@@ -163,7 +165,7 @@ class Loan(Workflow, model.CoogSQL, model.CoogView, with_extra_data(['loan'])):
             states={
                 'invisible': ~Eval('deferral'),
                 'required': Bool(Eval('deferral', '')) & Eval('kind').in_(
-                    ['fixed_rate', 'interest_free']),
+                    ['fixed_rate', 'variable_rate', 'interest_free']),
                 'readonly': Eval('state') != 'draft'
                 },
             depends=['deferral', 'kind', 'state']),
@@ -593,7 +595,7 @@ class Loan(Workflow, model.CoogSQL, model.CoogView, with_extra_data(['loan'])):
             name.append('[%s]' % self.number)
         if self.kind:
             name.append(coog_string.translate_value(self, 'kind'))
-        if self.kind == 'fixed_rate':
+        if self.kind in ('fixed_rate', 'variable_rate'):
             name.append('%s%%' % coog_string.format_number('%.2f',
                     self.rate * 100))
         if self.amount:
