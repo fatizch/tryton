@@ -1,3 +1,5 @@
+* OTH#00000 Remove redundant loss_kind field and use claim module loss_desc_kind instead
+
 Version 2.6 - 2019-10-11
 * OTH#00000 Getter of default claim bank account should never return an instance
 

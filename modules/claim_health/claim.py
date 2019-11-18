@@ -59,10 +59,8 @@ class Loss(model.CoogSQL, model.CoogView):
 
     health_loss = fields.One2Many('claim.loss.health', 'loss', 'Health Loss',
         size=1, delete_missing=True,
-        states={'invisible': ~Bool(Equal(Eval('loss_kind'), 'health'))},
-        depends=['loss_kind'])
-    loss_kind = fields.Function(
-        fields.Char('Loss Kind'), 'get_loss_kind')
+        states={'invisible': ~Bool(Equal(Eval('loss_desc_kind'), 'health'))},
+        depends=['loss_desc_kind'])
 
     @classmethod
     def get_date_field_for_kind(cls, kind):
@@ -80,9 +78,6 @@ class Loss(model.CoogSQL, model.CoogView):
             if hasattr(self, 'loss_desc') and self.loss_desc and \
             self.loss_desc.loss_kind == 'health' \
             else super(Loss, self).get_covered_person()
-
-    def get_loss_kind(self, name):
-        return self.loss_desc.loss_kind
 
 
 class Claim(metaclass=PoolMeta):

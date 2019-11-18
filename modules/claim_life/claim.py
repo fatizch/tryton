@@ -156,9 +156,6 @@ class Loss(metaclass=PoolMeta):
             'invisible': ~Eval('has_end_date'),
             'readonly': CLAIM_READONLY, },
         depends=['has_end_date', 'claim_status'])
-    loss_kind = fields.Function(
-        fields.Char('Loss Kind'),
-        'get_loss_kind')
     relapse_initial_loss = fields.Many2One('claim.loss', 'Relapse Initial Loss',
         ondelete='RESTRICT', domain=[
             ('id', 'in', Eval('possible_relapse_losses'))],
@@ -202,7 +199,7 @@ class Loss(metaclass=PoolMeta):
         cls.closing_reason.states.update({
                 'required': Bool(Eval('end_date')),
                 })
-        cls.closing_reason.depends.extend(['loss_kind', 'end_date'])
+        cls.closing_reason.depends.extend(['loss_desc_kind', 'end_date'])
 
     @classmethod
     def __post_setup__(cls):
@@ -230,13 +227,9 @@ class Loss(metaclass=PoolMeta):
         key += name[:-7]
         return gettext('claim_life.msg_%s' % key)
 
-    @fields.depends('loss_kind', 'is_a_relapse')
+    @fields.depends('loss_desc_kind', 'is_a_relapse')
     def on_change_with_possible_loss_descs(self, name=None):
         return super(Loss, self).on_change_with_possible_loss_descs(name)
-
-    def get_loss_kind(self, name):
-        if self.loss_desc:
-            return self.loss_desc.loss_kind
 
     def close(self, sub_status, date=None):
         super(Loss, self).close(sub_status, date)
@@ -371,9 +364,9 @@ class Loss(metaclass=PoolMeta):
     def get_date(self):
         if self.is_a_relapse and self.relapse_initial_loss:
             return self.relapse_initial_loss.get_date()
-        if self.loss_kind == 'ltd':
+        if self.loss_desc_kind == 'ltd':
             return self.initial_std_start_date
-        if self.loss_kind in ('std', 'death'):
+        if self.loss_desc_kind in ('std', 'death'):
             # The initial event must be used to know if the person is covered
             if hasattr(self, 'claim') and self.claim.losses:
                 return self.claim.losses[0].start_date

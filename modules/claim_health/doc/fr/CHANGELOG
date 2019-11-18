@@ -1,3 +1,5 @@
+* OTH#00000 Suppression du champ redonant loss_kind et utilisation du champ loss_desc_kind du module claim en échange
+
 Version 2.6 - 2019-10-11
 * OTH#00000 Le getter du compte bancaire par défaut pour les sinistres ne doit jamais retourner une instance
 

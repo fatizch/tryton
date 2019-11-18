@@ -102,10 +102,6 @@ msgctxt "field:claim.loss,health_loss:"
 msgid "Health Loss"
 msgstr "Acte santé"
 
-msgctxt "field:claim.loss,loss_kind:"
-msgid "Loss Kind"
-msgstr "Type de préjudice"
-
 msgctxt "field:claim.loss.health,act_date:"
 msgid "Date of Medical Act"
 msgstr "Date de l'acte"
