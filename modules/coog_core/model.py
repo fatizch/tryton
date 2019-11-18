@@ -1529,6 +1529,10 @@ class ConfigurationMixin(CoogSQL):
             static, and the fields it depends on are in the ConfigurationMixin
             model subset
         '''
+        if not domain:
+            # Maybe this should be False, but ConfigurationMixin are supposed
+            # to be small tables
+            return True
         if domain[0] in ['OR', 'AND']:
             return all(cls._cachable_domain(x) for x in domain[1:])
         if isinstance(domain[0], (tuple, list)):
