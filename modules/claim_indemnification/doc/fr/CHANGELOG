@@ -1,3 +1,4 @@
+* FEA#11618 Générer un modèle de document sur un sinistre à partir d'un groupe de paiement ou d'une quittance
 * FEA#13318 Ajout dans le moteur de règles d'une fonction retournant le montant total indemnisé (payé/validé) pour une personne couverte et une prestation sur le terme courant
 * BUG#13304 Ne pas vérifier la quote part pour les indemnisations refusées
 

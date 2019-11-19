@@ -1170,7 +1170,9 @@ class Group(Workflow, ModelCurrency, export.ExportImportMixin, Printable,
     @ModelView.button
     @Workflow.transition('acknowledged')
     def acknowledge(cls, groups):
-        Payment = Pool().get('account.payment')
+        pool = Pool()
+        Payment = pool.get('account.payment')
+        Event = pool.get('event')
         payments = []
         with model.error_manager():
             for group in groups:
@@ -1183,6 +1185,8 @@ class Group(Workflow, ModelCurrency, export.ExportImportMixin, Printable,
                                 date=utils.today(),
                                 )))
                 payments.extend(group.processing_payments)
+        if groups:
+            Event.notify_events(groups, 'group_acknowledged')
         if payments:
             Payment.succeed(payments)
 

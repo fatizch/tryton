@@ -22,6 +22,23 @@ class EventTypeAction(metaclass=PoolMeta):
             process_objects.append(object_.service.claim)
         return process_objects
 
+    def get_targets_and_origin_from_object_and_template(self, objects,
+            template):
+        if template.on_model and template.on_model.model == 'claim':
+            if objects.__name__ == 'account.payment.group':
+                invoices = {payment.related_invoice
+                    for payment in objects.payments}
+            elif objects.__name__ == 'account.invoice':
+                invoices = objects
+            claims = {claim_detail.claim
+                for invoice in invoices
+                for invoice_line in invoice.lines
+                for claim_detail in invoice_line.claim_details}
+            return list(claims), objects
+        return super(EventTypeAction,
+            self).get_targets_and_origin_from_object_and_template(objects,
+                template)
+
 
 class EventLog(metaclass=PoolMeta):
     __name__ = 'event.log'

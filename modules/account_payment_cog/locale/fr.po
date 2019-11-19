@@ -787,6 +787,10 @@ msgctxt "model:event.type,name:event_fail_payment"
 msgid "Fail Payment"
 msgstr "Échec du paiement"
 
+msgctxt "model:event.type,name:event_group_acknowledge"
+msgid "Payment Group Acknowledged"
+msgstr "Groupe de paiement reçu"
+
 msgctxt "model:event.type,name:event_group_acknowledge_planned"
 msgid "Payment Group Acknowledge Planned"
 msgstr "Accusé réception du groupe de paiement planifié "

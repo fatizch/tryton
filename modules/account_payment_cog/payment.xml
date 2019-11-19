@@ -168,6 +168,11 @@ this repository contains the full copyright notices and license terms. -->
             <field name="code">group_acknowledge_planned</field>
             <field name="icon" ref="account_payment_cog.succeed_payment_icon"/>
         </record>
+        <record model="event.type" id="event_group_acknowledge">
+            <field name="name">Payment Group Acknowledged</field>
+            <field name="code">group_acknowledged</field>
+            <field name="icon" ref="account_payment_cog.succeed_payment_icon"/>
+        </record>
         <!-- ########################################### -->
         <!-- ########### Payment Fail Wizard ########### -->
         <!-- ########################################### -->
