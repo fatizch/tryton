@@ -1,3 +1,4 @@
+* OTH#00000 Mise a jour des primes après une analyse de risque emprunteur
 * OTH#0000 Ajout du taux variable dans les types de prêt
 * BUG#13201 Modifier le message d'erreur d'éligibilité d'une garantie d'un prêt
 * OTH#00000 Ajout d'un searcher requis sur l'état du prêt depuis les incréments

@@ -1012,3 +1012,10 @@ class APIContractUnderwriting(metaclass=PoolMeta):
             extra_premium.capital_per_mil_rate = data.get('rate', None)
         if extra_premium.calculation_kind == 'remaining_capital_per_mil':
             extra_premium.remaining_capital_per_mil = data.get('rate', None)
+
+    @classmethod
+    def update_underwriting(cls, parameters):
+        super().update_underwriting(parameters)
+        contract = parameters['contract']
+        if contract.is_loan:
+            contract.calculate_prices([contract])

@@ -1,3 +1,4 @@
+* OTH#00000 Update prices after loan underwriting
 * OTH#0000 Add variable rate kind on loan
 * BUG#13201 Modify coverage eligibility error on a loan
 * OTH#00000 Add required searcher on loan state increment
