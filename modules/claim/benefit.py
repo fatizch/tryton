@@ -3,6 +3,7 @@
 # this repository contains the full copyright notices and license terms.
 import logging
 
+from sql import Null
 from trytond.i18n import gettext
 from trytond.pyson import Eval
 from trytond.transaction import Transaction
@@ -61,6 +62,17 @@ class EventDescription(model.CodedMixin, model.CoogView):
     sequence = fields.Integer('Sequence')
 
     @classmethod
+    def __register__(cls, module_name):
+        super(EventDescription, cls).__register__(module_name)
+        table = cls.__table__()
+        # Migration from 2.6: Name is required
+        cursor = Transaction().connection.cursor()
+        cursor.execute(*table.update(
+                columns=[table.name],
+                values=[table.code],
+                where=(table.name == Null)))
+
+    @classmethod
     def __setup__(cls):
         super(EventDescription, cls).__setup__()
         cls._order.insert(0, ('sequence', 'ASC'))
@@ -112,12 +124,17 @@ class LossDescription(model.CodedMixin, model.CoogView, with_extra_data_def(
     @classmethod
     def __register__(cls, module):
         table = backend.get('TableHandler')(cls, module)
-
+        loss_desc = cls.__table__()
         # Migration from 2.0: Rename with_end_date
         if table.column_exist('with_end_date'):
             table.column_rename('with_end_date', 'has_end_date')
-
+        # Migration from 2.6: Name is required
         super(LossDescription, cls).__register__(module)
+        cursor = Transaction().connection.cursor()
+        cursor.execute(*loss_desc.update(
+                columns=[loss_desc.name],
+                values=[loss_desc.code],
+                where=(loss_desc.name == Null)))
 
     @classmethod
     def is_master_object(cls):

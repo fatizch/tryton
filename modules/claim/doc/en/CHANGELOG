@@ -1,3 +1,4 @@
+* OTH#00000 Add migration for field "Name" on benefit event description and loss description
 * OTH#00000 Improve administration benefit view to display all loss desc 
 
 Version 2.6 - 2019-10-11
