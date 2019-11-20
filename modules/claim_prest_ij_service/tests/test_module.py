@@ -56,7 +56,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
             self.SubmitPersonPrestIjSubscription
         treatment_date = datetime.date.today()
         ids = SubmitPerson.select_ids(
-            treatment_date=treatment_date, operation=operation)
+            treatment_date=treatment_date, operation=operation, kind='person')
         objects = \
             list(SubmitPerson.convert_to_instances(ids))
         SubmitPerson.execute(objects,

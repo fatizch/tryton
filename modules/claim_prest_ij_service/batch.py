@@ -319,6 +319,8 @@ class SubmitPersonPrestIjSubscription(BaseSelectPrestIj):
             'prest_ij', 'with_subsidiary', default=False)
         if with_subsidiary:
             params['kind'] = 'affiliated'
+        else:
+            params['kind'] = 'person'
         assert params.get('operation') in ('cre', 'sup'), 'Invalid operation'
         return params
 
@@ -329,12 +331,9 @@ class SubmitPersonPrestIjSubscription(BaseSelectPrestIj):
         request = tables['claim.ij.subscription_request']
         company = tables['party.party.company']
         company_sub = tables['claim.ij.subscription.company']
-        cpy_kwargs = {}
 
-        cpy_kwargs.update(kwargs)
         query_table = super(SubmitPersonPrestIjSubscription, cls
-            ).get_query_table(tables, kind=cpy_kwargs.pop('kind', 'person'),
-                **cpy_kwargs
+            ).get_query_table(tables, **kwargs
             ).join(subscription,
                 condition=(party.ssn == subscription.ssn)
                 & (company.siren == subscription.siren))
@@ -360,7 +359,7 @@ class SubmitPersonPrestIjSubscription(BaseSelectPrestIj):
             where_clause &= (claim.status != 'closed')
         else:
             where_clause = super(SubmitPersonPrestIjSubscription, cls
-                ).get_where_clause(tables, kind='person', **kwargs)
+                ).get_where_clause(tables, **kwargs)
             where_clause &= (subscription.state == 'declaration_confirmed')
         return where_clause
 
@@ -498,7 +497,7 @@ class SubmitCompanyPrestIjSubscription(BaseSelectPrestIj):
                        condition=(party.siren == subscription.siren))
         else:
             query_table = super(SubmitCompanyPrestIjSubscription, cls
-                ).get_query_table(tables, kind=kind, **kwargs
+                ).get_query_table(tables, **kwargs
                 ).join(subscription,
                     condition=(party.siren == subscription.siren))
         return query_table.join(request, 'LEFT OUTER', condition=(
@@ -509,6 +508,7 @@ class SubmitCompanyPrestIjSubscription(BaseSelectPrestIj):
         operation = kwargs.get('operation')
         subscription = tables['claim.ij.subscription']
         contract = tables['contract']
+        kind = kwargs.get('kind', 'company')
         if operation == 'cre':
             where_clause = (
                 subscription.state.in_(['undeclared', 'deletion_confirmed']))
@@ -516,11 +516,13 @@ class SubmitCompanyPrestIjSubscription(BaseSelectPrestIj):
             where_clause &= (subscription.ssn == Null)
         else:
             where_clause = super(SubmitCompanyPrestIjSubscription, cls
-                ).get_where_clause(tables, kwargs.get('kind', 'company'),
-                    **kwargs)
+                ).get_where_clause(tables, **kwargs)
             where_clause &= (subscription.state == 'declaration_confirmed')
-            where_clause &= (contract.status == 'terminated')
             where_clause &= (subscription.ssn == Null)
+            if kind == 'company':
+                # For kind 'subsidiary', we need to check the end date on the
+                # covered element, which is done in the select_ids method
+                where_clause &= (contract.status == 'terminated')
         return where_clause
 
     @classmethod
@@ -552,14 +554,28 @@ class SubmitCompanyPrestIjSubscription(BaseSelectPrestIj):
                 group_by=[subscription.id, contract.id],
                 order_by=[subscription.id, contract.id]
                 ))
-
+        kind = kwargs.get('kind', 'company')
+        pool = Pool()
+        Contract = pool.get('contract')
+        CoveredElement = pool.get('contract.covered_element')
+        Subscription = pool.get('claim.ij.subscription')
         for sub, models in groupby(cursor.fetchall(), key=lambda x: x[0]):
             models = [x[1] for x in models]
             if operation == 'cre':
                 yield (sub, )
             else:
-                contracts = Pool().get('contract').browse(models)
-                date_to_check = max([c.end_date for c in contracts])
+                contracts = Contract.browse(models)
+                if kind == 'company':
+                    date_to_check = max([c.end_date for c in contracts])
+                else:
+                    covered_elements = [x for x in CoveredElement.search([
+                                ('contract', 'in', [x.id for x in contracts]),
+                                ('item_desc.kind', '=', 'subsidiary'),
+                                ('party.siren', '=', Subscription(sub).siren),
+                                ])]
+                    date_to_check = max([
+                            x.end_date or datetime.date.max
+                            for x in covered_elements])
                 if date_to_check < coog_date.add_year(treatment_date, -2):
                     yield (sub, )
                 else:
