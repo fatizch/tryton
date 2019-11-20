@@ -1,6 +1,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool, PoolMeta
+from trytond.transaction import Transaction
 
 __all__ = [
     'Contract',
@@ -27,8 +28,9 @@ class Contract(metaclass=PoolMeta):
         for k, documents in res.items():
             for k, v in documents.items():
                 desc_codes |= v.keys()
-        desc_dict = dict((d.code, d) for d in DocumentDesc.search(
-            ['code', 'in', desc_codes]))
+        with Transaction().set_context(_check_access=False):
+            desc_dict = dict((d.code, d) for d in DocumentDesc.search(
+                ['code', 'in', desc_codes]))
         new_res = {}
         for contract, documents in res.items():
             new_res[contract] = {}

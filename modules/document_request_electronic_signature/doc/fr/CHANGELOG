@@ -1,3 +1,4 @@
+* BUG#13387 Correctif sur la recherche des documents protégés lors du calcul des documents avec signature electronique
 * OTH#0000 Utilisation du bon type de document pour l'initialisation de la signature
 * BUG#13271 Correctif d'un crash de la librairie PY2PDF lorsqu'il y à des bookmarks
 
