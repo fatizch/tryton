@@ -47,10 +47,23 @@ class DocumentRequestLine(metaclass=PoolMeta):
                     ))
 
     @classmethod
+    def __setup__(cls):
+        super(DocumentRequestLine, cls).__setup__()
+        or_clause = cls.attachment.domain[0]
+        assert or_clause[0] == 'OR'
+        or_clause.append(('resource.id', '=', Eval('claim'), 'claim'))
+        cls.attachment.depends.append('claim')
+
+    @classmethod
     def __post_setup__(cls):
         super(DocumentRequestLine, cls).__post_setup__()
         cls.set_fields_readonly_condition(Eval('claim_status') == 'closed',
             ['claim_status'], cls._get_skip_set_readonly_fields())
+
+    def get_reference_object_for_edm(self):
+        if self.claim:
+            return self.claim
+        return super(DocumentRequestLine, self).get_reference_object_for_edm()
 
     @classmethod
     def _get_skip_set_readonly_fields(cls):
