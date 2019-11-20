@@ -1114,7 +1114,7 @@ class CoveredElement(Printable,
         return '[%s]' % coog_string.translate_value(
             self.contract, 'status') if self.contract else ''
 
-    def get_synthesis_rec_name(self):
+    def get_synthesis_rec_name(self, name=None):
         dates = self.get_synthesis_dates()
         status = self.get_synthesis_status()
         product = '[%s]' % self.contract.product.rec_name if self.contract \
