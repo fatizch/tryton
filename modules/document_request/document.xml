@@ -142,5 +142,9 @@ this repository contains the full copyright notices and license terms. -->
             <field name="model">document.description,-1</field>
             <field name="action" ref="web_configuration.act_web_ui_resource_for_keyword_window"/>
         </record>
+        <record model="ir.model-web.ui.resource.key" id="key_markdown_formatted">
+            <field name="web_ui_res_key" ref="web_configuration.key_markdown_formatted_text"/>
+            <field name="on_model" search="[('model', '=', 'document.description')]"/>
+        </record>
     </data>
 </tryton>
