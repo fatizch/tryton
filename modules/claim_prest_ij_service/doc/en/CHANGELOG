@@ -1,3 +1,5 @@
+* BUG#12706 Hotfix manual covered person subscription wizard with subsidiaries
+
 Version 2.6 - 2019-10-11
 * BUG#12546 Fix batch to wait until all files in the transaction are successfully processed before archiving it
 * OTH#00000 Translate Mandate identification to RUM

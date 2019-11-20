@@ -11,6 +11,7 @@ from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval, Bool, PYSONEncoder
 from trytond.server_context import ServerContext
 from trytond.transaction import Transaction
+from trytond.config import config
 from trytond.wizard import Wizard, StateAction, StateTransition, StateView, \
     Button
 
@@ -51,6 +52,9 @@ class FindPartySubscription(Wizard):
         selection_id = Transaction().context.get('active_id')
         selection = Model(selection_id)
         Subscription = pool.get('claim.ij.subscription')
+        with_subsidiary = config.getboolean(
+            'prest_ij', 'with_subsidiary', default=False)
+
         if model == 'party.party':
             covered = selection
             domain = [
@@ -67,7 +71,10 @@ class FindPartySubscription(Wizard):
             domain = [
                 ('ssn', '=', covered.ssn),
                 ('siren', '=',
-                    selection.losses[0].services[0].contract.subscriber.siren),
+                    selection.losses[0].services[0
+                        ].contract.subscriber.siren if not with_subsidiary
+                     else selection.losses[0].services[0
+                        ].theoretical_covered_element.parent.party.siren),
                 ]
         else:
             assert False, 'Model must be a claim or a party'
@@ -135,6 +142,8 @@ class CreateCoveredPersonIjSubscription(Wizard):
         Subscription = pool.get('claim.ij.subscription')
         CoveredElement = pool.get('contract.covered_element')
         Warning = pool.get('res.user.warning')
+        with_subsidiary = config.getboolean(
+            'prest_ij', 'with_subsidiary', default=False)
 
         subscription = self.select_date.subscription
         if any([x.method == 'manual' and x.state == 'unprocessed'
@@ -156,12 +165,22 @@ class CreateCoveredPersonIjSubscription(Wizard):
 
         date = self.select_date.period_start
 
-        siren_contracts = Contract.search([
-                'OR', [
-                    [('end_date', '<=', date)],
-                    [('end_date', '=', None)]],
-                ('subscriber', 'in', [party.id for sub in company_subs
-                        for party in sub.parties])])
+        if not with_subsidiary:
+            siren_contracts = Contract.search([
+                    'OR', [
+                        [('end_date', '<=', date)],
+                        [('end_date', '=', None)]],
+                    ('subscriber', 'in', [party.id for sub in company_subs
+                            for party in sub.parties])])
+        else:
+            subsidiaries = CoveredElement.search([
+                    ('party', 'in', [party.id for sub in company_subs
+                            for party in sub.parties]),
+                    ('item_desc.kind', '=', 'subsidiary'),
+                    ])
+            siren_contracts = [x.contract for x in subsidiaries if
+                (x.contract.end_date is None or x.contract.end_date <= date)]
+
         parent_covereds = CoveredElement.search(
             [('contract', 'in', [x.id for x in siren_contracts])])
         person_covered = CoveredElement.search(
