@@ -95,7 +95,12 @@ class PartySSN(metaclass=PoolMeta):
     def on_change_with_birth_zip_and_city(self, name=None):
         if self.ssn and len(self.ssn[5:10]) == 5:
             zip_code = self.__class__.get_birth_zip_from_code(self.ssn[5:10])
-            return zip_code.id if zip_code else None
+            if zip_code:
+                return zip_code.id
+            elif self.birth_zip_and_city:
+                return self.birth_zip_and_city.id
+            else:
+                return None
 
     @fields.depends('ssn', 'ssn_no_key', 'ssn_key')
     def on_change_with_birth_zip(self, name=None):
@@ -115,7 +120,12 @@ class PartySSN(metaclass=PoolMeta):
     def on_change_with_birth_country(self, name=None):
         if self.ssn and len(self.ssn[5:10]) == 5:
             zip_code = self.__class__.get_birth_zip_from_code(self.ssn[5:10])
-            return zip_code.country.id if zip_code else None
+            if zip_code:
+                return zip_code.country.id
+            elif self.birth_country:
+                return self.birth_country.id
+            else:
+                return None
 
     def check_SSN_from_party_information(self):
         super().check_SSN_from_party_information()
