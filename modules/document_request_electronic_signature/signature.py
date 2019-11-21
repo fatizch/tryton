@@ -46,6 +46,11 @@ class Signature(metaclass=PoolMeta):
 class SignatureCredential(export.ExportImportMixin, metaclass=PoolMeta):
     __name__ = 'document.signature.credential'
 
+    @classmethod
+    def _export_skips(cls):
+        return super(SignatureCredential, cls)._export_skips() | {
+            'username', 'password'}
+
 
 class SignatureConfiguration(export.ExportImportMixin, metaclass=PoolMeta):
     __name__ = 'document.signature.configuration'

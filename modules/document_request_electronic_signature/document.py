@@ -158,28 +158,6 @@ class DocumentRequestLine(metaclass=PoolMeta):
         return res and (self.attachment and self.attachment.is_signed())
 
     @classmethod
-    def update_electronic_signature_status(cls, request_lines):
-        Attachment = Pool().get('ir.attachment')
-        to_update = {}
-        for line in request_lines:
-            if not (line.digital_signature_required and line.attachment):
-                continue
-            has_signature_request = \
-                line.attachment.has_signature_transaction_request()
-            if has_signature_request and not line.attachment.is_signed():
-                to_update[line] = line.attachment
-        if to_update:
-            Attachment.update_electronic_signature_transaction_info(
-                list(to_update.values()))
-        to_receive = []
-        for line, attachment in to_update.items():
-            if attachment.is_signed() and not \
-                    line.reception_date:
-                to_receive.append(line)
-        if to_receive:
-            cls.write(to_receive, {'reception_date': utils.today()})
-
-    @classmethod
     def link_to_attachments(cls, requests, attachments):
         requests_to_save = super(DocumentRequestLine,
             cls).link_to_attachments(requests, attachments)
@@ -225,6 +203,8 @@ class DocumentRequestLine(metaclass=PoolMeta):
         return super(DocumentRequestLine, self).format_signature_url(url)
 
     def notify_signature_completed(self, signature):
+        self.reception_date = utils.today()
+        self.save()
         Event = Pool().get('event')
         Event.notify_events([self], 'signature_completed')
 

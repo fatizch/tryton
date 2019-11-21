@@ -5,7 +5,6 @@ from . import attachment
 from . import document
 from . import report_engine
 from . import contract
-from . import claim
 from . import signature
 
 
@@ -25,7 +24,3 @@ def register():
         contract.Contract,
         module='document_request_electronic_signature', type_='model',
         depends=['contract_insurance_document_request'])
-    Pool.register(
-        claim.Claim,
-        module='document_request_electronic_signature', type_='model',
-        depends=['claim_process'])
