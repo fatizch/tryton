@@ -16,6 +16,13 @@ class ModuleTestCase(test_framework.CoogTestCase):
         pool = Pool()
         Party = pool.get('party.party')
         APIParty = pool.get('api.party')
+        Country = pool.get('country.country')
+        Subdivision = pool.get('country.subdivision')
+        fr = Country(name='France', code='FR')
+        fr.save()
+        allier = Subdivision(name='Allier', code='FR-03', country=fr,
+            type='metropolitan department')
+        allier.save()
         example_party_employment = APIParty._create_party_examples()[-1]
         result = APIParty.create_party(
             example_party_employment['input'], {})
@@ -27,8 +34,11 @@ class ModuleTestCase(test_framework.CoogTestCase):
         self.assertEqual(
             daizy.employments[0].versions[0].administrative_situation, 'active')
         self.assertEqual(daizy.employments[0].versions[0].gross_salary,
-                         10000)
+            10000)
         self.assertEqual(daizy.employments[0].versions[0].increased_index, 100)
+        self.assertEqual(daizy.employments[0].versions[0].work_country, fr)
+        self.assertEqual(daizy.employments[0].versions[0].work_subdivision,
+            allier)
         employe_update = {
             'parties': [{
                 'ref': '5',
@@ -44,6 +54,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
                         'gross_salary': '20000',
                         'administrative_situation': 'retired',
                         'increased_index': 200,
+                        'work_subdivision': '03',
                         }]
                 },
                 ],
@@ -63,6 +74,8 @@ class ModuleTestCase(test_framework.CoogTestCase):
             200)
         self.assertEqual(test_update.employments[0].versions[0].gross_salary,
             20000)
+        self.assertEqual(daizy.employments[0].versions[0].work_subdivision,
+            allier)
 
 
 def suite():

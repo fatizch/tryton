@@ -1,3 +1,4 @@
+* FEA#13436 Ajout des champs pays et département d'affectation sur un emploi
 * BUG#13193 Mettre à null la donnée administrative_situation_sub_status lorsque la donnée administrative_situation est modifiée
 
 Version 2.6 - 2019-10-11
