@@ -55,6 +55,20 @@ class Employment(model.CoogSQL, model.CoogView):
     def check_employment_identifier(self):
         pass
 
+    @classmethod
+    def add_func_key(cls, values):
+        if ('employer' in values or 'employment_identifier' in values or
+                'employment_kind' in values):
+            values['_func_key'] = '%s | %s | %s' % (
+                values['employer'] if 'employer' in values else '',
+                values['employment_identifier']
+                if 'employment_identifier' in values else '',
+                values['employment_kind']
+                if 'employment_kind' in values else '',
+                )
+        else:
+            super().add_func_key(values)
+
     @fields.depends('employer', 'work_section')
     def on_change_employer(self):
         self.work_section = None
@@ -120,6 +134,13 @@ class EmploymentVersion(model._RevisionMixin, model.CoogView, model.CoogSQL):
     @classmethod
     def fields_modifiable_in_endorsement(cls):
         return ['work_time_type', 'gross_salary', 'date']
+
+    @classmethod
+    def add_func_key(cls, values):
+        if 'date' in values:
+            values['_func_key'] = values['date']
+        else:
+            super().add_func_key(values)
 
 
 class EmploymentKind(model.CoogSQL, model.CoogView):

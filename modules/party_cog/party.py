@@ -815,6 +815,13 @@ class PartyIdentifier(export.ExportImportMixin):
     def _get_base_types(cls):
         return cls.__previous_type_selection
 
+    @classmethod
+    def add_func_key(cls, values):
+        if 'code' in values:
+            values['_func_key'] = values['code']
+        else:
+            super().add_func_key(values)
+
     def get_summary_content(self, label, at_date=None, lang=None):
         return (self.type, self.code)
 

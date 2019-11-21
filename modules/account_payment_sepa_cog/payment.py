@@ -167,6 +167,13 @@ class Mandate(model.CoogSQL, model.CoogView):
 
         return [('id', 'in', query)]
 
+    @classmethod
+    def add_func_key(cls, values):
+        if 'identification' in values:
+            values['_func_key'] = values['identification']
+        else:
+            super().add_func_key(values)
+
     def _get_origin(self):
         if self.amendment_of:
             return self.amendment_of._get_origin()
