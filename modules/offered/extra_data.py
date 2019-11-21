@@ -93,7 +93,7 @@ class ExtraData(model.CoogDictSchema, model.ConfigurationMixin, model.CoogView,
             ('code_uniq', Unique(t, t.name), 'offered.msg_code_uniq'),
             ]
         cls.__rpc__.update({'get_default_value_selection': RPC(instantiate=0)})
-        cls._order = [('kind', 'ASC'), ('string', 'ASC')]
+        cls._order = [('kind', 'ASC'), ('sequence_order', 'ASC')]
         cls._extra_data_providers = getattr(cls, '_extra_data_providers', {})
         cls._function_auto_cache_fields.append('selection_json')
         cls._function_auto_cache_fields.append('default_value_selection')
@@ -237,6 +237,13 @@ class ExtraData(model.CoogDictSchema, model.ConfigurationMixin, model.CoogView,
         selection += [x.split(':') for x in self.selection.splitlines()
             if ':' in x] if self.selection else []
         return selection
+
+    @classmethod
+    def search_rec_name(cls, name, clause):
+        return ['OR',
+            ('string',) + tuple(clause[1:]),
+            ('name',) + tuple(clause[1:])
+            ]
 
     @classmethod
     def search_tags(cls, name, clause):

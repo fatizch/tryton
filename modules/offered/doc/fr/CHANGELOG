@@ -1,3 +1,4 @@
+* OTH#0000 Utilisation de l'ordre d'affichage pour trier les données complémentaires dans le menu principal
 * FEA#13077 Ajout du modèle de groupe de données complémentaires
 * FEA#13073 Ajout de la distinction entre champs requis pour les devis et les champs requis pour la souscription dans l'API de description des produits
 * FEA#13174 Ajout d'un onglet dans données complémentaires pour afficher la liste des resources web
