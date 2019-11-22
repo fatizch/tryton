@@ -1,7 +1,6 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 from zeep import Client
-import base64
 import logging
 
 from trytond.pool import PoolMeta, Pool
@@ -111,7 +110,7 @@ class ReportGenerate(metaclass=PoolMeta):
             report_template.code,
             '',
             '',
-            base64.b64encode(xml_file),
+            xml_file,
             '',
             {'key': 'bwFormat', 'value': report_template.BDOC_production_format}
             )

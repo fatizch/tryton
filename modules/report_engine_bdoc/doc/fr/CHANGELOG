@@ -1,3 +1,4 @@
+* OTH#00000 Ne pas encoder le contenu du fichier XML en base 64 car la librairie Zeep le fait automatiquement
 * FEA#13118 Impression d'un document via un appel web service à BDOC web
 
 Version 2.6 - 2019-10-11
