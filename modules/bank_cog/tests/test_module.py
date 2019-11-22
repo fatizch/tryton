@@ -8,8 +8,9 @@ from stdnum import iban
 
 import trytond.tests.test_tryton
 from trytond.exceptions import UserError
+from trytond.pool import Pool
 
-from trytond.modules.coog_core import test_framework
+from trytond.modules.coog_core import test_framework, utils
 
 
 class ModuleTestCase(test_framework.CoogTestCase):
@@ -166,6 +167,35 @@ class ModuleTestCase(test_framework.CoogTestCase):
                     'type': 'unknown_bic',
                     'data': {'bic': 'BAD_BIC'},
                     }])
+
+    def test_swift_import(self):
+        fr = self.Country(name="France", code='FR')
+        fr.save()
+        ma = self.Country(name="Maroc", code='MA')
+        ma.save()
+        BankWizard = Pool().get('bank_cog.data.set.wizard', type='wizard')
+        bank_wiz_id, _, _ = BankWizard.create()
+        bank_wiz = BankWizard(bank_wiz_id)
+        # Create banks
+        bank_wiz._execute('configuration')
+        bank_wiz.configuration.file_format = 'swift'
+        bank_wiz.configuration.use_default = False
+        test_file_path = utils.get_module_path(
+            'bank_cog') + '/tests/test_files/%s'
+        bank_wiz.configuration.resource = open(test_file_path % 'swift.txt',
+            'rb').read()
+        bank_wiz.configuration.countries_to_import = [fr.id, ma.id]
+        bank_wiz._execute('set_')
+        self.assertEqual(len(self.Bank.search([('bic', 'in',
+            ('AAADFRP1XXX', 'AAAGFRP1XXX', 'AAAMFRP1XXX', 'ARABMAMC220',
+             'ARABMAMC221', 'ARABMAMC230'))])), 6)
+        # Update and create banks
+        bank_wiz.configuration.resource = open(
+            test_file_path % 'swift_update.txt', 'rb').read()
+        bank_wiz._execute('set_')
+        self.assertEqual(len(self.Bank.search([])), 8)
+        self.assertEqual(self.Bank.search([('bic', '=', 'AAADFRP1XXX')])[
+            0].party.name, '1818 GESTION')
 
 
 def suite():
