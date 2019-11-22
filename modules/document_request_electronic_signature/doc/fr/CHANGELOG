@@ -1,3 +1,4 @@
+* OTH#0000 Vérification que les pdfs sont conformes avant de les fusionner
 * OTH#0000 Positionnement de la date de réception lors du call back de la signature électronique
 * BUG#13387 Correctif sur la recherche des documents protégés lors du calcul des documents avec signature electronique
 * OTH#0000 Utilisation du bon type de document pour l'initialisation de la signature

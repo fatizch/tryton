@@ -2,11 +2,13 @@
 # this repository contains the full copyright notices and license terms.
 from collections import defaultdict
 from io import BytesIO
-from PyPDF2 import PdfFileMerger
+from PyPDF2 import PdfFileMerger, PdfFileReader, utils as PyPDF2utils
 
+from trytond.i18n import gettext
 from trytond.modules.coog_core import fields
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, Bool, Or
+from trytond.model.exceptions import ValidationError
 
 from trytond.modules.coog_core import utils, model
 
@@ -164,16 +166,25 @@ class DocumentRequestLine(metaclass=PoolMeta):
         attachments = []
         attachments_grouped = defaultdict(list)
         for request in [r for r in requests if r.document_desc]:
-            attachments_grouped[request.document_desc] = \
-                [request.attachment] if request.attachment else []
+            attachments_grouped[request.document_desc] = ([request.attachment]
+                if request.attachment and request.attachment.data else [])
 
         for request in [r for r in requests
                 if r.document_desc and r.document_desc.sub_documents
                 and not r.attachment]:
             for doc in [s.doc for s in request.document_desc.sub_documents]:
                 if len(attachments_grouped[doc]) == 1:
-                    attachments_grouped[request.document_desc].append(
-                        attachments_grouped[doc][0])
+                    attachment = attachments_grouped[doc][0]
+                    try:
+                        # Checking it is a real pdf file
+                        PdfFileReader(BytesIO(attachment.data))
+                        attachments_grouped[request.document_desc].append(
+                            attachment)
+                    except PyPDF2utils.PdfReadError:
+                        raise ValidationError(gettext(
+                                'document_request_electronic_signature.'
+                                'msg_pdf_not_valid',
+                                name=attachment.name))
 
             if len(attachments_grouped[request.document_desc]) != len(
                     request.document_desc.sub_documents):

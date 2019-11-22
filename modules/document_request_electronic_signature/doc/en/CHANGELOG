@@ -1,3 +1,4 @@
+* OTH#0000 Check pdf are real pdf documents before merging
 * OTH#0000 Set reception date when receiving electronic signature callback
 * BUG#13387 Fix protected documents research when calculating required documents with electronic signature
 * OTH#0000 Use good document desc to initiate signature process

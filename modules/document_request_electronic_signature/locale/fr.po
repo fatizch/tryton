@@ -167,3 +167,7 @@ msgstr "Finalisation du processus de signature"
 msgctxt "model:event.type,name:event_signature_failed"
 msgid "Signature Failed"
 msgstr "Echec du processus de signature"
+
+msgctxt "model:ir.message,text:msg_pdf_not_valid"
+msgid "File %(name)s is not a valid pdf file. Merge Failed."
+msgstr "Echec de la génération de la liasse car le fichier %(name)s n'est pas un ficher pdf valide"
