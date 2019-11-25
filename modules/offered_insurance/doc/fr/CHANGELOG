@@ -1,3 +1,5 @@
+* FEA#13170 API Description de produits, changer l'emplacement des options de descripteurs de risques
+
 Version 2.6 - 2019-10-11
 * OTH#00000 Ajout du code postal souscripteur dans les fonctions du moteur de règle
 * BUG#12120 Correctif sur la méthode du moteur de règle: option déja souscrite

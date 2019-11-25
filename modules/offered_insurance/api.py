@@ -4,7 +4,6 @@ from trytond.pool import PoolMeta, Pool
 
 from trytond.modules.api import DEFAULT_INPUT_SCHEMA
 from trytond.modules.coog_core.api import OBJECT_ID_SCHEMA, CODE_SCHEMA
-from trytond.modules.coog_core.api import OBJECT_ID_NULL_SCHEMA
 from trytond.modules.offered.api import CONTRACT_PARTY_SCHEMA
 
 
@@ -23,18 +22,18 @@ class APIProduct(metaclass=PoolMeta):
     @classmethod
     def _describe_product(cls, product):
         result = super()._describe_product(product)
-        result['item_descriptors'] = [
-            cls._describe_item_descriptor(x) for x in product.item_descriptors]
+
+        item_descriptors = []
+        for item_desc in product.item_descriptors:
+            description = cls._describe_item_descriptor(item_desc)
+            description['coverages'] = [cls._describe_coverage(x)
+                for x in product.coverages
+                if x.item_desc == item_desc]
+            item_descriptors.append(description)
+        result['item_descriptors'] = item_descriptors
         if product.packages:
             result['covered_packages'] = bool(
                 product.packages_defined_per_covered)
-        return result
-
-    @classmethod
-    def _describe_coverage(cls, coverage):
-        result = super()._describe_coverage(coverage)
-        result['item_desc'] = (coverage.item_desc.id
-            if coverage.item_desc else None)
         return result
 
     @classmethod
@@ -144,13 +143,6 @@ class APIProduct(metaclass=PoolMeta):
         return schema
 
     @classmethod
-    def _describe_coverage_schema(cls):
-        schema = super()._describe_coverage_schema()
-        schema['properties']['item_desc'] = OBJECT_ID_NULL_SCHEMA
-        schema['required'].append('item_desc')
-        return schema
-
-    @classmethod
     def _describe_item_descriptor_schema(cls):
         return {
             'type': 'object',
@@ -163,8 +155,14 @@ class APIProduct(metaclass=PoolMeta):
                 'party': {
                     'oneOf': [CONTRACT_PARTY_SCHEMA, DEFAULT_INPUT_SCHEMA],
                     },
+                'coverages': {
+                    'type': 'array',
+                    'additionalItems': False,
+                    'items': cls._describe_coverage_schema(),
+                    },
                 },
-            'required': ['id', 'code', 'name', 'extra_data', 'party'],
+            'required': ['id', 'code', 'name', 'extra_data', 'coverages',
+                'party'],
             }
 
     @classmethod
@@ -178,6 +176,7 @@ class APIProduct(metaclass=PoolMeta):
                         'code': 'item_desc_1',
                         'name': 'Item Descriptor 1',
                         'extra_data': [],
+                        'coverages': [],
                         'party': {
                             'model': 'party',
                             'domains': {
@@ -191,8 +190,6 @@ class APIProduct(metaclass=PoolMeta):
                                     }],
                                 }
                             }
-                        },
+                        }
                     ]
-                for coverage in description['coverages']:
-                    coverage['item_desc'] = 1
         return examples

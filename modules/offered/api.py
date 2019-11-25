@@ -471,7 +471,8 @@ class APIProduct(APIMixin):
             'extra_data': ApiCore._extra_data_structure(
                 product.extra_data_def),
             'coverages': [
-                cls._describe_coverage(x) for x in product.coverages],
+                cls._describe_coverage(x) for x in product.coverages
+                if x.is_service],
             'packages': [cls._describe_package(x) for x in product.packages],
             'subscriber': cls._describe_subscriber(product),
             }
