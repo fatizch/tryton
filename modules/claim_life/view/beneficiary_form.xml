@@ -21,7 +21,7 @@ this repository contains the full copyright notices and license terms. -->
     <separator name="description" colspan="2"/>
     <field name="description" colspan="2"/>
     <separator name="document_request_lines" colspan="2"/>
-    <field name="document_request_lines" colspan="2"/>
+    <field name="document_request_lines" colspan="2" mode="list-form"/>
     <field name="identified" invisible="1"/>
     <field name="ignore_share" invisible="1"/>
 </form>

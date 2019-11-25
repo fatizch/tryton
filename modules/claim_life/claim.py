@@ -677,12 +677,14 @@ class ClaimBeneficiary(model.CoogSQL, model.CoogView,
         DocumentRequestLine = Pool().get('document.request.line')
         documents = []
         for descriptor in self.service.benefit.beneficiary_documents:
-            documents.append(DocumentRequestLine(
+            new_line = DocumentRequestLine(
                     document_desc=descriptor,
                     for_object=self,
                     claim=self.service.claim,
                     blocking=True,
-                    ))
+                    )
+            new_line.on_change_document_desc()
+            documents.append(new_line)
         self.document_request_lines = documents
 
     def get_rec_name(self, name):
