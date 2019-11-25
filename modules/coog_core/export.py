@@ -575,7 +575,8 @@ class ExportImportMixin(Historizable):
         for fname in self._export_binary_fields:
             val = getattr(self, fname, None)
             if not configuration and val or fname in new_values:
-                new_values[fname] = base64.b64encode(val) if val else val
+                new_values[fname] = base64.b64encode(val).decode(
+                    'utf8') if val else val
 
 
 class FileSelector(ModelView):

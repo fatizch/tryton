@@ -1,3 +1,4 @@
+* BUG#13491 Correction de l'export json des données binaires
 * FEA#13062 Ajout d'un cache intelligent sur les objets de configuration
 * BUG#12910 Correction d'un cas à la marge sur le calcul des montants d'échéance
 

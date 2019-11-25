@@ -1,3 +1,4 @@
+* BUG#13491 Fix json export of binary data
 * FEA#13062 Add auto-cache for configuration objects
 * BUG#12910 Fix an edge case when computing prorated amounts
 
