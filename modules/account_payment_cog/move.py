@@ -288,6 +288,7 @@ class MoveLine(metaclass=PoolMeta):
     def init_payments(cls, lines, journal, ignore_unpaid_lines=False):
         if not lines:
             return []
+        lines_with_outstanding = []
         payments = []
         lines, outstanding = cls.calculate_amount(lines, ignore_unpaid_lines)
         if not lines:
@@ -298,13 +299,21 @@ class MoveLine(metaclass=PoolMeta):
                 continue
             if outstanding >= line.payment_amount:
                 outstanding -= line.payment_amount
+                lines_with_outstanding.append(line)
                 continue
             amount = line.payment_amount - outstanding
             outstanding = 0
             if amount:
                 payments.append(line.new_payment(journal, cls.get_kind(lines),
                     amount))
+        to_update = cls.update_lines_when_overpaid(lines_with_outstanding)
+        cls.save(to_update)
         return payments
+
+    @classmethod
+    def update_lines_when_overpaid(cls, lines):
+        # Defined here to ease override
+        return []
 
     def get_payment_journal(self):
         pool = Pool()

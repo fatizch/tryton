@@ -1,3 +1,4 @@
+* BUG#13398 Mettre à jour correctement la date de paiement des lignes de paiement en cas de trop perçu
 * FEA#11618 Notifie l'évènement d'accusé réception d'un groupe de paiement
 
 Version 2.6 - 2019-10-11

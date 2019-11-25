@@ -1,3 +1,4 @@
+* BUG#13398 Correctly update move line payment date when there is an outstanding amount
 * FEA#11618 Notify payment group acknowledged event
 
 Version 2.6 - 2019-10-11

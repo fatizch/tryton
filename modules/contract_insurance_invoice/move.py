@@ -182,6 +182,16 @@ WHERE
                 line.contract = self.contract
         return split_move
 
+    @classmethod
+    def update_lines_when_overpaid(cls, lines):
+        to_update = set(super(MoveLine, cls).update_lines_when_overpaid(lines))
+        for line in lines:
+            if (line.move.origin and
+                    line.move.origin.__name__ == 'account.invoice'):
+                line.move.origin.update_move_line_from_billing_information(line)
+                to_update.add(line)
+        return list(to_update)
+
 
 class ReconcileShow(metaclass=PoolMeta):
     __name__ = 'account.reconcile.show'
