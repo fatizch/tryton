@@ -1334,6 +1334,7 @@ class TerminateContract(EndorsementWizardStepMixin):
             model_name)
         if model_name == 'contract':
             methods -= {'calculate_activation_dates'}
+            methods -= {'check_eligibility'}
             methods.add('plan_termination_or_terminate')
         return methods
 

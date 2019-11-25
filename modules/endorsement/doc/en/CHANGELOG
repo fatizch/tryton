@@ -1,3 +1,4 @@
+* BUG#13146 Removed check eligibility in TerminateContract
 * BUG#11342 Allow endorsements on contracts on hold
 * BUG#13039 Endorsement summary did not display records deleted by endorsement
 
