@@ -65,4 +65,5 @@ def register():
         api.APIContract,
         api.RuleEngine,
         api.APIRuleRuntime,
+        api.APIParty,
         module='contract_insurance', type_='model', depends=['api'])

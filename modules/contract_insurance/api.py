@@ -11,6 +11,7 @@ __all__ = [
     'APIContract',
     'RuleEngine',
     'APIRuleRuntime',
+    'APIParty',
     ]
 
 
@@ -470,3 +471,62 @@ class APIRuleRuntime(metaclass=PoolMeta):
     @check_args('api.contract', 'api.option')
     def _re_api_get_option_initial_start_date(cls, args):
         return cls._re_api_get_contract_initial_start_date(args)
+
+
+class APIParty(metaclass=PoolMeta):
+    __name__ = 'api.party'
+
+    @classmethod
+    def _create_party_examples(cls):
+        examples = super()._create_party_examples()
+        examples.append({
+                'input': {
+                    'parties': [{
+                        'ref': '4',
+                        'is_person': False,
+                        'name': 'My company',
+                        'contacts': [
+                            {
+                                'type': 'email',
+                                'value': '123@456.com',
+                                },
+                            ],
+                        'extra_data': {
+                            'house_floor': 2,
+                            },
+                        },
+                    ],
+                    },
+                'output': {
+                    'parties': [{'ref': '4', 'id': 4}],
+                    },
+                })
+        return examples
+
+    @classmethod
+    def _party_schema(cls):
+        schema = super()._party_schema()
+        for party_schema in schema['oneOf']:
+            party_schema['properties']['extra_data'] = \
+                EXTRA_DATA_VALUES_SCHEMA
+        return schema
+
+    @classmethod
+    def _party_convert(cls, data, options, parameters):
+        super()._party_convert(data, options, parameters)
+        pool = Pool()
+        APICore = pool.get('api.core')
+        data['extra_data'] = APICore._extra_data_convert(
+            data.get('extra_data', {}))
+
+    @classmethod
+    def _init_new_party(cls, data, options):
+        party = super()._init_new_party(data, options)
+        party.extra_data = data['extra_data']
+        return party
+
+    @classmethod
+    def _update_party(cls, party, data, options):
+        super()._update_party(party, data, options)
+        party.extra_data.update(data['extra_data'])
+        party.extra_data = dict(party.extra_data)

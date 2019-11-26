@@ -1,3 +1,5 @@
+* FEA#13370 Récupère les données complémentaires de tiers dans l'API de création de tiers
+
 Version 2.6 - 2019-10-11
 * FEA#12648 Permet de définir les données requises sur les tiers couverts pour l'activation du contrat.
 * BUG#12757 Correctif du crash lors de création des surprimes / exclusions
