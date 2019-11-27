@@ -76,11 +76,11 @@ mkdir conf
 # Create symlinks in virtualenv file
 ./coog/bin/coog init bin
 
-# Install python dependencies
-coog dep
-
 # Init default configuration
 coog init conf
+
+# Install python dependencies
+coog dep
 
 # Link modules
 coog repo link
