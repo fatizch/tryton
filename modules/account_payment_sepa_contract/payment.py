@@ -91,6 +91,10 @@ class Payment(metaclass=PoolMeta):
                 sepa_mandate = None
                 payment_date = None
                 journal = key[1]
+                contract = cls.get_contract_for_reject_invoice(payments_list)
+                payment_day = (contract.billing_information.direct_debit_day if
+                    contract else None) or payment.date.day
+
                 # reject_fee = cls.get_reject_fee(payments_list)
                 if cls.avoid_reject_fee_creation(reject_fee, journal,
                         payments_list):
@@ -100,7 +104,7 @@ class Payment(metaclass=PoolMeta):
                     sepa_mandate = payment.sepa_mandate
                     payment_date = \
                         payment.journal.get_next_possible_payment_date(
-                            payment.line, payment.date.day)
+                            payment.line, payment_day)
 
                 if 'present_again_after' in [action[0] for action in
                         journal.get_fail_actions(payments_list)]:
@@ -122,13 +126,13 @@ class Payment(metaclass=PoolMeta):
                             payment.line, present_again_day)
                         new_payment_date = \
                             payment.journal.get_next_possible_payment_date(
-                                payment.line, payment.date.day)
+                                payment.line, payment_day)
                         new_date = min(new_date, new_payment_date)
                         payment_date = new_date
                     else:
                         payment_date = \
                             payment.journal.get_next_possible_payment_date(
-                                payment.line, payment.date.day)
+                                payment.line, payment_day)
 
                 journal = config.reject_fee_journal
                 account = reject_fee.product.template.account_revenue_used
@@ -136,7 +140,6 @@ class Payment(metaclass=PoolMeta):
                 invoice = payment.create_fee_invoice(
                     reject_fee.amount, journal, account, name_for_billing,
                     sepa_mandate)
-                contract = cls.get_contract_for_reject_invoice(payments_list)
                 if contract is not None:
                     contract_invoice = ContractInvoice(
                         contract=contract, invoice=invoice, non_periodic=True)

@@ -3,7 +3,6 @@
 import datetime
 
 from trytond.pool import PoolMeta
-from trytond.transaction import Transaction
 from trytond.pyson import Eval
 
 from trytond.modules.coog_core import fields, utils

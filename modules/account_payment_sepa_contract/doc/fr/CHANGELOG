@@ -1,3 +1,5 @@
+* BUG#13529 Correction sur la date de paiement initialisée pour les quittances de frais de rejet
+
 Version 2.6 - 2019-10-11
 Version 2.4 - 2019-04-12
 * BUG#11068 Ne forcer le statut d'un paiement Sepa sans mandat à brouillon que lorsqu'il est à recevoir
@@ -20,7 +22,7 @@ Version 2.0 - 2018-04-13
 
 Version 1.14 - 2017-11-09
 * OTH#0000 Correction du scenario de test sur l'annulation de quittance
-* OTH#0000 Extraction de la vérification sur la création des frais de rejet pour permettre une surcharge 
+* OTH#0000 Extraction de la vérification sur la création des frais de rejet pour permettre une surcharge
 * BUG#7332 Réinitialisation des données de prélèvement lors d'un changement de souscripteur
 * FEA#7024 Ajout de courriers par defaut "Demande de mandat SEPA"
 * BUG#6505 Il est possible de mettre à jour le mandat SEPA d'une quittance à partir de l'assistant de modification des informations de prélèvement
