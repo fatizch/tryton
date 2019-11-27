@@ -13,7 +13,7 @@ from . import almerys
 def register():
     Pool.register(
         batch.AlmerysProtocolBatch,
-        batch.AlmerysReturnBatch,
+        batch.AlmerysFeedbackBatch,
         config.AlmerysConfig,
         config.ConfigurationNumberSequenceV3,
         config.ConfigurationProtocolVersion,

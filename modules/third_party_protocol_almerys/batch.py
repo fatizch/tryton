@@ -11,14 +11,14 @@ from stdnum import iban
 from trytond.pool import Pool
 from trytond.transaction import Transaction
 
-from trytond.modules.coog_core import batch
+from trytond.modules.coog_core import batch, utils
 from trytond.tools import grouped_slice
 
 from . import return_almerys_handler
 
 
 __all__ = [
-    'AlmerysReturnBatch',
+    'AlmerysFeedbackBatch',
     'AlmerysProtocolBatch',
     ]
 
@@ -613,8 +613,8 @@ class AlmerysProtocolBatch(batch.BatchRoot):
         TPPeriod.write(objects, {'status': 'sent'})
 
 
-class AlmerysReturnBatch(batch.BatchRootNoSelect):
-    'Return Almerys Batch'
+class AlmerysFeedbackBatch(batch.BatchRootNoSelect):
+    'Almerys Feeback Batch'
 
     __name__ = 'batch.almerys.feedback'
 
@@ -633,6 +633,7 @@ class AlmerysReturnBatch(batch.BatchRootNoSelect):
             with open(file_path, 'rb') as _file:
                 handler = cls.get_file_handler()
                 all_elements.extend(handler.handle_file(_file))
+        cls.archive_treated_files(files, archive_path, utils.today())
         return all_elements
 
     @classmethod

@@ -1,3 +1,4 @@
+* BUG#13523 Correction de la chaine de batcjh des retours Almerys et de son mécanisme d'archivage
 * OTH#00000 Support des codes erreur inconnus dans le batch de retour Almerys
 * OTH#00000 Correction du ssn et du perimetre service dans le batch
 

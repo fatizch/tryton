@@ -1,0 +1,19 @@
+#!/bin/bash
+# vim: set ft=sh:
+
+CHAIN_NAME=almerys_feedback
+
+CHAIN_PARAMETERS=('IN_PATH' 'ARCHIVE_PATH')
+CHAIN_REQUIRED=()
+
+chain_params "$@"
+chain_begin
+
+if [[ -n "$IN_PATH" ]] && [[ -n "$ARCHIVE_PATH" ]]; then
+	chain_step batch.almerys.feedback --in_path="$IN_PATH" --archive_path="$ARCHIVE_PATH"
+else
+	chain_step batch.almerys.feedback
+fi
+chain_wait batch.almerys.feedback || chain_end
+
+chain_end
