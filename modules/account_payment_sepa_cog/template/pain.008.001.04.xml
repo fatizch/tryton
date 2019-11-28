@@ -58,7 +58,7 @@ this repository contains the full copyright notices and license terms. -->
             <CreDtTm>${datetime.datetime.now().isoformat()}</CreDtTm>
             <!-- Authstn -->
             <NbOfTxs>${len(group.payments)}</NbOfTxs>
-            <CtrlSum>${sum(p.amount for p in group.payments)}</CtrlSum>
+            <CtrlSum>${group.amount}</CtrlSum>
             <!-- PmtTpInf -->
             <!-- ReqdColltnDt -->
             <InitgPty>
@@ -101,7 +101,7 @@ this repository contains the full copyright notices and license terms. -->
                         <MndtRltdInf py:with="mandate = payment.sepa_mandate">
                             <MndtId>${mandate.reference}</MndtId>
                             <DtOfSgntr>${mandate.signature_date.isoformat()}</DtOfSgntr>
-                            <py:if test="mandate.amendment_of and not any([x.state == 'succeeded' for x in mandate.payments])">
+                            <py:if test="mandate.amendment_of and not mandate.has_succeeded_payments">
                             <AmdmntInd>true</AmdmntInd>
                             <AmdmntInfDtls>
                                 <OrgnlDbtrAcct>

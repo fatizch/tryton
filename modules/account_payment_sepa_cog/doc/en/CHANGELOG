@@ -1,3 +1,4 @@
+* BUG#13573 Degraded performances for SEPA message generation in case of amendment
 * FEA#12943 Add constraint on mandate signature date
 
 Version 2.6 - 2019-10-11

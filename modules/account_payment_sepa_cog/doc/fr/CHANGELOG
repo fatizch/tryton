@@ -1,3 +1,4 @@
+* BUG#13573 Performance dégradée de la génération du message SEPA en cas d'amendement
 * FEA#12943 Ajout d'une contrainte sur la date de signature de mandat SEPA
 
 Version 2.6 - 2019-10-11

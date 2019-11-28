@@ -160,9 +160,15 @@ Create SEPA mandate (mandate = subcriber, mandate 2,3,4 =::
 
 subscriber2)::
 
+    >>> old_subscriber_account = Account()
+    >>> old_subscriber_account.bank = bank
+    >>> old_subscriber_account.owners.append(subscriber)
+    >>> old_subscriber_account.currency = currency
+    >>> old_subscriber_account.number = 'GB25NWBK60080600724890'
+    >>> old_subscriber_account.save()
     >>> subscriber_account = Account()
     >>> subscriber_account.bank = bank
-    >>> subscriber_account.owners.append(subscriber)
+    >>> subscriber_account.owners.append(Party(subscriber.id))
     >>> subscriber_account.currency = currency
     >>> subscriber_account.number = 'BE82068896274468'
     >>> subscriber_account.save()
@@ -185,12 +191,25 @@ subscriber2)::
     >>> subscriber2_account_3.number = 'PK36SCBL0000001123456702'
     >>> subscriber2_account_3.save()
     >>> Mandate = Model.get('account.payment.sepa.mandate')
+    >>> old_mandate = Mandate()
+    >>> old_mandate.company = company
+    >>> old_mandate.party = subscriber
+    >>> old_mandate.account_number = old_subscriber_account.numbers[0]
+    >>> old_mandate.identification = 'MANDATE'
+    >>> old_mandate.type = 'recurrent'
+    >>> old_mandate.signature_date = contract_start_date
+    >>> old_mandate.save()
+    >>> old_mandate.click('request')
+    >>> old_mandate.click('validate_mandate')
+    >>> Mandate = Model.get('account.payment.sepa.mandate')
     >>> mandate = Mandate()
     >>> mandate.company = company
     >>> mandate.party = subscriber
     >>> mandate.account_number = subscriber_account.numbers[0]
     >>> mandate.identification = 'MANDATE'
     >>> mandate.type = 'recurrent'
+    >>> mandate.amendment_of = old_mandate
+    >>> mandate.start_date = contract_start_date
     >>> mandate.signature_date = contract_start_date
     >>> mandate.save()
     >>> mandate.click('request')

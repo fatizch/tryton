@@ -13,7 +13,7 @@ this repository contains the full copyright notices and license terms. -->
             <CreDtTm>${datetime.datetime.now().replace(microsecond=0).isoformat()}</CreDtTm>
             <!-- Authstn -->
             <NbOfTxs>${sum(len(payments) for _, payments in group.sepa_payments)}</NbOfTxs>
-            <CtrlSum>${sum(p.amount for p in group.payments)}</CtrlSum>
+            <CtrlSum>${group.amount}</CtrlSum>
             <!-- PmtTpInf -->
             <!-- ReqdColltnDt -->
             <InitgPty>

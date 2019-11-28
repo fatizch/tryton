@@ -87,6 +87,9 @@ class Mandate(model.CoogSQL, model.CoogView):
     amended_by = fields.Function(
         fields.Many2One('account.payment.sepa.mandate', 'Amended By'),
         'getter_amended_by', searcher='search_amended_by')
+    has_succeeded_payments = fields.Function(
+        fields.Boolean('Has Succeeded Payments'),
+        getter='getter_has_succeeded_payments')
 
     @classmethod
     def __setup__(cls):
@@ -144,6 +147,22 @@ class Mandate(model.CoogSQL, model.CoogView):
 
             result.update(dict(cursor.fetchall()))
 
+        return result
+
+    @classmethod
+    def getter_has_succeeded_payments(cls, instances, name):
+        pool = Pool()
+        payment = pool.get('account.payment').__table__()
+
+        result = {x.id: False for x in instances}
+        cursor = Transaction().connection.cursor()
+        query = payment.select(payment.sepa_mandate,
+                distinct_on=payment.sepa_mandate,
+                where=((payment.state == 'succeeded') & (
+                    payment.sepa_mandate.in_(list(result.keys()))))
+            )
+        cursor.execute(*query)
+        result.update({x[0]: True for x in cursor.fetchall()})
         return result
 
     @classmethod
