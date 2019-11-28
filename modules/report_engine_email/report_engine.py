@@ -97,7 +97,11 @@ class ReportGenerate(metaclass=PoolMeta):
                 fake_event_action.report_templates = [tmpl]
                 valid_objects = fake_event_action.filter_objects_for_report(
                     cur_objects, tmpl)
-                generated_reports = tmpl._generate_reports(valid_objects, {})
+                generated_reports = tmpl._generate_reports(valid_objects, {
+                        'origin': report_context.get('origin', None),
+                        'functionnal_date':
+                        report_context.get('functionnal_date', None),
+                        })
                 if tmpl.format_for_internal_edm:
                     tmpl.save_reports_in_edm(generated_reports)
                 attachments += generated_reports

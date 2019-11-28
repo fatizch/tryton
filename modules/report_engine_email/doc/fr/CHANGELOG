@@ -1,3 +1,5 @@
+* BUG#13588 Correctif sur le context d'impression passé aux pièces jointes des emails
+
 Version 2.6 - 2019-10-11
 * BUG#12216 Ne pas afficher une message d'avertissement lors de l'envoi d'un mail avec images mais sans pièces jointes
 * BUG#11811 Correction de la traduction en doublon de generated_code
