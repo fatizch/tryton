@@ -1,3 +1,4 @@
+* OTH#00000 Correction d'une régression suite ) #13206
 * FEA#13206 Intégration du référentiel des banques en utilisant le format "Swift"
 * OTH#00000 Amélioration des performances du chargement des banques
 

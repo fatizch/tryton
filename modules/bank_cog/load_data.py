@@ -224,8 +224,11 @@ class BankDataSetWizard(Wizard):
         for bank_row in self.read_resource_file():
             bic = ('%sXXX' % bank_row['bic']
                    if len(bank_row['bic']) == 8 else bank_row['bic'])
-            country = Country.get_instance_from_code(
-                bank_row['address_country'].upper())
+            if bank_row['address_country']:
+                country = Country.get_instance_from_code(
+                    bank_row['address_country'].upper())
+            else:
+                country = None
             if bic in existing_banks:
                 if not self.configuration.is_update:
                     continue
