@@ -147,6 +147,7 @@ class ExtraData(model.CoogDictSchema, model.ConfigurationMixin, model.CoogView,
     def create(cls, vlist):
         created = super(ExtraData, cls).create(vlist)
         cls._extra_data_cache.clear()
+        cls._extra_data_structure_cache.clear()
         cls._translation_cache.clear()
         return created
 
@@ -154,12 +155,14 @@ class ExtraData(model.CoogDictSchema, model.ConfigurationMixin, model.CoogView,
     def delete(cls, ids):
         super(ExtraData, cls).delete(ids)
         cls._extra_data_cache.clear()
+        cls._extra_data_structure_cache.clear()
         cls._translation_cache.clear()
 
     @classmethod
     def write(cls, *args):
         super(ExtraData, cls).write(*args)
         cls._extra_data_cache.clear()
+        cls._extra_data_structure_cache.clear()
         cls._translation_cache.clear()
 
     @classmethod

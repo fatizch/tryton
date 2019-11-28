@@ -1,3 +1,4 @@
+* OTH#00000 Clear extra data structure cache on extra data modification
 * OTH#0000 Use sequence order to sort extra data in menu entry point
 * FEA#13077 Add extra data group mixin
 * FEA#13073 Add distinction between field required for quotation and fields required for subscription in the Product Description API
