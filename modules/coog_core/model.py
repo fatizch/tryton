@@ -461,7 +461,10 @@ class FunctionalErrorMixIn(object):
     @classmethod
     def append_functional_error(cls, exception, fail=True):
         error_manager = ServerContext().get('error_manager', None)
+
         if error_manager is None:
+            if isinstance(exception, str):
+                raise UserError(exception)
             raise exception
         error_manager.add_error(exception, fail)
 
