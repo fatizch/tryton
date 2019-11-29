@@ -1,3 +1,5 @@
+* OTH#00000 Résolution des tests journaliers
+
 Version 2.6 - 2019-10-11
 * FEA#12708 Ajout d'une règle de montant de couverture permettant de paramétrer une liste de montant de couverture
 * FEA#12260 Gestion des montants de couverture dans les APIs de souscription

@@ -1,3 +1,5 @@
+* OTH#00000 Update contract_coverage_amount tests following
+
 Version 2.6 - 2019-10-11
 * FEA#12708 Add default coverage amount rule based on predefined list
 * FEA#12260 Manage coverage amount in subscription APIs

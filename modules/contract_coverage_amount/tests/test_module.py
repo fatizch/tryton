@@ -107,47 +107,49 @@ return coverage_amount() < 1000
             [{
                     'code': 'AAA',
                     'coverages': [
-                        {
-                            'code': 'ALP',
-                            'description': '',
-                            'extra_data': [],
-                            'id': alpha.id,
-                            'item_desc': item_desc.id,
-                            'mandatory': True,
-                            'name': 'Alpha Coverage',
-                            'coverage_amount': {
-                                'label': 'Coverage Amount',
-                                'name': 'coverage_amount',
-                                'required': True,
-                                'sequence': 0,
-                                'type': 'amount',
-                                'help': '',
-                                },
-                            },
-                        {
-                            'code': 'BET',
-                            'description': '',
-                            'extra_data': [],
-                            'id': beta.id,
-                            'item_desc': item_desc.id,
-                            'mandatory': True,
-                            'name': 'Beta Coverage',
-                            'coverage_amount': {
-                                'enum': ['100', '200', '300', '400', '500'],
-                                'name': 'coverage_amount',
-                                'required': True,
-                                'label': 'Coverage Amount',
-                                'sequence': 0,
-                                'help': '',
-                                'type': 'amount'
-                                },
-                            }],
+                        ],
                     'description': '',
                     'extra_data': [],
                     'id': product.id,
                     'item_descriptors': [
                         {
                             'code': 'person',
+                            'coverages': [
+                                {
+                                    'code': 'ALP',
+                                    'description': '',
+                                    'extra_data': [],
+                                    'id': alpha.id,
+                                    'mandatory': True,
+                                    'name': 'Alpha Coverage',
+                                    'coverage_amount': {
+                                        'label': 'Coverage Amount',
+                                        'name': 'coverage_amount',
+                                        'required': True,
+                                        'sequence': 0,
+                                        'type': 'amount',
+                                        'help': '',
+                                        },
+                                    },
+                                {
+                                    'code': 'BET',
+                                    'description': '',
+                                    'extra_data': [],
+                                    'id': beta.id,
+                                    'mandatory': True,
+                                    'name': 'Beta Coverage',
+                                    'coverage_amount': {
+                                        'enum': ['100', '200', '300', '400',
+                                            '500'],
+                                        'name': 'coverage_amount',
+                                        'required': True,
+                                        'label': 'Coverage Amount',
+                                        'sequence': 0,
+                                        'help': '',
+                                        'type': 'amount'
+                                        },
+                                    }
+                                ],
                             'extra_data': [],
                             'party': {
                                 'model': 'party',
