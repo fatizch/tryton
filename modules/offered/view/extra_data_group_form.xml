@@ -15,7 +15,7 @@ this repository contains the full copyright notices and license terms. -->
             <field name="extra_data"/>
         </page>
         <page id="sub_groups" string="Sub-groups">
-            <field name="sub_groups"/>
+            <field name="extra_data_groups"/>
         </page>
     </notebook>
 </form>

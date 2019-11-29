@@ -545,7 +545,18 @@ class ExtraDataDefTable(model.ConfigurationMixin):
         Pool().get('extra_data')._extra_data_structure_cache.clear()
 
 
-class ExtraDataGroup(model.CoogSQL, model.CoogView):
+class HasExtraDataDef(Model):
+    ''' Allows to recognize models inheriting from with_extra_data_def '''
+    pass
+
+
+class WithExtraDataGroups(HasExtraDataDef):
+    ''' Registered if web_configuration module is loaded '''
+    extra_data_groups = fields.One2Many('extra_data.group', 'parent_model',
+        'Extra Data Groups', delete_missing=True)
+
+
+class ExtraDataGroup(model.CoogSQL, model.CoogView, WithExtraDataGroups):
     'Extra Data Group'
 
     __name__ = 'extra_data.group'
@@ -554,11 +565,6 @@ class ExtraDataGroup(model.CoogSQL, model.CoogView):
         selection='models_with_extra_data_get',
         readonly=True, required=True, select=True,
         help='Model with extra data')
-    parent_group = fields.Many2One('extra_data.group', 'Parent Group',
-        ondelete='CASCADE', select=True)
-    sub_groups = fields.One2Many('extra_data.group', 'parent_group',
-        'Sub-groups', delete_missing=True, target_not_required=True,
-        help='Children groups of extra data')
     title = fields.Char('Title', required=True)
     description = fields.Char('Description')
     tooltip = fields.Char('Tooltip')
@@ -576,11 +582,9 @@ class ExtraDataGroup(model.CoogSQL, model.CoogView):
     def models_with_extra_data_get():
         pool = Pool()
         Model = pool.get('ir.model')
-        model_names = []
-        for _, klass in pool.iterobject():
-            if not issubclass(klass, HasExtraDataDef):
-                continue
-            model_names.append(klass.__name__)
+        model_names = [klass.__name__ for _, klass in pool.iterobject()
+            if issubclass(klass, HasExtraDataDef)
+            or issubclass(klass, ExtraDataGroup)]
         return [(m.model, m.name) for m in Model.search([('model', 'in',
                         model_names)])]
 
@@ -594,17 +598,6 @@ class ExtraDataGroupExtraDataRelation(model.CoogSQL):
         ondelete='CASCADE', select=True)
     group = fields.Many2One('extra_data.group', 'Extra Data Group',
         required=True, ondelete='RESTRICT', select=True)
-
-
-class HasExtraDataDef(Model):
-    ''' Allows to recognize models inheriting from with_extra_data_def '''
-    pass
-
-
-class WithExtraDataGroups(HasExtraDataDef):
-    ''' Registered if web_configuration module is loaded '''
-    extra_data_groups = fields.One2Many('extra_data.group', 'parent_model',
-        'Extra Data Groups', delete_missing=True)
 
 
 def with_extra_data_def(reverse_model_name, reverse_field_name, kind,

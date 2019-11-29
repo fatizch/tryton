@@ -404,7 +404,8 @@ class APICoreWebConfiguration(metaclass=PoolMeta):
                 'title': x.title,
                 'description': x.description,
                 'tooltip': x.tooltip,
-                'groups': cls._extra_data_group_structure(x.sub_groups),
+                'sequence': x.sequence_order,
+                'groups': cls._extra_data_group_structure(x.extra_data_groups),
                 } for x in extra_data_group_list]
 
     @classmethod
@@ -419,6 +420,7 @@ class APICoreWebConfiguration(metaclass=PoolMeta):
                     'title': {'type': 'string'},
                     'description': {'type': 'string'},
                     'tooltip': {'type': 'string'},
+                    'sequence': {'type': 'integer'},
                     'groups': {
                         'type': 'array',
                         'items': {},

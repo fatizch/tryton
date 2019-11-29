@@ -42,6 +42,10 @@ msgctxt "field:extra_data,has_default_value:"
 msgid "Default Value"
 msgstr "Valeur par Défaut"
 
+msgctxt "field:extra_data,help:"
+msgid "Help"
+msgstr "Aide"
+
 msgctxt "field:extra_data,id:"
 msgid "ID"
 msgstr "ID"
@@ -182,13 +186,13 @@ msgctxt "field:extra_data.group,extra_data:"
 msgid "Extra Data"
 msgstr "Données complémentaires"
 
+msgctxt "field:extra_data.group,extra_data_groups:"
+msgid "Extra Data Groups"
+msgstr "Groupes de Données Complémentaires"
+
 msgctxt "field:extra_data.group,id:"
 msgid "ID"
 msgstr "Identifiant"
-
-msgctxt "field:extra_data.group,parent_group:"
-msgid "Parent Group"
-msgstr "Groupe parent"
 
 msgctxt "field:extra_data.group,parent_model:"
 msgid "Parent Model"
@@ -201,10 +205,6 @@ msgstr "Nom de l'enregistrement"
 msgctxt "field:extra_data.group,sequence_order:"
 msgid "Sequence Order"
 msgstr "Ordre de séquence"
-
-msgctxt "field:extra_data.group,sub_groups:"
-msgid "Sub-groups"
-msgstr "Sous-groupes"
 
 msgctxt "field:extra_data.group,title:"
 msgid "Title"
@@ -1040,10 +1040,6 @@ msgstr ""
 msgctxt "help:extra_data.group,parent_model:"
 msgid "Model with extra data"
 msgstr "Modèle avec des données complémentaires"
-
-msgctxt "help:extra_data.group,sub_groups:"
-msgid "Children groups of extra data"
-msgstr "Groupes de données complémentaires enfants"
 
 msgctxt "help:offered.configuration,use_default_style:"
 msgid ""
