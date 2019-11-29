@@ -1,3 +1,5 @@
+* FEA#13490 Trigger Paybox payment at contract activation even if billign mode is not paybox
+
 Version 2.6 - 2019-10-11
 * OTH#00000 Fix pay_with_paybox method
 * FEA#12377 Add new method to call in configuration which pays contract invoices through Paybox

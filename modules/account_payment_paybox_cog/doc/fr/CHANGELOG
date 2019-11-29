@@ -1,3 +1,5 @@
+* FEA#13490 Déclencher un paiement paybox à l'activation du contrat même si le mode de quittancement n'est pas paybox
+
 Version 2.6 - 2019-10-11
 * OTH#00000 Corriger la méthode pay_with_paybox
 * FEA#12377 Ajout d'une méthode à exploiter dans la configuration afin de payer les quittances d'un contrat via Paybox

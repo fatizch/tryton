@@ -6,6 +6,7 @@ from trytond.exceptions import UserError
 from trytond.i18n import gettext
 
 from trytond.pool import PoolMeta, Pool
+from trytond.transaction import Transaction
 
 __all__ = [
     'Contract',
@@ -15,8 +16,10 @@ __all__ = [
 class Contract(metaclass=PoolMeta):
     __name__ = 'contract'
 
-    def pay_with_paybox(self, nb_invoices=0, nb_lines_to_pay=1):
-        if self.billing_information.process_method != 'paybox':
+    def pay_with_paybox(self, nb_invoices=0, nb_lines_to_pay=1,
+            force_payment=False):
+        if (self.billing_information.process_method != 'paybox' and not
+                force_payment):
             return
         if nb_invoices < 0:
             self.append_functional_error(UserError(gettext(
@@ -44,7 +47,9 @@ class Contract(metaclass=PoolMeta):
             key=lambda x: x.maturity_date)
         lines_to_pay = [l for l in invoices_lines_to_pay[0:nb_lines_to_pay]
             if not l.reconciliation]
-        created_payments = MoveLine.create_payments(lines_to_pay)
+        with Transaction().set_context(
+                forced_payment_journal=self.product.paybox_payment_journal.id):
+            created_payments = MoveLine.create_payments(lines_to_pay)
         if not created_payments:
             return
         payment_groups = []

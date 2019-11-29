@@ -19,6 +19,11 @@ class Configuration(metaclass=PoolMeta):
         help='Default Paybox payment journal')
 
     def get_payment_journal(self, line):
+        PaymentJournal = Pool().get('account.payment.journal')
+        forced_journal = Transaction().context.get('forced_payment_journal',
+            None)
+        if forced_journal:
+            return PaymentJournal(forced_journal)
         contract_revision_date = getattr(line, 'payment_date', None) \
             or line.maturity_date or utils.today()
         AccountConfiguration = Pool().get('account.configuration')
