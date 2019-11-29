@@ -642,6 +642,11 @@ msgctxt "field:contract.option.extra_premium,calculation_kind:"
 msgid "Calculation Kind"
 msgstr "Type de calcul"
 
+
+msgctxt "field:contract.option.extra_premium,comment:"
+msgid "Comment"
+msgstr "Commentaire"
+
 msgctxt "field:contract.option.extra_premium,contract_status:"
 msgid "Contract Status"
 msgstr "Statut du contrat"

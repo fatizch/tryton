@@ -286,11 +286,11 @@ class ContractUnderwritingOption(model.CoogSQL, model.CoogView,
                 readonly=True, states={'invisible': ~Eval('covered')}),
             'get_covered')
     extra_premiums = fields.Function(
-        fields.Char('Extra Premiums',
+        fields.Text('Extra Premiums',
             states={'invisible': ~Eval('extra_premiums')}),
         'on_change_with_extra_premiums')
     exclusions = fields.Function(
-        fields.Char('Exclusions',
+        fields.Text('Exclusions',
             states={'invisible': ~Eval('exclusions')}),
         'on_change_with_exclusions')
 
@@ -362,13 +362,13 @@ class ContractUnderwritingOption(model.CoogSQL, model.CoogView,
     def on_change_with_extra_premiums(self, name=None):
         if not self.option:
             return ''
-        return ', '.join(x.rec_name for x in self.option.extra_premiums)
+        return '\n'.join(x.get_extract() for x in self.option.extra_premiums)
 
     @fields.depends('option')
     def on_change_with_exclusions(self, name=None):
         if not self.option:
             return ''
-        return ', '.join(x.rec_name for x in self.option.exclusions)
+        return '\n'.join(x.rec_name for x in self.option.exclusions)
 
 
 class Contract(metaclass=PoolMeta):

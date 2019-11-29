@@ -2144,6 +2144,8 @@ class ExtraPremium(model.CoogSQL, model.CoogView, ModelCurrency):
     motive = fields.Many2One('extra_premium.kind', 'Motive',
         ondelete='RESTRICT', required=True, states=_CONTRACT_STATUS_STATES,
         depends=_CONTRACT_STATUS_DEPENDS)
+    comment = fields.Text('Comment', states=_CONTRACT_STATUS_STATES,
+        depends=_CONTRACT_STATUS_DEPENDS)
     rate = fields.Numeric('Rate on Premium', states={
             'invisible': Eval('calculation_kind', '') != 'rate',
             'required': Eval('calculation_kind', '') == 'rate',
@@ -2281,7 +2283,7 @@ class ExtraPremium(model.CoogSQL, model.CoogView, ModelCurrency):
     def on_change_with_max_rate(self, name=None):
         return self.motive.max_rate if self.motive else None
 
-    @fields.depends('option', 'motive', 'value_as_string')
+    @fields.depends('option', 'motive', 'value_as_string', 'comment')
     def on_change_with_rec_name(self, name=None):
         return self.get_rec_name(name)
 
@@ -2299,9 +2301,14 @@ class ExtraPremium(model.CoogSQL, model.CoogView, ModelCurrency):
     def get_possible_extra_premiums_kind():
         return list(POSSIBLE_EXTRA_PREMIUM_RULES)
 
+    def get_extract(self):
+        fields = [self.value_as_string,
+            self.motive.name if self.motive else None, self.comment]
+        return ' '.join(f for f in fields if f)
+
     def get_rec_name(self, name):
-        return '%s %s %s' % (self.option.rec_name if self.option else '',
-            self.value_as_string, self.motive.name if self.motive else '')
+        return '%s %s' % (self.option.rec_name if self.option else '',
+            self.get_extract())
 
     def get_value_as_string(self, name):
         if self.calculation_kind == 'flat' and self.flat_amount:
