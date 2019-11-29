@@ -170,4 +170,10 @@ msgstr "Echec du processus de signature"
 
 msgctxt "model:ir.message,text:msg_pdf_not_valid"
 msgid "File %(name)s is not a valid pdf file. Merge Failed."
-msgstr "Echec de la génération de la liasse car le fichier %(name)s n'est pas un ficher pdf valide"
+msgstr ""
+"Echec de la génération de la liasse car le fichier %(name)s n'est pas un "
+"ficher pdf valide"
+
+msgctxt "view:document.description:"
+msgid "Electronic Signature"
+msgstr "Signature électronique"

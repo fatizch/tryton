@@ -30,6 +30,54 @@ msgctxt "field:contract.covered_element,document_token:"
 msgid "Document Token"
 msgstr "Jeton de document"
 
+msgctxt "field:document.description,products:"
+msgid "Product Filter"
+msgstr "Filtre produit"
+
+msgctxt "field:document.description,products_name:"
+msgid "Products"
+msgstr "Produits"
+
+msgctxt "field:document.description-product,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:document.description-product,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:document.description-product,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:document.description-product,document_desc:"
+msgid "Document Description"
+msgstr "Type de document"
+
+msgctxt "field:document.description-product,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:document.description-product,product:"
+msgid "Product"
+msgstr "Produit"
+
+msgctxt "field:document.description-product,rec_name:"
+msgid "Record Name"
+msgstr "Nom de l'enregistrement"
+
+msgctxt "field:document.description-product,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:document.description-product,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:document.description-product,xml_id:"
+msgid "XML Id"
+msgstr "XML Id"
+
 msgctxt "field:document.reception,contract:"
 msgid "Contract"
 msgstr "Contrat"
@@ -170,6 +218,14 @@ msgstr ""
 "Ce jeton permet de retrouver les demandes de documents liées au porteur du "
 "jeton."
 
+msgctxt "help:document.description,products:"
+msgid ""
+"Used to filter document desc per product on request line for a contract. If "
+"not set will be available for all products"
+msgstr ""
+"Utilisé pour filtrer sur le produit du contrat le type de document associé à"
+" une demande de document. Si non renseigné sera disponible pour tout produit"
+
 msgctxt "help:document.request.line,details:"
 msgid "Add details about the received document"
 msgstr "Permet d'ajouter des précisions sur le document reçu"
@@ -198,6 +254,10 @@ msgid ""
 msgstr ""
 "Définit quels documents sont demandés et requis lors de la souscription du "
 "contrat"
+
+msgctxt "model:document.description-product,name:"
+msgid "Document Desc To Product Relation"
+msgstr "Relation entre le type de document et le produit"
 
 msgctxt "model:document.rule,name:"
 msgid "Document Managing Rule"

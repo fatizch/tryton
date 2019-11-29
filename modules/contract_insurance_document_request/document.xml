@@ -19,5 +19,15 @@ this repository contains the full copyright notices and license terms. -->
             <field name="inherit" ref="document_request.document_request_line_view_list"/>
             <field name="name">document_request_line_list</field>
         </record>
+        <record model="ir.ui.view" id="document_desc_view_form">
+            <field name="model">document.description</field>
+            <field name="inherit" ref="document.document_desc_form"/>
+            <field name="name">document_desc_form</field>
+        </record>
+        <record model="ir.ui.view" id="document_desc_view_list">
+            <field name="model">document.description</field>
+            <field name="inherit" ref="document.document_desc_tree"/>
+            <field name="name">document_desc_list</field>
+        </record>
     </data>
 </tryton>

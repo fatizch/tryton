@@ -46,6 +46,14 @@ class DocumentDescription(metaclass=PoolMeta):
         states={'invisible': ~Eval('digital_signature_required')},
         depends=['digital_signature_required'])
 
+    @classmethod
+    def view_attributes(cls):
+        return super(DocumentDescription, cls).view_attributes() + [(
+                '//page[@id="electronic_signature"]',
+                'states',
+                {'invisible': ~Eval('digital_signature_required')}
+                )]
+
     @fields.depends('digital_signature_required',
         'reception_requires_attachment', 'signature_configuration',
         'signature_credential', 'sub_documents')

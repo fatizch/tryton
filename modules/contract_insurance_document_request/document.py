@@ -9,12 +9,14 @@ from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
 from trytond.pyson import Eval
 
-from trytond.modules.coog_core import fields
+from trytond.modules.coog_core import fields, model
 
 
 __all__ = [
     'DocumentRequest',
     'DocumentRequestLine',
+    'DocumentDescription',
+    'DocumentDescriptionProduct',
     'DocumentReception',
     'ReceiveDocument',
     ]
@@ -25,6 +27,9 @@ class DocumentRequestLine(metaclass=PoolMeta):
 
     contract = fields.Many2One('contract', 'Contract',
         ondelete='CASCADE', select=True)
+    product = fields.Function(
+        fields.Many2One('offered.product', 'Product'),
+        'on_change_with_product')
 
     @classmethod
     def __setup__(cls):
@@ -33,6 +38,13 @@ class DocumentRequestLine(metaclass=PoolMeta):
         assert or_clause[0] == 'OR'
         or_clause.append(('resource.id', '=', Eval('contract'), 'contract'))
         cls.attachment.depends.append('contract')
+
+        cls.document_desc.domain.append([
+                'OR',
+                [('products', '=', None)],
+                [('products', '=', Eval('product'))]
+                ])
+        cls.document_desc.depends += ['product']
 
     def get_attachment_possible_resources(self):
         res = super(DocumentRequestLine,
@@ -77,6 +89,10 @@ class DocumentRequestLine(metaclass=PoolMeta):
         if self.for_object is None:
             self.for_object = self.contract
 
+    @fields.depends('contract')
+    def on_change_with_product(self, name=None):
+        return self.contract.product.id if self.contract else None
+
     @classmethod
     def for_object_models(cls):
         return super(DocumentRequestLine, cls).for_object_models() + \
@@ -115,6 +131,32 @@ class DocumentRequest(metaclass=PoolMeta):
         super(DocumentRequest, cls).__setup__()
         cls.needed_by.selection.append(
             ('contract', 'Contract'))
+
+
+class DocumentDescription(metaclass=PoolMeta):
+    __name__ = 'document.description'
+
+    products = fields.Many2Many('document.description-product', 'document_desc',
+        'product', 'Product Filter', help='Used to filter document desc per '
+        'product on request line for a contract. If not set will be available '
+        'for all products')
+    products_name = fields.Function(
+        fields.Char('Products'), 'on_change_with_products_name')
+
+    @fields.depends('products')
+    def on_change_with_products_name(self, name=None):
+        return ', '.join([p.rec_name for p in self.products])
+
+
+class DocumentDescriptionProduct(model.CoogSQL):
+    'Document Desc To Product Relation'
+
+    __name__ = 'document.description-product'
+
+    document_desc = fields.Many2One('document.description',
+        'Document Description', ondelete='CASCADE', required=True, select=True)
+    product = fields.Many2One('offered.product', 'Product', ondelete='CASCADE',
+        required=True, select=True)
 
 
 class DocumentReception(metaclass=PoolMeta):

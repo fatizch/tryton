@@ -1,3 +1,5 @@
+* FEA#13618 Filter document desc per product. Useful when manually asking a new request line for a specific document for a product and therefore for a specific insurer
+
 Version 2.6 - 2019-10-11
 * FEA#12837 Add new function to rule engine which returns all requested documents for a contract
 * FEA#12764 Add an API to upload documents to a contract

@@ -69,6 +69,13 @@ class DocumentDescription(model.CoogSQL, model.CoogView):
         return super(DocumentDescription, cls)._export_light() | {'groups', }
 
     @classmethod
+    def search_rec_name(cls, name, clause):
+        return ['OR',
+            ('code',) + tuple(clause[1:]),
+            ('name',) + tuple(clause[1:])
+            ]
+
+    @classmethod
     def search(cls, domain, *args, **kwargs):
         # Filter out everything the user is not allowed to view
         # The 'remove_document_desc_filter' is used in document desc act window

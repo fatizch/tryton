@@ -121,11 +121,6 @@ this repository contains the full copyright notices and license terms. -->
             <field name="inherit" ref="document_request_line_view_form"/>
             <field name="name">document_request_line_form_depend_offered</field>
         </record>
-        <record model="ir.ui.view" id="document_request_line_view_list_offered">
-            <field name="model">document.request.line</field>
-            <field name="inherit" ref="document_request_line_view_list"/>
-            <field name="name">document_request_line_list_depend_offered</field>
-        </record>
         <record model="ir.ui.view" id="document_request_line_view_card_offered">
             <field name="model">document.request.line</field>
             <field name="inherit" ref="document_request_line_view_card"/>

@@ -6,14 +6,15 @@ this repository contains the full copyright notices and license terms. -->
         <newline/>
         <label name="digital_signature_required"/>
         <field name="digital_signature_required"/>
-        <newline/>
-        <label name="signature_configuration"/>
-        <field name="signature_configuration"/>
-        <label name="signature_credential"/>
-        <field name="signature_credential"/>
     </xpath>
-    <xpath expr="/form" position="inside">
-        <field name="signature_coordinates" colspan="1"/>
-        <field name="sub_documents" colspan="3"/>
+    <xpath expr="/form/notebook" position="inside">
+        <page id="electronic_signature" string='Electronic Signature'>
+            <label name="signature_configuration"/>
+            <field name="signature_configuration"/>
+            <label name="signature_credential"/>
+            <field name="signature_credential"/>
+            <field name="signature_coordinates" colspan="1"/>
+            <field name="sub_documents" colspan="3"/>
+        </page>
     </xpath>
 </data>

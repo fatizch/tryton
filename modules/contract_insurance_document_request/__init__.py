@@ -20,6 +20,8 @@ def register():
         offered.OptionDescription,
         contract.Contract,
         document.DocumentRequest,
+        document.DocumentDescription,
+        document.DocumentDescriptionProduct,
         document.DocumentReception,
         rule_engine.RuleEngine,
         rule_engine.RuleEngineRuntime,

@@ -2,13 +2,9 @@
 <!-- This file is part of Coog. The COPYRIGHT file at the top level of
 this repository contains the full copyright notices and license terms. -->
 <data>
-    <xpath expr="/form/field[@name='when_received']" position="after">
-        <label name="template"/>
-        <field name="template"/>
-    </xpath>
     <xpath expr="/form/notebook" position="inside">
-        <page name="extra_data_def">
-            <field name="extra_data_def" colspan="4"/>
+        <page name='products'>
+            <field name="products"/>
         </page>
     </xpath>
 </data>
