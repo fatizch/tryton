@@ -40,7 +40,7 @@ If user must be able to edit the letter templates, it’s necessary to set
 ``client_shared_folder`` to the mounted folder (same folder that server write
 into) with write access::
 
-    [EDM]
+    [edm]
     server_shared_folder = /mnt/mail_documents
     client_shared_folder = F:\partage-serveur\mail_documents
 

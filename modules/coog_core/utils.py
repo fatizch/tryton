@@ -45,7 +45,7 @@ class FileLocker:
     def __init__(self, path, *args, **kwargs):
         self.path = path
         self.lock_extension = kwargs.pop('lock_extension', 'lck')
-        temporary_folder = config.get('TMP', 'folder')
+        temporary_folder = config.get('tmp', 'folder')
         self.lock_path = kwargs.pop('lock_directory', temporary_folder)
         if not self.lock_path:
             self.lock_path = self.path

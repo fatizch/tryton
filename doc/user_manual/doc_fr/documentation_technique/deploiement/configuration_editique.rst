@@ -14,7 +14,7 @@ Dans le cas où l'on souhaite permettre l'édition du courrier .odt par
 l'utilisateur, il faut renseigner le chemin ``client_shared_folder`` par lequel
 le client accède au dossier partagé dans lequel le serveur écrit ::
 
-    [EDM]
+    [edm]
     server_shared_folder = /mnt/mail_documents
     client_shared_folder = F:\partage-serveur\mail_documents
 
@@ -71,8 +71,8 @@ lequel écrire les documents générés :
 - si aucun *Répertoire d'export* n'est renseigné alors pas d'export
 - si ``/`` est saisi, alors les documents sont copiés directement à la racine,
   indiqué par le paramètre de configuration *export_root_dir*
-- sinon le nom saisi est utilisé comme nom de sous-répertoire par rapport à 
-  *export_root_dir*. Il est possible de renseigner une hiérarchie de dossiers, 
+- sinon le nom saisi est utilisé comme nom de sous-répertoire par rapport à
+  *export_root_dir*. Il est possible de renseigner une hiérarchie de dossiers,
   auxquels cas les dossiers sont créés à la volée si non existants.
 
 Exemple : avec le paramétrage de relance ci-dessous

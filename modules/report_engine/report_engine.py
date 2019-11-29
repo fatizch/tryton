@@ -1320,9 +1320,9 @@ class ReportGenerate(CoogReport):
 
     @classmethod
     def create_shared_tmp_dir(cls):
-        server_shared_folder = config.get('EDM', 'server_shared_folder',
+        server_shared_folder = config.get('edm', 'server_shared_folder',
             default='/tmp')
-        client_shared_folder = config.get('EDM', 'client_shared_folder')
+        client_shared_folder = config.get('edm', 'client_shared_folder')
         try:
             tmp_dir = os.path.basename(
                 tempfile.mkdtemp(dir=server_shared_folder))

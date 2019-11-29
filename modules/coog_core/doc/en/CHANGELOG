@@ -1,3 +1,4 @@
+* OTH#00000 Remove the support of upper case in the naming of trytond config variables
 * OTH#00000 append_functional_error must properly handle cases of pure string errors
 * BUG#13491 Fix json export of binary data
 * FEA#13062 Add auto-cache for configuration objects

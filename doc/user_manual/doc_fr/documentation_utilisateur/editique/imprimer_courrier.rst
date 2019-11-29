@@ -26,6 +26,6 @@ Si l'utilisateur doit pouvoir éditer les modèles de lettre, il faut alors que
 ``client_shared_folder`` pointe vers le montage du dossier partagé sur la
 machine client avec aussi des permissions en écriture ::
 
-    [EDM]
+    [edm]
     server_shared_folder = /mnt/mail_documents
     client_shared_folder = F:\partage-serveur\mail_documents
