@@ -1,3 +1,4 @@
+* BUG#13422 Ajout d'une option pour cacher le boutton appliquer le package sur les contrats emprunteur
 * OTH#00000 Définition de la date de condition dans l'API de contrat
 * BUG#12942 Correction de la réinitialisation du status des garanties à la réactivation
 

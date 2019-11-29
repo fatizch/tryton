@@ -47,7 +47,8 @@ class OptionSubscription(model.CoogWizard):
         'contract.select_package_view_form', [
             Button('Cancel', 'end', 'tryton-cancel'),
             Button('Apply Package', 'set_package', 'tryton-go-next',
-                default=True),
+                default=True,
+                states={'invisible': ~~Eval('hide_apply_package_button')}),
             Button('Apply Package and Customize Options',
                 'set_package_and_customize_option',
                 'tryton-go-next'),
@@ -150,6 +151,7 @@ class PackageSelection(model.CoogView):
     package = fields.Many2One('offered.package', 'Package',
         domain=[('id', 'in', Eval('possible_packages'))],
         depends=['possible_packages'])
+    hide_apply_package_button = fields.Boolean('Hide Apply Package Button')
     possible_packages = fields.Many2Many('offered.package', None, None,
         'Possible Packages')
 

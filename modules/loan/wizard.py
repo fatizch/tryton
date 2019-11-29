@@ -5,7 +5,20 @@ from trytond.transaction import Transaction
 
 __all__ = [
     'CreateExtraPremium',
+    'OptionSubscription',
     ]
+
+
+class OptionSubscription(metaclass=PoolMeta):
+    'Option Subscription'
+    __name__ = 'contract.wizard.option_subscription'
+
+    def default_select_package(self, values):
+        contract = self.get_contract()
+        res = super(OptionSubscription, self).default_select_package(values)
+        if contract and contract.is_loan is True:
+            res['hide_apply_package_button'] = True
+        return res
 
 
 class CreateExtraPremium(metaclass=PoolMeta):

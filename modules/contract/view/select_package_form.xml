@@ -4,4 +4,5 @@ this repository contains the full copyright notices and license terms. -->
 <form>
     <label name="package"/>
     <field name="package" widget="selection"/>
+    <field name="hide_apply_package_button" invisible="1"/>
 </form>

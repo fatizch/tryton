@@ -47,6 +47,7 @@ def register():
         depends=['commission_insurance'])
     Pool.register(
         contract.OptionSubscription,
+        wizard.OptionSubscription,
         wizard.CreateExtraPremium,
         party.SynthesisMenuOpen,
         party.DisplayInsuredOutstandingLoanBalance,
