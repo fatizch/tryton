@@ -1,3 +1,4 @@
+* FEA#13273 Remove package forced extra data from product description API
 * BUG#13574 Fix extra data groups relation to sub groups
 * OTH#00000 Clear extra data structure cache on extra data modification
 * OTH#0000 Use sequence order to sort extra data in menu entry point

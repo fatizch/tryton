@@ -1176,7 +1176,6 @@ class ModuleTestCase(test_framework.CoogTestCase):
             covered['coverages'] = [
                 {
                     'coverage': {'code': 'ALP'},
-                    'extra_data': {'option_1': '1'},
                     },
                 ]
         result = ContractAPI.subscribe_contracts(data_dict,
@@ -1320,7 +1319,6 @@ class ModuleTestCase(test_framework.CoogTestCase):
         data_dict['contracts'][0]['covereds'][1]['coverages'] = [
             {
                 'coverage': {'code': 'ALP'},
-                'extra_data': {'option_1': '8'},
                 },
             ]
         data_dict['contracts'][0]['extra_data']['contract_1'] = '1000'
@@ -1358,7 +1356,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
             ['ALP', 'BET', 'GAM'])
         self.assertEqual([x.current_extra_data
                 for x in contract.covered_elements[1].options],
-            [{'option_1': Decimal(8)}, {}, {}])
+            [{'option_1': Decimal(1)}, {}, {}])
 
     @test_framework.prepare_test(
         # Check that basic subscription still works

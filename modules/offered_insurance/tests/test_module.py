@@ -422,7 +422,8 @@ return True'''
         package_b.name = 'Package B'
         package_b.code = 'package_b'
         package_b.option_relations = [
-            PackageCoverageRelation(option=coverage_a),
+            PackageCoverageRelation(option=coverage_a,
+                extra_data={'option_1': Decimal('1')}),
             PackageCoverageRelation(option=coverage_b),
             PackageCoverageRelation(option=coverage_d),
             ]
@@ -432,7 +433,8 @@ return True'''
         package_c.name = 'Package C'
         package_c.code = 'package_c'
         package_c.option_relations = [
-            PackageCoverageRelation(option=coverage_a),
+            PackageCoverageRelation(option=coverage_a,
+                extra_data={'option_1': Decimal('1')}),
             PackageCoverageRelation(option=coverage_b),
             PackageCoverageRelation(option=coverage_c),
             PackageCoverageRelation(option=coverage_d),
@@ -689,6 +691,15 @@ return True'''
         Coverage = pool.get('offered.option.description')
         ItemDesc = pool.get('offered.item.description')
         Package = pool.get('offered.package')
+        ExtraData = pool.get('extra_data')
+
+        variable_extra = ExtraData()
+        variable_extra.name = 'variable_data_1'
+        variable_extra.string = 'Variable Data 1'
+        variable_extra.kind = 'option'
+        variable_extra.type_ = 'numeric'
+        variable_extra.digits = 2
+        variable_extra.save()
 
         product, = Product.search([('code', '=', 'AAA')])
         alpha, = Coverage.search([('code', '=', 'ALP')])
@@ -701,6 +712,9 @@ return True'''
         package_2, = Package.search([('code', '=', 'P2')])
         package_3, = Package.search([('code', '=', 'P3')])
         package_4, = Package.search([('code', '=', 'P4')])
+
+        alpha.extra_data_def += (variable_extra,)
+        alpha.save()
 
         self.maxDiff = None
         self.assertEqual(
@@ -820,26 +834,14 @@ return True'''
                                     'code': 'ALP',
                                     'description': '',
                                     'extra_data': [
-                                        {'code': 'extra_data_coverage_alpha',
-                                            'name': 'Extra Data Coverage Alpha',
-                                            'selection': [
-                                                {'name': 'Option 1',
-                                                    'sequence': 0,
-                                                    'value': 'option1'},
-                                                {
-                                                    'name': 'Option 2',
-                                                    'sequence': 1,
-                                                    'value': 'option2',
-                                                    },
-                                                {
-                                                    'name': 'Option 3',
-                                                    'sequence': 2,
-                                                    'value': 'option3',
-                                                    },
-                                                ],
-                                            'sequence': 2,
-                                            'type': 'selection'},
-                                        ],
+                                        {
+                                            'code': 'variable_data_1',
+                                            'digits': 2,
+                                            'name': 'Variable Data 1',
+                                            'sequence': 4,
+                                            'type': 'numeric',
+                                        }
+                                    ],
                                     'id': alpha.id,
                                     'mandatory': True,
                                     'name': 'Alpha Coverage',
@@ -873,14 +875,10 @@ return True'''
                                 {
                                     'code': 'ALP',
                                     'id': alpha.id,
-                                    'package_extra_data': {
-                                        'extra_data_coverage_alpha': 'option2',
-                                        },
                                     },
                                 {
                                     'code': 'BET',
                                     'id': beta.id,
-                                    'package_extra_data': {},
                                     },
                                 ],
                             },
@@ -895,24 +893,18 @@ return True'''
                                 {
                                     'code': 'ALP',
                                     'id': alpha.id,
-                                    'package_extra_data': {
-                                        'extra_data_coverage_alpha': 'option3',
-                                        },
                                     },
                                 {
                                     'code': 'GAM',
                                     'id': gamma.id,
-                                    'package_extra_data': {},
                                     },
                                 {
                                     'code': 'DEL',
                                     'id': delta.id,
-                                    'package_extra_data': {},
                                     },
                                 {
                                     'code': 'CONT',
                                     'id': cont.id,
-                                    'package_extra_data': {},
                                     },
                                 ],
                             },
@@ -927,12 +919,10 @@ return True'''
                                 {
                                     'code': 'GAM',
                                     'id': gamma.id,
-                                    'package_extra_data': {},
                                     },
                                 {
                                     'code': 'DEL',
                                     'id': delta.id,
-                                    'package_extra_data': {},
                                     },
                                 ],
                             },

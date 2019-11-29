@@ -458,7 +458,9 @@ class APIProduct(APIMixin):
         if not products:
             products = Pool().get('offered.product').search([])
         for product in products:
-            result.append(cls._describe_product(product))
+            description = cls._describe_product(product)
+            cls._mask_package_forced_extra_data(product, description)
+            result.append(description)
         return result
 
     @classmethod
@@ -478,6 +480,28 @@ class APIProduct(APIMixin):
             'packages': [cls._describe_package(x) for x in product.packages],
             'subscriber': cls._describe_subscriber(product),
             }
+
+    @classmethod
+    def _mask_package_forced_extra_data(cls, product, description):
+        extra_codes_to_mask = set(sum([list(rel.extra_data)
+                for package in product.packages
+                for rel in package.option_relations
+                ], []))
+        coverage_descs = cls._coverages_in_description(description)
+        cls._remove_coverage_extra_description(coverage_descs,
+            extra_codes_to_mask)
+
+    @classmethod
+    def _coverages_in_description(cls, description):
+        for desc in description.get('coverages', []):
+            yield desc
+
+    @classmethod
+    def _remove_coverage_extra_description(cls, coverage_descs,
+            extra_codes_to_mask):
+        for cov in coverage_descs:
+            cov['extra_data'] = [x for x in cov.get('extra_data', [])
+                if x['code'] not in extra_codes_to_mask]
 
     @classmethod
     def _describe_coverage(cls, coverage):
@@ -510,7 +534,6 @@ class APIProduct(APIMixin):
         return {
             'id': package_option.option.id,
             'code': package_option.option.code,
-            'package_extra_data': package_option.extra_data,
             }
 
     @classmethod
@@ -997,7 +1020,6 @@ class APIProduct(APIMixin):
             'properties': {
                 'id': OBJECT_ID_SCHEMA,
                 'code': CODE_SCHEMA,
-                'package_extra_data': EXTRA_DATA_VALUES_SCHEMA,
                 },
             'required': ['id', 'code'],
             }

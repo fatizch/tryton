@@ -759,20 +759,6 @@ class ModuleTestCase(test_framework.CoogTestCase):
                                     'type': 'boolean',
                                     'sequence': 5,
                                     },
-                                {
-                                    'code': 'option_3',
-                                    'name': 'Option 3',
-                                    'type': 'selection',
-                                    'sequence': 6,
-                                    'selection': [
-                                        {'value': '1', 'name': '1',
-                                            'sequence': 0},
-                                        {'value': '2', 'name': '2',
-                                            'sequence': 1},
-                                        {'value': '3', 'name': '3',
-                                            'sequence': 2},
-                                        ],
-                                    },
                                 ],
                             'mandatory': True,
                             },
@@ -795,15 +781,11 @@ class ModuleTestCase(test_framework.CoogTestCase):
                                 {
                                     'id': coverage_a.id,
                                     'code': 'ALP',
-                                    'package_extra_data': {
-                                        'option_3': '2',
-                                        },
                                     },
                                 {
                                     'id': coverage_b.id,
                                     'code': 'BET',
-                                    'package_extra_data': {},
-                                    },
+                                    }
                                 ],
                             'extra_data': {
                                 'contract_1': '16.10',
@@ -817,9 +799,6 @@ class ModuleTestCase(test_framework.CoogTestCase):
                                 {
                                     'id': coverage_a.id,
                                     'code': 'ALP',
-                                    'package_extra_data': {
-                                        'option_3': '1',
-                                        },
                                     },
                                 ],
                             'extra_data': {},

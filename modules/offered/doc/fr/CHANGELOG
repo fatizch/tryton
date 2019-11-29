@@ -1,3 +1,4 @@
+* FEA#13273 Filtrage des données complémentaires forcées par les formules dans l'API de description des produits
 * BUG#13574 Correction des sous-groupes de données complémentaires
 * OTH#00000 Nettoyage du cache de la structure des données complémentaires lors de leur modification
 * OTH#0000 Utilisation de l'ordre d'affichage pour trier les données complémentaires dans le menu principal

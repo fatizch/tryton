@@ -28,5 +28,8 @@
         <record model="ir.message" id="msg_wrong_rule_format">
             <field name="text">The return value of the rule must be a dictionnary.</field>
         </record>
+        <record model="ir.message" id="msg_must_force_extra_on_all_packages">
+            <field name="text">The forcing of extra datas %(diff)s for option %(option)s must be done for all packages that include this option.</field>
+        </record>
     </data>
 </tryton>

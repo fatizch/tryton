@@ -1,6 +1,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 import datetime
+from collections import defaultdict
 from sql import Literal, Window
 from sql.aggregate import Min
 from sql.conditionals import Coalesce
@@ -148,7 +149,36 @@ class Product(model.CodedMixin, model.CoogView, Printable,
 
     @classmethod
     def validate_packages(cls, instances):
-        pass
+        for product in instances:
+            product.check_packages_forced_keys()
+
+    def check_packages_forced_keys(self):
+        """
+            If an Extra Data value is forced by a package for a coverage, then
+            the said Extra Data will not be displayed by the Product
+            Description API. The Extra Data in question should never be entered
+            manually. So, all packages containing the coverage must force the
+            value.  See: https://support.coopengo.com/issues/13273
+        """
+        data_by_coverage = defaultdict(list)
+        for package in self.packages:
+            for rel in package.option_relations:
+                data_by_coverage[rel.option].append(set(rel.extra_data))
+
+        for option, extras in data_by_coverage.items():
+            diff = set()
+            previous = None
+            for extra in extras:
+                if previous is None:
+                    previous = extra
+                    continue
+                diff |= previous ^ extra
+                previous = extra
+            if diff:
+                diff = ', '.join(list(diff))
+                raise ValidationError(gettext(
+                        'offered.msg_must_force_extra_on_all_packages',
+                        diff=diff, option=option.rec_name))
 
     @classmethod
     def validate_contract_extra_data(cls, instances):

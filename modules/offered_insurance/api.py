@@ -53,6 +53,13 @@ class APIProduct(metaclass=PoolMeta):
             }
 
     @classmethod
+    def _coverages_in_description(cls, description):
+        super()._coverages_in_description(description)
+        for item in description.get('item_descriptors', []):
+            for desc in item.get('coverages', []):
+                yield desc
+
+    @classmethod
     def _init_covered_party_domains(cls):
         # The keys of this represent a context
         # and the values are dictionnaries with named domains as keys
