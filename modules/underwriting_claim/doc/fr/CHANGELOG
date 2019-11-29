@@ -1,3 +1,5 @@
+* BUG#13629 Correction du filtre sur les analyses de risques en cours de traitement
+
 Version 2.6 - 2019-10-11
 Version 2.4 - 2019-04-12
 * FEA#10506 Modification de l'affichage de la liste d'analyses de risques depuis un dossier de sinistre: ajout d'informations sur les demandes de documents et les résultats d'analyses.

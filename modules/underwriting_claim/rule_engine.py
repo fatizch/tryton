@@ -29,7 +29,8 @@ class RuleEngineRuntime(metaclass=PoolMeta):
     def _re_underwriting_non_received_documents(cls, args):
         claim = args['claim']
         non_received_documents = []
-        underwritings = [x for x in claim.underwritings if x.state != 'state']
+        underwritings = [x for x in claim.underwritings
+            if x.state == 'processing']
         for underwriting in underwritings:
             non_received_documents.extend([
                     (doc.document_desc.code, doc.rec_name)
