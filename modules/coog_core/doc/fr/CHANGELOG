@@ -1,3 +1,4 @@
+* BUG#12337 Export Configuration peut maintenant être dupliqué avec "Ctrl + Shift + d"
 * OTH#00000 Retrait du support des caractères majuscules dans le nommage des variables de configuration trytond
 * OTH#00000 append_functional_error doit correctement gérer le cas d'une erreur sous forme de texte simple
 * BUG#13491 Correction de l'export json des données binaires

@@ -38,7 +38,6 @@ def register():
     Pool.register(
         export.ExportPackage,
         export.ExportInstance,
-        export.ExportConfiguration,
         export.ExportModelConfiguration,
         export.ExportFieldConfiguration,
         export.ExportModelExportConfigurationRelation,
@@ -78,6 +77,7 @@ def register():
         test_case_framework.TestCaseFileSelector,
         tag.TagObjectRelation,
         model.MethodDefinition,
+        model.ExportConfiguration,
         event.Event,
         event.EventType,
         event.EventTypeAction,

@@ -35,7 +35,6 @@ __all__ = [
     'ExportPackage',
     'Add2ExportPackageWizard',
     'Add2ExportPackageWizardStart',
-    'ExportConfiguration',
     'ExportModelConfiguration',
     'ExportFieldConfiguration',
     'ExportModelExportConfigurationRelation',
@@ -711,50 +710,6 @@ class Add2ExportPackageWizard(Wizard):
                     'package': self.start.export_package,
                     } for id_ in ids])
         return 'end'
-
-
-class ExportConfiguration(ExportImportMixin, ModelView):
-    'Export Configuration'
-    __name__ = 'ir.export.configuration'
-    _func_key = 'code'
-
-    name = fields.Char('Name', required=True, translate=True)
-    code = fields.Char('Code', required=True)
-    models_configuration = fields.Many2Many(
-        'ir.export_configuration-export_model', 'configuration', 'model',
-        'Models Configuration')
-
-    @classmethod
-    def __setup__(cls):
-        super(ExportConfiguration, cls).__setup__()
-        t = cls.__table__()
-        cls._sql_constraints += [
-            ('code_uniq', Unique(t, t.code), 'The code must be unique!'),
-            ]
-
-    @property
-    def configuration(self):
-        if not getattr(self, '_configuration', None):
-            self.init_configuration()
-        return self._configuration
-
-    @fields.depends('code', 'name')
-    def on_change_with_code(self):
-        if self.code:
-            return self.code
-        return coog_string.slugify(self.name)
-
-    def init_configuration(self):
-        self._configuration = {}
-        for model_configuration in self.models_configuration:
-            self._configuration[model_configuration.model.model] = \
-                model_configuration.get_fields()
-
-    def get_model_configuration(self, model_name):
-        conf = self.configuration
-        if model_name in conf:
-            return conf[model_name]
-        return None
 
 
 class ExportModelConfiguration(ExportImportMixin, ModelView):
