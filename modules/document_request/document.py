@@ -151,6 +151,12 @@ class DocumentRequestLine(Printable, model.CoogSQL, model.CoogView):
     def __setup__(cls):
         super(DocumentRequestLine, cls).__setup__()
         cls._order = [('for_object', 'ASC'), ('document_desc', 'ASC')]
+        cls._buttons.update({
+                'validate_attachment': {
+                    'invisible': ~Eval('attachment') | (
+                        Eval('received')),
+                    },
+                })
 
     @classmethod
     def __register__(cls, module_name):
@@ -438,6 +444,24 @@ class DocumentRequestLine(Printable, model.CoogSQL, model.CoogView):
 
     def get_allow_force_receive(self, name=None):
         return self.attachment_not_required()
+
+    @classmethod
+    @ModelView.button
+    def validate_attachment(cls, lines):
+        cls.update_lines(lines)
+        cls.save(lines)
+        return 'reload'
+
+    @classmethod
+    def update_lines(cls, lines):
+        Attachment = Pool().get('ir.attachment')
+        to_update = []
+        for line in lines:
+            line.reception_date = line.reception_date or utils.today()
+            to_update.append(line.attachment)
+        if to_update:
+            Attachment.valid(to_update)
+        return lines
 
 
 class DocumentRequestLineOffered(

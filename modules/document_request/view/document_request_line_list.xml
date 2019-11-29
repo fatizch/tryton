@@ -13,4 +13,5 @@ this repository contains the full copyright notices and license terms. -->
     <field name="attachment_data"/>
     <field name="details"/>
     <field name="allow_force_receive" tree_invisible="1"/>
+    <button string="Validate Attachment" name="validate_attachment"/>
 </tree>

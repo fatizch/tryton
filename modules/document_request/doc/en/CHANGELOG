@@ -1,3 +1,4 @@
+* BUG#13461 Add button to validate attachments uploaded by B2C API
 * BUG#13092 Wrong domain error  when uploading a document on a document request on a claim
 * FEA#13350 Add dynamically evaluated web resources on document descriptions
 

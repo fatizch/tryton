@@ -24,8 +24,11 @@ this repository contains the full copyright notices and license terms. -->
         <label name="attachment"/>
         <field name="attachment"/>
         <label name="attachment_data"/>
-        <field name="attachment_data"/>
+        <field name="attachment_data" filename_visible="1"/>
         <label name="details"/>
         <field name="details"/>
+        <group id="button_validate" string="" colspan="2">
+            <button string="Validate Attachment" name="validate_attachment"/>
+        </group>
     </group>
 </form>

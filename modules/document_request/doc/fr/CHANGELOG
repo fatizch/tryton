@@ -1,3 +1,4 @@
+* BUG#13461 Ajout d'un bouton pour valider les pièces jointes uploadées par API B2C
 * BUG#13092 Domaine erronée sur demande de document lors de la déclaration de sinistre
 * FEA#13350 Ajout de ressources web évaluées dynamiquement sur les descriptions de documents
 

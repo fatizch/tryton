@@ -22,6 +22,10 @@ msgctxt "field:document.description,template:"
 msgid "Template"
 msgstr "Modèle de courrier"
 
+msgctxt "field:document.description,web_ui_resources:"
+msgid "Web UI Resources"
+msgstr "Ressources Web"
+
 msgctxt "field:document.description-extra_data,create_date:"
 msgid "Create Date"
 msgstr "Date de Création"
@@ -318,6 +322,10 @@ msgstr ""
 "S'il est défini, un document sera automatiquement créé à l'aide de ce modèle"
 " et sera joint à la ligne de requête associée.."
 
+msgctxt "help:document.description,web_ui_resources:"
+msgid "A list of resources which will only be used through the APIs"
+msgstr "Une liste de ressources qui ne seront utilisées que par les APIs"
+
 msgctxt "help:document.request.line,details:"
 msgid "Add details about the received document"
 msgstr "Permet d'ajouter des précisions sur le document reçu"
@@ -433,6 +441,10 @@ msgstr "Confirmer"
 msgctxt "view:document.request.line:"
 msgid "Details"
 msgstr "Commentaire"
+
+msgctxt "view:document.request.line:"
+msgid "Validate Attachment"
+msgstr "Valider la pièce jointe"
 
 msgctxt "view:document.request:"
 msgid "Send Request"
