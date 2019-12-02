@@ -1067,6 +1067,113 @@ class ModuleTestCase(test_framework.CoogTestCase):
                 })
 
     @test_framework.prepare_test(
+        'offered_insurance.test0010Coverage_creation',
+        'contract_insurance.test0001_testPersonCreation',
+        'contract.test0005_PrepareProductForSubscription',
+        'contract.test0002_testCountryCreation',
+        )
+    def test0063_conflicting_covered_extra_subscribe_contract_API(self):
+        pool = Pool()
+        ExtraData = pool.get('extra_data')
+        ItemDescriptor = pool.get('offered.item.description')
+
+        covered_extra_1 = ExtraData()
+        covered_extra_1.name = 'covered_1'
+        covered_extra_1.string = 'Covered 1'
+        covered_extra_1.kind = 'covered_element'
+        covered_extra_1.type_ = 'boolean'
+        covered_extra_1.save()
+
+        description, = ItemDescriptor.search([('code', '=', 'person')])
+        description.extra_data_def = list(description.extra_data_def) +\
+            [covered_extra_1]
+        description.save()
+
+        data_ref = {
+            'parties': [
+                {
+                    'ref': '1',
+                    'is_person': True,
+                    'name': 'Doe',
+                    'first_name': 'Mother',
+                    'birth_date': '1978-01-14',
+                    'gender': 'female',
+                    'addresses': [
+                        {
+                            'street': 'Somewhere along the street',
+                            'zip': '75002',
+                            'city': 'Paris',
+                            'country': 'fr',
+                            },
+                        ],
+                    'extra_data': {'covered_1': True},
+                    },
+                ],
+            'contracts': [
+                {
+                    'ref': '1',
+                    'product': {'code': 'AAA'},
+                    'subscriber': {'ref': '1'},
+                    'extra_data': {},
+                    'covereds': [
+                        {
+                            'party': {'ref': '1'},
+                            'item_descriptor': {'code': 'person'},
+                            'extra_data': {'covered_1': False},
+                            'coverages': [
+                                {
+                                    'coverage': {'code': 'ALP'},
+                                    'extra_data': {},
+                                    },
+                                {
+                                    'coverage': {'code': 'BET'},
+                                    'extra_data': {},
+                                    },
+                                ],
+                            },
+                        ],
+                    'coverages': [
+                        {
+                            'coverage': {'code': 'DEL'},
+                            'extra_data': {},
+                            },
+                        ],
+                    },
+                ],
+            'options': {
+                'activate': True,
+                },
+            }
+
+        data_dict = copy.deepcopy(data_ref)
+        error = self.ContractAPI.subscribe_contracts(data_dict, {})
+        self.assertEqual(error.data, [{
+                    'type': 'conflicting_extra_data',
+                    'data': {
+                        'codes': ['covered_1'],
+                        },
+                    }])
+
+        data_dict = copy.deepcopy(data_ref)
+        data_dict['contracts'][0]['covereds'][0]['extra_data'] = {
+            'covered_1': True,
+            }
+        result = self.ContractAPI.subscribe_contracts(data_dict,
+            {'_debug_server': True})
+
+        person, = self.Party.search([('name', '=', 'Doe'),
+            ('first_name', '=', 'Mother')])
+        contract, = self.Contract.browse(
+            [x['id'] for x in result['contracts']])
+
+        self.assertEqual(len(contract.options), 1)
+        self.assertEqual(contract.options[0].coverage.code, 'DEL')
+        self.assertEqual(len(contract.covered_elements), 1)
+        self.assertEqual(len(contract.covered_elements[0].options), 2)
+        self.assertEqual(contract.covered_elements[0].party.id,
+            result['parties'][0]['id'])
+
+    @test_framework.prepare_test(
         'contract_insurance.test0001_testPersonCreation',
         'offered_insurance.test0011ConsistentPackage_creation',
         'contract.test0005_PrepareProductForSubscription',
@@ -1492,6 +1599,47 @@ class ModuleTestCase(test_framework.CoogTestCase):
                 for c in contract.covered_elements], [
                 {'extra_data_covered': 'covered3'},
                 {'extra_data_covered': 'covered3'}])
+
+    @test_framework.prepare_test(
+        'contract_insurance.test0001_testPersonCreation',
+        )
+    def test0090_create_party_API(self):
+        pool = Pool()
+        ExtraData = pool.get('extra_data')
+        Party = pool.get('party.party')
+        PartyAPI = pool.get('api.party')
+
+        covered_extra_1 = ExtraData()
+        covered_extra_1.name = 'covered_1'
+        covered_extra_1.string = 'Covered 1'
+        covered_extra_1.kind = 'covered_element'
+        covered_extra_1.type_ = 'boolean'
+        covered_extra_1.save()
+
+        party, = Party.search([('name', '=', 'DOE')])
+        data_ref = {
+            'parties': [{
+                    'ref': '1',
+                    'id': party.id,
+                    'name': party.name,
+                    'is_person': True,
+                    'first_name': party.first_name,
+                    'birth_date': '1980-05-30',
+                    'gender': party.gender,
+                    'extra_data': {
+                        'covered_1': True,
+                        },
+                    }],
+            }
+
+        data_dict = copy.deepcopy(data_ref)
+        PartyAPI.create_party(data_dict, {})
+        self.assertEqual(party.extra_data['covered_1'], True)
+
+        data_dict = copy.deepcopy(data_ref)
+        data_dict['parties'][0]['extra_data']['covered_1'] = False
+        PartyAPI.create_party(data_dict, {})
+        self.assertEqual(party.extra_data['covered_1'], False)
 
     def test0200_test_api_rule_tree_elements(self):
         APIRuleRuntime = Pool().get('api.rule_runtime')

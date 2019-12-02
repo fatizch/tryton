@@ -1,3 +1,4 @@
+* BUG#13518 Check extra data business kind
 * BUG#13422 Add an option to Hide the apply package button in contract options
 * OTH#00000 Define appliable conditions in the contract creation API
 * BUG#12942 Fix clearing of status of options when reactivating contract

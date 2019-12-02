@@ -244,7 +244,7 @@ class APICore(metaclass=PoolMeta):
             }
 
     @classmethod
-    def _extra_data_convert(cls, data):
+    def _extra_data_convert(cls, data, business_kinds):
         '''
             Transforms a dictionary of extra_data into the relevant types.
 
@@ -267,6 +267,14 @@ class APICore(metaclass=PoolMeta):
                         })
                 continue
             structure = extra_definition[0]._get_structure()
+            if structure['business_kind'] not in business_kinds:
+                API.add_input_error({
+                    'type': 'extra_data_business_kind',
+                    'data': {
+                        'extra_data': code,
+                        'expected_business_kinds': business_kinds,
+                        },
+                    })
             if structure['technical_kind'] == 'integer':
                 if not isinstance(value, int):
                     API.add_input_error({

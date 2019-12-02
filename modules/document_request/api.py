@@ -464,7 +464,8 @@ class APIParty(metaclass=PoolMeta):
         to_be_answered = DocumentRequestLine(parameters['id'])
         if to_be_answered not in possible_lines:
             raise APIInputError([{'type': 'Wrong document request ids.'}])
-        extra_data = Core._extra_data_convert(parameters['answers'])
+        extra_data = Core._extra_data_convert(parameters['answers'],
+            ['document_request'])
         to_be_answered.extra_data = extra_data
         to_be_answered.save()
         with Transaction().set_user(0):

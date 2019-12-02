@@ -1,3 +1,4 @@
+* BUG#13518 Vérification du type métier des données complémentaires
 * FEA#13273 Filtrage des données complémentaires forcées par les formules dans l'API de description des produits
 * BUG#13574 Correction des sous-groupes de données complémentaires
 * OTH#00000 Nettoyage du cache de la structure des données complémentaires lors de leur modification

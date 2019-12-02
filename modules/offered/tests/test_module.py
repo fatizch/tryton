@@ -492,10 +492,17 @@ class ModuleTestCase(test_framework.CoogTestCase):
         contract_extra_5.type_ = 'date'
         contract_extra_5.save()
 
+        product_extra_1 = self.ExtraData()
+        product_extra_1.name = 'product_1'
+        product_extra_1.string = 'Product 1'
+        product_extra_1.kind = 'product'
+        product_extra_1.type_ = 'integer'
+        product_extra_1.save()
+
         def test_error(extra_data, errors):
             try:
                 with api_input_error_manager():
-                    self.APICore._extra_data_convert(extra_data)
+                    self.APICore._extra_data_convert(extra_data, ['contract'])
                 raise Exception('Not Raised')
             except APIInputError as e:
                 self.assertEqual(e.data, errors)
@@ -551,7 +558,8 @@ class ModuleTestCase(test_framework.CoogTestCase):
                     }])
 
         self.assertEqual(self.APICore._extra_data_convert(
-                {'contract_1': '123.45'}),
+                {'contract_1': '123.45'},
+                ['contract']),
             {'contract_1': Decimal('123.45')})
 
         test_error({'contract_2': None}, [{
@@ -617,8 +625,17 @@ class ModuleTestCase(test_framework.CoogTestCase):
                         },
                     }])
 
+        test_error({'product_1': 1}, [{
+                    'type': 'extra_data_business_kind',
+                    'data': {
+                        'extra_data': 'product_1',
+                        'expected_business_kinds': ['contract'],
+                        },
+                    }])
+
         self.assertEqual(self.APICore._extra_data_convert(
-                {'contract_5': '2000-05-01'}),
+                {'contract_5': '2000-05-01'},
+                ['contract']),
             {'contract_5': datetime.date(2000, 5, 1)})
 
     @test_framework.prepare_test(

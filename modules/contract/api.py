@@ -338,7 +338,7 @@ class APIContract(APIMixin):
             cls._contract_apply_package(data)
 
         extra_data = data.get('extra_data', {})
-        extra_data = Core._extra_data_convert(extra_data)
+        extra_data = Core._extra_data_convert(extra_data, ['contract'])
         data['extra_data'] = extra_data
 
     @classmethod
@@ -356,7 +356,7 @@ class APIContract(APIMixin):
                 package)
 
         extra_data = data.get('extra_data', {})
-        extra_data = Core._extra_data_convert(extra_data)
+        extra_data = Core._extra_data_convert(extra_data, ['option'])
         data['extra_data'] = extra_data
 
     @classmethod

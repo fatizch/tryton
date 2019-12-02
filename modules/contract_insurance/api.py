@@ -280,7 +280,7 @@ class APIContract(metaclass=PoolMeta):
                 data['coverages'].append(cls._contract_create_package_option(
                         data['package'], coverage_code))
 
-        extra_data = Core._extra_data_convert(extra_data)
+        extra_data = Core._extra_data_convert(extra_data, ['covered_element'])
         data['extra_data'] = extra_data
 
     @classmethod
@@ -290,7 +290,7 @@ class APIContract(metaclass=PoolMeta):
         for contract_data in parameters['contracts']:
             for covered_data in contract_data.get('covereds', []):
                 cls._validate_covered_element_input(
-                    covered_data, contract_data)
+                    covered_data, contract_data, parameters.get('parties', []))
                 for option_data in covered_data.get('coverages', []):
                     cls._validate_contract_option_input(option_data)
 
@@ -313,7 +313,7 @@ class APIContract(metaclass=PoolMeta):
                         })
 
     @classmethod
-    def _validate_covered_element_input(cls, data, contract_data):
+    def _validate_covered_element_input(cls, data, contract_data, parties):
         API = Pool().get('api')
         extra = data['extra_data']
         recomputed = data['item_descriptor'].refresh_extra_data(
@@ -361,6 +361,27 @@ class APIContract(metaclass=PoolMeta):
                         'coverages': sorted(x.code for x in all_coverages),
                         'mandatory_coverages': sorted(
                             x.code for x in product_mandatory),
+                        },
+                    })
+
+        # test coherence between the party in covered and the referenced party
+        if data['party'] and 'ref' in data['party']:
+            party = next(party for party in parties
+                if party['ref'] == data['party']['ref'])
+            if 'extra_data' in party:
+                cls._validate_party_extra_data(data, party)
+
+    @classmethod
+    def _validate_party_extra_data(cls, covered, party):
+        API = Pool().get('api')
+        common_keys = set(covered['extra_data']) & set(party['extra_data'])
+        conflicting_keys = [key for key in common_keys
+            if covered['extra_data'][key] != party['extra_data'][key]]
+        if conflicting_keys:
+            API.add_input_error({
+                    'type': 'conflicting_extra_data',
+                    'data': {
+                        'codes': list(conflicting_keys),
                         },
                     })
 
@@ -514,15 +535,14 @@ class APIParty(metaclass=PoolMeta):
     @classmethod
     def _party_convert(cls, data, options, parameters):
         super()._party_convert(data, options, parameters)
-        pool = Pool()
-        APICore = pool.get('api.core')
+        APICore = Pool().get('api.core')
         data['extra_data'] = APICore._extra_data_convert(
-            data.get('extra_data', {}))
+            data.get('extra_data', {}), ['covered_element'])
 
     @classmethod
     def _init_new_party(cls, data, options):
         party = super()._init_new_party(data, options)
-        party.extra_data = data['extra_data']
+        party.extra_data = {}
         return party
 
     @classmethod

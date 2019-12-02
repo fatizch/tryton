@@ -853,6 +853,13 @@ class ModuleTestCase(test_framework.CoogTestCase):
         data_dict['contracts'][0]['extra_data']['option_1'] = '1.21'
         error = ContractAPI.subscribe_contracts(data_dict, {})
         self.assertEqual(error.data, [{
+                    'type': 'extra_data_business_kind',
+                    'data': {
+                        'extra_data': 'option_1',
+                        'expected_business_kinds': ['contract'],
+                        },
+                    },
+                    {
                     'type': 'invalid_extra_data_for_product',
                     'data': {
                         'product': 'AAA',
@@ -896,6 +903,13 @@ class ModuleTestCase(test_framework.CoogTestCase):
             = '13.21'
         error = ContractAPI.subscribe_contracts(data_dict, {})
         self.assertEqual(error.data, [{
+                    'type': 'extra_data_business_kind',
+                    'data': {
+                        'extra_data': 'contract_1',
+                        'expected_business_kinds': ['option'],
+                        },
+                    },
+                    {
                     'type': 'invalid_extra_data_for_coverage',
                     'data': {
                         'coverage': 'ALP',

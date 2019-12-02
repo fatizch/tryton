@@ -202,7 +202,8 @@ class APICore(metaclass=PoolMeta):
         for part_data in parameters['parts']:
             parsed_parts.append({
                     'part': Part(part_data['id']),
-                    'answers': cls._extra_data_convert(part_data['answers']),
+                    'answers': cls._extra_data_convert(part_data['answers'],
+                        ['questionnaire']),
                     })
         parameters['parts'] = parsed_parts
         return parameters
@@ -587,7 +588,7 @@ class APIContract(metaclass=PoolMeta):
             API.instantiate_code_object(
                 'questionnaire.part', {'id': part['id']})
             answers = part.get('answers', {})
-            answers = Core._extra_data_convert(answers)
+            answers = Core._extra_data_convert(answers, ['questionnaire'])
             part['answers'] = answers
 
             for choice in part['results']:
