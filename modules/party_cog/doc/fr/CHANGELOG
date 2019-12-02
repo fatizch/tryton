@@ -1,3 +1,4 @@
+* BUG#11749 Correction de la recherche globale des synthèses acteur
 * FEA#13147 Redéfinir la fonction add_func_key
 * BUG#00000 Rendre possile la recherche de tiers inactifs
 

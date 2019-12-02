@@ -1187,7 +1187,7 @@ class SynthesisMenu(UnionMixin, model.CoogSQL, model.CoogView,
                         ('rec_name', 'ilike', '%%%s%%' % text),
                         ('party', 'in', party_ids),
                         ]):
-                yield record.id, record.rec_name, None
+                yield record, record.rec_name, None
         else:
             for i in super(SynthesisMenu, cls).search_global(text):
                 yield i
