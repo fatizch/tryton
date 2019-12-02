@@ -374,6 +374,13 @@ class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
         return super(ReportTemplate, cls).search(domain, *args, **kwargs)
 
     @classmethod
+    def search_rec_name(cls, name, clause):
+        return ['OR',
+            ('code',) + tuple(clause[1:]),
+            ('name',) + tuple(clause[1:])
+            ]
+
+    @classmethod
     def default_input_kind(cls):
         return 'libre_office_odt'
 
