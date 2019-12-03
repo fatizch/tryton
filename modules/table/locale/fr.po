@@ -230,174 +230,6 @@ msgctxt "field:table,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
-msgctxt "field:table.2d,create_date:"
-msgid "Create Date"
-msgstr "Date de création"
-
-msgctxt "field:table.2d,create_date_:"
-msgid "Creation date"
-msgstr "Creation date"
-
-msgctxt "field:table.2d,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:table.2d,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:table.2d,rec_name:"
-msgid "Record Name"
-msgstr "Nom"
-
-msgctxt "field:table.2d,row:"
-msgid "Row"
-msgstr "Ligne"
-
-msgctxt "field:table.2d,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:table.2d,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
-msgctxt "field:table.2d,xml_id:"
-msgid "XML Id"
-msgstr "Identifiant XML"
-
-msgctxt "field:table.2d.import.param,col_dimension:"
-msgid "Column"
-msgstr "Colonne"
-
-msgctxt "field:table.2d.import.param,data:"
-msgid "Data"
-msgstr "Données"
-
-msgctxt "field:table.2d.import.param,fixed_dimension10:"
-msgid "Fixed Dimension 10"
-msgstr "Dimension Figée 10"
-
-msgctxt "field:table.2d.import.param,fixed_dimension1:"
-msgid "Fixed Dimension 1"
-msgstr "Dimension Figée 1"
-
-msgctxt "field:table.2d.import.param,fixed_dimension2:"
-msgid "Fixed Dimension 2"
-msgstr "Dimension Figée 2"
-
-msgctxt "field:table.2d.import.param,fixed_dimension3:"
-msgid "Fixed Dimension 3"
-msgstr "Dimension Figée 3"
-
-msgctxt "field:table.2d.import.param,fixed_dimension4:"
-msgid "Fixed Dimension 4"
-msgstr "Dimension Figée 4"
-
-msgctxt "field:table.2d.import.param,fixed_dimension5:"
-msgid "Fixed Dimension 5"
-msgstr "Dimension Figée 5"
-
-msgctxt "field:table.2d.import.param,fixed_dimension6:"
-msgid "Fixed Dimension 6"
-msgstr "Dimension Figée 6"
-
-msgctxt "field:table.2d.import.param,fixed_dimension7:"
-msgid "Fixed Dimension 7"
-msgstr "Dimension Figée 7"
-
-msgctxt "field:table.2d.import.param,fixed_dimension8:"
-msgid "Fixed Dimension 8"
-msgstr "Dimension Figée 8"
-
-msgctxt "field:table.2d.import.param,fixed_dimension9:"
-msgid "Fixed Dimension 9"
-msgstr "Dimension Figée 9"
-
-msgctxt "field:table.2d.import.param,id:"
-msgid "ID"
-msgstr "Identifiant"
-
-msgctxt "field:table.2d.import.param,line_dimension:"
-msgid "Line"
-msgstr "Ligne"
-
-msgctxt "field:table.2d.import.param,table:"
-msgid "Table"
-msgstr "Table"
-
-msgctxt "field:table.2d.open.ask_dimensions,definition:"
-msgid "Definition"
-msgstr "Définition"
-
-msgctxt "field:table.2d.open.ask_dimensions,dimension10:"
-msgid "Dimension 10"
-msgstr "Dimension 10"
-
-msgctxt "field:table.2d.open.ask_dimensions,dimension10_required:"
-msgid "Dimension %s Required"
-msgstr "Dimension %s requise"
-
-msgctxt "field:table.2d.open.ask_dimensions,dimension3:"
-msgid "Dimension 3"
-msgstr "Dimension 3"
-
-msgctxt "field:table.2d.open.ask_dimensions,dimension3_required:"
-msgid "Dimension %s Required"
-msgstr "Dimension %s requise"
-
-msgctxt "field:table.2d.open.ask_dimensions,dimension4:"
-msgid "Dimension 4"
-msgstr "Dimension 4"
-
-msgctxt "field:table.2d.open.ask_dimensions,dimension4_required:"
-msgid "Dimension %s Required"
-msgstr "Dimension %s requise"
-
-msgctxt "field:table.2d.open.ask_dimensions,dimension5:"
-msgid "Dimension 5"
-msgstr "Dimension 5"
-
-msgctxt "field:table.2d.open.ask_dimensions,dimension5_required:"
-msgid "Dimension %s Required"
-msgstr "Dimension %s requise"
-
-msgctxt "field:table.2d.open.ask_dimensions,dimension6:"
-msgid "Dimension 6"
-msgstr "Dimension 6"
-
-msgctxt "field:table.2d.open.ask_dimensions,dimension6_required:"
-msgid "Dimension %s Required"
-msgstr "Dimension %s requise"
-
-msgctxt "field:table.2d.open.ask_dimensions,dimension7:"
-msgid "Dimension 7"
-msgstr "Dimension 7"
-
-msgctxt "field:table.2d.open.ask_dimensions,dimension7_required:"
-msgid "Dimension %s Required"
-msgstr "Dimension %s requise"
-
-msgctxt "field:table.2d.open.ask_dimensions,dimension8:"
-msgid "Dimension 8"
-msgstr "Dimension 8"
-
-msgctxt "field:table.2d.open.ask_dimensions,dimension8_required:"
-msgid "Dimension %s Required"
-msgstr "Dimension %s requise"
-
-msgctxt "field:table.2d.open.ask_dimensions,dimension9:"
-msgid "Dimension 9"
-msgstr "Dimension 9"
-
-msgctxt "field:table.2d.open.ask_dimensions,dimension9_required:"
-msgid "Dimension %s Required"
-msgstr "Dimension %s requise"
-
-msgctxt "field:table.2d.open.ask_dimensions,id:"
-msgid "ID"
-msgstr "ID"
-
 msgctxt "field:table.cell,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
@@ -576,10 +408,6 @@ msgstr ""
 "Liste des labels sur l'objet de configuration. Permet ensuite de rechercher "
 "l'ensemble des objets de configuration liés à un même label."
 
-msgctxt "help:table.2d.import.param,data:"
-msgid "Copy/Paste from Excel"
-msgstr "Copier/Coller depuis Excel"
-
 msgctxt "help:table.dimension.value,end:"
 msgid "Value Excluded"
 msgstr "Valeur exclue"
@@ -615,18 +443,6 @@ msgstr "Valeurs des dimensions"
 msgctxt "model:ir.action,name:act_dimension_value_open"
 msgid "Define Dimension Value"
 msgstr "Valeurs des dimensions"
-
-msgctxt "model:ir.action,name:act_table_2D_import"
-msgid "Import 2D table"
-msgstr "Importer table 2D"
-
-msgctxt "model:ir.action,name:act_table_2d_open"
-msgid "Table 2D"
-msgstr "Table 2D"
-
-msgctxt "model:ir.action,name:act_table_2d_relate_form"
-msgid "Table 2D"
-msgstr "Table 2D"
 
 msgctxt "model:ir.action,name:act_table_definition_form"
 msgid "Tables"
@@ -667,18 +483,6 @@ msgstr "Tables"
 msgctxt "model:table,name:"
 msgid "Table Definition"
 msgstr "Table"
-
-msgctxt "model:table.2d,name:"
-msgid "Table 2D"
-msgstr "Table 2D"
-
-msgctxt "model:table.2d.import.param,name:"
-msgid "Parameters"
-msgstr "Paramètres"
-
-msgctxt "model:table.2d.open.ask_dimensions,name:"
-msgid "Table Open 2D Ask Dimensions"
-msgstr "Table Open 2D Ask Dimensions"
 
 msgctxt "model:table.cell,name:"
 msgid "Cell"
@@ -1064,10 +868,6 @@ msgctxt "selection:table.dimension.value,type:"
 msgid "Dimension 9"
 msgstr "Dimension 9"
 
-msgctxt "view:table.2d.open.ask_dimensions:"
-msgid "Dimensions"
-msgstr "Dimensions"
-
 msgctxt "view:table.cell:"
 msgid "Table"
 msgstr "Table"
@@ -1087,22 +887,6 @@ msgstr "Dimensions"
 msgctxt "view:table:"
 msgid "Dimensions"
 msgstr "Dimensions"
-
-msgctxt "wizard_button:table.2d.import,param,end:"
-msgid "Cancel"
-msgstr "Annuler"
-
-msgctxt "wizard_button:table.2d.import,param,import_:"
-msgid "Import"
-msgstr "Importer"
-
-msgctxt "wizard_button:table.2d.open,ask_dimensions,end:"
-msgid "Cancel"
-msgstr "Annuler"
-
-msgctxt "wizard_button:table.2d.open,ask_dimensions,open_:"
-msgid "Open"
-msgstr "Ouvert"
 
 msgctxt "wizard_button:table.dimension.value.open,ask_type,end:"
 msgid "Cancel"
