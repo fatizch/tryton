@@ -233,14 +233,6 @@ this repository contains the full copyright notices and license terms. -->
             <field name="perm_create" eval="True"/>
             <field name="perm_delete" eval="True"/>
         </record>
-        <record model="ir.model.access" id="access_table_2d_group_product_manage">
-            <field name="model" search="[('model', '=', 'table.2d')]"/>
-            <field name="group" ref="group_product_manage"/>
-            <field name="perm_read" eval="True"/>
-            <field name="perm_write" eval="True"/>
-            <field name="perm_create" eval="True"/>
-            <field name="perm_delete" eval="True"/>
-        </record>
         <record model="ir.model.access" id="access_table_cell_group_product_manage">
             <field name="model" search="[('model', '=', 'table.cell')]"/>
             <field name="group" ref="group_product_manage"/>
@@ -376,13 +368,6 @@ this repository contains the full copyright notices and license terms. -->
         </record>
         <record model="ir.model.access" id="access_table">
             <field name="model" search="[('model', '=', 'table')]"/>
-            <field name="perm_read" eval="True"/>
-            <field name="perm_write" eval="False"/>
-            <field name="perm_create" eval="False"/>
-            <field name="perm_delete" eval="False"/>
-        </record>
-        <record model="ir.model.access" id="access_table_2d">
-            <field name="model" search="[('model', '=', 'table.2d')]"/>
             <field name="perm_read" eval="True"/>
             <field name="perm_write" eval="False"/>
             <field name="perm_create" eval="False"/>
