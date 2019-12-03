@@ -61,6 +61,12 @@ Create Fiscal Year::
     >>> fiscalyear = set_fiscalyear_invoice_sequences(create_fiscalyear(company))
     >>> fiscalyear.click('create_period')
 
+Create Fiscal Year at N+1::
+
+    >>> fiscalyear = set_fiscalyear_invoice_sequences(create_fiscalyear(company,
+    ...          today=datetime.datetime.today() + relativedelta(years=1)))
+    >>> fiscalyear.click('create_period')
+
 Create chart of accounts::
 
     >>> _ = create_chart(company)
