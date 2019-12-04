@@ -225,6 +225,8 @@ this repository contains the full copyright notices and license terms. -->
             <field name="sequence_type" ref="sequence_type_claim_number"/>
             <field name="group" ref="offered.group_offered_admin"/>
         </record>
+    </data>
+    <data noupdate="1">
         <record model="ir.sequence" id="claim_sequence">
             <field name="name">Claim Sequence</field>
             <field name="code">claim</field>
