@@ -14,6 +14,7 @@ from trytond.transaction import Transaction
 from trytond.pool import PoolMeta, Pool
 from trytond.modules.coog_core import fields, model
 from trytond.wizard import StateView, Button
+from trytond.server_context import ServerContext
 
 from .report_engine import Printable
 
@@ -43,12 +44,23 @@ class EventTypeAction(metaclass=PoolMeta):
     report_templates = fields.Many2Many('event.type.action-report.template',
             'event_type_action', 'report_template', 'Report Templates',
         states={'invisible': Eval('action') != 'generate_documents'})
+    filter_on_target_object = fields.Boolean('Filter On Target Object',
+        states={
+            'invisible': Eval('action') != 'generate_documents',
+            'readonly': Eval('action') != 'generate_documents',
+            },
+        help='If checked, the the filter condition will be applied '
+        'on target objects instead of origin event objets')
 
     @classmethod
     def get_action_types(cls):
         return super(EventTypeAction, cls).get_action_types() + [
             ('generate_documents',
                 gettext('report_engine.msg_generate_documents'))]
+
+    @classmethod
+    def default_filter_on_target_object(cls):
+        return False
 
     @classmethod
     def default_treatment_kind(cls):
@@ -59,6 +71,7 @@ class EventTypeAction(metaclass=PoolMeta):
         super(EventTypeAction, self).on_change_action()
         self.report_templates = []
         self.treatment_kind = 'synchronous'
+        self.filter_on_target_object = False
 
     @classmethod
     def possible_asynchronous_actions(cls):
@@ -158,6 +171,12 @@ class EventTypeAction(metaclass=PoolMeta):
         return {template: self.filter_objects_for_report(event_objects,
                 template) for template in self.report_templates}
 
+    def filter_objects(self, objects):
+        if self.filter_on_target_object and not ServerContext().get(
+                'target_objects', False):
+            return objects
+        return super(EventTypeAction, self).filter_objects(objects)
+
     def filter_objects_for_report(self, event_objects, template):
         res = []
         for event_object in event_objects:
@@ -180,6 +199,9 @@ class EventTypeAction(metaclass=PoolMeta):
                 to_print, origin = \
                     self.get_targets_and_origin_from_object_and_template(
                         obj, template)
+                if self.filter_on_target_object:
+                    with ServerContext().set_context(target_objects=True):
+                        to_print = self.filter_objects(to_print)
                 if to_print:
                     obj_orig_templates.append((to_print, origin, template))
         return obj_orig_templates

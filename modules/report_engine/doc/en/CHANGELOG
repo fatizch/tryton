@@ -1,3 +1,4 @@
+* FEA#13591 Add configuration on event type action to allow filtering on target objects instead of event objects
 * BUG#13140 Fix crash which occures when generating a report which has an attachment with formatting for internal EDM
 
 Version 2.6 - 2019-10-11

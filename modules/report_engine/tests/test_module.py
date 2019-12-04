@@ -17,6 +17,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
 
     def test0001_report_event_without_filter(self):
         event.EventTypeAction.report_templates = None
+        event.EventTypeAction.filter_on_target_object = False
         good_template = Mock()
         good_template.on_model.model = 'good_model'
         bad_template = Mock()
@@ -41,6 +42,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
 
         class MockedEventTypeAction(Mock, event.EventTypeAction):
             report_templates = None
+            filter_on_target_object = False
 
             def get_filtering_objects_from_event_object(self, event_obj):
                 return [event_obj.root]

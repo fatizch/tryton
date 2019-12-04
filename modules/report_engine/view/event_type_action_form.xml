@@ -2,6 +2,11 @@
 <!-- This file is part of Coog. The COPYRIGHT file at the top level of
 this repository contains the full copyright notices and license terms. -->
 <data>
+    <xpath expr="//group[@id='action']/label[@name='action']" position="before">
+        <label name="filter_on_target_object"/>
+        <field name="filter_on_target_object"/>
+        <newline/>
+    </xpath>
     <xpath expr="//group[@id='action']" position="after">
         <newline/>
         <field name="report_templates" colspan="4"/>

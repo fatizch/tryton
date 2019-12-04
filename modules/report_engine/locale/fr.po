@@ -6,6 +6,18 @@ msgctxt "field:event.type.action,at_commit:"
 msgid "At The Last Moment"
 msgstr "Au dernier moment"
 
+msgctxt "field:event.type.action,filter_on_target_object:"
+msgid "Filter On Target Object"
+msgstr "Filtrer sur les objets cibles"
+
+msgctxt "help:event.type.action,filter_on_target_object:"
+msgid ""
+"If checked, the filter condition will be applied "
+"on target objects instead of origin event objets"
+msgstr ""
+"Si coché, la condition de filtre sera appliquée "
+"sur les objets cibles au lieu des objets de l'événement"
+
 msgctxt "field:event.type.action,report_templates:"
 msgid "Report Templates"
 msgstr "Modèles de courrier"
