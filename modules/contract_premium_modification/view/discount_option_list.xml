@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<tree>
+    <field name="option" expand="1"/>
+    <field name="discount_rule" expand="1"/>
+    <field name="start_date"/>
+    <field name="end_date"/>
+</tree>

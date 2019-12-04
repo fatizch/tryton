@@ -1,3 +1,4 @@
+* FEA#13410 Add automatic and time-bound commercial discounts
 * FEA#12989 Manage discounts in subscription API
 * OTH#00000 Update view attributes according to new buttons group id
 * FEA#12796 Add support for discounts

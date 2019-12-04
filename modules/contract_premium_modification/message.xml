@@ -16,5 +16,8 @@
         <record model="ir.message" id="msg_waiver_discount_coverage">
             <field name="text">A coverage can not use both a waiver and discount rules</field>
         </record>
+        <record model="ir.message" id="msg_automatic_discount_rules">
+            <field name="text">All rules should have the same value for the boolean automatic</field>
+        </record>
     </data>
 </tryton>

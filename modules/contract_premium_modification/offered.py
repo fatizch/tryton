@@ -28,6 +28,7 @@ __all__ = [
 class PremiumModificationRuleMixin(
         get_rule_mixin('duration_rule', 'Duration Rule',
             extra_string='Duration Rule Extra Data'),
+        get_rule_mixin('eligibility_rule', 'Eligibility Rule'),
         model.ConfigurationMixin):
 
     automatic = fields.Boolean("Automatic")
@@ -106,9 +107,10 @@ class PremiumModificationRuleMixin(
         currency = premium.main_contract.company.currency
         if (self.invoice_line_period_behaviour == 'proportion'
                 and not fully_exonerated):
+            line.coverage_start = max(line.coverage_start, modification_start)
+            line.coverage_end = min(line.coverage_end, modification_end)
             line.unit_price = -1 * utils.get_prorated_amount_on_period(
-                max(line.coverage_start, modification_start),
-                min(line.coverage_end, modification_end),
+                line.coverage_start, line.coverage_end,
                 frequency=premium.frequency, value=premium.amount,
                 sync_date=premium.main_contract.start_date,
                 interval_start=premium.start,
@@ -120,9 +122,11 @@ class PremiumModificationRuleMixin(
         if modification_ctx.get('is_waiver'):
             line.description += ' - ' + gettext(
                 'contract_premium_modification.msg_waiver_line')
+        else:
+            line.description += modification_ctx.get('discount_description')
         return line
 
-    def eligible(self, option, start_date, end_date, modifications):
+    def eligible(self, option, modifications):
         raise NotImplementedError
 
 
@@ -375,7 +379,7 @@ class WaiverPremiumRule(
         else:
             return self.coverage.get_account_for_billing(line)
 
-    def eligible(self, option, start_date, end_date, modifications):
+    def eligible(self, option, modifications):
         return True
 
 
@@ -419,6 +423,15 @@ class CommercialDiscount(model.CodedMixin, model.CoogView, model.CoogSQL):
         'commercial_discount.rule', 'commercial_discount',
         "Rules", delete_missing=True)
 
+    @classmethod
+    def validate(cls, discounts):
+        super().validate(discounts)
+        for discount in discounts:
+            if len({bool(rule.automatic) for rule in discount.rules}) > 1:
+                raise WaiverDiscountValidationError(gettext(
+                    'contract_premium_modification'
+                    '.msg_automatic_discount_rules'))
+
 
 class CommercialDiscountModificationRule(
         PremiumModificationRuleMixin, model.CoogView, model.CoogSQL):
@@ -436,20 +449,38 @@ class CommercialDiscountModificationRule(
         'rule', 'coverage', "Coverages")
 
     @classmethod
+    def validate(cls, rules):
+        pool = Pool()
+        CommercialDiscount = pool.get('commercial_discount')
+
+        discounts = set()
+        super().validate(rules)
+        for rule in rules:
+            discounts.add(rule.commercial_discount)
+        CommercialDiscount.validate(discounts)
+
+    @classmethod
     def __setup__(cls):
         super().__setup__()
         cls.account_for_modification.required = True
+        cls.duration_rule.domain = [('type_', '=', 'discount_duration')]
+        cls.duration_rule.states['required'] = Eval('automatic')
+        cls.eligibility_rule.domain = [('type_', '=', 'discount_eligibility')]
+        cls.eligibility_rule.required = False
 
     def get_account_for_modification_line(self, line):
         return self.account_for_modification
 
-    def eligible(self, option, start_date, end_date, modifications):
-        if self.commercial_discount not in modifications:
-            return False
-        for discount in option.possible_discounts:
-            if discount == self.commercial_discount:
-                return True
-        return False
+    def eligible(self, option, modifications):
+        if modifications:
+            if self.commercial_discount not in modifications:
+                return False
+        if self.eligibility_rule is not None:
+            data = {}
+            option.init_dict_for_rule_engine(data)
+            return self.calculate_eligibility_rule(data)
+        else:
+            return True
 
     @classmethod
     def get_modification_line_fields(cls):
@@ -471,6 +502,9 @@ class CommercialDiscountModificationRule(
     @property
     def modification(self):
         return self.commercial_discount
+
+    def get_rec_name(self, name):
+        return ' %s %.2f %%' % (self.commercial_discount.name, self.rate * 100)
 
 
 class DiscountRuleTax(model.ConfigurationMixin):

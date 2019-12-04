@@ -10,6 +10,8 @@ from trytond.pool import Pool
 import trytond.tests.test_tryton
 from trytond.modules.coog_core import test_framework
 from trytond.tests.test_tryton import doctest_teardown
+from trytond.modules.contract_premium_modification.exceptions import \
+    WaiverDiscountValidationError
 
 
 class ModuleTestCase(test_framework.CoogTestCase):
@@ -31,6 +33,8 @@ class ModuleTestCase(test_framework.CoogTestCase):
         Account = pool.get('account.account')
         CommercialDiscount = pool.get('commercial_discount')
         Coverage = pool.get('offered.option.description')
+        RuleEngine = pool.get('rule_engine')
+        RuleEngineContext = pool.get('rule_engine.context')
 
         account = Account.search([('code', '=', 'account_product')])[0]
         coverage_alpha = Coverage.search([('code', '=', 'ALP')])[0]
@@ -66,6 +70,33 @@ class ModuleTestCase(test_framework.CoogTestCase):
         discount_zeta.rules[-1].invoice_line_period_behaviour = \
             'one_day_overlap'
         discount_zeta.save()
+
+        rule_context = RuleEngineContext(1)
+
+        duration_rule = RuleEngine(name="Discount Duration")
+        duration_rule.algorithm = ('start_date=date_effet_initiale_contrat()\n'
+            'end_date=ajouter_annees(date_effet_initiale_contrat(),1,False)\n'
+            'end_date=ajouter_jours(end_date, -1)\n'
+            'return(start_date,end_date)')
+        duration_rule.context = rule_context
+        duration_rule.rec_name = 'Discount_Duration'
+        duration_rule.result_type = 'list'
+        duration_rule.short_name = 'Discount_Duration'
+        duration_rule.status = 'validated'
+        duration_rule.type_ = 'discount_duration'
+        duration_rule.save()
+
+        discount_delta = CommercialDiscount(name="Discount Delta")
+        discount_delta.code = 'DEL'
+        discount_delta.rules = [{}]
+        discount_delta.rules[-1].rate = Decimal('0.2')
+        discount_delta.rules[-1].account_for_modification = account.id
+        discount_delta.rules[-1].invoice_line_period_behaviour = \
+            'one_day_overlap'
+        discount_delta.rules[-1].coverages = [Coverage(coverage_alpha.id)]
+        discount_delta.rules[-1].automatic = True
+        discount_delta.rules[-1].duration_rule = duration_rule
+        discount_delta.save()
 
     @test_framework.prepare_test(
         'contract_premium_modification.test0020_create_commercial_discounts',
@@ -164,7 +195,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
             data_dict, {'_debug_server': True})
         contract = Contract(result['contracts'][0]['id'])
         self.assertEqual(contract.with_discount_of_premium, True)
-        self.assertEqual(len(contract.discounts), 1)
+        self.assertEqual(len(contract.discounts), 2)
         self.assertEqual(len(contract.discounts[0].options), 2)
 
         data_dict = copy.deepcopy(data_ref)
@@ -173,7 +204,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
             data_dict, {'_debug_server': True})
         contract = Contract(result['contracts'][0]['id'])
         self.assertEqual(contract.with_discount_of_premium, True)
-        self.assertEqual(len(contract.discounts), 2)
+        self.assertEqual(len(contract.discounts), 3)
         self.assertEqual(len(contract.discounts[0].options), 2)
         self.assertEqual(len(contract.discounts[1].options), 1)
 
@@ -185,6 +216,56 @@ class ModuleTestCase(test_framework.CoogTestCase):
                 'discount': 'ZET',
                 },
             }])
+
+    @test_framework.prepare_test(
+        'contract_insurance_invoice.test0006_prepare_product_for_subscription',
+        )
+    def test0040_test_validate_commercial_discounts(self):
+        pool = Pool()
+        Account = pool.get('account.account')
+        CommercialDiscount = pool.get('commercial_discount')
+        Coverage = pool.get('offered.option.description')
+        RuleEngine = pool.get('rule_engine')
+        RuleEngineContext = pool.get('rule_engine.context')
+
+        account = Account.search([('code', '=', 'account_product')])[0]
+        coverage_alpha = Coverage.search([('code', '=', 'ALP')])[0]
+        coverage_alpha.subscription_behavior = 'optional'
+        coverage_alpha.save()
+
+        rule_context = RuleEngineContext(1)
+
+        duration_rule = RuleEngine(name="Discount Duration")
+        duration_rule.algorithm = ('start_date=date_effet_initiale_contrat()\n'
+            'end_date=ajouter_annees(date_effet_initiale_contrat(),1,False)\n'
+            'end_date=ajouter_jours(end_date, -1)\n'
+            'return(start_date,end_date)')
+        duration_rule.context = rule_context
+        duration_rule.rec_name = 'Discount_Duration'
+        duration_rule.result_type = 'list'
+        duration_rule.short_name = 'Discount_Duration'
+        duration_rule.status = 'validated'
+        duration_rule.type_ = 'discount_duration'
+        duration_rule.save()
+
+        discount_delta = CommercialDiscount(name="Discount Delta")
+        discount_delta.code = 'DEL'
+        discount_delta.rules = [{}, {}]
+        discount_delta.rules[-1].rate = Decimal('0.2')
+        discount_delta.rules[-1].account_for_modification = account.id
+        discount_delta.rules[-1].invoice_line_period_behaviour = \
+            'one_day_overlap'
+        discount_delta.rules[-1].coverages = [Coverage(coverage_alpha.id)]
+        discount_delta.rules[-1].automatic = True
+        discount_delta.rules[-1].duration_rule = duration_rule
+        discount_delta.rules[-2].rate = Decimal('0.1')
+        discount_delta.rules[-2].account_for_modification = account.id
+        discount_delta.rules[-2].invoice_line_period_behaviour = \
+            'one_day_overlap'
+        discount_delta.rules[-2].coverages = [Coverage(coverage_alpha.id)]
+        discount_delta.rules[-2].automatic = False
+
+        self.assertRaises(WaiverDiscountValidationError, discount_delta.save)
 
 
 def suite():
@@ -201,6 +282,10 @@ def suite():
             optionflags=doctest.REPORT_ONLY_FIRST_FAILURE))
     suite.addTests(doctest.DocFileSuite(
             'scenario_waiver_discount.rst',
+            tearDown=doctest_teardown, encoding='utf-8',
+            optionflags=doctest.REPORT_ONLY_FIRST_FAILURE))
+    suite.addTests(doctest.DocFileSuite(
+            'scenario_automatic_discount_of_premium.rst',
             tearDown=doctest_teardown, encoding='utf-8',
             optionflags=doctest.REPORT_ONLY_FIRST_FAILURE))
     return suite

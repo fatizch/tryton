@@ -2,7 +2,9 @@
 <tree>
     <field name="commercial_discount"/>
     <field name="invoice_line_period_behaviour"/>
-    <field name="rate"/>
+    <field name="rate" factor="100">
+        <suffix id="suffix" string="%"/>
+    </field>
     <field name="account_for_modification"/>
     <field name="automatic"/>
 </tree>

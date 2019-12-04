@@ -111,6 +111,9 @@ class Contract(metaclass=PoolMeta):
     def get_new_modifications(
             self, options, start_date, end_date, automatic=False,
             modifications=None):
+        """
+        If automatic is set to True end_date and start_date will be ignored
+        """
         pool = Pool()
         WaiverPremiumRule = pool.get('waiver_premium.rule')
         WaiverPremium = pool.get('contract.waiver_premium')
@@ -129,8 +132,7 @@ class Contract(metaclass=PoolMeta):
             if option.status in {'void', 'quote', 'refused', 'declined'}:
                 continue
             for rule in option.coverage.premium_modification_rules:
-                if not rule.eligible(
-                        option, start_date, end_date, modifications):
+                if not rule.eligible(option, modifications):
                     continue
                 if automatic and not rule.automatic:
                     continue
@@ -148,12 +150,17 @@ class Contract(metaclass=PoolMeta):
             prem_mod = PremMod()
             prem_mod.contract = self
             prem_mod.automatic = automatic
-            prem_mod.premium_modification_options = [
-                PremModOption(
-                    start_date=start_date, end_date=end_date, option=option,
-                    modification_rule=rule)
-                for rule, options in rule_options.items()
-                for option in options]
+            new_options = []
+            for rule, options in rule_options.items():
+                for option in options:
+                    if automatic:
+                        start_date, end_date = \
+                            option.calculate_automatic_discount_duration(rule)
+                    premmod = PremModOption(
+                        start_date=start_date, end_date=end_date,
+                        option=option, modification_rule=rule)
+                    new_options.append(premmod)
+            prem_mod.premium_modification_options = new_options
             prem_mod.modification = modification
             new_modifications.append(prem_mod)
         return new_modifications
@@ -236,7 +243,7 @@ class Contract(metaclass=PoolMeta):
             if modification_option is None:
                 modification_option = PremModOption(option=option)
                 modification_options.append(modification_option)
-            dates = option.calculate_automatic_premium_duration()
+            dates = option.calculate_automatic_waiver_duration()
             if dates and len(dates) == 2:
                 modification_option.start_date = dates[0]
                 modification_option.end_date = dates[1]
@@ -300,8 +307,23 @@ class Contract(metaclass=PoolMeta):
                 new_modifications.extend(current_automatic_mods)
             else:
                 new_modifications.append(modification)
-
         return new_modifications
+
+    def init_automatic_discount(self):
+        manual_discounts = [x for x in self.discounts if not
+            x.discount_options[0].discount_rule.automatic]
+        if any(rule.automatic
+                for discount in self.possible_discounts
+                for rule in discount.rules):
+            self.discounts = manual_discounts + self.get_new_modifications(
+                self.covered_element_options, self.start_date, self.end_date,
+                automatic=True)
+        else:
+            self.discounts = manual_discounts
+
+    def before_activate(self):
+        super().before_activate()
+        self.init_automatic_discount()
 
     def create_automatic_premium_modifications(self):
         waiver_options, discount_options = [], []
@@ -454,17 +476,23 @@ class ContractOption(metaclass=PoolMeta):
         premium_modification = modification_option.premium_modification
         return {
             'is_waiver': isinstance(premium_modification, WaiverPremium),
-            'start_date': premium_modification.start_date,
-            'end_date': premium_modification.end_date,
+            'start_date': modification_option.start_date,
+            'end_date': modification_option.end_date,
+            'discount_description': modification_option.rec_name,
             }
 
-    def calculate_automatic_premium_duration(self):
+    def calculate_automatic_waiver_duration(self):
         if not self.with_waiver_of_premium:
             return [None, None]
         exec_context = {'date': self.start_date}
         self.init_dict_for_rule_engine(exec_context)
         return self.coverage.waiver_premium_rule[0].calculate_duration_rule(
             exec_context)
+
+    def calculate_automatic_discount_duration(self, rule):
+        exec_context = {'date': self.start_date}
+        self.init_dict_for_rule_engine(exec_context)
+        return rule.calculate_duration_rule(exec_context)
 
     def with_automatic_modifications(self):
         return any(r.automatic

@@ -17,9 +17,17 @@ class RuleEngine(metaclass=PoolMeta):
         super(RuleEngine, cls).__setup__()
         cls.type_.selection.append(
             ('waiver_duration', 'Waiver Of Premium Duration'))
+        cls.type_.selection.append(
+            ('discount_duration', 'Duration Of A Discount'))
+        cls.type_.selection.append(
+            ('discount_eligibility', 'Eligibility Of A Discount'))
 
     @fields.depends('type_')
     def on_change_with_result_type(self, name=None):
         if self.type_ == 'waiver_duration':
             return 'list'
+        if self.type_ == 'discount_duration':
+            return 'list'
+        if self.type_ == 'discount_eligibility':
+            return 'boolean'
         return super(RuleEngine, self).on_change_with_result_type(name)

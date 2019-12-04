@@ -2,7 +2,6 @@
 <tryton>
     <data>
         <menuitem id="menu_discount" name="Commercial Discount"/>
-
         <!-- ####################### -->
         <!-- # Commercial Discount # -->
         <!-- ####################### -->
@@ -31,7 +30,6 @@
             <field name="act_window" ref="act_commercial_discount"/>
         </record>
         <menuitem parent="menu_discount" action="act_commercial_discount" id="menu_commercial_discount_form"/>
-
         <!-- ################# -->
         <!-- # Discount Rule # -->
         <!-- ################# -->
@@ -60,7 +58,6 @@
             <field name="act_window" ref="act_discount_rule"/>
         </record>
         <menuitem parent="menu_discount" action="act_discount_rule" id="menu_discount_rule_form"/>
-
         <!-- ############################### -->
         <!-- # Contract - Premium Discount # -->
         <!-- ############################### -->
@@ -73,6 +70,14 @@
             <field name="model">contract.premium_modification.discount</field>
             <field name="type">form</field>
             <field name="name">discount_premium_option_form</field>
+        </record>
+        <!-- ###################################### -->
+        <!-- # Contract - Premium Discount Option # -->
+        <!-- ###################################### -->
+        <record model="ir.ui.view" id="discount_premium_modification_option_view_list">
+            <field name="model">contract.premium_modification.discount-contract.option</field>
+            <field name="type">tree</field>
+            <field name="name">discount_option_list</field>
         </record>
     </data>
 </tryton>

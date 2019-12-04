@@ -35,6 +35,9 @@ class DiscountModification(
             '%s - %s' % (o.covered_element.party.full_name, o.coverage.name)
             for o in self.options)
 
+    def get_rec_name(self, name):
+        return self.discount_options[0].discount_rule.commercial_discount.name
+
 
 class DiscountModificationOption(model.CoogSQL, model.CoogView):
     "Discount Option"
@@ -66,3 +69,6 @@ class DiscountModificationOption(model.CoogSQL, model.CoogView):
     @modification_rule.setter
     def modification_rule(self, rule):
         self.discount_rule = rule
+
+    def get_rec_name(self, name):
+        return self.discount_rule.rec_name

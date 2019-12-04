@@ -2,10 +2,14 @@
 <form>
     <label name="contract"/>
     <field name="contract" colspan="3"/>
+    <label name="rec_name"/>
+    <field name="rec_name" colspan="3"/>
     <label name="start_date"/>
     <field name="start_date"/>
     <label name="end_date"/>
     <field name="end_date"/>
     <label name="automatic"/>
     <field name="automatic"/>
+    <separator name="discount_options" colspan="4"/>
+    <field name="discount_options" colspan="4" expand_toolbar="0"/>
 </form>
