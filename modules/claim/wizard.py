@@ -123,7 +123,7 @@ class ClaimCloseReasonView(model.CoogView):
     claims = fields.Many2Many('claim', '', '', 'Claims', readonly=True)
     sub_status = fields.Many2One(
         'claim.sub_status', 'Substatus', required=True,
-        domain=[('status', '=', 'closed')])
+        domain=[('status', 'in', ['closed', 'dropped'])])
 
 
 class CloseClaim(Wizard):

@@ -57,7 +57,8 @@ class DocumentRequestLine(metaclass=PoolMeta):
     @classmethod
     def __post_setup__(cls):
         super(DocumentRequestLine, cls).__post_setup__()
-        cls.set_fields_readonly_condition(Eval('claim_status') == 'closed',
+        cls.set_fields_readonly_condition(Eval('claim_status').in_(
+            ['closed', 'dropped']),
             ['claim_status'], cls._get_skip_set_readonly_fields())
 
     def get_reference_object_for_edm(self):

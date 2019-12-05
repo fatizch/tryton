@@ -23,7 +23,7 @@ class UnderwritingStart(metaclass=PoolMeta):
         if Transaction().context.get('active_model') != 'claim':
             return defaults
         claim = Pool().get('claim')(Transaction().context.get('active_id'))
-        if claim.status == 'closed':
+        if claim.status in ['closed', 'dropped']:
             raise AccessError(gettext(
                     'underwriting_claim.msg_closed_claim'))
         defaults['parent'] = str(claim)

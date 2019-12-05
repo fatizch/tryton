@@ -34,10 +34,11 @@ CLAIMSTATUSES = [
     ('open', 'Open'),
     ('closed', 'Closed'),
     ('reopened', 'Reopened'),
+    ('dropped', 'Sans Suite')
     ]
 
 CLAIM_READONLY = Bool(Eval('claim_status')) & (
-            Eval('claim_status') == 'closed')
+        Eval('claim_status').in_(['closed', 'dropped']))
 
 
 class Claim(export.ExportImportMixin, Printable, model.CoogView):
@@ -62,7 +63,7 @@ class Claim(export.ExportImportMixin, Printable, model.CoogView):
         'on_change_with_is_sub_status_required')
     declaration_date = fields.Date('Declaration Date', required=True)
     end_date = fields.Date('End Date', readonly=True,
-        states={'invisible': Eval('status') != 'closed'},
+        states={'invisible': ~Eval('status').in_(['closed', 'dropped'])},
         depends=['status'])
     claimant = fields.Many2One('party.party', 'Claimant', ondelete='RESTRICT',
         required=True, select=True)
@@ -104,7 +105,8 @@ class Claim(export.ExportImportMixin, Printable, model.CoogView):
         cls._buttons.update({
                 'deliver': {},
                 'button_close': {
-                    'invisible': Eval('status') == 'closed'},
+                    'invisible': Eval('claim_status').in_(
+                        ['closed', 'dropped'])},
                 })
         cls.__rpc__.update({
                 'ws_add_new_loss': RPC(instantiate=0, readonly=False),
@@ -132,7 +134,8 @@ class Claim(export.ExportImportMixin, Printable, model.CoogView):
     @classmethod
     def __post_setup__(cls):
         super(Claim, cls).__post_setup__()
-        cls.set_fields_readonly_condition(Eval('status') == 'closed',
+        cls.set_fields_readonly_condition(~Eval('status').in_
+            (['closed', 'dropped']),
             ['status'], cls._get_skip_set_readonly_fields())
 
     @classmethod
@@ -208,7 +211,7 @@ class Claim(export.ExportImportMixin, Printable, model.CoogView):
 
     @fields.depends('status')
     def on_change_with_is_sub_status_required(self, name=None):
-        return self.status == 'closed'
+        return self.status in ['closed', 'dropped']
 
     def get_delivered_services(self, name):
         return [service.id for loss in self.losses for service in loss.services]
@@ -321,14 +324,14 @@ class Claim(export.ExportImportMixin, Printable, model.CoogView):
         cls.save(claims)
 
     def close_claim(self, sub_status, date=None):
-        self.status = 'closed'
+        self.status = sub_status.status
         self.sub_status = sub_status
         self.end_date = date or utils.today()
         for loss in self.losses:
             loss.close(sub_status, date)
 
     def reopen_claim(self):
-        if self.status == 'closed':
+        if self.status in ['closed', 'dropped']:
             self.status = 'reopened'
             self.sub_status = None
             self.end_date = None
@@ -492,7 +495,7 @@ class Loss(model.CoogSQL, model.CoogView,
     end_date = fields.Date('End Date',
         states={
             'invisible': Bool(~Eval('has_end_date')),
-            'readonly': Eval('claim_status') == 'closed',
+            'readonly': Eval('claim_status').in_(['closed', 'dropped']),
             }, depends=['has_end_date', 'claim_status'])
     loss_desc_code = fields.Function(
         fields.Char('Loss Desc Code', depends=['loss_desc']),
@@ -509,7 +512,7 @@ class Loss(model.CoogSQL, model.CoogView,
     closing_reason = fields.Many2One('claim.closing_reason', 'Closing Reason',
         domain=[('id', 'in', Eval('available_closing_reasons'))],
         states={
-            'readonly': Eval('claim_status') == 'closed',
+            'readonly': Eval('claim_status').in_(['closed', 'dropped']),
             'invisible': ~Eval('has_end_date')},
         depends=['available_closing_reasons', 'claim_status', 'has_end_date'],
         ondelete='RESTRICT')
@@ -524,7 +527,7 @@ class Loss(model.CoogSQL, model.CoogView,
                         Eval('state') == 'draft'),
                     'invisible': Or(
                         Eval('state') == 'draft',
-                        Eval('claim_status') == 'closed'),
+                        Eval('claim_status').in_(['closed', 'dropped'])),
                     },
                 'activate': {
                     'invisible': Or(
@@ -937,22 +940,27 @@ class ClaimService(model.CoogSQL, model.CoogView,
         cls._buttons.update({
                 'button_set_origin_service': {
                     'invisible': ~~Eval('origin_service') | (
-                        Eval('claim_status', 'closed') == 'closed'),
+                        Eval('claim_status', 'closed').in_(
+                            ['closed', 'dropped'])),
                     'readonly': ~~Eval('origin_service') | (
-                        Eval('claim_status', 'closed') == 'closed'),
+                        Eval('claim_status', 'closed').in_(
+                            ['closed', 'dropped'])),
                     },
                 'clear_origin_service': {
                     'invisible': ~Eval('origin_service') | (
-                        Eval('claim_status', 'closed') == 'closed'),
+                        Eval('claim_status', 'closed').in_(
+                            ['closed', 'dropped'])),
                     'readonly': ~Eval('origin_service') | (
-                        Eval('claim_status', 'closed') == 'closed'),
+                        Eval('claim_status', 'closed').in_(
+                            ['closed', 'dropped'])),
                     },
                 })
 
     @classmethod
     def __post_setup__(cls):
         super(ClaimService, cls).__post_setup__()
-        cls.set_fields_readonly_condition(Eval('claim_status') == 'closed',
+        cls.set_fields_readonly_condition(Eval('claim_status').in_(
+            ['closed', 'dropped']),
             ['claim_status'], cls._get_skip_set_readonly_fields())
         Pool().get('extra_data')._register_extra_data_provider(cls,
             'find_extra_data_value', ['benefit'])
@@ -1165,7 +1173,7 @@ class ClaimService(model.CoogSQL, model.CoogView,
 
     def set_origin_service(self, origin):
         assert origin
-        assert self.loss.claim.status != 'closed'
+        assert self.loss.claim.status not in ['closed', 'dropped']
         self.origin_service = origin
         self.save()
 
@@ -1185,7 +1193,7 @@ class ClaimService(model.CoogSQL, model.CoogView,
         if Warning.check(key):
             raise UserWarning(key, gettext('claim.msg_clearing_origin'))
         for service in services:
-            assert service.loss.claim.status != 'closed'
+            assert service.loss.claim.status not in ['closed', 'dropped']
             service._clear_origin_service()
         cls.save(services)
 
@@ -1204,7 +1212,6 @@ class ClaimSubStatus(model.CoogSQL, model.CoogView):
     status = fields.Selection(CLAIMSTATUSES, 'Status', required=True,
         select=True)
     active = fields.Boolean('Active')
-
     _get_claim_sub_status_cache = Cache('get_claim_sub_status')
 
     @classmethod
@@ -1278,7 +1285,8 @@ class ClaimServiceExtraDataRevision(model.CoogSQL, model.CoogView,
     @classmethod
     def __post_setup__(cls):
         super(ClaimServiceExtraDataRevision, cls).__post_setup__()
-        cls.set_fields_readonly_condition(Eval('claim_status') == 'closed',
+        cls.set_fields_readonly_condition(Eval('claim_status').in_(
+            ['closed', 'dropped']),
             ['claim_status'], cls._get_skip_set_readonly_fields())
 
     @staticmethod

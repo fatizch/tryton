@@ -71,13 +71,16 @@ class Claim(metaclass=PoolMeta):
         super(Claim, cls).__setup__()
         cls._buttons.update({
                 'button_calculate': {
-                    'invisible': Eval('status').in_(['closed']),
+                    'invisible': Eval('status').in_(
+                        ['closed', 'dropped']),
                     },
                 'create_indemnification': {
-                    'invisible': Eval('status').in_(['closed']),
+                    'invisible': Eval('status').in_(
+                        ['closed', 'dropped']),
                     },
                 'schedule_all': {
-                    'invisible': Eval('status').in_(['closed']),
+                    'invisible': Eval('status').in_(
+                        ['closed', 'dropped']),
                     },
                 })
 
@@ -226,8 +229,13 @@ class Loss(metaclass=PoolMeta):
             for x in self.services])
         if (not all_service_refused and self.has_end_date
                 and not self.end_date):
-            raise ValidationError(gettext(
-                    'claim_indemnification.msg_missing_end_date'))
+            key = str(self.id)
+            if sub_status.status == 'closed':
+                raise ValidationError(gettext(
+                        'claim_indemnification.msg_missing_end_date'))
+            elif Warning.check(key):
+                raise UserWarning(key, gettext(
+                        'claim_indemnification.msg_missing_end_date'))
         if (not all_service_refused and self.has_end_date
                 and not self.closing_reason):
             raise ValidationError(gettext(

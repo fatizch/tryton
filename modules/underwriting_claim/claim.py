@@ -79,7 +79,7 @@ class Claim(metaclass=PoolMeta):
         Underwriting = Pool().get('underwriting')
         to_create, to_save, to_close, to_delete = [], [], [], []
         for claim in claims:
-            if claim.status == 'closed':
+            if claim.status in ['closed', 'dropped']:
                 tmp_close, tmp_delete = claim.close_underwritings()
                 to_close += tmp_close
                 to_delete += tmp_delete

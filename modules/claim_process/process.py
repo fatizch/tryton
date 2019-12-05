@@ -308,7 +308,7 @@ class ClaimDeclare(ProcessFinder):
         return None
 
     def update_main_object(self, main_obj):
-        if main_obj.status == 'closed':
+        if main_obj.status in ['closed', 'dropped']:
             main_obj.reopen_claim()
         return main_obj
 
