@@ -9,6 +9,7 @@ from . import test_case
 from . import wizard
 from . import api
 from . import configuration
+from . import batch
 
 
 def register():
@@ -24,6 +25,7 @@ def register():
         load_data.BankDataSet,
         configuration.Configuration,
         configuration.SwiftPartyConfiguration,
+        batch.BankImport,
         module='bank_cog', type_='model')
     Pool.register(
         party.SynthesisMenuOpen,
