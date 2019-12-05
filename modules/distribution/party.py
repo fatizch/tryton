@@ -2,7 +2,6 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import PoolMeta
 from trytond.pyson import Eval
-
 from trytond.modules.coog_core import fields
 
 __all__ = [

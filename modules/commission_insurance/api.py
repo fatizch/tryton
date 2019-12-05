@@ -1,13 +1,20 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms
+import copy
+
 from trytond.pool import PoolMeta, Pool
 
+from trytond.modules.coog_core import utils
+
+from trytond.modules.api import date_from_api
+from trytond.modules.api import DATE_SCHEMA
 from trytond.modules.coog_core.api import CODED_OBJECT_SCHEMA, OBJECT_ID_SCHEMA
 
 
 __all__ = [
     'APIProduct',
     'APIContract',
+    'APICore',
     ]
 
 
@@ -174,3 +181,215 @@ class APIContract(metaclass=PoolMeta):
             for contract_data in example['input']['contracts']:
                 contract_data['agent'] = {'code': 'agent_007'}
         return examples
+
+
+class APICore(metaclass=PoolMeta):
+    __name__ = 'api.core'
+
+    @classmethod
+    def __setup__(cls):
+        super().__setup__()
+        cls._apis.update({
+                'close_distribution_network': {
+                    'description': 'Set end date to the specified date '
+                    'or today and block payments',
+                    'public': False,
+                    'readonly': False,
+                    },
+                'reopen_distribution_network': {
+                    'description': 'Remove the end date and unblock '
+                    'payments',
+                    'public': False,
+                    'readonly': False,
+                    },
+                })
+
+    @classmethod
+    def close_distribution_network(cls, parameters):
+        pool = Pool()
+        Party = pool.get('party.party')
+
+        parties = []
+        for network_data in parameters:
+            cls._close_distribution_network_block_payments(network_data)
+            cls._close_distribution_network_end_agents(network_data)
+            network_data['network'].party.agents = list(
+                network_data['network'].party.agents)
+            parties.append(network_data['network'].party)
+        Party.save(parties)
+        return
+
+    @classmethod
+    def _close_distribution_network_block_payments(cls, data):
+        if 'block_payments' in data and (
+                data['network'].party.block_payable_payments !=
+                data['block_payments']):
+            data.party.block_payable_payments = data['block_payments']
+
+    @classmethod
+    def _close_distribution_network_end_agents(cls, data):
+        for agent in data['network'].party.agents:
+            agent.end_date = data['end_date']
+
+    @classmethod
+    def _close_distribution_network_schema(cls):
+        return {
+            'type': 'array',
+            'additionalItems': False,
+            'items': cls._close_distribution_network_schema_item(),
+            'minItems': 1,
+            }
+
+    @classmethod
+    def _close_distribution_network_schema_item(cls):
+        code_req = cls._close_distribution_network_schema_shared()
+        id_req = copy.deepcopy(code_req)
+        code_req['properties']['code'] = {'type': 'string'}
+        code_req['required'] = ['code']
+        id_req['properties']['id'] = {'type': 'boolean'}
+        id_req['required'] = ['id']
+        return {'oneOf': [code_req, id_req]}
+
+    @classmethod
+    def _close_distribution_network_schema_shared(cls):
+        return {
+            'type': 'object',
+            'additionalProperties': False,
+            'properties': {
+                'end_date': DATE_SCHEMA,
+                'block_payments': {'type': 'boolean'},
+                },
+            }
+
+    @classmethod
+    def _close_distribution_network_examples(cls):
+        return [
+            {
+                'input': [
+                    {
+                        'code': 'C1',
+                        'end_date': '2019-12-31',
+                        'block_payments': True
+                    },
+                ],
+                'output': None,
+            }
+        ]
+
+    @classmethod
+    def _close_distribution_network_convert_input(cls, parameters):
+        for parameter in parameters:
+            cls._close_distribution_network_convert_end_date(parameter)
+            cls._close_distribution_network_convert_code(parameter)
+        return parameters
+
+    @classmethod
+    def _close_distribution_network_convert_end_date(cls, parameter):
+        if 'end_date' in parameter:
+            parameter['end_date'] = date_from_api(parameter['end_date'])
+        else:
+            parameter['end_date'] = utils.today()
+
+    @classmethod
+    def _close_distribution_network_convert_code(cls, parameter):
+        pool = Pool()
+        API = pool.get('api')
+        if 'code' in parameter:
+            parameter['network'] = API.instantiate_code_object(
+                'distribution.network',
+                {'code': parameter['code']})
+        elif 'id' in parameter:
+            parameter['network'] = API.instantiate_code_object(
+                'distribution.network',
+                {'id': parameter['id']})
+
+    @classmethod
+    def _close_distribution_network_validate_input(cls, parameters):
+        pool = Pool()
+        API = pool.get('api')
+        for data in parameters:
+            if data['network'].party is None:
+                API.add_input_error({
+                        'type': 'cannot_close_network_wo_party',
+                        'data': data['network'].code,
+                        })
+            else:
+                for agent in data['network'].party.agents:
+                    if agent.start_date is not None and (
+                            data['end_date'] < agent.start_date):
+                        API.add_input_error({
+                                'type': 'agents_exist_past_close_date',
+                                'data': data['network'].code,
+                                })
+                if all(agent.end_date is not None for agent in
+                        data['network'].party.agents):
+                    API.add_input_error({
+                            'type': 'network_already_closed',
+                            'data': data['network'].code,
+                            })
+
+    @classmethod
+    def reopen_distribution_network(cls, parameters):
+        pool = Pool()
+        Party = pool.get('party.party')
+
+        parties = []
+        for network_data in parameters:
+            cls._reopen_party_distribution_network(network_data)
+            network_data['network'].party.agents = list(
+                network_data['network'].party.agents)
+            parties.append(network_data['network'].party)
+        Party.save(parties)
+        return
+
+    @classmethod
+    def _reopen_party_distribution_network(cls, data):
+        if data['network'].party.block_payable_payments is not False:
+            data['network'].party.block_payable_payments = False
+        for agent in data['network'].party.agents:
+            agent.end_date = None
+
+    @classmethod
+    def _reopen_distribution_network_schema(cls):
+        return {
+            'type': 'array',
+            'additionalItems': False,
+            'items': CODED_OBJECT_SCHEMA,
+            'minItems': 1
+            }
+
+    @classmethod
+    def _reopen_distribution_network_examples(cls):
+        return [
+            {
+                'input': [
+                    {'code': 'C2'},
+                    ],
+                'output': None,
+            }
+        ]
+
+    @classmethod
+    def _reopen_distribution_network_convert_input(cls, parameters):
+        for parameter in parameters:
+            cls._close_distribution_network_convert_code(parameter)
+        return parameters
+
+    @classmethod
+    def _reopen_distribution_network_validate_input(cls, parameters):
+        pool = Pool()
+        API = pool.get('api')
+
+        for data in parameters:
+            if data['network'].party is None:
+                API.add_input_error({
+                        'type': 'cannot_reopen_network_wo_party',
+                        'data': data['network'].code,
+                        })
+            else:
+                if all(agent.end_date is None for agent in
+                        data['network'].party.agents):
+                    API.add_input_error({
+                        'type': 'network_already_opened',
+                        'data': data['network'].code,
+                        })

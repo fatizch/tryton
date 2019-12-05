@@ -79,4 +79,5 @@ def register():
     Pool.register(
         api.APIProduct,
         api.APIContract,
+        api.APICore,
         module='commission_insurance', type_='model', depends=['api'])

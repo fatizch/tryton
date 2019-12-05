@@ -7,7 +7,7 @@ from trytond.modules.api import date_from_api
 from trytond.modules.coog_core.api import OBJECT_ID_SCHEMA
 
 from trytond.modules.coog_core import fields
-
+from trytond.modules.coog_core import utils
 
 PARTY_RELATION_SCHEMA = {
     'oneOf': [
@@ -685,6 +685,11 @@ class APIParty(APIMixin):
                 assert len(data['addresses']) == 1
 
                 address_data = data['addresses'][0]
+                if options.get("update_address_date", False) is True:
+                    old_address = party.main_address
+                    if old_address is not None:
+                        old_address.end_date = utils.today()
+
                 address = cls._find_party_address(party, address_data)
                 cls._update_party_address(address, address_data, options)
             else:
@@ -699,6 +704,8 @@ class APIParty(APIMixin):
         address.zip = data['zip']
         address.city = data['city']
         address.country = data['country']
+        if options.get('update_address_date', False) is True:
+            address.start_date = utils.today()
 
     @classmethod
     def _update_party_identifiers(cls, party, data, options):
@@ -714,16 +721,29 @@ class APIParty(APIMixin):
         keys = {(x.type, x.value) for x in contact_mechanisms}
         for contact_data in data.get('contacts', []):
             if (contact_data['type'], contact_data['value']) in keys:
-                pass
+                continue
+            if options.get("archive_old_contacts", False) is True:
+                contact_mechanisms = cls._update_party_contacts_archive_old(
+                    contact_mechanisms, contact_data['type'])
             contact_mechanisms.append(ContactMechanism(
                     type=contact_data['type'],
                     value=contact_data['value'],
+                    active=True,
                     ))
         party.contact_mechanisms = contact_mechanisms
 
     @classmethod
+    def _update_party_contacts_archive_old(cls, contact_list, contact_type):
+        for contact_item in contact_list:
+            if (contact_item.type == contact_type and
+                    contact_item.active is True):
+                contact_item.active = False
+            return contact_list
+
+    @classmethod
     def _update_party_fields(cls):
-        return ['name', 'email', 'phone']
+        return ['name', 'email', 'phone',
+            'mobile', 'first_name', 'commercial_name']
 
     @classmethod
     def _find_party_address(cls, party, address_data):

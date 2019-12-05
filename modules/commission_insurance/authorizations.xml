@@ -449,4 +449,17 @@ this repository contains the full copyright notices and license terms. -->
             <field name="perm_delete" eval="True"/>
         </record>
     </data>
+    <data depends="api">
+        <!-- ############## -->
+        <!-- # API Access # -->
+        <!-- ############## -->
+        <record model="ir.api.access" id="close_distribution_network_default_access">
+            <field name="api">api.core.close_distribution_network</field>
+            <field name="group" ref="api.group_default_api"/>
+        </record>
+        <record model="ir.api.access" id="reopen_distribution_network_default_access">
+            <field name="api">api.core.reopen_distribution_network</field>
+            <field name="group" ref="api.group_default_api"/>
+        </record>
+    </data>
 </tryton>

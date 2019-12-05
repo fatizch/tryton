@@ -3,7 +3,6 @@
 from trytond.pool import PoolMeta, Pool
 from trytond.model import ModelSingleton, Unique, fields as tryton_fields
 from trytond.config import config
-
 from trytond.modules.coog_core import model, fields, coog_string
 
 OBJECT_ID_SCHEMA = {

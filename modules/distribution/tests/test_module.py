@@ -28,13 +28,21 @@ class ModuleTestCase(test_framework.CoogTestCase):
     def test0002_dist_network_creation(self):
         company, = self.Company.search([('party.name', '=', 'World Company')])
         DistNetwork = Pool().get('distribution.network')
+        Party = Pool().get('party.party')
+
+        party_1 = Party(name='party_1', addresses=[])
+        party_2 = Party(name='party_2', addresses=[])
+        party_2_2 = Party(name='party_2_2', addresses=[])
+
+        Party.save([party_1, party_2, party_2_2])
+
         root = DistNetwork(name='Root', code='root', company=company)
         root.save()
 
         node_1 = DistNetwork(name='Node 1', code='node_1', parent=root,
-            company=company)
+            company=company, party=party_1)
         node_2 = DistNetwork(name='Node 2', code='node_2', parent=root,
-            company=company)
+            company=company, party=party_2)
         DistNetwork.save([node_1, node_2])
 
         node_1_1 = DistNetwork(name='Node 1 1', code='node_1_1',
@@ -44,7 +52,8 @@ class ModuleTestCase(test_framework.CoogTestCase):
         node_2_1 = DistNetwork(name='Node 2 1', code='node_2_1',
             parent=node_2, company=company)
         node_2_2 = DistNetwork(name='Node 2 2', code='node_2_2',
-            parent=node_2, company=company)
+            parent=node_2, company=company, party=party_2_2)
+
         DistNetwork.save([node_1_1, node_1_2, node_2_1, node_2_2])
 
         self.assertEqual({x.id for x in node_2_2.parents},
@@ -133,6 +142,20 @@ class ModuleTestCase(test_framework.CoogTestCase):
             {'_debug_server': True})
         network_3 = Network(created['networks'][0]['id'])
         self.assertEqual(network_3.party.id, network_1.party.id)
+
+    @test_framework.prepare_test(
+        'distribution.test0002_dist_network_creation'
+        )
+    def test0021_update_distribution_network_api(self):
+        pool = Pool()
+        Core = pool.get('api.core')
+        Core.update_distribution_networks([
+            {
+                'code': 'node_1',
+                'network': {'name': 'titi'},
+                'party': {'name': 'tototo'}
+                }
+            ], {'_debug_server': True})
 
     @test_framework.prepare_test(
         'party_cog.test0001_createParties',

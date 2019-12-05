@@ -53,6 +53,11 @@ class APICore(metaclass=PoolMeta):
                     'description': 'Creates a new node in the distribution '
                     'network tree',
                     },
+                'update_distribution_networks': {
+                    'public': False,
+                    'readonly': False,
+                    'description': 'Update a list of distribution network'
+                    },
                 })
 
     @classmethod
@@ -346,6 +351,204 @@ class APICore(metaclass=PoolMeta):
         schema = super()._identity_context_output_schema()
         schema['properties']['dist_network'] = {'type': 'integer'}
         return schema
+
+    @classmethod
+    def update_distribution_networks(cls, parameters):
+        pool = Pool()
+        Party = pool.get('party.party')
+        Network = pool.get('distribution.network')
+        networks_to_update = []
+        partys_to_update = []
+        for data in parameters:
+            distribution_obj = data['_network_instance']
+
+            if 'network' in data:
+                network_ret = cls.update_distribution_network_network(
+                    distribution_obj,
+                    data['network'])
+                if network_ret is not None:
+                    networks_to_update.append(network_ret)
+            if 'party' in data:
+                party_ret = cls.update_distribution_network_party(
+                    distribution_obj.party,
+                    data['party'])
+                partys_to_update.append(party_ret)
+        Network.save(networks_to_update)
+        Party.save(partys_to_update)
+        return None
+
+    @classmethod
+    def _update_distribution_networks_convert_input(cls, parameters):
+        pool = Pool()
+        API = pool.get('api')
+        for data in parameters:
+            if 'code' in data and 'id' in data:
+                API.add_input_error({
+                    'type': 'id_and_code_exclusive',
+                    'data': {
+                        'network': {
+                            'data': data}
+                        },
+                    })
+            if 'code' in data:
+                network = API.instantiate_code_object('distribution.network', {
+                    'code': data['code']
+                })
+            elif 'id' in data:
+                network = API.instantiate_code_object('distribution.network', {
+                    'id': data['id']
+                })
+
+            data['_network_instance'] = network
+            if 'party' in data:
+                data['party']['contacts'] = []
+                data['party']['addresses'] = []
+                if 'address' in data['party']:
+                    data['party']['addresses'].append(data['party']['address'])
+                pool.get('api.party')._party_convert(data['party'], {},
+                    {'relations': {}, 'identifiers': {}})
+        return parameters
+
+    @classmethod
+    def _update_distribution_networks_validate_input(cls, parameters):
+        pool = Pool()
+        API = pool.get('api')
+        for data in parameters:
+            network = data['_network_instance']
+            if 'party' in data:
+                if len(data['party']) > 0 and network.party is None:
+                    API.add_input_error({
+                        'type': 'party_not_found',
+                        'data': {
+                            'network': {
+                                'code': network.code,
+                                'id': network.id}
+                            },
+                        })
+                if 'address' in data['party']:
+                    PartyAPI = pool.get('api.party')
+                    matches = [x for x in network.party.addresses
+                        if PartyAPI._party_address_matches(x,
+                            data['party']['address'])]
+
+                    if len(matches) > 0:
+                        API.add_input_error({
+                                'type': 'duplicate_address',
+                                'data': {
+                                    'model': 'party.address',
+                                    'data': {
+                                        'party': network.party.code,
+                                        'address': matches[0].full_address,
+                                        },
+                                     },
+                                 })
+
+        return parameters
+
+    @classmethod
+    def update_distribution_network_party(cls, party_instance, data):
+        pool = Pool()
+        APIParty = pool.get('api.party')
+        APIParty._update_party(party_instance, data, {'updateAddressDate': True,
+            'archive_old_contacts': True})
+        return party_instance
+
+    @classmethod
+    def update_distribution_network_network(cls, distribution_instance, data):
+        if 'name' in data:
+            distribution_instance.name = data['name']
+            return distribution_instance
+        return None
+
+    @classmethod
+    def _update_distribution_networks_schema(cls):
+        return {
+            'type': 'array',
+            'additionalItems': False,
+            'items': cls._update_distribution_network_schema_item(),
+            'minItems': 1
+            }
+
+    @classmethod
+    def _update_distribution_network_schema_item(cls):
+        return {
+            'type': 'object',
+            'additionalProperties': False,
+            'properties': {
+                'id': OBJECT_ID_SCHEMA,
+                'code': {'type': 'string'},
+                'network': cls._update_distribution_network_schema_network(),
+                'party': cls._update_distribution_network_schema_party(),
+                },
+            'anyOf': [
+                {
+                    'required': ['id'],
+                    },
+                {
+                    'required': ['code'],
+                    },
+                ]
+            }
+
+    @classmethod
+    def _update_distribution_network_schema_party(cls):
+        pool = Pool()
+        APIParty = pool.get('api.party')
+        return {
+            'type': 'object',
+            'additionalProperties': False,
+            'properties': {
+                'name': {'type': 'string'},
+                'commercial_name': {'type': 'string'},
+                'first_name': {'type': 'string'},
+                'address': APIParty._party_address_schema(),
+                'email': {'type': 'string'},
+                'phone': {'type': 'string'},
+                'mobile': {'type': 'string'}
+                }
+            }
+
+    @classmethod
+    def _update_distribution_network_schema_network(cls):
+        return {
+            'type': 'object',
+            'additionalProperties': False,
+            'properties': {
+                'name': {'type': 'string'},
+                }
+            }
+
+    @classmethod
+    def _update_distribution_networks_examples(cls):
+        return [
+            {
+                'input': [
+                    {
+                        "code": "C1",
+                        "party": {
+                            "name": "Eugène Rougon",
+                            "commercial_name": "Eugène Rougon vendeur",
+                            "first_name": "Eugène",
+                            "email": "eugenerougon@gmail.com",
+                            "address": {
+                                "street": "3 square gay lussac",
+                                "zip": "78330",
+                                "city": "Fontenay-Le-FLeury",
+                                "country": "FR"}
+                            }
+                    },
+                    {
+                        "code": "C1010101",
+                        "network": {"name": "nom du reseau du revendeur"},
+                    },
+                    {
+                        "code": "C3",
+                        "network": {"name": "nom du reseau de distribution"}
+                    }
+                ],
+                'output': None,
+            }
+        ]
 
 
 class DistributionNetwork(WebUIResourceMixin):

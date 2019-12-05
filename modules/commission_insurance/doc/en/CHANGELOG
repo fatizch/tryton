@@ -1,3 +1,5 @@
+* FEA#13326 Add two APIs to close and reopen distribution networks
+
 Version 2.6 - 2019-10-11
 * OTH#00000 Ensure no crash when computing commissions on coverage without premium rule
 * BUG#12166 Fix new cases for commission simulation wizard

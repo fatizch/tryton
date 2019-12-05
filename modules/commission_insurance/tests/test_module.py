@@ -467,6 +467,35 @@ class ModuleTestCase(test_framework.CoogTestCase):
                     datetime.date(2001, 3, 4), datetime.date(2002, 5, 7),
                     datetime.date(2003, 7, 10)]))
 
+    @test_framework.prepare_test(
+        'distribution.test0002_dist_network_creation',
+        )
+    def test0030_close_network(self):
+        self.APICore.close_distribution_network([
+            {
+                'code': 'node_1',
+                'end_date': '2019-10-28',
+                'block_payments': True
+                },
+            {
+                'code': 'node_2',
+                'block_payments': True
+                }
+            ], {})
+
+    @test_framework.prepare_test(
+        'commission_insurance.test0030_close_network',
+        )
+    def test0035_reopen_network(self):
+        self.APICore.reopen_distribution_network([
+            {
+                'code': 'node_1'
+                },
+            {
+                'code': 'node_2'
+                }
+            ], {})
+
 
 def suite():
     suite = trytond.tests.test_tryton.suite()
