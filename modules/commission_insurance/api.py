@@ -224,7 +224,8 @@ class APICore(metaclass=PoolMeta):
         if 'block_payments' in data and (
                 data['network'].party.block_payable_payments !=
                 data['block_payments']):
-            data.party.block_payable_payments = data['block_payments']
+            data['network'].party.block_payable_payments = \
+                data['block_payments']
 
     @classmethod
     def _close_distribution_network_end_agents(cls, data):
