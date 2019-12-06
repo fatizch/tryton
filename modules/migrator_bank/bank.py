@@ -327,7 +327,7 @@ class MigratorBankAccount(migrator.Migrator):
         if 'with_sepa_mandate' in kwargs and kwargs['with_sepa_mandate']:
             cls.columns['identification'] = 'identification'
             cls.columns['signature_date'] = 'signature_date'
-        super(MigratorBankAccount, cls).execute(objects, ids, kwargs)
+        super(MigratorBankAccount, cls).execute(objects, ids, **kwargs)
 
 
 class MigratorSepaMandat(migrator.Migrator):

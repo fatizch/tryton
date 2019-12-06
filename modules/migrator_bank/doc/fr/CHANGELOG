@@ -1,3 +1,4 @@
+* BUG#13731 correctif de la méthode execute du batch migrator.bank_account
 * BUG#12845 correctif de la migration des comptes bancaires avec plusieurs
 propriétaires
 * FEA#12847 Ajout de migrator du mandat sepa
