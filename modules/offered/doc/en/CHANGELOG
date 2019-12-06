@@ -1,3 +1,4 @@
+* BUG#13732 Filter extra data returned in extra data groups by API
 * BUG#13518 Check extra data business kind
 * FEA#13273 Remove package forced extra data from product description API
 * BUG#13574 Fix extra data groups relation to sub groups

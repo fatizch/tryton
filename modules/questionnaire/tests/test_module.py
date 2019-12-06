@@ -13,6 +13,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
     'Module Test Case'
 
     module = 'questionnaire'
+    extras = ['web_configuration']
 
     @classmethod
     def fetch_models_for(cls):
@@ -160,6 +161,7 @@ return [
                     'mandatory': False,
                     'sequence': questionnaire.parts[0].sequence,
                     'description': 'lorem ipsum',
+                    'groups': [],
                     'questions': [
                         {
                             'code': 'remboursement_anticipe',
@@ -196,6 +198,7 @@ return [
                     'mandatory': False,
                     'sequence': questionnaire.parts[1].sequence,
                     'description': 'dolor sic amet',
+                    'groups': [],
                     'questions': [
                         {
                             'code': 'capitaux_eleves',
@@ -237,6 +240,65 @@ return [
                     'data': {'code': 'inexisting', 'model': 'questionnaire'},
                     },
                 ])
+
+    @test_framework.prepare_test('questionnaire.test0001_init_questionnaire')
+    def test0015_test_questionnaire_description_sub_extra_data(self):
+        product, = self.Product.search([('code', '=', 'AAA')])
+        rule_questionnaire_loan, = self.RuleEngine.search([('name', '=',
+                    'Regle questionnaire emprunteur')])
+        rule_questionnaire_life, = self.RuleEngine.search([('name', '=',
+                    'Regle questionnaire Prevoyance')])
+        remboursement_anticipe, = self.ExtraData.search([('name', '=',
+                    'remboursement_anticipe')])
+        plusieurs_emprunteurs, = self.ExtraData.search([('name', '=',
+                    'plusieurs_emprunteurs')])
+
+        remboursement_anticipe.sub_data = [plusieurs_emprunteurs]
+        remboursement_anticipe.save()
+
+        questionnaire = self.Questionnaire()
+        questionnaire.name = 'Questionnaire Emprunteur / Prevoyance'
+        questionnaire.code = 'questionnaire_emprunteur_prevoyance_test'
+        questionnaire.sequence = 1
+        questionnaire.company = product.company
+        questionnaire.description = 'Notre algorithme a votre service'
+        questionnaire.products = [product]
+        questionnaire.parts = [{
+                'sequence': 1,
+                'name': 'Emprunteur',
+                'rule': rule_questionnaire_loan.id,
+                'extra_data_def': [
+                    remboursement_anticipe.id,
+                    plusieurs_emprunteurs.id,
+                    ],
+                'extra_data_groups': [
+                    {
+                        'title': 'Premier groupe',
+                        'description': 'Le premier groupe',
+                        'tooltip': 'premier',
+                        'sequence_order': 1,
+                        'parent_model': questionnaire.id,
+                        'extra_data': [remboursement_anticipe.id],
+                        },
+                    {
+                        'title': 'Deuxième groupe',
+                        'description': 'Le second groupe',
+                        'tooltip': 'deuxième',
+                        'sequence_order': 2,
+                        'parent_model': questionnaire.id,
+                        'extra_data': [plusieurs_emprunteurs.id],
+                        },
+                    ]
+                },
+            ]
+        questionnaire.save()
+
+        result = self.APICore.list_questionnaires({
+                'questionnaires': [{'code':
+                        'questionnaire_emprunteur_prevoyance_test'}],
+                }, {'_debug_server': True})
+        self.assertEqual(len(result[0]['parts'][0]['groups'][0]['extra_data']),
+            1)
 
     @test_framework.prepare_test('questionnaire.test0001_init_questionnaire')
     def test0020_test_questionnaire_compute(self):

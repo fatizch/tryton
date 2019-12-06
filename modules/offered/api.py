@@ -408,7 +408,9 @@ class APICoreWebConfiguration(metaclass=PoolMeta):
     @classmethod
     def _extra_data_group_structure(cls, extra_data_group_list):
         return [{
-                'extra_data': cls._extra_data_structure(x.extra_data),
+                'extra_data': [extra
+                    for extra in cls._extra_data_structure(x.extra_data)
+                    if any(extra['code'] == x.name for x in x.extra_data)],
                 'title': x.title,
                 'description': x.description,
                 'tooltip': x.tooltip,
