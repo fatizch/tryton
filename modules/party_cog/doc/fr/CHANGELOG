@@ -1,3 +1,4 @@
+* FEA#13710 Eviter la vérification des doublons si il s'agit d'un appel à partir d'un batch
 * FEA#13326 Nouvelles apis de modification d'informations du tiers sur un réseau de distribution et de fermeture de réseau de distribution (lié à un plan de commission)
 * BUG#11749 Correction de la recherche globale des synthèses acteur
 * FEA#13147 Redéfinir la fonction add_func_key

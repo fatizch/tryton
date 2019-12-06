@@ -1,3 +1,4 @@
+* FEA#13710 Bypass check duplicates method in case of a call from batch
 * FEA#13326 New apis to handle party informations update on distribution network and commission agent closure
 * BUG#11749 Fix party synthesis menu global search
 * FEA#13147 Redefine add_func_key function

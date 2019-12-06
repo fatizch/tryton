@@ -14,6 +14,7 @@ from sql.functions import Function
 
 from trytond import backend
 from trytond.exceptions import UserWarning, UserError
+from trytond.server_context import ServerContext
 from trytond.i18n import gettext
 from trytond.model.exceptions import AccessError
 from trytond.pyson import Eval, Bool, Or
@@ -318,6 +319,9 @@ class Party(export.ExportImportMixin, summary.SummaryMixin):
 
     @classmethod
     def check_duplicates(cls, parties):
+        if ServerContext().get('from_batch', None):
+            # Warnings are ignored anyway
+            return
         pool = Pool()
         Warning = pool.get('res.user.warning')
         in_max = Transaction().database.IN_MAX
