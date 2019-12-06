@@ -800,6 +800,7 @@ class PartyIdentifier(export.ExportImportMixin):
         cls.__previous_type_selection = cls.type.selection
         cls.type.selection = 'get_types'
         cls.type.required = True
+        cls.code.select = True
 
     @classmethod
     def get_types(cls):
