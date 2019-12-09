@@ -1,3 +1,4 @@
+* BUG#00000 Fix call to update party address
 * BUG#11342 Allow endorsements on contracts on hold
 
 Version 2.6 - 2019-10-11

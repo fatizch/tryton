@@ -255,7 +255,7 @@ class APIEndorsement(metaclass=PoolMeta):
         for address in party.all_addresses:
             if address.id not in per_id:
                 continue
-            PartyAPI._update_party_address(address, per_id[address.id], None)
+            PartyAPI._update_party_address(address, per_id[address.id], {})
 
         party.all_addresses = list(party.all_addresses)
 
