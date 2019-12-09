@@ -4,7 +4,7 @@ from trytond.pool import PoolMeta, Pool
 
 from trytond.modules.coog_core import utils
 
-from trytond.modules.api import DATE_SCHEMA, AMOUNT_SCHEMA, RATE_SCHEMA
+from trytond.modules.api import DATE_SCHEMA, POSITIVE_AMOUNT_SCHEMA, RATE_SCHEMA
 from trytond.modules.api import date_from_api, amount_from_api, date_for_api
 from trytond.modules.coog_core.api import CODED_OBJECT_SCHEMA
 from trytond.modules.contract.api import CONTRACT_SCHEMA
@@ -217,7 +217,7 @@ class ContractAPI(metaclass=PoolMeta):
                     'type': 'string',
                     'enum': ['flat', 'rate'],
                     },
-                'flat_amount': AMOUNT_SCHEMA,
+                'flat_amount': POSITIVE_AMOUNT_SCHEMA,
                 'rate': RATE_SCHEMA,
                 'end': DATE_SCHEMA,
                 },
@@ -226,7 +226,7 @@ class ContractAPI(metaclass=PoolMeta):
                 {
                     'properties': {
                         'mode': 'flat',
-                        'flat_amount': AMOUNT_SCHEMA,
+                        'flat_amount': POSITIVE_AMOUNT_SCHEMA,
                         },
                     'required': ['mode', 'flat_amount'],
                     },

@@ -2,7 +2,7 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import PoolMeta, Pool
 
-from trytond.modules.api import DATE_SCHEMA, AMOUNT_SCHEMA
+from trytond.modules.api import DATE_SCHEMA, POSITIVE_AMOUNT_SCHEMA
 from trytond.modules.api.api.core import date_from_api
 
 
@@ -22,7 +22,7 @@ class APIParty(metaclass=PoolMeta):
             'properties': {
                 'entry_date': DATE_SCHEMA,
                 'employment_kind': {'type': 'string'},
-                'gross_salary': AMOUNT_SCHEMA,
+                'gross_salary': POSITIVE_AMOUNT_SCHEMA,
             },
             'required': ['entry_date'],
         }

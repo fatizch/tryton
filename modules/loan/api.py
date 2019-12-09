@@ -8,7 +8,8 @@ from trytond.modules.coog_core import utils
 
 from trytond.modules.api.api.core import amount_for_api, date_for_api
 from trytond.modules.api.api.core import amount_from_api, date_from_api
-from trytond.modules.api.api.core import DATE_SCHEMA, AMOUNT_SCHEMA, RATE_SCHEMA
+from trytond.modules.api.api.core import DATE_SCHEMA, POSITIVE_AMOUNT_SCHEMA
+from trytond.modules.api.api.core import RATE_SCHEMA
 from trytond.modules.coog_core.api import FIELD_SCHEMA, OBJECT_ID_SCHEMA
 from trytond.modules.coog_core.api import REF_ID_SCHEMA
 
@@ -186,7 +187,7 @@ class APIContract(metaclass=PoolMeta):
             'additionalProperties': False,
             'properties': {
                 'ref': {'type': 'string'},
-                'amount': AMOUNT_SCHEMA,
+                'amount': POSITIVE_AMOUNT_SCHEMA,
                 'funds_release_date': DATE_SCHEMA,
                 'payment_frequency': {
                     'type': 'string',
@@ -263,7 +264,7 @@ class APIContract(metaclass=PoolMeta):
                 'properties': {
                     'number_of_payments': {'type': 'integer', 'minimum': 1},
                     'payment_amount': {
-                        'oneOf': [AMOUNT_SCHEMA, {'type': 'null'}],
+                        'oneOf': [POSITIVE_AMOUNT_SCHEMA, {'type': 'null'}],
                         'default': None,
                         },
                     'rate': {
@@ -318,10 +319,10 @@ class APIContract(metaclass=PoolMeta):
             'type': 'object',
             'additionalProperties': False,
             'properties': {
-                'amount': AMOUNT_SCHEMA,
-                'interest': AMOUNT_SCHEMA,
+                'amount': POSITIVE_AMOUNT_SCHEMA,
+                'interest': POSITIVE_AMOUNT_SCHEMA,
                 'number': {'type': 'integer'},
-                'principal': AMOUNT_SCHEMA,
+                'principal': POSITIVE_AMOUNT_SCHEMA,
                 'start': DATE_SCHEMA,
                 },
             'required': ['amount', 'interest', 'number', 'principal', 'start'],

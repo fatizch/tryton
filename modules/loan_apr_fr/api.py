@@ -1,7 +1,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import PoolMeta
-from trytond.modules.api.api.core import AMOUNT_SCHEMA, amount_for_api
+from trytond.modules.api.api.core import POSITIVE_AMOUNT_SCHEMA, amount_for_api
 from trytond.modules.coog_core.api import OBJECT_ID_SCHEMA, CODE_SCHEMA
 
 
@@ -42,7 +42,7 @@ class APIContract(metaclass=PoolMeta):
                 'type': 'object',
                 'additionalProperties': False,
                 'properties': {
-                    'taea': AMOUNT_SCHEMA,
+                    'taea': POSITIVE_AMOUNT_SCHEMA,
                     'loan': {
                         'type': 'object',
                         'additionalProperties': False,

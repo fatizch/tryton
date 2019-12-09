@@ -2,7 +2,7 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import PoolMeta, Pool
 
-from trytond.modules.api.api.core import AMOUNT_SCHEMA, amount_from_api
+from trytond.modules.api.api.core import POSITIVE_AMOUNT_SCHEMA, amount_from_api
 from trytond.modules.coog_core.api import FIELD_SCHEMA
 from trytond.modules.rule_engine import check_args
 
@@ -46,7 +46,7 @@ class APIContract(metaclass=PoolMeta):
     @classmethod
     def _contract_option_schema(cls, minimum=False):
         schema = super()._contract_option_schema(minimum=minimum)
-        schema['properties']['coverage_amount'] = AMOUNT_SCHEMA
+        schema['properties']['coverage_amount'] = POSITIVE_AMOUNT_SCHEMA
         return schema
 
     @classmethod

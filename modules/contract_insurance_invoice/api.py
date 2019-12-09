@@ -9,7 +9,7 @@ from trytond.transaction import Transaction
 from trytond.modules.coog_core import coog_date
 
 from trytond.modules.api import DATE_SCHEMA, api_input_error_manager
-from trytond.modules.api.api.core import AMOUNT_SCHEMA, amount_for_api
+from trytond.modules.api.api.core import POSITIVE_AMOUNT_SCHEMA, amount_for_api
 from trytond.modules.api.api.core import date_for_api
 from trytond.modules.coog_core.api import OBJECT_ID_SCHEMA, CODE_SCHEMA
 from trytond.modules.coog_core.api import MODEL_REFERENCE
@@ -628,10 +628,10 @@ class APIContract(metaclass=PoolMeta):
                         'additionalItems': False,
                         'items': cls._payment_schedule_invoice_schema(),
                         },
-                    'total_premium': AMOUNT_SCHEMA,
-                    'total_fee': AMOUNT_SCHEMA,
-                    'total_tax': AMOUNT_SCHEMA,
-                    'total': AMOUNT_SCHEMA,
+                    'total_premium': POSITIVE_AMOUNT_SCHEMA,
+                    'total_fee': POSITIVE_AMOUNT_SCHEMA,
+                    'total_tax': POSITIVE_AMOUNT_SCHEMA,
+                    'total': POSITIVE_AMOUNT_SCHEMA,
                     },
                 },
             }
@@ -649,11 +649,11 @@ class APIContract(metaclass=PoolMeta):
                     'items': cls._payment_schedule_invoice_detail_schema(),
                     },
                 'end': DATE_SCHEMA,
-                'fee': AMOUNT_SCHEMA,
-                'premium': AMOUNT_SCHEMA,
+                'fee': POSITIVE_AMOUNT_SCHEMA,
+                'premium': POSITIVE_AMOUNT_SCHEMA,
                 'start': DATE_SCHEMA,
-                'tax': AMOUNT_SCHEMA,
-                'total': AMOUNT_SCHEMA,
+                'tax': POSITIVE_AMOUNT_SCHEMA,
+                'total': POSITIVE_AMOUNT_SCHEMA,
                 },
             }
 
@@ -664,12 +664,12 @@ class APIContract(metaclass=PoolMeta):
             'additionalProperties': False,
             'properties': {
                 'end': DATE_SCHEMA,
-                'fee': AMOUNT_SCHEMA,
+                'fee': POSITIVE_AMOUNT_SCHEMA,
                 'name': {'type': 'string'},
-                'premium': AMOUNT_SCHEMA,
+                'premium': POSITIVE_AMOUNT_SCHEMA,
                 'start': DATE_SCHEMA,
-                'tax': AMOUNT_SCHEMA,
-                'total': AMOUNT_SCHEMA,
+                'tax': POSITIVE_AMOUNT_SCHEMA,
+                'total': POSITIVE_AMOUNT_SCHEMA,
                 'origin': cls._payment_schedule_detail_origin_schema(),
                 },
             }

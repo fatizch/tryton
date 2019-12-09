@@ -69,7 +69,9 @@ DEFAULT_OUTPUT_SCHEMA = {
 
 DATE_SCHEMA = {'type': 'string', 'pattern': r'^[0-9]{4}-[0-9]{2}-[0-9]{2}$'}
 
-AMOUNT_SCHEMA = {'type': 'string', 'pattern': r'^([0-9]{1,}\.)?[0-9]{1,}$'}
+POSITIVE_AMOUNT_SCHEMA = {
+    'type': 'string', 'pattern': r'^([0-9]{1,}\.)?[0-9]{1,}$',
+    }
 
 RATE_SCHEMA = {'oneOf': [
         {'type': 'string', 'enum': ['1', '1.0', '1.00', '1.000', '1.0000']},
