@@ -49,6 +49,38 @@ class ContractAPI(metaclass=PoolMeta):
         super()._subscribe_contracts_execute(created, options)
 
     @classmethod
+    def _validate_contract_input(cls, data):
+        # temporarily add contract_underwriting keys which are not supposed to
+        # be here (wrong business kind) but that validate requires anyway
+        ExtraData = Pool().get('extra_data')
+        extra = data['extra_data']
+        recomputed = data['product'].refresh_extra_data(extra.copy())
+        temp_keys = [key for key in set(recomputed) - set(extra)
+            if ExtraData._extra_data_struct(key)['kind'] ==
+            'contract_underwriting']
+        for key in temp_keys:
+            extra[key] = recomputed[key]
+        super(ContractAPI, cls)._validate_contract_input(data)
+        for key in temp_keys:
+            del extra[key]
+
+    @classmethod
+    def _validate_contract_option_input(cls, data):
+        # temporarily add option_underwriting keys which are not supposed to be
+        # here (wrong business kind) but that validate requires anyway
+        ExtraData = Pool().get('extra_data')
+        extra = data['extra_data']
+        recomputed = data['coverage'].refresh_extra_data(extra.copy())
+        temp_keys = [key for key in set(recomputed) - set(extra)
+            if ExtraData._extra_data_struct(key)['kind'] ==
+            'option_underwriting']
+        for key in temp_keys:
+            extra[key] = recomputed[key]
+        super(ContractAPI, cls)._validate_contract_option_input(data)
+        for key in temp_keys:
+            del extra[key]
+
+    @classmethod
     def update_underwriting(cls, parameters):
 
         cls._update_underwriting_contract(parameters)

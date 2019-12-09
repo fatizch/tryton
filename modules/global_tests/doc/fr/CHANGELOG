@@ -1,3 +1,5 @@
+* BUG#0000 Suppression d'une donnée complémentaire au type métier incorrect
+
 Version 2.6 - 2019-10-11
 * OTH#0000 Initialisation des tests API dans new_db
 

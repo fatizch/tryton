@@ -97,7 +97,6 @@
             "product": {"code": "life_product"},
             "commercial_product": {"code": "prevoyance_plus"},
             "agent": {"code": "vip"},
-            "extra_data": {"analyse_forcee": "non"},
             "questionnaire": {"ref": "1"},
             "billing": {
                 "payer": {"ref": "1"},

@@ -1,3 +1,5 @@
+* BUG#0000 Remove extra data with invalid business kind
+
 Version 2.6 - 2019-10-11
 * OTH#0000 Initialize API tests in new_db script
 
