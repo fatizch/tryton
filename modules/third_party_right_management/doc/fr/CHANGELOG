@@ -1,3 +1,5 @@
+* BUG#13781 Le renouvellement de contrat doit ajuster les périodes délégataires en fonction des changements apportés au contract
+
 Version 2.6 - 2019-10-11
 * BUG#12476 L'annulation des avenants ne rétablit pas les périodes de droits telles qu'initialement calculées
 * OTH#00000 Correction de la gestion des périodes pour les avenants

@@ -227,9 +227,12 @@ item_description = Model.get('offered.item.description')(item_description.id)
 
 contract = Contract()
 company = Model.get('company.company')(company.id)
+# #Comment# #To avoid leap years issues with tests, it's better to chose a fixed
+# #Comment# contract start date
+contract_start_date = dt.date(2015, 1, 1)
 contract.company = company
 contract.subscriber = subscriber
-contract.start_date = dt.date.today()
+contract.start_date = contract_start_date
 contract.status = 'quote'
 product = Model.get('offered.product')(product.id)
 contract.product = product
@@ -250,12 +253,13 @@ Wizard('contract.activate', models=[contract]).execute('apply')
 
 # #Comment# #Renew the contract
 
-config._context['client_defined_date'] = dt.date.today() + dt.timedelta(days=60)
+config._context['client_defined_date'] = contract_start_date + \
+    dt.timedelta(days=60)
 renew_wizard = Wizard('contract_term_renewal.renew', models=[contract])
 renew_wizard.execute('renew')
 
 contract.reload()
 option, = contract.covered_elements[0].options
 tpp = option.third_party_periods[-1]
-(tpp.end_date - dt.date.today()).days
-# #Res# #365
+(tpp.end_date - contract_start_date).days
+# #Res# #730

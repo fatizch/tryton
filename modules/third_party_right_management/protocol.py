@@ -90,7 +90,7 @@ class Protocol(model.CodedMixin, model.CoogView,
 
         today = Date.today()
         start_date = rule_result.get('start_date', date)
-        end_date = rule_result.get('end_date', option.end_date)
+        end_date = rule_result.get('end_date', option.final_end_date)
         add_period = rule_result.get('add_period', True)
         end_date_offset = dt.timedelta(days=1) if add_period else dt.timedelta()
 
