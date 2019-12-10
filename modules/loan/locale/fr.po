@@ -958,7 +958,7 @@ msgstr "Année"
 
 msgctxt "selection:loan,kind:"
 msgid "Balloon"
-msgstr "In Fine"
+msgstr "In fine"
 
 msgctxt "selection:loan,kind:"
 msgid "Fixed Rate"
@@ -966,11 +966,11 @@ msgstr "Amortissable"
 
 msgctxt "selection:loan,kind:"
 msgid "Graduated"
-msgstr "Palier"
+msgstr "A paliers"
 
 msgctxt "selection:loan,kind:"
 msgid "Interest Free Loan"
-msgstr "Taux Zéro"
+msgstr "Taux zéro"
 
 msgctxt "selection:loan,kind:"
 msgid "Intermediate"
