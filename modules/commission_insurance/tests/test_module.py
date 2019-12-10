@@ -13,6 +13,7 @@ import trytond.tests.test_tryton
 from trytond.pool import Pool
 from trytond.transaction import Transaction
 
+from trytond.modules.api import APIInputError
 from trytond.modules.coog_core import test_framework
 from trytond.tests.test_tryton import doctest_teardown
 
@@ -148,6 +149,17 @@ class ModuleTestCase(test_framework.CoogTestCase):
         node_1_1.is_distributor = True
         node_1_1.save()
 
+        node_2, = DistNetwork.search([('code', '=', 'node_2')])
+        broker_2 = Party()
+        broker_2.is_person = False
+        broker_2.name = 'Broker'
+        broker_2.save()
+
+        node_2.party = broker_2
+        node_2.is_distributor = True
+        node_2.is_broker = True
+        node_2.save()
+
     @test_framework.prepare_test(
         'commission_insurance.test0003_create_broker',
         )
@@ -161,6 +173,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
 
         product, = Product.search([('code', '=', 'AAA')])
         broker, = Party.search([('name', '=', 'My Broker')])
+        broker_2, = Party.search([('name', '=', 'Broker')])
         commission_product, = AccountProduct.search([
                 ('code', '=', 'commission_product')])
 
@@ -205,6 +218,16 @@ class ModuleTestCase(test_framework.CoogTestCase):
         wonder_agent_broker.plan = wonder_plan
         wonder_agent_broker.currency = product.company.currency
         wonder_agent_broker.save()
+
+        agent_broker = Agent()
+        agent_broker.company = product.company
+        agent_broker.party = broker_2
+        agent_broker.code = 'agent'
+        agent_broker.type_ = 'agent'
+        agent_broker.plan = wonder_plan
+        agent_broker.currency = product.company.currency
+        agent_broker.start_date = '2020-01-01'
+        agent_broker.save()
 
     @test_framework.prepare_test(
         'commission_insurance.test0004_create_commission_agents',
@@ -468,33 +491,99 @@ class ModuleTestCase(test_framework.CoogTestCase):
                     datetime.date(2003, 7, 10)]))
 
     @test_framework.prepare_test(
-        'distribution.test0002_dist_network_creation',
+        'commission_insurance.test0004_create_commission_agents',
         )
     def test0030_close_network(self):
-        self.APICore.close_distribution_network([
+        pool = Pool()
+        DistNetwork = pool.get('distribution.network')
+
+        node_1, = DistNetwork.search([('code', '=', 'node_1')])
+        node_1_1, = DistNetwork.search([('code', '=', 'node_1_1')])
+        node_2, = DistNetwork.search([('code', '=', 'node_2')])
+
+        data_ref = [
             {
                 'code': 'node_1',
                 'end_date': '2019-10-28',
                 'block_payments': True
-                },
-            {
-                'code': 'node_2',
-                'block_payments': True
                 }
-            ], {})
+            ]
+
+        data_dict = copy.deepcopy(data_ref)
+        self.APICore.close_distribution_network(
+            data_dict, {'_debug_server': True})
+        self.assertEqual(node_1.party.agents[0].end_date,
+            datetime.date(2019, 10, 28))
+        self.assertEqual(node_1.party.block_payable_payments,
+            True)
+
+        data_dict = copy.deepcopy(data_ref)
+        self.assertEqual(
+            self.APICore.close_distribution_network(data_dict,
+                {}),
+            APIInputError([{
+                        'type': 'network_already_closed',
+                        'data': 'node_1',
+                        }]))
+
+        data_dict = copy.deepcopy(data_ref)
+        data_dict[0]['code'] = 'node_1_1'
+        self.assertEqual(
+            self.APICore.close_distribution_network(data_dict, {}),
+            APIInputError([{
+                        'type': 'cannot_close_network_wo_party',
+                        'data': 'node_1_1',
+                        }]))
+
+        data_dict = copy.deepcopy(data_ref)
+        data_dict[0]['code'] = 'node_2'
+        self.assertEqual(
+            self.APICore.close_distribution_network(data_dict, {}),
+            APIInputError([{
+                        'type': 'agents_exist_past_close_date',
+                        'data': 'node_2',
+                        }]))
 
     @test_framework.prepare_test(
         'commission_insurance.test0030_close_network',
         )
     def test0035_reopen_network(self):
-        self.APICore.reopen_distribution_network([
+        pool = Pool()
+        DistNetwork = pool.get('distribution.network')
+
+        node_1, = DistNetwork.search([('code', '=', 'node_1')])
+        node_1_1, = DistNetwork.search([('code', '=', 'node_1_1')])
+
+        data_ref = [
             {
                 'code': 'node_1'
                 },
-            {
-                'code': 'node_2'
-                }
-            ], {})
+            ]
+
+        data_dict = copy.deepcopy(data_ref)
+        self.APICore.reopen_distribution_network(
+            data_dict, {'_debug_server': True})
+        self.assertEqual(node_1.party.agents[0].end_date, None)
+        self.assertEqual(node_1.party.block_payable_payments,
+            False)
+
+        data_dict = copy.deepcopy(data_ref)
+        self.assertEqual(
+            self.APICore.reopen_distribution_network(data_dict, {}),
+            APIInputError([{
+                        'type': 'network_already_opened',
+                        'data': 'node_1',
+                        }]))
+
+        data_dict = copy.deepcopy(data_ref)
+        data_dict[0]['code'] = 'node_1_1'
+        self.assertEqual(
+            self.APICore.reopen_distribution_network(data_dict,
+                {}),
+            APIInputError([{
+                        'type': 'cannot_reopen_network_wo_party',
+                        'data': 'node_1_1',
+                        }]))
 
 
 def suite():

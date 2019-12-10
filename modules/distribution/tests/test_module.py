@@ -5,6 +5,7 @@ import copy
 
 import trytond.tests.test_tryton
 
+from trytond.modules.api import APIInputError
 from trytond.transaction import Transaction
 from trytond.pool import Pool
 
@@ -148,14 +149,38 @@ class ModuleTestCase(test_framework.CoogTestCase):
         )
     def test0021_update_distribution_network_api(self):
         pool = Pool()
-        Core = pool.get('api.core')
-        Core.update_distribution_networks([
+        DistNetwork = pool.get('distribution.network')
+
+        node_1, = DistNetwork.search([('code', '=', 'node_1')])
+        node_1_1, = DistNetwork.search([('code', '=', 'node_1_1')])
+
+        data_ref = [
             {
                 'code': 'node_1',
                 'network': {'name': 'titi'},
                 'party': {'name': 'tototo'}
                 }
-            ], {'_debug_server': True})
+            ]
+
+        data_dict = copy.deepcopy(data_ref)
+        self.APICore.update_distribution_networks(
+            data_dict, {'_debug_server': True})
+        self.assertEqual(node_1.name, 'titi')
+        self.assertEqual(node_1.party.name, 'tototo')
+
+        data_dict = copy.deepcopy(data_ref)
+        data_dict[0]['code'] = 'node_1_1'
+        self.assertEqual(
+            self.APICore.update_distribution_networks(data_dict, {}),
+            APIInputError([{
+                'type': 'party_not_found',
+                'data': {
+                    'network': {
+                        'code': 'node_1_1',
+                        'id': node_1_1.id,
+                        },
+                    },
+                }]))
 
     @test_framework.prepare_test(
         'party_cog.test0001_createParties',

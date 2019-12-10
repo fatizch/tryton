@@ -1,3 +1,4 @@
+* BUG#13653 Ajout de tests pour les deux APIS de réseaux de distribution
 * FEA#13326 Ajout de deux APIs pour la fermeture et la réouverture de réseaux de distribution
 
 Version 2.6 - 2019-10-11
