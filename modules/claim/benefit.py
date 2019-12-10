@@ -239,6 +239,9 @@ class Benefit(model.CodedMixin, model.CoogView,
         help='If True, services based on this benefit will have the '
         'possibility to select an "origin service", which represents the '
         'service that preceded it')
+    show_benefit = fields.Function(
+        fields.Boolean('Show Benefit', depends=['beneficiary_kind']),
+        'on_change_with_show_benefit')
 
     @classmethod
     def __setup__(cls):
@@ -296,6 +299,10 @@ class Benefit(model.CodedMixin, model.CoogView,
         default.setdefault('options', None)
         return super(Benefit, cls).copy(instances, default=default)
 
+    @fields.depends('beneficiary_kind')
+    def on_change_with_show_benefit(self, name=None):
+        return self.beneficiary_kind != 'subscriber'
+
     @classmethod
     def get_beneficiary_kind(cls):
         return [
@@ -310,6 +317,15 @@ class Benefit(model.CodedMixin, model.CoogView,
     @classmethod
     def default_company(cls):
         return Transaction().context.get('company', None)
+
+    @classmethod
+    def view_attributes(cls):
+        return super(Benefit, cls).view_attributes() + [
+            ('/form/notebook/page[@id="managers"]/notebook/'
+                'page[@id="beneficiary"]',
+                'states',
+                {'invisible': ~Eval('show_benefit')})
+            ]
 
     def init_dict_for_rule_engine(self, args):
         args['benefit'] = self

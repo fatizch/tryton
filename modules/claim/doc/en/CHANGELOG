@@ -1,3 +1,4 @@
+* BUG#13754 Beneficiary tab will now be hidden for benefit with subscriber type 
 * FEA#13546 Allow to easily close contract with the new status 'dropped'
 * BUG#8308 The claim sequence prefix can now be edited
 * OTH#00000 Add migration for field "Name" on benefit event description and loss description

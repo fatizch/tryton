@@ -22,6 +22,7 @@ this repository contains the full copyright notices and license terms. -->
         <page string="Rules" id="managers">
             <label name="automatically_deliver"/>
             <field name="automatically_deliver"/>
+            <field name="show_benefit" invisible="1"/>
             <notebook>
             </notebook>
         </page>
