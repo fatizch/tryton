@@ -1,6 +1,6 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
-from trytond.pool import PoolMeta
+from trytond.pool import PoolMeta, Pool
 
 from trytond.modules.coog_core import utils
 
@@ -13,6 +13,14 @@ __all__ = [
 class EventTypeAction(metaclass=PoolMeta):
     __name__ = 'event.type.action'
 
+    def get_templates_list(self, filtering_object):
+        res = super(EventTypeAction, self).get_templates_list(
+            filtering_object)
+        if filtering_object.__name__ == 'account.invoice':
+            return res + Pool().get('report.template').search(
+                [('on_model.model', '=', 'claim')])
+        return res
+
     def get_objects_for_process(self, objects, target_model_name):
         if target_model_name != 'claim':
             return super(EventTypeAction, self).get_objects_for_process(
@@ -22,21 +30,21 @@ class EventTypeAction(metaclass=PoolMeta):
             process_objects.append(object_.service.claim)
         return process_objects
 
-    def get_targets_and_origin_from_object_and_template(self, objects,
+    def get_targets_and_origin_from_object_and_template(self, object_,
             template):
         if template.on_model and template.on_model.model == 'claim':
-            if objects.__name__ == 'account.payment.group':
+            if object_.__name__ == 'account.payment.group':
                 invoices = {payment.related_invoice
-                    for payment in objects.payments}
-            elif objects.__name__ == 'account.invoice':
-                invoices = objects
+                    for payment in object_.payments}
+            elif object_.__name__ == 'account.invoice':
+                invoices = [object_]
             claims = {claim_detail.claim
                 for invoice in invoices
                 for invoice_line in invoice.lines
                 for claim_detail in invoice_line.claim_details}
-            return list(claims), objects
+            return list(claims), object_
         return super(EventTypeAction,
-            self).get_targets_and_origin_from_object_and_template(objects,
+            self).get_targets_and_origin_from_object_and_template(object_,
                 template)
 
 

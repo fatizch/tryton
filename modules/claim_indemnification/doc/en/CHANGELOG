@@ -1,3 +1,4 @@
+* OTH#00000 Hotfix for feature 11618
 * FEA#11618 Generate document template on claims from payment groups and invoices
 * FEA#13318 Add rule engine function which returns total indemnificated (paid/validated) amount for a covered person and benefit on current term
 * BUG#13304 Do not check share for canceled indemnification
