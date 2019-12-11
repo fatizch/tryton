@@ -19,6 +19,8 @@ this repository contains the full copyright notices and license terms. -->
             <field name="selection" colspan="4"/>
             <label name="selection_sorted"/>
             <field name="selection_sorted"/>
+            <label name="gdpr"/>
+            <field name="gdpr"/>
             <label name="digits"/>
             <field name="digits"/>
             <newline/>

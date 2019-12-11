@@ -3,7 +3,7 @@
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, Bool
 
-from trytond.modules.coog_core import fields, model
+from trytond.modules.coog_core import fields, model, coog_string
 from trytond.modules.offered.extra_data import with_extra_data
 
 
@@ -65,6 +65,17 @@ class Party(with_extra_data(['covered_element']), metaclass=PoolMeta):
         result = super(Party, cls)._export_skips()
         result.add('covered_elements')
         return result
+
+    def get_gdpr_data(self):
+        res = super(Party, self).get_gdpr_data()
+        ExtraData = Pool().get('extra_data')
+        value_ = coog_string.translate_value
+        extras = ExtraData.search([
+                ('name', 'in', list(self.extra_data.keys())),
+                ('gdpr', '=', True)])
+        res.update({value_(extra, 'rec_name'): self.extra_data[extra.name]
+                for extra in extras})
+        return res
 
 
 class PartyReplace(metaclass=PoolMeta):

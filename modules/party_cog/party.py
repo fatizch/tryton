@@ -725,14 +725,26 @@ class Party(export.ExportImportMixin, summary.SummaryMixin):
         label_ = self.__class__._label_gdpr
         value_ = coog_string.translate_value
         return {
-                label_(self, 'name'): value_(self, 'name'),
-                label_(self, 'first_name'): value_(self, 'first_name'),
-                label_(self, 'birth_date'): value_(self, 'birth_date'),
-                label_(self, 'addresses'): [value_(addr, 'rec_name')
-                    for addr in self.all_addresses],
-                label_(self, 'relations'): [value_(relation, 'rec_name')
-                    for relation in self.relations]
-                }
+            label_(self, 'name'): value_(self, 'name'),
+            label_(self, 'first_name'): value_(self, 'first_name'),
+            label_(self, 'birth_date'): value_(self, 'birth_date'),
+            label_(self, 'addresses'): [value_(addr, 'rec_name')
+                for addr in self.all_addresses],
+            label_(self, 'relations'): [value_(relation, 'rec_name')
+                for relation in self.relations],
+            label_(self, 'gender'): value_(self, 'gender'),
+            label_(self, 'contact_mechanisms'): [
+                {value_(mechanism, 'type'): value_(mechanism, 'rec_name')}
+                for mechanism in self.contact_mechanisms],
+            label_(self, 'addresses'): [
+                {
+                    label_(address, 'one_line_street'): value_(address,
+                        'one_line_street'),
+                    label_(address, 'zip'): value_(address, 'zip'),
+                    label_(address, 'city'): value_(address, 'city'),
+                    }
+                for address in self.addresses],
+            }
 
     @classmethod
     def _import_json(cls, values, main_object=None):

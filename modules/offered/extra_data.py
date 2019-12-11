@@ -65,6 +65,8 @@ class ExtraData(model.CoogDictSchema, model.ConfigurationMixin, model.CoogView,
             ('loss', 'Loss'),
             ('benefit', 'Benefit'),
             ], 'Kind', required=True)
+    gdpr = fields.Boolean('GDPR Extraction',
+        help='Specify if the data should be used in GDPR extractions')
     sub_datas = fields.One2Many('extra_data-sub_extra_data', 'master',
         'Sub Data', domain=[('child.kind', '=', Eval('kind'))],
         states={'invisible': ~In(Eval('type_'), ['selection', 'boolean'])},

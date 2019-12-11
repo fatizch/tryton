@@ -127,10 +127,17 @@ class Party(metaclass=PoolMeta):
         res = super(Party, self).get_gdpr_data()
         label_ = self.__class__._label_gdpr
         value_ = coog_string.translate_value
-        if self.main_health_complement:
+        if self.bank_accounts:
             res.update({
-                    label_(self, 'bank_accounts'): [value_(account, 'number')
-                        for account in self.bank_accounts],
+                    label_(self, 'bank_accounts'): [{
+                            label_(account, 'number'): value_(account,
+                                'number'),
+                            label_(account, 'bank'): value_(account.bank,
+                                'name'),
+                            label_(account, 'owners'): [value_(owner,
+                                    'full_name')
+                                for owner in account.owners],
+                            } for account in self.bank_accounts],
                     })
         return res
 

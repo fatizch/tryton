@@ -1,3 +1,4 @@
+* FEA#13568 Update fields in party GDPR extraction
 * FEA#13655 Add index on party indentifier code
 * FEA#13710 Bypass check duplicates method in case of a call from batch
 * FEA#13326 New apis to handle party informations update on distribution network and commission agent closure

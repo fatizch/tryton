@@ -1,3 +1,4 @@
+* FEA#13568 Update fields in party GDPR extraction
 * BUG#13518 Check extra data business kind and coherence with existing party extra data
 * FEA#13570 New comment field on extra premium
 * FEA#13370 Handle party extra_data in party creation API

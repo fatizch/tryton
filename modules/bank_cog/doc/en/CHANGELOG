@@ -1,3 +1,4 @@
+* FEA#13568 Update fields in party GDPR extraction
 * FEA#13658 Import swift file bank by batch
 * OTH#00000 Fix a regression following #13206
 * FEA#13206 Integrate swift bank bic file
