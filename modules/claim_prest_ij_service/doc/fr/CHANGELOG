@@ -1,3 +1,4 @@
+* BUG#13841 Correctif pour supporter les BPIJ lorsque les personnes couvertes sont des filiales
 * BUG#12706 Correctif sur l'assistant de souscription manuelle d'une personne couverte avec les filiales
 
 Version 2.6 - 2019-10-11

@@ -1168,23 +1168,37 @@ class ClaimIjPeriod(model.CoogSQL, model.CoogView, ModelCurrency):
         service = pool.get('claim.service').__table__()
         loss = pool.get('claim.loss').__table__()
         contract = pool.get('contract').__table__()
-        subscriber = pool.get('party.party').__table__()
+        company = pool.get('party.party').__table__()
         party = pool.get('party.party').__table__()
         subscription = pool.get('claim.ij.subscription').__table__()
         period = cls.__table__()
+        with_subsidiary = config.getboolean(
+            'prest_ij', 'with_subsidiary', default=False)
+        item_desc = pool.get('offered.item.description').__table__()
+        covered_element = pool.get('contract.covered_element').__table__()
 
         cursor = Transaction().connection.cursor()
 
-        cursor.execute(*period.join(subscription, condition=(
-                    period.subscription == subscription.id)
-                ).join(subscriber, condition=(
-                    subscription.siren == subscriber.siren)
-                ).join(party, condition=subscription.ssn == party.ssn
-                ).join(loss, condition=loss.covered_person == party.id
-                ).join(service, condition=service.loss == loss.id
-                ).join(contract, condition=(service.contract == contract.id
-                    ) & (contract.subscriber == subscriber.id)
-                ).select(period.id, service.id,
+        query_table = period.join(subscription, condition=(
+            period.subscription == subscription.id)
+            ).join(party, condition=subscription.ssn == party.ssn
+            ).join(loss, condition=loss.covered_person == party.id
+            ).join(service, condition=service.loss == loss.id
+            ).join(contract, condition=(service.contract == contract.id))
+        if not with_subsidiary:
+            query_table = query_table.join(company,
+                condition=(contract.subscriber == company.id))
+        else:
+            query_table = query_table.join(covered_element, condition=(
+                covered_element.contract == contract.id)
+            ).join(item_desc,
+                condition=((covered_element.item_desc == item_desc.id)
+                    & (item_desc.kind == 'subsidiary')))
+
+        query_table = query_table.join(company, condition=(
+            subscription.siren == company.siren))
+
+        cursor.execute(*query_table.select(period.id, service.id,
                 where=service.benefit.in_([x.id for x in benefits])
                 & ((loss.start_date == Null)
                     | (loss.start_date <= period.start_date))

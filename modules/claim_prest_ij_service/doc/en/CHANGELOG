@@ -1,3 +1,4 @@
+* BUG#13841 Handle BPIJ periods when covered element is a subdiary
 * BUG#12706 Hotfix manual covered person subscription wizard with subsidiaries
 
 Version 2.6 - 2019-10-11
