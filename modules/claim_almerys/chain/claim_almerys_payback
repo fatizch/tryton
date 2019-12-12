@@ -1,0 +1,19 @@
+#!/bin/bash
+# vim: set ft=sh:
+
+CHAIN_NAME=claim_almerys_payback
+
+CHAIN_PARAMETERS=('IN_DIRECTORY' 'OUT_DIRECTORY' 'ERROR_DIRECTORY')
+CHAIN_REQUIRED=()
+
+chain_params "$@"
+chain_begin
+
+if [[ -n "$IN_DIRECTORY" ]] && [[ -n "$OUT_DIRECTORY" ]] && [[ -n "$ERROR_DIRECTORY" ]]; then
+	chain_step claim.almerys.payback_creation --in_directory="$IN_DIRECTORY" --out_directory="${IN_DIRECTORY}/statement" --error_directory="$ERROR_DIRECTORY"
+else
+	chain_step claim.almerys.payback_creation
+fi
+chain_wait claim.almerys.payback_creation || chain_end
+
+chain_end

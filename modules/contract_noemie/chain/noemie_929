@@ -4,12 +4,16 @@
 CHAIN_NAME=noemie_929
 
 CHAIN_PARAMETERS=('IN_DIRECTORY' 'OUT_DIRECTORY')
-CHAIN_REQUIRED=('IN_DIRECTORY' 'OUT_DIRECTORY')
+CHAIN_REQUIRED=()
 
 chain_params "$@"
 chain_begin
-
-chain_step contract.noemie.flow.batch ${GIVEN_PARAMETERS[@]}
+if [[ -n "$IN_DIRECTORY" ]] && [[ -n "$OUT_DIRECTORY" ]] && [[ -n "$ERROR_DIRECTORY" ]]; then
+    chain_step contract.noemie.flow.batch --in_directory="$IN_DIRECTORY" --out_directory="$OUT_DIRECTORY" --error_directory="$ERROR_DIRECTORY"
+else
+    chain_step contract.noemie.flow.batch
+fi
 chain_wait contract.noemie.flow.batch || chain_end
 
 chain_end
+
