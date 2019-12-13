@@ -28,6 +28,12 @@ class Party(metaclass=PoolMeta):
         states={'invisible': ~STATES_PERSON, 'readonly': STATES_ACTIVE},
         depends=['is_person', 'active'])
 
+    @classmethod
+    def view_attributes(cls):
+        return super().view_attributes() + [
+            ('/form/notebook/page[@id="health_data"]', 'states',
+                {'invisible': ~Eval('is_person')})]
+
     def get_health_contract_id(self, name):
         for contract in self.contracts:
             if contract.is_health:

@@ -1,3 +1,4 @@
+* BUG#13778 Affichage de dossier santé uniquement si le tiers est une personne
 * OTH#0000 Ajout de la fonction rang de l'enfant dans le moteur de règle
 * FEA#13248 API, Gestion du rang de naissance sur les tiers
 * FEA#12909 initialiser le rang de naissance à 1
