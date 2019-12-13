@@ -1,3 +1,4 @@
+* FEA#13245 Génération des données d'échéancier de paiement sur un tiers à des fins d'impression
 * FEA#13843 Ajoute les informations de quittancement dans l'API simulate
 * BUG#13398 Mettre à jour correctement la date de paiement des lignes de paiement en cas de trop perçu
 * FEA#12980 Ajout d'une API de tarification dans le backoffice

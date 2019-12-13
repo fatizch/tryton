@@ -6,6 +6,7 @@ import datetime
 from decimal import Decimal
 
 import trytond.tests.test_tryton
+
 from trytond.modules.coog_core import test_framework
 from trytond.modules.currency.tests import create_currency
 
@@ -78,14 +79,11 @@ class ModuleTestCase(test_framework.CoogTestCase):
             self.assertEqual(terms,
                 [(datetime.date(2011, (m - 1) // 3 * 3 + 1, 30), amount), ])
 
-    @test_framework.prepare_test('company_cog.test0001_testCompanyCreation')
-    def test0010_invoice_line_taxes(self):
-        self.maxDiff = None
-        company, = self.Company.search([
-                ('rec_name', '=', 'World Company'),
-                ])
-        company.party.addresses = [{}]
-        company.party.save()
+    @test_framework.prepare_test(
+        'company_cog.test0001_testCompanyCreation')
+    def test0001_create_taxes(self):
+        company = self.Company.search([
+            ('rec_name', '=', 'World Company')])[0]
         tax_account_kind = self.AccountKind()
         tax_account_kind.name = 'Tax Account Kind'
         tax_account_kind.company = company
@@ -98,6 +96,35 @@ class ModuleTestCase(test_framework.CoogTestCase):
         tax_account.type = tax_account_kind
         tax_account.save()
 
+        tax_1 = self.Tax()
+        tax_1.name = 'Tax1'
+        tax_1.type = 'percentage'
+        tax_1.description = 'Tax 1'
+        tax_1.rate = Decimal('0.09')
+        tax_1.company = company
+        tax_1.invoice_account = tax_account
+        tax_1.credit_note_account = tax_account
+        tax_1.save()
+        tax_2 = self.Tax()
+        tax_2.name = 'Tax2'
+        tax_2.type = 'percentage'
+        tax_2.description = 'Tax 2'
+        tax_2.rate = Decimal('0.05')
+        tax_1.amount = Decimal('2000')
+        tax_2.company = company
+        tax_2.invoice_account = tax_account
+        tax_2.credit_note_account = tax_account
+        tax_2.save()
+
+    @test_framework.prepare_test(
+        'account_invoice_cog.test0001_create_taxes')
+    def test0010_invoice_line_taxes(self):
+        self.maxDiff = None
+        company, = self.Company.search([
+            ('rec_name', '=', 'World Company'),
+            ])
+        company.party.addresses = [{}]
+        company.party.save()
         invoice_account_kind = self.AccountKind()
         invoice_account_kind.name = 'Invoice Account Kind'
         invoice_account_kind.company = company
@@ -128,15 +155,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
         configuration = self.Configuration(1)
         configuration.tax_rounding = 'line'
         configuration.save()
-        tax_1 = self.Tax()
-        tax_1.name = 'Tax1'
-        tax_1.type = 'percentage'
-        tax_1.description = 'Tax 1'
-        tax_1.rate = Decimal('0.09')
-        tax_1.company = company
-        tax_1.invoice_account = tax_account
-        tax_1.credit_note_account = tax_account
-        tax_1.save()
+        tax_1, = self.Tax.search(['name', '=', 'Tax1'])
 
         sequence = self.Sequence()
         sequence.name = 'Test Sequence'

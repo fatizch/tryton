@@ -1451,6 +1451,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
 
     @test_framework.prepare_test(
         'contract_insurance_invoice.test0006_prepare_product_for_subscription',
+
         )
     def test9910_test_simulate_API(self):
         pool = Pool()
@@ -1571,6 +1572,147 @@ class ModuleTestCase(test_framework.CoogTestCase):
                     ('2020-07-01', '2020-09-30', '660.00'),
                     ('2020-10-01', '2020-12-31', '660.00'),
                     ])
+
+    @test_framework.prepare_test(
+        'account_cog.test0001_create_period',
+        'account_invoice_cog.test0001_create_taxes',
+    )
+    def test_invoices_report_for_party(self):
+        pool = Pool()
+        Address = pool.get('party.address')
+        Journal = pool.get('account.journal')
+        InvoiceTax = pool.get('account.invoice.tax')
+        product, = self.Product.search([
+            ('code', '=', 'AAA'), ])
+        company = product.company
+        start_date = product.start_date + datetime.timedelta(weeks=4)
+        subscriber = self.Party(name='Jane')
+        address = Address(party=subscriber)
+        address.save()
+        freq_month, = self.BillingMode.search([('code', '=', 'monthly')])
+        freq_quart, = self.BillingMode.search([('code', '=', 'quarterly')])
+        payment_term = self.PaymentTerm.search([])[0]
+        freq_month.allowed_payment_terms = [payment_term]
+        freq_quart.allowed_payment_terms = [payment_term]
+        self.BillingMode.save([freq_month, freq_quart])
+        contract_1 = self.Contract(
+            start_date=start_date,
+            product=product.id,
+            company=company.id,
+            appliable_conditions_date=start_date,
+            subscriber=subscriber,
+            billing_informations=[
+                self.BillingInformation(date=None,
+                    billing_mode=freq_month,
+                    payment_term=payment_term),
+                self.BillingInformation(date=date(2014, 7, 1),
+                    billing_mode=freq_quart,
+                    direct_debit_day=5,
+                    payment_term=payment_term),
+                ],
+            )
+        contract_1.save()
+
+        invoice_account_kind, = self.AccountKind.search([
+            'name', '=', 'Tax Account Kind'])
+        invoice_account_kind.receivable = True
+        invoice_account_kind.save()
+        invoice_account, = self.Account.search(['code', '=', 'main_tax'])
+        tax_1, = self.Tax.search(['name', '=', 'Tax1'])
+        tax_2, = self.Tax.search(['name', '=', 'Tax2'])
+        sequence = self.Sequence()
+        sequence.name = 'Test Sequence'
+        sequence.code = 'account.journal'
+        sequence.suffix = 'Y${year}'
+        sequence.save()
+        journal = Journal()
+        journal.name = 'Test Journal'
+        journal.code = 'test_journal'
+        journal.type = 'revenue'
+        journal.sequence = sequence
+        journal.save()
+        invoice_1 = self.Invoice()
+        invoice_1.description = 'Invoice 1'
+        invoice_1.currency = company.currency
+        invoice_1.contract = contract_1
+        invoice_1.journal = journal
+        invoice_1.party = subscriber
+        invoice_1.invoice_address = address
+        invoice_1.lines = [
+            self.InvoiceLine(
+                unit_price=Decimal('31.5250'),
+                coverage_start=datetime.date(2017, 1, 20),
+                coverage_end=datetime.date(2017, 2, 19),
+                quantity=1,
+                type='comment',
+                company=company,
+                taxes=[],
+                )]
+        today = datetime.date.today()
+        invoice_1.account = invoice_account
+        invoice_1.company = company
+        invoice_1.save()
+        invoice_tax1 = InvoiceTax()
+        invoice_tax1.invoice = invoice_1
+        invoice_tax1.tax = tax_1
+        invoice_tax1.account = invoice_account
+        invoice_tax1.description = 'Tax 1'
+        invoice_tax1.amount = Decimal('25.32')
+        invoice_tax1.save()
+        invoice_tax2 = InvoiceTax()
+        invoice_tax2.invoice = invoice_1
+        invoice_tax2.tax = tax_2
+        invoice_tax2.account = invoice_account
+        invoice_tax2.description = 'Tax 2'
+        invoice_tax2.amount = Decimal('33.33')
+        invoice_tax2.save()
+        self.Invoice.post([invoice_1])
+
+        contract_invoice = self.ContractInvoice(
+            contract=contract_1,
+            invoice=invoice_1,
+            start=datetime.date(2017, 1, 20),
+            end=datetime.date(2017, 2, 19),
+            )
+        contract_invoice.save()
+        contract_2 = self.Contract(
+            start_date=start_date,
+            product=product.id,
+            company=company.id,
+            appliable_conditions_date=start_date,
+            subscriber=subscriber,
+            billing_informations=[
+                self.BillingInformation(date=None,
+                    billing_mode=freq_quart,
+                    payment_term=payment_term),
+                self.BillingInformation(date=date(2015, 7, 1),
+                    billing_mode=freq_month,
+                    direct_debit_day=5,
+                    payment_term=payment_term),
+                ],
+            )
+        contract_2.save()
+        expected_value = [{
+            'total_amount': 0,
+            'billing_mode': freq_month,
+            'schedules': [], 'taxes': {'total': 0, 'details': {}}},
+            {'total_amount': Decimal('0.00'),
+             'billing_mode': freq_quart,
+             'schedules': [{
+                 'total_amount': Decimal('0.00'),
+                 'components': [{
+                     'kind': 'line_to_pay',
+                     'amount': Decimal('58.65'),
+                     'line': Pool().get('account.move.line')(3),
+                     'invoice': contract_invoice,
+                     'term': payment_term}, {
+                     'kind': 'overpayment_substraction',
+                     'amount': Decimal('-58.65')}],
+                 'planned_payment_date': today}],
+             'taxes': {'total': Decimal('0.00'), 'details': {
+                 tax_1: Decimal('0.00'),
+                 tax_2: Decimal('0.00')}}}]
+        self.assertEqual(subscriber.payment_schedule_report(), expected_value)
 
 
 def suite():

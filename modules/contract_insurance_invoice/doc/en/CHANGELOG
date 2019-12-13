@@ -1,3 +1,4 @@
+* FEA#13245 Generate payment schedule data on a party in order to be able to print it
 * FEA#13843 Add invoice information to simulate API
 * BUG#13398 Correctly update move line payment date when there is an outstanding amount
 * FEA#12980 Add a backend API for quotations

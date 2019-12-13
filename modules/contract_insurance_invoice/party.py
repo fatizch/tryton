@@ -3,6 +3,9 @@
 import copy
 import datetime
 from itertools import groupby
+from collections import defaultdict
+from decimal import Decimal
+
 from sql.aggregate import Max
 from sql import Literal
 
@@ -134,6 +137,66 @@ class Party(metaclass=PoolMeta):
     @classmethod
     def _group_billing_per_contract(cls, billing_info):
         return billing_info.contract
+
+    def _get_contracts_for_invoices_report(self):
+        contracts = Pool().get('contract').search(['OR',
+            ['billing_informations.payer', '=', self],
+            [('billing_informations.payer', '=', None),
+             ('subscriber', '=', self)]])
+        return [contract for contract in contracts
+            if contract.payer == self or contract.subscriber == self]
+
+    @classmethod
+    def _invoices_report_contract_key(cls, contract):
+        billing_info = contract.billing_information
+        key = (billing_info.billing_mode, billing_info.direct_debit_account
+            if billing_info.direct_debit_account else False)
+        return key
+
+    def payment_schedule_report(self):
+        # Method used in printing report
+        contracts = self._get_contracts_for_invoices_report()
+        sorted_contracts = sorted(contracts,
+            key=self.__class__._invoices_report_contract_key)
+        grouped_contracts_by_bill_info = groupby(sorted_contracts,
+            key=self.__class__._invoices_report_contract_key)
+        invoices_report_data = []
+        for key, contracts in grouped_contracts_by_bill_info:
+            invoices_reports = [contract.invoices_report()
+                for contract in contracts]
+            all_reports = [report for invoice_report in invoices_reports
+                for report in invoice_report[0]]
+            sorted_reports = sorted(all_reports,
+                key=lambda x: x['planned_payment_date'])
+            reports_per_date = defaultdict(lambda:
+                {'total_amount': 0, 'components': []})
+            grouped_invoices = groupby(sorted_reports,
+                lambda x: x['planned_payment_date'])
+            total = 0
+            schedules_data = []
+            for planned_date, schedules in grouped_invoices:
+                for schedule in schedules:
+                    reports_per_date[planned_date]['total_amount'] += schedule[
+                        'total_amount']
+                    reports_per_date[planned_date]['components'] += schedule[
+                        'components']
+                    reports_per_date[planned_date][
+                        'planned_payment_date'] = planned_date
+                    total += schedule['total_amount']
+                schedules_data.append(reports_per_date.get(planned_date))
+            taxes = defaultdict(Decimal)
+            total_taxes = 0
+            for report in invoices_reports:
+                for k, value in report[2].items():
+                    taxes[k] += value
+                    total_taxes += value
+            invoices_report_data.append({
+                'total_amount': total,
+                'billing_mode': key[0],
+                'schedules': schedules_data,
+                'taxes': {'total': total_taxes, 'details': dict(taxes)},
+                })
+        return invoices_report_data
 
     @classmethod
     def get_depending_contracts(cls, parties, date=None):

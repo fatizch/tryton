@@ -311,6 +311,11 @@ class ContractOption(metaclass=PoolMeta):
         return (super(ContractOption, cls).functional_skips_for_duplicate() |
         set(['premiums']))
 
+    def get_current_premium(self):
+        for premium in sorted(self.premiums, key=lambda x: x.end, reverse=True):
+            if premium.end >= utils.today():
+                return premium
+
 
 class ContractFee(model.CoogSQL, model.CoogView, ModelCurrency):
     'Contract Fee'

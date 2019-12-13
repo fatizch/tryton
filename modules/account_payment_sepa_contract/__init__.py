@@ -8,6 +8,7 @@ from . import move
 from . import payment
 from . import event
 from . import offered
+from . import party
 
 
 def register():
@@ -23,6 +24,7 @@ def register():
         payment.PaymentCreationStart,
         payment.MergedPaymentsByContracts,
         offered.Product,
+        party.Party,
         module='account_payment_sepa_contract', type_='model')
     Pool.register(
         event.EventLog,

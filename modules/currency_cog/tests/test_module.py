@@ -20,12 +20,13 @@ class ModuleTestCase(test_framework.CoogTestCase):
             }
 
     def test0001_testCurrencyCreation(self):
-        euro = self.Currency()
-        euro.name = 'Euro'
-        euro.symbol = '€'
-        euro.code = 'EUR'
-        euro.save()
-        self.assertTrue(euro.id)
+        if not self.Currency.search(['code', '=', 'EUR']):
+            euro = self.Currency()
+            euro.name = 'Euro'
+            euro.symbol = '€'
+            euro.code = 'EUR'
+            euro.save()
+            self.assertTrue(euro.id)
 
 
 def suite():
