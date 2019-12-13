@@ -1,3 +1,4 @@
+* FIX#00000 Correction de la migration des adresses: toutes les adresses sont importées pour chaque job
 * FEA#12844 Ajout des dates de début et de fin au migrateur de relation tiers
 
 Version 2.6 - 2019-10-11

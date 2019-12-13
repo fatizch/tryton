@@ -1,3 +1,4 @@
+* FIX#00000 Fix address migration: all addresses are imported in each job
 * FEA#12844 Add start_date and end_date to party_relation migrator
 
 Version 2.6 - 2019-10-11
