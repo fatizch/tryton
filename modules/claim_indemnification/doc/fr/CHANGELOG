@@ -1,3 +1,4 @@
+* FEA#13839 Activation des sous-statuts bloquants pour le statut réouvert
 * OTH#00000 Correctif fonctionnalité 11618
 * FEA#11618 Générer un modèle de document sur un sinistre à partir d'un groupe de paiement ou d'une quittance
 * FEA#13318 Ajout dans le moteur de règles d'une fonction retournant le montant total indemnisé (payé/validé) pour une personne couverte et une prestation sur le terme courant

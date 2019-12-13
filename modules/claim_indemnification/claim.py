@@ -2048,8 +2048,11 @@ class ClaimSubStatus(metaclass=PoolMeta):
     __name__ = 'claim.sub_status'
 
     block_indemnifications = fields.Boolean('Block Indemnifications Scheduling',
-     states={'invisible': Eval('status') != 'open',
-            'readonly': Eval('status') != 'open'}, depends=['status'],
+        states={
+            'invisible': Not(Eval('status').in_(['open', 'reopened'])),
+            'readonly': Not(Eval('status').in_(['open', 'reopened']))
+            },
+        depends=['status'],
         help='If true, all claim\'s indemnifications scheduling will be '
         'blocked',)
 
