@@ -16,7 +16,7 @@ EXTRA_DATA_VALUES_SCHEMA = {
     'type': 'object',
     'additionalProperties': False,
     'patternProperties': {
-        r'^[a-z0-9_\-]*$': {
+        r'^[a-zA-Z0-9_\-]*$': {
             'type': ['boolean', 'integer', 'string'],
             },
         },
