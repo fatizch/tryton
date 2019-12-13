@@ -120,7 +120,7 @@ class ClaimDeclareFindProcess(ProcessStart):
     @fields.depends('party', 'claims')
     def on_change_with_loss_desc(self, name=None):
         for claim in self.claims:
-            if claim.select:
+            if claim.select and claim.loss and claim.loss.loss_desc:
                 return claim.loss.loss_desc.id
         return
 

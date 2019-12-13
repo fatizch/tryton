@@ -1,3 +1,5 @@
+BUG#13804 Fix crash in claim creation wizard
+
 Version 2.6 - 2019-10-11
 BUG#11416 Iteration on incomplete fix
 
