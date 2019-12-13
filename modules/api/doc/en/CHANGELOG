@@ -1,3 +1,4 @@
+* FEA#13843 Add a negative amount schema
 * OTH#00000 Return a user-friendly error when API context is missing
 
 Version 2.6 - 2019-10-11

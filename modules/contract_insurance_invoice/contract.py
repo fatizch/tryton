@@ -1535,49 +1535,55 @@ class Contract(metaclass=PoolMeta):
             }
 
     def set_future_invoice_lines(self, contract_invoice, displayer):
-        pool = Pool()
-        Tax = pool.get('account.tax')
-        config = pool.get('account.configuration')(1)
         invoice = contract_invoice.invoice
         for line in sorted(invoice.lines, key=lambda x: (
                     getattr(x.details[0].premium, 'rec_name', ''),
                     x.coverage_start)):
-            taxes = Tax.compute(line.taxes, line.unit_price, line.quantity,
-                date=contract_invoice.start)
-            premium = line.details[0].premium
-            amount = invoice.currency.round(line.unit_price)
-            if config.tax_rounding == 'line':
-                # Manually handle taxes_included_in_premium, it's easier since
-                # we only need to manage a single total tax amount.
-                if premium.rated_entity and getattr(premium.rated_entity,
-                        'taxes_included_in_premium', False):
-                    tax_amount = invoice.currency.round(line.unit_price +
-                        sum(t['amount'] for t in taxes)) - amount
-                else:
-                    tax_amount = sum(
-                        invoice.currency.round(t['amount'])
-                        for t in taxes)
+            details = self._get_schedule_displayer_details(line,
+                contract_invoice)
+            displayer['details'].append(details)
+            displayer['tax_amount'] += details['tax_amount']
+            displayer['total_amount'] += details['total_amount']
+            if details['premium'].fee:
+                displayer['fee'] += details['fee']
             else:
-                tax_amount = invoice.currency.round(
-                    sum(t['amount'] for t in taxes))
-            displayer['details'].append({
-                    'name': premium.rec_name,
-                    'start': line.coverage_start,
-                    'end': line.coverage_end,
-                    'premium': premium,
-                    'currency_digits': invoice.currency.digits,
-                    'currency_symbol': invoice.currency.symbol,
-                    'amount': amount if not premium.fee else Decimal(0),
-                    'fee': amount if premium.fee else Decimal(0),
-                    'tax_amount': tax_amount or Decimal(0),
-                    'total_amount': (amount + tax_amount) or Decimal(0),
-                    })
-            displayer['tax_amount'] += tax_amount
-            displayer['total_amount'] += amount + tax_amount
-            if premium.fee:
-                displayer['fee'] += amount
+                displayer['amount'] += details['amount']
+
+    def _get_schedule_displayer_details(self, line, contract_invoice):
+        pool = Pool()
+        Tax = pool.get('account.tax')
+        invoice = contract_invoice.invoice
+        amount = invoice.currency.round(line.unit_price)
+        config = pool.get('account.configuration')(1)
+        premium = line.details[0].premium
+        taxes = Tax.compute(line.taxes, line.unit_price, line.quantity,
+            date=contract_invoice.start)
+        if config.tax_rounding == 'line':
+            # Manually handle taxes_included_in_premium, it's easier since
+            # we only need to manage a single total tax amount.
+            if premium.rated_entity and getattr(premium.rated_entity,
+                    'taxes_included_in_premium', False):
+                tax_amount = invoice.currency.round(line.unit_price + sum(
+                        t['amount'] for t in taxes)) - amount
             else:
-                displayer['amount'] += amount
+                tax_amount = sum(
+                    invoice.currency.round(t['amount'])
+                    for t in taxes)
+        else:
+            tax_amount = invoice.currency.round(
+                sum(t['amount'] for t in taxes))
+        return {
+            'name': premium.rec_name,
+            'start': line.coverage_start,
+            'end': line.coverage_end,
+            'premium': premium,
+            'currency_digits': invoice.currency.digits,
+            'currency_symbol': invoice.currency.symbol,
+            'amount': amount if not premium.fee else Decimal(0),
+            'fee': amount if premium.fee else Decimal(0),
+            'tax_amount': tax_amount or Decimal(0),
+            'total_amount': (amount + tax_amount) or Decimal(0),
+            }
     ###########################################################################
     # End calculation cache                                                   #
     ###########################################################################

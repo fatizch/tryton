@@ -73,6 +73,11 @@ POSITIVE_AMOUNT_SCHEMA = {
     'type': 'string', 'pattern': r'^([0-9]{1,}\.)?[0-9]{1,}$',
     }
 
+AMOUNT_SCHEMA = {
+    'type': 'string',
+    'pattern': r'^-?([0-9]{1,}\.)?[0-9]{1,}$',
+    }
+
 RATE_SCHEMA = {'oneOf': [
         {'type': 'string', 'enum': ['1', '1.0', '1.00', '1.000', '1.0000']},
         {'type': 'string', 'pattern': r'^0\.[0-9]{1,4}$'},

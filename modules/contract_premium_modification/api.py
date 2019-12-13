@@ -1,6 +1,9 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms
-from trytond.modules.coog_core.api import CODED_OBJECT_ARRAY_SCHEMA
+from decimal import Decimal
+
+from trytond.modules.coog_core.api import CODED_OBJECT_ARRAY_SCHEMA, CODE_SCHEMA
+from trytond.modules.api.api.core import AMOUNT_SCHEMA, amount_for_api
 from trytond.pool import Pool, PoolMeta
 
 __all__ = [
@@ -76,3 +79,81 @@ class APIContract(metaclass=PoolMeta):
                 {'id': 26},
                 ]
         return examples
+
+    @classmethod
+    def _payment_schedule_format_invoice_detail(cls, detail):
+        res = super(APIContract, cls)._payment_schedule_format_invoice_detail(
+            detail)
+        if 'discount' in detail:
+            res['discount'] = {
+                'code': detail['discount']['code'],
+                'amount': amount_for_api(detail['discount']['amount']),
+                }
+        return res
+
+    @classmethod
+    def _payment_schedule_invoice_detail_schema(cls):
+        schema = super(APIContract,
+            cls)._payment_schedule_invoice_detail_schema()
+        schema['properties']['discount'] = {
+            'type': 'object',
+            'additionalProperties': False,
+            'properties': {
+                'code': CODE_SCHEMA,
+                'amount': AMOUNT_SCHEMA,
+                }
+            }
+        schema['properties']['premium'] = AMOUNT_SCHEMA
+        schema['properties']['total'] = AMOUNT_SCHEMA
+        return schema
+
+    @classmethod
+    def _simulate_update_premium_field(cls, target, source):
+        super(APIContract,
+            cls)._simulate_update_premium_field(target, source)
+        if 'discount' in source:
+            amount = source['discount']['amount']
+            code = source['discount']['code']
+            discount = next((d for d in target['discounts']
+                    if d['code'] == code), None)
+            if discount:
+                discount['amount'] += Decimal(amount)
+            else:
+                target['discounts'].append({
+                        'code': code,
+                        'amount': Decimal(amount),
+                        })
+            target['total'] += Decimal(amount)
+
+    @classmethod
+    def _simulate_init_premium_field(cls):
+        res = super(APIContract, cls)._simulate_init_premium_field()
+        res['premium']['discounts'] = []
+        return res
+
+    @classmethod
+    def _simulate_convert_premium_field(cls, premium):
+        for total in premium:
+            if total == 'discounts':
+                premium['discounts'] = [{
+                        'code': discount['code'],
+                        'amount': amount_for_api(discount['amount']),
+                        } for discount in premium['discounts']]
+            else:
+                premium[total] = amount_for_api(premium[total])
+
+    @classmethod
+    def _simulate_premium_output_schema(cls):
+        schema = super(APIContract, cls)._simulate_premium_output_schema()
+        schema['premium']['properties']['discounts'] = {
+            'type': 'array',
+            'items': {
+                'type': 'object',
+                'additionalProperties': False,
+                'properties': {
+                    'code': CODE_SCHEMA,
+                    'amount': AMOUNT_SCHEMA,
+                    }
+                }
+            }
+        return schema

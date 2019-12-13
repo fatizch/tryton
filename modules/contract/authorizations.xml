@@ -396,5 +396,9 @@ this repository contains the full copyright notices and license terms. -->
             <field name="api">api.contract.subscribe_contracts</field>
             <field name="group" ref="api.group_default_api"/>
         </record>
+        <record model="ir.api.access" id="simulate_default_access">
+            <field name="api">api.contract.simulate</field>
+            <field name="group" ref="api.group_default_api"/>
+        </record>
     </data>
 </tryton>

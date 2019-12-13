@@ -456,6 +456,43 @@ class APIContract(metaclass=PoolMeta):
             ]
         return examples
 
+    @classmethod
+    def _simulate_result(cls, contracts, parameters, created):
+        results = super(APIContract, cls)._simulate_result(contracts,
+            parameters, created)
+        for i, contract in enumerate(contracts):
+            add_to_result = {
+                'covereds': [{
+                        'ref': created['party_ref_per_id'][covered.party.id],
+                        'coverages': [{
+                                'coverage': {'code': option.coverage.code},
+                                } for option in covered.options]
+                        } for covered in contract.covered_elements]
+                }
+            results[i].update(add_to_result)
+        return results
+
+    @classmethod
+    def _simulate_contract_output_schema(cls):
+        schema = super(APIContract, cls)._simulate_contract_output_schema()
+        schema['properties']['covereds'] = \
+            cls._simulate_covereds_output_schema()
+        return schema
+
+    @classmethod
+    def _simulate_covereds_output_schema(cls):
+        return {
+            'type': 'array',
+            'items': {
+                'type': 'object',
+                'additionalProperties': False,
+                'properties': {
+                    'ref': {'type': 'string'},
+                    'coverages': cls._simulate_coverages_output_schema(),
+                    },
+                }
+            }
+
 
 class RuleEngine(metaclass=PoolMeta):
     __name__ = 'rule_engine'

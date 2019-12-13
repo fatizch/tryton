@@ -1,3 +1,4 @@
+* FEA#13843 Ajoute les informations de risques couverts dans l'API simulate
 * FEA#13568 Mise à jour des champs dans l'extraction RGPD d'un tiers
 * BUG#13518 Vérification du type métier des données complémentaires et cohérence avec les données tiers existantes
 * FEA#13570 Nouveau champ commentaire sur les surprimes permettant de différencier des surprimes pour le même type de risque (Risque sportif - Plongée sous Marine / Risque sportif - Courses automobiles)

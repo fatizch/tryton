@@ -495,7 +495,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
         'contract_insurance.test0012_testContractCreation',
         'contract_insurance.test0001_testPersonCreation',
     )
-    def test_0020_testLastOptionEndsContract(self):
+    def test0020_testLastOptionEndsContract(self):
         # The ending date of a contract should be capped by
         # the max ending date of covered elements options
         contract, = self.Contract.search([])
@@ -560,7 +560,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
         'contract_insurance.test0012_testContractCreation',
         'contract_insurance.test0001_testPersonCreation',
     )
-    def test_0030_search_start_date(self):
+    def test0030_search_start_date(self):
         contract, = self.Contract.search([])
         coverage_a, = self.Coverage.search([('code', '=', 'ALP')])
         coverage_b, = self.Coverage.search([('code', '=', 'BET')])
@@ -1640,6 +1640,88 @@ class ModuleTestCase(test_framework.CoogTestCase):
         data_dict['parties'][0]['extra_data']['covered_1'] = False
         PartyAPI.create_party(data_dict, {})
         self.assertEqual(party.extra_data['covered_1'], False)
+
+    @test_framework.prepare_test(
+        'offered.test0030_testProductCoverageRelation',
+        'contract.test0002_testCountryCreation',
+        'contract.test0005_PrepareProductForSubscription',
+        'offered.test0001_testNumberGeneratorCreation',
+        'offered_insurance.test0005_testItemDescCreation',
+        'offered_insurance.test0005_testInsurerCreation',
+        )
+    def test9910_test_simulate_API(self):
+        pool = Pool()
+        ContractAPI = pool.get('api.contract')
+        data_ref = {
+            'parties': [
+                {
+                    'ref': '1',
+                    'is_person': True,
+                    'birth_date': '1978-01-14',
+                    },
+                {
+                    'ref': '2',
+                    'is_person': True,
+                    'birth_date': '1978-06-12',
+                    },
+                ],
+            'contracts': [
+                {
+                    'ref': '1',
+                    'product': {'code': 'AAA'},
+                    'subscriber': {'ref': '1'},
+                    'extra_data': {},
+                    'start': '2020-01-01',
+                    'covereds': [
+                        {
+                            'party': {'ref': '1'},
+                            'item_descriptor': {'code': 'person'},
+                            'coverages': [
+                                {
+                                    'coverage': {'code': 'ALP'},
+                                    'extra_data': {},
+                                    },
+                                {
+                                    'coverage': {'code': 'BET'},
+                                    'extra_data': {},
+                                    },
+                                ],
+                            },
+                        {
+                            'party': {'ref': '2'},
+                            'item_descriptor': {'code': 'person'},
+                            'coverages': [
+                                {
+                                    'coverage': {'code': 'ALP'},
+                                    'extra_data': {},
+                                    },
+                                {
+                                    'coverage': {'code': 'BET'},
+                                    'extra_data': {},
+                                    },
+                                ],
+                            },
+                        ],
+                    },
+                ],
+            }
+
+        # We have to commit here because simulate is executed in a new
+        # transaction, which cannot have access to the contents of the testing
+        # transaction
+        Transaction().commit()
+
+        data_dict = copy.deepcopy(data_ref)
+        simulation = ContractAPI.simulate(data_dict, {'_debug_server': True})
+
+        self.assertEqual(len(simulation), 1)
+        self.assertEqual(simulation[0]['ref'], '1')
+        self.assertEqual(simulation[0]['product']['code'], 'AAA')
+        self.assertEqual(len(simulation[0]['coverages']), 0)
+        covereds = simulation[0]['covereds']
+        self.assertEqual(len(covereds), 2)
+        self.assertEqual(len(covereds[0]['coverages']), 2)
+        self.assertEqual(covereds[0]['ref'], '1')
 
     def test0200_test_api_rule_tree_elements(self):
         APIRuleRuntime = Pool().get('api.rule_runtime')

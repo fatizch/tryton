@@ -5,6 +5,7 @@ import copy
 import doctest
 from decimal import Decimal
 
+from trytond.transaction import Transaction
 from trytond.pool import Pool
 
 import trytond.tests.test_tryton
@@ -266,6 +267,152 @@ class ModuleTestCase(test_framework.CoogTestCase):
         discount_delta.rules[-2].automatic = False
 
         self.assertRaises(WaiverDiscountValidationError, discount_delta.save)
+
+    @test_framework.prepare_test(
+        'contract_premium_modification.test0020_create_commercial_discounts',
+        )
+    def test9910_test_simulate_API(self):
+        pool = Pool()
+        ContractAPI = pool.get('api.contract')
+        data_ref = {
+            'parties': [
+                {
+                    'ref': '1',
+                    'is_person': True,
+                    'birth_date': '1978-01-14',
+                    },
+                {
+                    'ref': '2',
+                    'is_person': True,
+                    'birth_date': '1978-06-12',
+                    },
+                ],
+            'contracts': [
+                {
+                    'ref': '1',
+                    'product': {'code': 'AAA'},
+                    'subscriber': {'ref': '1'},
+                    'extra_data': {},
+                    'start': '2020-01-01',
+                    'discounts': [
+                        {'code': 'BET'}
+                        ],
+                    'covereds': [
+                        {
+                            'party': {'ref': '1'},
+                            'item_descriptor': {'code': 'person'},
+                            'coverages': [
+                                {
+                                    'coverage': {'code': 'ALP'},
+                                    'extra_data': {},
+                                    },
+                                {
+                                    'coverage': {'code': 'BET'},
+                                    'extra_data': {},
+                                    },
+                                ],
+                            },
+                        {
+                            'party': {'ref': '2'},
+                            'item_descriptor': {'code': 'person'},
+                            'coverages': [
+                                {
+                                    'coverage': {'code': 'ALP'},
+                                    'extra_data': {},
+                                    },
+                                {
+                                    'coverage': {'code': 'BET'},
+                                    'extra_data': {},
+                                    },
+                                ],
+                            },
+                        ],
+                    },
+                ],
+            }
+
+        # We have to commit here because simulate is executed in a new
+        # transaction, which cannot have access to the contents of the testing
+        # transaction
+        Transaction().commit()
+
+        data_dict = copy.deepcopy(data_ref)
+        schedule = ContractAPI.simulate(
+            data_dict, {'_debug_server': True})
+
+        self.maxDiff = None
+
+        self.assertEqual(len(schedule), 1)
+        self.assertEqual(schedule[0]['ref'], '1')
+
+        # Monthly billing (default value for the product), default schedule is
+        # 1 year
+        self.assertEqual(len(schedule[0]['schedule']), 12)
+
+        # Coverage A is 10 per month, 12 months + 2 covereds = 240
+        # Coverage B is 100 per month, 12 months + 2 covereds = 2400
+        self.assertEqual(schedule[0]['premium']['total'], '2400.00')
+
+        self.assertEqual([(x['start'], x['end'], x['total'])
+                    for x in schedule[0]['schedule']],
+                [
+                    ('2020-01-01', '2020-01-31', '200.00'),
+                    ('2020-02-01', '2020-02-29', '200.00'),
+                    ('2020-03-01', '2020-03-31', '200.00'),
+                    ('2020-04-01', '2020-04-30', '200.00'),
+                    ('2020-05-01', '2020-05-31', '200.00'),
+                    ('2020-06-01', '2020-06-30', '200.00'),
+                    ('2020-07-01', '2020-07-31', '200.00'),
+                    ('2020-08-01', '2020-08-31', '200.00'),
+                    ('2020-09-01', '2020-09-30', '200.00'),
+                    ('2020-10-01', '2020-10-31', '200.00'),
+                    ('2020-11-01', '2020-11-30', '200.00'),
+                    ('2020-12-01', '2020-12-31', '200.00'),
+                    ])
+
+        data_dict = copy.deepcopy(data_ref)
+        data_dict['contracts'][0]['billing'] = {
+            'billing_mode': {'code': 'quarterly'},
+            }
+        output = ContractAPI.simulate(
+            data_dict, {'_debug_server': True})
+
+        self.maxDiff = None
+
+        self.assertEqual(len(output), 1)
+        self.assertEqual(output[0]['ref'], '1')
+
+        # Quarterly billing
+        self.assertEqual(len(output[0]['schedule']), 4)
+        self.assertEqual(output[0]['premium']['total'], '2400.00')
+        self.assertEqual([(x['start'], x['end'], x['total'])
+                    for x in output[0]['schedule']],
+                [
+                    # (ALP 30 * 2 covered) +  (BET 300 * 2 covered)
+                    #  +  (BET discount -30 * 2 covered)
+                    ('2020-01-01', '2020-03-31', '600.00'),
+                    ('2020-04-01', '2020-06-30', '600.00'),
+                    ('2020-07-01', '2020-09-30', '600.00'),
+                    ('2020-10-01', '2020-12-31', '600.00'),
+                    ])
+
+        def check_amounts(p):
+            sum_ = sum(Decimal(p[key]) for key in ('total_fee',
+                    'total_premium', 'total_tax'))
+            discounts = p.get('discounts', [])
+            discount_sum = sum([Decimal(x["amount"]) for x in discounts])
+            all_summed = sum_ + discount_sum
+            self.assertEqual(Decimal(p['total']), all_summed)
+
+        for c in output:
+            check_amounts(c['premium'])
+            covered_summary = c['covereds']
+            self.assertTrue(bool(len(covered_summary)))
+            for covered in covered_summary:
+                check_amounts(covered['premium'])
+                self.assertTrue(bool(len(covered['coverages'])))
+                for coverage in covered['coverages']:
+                    check_amounts(coverage['premium'])
 
 
 def suite():

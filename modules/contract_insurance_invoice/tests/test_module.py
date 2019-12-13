@@ -1452,7 +1452,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
     @test_framework.prepare_test(
         'contract_insurance_invoice.test0006_prepare_product_for_subscription',
         )
-    def test0110_test_simulate_API(self):
+    def test9910_test_simulate_API(self):
         pool = Pool()
         ContractAPI = pool.get('api.contract')
         data_ref = {
@@ -1529,7 +1529,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
 
         # Coverage A is 10 per month, 12 months + 2 covereds = 240
         # Coverage B is 100 per month, 12 months + 2 covereds = 2400
-        self.assertEqual(schedule[0]['total'], '2640.00')
+        self.assertEqual(schedule[0]['premium']['total'], '2640.00')
 
         self.assertEqual([(x['start'], x['end'], x['total'])
                     for x in schedule[0]['schedule']],
@@ -1562,7 +1562,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
 
         # Quarterly billing
         self.assertEqual(len(schedule[0]['schedule']), 4)
-        self.assertEqual(schedule[0]['total'], '2640.00')
+        self.assertEqual(schedule[0]['premium']['total'], '2640.00')
         self.assertEqual([(x['start'], x['end'], x['total'])
                     for x in schedule[0]['schedule']],
                 [

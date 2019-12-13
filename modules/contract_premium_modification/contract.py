@@ -354,6 +354,18 @@ class Contract(metaclass=PoolMeta):
             return None
         return super(Contract, self)._calculate_final_invoice_end_date()
 
+    def _get_schedule_displayer_details(self, line, contract_invoice):
+        details = super(Contract, self)._get_schedule_displayer_details(line,
+            contract_invoice)
+        discount = line.details[0].discount if line.details else None
+        if discount:
+            details['discount'] = {
+                'code': discount.discount_options[0].discount_rule
+                .commercial_discount.code,
+                'amount': details['amount'],
+                }
+        return details
+
 
 class ContractOption(metaclass=PoolMeta):
     __name__ = 'contract.option'

@@ -5,6 +5,7 @@ import logging
 from trytond.pool import Pool
 from trytond.model import Model
 from trytond.server_context import ServerContext
+from trytond.transaction import Transaction
 
 from trytond.modules.coog_core import utils, model
 from trytond.modules.rule_engine import check_args
@@ -59,8 +60,13 @@ class APIContract(APIMixin):
                     'description': 'Subscribe a contract using the provided '
                     'informations',
                     },
-                },
-            )
+                'simulate': {
+                    'public': False,
+                    'readonly': True,
+                    'description': 'Simulate contracts computations based '
+                    'on provided informations',
+                    },
+                })
 
     @classmethod
     def _get_contract(cls, data, status_filter=None):
@@ -738,6 +744,192 @@ class APIContract(APIMixin):
         base['api.option'] = option_data
         base['api.extra_data']['option'] = option_data.get('extra_data', {})
         return base
+
+    @classmethod
+    def simulate(cls, parameters):
+        with Transaction().new_transaction() as transaction:
+            with Transaction().set_context(_will_be_rollbacked=True,
+                    _disable_validations=True):
+                with Transaction().set_user(0):
+                    try:
+                        created = cls._simulate_create_contracts(
+                            parameters)
+
+                        cls._simulate_parse_created(created)
+                        contracts = created['contract_instances']
+                        cls._simulate_prepare_contracts(contracts,
+                            parameters)
+
+                        return cls._simulate_result(contracts, parameters,
+                            created)
+                    finally:
+                        transaction.rollback()
+
+    @classmethod
+    def _simulate_result(cls, contracts, parameters, created):
+        results = []
+        for contract in contracts:
+            result = {
+                'product': {
+                    'code': contract.product.code,
+                    },
+                'coverages': [{
+                        'coverage': {'code': option.coverage.code},
+                        } for option in contract.options],
+                'ref': created['contract_ref_per_id'][contract.id],
+                }
+            package = contract.get_package()
+            if package:
+                result['package'] = {
+                    'code': package.code,
+                    }
+            results.append(result)
+        return results
+
+    @classmethod
+    def _simulate_parse_created(cls, created):
+        Contract = Pool().get('contract')
+        created['party_ref_per_id'] = {
+            x['id']: x['ref'] for x in created['parties']}
+        created['contract_ref_per_id'] = {
+            x['id']: x['ref'] for x in created['contracts']}
+        created['contract_instances'] = Contract.browse(
+            [x['id'] for x in created['contracts']])
+
+    @classmethod
+    def _simulate_create_contracts(cls, parameters):
+        # Make sure we do not inadvertently activate the contract :)
+        parameters['options'] = {}
+
+        return getattr(cls.subscribe_contracts, '__origin_function')(cls,
+            parameters)
+
+    @classmethod
+    def _simulate_prepare_contracts(cls, contracts, parameters):
+        Contract = Pool().get('contract')
+        Contract.calculate(contracts)
+
+    @classmethod
+    def _simulate_schema(cls):
+        schema = cls._subscribe_contracts_schema(minimum=True)
+        for kind in schema['properties']['parties']['items']['oneOf']:
+            kind['required'] = ['ref']
+        return schema
+
+    @classmethod
+    def _simulate_convert_input(cls, parameters):
+        cls._simulate_convert_input_parties(parameters)
+        result = cls._subscribe_contracts_convert_input(parameters,
+            minimum=True)
+        return result
+
+    @classmethod
+    def _simulate_convert_input_parties(cls, parameters):
+        for party_data in parameters.get('parties', []):
+            if 'name' not in party_data:
+                party_data['name'] = 'Temp Name %s' % party_data['ref']
+            if 'is_person' in party_data:
+                if 'first_name' not in party_data:
+                    party_data['first_name'] = \
+                        'Temp First Name %s' % party_data['ref']
+                if 'gender' not in party_data:
+                    party_data['gender'] = 'male'
+
+    @classmethod
+    def _simulate_output_schema(cls):
+        return {
+            'type': 'array',
+            'items': cls._simulate_contract_output_schema(),
+            }
+
+    @classmethod
+    def _simulate_contract_output_schema(cls):
+        return {
+            'type': 'object',
+            'additionalProperties': False,
+            'properties': {
+                'product': CODED_OBJECT_SCHEMA,
+                'package': CODED_OBJECT_SCHEMA,
+                'coverages': cls._simulate_coverages_output_schema(),
+                'ref': {'type': 'string'},
+                },
+            }
+
+    @classmethod
+    def _simulate_coverages_output_schema(cls):
+        return {
+            'type': 'array',
+            'items': {
+                'type': 'object',
+                'properties': {
+                    'additionalProperties': False,
+                    'coverage': CODED_OBJECT_SCHEMA,
+                    }
+                }
+            }
+
+    @classmethod
+    def _simulate_examples(cls):
+        return [{
+                'input': {
+                    'parties': [
+                        {
+                            'ref': '1',
+                            'is_person': True,
+                            'name': 'Doe',
+                            'first_name': 'Father',
+                            'birth_date': '1980-01-20',
+                            'gender': 'male',
+                            'addresses': [
+                                {
+                                    'street': 'Somewhere along the street',
+                                    'zip': '75002',
+                                    'city': 'Paris',
+                                    'country': 'fr',
+                                    },
+                                ],
+                            },
+                        ],
+                    'contracts': [
+                        {
+                            'ref': '1',
+                            'product': {'code': 'AAA'},
+                            'subscriber': {'ref': '1'},
+                            'extra_data': {
+                                'contract_1': '16.10',
+                                'contract_2': False,
+                                'contract_3': '2',
+                                },
+                            'coverages': [
+                                {
+                                    'coverage': {'code': 'ALP'},
+                                    'extra_data': {
+                                        'option_1': '6.10',
+                                        'option_2': True,
+                                        'option_3': '2',
+                                        },
+                                    },
+                                {
+                                    'coverage': {'code': 'BET'},
+                                    'extra_data': {},
+                                    },
+                                ],
+                            },
+                        ],
+                    'options': {
+                        'activate': True,
+                        },
+                    },
+                'output': [{
+                        'coverages': [
+                            {'coverage': {'code': 'ALP'}},
+                            {'coverage': {'code': 'BET'}},
+                            ],
+                        'product': {'code': 'AAA'},
+                        'ref': '1',
+                        },
+                    ],
+                }]
 
 
 class APIRuleRuntime(Model):

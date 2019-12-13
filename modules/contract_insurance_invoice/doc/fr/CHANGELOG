@@ -1,3 +1,4 @@
+* FEA#13843 Ajoute les informations de quittancement dans l'API simulate
 * BUG#13398 Mettre à jour correctement la date de paiement des lignes de paiement en cas de trop perçu
 * FEA#12980 Ajout d'une API de tarification dans le backoffice
 * BUG#13014 La méthode de répartition n'était pas renseigné à "Pertes et Profits" dans l'assistant de lettrage quand le reste était supérieur à zéro.

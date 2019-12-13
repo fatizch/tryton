@@ -1,3 +1,4 @@
+* FEA#13843 Ajout d'un schéma de montant négatif
 * OTH#00000 Renvoyer une erreur propre si le contexte de l'API est absent
 
 Version 2.6 - 2019-10-11

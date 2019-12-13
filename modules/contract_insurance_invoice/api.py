@@ -4,11 +4,11 @@ from decimal import Decimal
 
 from trytond.pool import PoolMeta, Pool
 from trytond.server_context import ServerContext
-from trytond.transaction import Transaction
 
 from trytond.modules.coog_core import coog_date
 
-from trytond.modules.api import DATE_SCHEMA, api_input_error_manager
+from trytond.modules.api import DATE_SCHEMA
+from trytond.modules.api import api_input_error_manager
 from trytond.modules.api.api.core import POSITIVE_AMOUNT_SCHEMA, amount_for_api
 from trytond.modules.api.api.core import date_for_api
 from trytond.modules.coog_core.api import OBJECT_ID_SCHEMA, CODE_SCHEMA
@@ -157,14 +157,7 @@ class APIContract(metaclass=PoolMeta):
                     'readonly': True,
                     'description': 'Returns the payment schedule for contracts',
                     },
-                'simulate': {
-                    'public': False,
-                    'readonly': True,
-                    'description': 'Compute predicted payments amounts based '
-                    'on provided informations',
-                    },
-                },
-            )
+                })
 
     @classmethod
     def _create_contract(cls, contract_data, created):
@@ -828,58 +821,113 @@ class APIContract(metaclass=PoolMeta):
             ]
 
     @classmethod
-    def simulate(cls, parameters):
-        with Transaction().new_transaction() as transaction:
-            with Transaction().set_context(_will_be_rollbacked=True,
-                    _disable_validations=True):
-                with Transaction().set_user(0):
-                    try:
-                        created = cls._simulate_create_contracts(
-                            parameters)
-
-                        cls._simulate_parse_created(created)
-                        contracts = created['contract_instances']
-                        cls._simulate_prepare_contracts(contracts,
-                            parameters)
-
-                        results = []
-                        for contract in contracts:
-                            result = cls._simulate_get_schedule(
-                                contract, parameters, created)
-                            result.pop('contract')
-                            result['ref'] = created['contract_ref_per_id'][
-                                contract.id]
-                            results.append(result)
-                        return results
-                    finally:
-                        transaction.rollback()
-
-    @classmethod
-    def _simulate_parse_created(cls, created):
-        Contract = Pool().get('contract')
-        created['party_ref_per_id'] = {
-            x['id']: x['ref'] for x in created['parties']}
-        created['contract_ref_per_id'] = {
-            x['id']: x['ref'] for x in created['contracts']}
-        created['contract_instances'] = Contract.browse(
-            [x['id'] for x in created['contracts']])
-
-    @classmethod
     def _simulate_create_contracts(cls, parameters):
-        # Make sure we do not inadvertently activate the contract :)
-        parameters['options'] = {}
-
         # Hardcore
         with api_input_error_manager():
             Pool().get('api').ignore_input_errors('missing_bank_account')
 
-            return getattr(cls.subscribe_contracts, '__origin_function')(
-                cls, parameters)
+            return super(APIContract, cls)._simulate_create_contracts(
+                parameters)
 
     @classmethod
-    def _simulate_prepare_contracts(cls, contracts, parameters):
-        Contract = Pool().get('contract')
-        Contract.calculate(contracts)
+    def _simulate_result(cls, contracts, parameters, created):
+        results = super(APIContract, cls)._simulate_result(contracts,
+            parameters, created)
+        for i, contract in enumerate(contracts):
+            add_to_result = cls._simulate_get_schedule(contract, parameters,
+                created)
+            add_to_result.pop('contract')
+            add_to_result['premium'] = {}
+            add_to_result['premium']['total'] = add_to_result['total']
+            add_to_result.pop('total')
+            add_to_result['premium']['total_fee'] = add_to_result['total_fee']
+            add_to_result.pop('total_fee')
+            add_to_result['premium']['total_premium'] = \
+                add_to_result['total_premium']
+            add_to_result.pop('total_premium')
+            add_to_result['premium']['total_tax'] = add_to_result['total_tax']
+            add_to_result.pop('total_tax')
+            results[i].update(add_to_result)
+            cls._aggregate_schedule(contract, results[i])
+        return results
+
+    @classmethod
+    def _aggregate_schedule(cls, contract, contract_data):
+        contract_coverages = {}
+        contract_covereds = {}
+        covereds_coverages = {}
+        for schedule in contract_data['schedule']:
+            for detail in schedule['details']:
+                coverage = detail['origin']['option']['coverage']
+                cov_code = coverage['code']
+                covered = detail['origin']['covered']
+                contract_coverage = cls._aggregate_get_field(
+                    contract_data['coverages'], contract_coverages, cov_code,
+                    lambda x: x['coverages']['code'])
+                if contract_coverage:
+                    cls._simulate_update_premium_field(
+                        contract_coverage['premium'], detail)
+                contract_covered = cls._aggregate_get_field(
+                    contract_data['covereds'], contract_covereds,
+                    covered['party']['ref'], lambda x: x['ref'])
+                if contract_covered:
+                    cls._simulate_update_premium_field(
+                        contract_covered['premium'], detail)
+                    covered_ref = contract_covered['ref']
+                    if covered_ref not in covereds_coverages:
+                        covereds_coverages[covered_ref] = {}
+                    covered_coverage = cls._aggregate_get_field(
+                        contract_covered['coverages'],
+                        covereds_coverages[covered_ref], cov_code,
+                        lambda x: x['coverage']['code'])
+                    if covered_coverage:
+                        cls._simulate_update_premium_field(
+                            covered_coverage['premium'], detail)
+        cls._simulate_convert_premium_fields(contract_coverages)
+        cls._simulate_convert_premium_fields(contract_covereds)
+        for covered_coverages in covereds_coverages.values():
+            cls._simulate_convert_premium_fields(covered_coverages)
+
+    @classmethod
+    def _aggregate_get_field(cls, data, cache, cache_key, test_field):
+        if cache_key not in cache:
+            cache[cache_key] = next((cov
+                    for cov in data
+                    if test_field(cov) == cache_key),
+                None)
+            if cache[cache_key]:
+                cache[cache_key].update(
+                    cls._simulate_init_premium_field())
+        return cache[cache_key]
+
+    @classmethod
+    def _simulate_update_premium_field(cls, target, source):
+        target['total'] += Decimal(source['total'])
+        target['total_fee'] += Decimal(source['fee'])
+        target['total_premium'] += Decimal(source['premium'])
+        target['total_tax'] += Decimal(source['tax'])
+
+    @classmethod
+    def _simulate_init_premium_field(cls):
+        return {
+            'premium': {
+                'total': Decimal(0),
+                'total_fee': Decimal(0),
+                'total_premium': Decimal(0),
+                'total_tax': Decimal(0),
+                },
+            }
+
+    @classmethod
+    def _simulate_convert_premium_fields(cls, to_clean):
+        for field in to_clean.values():
+            if field:
+                cls._simulate_convert_premium_field(field['premium'])
+
+    @classmethod
+    def _simulate_convert_premium_field(cls, premium):
+        for total in premium:
+            premium[total] = amount_for_api(premium[total])
 
     @classmethod
     def _simulate_get_schedule(cls, contract, parameters, created):
@@ -909,31 +957,10 @@ class APIContract(metaclass=PoolMeta):
                         'party_ref_per_id'][party_id]
 
     @classmethod
-    def _simulate_schema(cls):
-        schema = cls._subscribe_contracts_schema(minimum=True)
-        for kind in schema['properties']['parties']['items']['oneOf']:
-            kind['required'] = ['ref']
-        return schema
-
-    @classmethod
     def _simulate_convert_input(cls, parameters):
-        cls._simulate_convert_input_parties(parameters)
-        result = cls._subscribe_contracts_convert_input(parameters,
-            minimum=True)
+        result = super(APIContract, cls)._simulate_convert_input(parameters)
         cls._simulate_convert_contract_input(parameters)
         return result
-
-    @classmethod
-    def _simulate_convert_input_parties(cls, parameters):
-        for party_data in parameters.get('parties', []):
-            if 'name' not in party_data:
-                party_data['name'] = 'Temp Name %s' % party_data['ref']
-            if 'is_person' in party_data:
-                if 'first_name' not in party_data:
-                    party_data['first_name'] = \
-                        'Temp First Name %s' % party_data['ref']
-                if 'gender' not in party_data:
-                    party_data['gender'] = 'male'
 
     @classmethod
     def _simulate_convert_contract_input(cls, parameters):
@@ -949,13 +976,49 @@ class APIContract(metaclass=PoolMeta):
                     contract_data['billing']['direct_debit_day'] = '1'
 
     @classmethod
-    def _simulate_output_schema(cls):
+    def _simulate_contract_output_schema(cls):
+        schema = super(APIContract, cls)._simulate_contract_output_schema()
         base = cls._payment_schedule_output_schema()
         del base['items']['properties']['contract']
         base['items']['properties']['ref'] = {'type': 'string'}
-
         cls._simulate_update_schedule_output_schema(base)
-        return base
+        del base['items']['properties']['total']
+        del base['items']['properties']['total_premium']
+        del base['items']['properties']['total_fee']
+        del base['items']['properties']['total_tax']
+        base['items']['properties'].update(
+            cls._simulate_premium_output_schema())
+        schema['properties'].update(base['items']['properties'])
+        return schema
+
+    @classmethod
+    def _simulate_coverages_output_schema(cls):
+        schema = super(APIContract, cls)._simulate_coverages_output_schema()
+        schema['items']['properties'].update(
+            cls._simulate_premium_output_schema())
+        return schema
+
+    @classmethod
+    def _simulate_covereds_output_schema(cls):
+        schema = super(APIContract, cls)._simulate_covereds_output_schema()
+        schema['items']['properties'].update(
+            cls._simulate_premium_output_schema())
+        return schema
+
+    @classmethod
+    def _simulate_premium_output_schema(cls):
+        return {
+            'premium': {
+                'type': 'object',
+                'additionalProperties': False,
+                'properties': {
+                    'total': POSITIVE_AMOUNT_SCHEMA,
+                    'total_premium': POSITIVE_AMOUNT_SCHEMA,
+                    'total_fee': POSITIVE_AMOUNT_SCHEMA,
+                    'total_tax': POSITIVE_AMOUNT_SCHEMA,
+                    }
+                }
+            }
 
     @classmethod
     def _simulate_update_schedule_output_schema(cls, base):
@@ -977,8 +1040,8 @@ class APIContract(metaclass=PoolMeta):
 
     @classmethod
     def _simulate_examples(cls):
-        return [
-            {
+        examples = super(APIContract, cls)._simulate_examples()
+        examples.append({
                 'input': {
                     'parties': [
                         {
@@ -990,7 +1053,7 @@ class APIContract(metaclass=PoolMeta):
                             'ref': '2',
                             'is_person': True,
                             'birth_date': '1992-01-12',
-                            }
+                            },
                         ],
                     'contracts': [
                         {
@@ -1148,12 +1211,15 @@ class APIContract(metaclass=PoolMeta):
                                 'total': '254.59',
                                 },
                             ],
-                        'total_premium': '254.59',
-                        'total_fee': '0',
-                        'total_tax': '0.00',
-                        'total': '254.59',
+                        'premium': {
+                            'total_premium': '254.59',
+                            'total_fee': '0',
+                            'total_tax': '0.00',
+                            'total': '254.59',
+                            },
                         'ref': '1',
                         },
                     ],
                 },
-            ]
+            )
+        return examples
