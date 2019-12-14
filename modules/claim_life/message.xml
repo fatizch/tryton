@@ -44,5 +44,11 @@
         <record model="ir.message" id="msg_manual_list_enum">
             <field name="text">Manual List</field>
         </record>
+        <record model="ir.message" id="msg_loss_date">
+            <field name="text">Loss date</field>
+        </record>
+        <record model="ir.message" id="msg_death_date_invalid">
+            <field name="text">Death date of the covered person is not set or not equal to the loss date </field>
+        </record>
     </data>
 </tryton>

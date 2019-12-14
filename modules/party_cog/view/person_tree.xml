@@ -9,6 +9,7 @@ this repository contains the full copyright notices and license terms. -->
     <field name="first_name"/>
     <field name="birth_date"/>
     <field name="main_address"/>
+    <field name="color" tree_invisible="1"/>
     <field name="is_person" tree_invisible="1"/>
     <field name="planned_anonymization_date"/>
 </tree>

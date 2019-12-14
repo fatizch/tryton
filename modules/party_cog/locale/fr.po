@@ -378,6 +378,10 @@ msgctxt "field:party.party,commercial_name:"
 msgid "Commercial Name"
 msgstr "Nom commercial"
 
+msgctxt "field:party.party,death_date:"
+msgid "Death Date"
+msgstr "Date du décès"
+
 msgctxt "field:party.party,first_name:"
 msgid "First Name"
 msgstr "Prénom"
@@ -833,6 +837,10 @@ msgstr "Synthèse acteur"
 msgctxt "field:res.user,party_synthesis_previous:"
 msgid "Previous Synthesis Parties"
 msgstr "Synthèses acteur précédentes"
+
+msgctxt "help:party.party,death_date:"
+msgid "Death date"
+msgstr "Date du décès du tiers"
 
 msgctxt "help:country.address.line,max_length:"
 msgid ""

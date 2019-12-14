@@ -24,6 +24,7 @@ def register():
         endorsement.EndorsementPartyRelation,
         endorsement.Endorsement,
         wizard.ChangePartyBirthDate,
+        wizard.ChangePartyDeathDate,
         wizard.AddressDisplayer,
         wizard.ChangePartyAddress,
         wizard.PartyNameDisplayer,

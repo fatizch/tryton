@@ -24,6 +24,9 @@ this repository contains the full copyright notices and license terms. -->
             <label name="birth_name"/>
             <field name="birth_name"/>
             <newline/>
+            <label name="death_date"/>
+            <field name="death_date"/>
+            <newline/>
             <group id="label_company_name" xfill="1" xexpand="0">
                 <label name="name" xfill="1" xexpand="1" xalign="1"/>
             </group>

@@ -69,6 +69,17 @@ this repository contains the full copyright notices and license terms. -->
 l'assuré</field>
             <field name="parent" ref="dossier_personne_couverte"/>
         </record>
+        <record model="rule_engine.function" id="date_du_deces">
+            <field name="translated_technical_name">date_du_deces</field>
+            <field name="description">Date du décès</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_get_person_death_date</field>
+            <field name="long_description">Retourne la date du décès de
+l'assuré</field>
+            <field name="parent" ref="dossier_personne_couverte"/>
+        </record>
         <record model="rule_engine.function" id="relation_avec_souscripteur">
             <field name="translated_technical_name">relation_avec_souscripteur</field>
             <field name="description">Relation avec le souscripteur</field>
@@ -115,6 +126,17 @@ de l'assuré défini sur son adresse</field>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_get_subscriber_birthdate</field>
             <field name="long_description">Retourne la date de naissance du 
+souscripteur du contrat</field>
+            <field name="parent" ref="dossier_souscripteur"/>
+        </record>
+        <record model="rule_engine.function" id="date_du_deces_souscripteur">
+            <field name="translated_technical_name">date_du_deces_souscripteur</field>
+            <field name="description">Date du décès</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_get_subscriber_death_date</field>
+            <field name="long_description">Retourne la date du décès du
 souscripteur du contrat</field>
             <field name="parent" ref="dossier_souscripteur"/>
         </record>

@@ -311,6 +311,34 @@ msgctxt "field:endorsement.party.change_birth_date,signature_date:"
 msgid "Signature Date"
 msgstr "Date de signature"
 
+msgctxt "field:endorsement.party.change_death_date,current_death_date:"
+msgid "Current Death Date"
+msgstr "Date du décès actuelle enregistrée"
+
+msgctxt "field:endorsement.party.change_death_date,effective_date:"
+msgid "Effective Date"
+msgstr "Date effective"
+
+msgctxt "field:endorsement.party.change_death_date,endorsement_definition:"
+msgid "Endorsement Definition"
+msgstr "Définition de l'avenant"
+
+msgctxt "field:endorsement.party.change_death_date,endorsement_part:"
+msgid "Endorsement Part"
+msgstr "Avenant unitaire"
+
+msgctxt "field:endorsement.party.change_death_date,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:endorsement.party.change_death_date,death_date:"
+msgid "Death Date"
+msgstr "Date du décès"
+
+msgctxt "field:endorsement.party.change_death_date,signature_date:"
+msgid "Signature Date"
+msgstr "Date de signature"
+
 msgctxt "field:endorsement.party.change_name,effective_date:"
 msgid "Effective Date"
 msgstr "Date d'effet"
@@ -696,6 +724,10 @@ msgctxt "model:endorsement.definition,name:modify_birth_date_party_definition"
 msgid "Change Party Birth Date"
 msgstr "Changement de date de naissance"
 
+msgctxt "model:endorsement.definition,name:modify_death_date_party_definition"
+msgid "Change Party Death Date"
+msgstr "Déclaration de la date du décès"
+
 msgctxt "model:endorsement.definition,name:modify_name_party_definition"
 msgid "Change Party Name"
 msgstr "Changement de nom d'un tiers"
@@ -719,6 +751,10 @@ msgstr "Changement d'adresse"
 msgctxt "model:endorsement.part,name:endorsement_part_party_modify_birth_date"
 msgid "Change Party Birth Date"
 msgstr "Changement de date de naissance"
+
+msgctxt "model:endorsement.part,name:endorsement_part_party_modify_death_date"
+msgid "Change Party Death Date"
+msgstr "Déclaration de la date du décès"
 
 msgctxt "model:endorsement.part,name:endorsement_part_party_modify_name"
 msgid "Change Party Name"
@@ -747,6 +783,10 @@ msgstr "Afficheur d'adresse"
 msgctxt "model:endorsement.party.change_birth_date,name:"
 msgid "Change Party Birth Date"
 msgstr "Changement de date de naissance"
+
+msgctxt "model:endorsement.party.change_death_date,name:"
+msgid "Change Party Death Date"
+msgstr "Déclaration de la date du décès"
 
 msgctxt "model:endorsement.party.change_name,name:"
 msgid "Change Party Name"
@@ -787,6 +827,10 @@ msgstr "Avenants"
 msgctxt "model:ir.message,text:msg_address_modifications"
 msgid "Addresses Modifications:"
 msgstr "Modifications des adresses"
+
+msgctxt "model:ir.message,text:msg_invalid_death_date"
+msgid "Invalid death date: death date set in the future or inferior of birth date"
+msgstr "Date du décès invalide : Date du décès en future ou inférieur de la date de naissance"
 
 msgctxt "model:ir.message,text:msg_new_address"
 msgid "New Address"
@@ -941,6 +985,25 @@ msgid "Suspend"
 msgstr "Suspendre"
 
 msgctxt "wizard_button:endorsement.start,change_party_birth_date,end:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt ""
+"wizard_button:endorsement.start,change_party_death_date,change_party_death_date_next:"
+msgid "Next"
+msgstr "Suivant"
+
+msgctxt ""
+"wizard_button:endorsement.start,change_party_death_date,change_party_death_date_previous:"
+msgid "Previous"
+msgstr "Précédent"
+
+msgctxt ""
+"wizard_button:endorsement.start,change_party_death_date,change_party_death_date_suspend:"
+msgid "Suspend"
+msgstr "Suspendre"
+
+msgctxt "wizard_button:endorsement.start,change_party_death_date,end:"
 msgid "Cancel"
 msgstr "Annuler"
 

@@ -58,8 +58,6 @@ class Party(ModelCurrency, model.CoogView):
         'Inactive Reconciliation Postponements',
         domain=[('active', '=', False)],
         order=[('date', 'DESC')])
-    reconciliation_color = fields.Function(fields.Char(
-            'Reconciliation Color'), 'on_change_with_reconciliation_color')
     reconciliation_name = fields.Function(fields.Char(
             'Active Reconciliation Postponement Name'),
         'getter_reconciliation_name')
@@ -83,11 +81,6 @@ class Party(ModelCurrency, model.CoogView):
         cls.receivable_today.depends += ['currency_digits']
 
     @classmethod
-    def view_attributes(cls):
-        return super(Party, cls).view_attributes() + [
-            ('/tree', 'colors', Eval('reconciliation_color', 'black'))]
-
-    @classmethod
     def validate(cls, parties):
         super(Party, cls).validate(parties)
         with model.error_manager():
@@ -97,9 +90,10 @@ class Party(ModelCurrency, model.CoogView):
                             'account_cog.msg_too_many_postponements',
                             party=party.rec_name))
 
-    @fields.depends('reconciliation_postponements',
-        'inactive_reconciliation_postponements')
-    def on_change_with_reconciliation_color(self, name=None):
+    def get_color(self, name):
+        color = super().get_color(name)
+        if color != 'black':
+            return color
         if self.reconciliation_postponements:
             return 'orange'
         if self.inactive_reconciliation_postponements:

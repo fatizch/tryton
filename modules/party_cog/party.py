@@ -148,6 +148,16 @@ class Party(export.ExportImportMixin, summary.SummaryMixin):
             'invisible': Eval('is_anonymized', True),
             }, depends=['is_anonymized'])
 
+    death_date = fields.Date('Death Date', states={
+        'invisible': (~STATES_PERSON | ~Bool(Eval('death_date')))},
+        depends=['is_person', 'birth_date'], domain=['OR',
+            ('death_date', '=', None),
+            ('death_date', '>', Eval('birth_date'))],
+        readonly=True, help='Death date')
+    color = fields.Function(
+        fields.Char('Color'),
+        'get_color')
+
     @classmethod
     def __register__(cls, module_name):
         # Migration from 1.8: rename short_name to commercial_name
@@ -216,11 +226,17 @@ class Party(export.ExportImportMixin, summary.SummaryMixin):
             ("/form/notebook/page/group[@id='one_address']", 'states', {
                     'invisible': Eval('has_multiple_addresses', False)}),
             ("/form/group[@id='button']", 'states', {'invisible': True}),
+            ('/tree', 'colors', Eval('color')),
             ]
 
     @staticmethod
     def default_addresses():
         return None
+
+    def get_color(self, name):
+        if self.death_date:
+            return 'red'
+        return 'black'
 
     @staticmethod
     def default_all_addresses():

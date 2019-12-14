@@ -154,6 +154,15 @@ class RuleEngineRuntime(metaclass=PoolMeta):
         cls.append_error(args, 'Subscriber does not have a birth date')
 
     @classmethod
+    @check_args('subscriber')
+    def _re_get_subscriber_death_date(cls, args):
+        subscriber = args['subscriber']
+        if (hasattr(subscriber, 'death_date') and hasattr(subscriber,
+                'is_person') and subscriber.is_person):
+            return subscriber.death_date
+        cls.append_error(args, 'Subscriber does not have a death date')
+
+    @classmethod
     @check_args('contract')
     def _re_get_subscriber_living_country(cls, args):
         address = args['contract'].subscriber.address_get()
@@ -197,6 +206,13 @@ class RuleEngineRuntime(metaclass=PoolMeta):
         if hasattr(person, 'birth_date'):
             return person.birth_date
         cls.append_error(args, '%s does not have a birth date' % person.name)
+
+    @classmethod
+    def _re_get_person_death_date(cls, args):
+        person = cls.get_person(args)
+        if hasattr(person, 'death_date'):
+            return person.death_date
+        cls.append_error(args, '%s does not have a death date' % person.name)
 
     @classmethod
     def _re_get_person_living_country(cls, args):

@@ -11,6 +11,14 @@ this repository contains the full copyright notices and license terms. -->
             <field name="type">form</field>
             <field name="name">party_change_birth_date_form</field>
         </record>
+        <!-- ########################### -->
+        <!-- # Change Party Death Date # -->
+        <!-- ########################### -->
+        <record model="ir.ui.view" id="party_change_death_date_view_form">
+            <field name="model">endorsement.party.change_death_date</field>
+            <field name="type">form</field>
+            <field name="name">party_change_death_date_form</field>
+        </record>
         <!-- ######################### -->
         <!-- # Change Party Address  # -->
         <!-- ######################### -->

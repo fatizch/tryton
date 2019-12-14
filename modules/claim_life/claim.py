@@ -325,6 +325,12 @@ class Loss(metaclass=PoolMeta):
 
     def check_activation(self):
         super(Loss, self).check_activation()
+        if self.loss_kind == 'death' and (
+                not self.covered_person.death_date or
+                self.start_date != self.covered_person.death_date):
+            self.append_functional_error(
+                ValidationError(gettext(
+                    'claim_life.msg_death_date_invalid')))
         if not self.is_a_relapse:
             return
         if not self.start_date:

@@ -6,7 +6,7 @@ from trytond.i18n import gettext
 from trytond.model.exceptions import ValidationError
 from trytond.transaction import Transaction
 from trytond.pool import PoolMeta, Pool
-from trytond.pyson import Eval, Bool, If
+from trytond.pyson import Eval, Bool, If, Date
 
 from trytond.modules.coog_core import fields, model, coog_string, utils
 from trytond.modules.endorsement.wizard import (EndorsementWizardStepMixin,
@@ -19,6 +19,7 @@ __all__ = [
     'AddressDisplayer',
     'ChangePartyAddress',
     'ChangePartyBirthDate',
+    'ChangePartyDeathDate',
     'ChangePartySSN',
     'PartyNameDisplayer',
     'ChangePartyName',
@@ -333,6 +334,59 @@ class ChangePartyBirthDate(EndorsementWizardStepMixin):
         parties = self._get_parties()
         party_endorsement = list(parties.values())[0]
         party_endorsement.values = {'birth_date': self.new_birth_date}
+        party_endorsement.save()
+
+
+class ChangePartyDeathDate(EndorsementWizardStepMixin):
+    'Change Party Death Date'
+
+    __name__ = 'endorsement.party.change_death_date'
+
+    current_death_date = fields.Date('Current Death Date', readonly=True,
+        states={'invisible': ~Bool(Eval('current_death_date'))})
+    death_date = fields.Date('Death Date', domain=['OR',
+        [('death_date', '=', None)], [('death_date', '<=', Date())]])
+
+    @classmethod
+    def is_multi_instance(cls):
+        return False
+
+    @classmethod
+    def state_view_name(cls):
+        return 'endorsement_party.party_change_death_date_view_form'
+
+    @classmethod
+    def _party_fields_to_extract(cls):
+        return {}
+
+    def _get_parties(self):
+        return {x.party.id: x
+                for x in self.wizard.endorsement.party_endorsements}
+
+    def step_default(self, name):
+        pool = Pool()
+        Party = pool.get('party.party')
+        defaults = super(ChangePartyDeathDate, self).step_default()
+        parties = self._get_parties()
+        party = Party(list(parties.keys())[0])
+        party_endorsement = list(parties.values())[0]
+        values = party_endorsement.values
+        if 'death_date' in values:
+            defaults['death_date'] = values['death_date']
+        else:
+            defaults['death_date'] = party.death_date
+        defaults['current_death_date'] = party.death_date
+        return defaults
+
+    def step_update(self):
+        parties = self._get_parties()
+        party_endorsement = list(parties.values())[0]
+        if self.death_date and (self.death_date > utils.today() or
+                self.death_date <= party_endorsement.party.birth_date):
+            self.append_functional_error(
+                ValidationError(gettext(
+                    'endorsement_party.msg_invalid_death_date')))
+        party_endorsement.values = {'death_date': self.death_date}
         party_endorsement.save()
 
 
@@ -734,6 +788,9 @@ class StartEndorsement(metaclass=PoolMeta):
 
 add_endorsement_step(StartEndorsement, ChangePartyBirthDate,
     'change_party_birth_date')
+
+add_endorsement_step(StartEndorsement, ChangePartyDeathDate,
+    'change_party_death_date')
 
 add_endorsement_step(StartEndorsement, ChangePartyAddress,
     'change_party_address')

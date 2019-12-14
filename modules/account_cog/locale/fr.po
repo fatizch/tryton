@@ -375,10 +375,6 @@ msgctxt "field:party.party,receivable_today_icon:"
 msgid "Receivable Today Icon"
 msgstr "Icône de à recevoir aujourd'hui"
 
-msgctxt "field:party.party,reconciliation_color:"
-msgid "Reconciliation Color"
-msgstr "Couleur de lettrage"
-
 msgctxt "field:party.party,reconciliation_comment:"
 msgid "Active Reconciliation Postponement Comment"
 msgstr "Commentaire du report de lettrage actif"

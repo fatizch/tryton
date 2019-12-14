@@ -15,6 +15,10 @@ this repository contains the full copyright notices and license terms. -->
             <field name="code">change_birth_date_party</field>
             <field name="name">Change Party Birth Date</field>
         </record>
+        <record model="endorsement.definition" id="modify_death_date_party_definition">
+            <field name="code">change_death_date_party</field>
+            <field name="name">Change Party Death Date</field>
+        </record>
     </data>
     <data>
         <!-- #################### -->
@@ -68,6 +72,17 @@ this repository contains the full copyright notices and license terms. -->
         <record model="endorsement.definition-endorsement.part" id="modify_birth_date_party_relation">
             <field name="definition" ref="modify_birth_date_party_definition"/>
             <field name="endorsement_part" ref="endorsement_part_party_modify_birth_date"/>
+            <field name="order">1</field>
+        </record>
+        <record model="endorsement.part" id="endorsement_part_party_modify_death_date">
+            <field name="code">change_party_death_date</field>
+            <field name="name">Change Party Death Date</field>
+            <field name="kind">party</field>
+            <field name="view">change_party_death_date</field>
+        </record>
+        <record model="endorsement.definition-endorsement.part" id="modify_death_date_party_relation">
+            <field name="definition" ref="modify_death_date_party_definition"/>
+            <field name="endorsement_part" ref="endorsement_part_party_modify_death_date"/>
             <field name="order">1</field>
         </record>
         <record model="endorsement.part" id="endorsement_part_party_modify_name">

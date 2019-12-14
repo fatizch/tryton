@@ -1,3 +1,4 @@
+* FEA#12673 Gestion de la date de décès sur une personne
 * BUG#00000 Corriger l'appel à la fonction de mise à jour de l'adresse d'un tiers
 * BUG#11342 Permettre les avenants sur les contrats suspendus
 

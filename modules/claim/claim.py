@@ -7,7 +7,7 @@ from sql.conditionals import Coalesce
 from trytond.exceptions import UserWarning
 from trytond.i18n import gettext
 from trytond.rpc import RPC
-from trytond.pyson import Eval, Bool, Or, If
+from trytond.pyson import Eval, Bool, Or, If, Date
 from trytond.pool import Pool
 from trytond.transaction import Transaction
 from trytond.model import Unique
@@ -489,7 +489,8 @@ class Loss(model.CoogSQL, model.CoogView,
         delete_missing=True)
     start_date = fields.Date('Loss Date',
         help='Date of the event, or start date of a period',
-        states={'readonly': CLAIM_READONLY, }, depends=['claim_status'])
+        states={'readonly': CLAIM_READONLY, }, depends=['claim_status'],
+        domain=['OR', ('start_date', '=', None), ('start_date', '<=', Date())])
     has_end_date = fields.Function(
         fields.Boolean('With End Date'), 'getter_has_end_date')
     end_date = fields.Date('End Date',

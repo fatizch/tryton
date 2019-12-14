@@ -8,6 +8,7 @@ Imports::
     >>> from proteus import Model, Wizard
     >>> from dateutil.relativedelta import relativedelta
     >>> from decimal import Decimal
+    >>> from trytond.exceptions import UserError
     >>> from trytond.tests.tools import activate_modules
     >>> from trytond.modules.party_cog.tests.tools import create_party_person
     >>> from trytond.modules.company.tests.tools import get_company
@@ -159,3 +160,44 @@ New Endorsement::
     >>> len(john.addresses)
     1
     >>> test_values_against_model(john.addresses[0], original_data)
+
+Create Change Death date Endorsement::
+
+    >>> change_death_date_part = EndorsementPart()
+    >>> change_death_date_part.name = 'change_death_date'
+    >>> change_death_date_part.code = 'Change death date'
+    >>> change_death_date_part.kind = 'party'
+    >>> change_death_date_part.view = 'change_party_death_date'
+    >>> change_death_date_part.save()
+    >>> change_death_date_def = EndorsementDefinition()
+    >>> change_death_date_def.name = 'Change death date party'
+    >>> change_death_date_def.code = 'change_death_date'
+    >>> change_death_date_def.ordered_endorsement_parts.append(
+    ...     EndorsementDefinitionPartRelation(endorsement_part=change_death_date_part))
+    >>> change_death_date_def.save()
+
+New Endorsement::
+
+    >>> def test_error(object):
+    ...     try:
+    ...         object.execute('change_party_death_date_next')
+    ...         raise Exception('Expected error was not raised')
+    ...     except UserError:
+    ...         pass
+    >>> new_endorsement = Wizard('endorsement.start')
+    >>> new_endorsement.form.party = john
+    >>> new_endorsement.form.endorsement_definition = change_death_date_def
+    >>> new_endorsement.form.endorsement = None
+    >>> new_endorsement.form.applicant = None
+    >>> new_endorsement.form.effective_date = endorsement_effective_date
+    >>> new_endorsement.execute('start_endorsement')
+    >>> date = datetime.date.today() + datetime.timedelta(days=1)
+    >>> new_endorsement.form.death_date = date
+    >>> test_error(new_endorsement)
+    >>> date = datetime.date.today()
+    >>> new_endorsement.form.death_date = date
+    >>> new_endorsement.execute('change_party_death_date_next')
+    >>> new_endorsement.execute('apply_endorsement')
+    >>> john.save()
+    >>> john.death_date == date
+    True

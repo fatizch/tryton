@@ -357,9 +357,19 @@ msgctxt "model:ir.message,text:msg_covered_party_enum"
 msgid "Covered Party"
 msgstr "Assuré"
 
+msgctxt "model:ir.message,text:msg_death_date_invalid"
+msgid "Death date of the covered person not set or not equal to loss date "
+msgstr ""
+"La date du décès sur la personne n'est pas définie ou différente de la date déclarée "
+"dans le sinistre"
+
 msgctxt "model:ir.message,text:msg_end_date"
 msgid "End Date:"
 msgstr "Date de fin :"
+
+msgctxt "model:ir.message,text:msg_loss_date"
+msgid "loss date"
+msgstr "Date du décès"
 
 msgctxt "model:ir.message,text:msg_ltd_end_date"
 msgid "LTD End Date:"

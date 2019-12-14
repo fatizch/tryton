@@ -9,6 +9,6 @@ this repository contains the full copyright notices and license terms. -->
     <field name="reconciliation_name"/>
     <field name="reconciliation_date"/>
     <field name="reconciliation_comment"/>
-    <field name="reconciliation_color" tree_invisible="1"/>
+     <field name="color" tree_invisible="1"/>
     <field name="reconciliation_postponements" tree_invisible="1"/>
 </tree>
