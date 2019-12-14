@@ -1,3 +1,4 @@
+* BUG#13869 Suppression de possible_billing_modes des données de l'avenant
 * BUG#12996 Correction d'un crash lorsqu'on modifie le jour de prélèvement sur un avenant de changement de paramètres de quittancement
 
 Version 2.6 - 2019-10-11

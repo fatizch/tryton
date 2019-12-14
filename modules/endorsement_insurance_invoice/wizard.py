@@ -356,6 +356,7 @@ class ChangeBillingInformation(EndorsementWizardStepMixin):
         values.pop('contract', None)
         values.pop('direct_debit_account_selector', None)
         values.pop('search_all_direct_debit_account', None)
+        values.pop('possible_billing_modes', None)
         if not new_info.billing_mode.direct_debit:
             for fname in self.direct_debit_account_only_fields():
                 values.pop(fname, None)

@@ -1,3 +1,4 @@
+* BUG#13869 Remove possible_billing_modes from endorsement data
 * BUG#12996 Fix crash when applying contract billing information endorsement which occures when changing direct debit day
 
 Version 2.6 - 2019-10-11
