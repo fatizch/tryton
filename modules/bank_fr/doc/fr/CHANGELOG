@@ -1,3 +1,4 @@
+* OTH#00000 importer les agences pour les banques swift
 * BUG#13048 Correction du chargement des banques: si le tiers change sur une adresse, il faut créer une nouvelle adresse et non pas mettre le tiers à jour sur l'addresse existante
 
 Version 2.6 - 2019-10-11

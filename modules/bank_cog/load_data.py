@@ -3,6 +3,7 @@
 import os
 import csv
 import io
+from collections import defaultdict
 
 from trytond.pool import Pool
 from trytond.pyson import Eval, Bool
@@ -242,7 +243,7 @@ class BankDataSetWizard(Wizard):
                 parties_to_save, banks, existing_banks)
         self.__class__._save_data(parties_to_save, banks)
 
-    def import_swift(self):
+    def import_swift(self, bic_id_data, agencies_data):
         pool = Pool()
         Party = pool.get('party.party')
         Bank = pool.get('bank')
@@ -253,11 +254,18 @@ class BankDataSetWizard(Wizard):
                    for x in Party.search([('is_bank', '=', True)])}
         parties_to_save = []
         for bank_row in self.read_resource_file():
-            if bank_row.get('BIC') or bank_row.get('BIC8'):
-                country_code = bank_row['ISO COUNTRY CODE']
-                if country_code in [country.code for country in
-                        self.configuration.countries_to_import]:
-                    country = Country.get_instance_from_code(country_code)
+            country_code = bank_row['ISO COUNTRY CODE']
+            if country_code in [country.code for country in
+                                self.configuration.countries_to_import]:
+                country = Country.get_instance_from_code(country_code)
+                if bank_row['RECORD KEY'] != bank_row['PARENT OFFICE KEY'] \
+                        and bank_row['NATIONAL ID']:
+                    agencies_data[bank_row['PARENT OFFICE KEY']].append({
+                        'row': bank_row,
+                        'code': bank_row['NATIONAL ID'],
+                        'country': country,
+                        })
+                if bank_row.get('BIC') or bank_row.get('BIC8'):
                     bic = bank_row.get('BIC') or (bank_row.get('BIC8') + (
                             bank_row.get('BRANCH BIC') or 'XXX'))
                     if bic in existing_banks:
@@ -266,14 +274,18 @@ class BankDataSetWizard(Wizard):
                             continue
                         self._update_existing_bank(bank, bank_row, country,
                             parties, bic, parties_to_save, banks)
+                        bic_id_data.update({bic: bank_row['RECORD KEY']})
                         continue
                     self._create_bank(bank_row, country, parties, bic,
                         parties_to_save, banks, existing_banks)
+                    bic_id_data.update({bic: bank_row['RECORD KEY']})
         self.__class__._save_data(parties_to_save, banks)
 
     def transition_set_(self):
+        bic_id_data = {}
+        agencies_data = defaultdict(list)
         if self.configuration.file_format == 'coog_file':
             self.import_coog_file()
         else:
-            self.import_swift()
+            self.import_swift(bic_id_data, agencies_data)
         return 'end'

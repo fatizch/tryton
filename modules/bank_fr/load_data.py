@@ -143,6 +143,35 @@ class BankDataSetWizard(metaclass=PoolMeta):
             return [line.decode('utf-8')
                 for line in self.configuration.resource.split(b'\n')]
 
+    def import_swift(self, bic_id_data, agencies_data):
+        super().import_swift(bic_id_data, agencies_data)
+        pool = Pool()
+        BankAgency = pool.get('bank.agency')
+        Bank = pool.get('bank')
+        bank_agencies = []
+        for bic, record_key in bic_id_data.items():
+            for item in agencies_data[record_key]:
+                code = item.get('code')
+                row = item.get('row')
+                country = item.get('country')
+                bank = Bank.search(['bic', '=', bic])[0]
+                bank_agencie = BankAgency.search([(
+                    'bank_code', '=', code[:5]),
+                    ('branch_code', '=', code[5:])])
+                address = self.get_address(row, country, bank.party)
+                if not address.party:
+                    address.party = bank.party
+                if bank_agencie:
+                    bank_agencie[0].bank = bank
+                    bank_agencie[0].bank_party = bank.party
+                    bank_agencie[0].address = address
+                    bank_agencies.append(bank_agencie[0])
+                else:
+                    bank_agencies.append(BankAgency(bank=bank,
+                        bank_party=bank.party, address=address,
+                        bank_code=code[:5], branch_code=code[5:]))
+        BankAgency.save(bank_agencies)
+
     def transition_set_(self):
         # This method overloads bank_cog behavior to allow uploading
         # Banque de France standard file. This file contains banks and bank
