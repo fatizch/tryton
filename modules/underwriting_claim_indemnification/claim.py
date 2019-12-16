@@ -1,5 +1,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+import datetime
+
 from trytond.exceptions import UserWarning
 from trytond.i18n import gettext
 from trytond.model.exceptions import ValidationError
@@ -68,25 +70,16 @@ class Service(metaclass=PoolMeta):
     __name__ = 'claim.service'
 
     def underwritings_at_date(self, start, end):
+        end = end or start
         for elem in self.underwritings:
-            if not start:
+            if start is None:
                 yield elem
                 continue
-            if end and (start <= elem.effective_decision_date <= end):
-                yield elem
-            elif not end and not elem.effective_decision_date and (
-                    elem.effective_decision_date <= start):
-                yield elem
-            elif elem.effective_decision_end and (
-                    elem.effective_decision_date <= start
-                    <= elem.effective_decision_end):
-                yield elem
-            elif end and elem.effective_decision_end and (
-                    elem.effective_decision_date <= end
-                    <= elem.effective_decision_end):
-                yield elem
-            elif not elem.effective_decision_end and (
-                    elem.effective_decision_date <= end):
+
+            elem_start = elem.effective_decision_date or datetime.date.min
+            elem_end = elem.effective_decision_end or datetime.date.max
+
+            if start <= elem_end and end >= elem_start:
                 yield elem
 
     def check_underwritings(self, start, end):
