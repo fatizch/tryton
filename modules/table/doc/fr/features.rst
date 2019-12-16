@@ -1,8 +1,5 @@
 La saisie des tables se fait en général via un import depuis un fichier csv,
-ou bien par copier / coller. Pour les tables à plusieurs dimensions, il
-est possible d'afficher les données sous forme d'un tableau à deux
-dimensions, en fixant les valeurs des autres dimensions.
-
+ou bien par copier / coller.
 
 - **Création de tables :** La création d'une table se fait en deux parties :
 
@@ -21,14 +18,8 @@ dimensions, en fixant les valeurs des autres dimensions.
 
 - **Visualisation de tables :** Le contenu d'une table à plusieurs dimensions
   (plus de 2) peut être difficile à visualiser. Le module ``table`` permet de
-  visualiser ces données de deux façons :
-
-  - Liste simple : chaque ligne de cette liste contient la valeur de chaque
-    dimension, ainsi que la valeur résultante.
-
-  - Tableau 2D : Affichage sour forme de tableau classique. Cette vue est utile
-    pour les tables à 2 dimensions, et peut également être utilisée pour des
-    tables à N dimensions en figeant les valeurs de N - 2 dimensions.
+  visualiser ces données sous forme de **liste simple** : chaque ligne de cette
+  liste contient la valeur de chaque dimension, ainsi que la valeur résultante.
 
 - **Index :** Un index étant une table à une dimension, ce module permet de
   les gérer correctement.
