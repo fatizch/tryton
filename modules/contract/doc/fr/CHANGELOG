@@ -1,3 +1,4 @@
+* FEA#13780 Gestion de la souscriptabilité dans les APIs
 * FEA#13843 Déplacement de l'API simulate dans le module contrat
 * BUG#13518 Vérification du type métier des données complémentaires
 * BUG#13422 Ajout d'une option pour cacher le boutton appliquer le package sur les contrats emprunteur

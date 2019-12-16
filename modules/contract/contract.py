@@ -208,7 +208,7 @@ class Contract(model.CoogSQL, model.CoogView, with_extra_data(['contract'],
             ('status', '!=', 'declined'),
             ],
         states=_STATES, depends=['status', 'start_date', 'product',
-            'extra_data_values'], target_not_required=True,
+            'extra_data_values'], target_not_required=True, delete_missing=True,
         order=[('coverage.sequence', 'ASC NULLS LAST'), ('start_date', 'ASC')])
     declined_options = fields.One2ManyDomain('contract.option', 'contract',
         'Declined Options', states=_STATES, depends=['status'],
@@ -1280,6 +1280,27 @@ class Contract(model.CoogSQL, model.CoogView, with_extra_data(['contract'],
             contract.save()
 
         Event.notify_events(contracts, event)
+
+    @classmethod
+    def auto_remove_not_subscriptable_options(cls, contracts,
+            clean_options=False):
+        """
+        clean_options: remove non subscriptable and non compatible options
+        from the contract
+        """
+        for contract in contracts:
+            contract._apply_subscription_conditions(clean_options)
+        if clean_options:
+            cls.save(contracts)
+
+    def _apply_subscription_conditions(self, clean_options):
+        Option = Pool().get('contract.option')
+
+        # First remove not subscriptable options
+        self.options = [x for x in self.options if x._can_be_subscribed()]
+
+        # Then make sure exclusions / requirements are satisfied
+        self.options = Option.filter_compatible_options(self.options)
 
     def do_activate(self):
         self.status = 'active'
@@ -2460,6 +2481,30 @@ class ContractOption(model.CoogSQL, model.CoogView, with_extra_data(['option'],
             res[1].append(coog_string.get_field_summary(self,
                 'current_extra_data', True, at_date, lang))
         return res
+
+    @property
+    def subscription_rules(self):
+        args = {'date': self.initial_start_date}
+        self.init_dict_for_rule_engine(args)
+        return self.coverage.get_subscription_behaviour(args)
+
+    def _can_be_subscribed(self):
+        return self.subscription_rules['behaviour'] != 'not_subscriptable'
+
+    @classmethod
+    def filter_compatible_options(cls, possible_options):
+        coverages = {x.coverage.code for x in possible_options}
+        options = []
+        for option in possible_options:
+            rules = option.subscription_rules
+
+            if rules['behaviour'] != 'mandatory':
+                if any(x not in coverages for x in rules['options_required']):
+                    continue
+                if any(x in rules['options_excluded'] for x in coverages):
+                    continue
+            options.append(option)
+        return options
 
 
 class ContractOptionVersion(model.CoogSQL, model.CoogView,

@@ -258,16 +258,26 @@ class APIContract(APIMixin):
 
     @classmethod
     def _subscribe_contracts_execute_methods(cls, options):
+        result = []
         if options.get('activate', False):
-            return [
+            result.append(
                 {
                     'priority': 100,
                     'name': 'activate_contract',
                     'params': None,
                     'error_type': 'cannot_activate_contract',
                     },
-                ]
-        return []
+                )
+        if options.get('auto_remove_not_subscriptable', False):
+            result.append(
+                {
+                    'priority': 1,
+                    'name': 'auto_remove_not_subscriptable_options',
+                    'params': [True],
+                    'error_type': 'cannot_clean_up_options',
+                    }
+                )
+        return result
 
     @classmethod
     def _subscribe_contracts_result(cls, created):
@@ -605,6 +615,7 @@ class APIContract(APIMixin):
     def _subscribe_contracts_options_schema(cls):
         return {
             'activate': {'type': 'boolean'},
+            'auto_remove_not_subscriptable': {'type': 'boolean'},
             }
 
     @classmethod
@@ -799,10 +810,26 @@ class APIContract(APIMixin):
     @classmethod
     def _simulate_create_contracts(cls, parameters):
         # Make sure we do not inadvertently activate the contract :)
-        parameters['options'] = {}
+        allowed_options = cls._simulate_allowed_options()
+        parameters['options'] = {
+            k: v for k, v in parameters.get('options', {}).items()
+            if k in allowed_options}
+        for k, v in cls._simulate_default_options().items():
+            if k not in parameters['options']:
+                parameters['options'][k] = v
 
         return getattr(cls.subscribe_contracts, '__origin_function')(cls,
             parameters)
+
+    @classmethod
+    def _simulate_allowed_options(cls):
+        return {'auto_remove_not_subscriptable'}
+
+    @classmethod
+    def _simulate_default_options(cls):
+        return {
+            'auto_remove_not_subscriptable': True,
+            }
 
     @classmethod
     def _simulate_prepare_contracts(cls, contracts, parameters):

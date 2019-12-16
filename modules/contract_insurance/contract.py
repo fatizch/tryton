@@ -480,6 +480,19 @@ class Contract(Printable):
         self.check_covered_elements()
         super().before_activate()
 
+    def _apply_subscription_conditions(self, clean_options):
+        Option = Pool().get('contract.option')
+
+        super()._apply_subscription_conditions(clean_options)
+
+        for covered_element in self.covered_elements:
+            covered_element.options = [x for x in covered_element.options
+                if x._can_be_subscribed()]
+            covered_element.options = Option.filter_compatible_options(
+                covered_element.options)
+        self.covered_elements = [x for x in self.covered_elements
+            if x.options]
+
 
 class ContractOption(Printable):
     __name__ = 'contract.option'
@@ -921,7 +934,7 @@ class CoveredElement(Printable,
             ('status', '!=', 'declined'),
             ], states={'readonly': COVERED_READ_ONLY},
         depends=['item_desc', 'product', 'contract_status', 'parent'],
-        target_not_required=True,
+        target_not_required=True, delete_missing=True,
         order=[('coverage.sequence', 'ASC NULLS LAST'), ('start_date', 'ASC')])
     declined_options = fields.One2ManyDomain('contract.option',
         'covered_element', 'Declined Options',

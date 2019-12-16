@@ -7,8 +7,8 @@ this repository contains the full copyright notices and license terms. -->
             <field name="name">Default Subscription Behavior Rule</field>
             <field name="short_name">default_subscription_rule</field>
             <field name="algorithm">return {'behaviour': param_subscription_behaviour(),
-    'options_required': param_required_options().split(','),
-    'options_excluded': param_excluded_options().split(',')}</field>
+    'options_required': [x for x in param_required_options().split(',') if x],
+    'options_excluded': [x for x in param_excluded_options().split(',') if x]}</field>
             <field name="status">validated</field>
             <field name="type_">subscription_behaviour</field>
             <field name="context" ref="rule_engine.default_context"/>

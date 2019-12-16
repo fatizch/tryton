@@ -1602,6 +1602,105 @@ class ModuleTestCase(test_framework.CoogTestCase):
 
     @test_framework.prepare_test(
         'contract_insurance.test0001_testPersonCreation',
+        'offered_insurance.test0011ConsistentPackage_creation',
+        'contract.test0005_PrepareProductForSubscription',
+        'contract.test0002_testCountryCreation',
+        )
+    def test0095_testAutomaticCleanOptions(self):
+        pool = Pool()
+        Product = pool.get('offered.product')
+        Package = pool.get('offered.package')
+        Contract = pool.get('contract')
+        ContractAPI = pool.get('api.contract')
+        Coverage = pool.get('offered.option.description')
+        RuleEngine = pool.get('rule_engine')
+
+        product, = Product.search([('code', '=', 'AAA')])
+        rule, = RuleEngine.search([
+                ('short_name', '=', 'default_subscription_rule')])
+        package_a, = Package.search([('code', '=', 'package_a')])
+        package_b, = Package.search([('code', '=', 'package_b')])
+        package_c, = Package.search([('code', '=', 'package_c')])
+        coverages = Coverage.search([('code', 'in',
+                ('DEL', 'BET', 'ALP'))])
+        for coverage in coverages:
+            coverage.allow_subscribe_coverage_multiple_times = True
+            coverage.save()
+
+        baby, = self.Party.search([('name', '=', 'Antoine'),
+                ('first_name', '=', 'Jeff')])
+        data_ref = {
+            'parties': [
+                {
+                    'ref': '1',
+                    'is_person': True,
+                    'name': 'Doe',
+                    'first_name': 'Mother',
+                    'birth_date': '1978-01-14',
+                    'gender': 'female',
+                    'addresses': [
+                        {
+                            'street': 'Somewhere along the street',
+                            'zip': '75002',
+                            'city': 'Paris',
+                            'country': 'fr',
+                            },
+                        ],
+                    },
+                ],
+            'contracts': [
+                {
+                    'ref': '1',
+                    'product': {'code': 'AAA'},
+                    'subscriber': {'ref': '1'},
+                    'extra_data': {},
+                    'covereds': [
+                        {
+                            'party': {'ref': '1'},
+                            'item_descriptor': {'code': 'person'},
+                            },
+                        {
+                            'party': {'id': baby.id},
+                            'item_descriptor': {'code': 'person'},
+                            },
+                        ],
+                    'package': {'code': 'package_a'},
+                    },
+                ],
+            }
+
+        coverage_b, = Coverage.search([('code', '=', 'BET')])
+        coverage_b.subscription_rule = rule
+        coverage_b.subscription_rule_extra_data = {
+            'subscription_behaviour': 'not_subscriptable',
+            'required_options': '',
+            'excluded_options': '',
+            }
+        coverage_b.save()
+
+        data_dict = copy.deepcopy(data_ref)
+        result = ContractAPI.subscribe_contracts(data_dict,
+            {'_debug_server': True})
+        contract, = Contract.browse(
+            [x['id'] for x in result['contracts']])
+        self.assertEqual({x.coverage.code
+                for x in contract.covered_elements[0].options}, {'ALP', 'BET'})
+        self.assertEqual({x.coverage.code
+                for x in contract.covered_elements[1].options}, {'ALP', 'BET'})
+
+        data_dict = copy.deepcopy(data_ref)
+        data_dict['options'] = {'auto_remove_not_subscriptable': True}
+        result = ContractAPI.subscribe_contracts(data_dict,
+            {'_debug_server': True})
+        contract, = Contract.browse(
+            [x['id'] for x in result['contracts']])
+        self.assertEqual({x.coverage.code
+                for x in contract.covered_elements[0].options}, {'ALP'})
+        self.assertEqual({x.coverage.code
+                for x in contract.covered_elements[1].options}, {'ALP'})
+
+    @test_framework.prepare_test(
+        'contract_insurance.test0001_testPersonCreation',
         )
     def test0090_create_party_API(self):
         pool = Pool()

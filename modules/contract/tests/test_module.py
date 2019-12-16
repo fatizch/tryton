@@ -650,6 +650,131 @@ class ModuleTestCase(test_framework.CoogTestCase):
         self.assertEqual([o.coverage.code for o in contract.options], ['ALP'])
 
     @test_framework.prepare_test(
+        'contract.test0090_testSubscriptionBehavior',
+        'contract.test0002_testCountryCreation',
+        'contract.test0005_PrepareProductForSubscription',
+        )
+    def test0095_testAutomaticCleanOptions(self):
+        pool = Pool()
+        ContractAPI = pool.get('api.contract')
+
+        rule, = self.RuleEngine.search([
+                ('short_name', '=', 'default_subscription_rule')])
+        coverage_b, = self.Coverage.search([('code', '=', 'BET')])
+        coverage_b.subscription_rule = rule
+        coverage_b.subscription_rule_extra_data = {
+            'subscription_behaviour': 'not_subscriptable',
+            'required_options': '',
+            'excluded_options': '',
+            }
+        coverage_b.save()
+
+        data_ref = {
+            'parties': [
+                {
+                    'ref': '1',
+                    'is_person': True,
+                    'name': 'Doe',
+                    'first_name': 'Richard',
+                    'birth_date': '1980-01-20',
+                    'gender': 'male',
+                    'addresses': [
+                        {
+                            'street': 'Somewhere along the street',
+                            'zip': '75002',
+                            'city': 'Paris',
+                            'country': 'fr',
+                            },
+                        ],
+                    },
+                ],
+            'contracts': [
+                {
+                    'ref': '1',
+                    'product': {'code': 'AAA'},
+                    'subscriber': {'ref': '1'},
+                    'extra_data': {
+                        'contract_1': '16.10',
+                        'contract_2': False,
+                        'contract_3': '2',
+                        },
+                    'coverages': [
+                        {
+                            'coverage': {'code': 'ALP'},
+                            'extra_data': {
+                                'option_1': '6.10',
+                                'option_2': True,
+                                'option_3': '2',
+                                },
+                            },
+                        {
+                            'coverage': {'code': 'BET'},
+                            'extra_data': {},
+                            },
+                        ],
+                    },
+                ],
+            'options': {
+                'auto_remove_not_subscriptable': True,
+                },
+            }
+
+        data_dict = copy.deepcopy(data_ref)
+        result = ContractAPI.subscribe_contracts(data_dict,
+            {'_debug_server': True})
+
+        contract, = self.Contract.browse(
+            [x['id'] for x in result['contracts']])
+        self.assertEqual(contract.product.code, 'AAA')
+        self.assertEqual(len(contract.options), 1)
+        self.assertEqual(contract.options[0].coverage.code, 'ALP')
+
+        coverage_b.subscription_rule = rule
+        coverage_b.subscription_rule_extra_data = {
+            'subscription_behaviour': 'defaulted',
+            'required_options': 'ALP,GAM',
+            'excluded_options': '',
+            }
+        coverage_b.save()
+        data_dict = copy.deepcopy(data_ref)
+        result = ContractAPI.subscribe_contracts(data_dict,
+            {'_debug_server': True})
+        contract, = self.Contract.browse(
+            [x['id'] for x in result['contracts']])
+        self.assertEqual(len(contract.options), 1)
+        self.assertEqual(contract.options[0].coverage.code, 'ALP')
+
+        coverage_b.subscription_rule = rule
+        coverage_b.subscription_rule_extra_data = {
+            'subscription_behaviour': 'defaulted',
+            'required_options': '',
+            'excluded_options': 'ALP',
+            }
+        coverage_b.save()
+        data_dict = copy.deepcopy(data_ref)
+        result = ContractAPI.subscribe_contracts(data_dict,
+            {'_debug_server': True})
+        contract, = self.Contract.browse(
+            [x['id'] for x in result['contracts']])
+        self.assertEqual(len(contract.options), 1)
+        self.assertEqual(contract.options[0].coverage.code, 'ALP')
+
+        coverage_b.subscription_rule_extra_data = {
+            'subscription_behaviour': 'optionnal',
+            'required_options': '',
+            'excluded_options': '',
+            }
+        coverage_b.save()
+        data_dict = copy.deepcopy(data_ref)
+        result = ContractAPI.subscribe_contracts(data_dict,
+            {'_debug_server': True})
+        contract, = self.Contract.browse(
+            [x['id'] for x in result['contracts']])
+        self.assertEqual(len(contract.options), 2)
+        self.assertEqual({x.coverage.code for x in contract.options},
+            {'ALP', 'BET'})
+
+    @test_framework.prepare_test(
         'offered.test0030_testProductCoverageRelation',
         'contract.test0002_testCountryCreation',
         'contract.test0005_PrepareProductForSubscription',

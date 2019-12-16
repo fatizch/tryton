@@ -860,17 +860,19 @@ class APIContract(metaclass=PoolMeta):
             for detail in schedule['details']:
                 coverage = detail['origin']['option']['coverage']
                 cov_code = coverage['code']
-                covered = detail['origin']['covered']
                 contract_coverage = cls._aggregate_get_field(
                     contract_data['coverages'], contract_coverages, cov_code,
-                    lambda x: x['coverages']['code'])
+                    lambda x: x['coverage']['code'])
                 if contract_coverage:
                     cls._simulate_update_premium_field(
                         contract_coverage['premium'], detail)
-                contract_covered = cls._aggregate_get_field(
-                    contract_data['covereds'], contract_covereds,
-                    covered['party']['ref'], lambda x: x['ref'])
-                if contract_covered:
+                if 'covered' in detail['origin']:
+                    covered = detail['origin']['covered']
+                    contract_covered = cls._aggregate_get_field(
+                        contract_data['covereds'], contract_covereds,
+                        covered['party']['ref'], lambda x: x['ref'])
+                    if not contract_covered:
+                        continue
                     cls._simulate_update_premium_field(
                         contract_covered['premium'], detail)
                     covered_ref = contract_covered['ref']
