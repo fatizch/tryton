@@ -574,6 +574,11 @@ class Contract(model.CoogSQL, model.CoogView, with_extra_data(['contract'],
                 if option.status in ('active', 'quote')]
         return []
 
+    def update_options_automatic_end_date(self, caller=None):
+        for option in self._get_calculate_targets('options'):
+            option.set_automatic_end_date()
+        self.save()
+
     @classmethod
     @model.CoogView.button
     def button_calculate(cls, contracts):
@@ -2354,6 +2359,23 @@ class ContractOption(model.CoogSQL, model.CoogView, with_extra_data(['option'],
     def decline_option(self, reason):
         self.status = 'declined'
         self.sub_status = reason
+
+    @classmethod
+    def auto_decline(cls, to_decline):
+        """
+        Expects a list of (option, msg) tuples
+        """
+        cls.do_auto_decline(to_decline)
+        cls.save([x[0] for x in to_decline])
+
+    @classmethod
+    def do_auto_decline(cls, to_decline):
+        SubStatus = Pool().get('contract.sub_status')
+        auto_declined, = SubStatus.search(
+            [('code', '=', 'automatically_declined')])
+        for option, msg in to_decline:
+            option.decline_option(auto_declined)
+            option.eligibility_message = msg
 
     def is_active_at_date(self, at_date, allow_quotes=False):
         return self.status not in ['void', 'declined'] and \

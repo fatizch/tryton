@@ -22,4 +22,9 @@ this repository contains the full copyright notices and license terms. -->
         <field name="code">terminated</field>
         <field name="status">terminated</field>
     </record>
+    <record model="contract.sub_status" id="sub_status_auto_declined">
+        <field name="name">Automatically Declined</field>
+        <field name="code">automatically_declined</field>
+        <field name="status">declined</field>
+    </record>
 </data>

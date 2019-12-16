@@ -1,3 +1,5 @@
+* FEA#13716 Extraction des informations d'éligibilité dans l'API de simulation
+
 Version 2.6 - 2019-10-11
 * OTH#00000 Correction de l'énoncé 'inclus' en 'age non éligible' dans la règle pré-paramétrée
 

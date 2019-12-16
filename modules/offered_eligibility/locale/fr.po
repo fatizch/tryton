@@ -2,6 +2,10 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "field:contract.option,eligibility_message:"
+msgid "Eligibility Message"
+msgstr "Message d'éligibilité"
+
 msgctxt "field:offered.option.description,eligibility_rules:"
 msgid "Eligibility Rules"
 msgstr "Eligibilité"
@@ -53,6 +57,10 @@ msgstr "Mis à jour par"
 msgctxt "field:offered.option.description.eligibility_rule,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
+
+msgctxt "help:contract.option,eligibility_message:"
+msgid "Explanations on the eligibilty status of the option"
+msgstr "Explications sur le statut d'éligibilité de la garantie"
 
 msgctxt "help:offered.option.description,eligibility_rules:"
 msgid ""

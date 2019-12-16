@@ -996,11 +996,6 @@ class Contract(metaclass=PoolMeta):
         self.start_date = caller.values['start_date']
         self.save()
 
-    def update_options_automatic_end_date(self, caller=None):
-        for option in self._get_calculate_targets('options'):
-            option.set_automatic_end_date()
-        self.save()
-
     def reactivate_through_endorsement(self, caller=None):
         History = Pool().get('contract.activation_history')
         with ServerContext().set_context(no_reactivate_endorsement=True):

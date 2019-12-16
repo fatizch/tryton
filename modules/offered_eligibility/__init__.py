@@ -4,6 +4,7 @@ from trytond.pool import Pool
 from . import rule_engine
 from . import offered
 from . import contract
+from . import api
 
 
 def register():
@@ -14,3 +15,7 @@ def register():
         contract.ContractOption,
         offered.OptionDescriptionEligibilityRule,
         module='offered_eligibility', type_='model')
+
+    Pool.register(
+        api.APIContract,
+        module='offered_eligibility', type_='model', depends=['api'])

@@ -818,6 +818,7 @@ class APIContract(APIMixin):
             if k not in parameters['options']:
                 parameters['options'][k] = v
 
+        # Remove api magic for this call
         return getattr(cls.subscribe_contracts, '__origin_function')(cls,
             parameters)
 

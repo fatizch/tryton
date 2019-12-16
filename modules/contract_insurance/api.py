@@ -461,16 +461,24 @@ class APIContract(metaclass=PoolMeta):
         results = super(APIContract, cls)._simulate_result(contracts,
             parameters, created)
         for i, contract in enumerate(contracts):
-            add_to_result = {
-                'covereds': [{
-                        'ref': created['party_ref_per_id'][covered.party.id],
-                        'coverages': [{
-                                'coverage': {'code': option.coverage.code},
-                                } for option in covered.options]
-                        } for covered in contract.covered_elements]
-                }
-            results[i].update(add_to_result)
+            descriptions = []
+            for covered in contract.covered_elements:
+                desc = {'coverages': [
+                        cls._simulate_contract_extract_covered_option(
+                            option) for option in covered.all_options]}
+                created_party = created['party_ref_per_id'].get(
+                    covered.party.id)
+                if created_party:
+                    desc['ref'] = created_party
+                elif covered.party:
+                    desc['party'] = {'id': covered.party.id}
+                descriptions.append(desc)
+            results[i].update({'covereds': descriptions})
         return results
+
+    @classmethod
+    def _simulate_contract_extract_covered_option(cls, option):
+        return {'coverage': {'code': option.coverage.code}}
 
     @classmethod
     def _simulate_contract_output_schema(cls):
@@ -488,6 +496,12 @@ class APIContract(metaclass=PoolMeta):
                 'additionalProperties': False,
                 'properties': {
                     'ref': {'type': 'string'},
+                    'party': {
+                        'type': 'object',
+                        'properties': {
+                            'id': {'type': 'integer'}
+                        },
+                    },
                     'coverages': cls._simulate_coverages_output_schema(),
                     },
                 }

@@ -3,6 +3,9 @@
 from trytond.i18n import gettext
 from trytond.model.exceptions import ValidationError
 from trytond.pool import PoolMeta, Pool
+from trytond.exceptions import UserError
+
+from trytond.modules.coog_core import fields
 
 __all__ = [
     'Contract',
@@ -32,9 +35,26 @@ class Contract(metaclass=PoolMeta):
                 for option in covered.options:
                     option.check_eligibility()
 
+    @classmethod
+    def decline_non_eligible_options(cls, contracts):
+        pool = Pool()
+        Option = pool.get('contract.option')
+        to_decline = []
+        for contract in contracts:
+            for option in contract.options + \
+                    contract.covered_element_options:
+                try:
+                    option.check_eligibility()
+                except UserError as e:
+                    to_decline.append([option, e.message])
+        Option.auto_decline(to_decline)
+
 
 class ContractOption(metaclass=PoolMeta):
     __name__ = 'contract.option'
+
+    eligibility_message = fields.Char('Eligibility Message', readonly=True,
+        help="Explanations on the eligibilty status of the option")
 
     def check_eligibility(self):
         if self.status in ('void', 'declined'):
