@@ -5,6 +5,7 @@ from trytond.pool import Pool
 from . import party
 from . import address
 from . import party_ssn
+from . import party_birth_data
 
 
 def register():
@@ -23,3 +24,7 @@ def register():
     Pool.register(
         party_ssn.MigratorParty,
         module='migrator_party', type_='model', depends=['party_ssn'])
+    Pool.register(
+        party_birth_data.MigratorParty,
+        module='migrator_party', type_='model', depends=['party_birth_data']
+    )
