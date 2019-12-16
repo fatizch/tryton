@@ -1,3 +1,5 @@
+* BUG#13648 Correction de la liste de dates retournée par la fonction du moteur de règle dates_changement_table()
+
 Version 2.6 - 2019-10-11
 * BUG#12447 Premettre d'utiliser les erreurs dans une règle utilisée par une autre sans que cela génère d'erreur technique
 * BUG#10976 Création automatique d'un warning name unique lors d'ajout des warning dans le moteur de règle

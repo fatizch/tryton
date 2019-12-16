@@ -330,7 +330,9 @@ Minimum, Maximum, [nombre de décimales]</field>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_dates_list_from_table_dimension</field>
             <field name="fct_args">Code_de_la_table, numero_de_dimension, date_de_debut_de_periode, date_de_fin_de_periode</field>
-            <field name="long_description">Récupérer une liste de dates à partir d'une dimension pour une table donnée</field>
+            <field name="long_description">
+Récupérer une liste de dates à partir d'une dimension pour une table donnée.
+Si la dimension est une intervalle de dates, seule la date de début de la dimension est prise en compte.</field>
             <field name="parent" ref="dossier_outils"/>
         </record>
     </data>

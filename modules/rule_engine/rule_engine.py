@@ -677,8 +677,8 @@ class RuleTools(ModelView):
         Table = Pool().get('table')
         dimension_values = Table.get_dates_from_table_dimension(table_code,
             col_number)
-        return [val[0] for val in dimension_values if val[0] >= start_date
-                and (val[1] or datetime.date.min) <= end_date]
+        return [val[0] for val in dimension_values
+            if start_date <= val[0] <= (end_date or datetime.date.max)]
 
     @classmethod
     def _re_add_result_detail(cls, args, key, value):

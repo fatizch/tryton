@@ -1497,7 +1497,7 @@ msgstr "Créer une période"
 
 msgctxt "model:ir.action,name:act_delete_indemnification_wizard"
 msgid "Delete Associated Indemnification(s)"
-msgstr "Supprimer les indemnistations associées"
+msgstr "Supprimer les indemnisations associées"
 
 msgctxt "model:ir.action,name:act_fill_extra_data_wizard"
 msgid "Fill Extra Datas"
