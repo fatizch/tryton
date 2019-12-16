@@ -153,6 +153,14 @@ class MigratorBankAccount(migrator.Migrator):
         })
 
     @classmethod
+    def get_batch_configuration(cls):
+        config = super(MigratorBankAccount, cls).get_batch_configuration()
+        if 'with_sepa_mandate' in config:
+            config['with_sepa_mandate'] = config['with_sepa_mandate'].lower()
+            config['with_sepa_mandate'] = True \
+                if config['with_sepa_mandate'] == 'true' else False
+
+    @classmethod
     def init_update_cache(cls, rows):
         pool = Pool()
         cursor = Transaction().connection.cursor()
@@ -253,6 +261,9 @@ class MigratorBankAccount(migrator.Migrator):
                 continue
             if not kwargs.get('update', False):
                 if row[cls.func_key] in to_upsert:
+                    to_upsert[row[cls.func_key]]['start_date'] = min(
+                        row['start_date'],
+                        to_upsert[row[cls.func_key]]['start_date'])
                     old_owners, =  to_upsert[row[cls.func_key]]['owners']
                     owners = old_owners[1]
                     owners.append(cls.cache_obj['party'][row[
@@ -328,7 +339,7 @@ class MigratorBankAccount(migrator.Migrator):
         if not res:
             return []
         if kwargs.get('delete', False):
-            ids = [res[r]['iban'] for r in res]
+            ids = [iban.compact(res[r]['iban']) for r in res]
             clause = Column(cls.table, cls.func_key).in_(ids)
             cls.delete_rows(tools.CONNECT_SRC, cls.table, clause)
 

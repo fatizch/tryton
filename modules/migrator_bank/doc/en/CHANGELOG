@@ -1,3 +1,4 @@
+* BUG#13876 Fix bank_account migration with delete option
 * FEA#13808 Group together bank accounts that must be handled by same job
 * BUG#13731 fix bug on execute method of migrator.bank_account batch
 * BUG#12845 allow migration of bank account with multiple owners
