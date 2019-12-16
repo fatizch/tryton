@@ -379,10 +379,14 @@ class FilterAggregatedCommissions(metaclass=PoolMeta):
         if commission.origin.__name__ != 'contract.option':
             return super(FilterAggregatedCommissions,
                 self).do_filter_commission(action)
-        clause = [('origin', '=', str(commission.origin))]
-        clause += [('agent', '=', commission.agent.id)]
+        clause = [('agent', '=', commission.agent.id)]
         if commission.is_prepayment:
             clause += [('date', '=', commission.date)]
+        origins = []
+        if 'origins' in context:
+            origins = [x for x in context['origins']
+                if x.startswith('contract.option,')]
+        clause += [('origin', 'in', origins or [str(commission.origin)])]
         action.update({'pyson_domain': PYSONEncoder().encode(clause)})
         return action, {}
 
