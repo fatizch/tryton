@@ -69,7 +69,8 @@ class ExtraData(model.CoogDictSchema, model.ConfigurationMixin, model.CoogView,
         help='Specify if the data should be used in GDPR extractions')
     sub_datas = fields.One2Many('extra_data-sub_extra_data', 'master',
         'Sub Data', domain=[('child.kind', '=', Eval('kind'))],
-        states={'invisible': ~In(Eval('type_'), ['selection', 'boolean'])},
+        states={'invisible': ~In(Eval('type_'), ['multiselection',
+                    'selection', 'boolean'])},
         depends=['kind', 'type_'], target_not_required=True)
     parents = fields.Many2Many('extra_data-sub_extra_data', 'child', 'master',
         'Parents', states={'readonly': True})
@@ -465,7 +466,11 @@ class ExtraData(model.CoogDictSchema, model.ConfigurationMixin, model.CoogView,
             if isinstance(match_value, bool):
                 return match_value == bool(value)
             else:
-                return match_value == value
+                if isinstance(value, list):
+                    comp_value = str(value)
+                else:
+                    comp_value = value
+                return match_value == comp_value
         raise NotImplementedError
 
     @classmethod

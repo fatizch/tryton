@@ -1,3 +1,4 @@
+* FEA#13356 Add multiselection extra data
 * BUG#13854 Handle extra data uppercase in apis
 * BUG#13732 Filter extra data returned in extra data groups by API
 * BUG#13518 Check extra data business kind

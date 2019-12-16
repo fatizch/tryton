@@ -1,3 +1,4 @@
+* FEA#13356 Ajout des données complémentaires multi-selection
 * BUG#13854 Gestion des données complémentaire en majuscule dans les apis
 * BUG#13732 Filtrage des données complémentaires retournées dans les groupes de données complémentaires par API
 * BUG#13518 Vérification du type métier des données complémentaires
