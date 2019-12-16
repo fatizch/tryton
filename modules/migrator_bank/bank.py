@@ -147,6 +147,10 @@ class MigratorBankAccount(migrator.Migrator):
             'iban': 'iban',
             'bic': 'bic',
             }
+        cls.error_messages.update({
+                'non_existing_party': "can not create a bank account for a"
+                "non existing party '%s'"
+        })
 
     @classmethod
     def init_update_cache(cls, rows):
@@ -191,6 +195,10 @@ class MigratorBankAccount(migrator.Migrator):
                 ('identification', ), ('identification', umrs))
 
     @classmethod
+    def select_group_ids(cls, ids):
+        return [(x,) for x in set(ids)]
+
+    @classmethod
     def sanitize(cls, row):
         row = super(MigratorBankAccount, cls).sanitize(row)
         if len(row['iban']) == 27:
@@ -207,6 +215,8 @@ class MigratorBankAccount(migrator.Migrator):
         if party_code in cls.cache_obj['party']:
             row['owners'] = [
                 ('add', [cls.cache_obj['party'][party_code].id])]
+        else:
+            cls.raise_error(row, 'non_existing_party', (row['party'],))
         if row['bic']:
             row['bank'] = cls.cache_obj['bank'][row['bic']]
         if row['iban'] not in cls.cache_obj.get('update', {}):
