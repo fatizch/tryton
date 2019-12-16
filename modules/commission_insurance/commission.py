@@ -65,7 +65,7 @@ class Commission(WithExtraDetails, metaclass=PoolMeta):
 
     commissioned_contract = fields.Many2One('contract',
         'Commissioned Contract', required=True, ondelete='CASCADE',
-        select=True)
+        select=True, readonly=True)
     commissioned_option = fields.Many2One('contract.option',
         'Commissioned Option', select=True, ondelete='RESTRICT', readonly=True)
     party = fields.Function(
