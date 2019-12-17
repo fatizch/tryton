@@ -1,3 +1,4 @@
+* BUG#13905 Add BPIJ chain in daily
 * BUG#12337 Export Configuration can now be duplicated using "Ctrl + Shift + d"
 * OTH#00000 Remove the support of upper case in the naming of trytond config variables
 * OTH#00000 append_functional_error must properly handle cases of pure string errors

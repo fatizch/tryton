@@ -264,6 +264,8 @@ coog_daily_run() {
             --treatment_date="$TODAY_DATE"
             coog_chain_main claim_prest_ij_service gestip     \
             --treatment_date="$TODAY_DATE"
+            coog_chain_main claim_prest_ij_service bpij       \
+            --treatment_date="$TODAY_DATE"
         )
         [ "$?" -ne 0 ] && GLOBAL_SUCCESS=1
     else

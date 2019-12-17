@@ -1,3 +1,4 @@
+* BUG#13905 Ajout de la chaine BPIJ dans la chaine journalière
 * BUG#12337 Export Configuration peut maintenant être dupliqué avec "Ctrl + Shift + d"
 * OTH#00000 Retrait du support des caractères majuscules dans le nommage des variables de configuration trytond
 * OTH#00000 append_functional_error doit correctement gérer le cas d'une erreur sous forme de texte simple
