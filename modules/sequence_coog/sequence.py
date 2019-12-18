@@ -181,11 +181,11 @@ class Sequence(model.CoogSQL, metaclass=PoolMeta):
             valid_sequence = sequence.get_valid_sequence_at_date()
             value = valid_sequence._get_sequence(valid_sequence)
             prefix, suffix = valid_sequence.prefix, valid_sequence.suffix
-        if (sequence.type == 'incremental' and sequence.max_number
-                and sequence.max_number - int(value) <=
-                sequence.iteration_before_notification):
-            Event.notify_events([sequence],
-                'sequence_limit_notification')
+            if (sequence.type == 'incremental' and sequence.max_number
+                    and sequence.max_number - int(value) <=
+                    sequence.iteration_before_notification):
+                Event.notify_events([sequence],
+                    'sequence_limit_notification')
         return '%s%s%s' % (prefix, value, suffix)
 
 
