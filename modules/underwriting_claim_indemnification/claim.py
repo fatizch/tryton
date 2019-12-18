@@ -27,9 +27,10 @@ class BenefitRule(metaclass=PoolMeta):
     __name__ = 'benefit.rule'
 
     @classmethod
-    def calculation_dates(cls, indemnification, start_date, end_date):
+    def calculation_dates(cls, indemnification, start_date, end_date,
+            no_revaluation_dates):
         dates = super(BenefitRule, cls).calculation_dates(indemnification,
-            start_date, end_date)
+            start_date, end_date, no_revaluation_dates)
         if not indemnification.apply_underwriting_reduction:
             return dates
         for elem in indemnification.service.underwritings_at_date(

@@ -22,6 +22,9 @@ __all__ = [
     'BenefitRuleIndemnification',
     'BenefitRuleDeductible',
     'BenefitRuleRevaluation',
+    'BenefitRuleDeductionPeriod',
+    'BenefitSalaryRevaluationDeductionPeriod',
+    'DeductionPeriodRulePeriodKind',
     ]
 
 
@@ -367,3 +370,40 @@ class BenefitRuleRevaluation(model.CoogSQL):
         ondelete='CASCADE', select=True)
     rule = fields.Many2One('rule_engine', 'Rule', required=True,
         ondelete='RESTRICT')
+
+
+class BenefitRuleDeductionPeriod(metaclass=PoolMeta):
+    __name__ = 'benefit.rule'
+
+    revaluation_on_basic_salary_period_rule = fields.One2Many(
+        'benefit.salary_revaluation.deduction_period.rule', 'benefit_rule',
+        'Revaluation On Basic Salary Periods Rule',
+        states={'invisible': ~Eval('is_group')},
+        depends=['is_group'], delete_missing=True,
+        )
+
+
+class BenefitSalaryRevaluationDeductionPeriod(model.CoogSQL, model.CoogView):
+    'Benefit Salary Revaluation Deduction Period Rule'
+
+    __name__ = 'benefit.salary_revaluation.deduction_period.rule'
+
+    benefit_rule = fields.Many2One('benefit.rule', 'Benefit Rule',
+        required=True, ondelete='RESTRICT', select=True)
+    name = fields.Char('Name', required=True)
+    code = fields.Char('Code', required=True)
+    periods_kinds = fields.Many2Many('deduction_period.rule-period_kind',
+        'benefit_period_rule', 'period_kind', 'Periods Kinds',
+         required=True)
+
+
+class DeductionPeriodRulePeriodKind(model.CoogSQL):
+    'Deduction Period Rule Period Kind Relation'
+
+    __name__ = 'deduction_period.rule-period_kind'
+
+    benefit_period_rule = fields.Many2One('deduction_period.rule-period_kind',
+        'Benefit Period Rule', required=True, ondelete='CASCADE')
+    period_kind = fields.Many2One(
+        'benefit.loss.description.deduction_period_kind',
+        'Benefit Period Rule', required=True, ondelete='CASCADE')

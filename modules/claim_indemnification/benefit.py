@@ -10,6 +10,7 @@ from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, Bool
 from trytond.cache import Cache
 from trytond.transaction import Transaction
+from trytond.server_context import ServerContext
 
 from trytond.modules.coog_core import model, fields, coog_date, coog_string
 from trytond.modules.rule_engine import get_rule_mixin
@@ -225,7 +226,8 @@ class BenefitRule(
             return args['option'].get_coverage_amount(args['covered_person'])
 
     @classmethod
-    def calculation_dates(cls, indemnification, start_date, end_date):
+    def calculation_dates(cls, indemnification, start_date, end_date,
+            no_revaluation_dates):
         res = set()
         for service in indemnification.service.loss.services:
             if service == indemnification.service:
@@ -320,13 +322,20 @@ class BenefitRule(
                 (extra_data.date or loss.start_date) <
                 indemnification.end_date)}
         # Add pivot periods
+        no_revaluation_periods = []
         dates |= self.calculation_dates(indemnification, previous_date,
-            args['end_date'])
+            args['end_date'], no_revaluation_periods)
         all_benefits = []
 
         must_revaluate = self.must_revaluate()
         for start_date, end_date in coog_date.calculate_periods_from_dates(
                 list(dates), previous_date, args['end_date']):
+
+            # Check whether the period overlaps in the no_revaluation_periods
+            force_basic_salary_reval = any([coog_date.period_overlap(
+                start_date, end_date, no_reval_start, no_reval_end) for
+                no_reval_start, no_reval_end in no_revaluation_periods])
+
             new_args = args.copy()
             new_args['indemnification_full_start'] = indemnification.start_date
             new_args['indemnification_full_end'] = indemnification.end_date
@@ -336,7 +345,11 @@ class BenefitRule(
             if indemnification.forced_base_amount is not None:
                 benefits = self.get_forced_amount_benefits(indemnification)
             else:
-                benefits = self.do_calculate_indemnification_rule(new_args)
+                benefits = self._execute_rule_for_benefits_with_context(
+                    self.do_calculate_indemnification_rule, new_args, {
+                        'force_revaluation_on_basic_salary':
+                        force_basic_salary_reval,
+                        })
             new_args['indemnification_periods'] = benefits
             if must_revaluate:
                 for benefit in benefits:
@@ -346,8 +359,12 @@ class BenefitRule(
                     reval_args['indemnification_detail_end_date'] = \
                         benefit['end_date']
                     reval_args.update(benefit)
-                    reval_benefits = self.do_calculate_revaluation_rule(
-                        reval_args) or []
+                    reval_benefits = \
+                        self._execute_rule_for_benefits_with_context(
+                            self.do_calculate_revaluation_rule, reval_args, {
+                                'force_revaluation_on_basic_salary':
+                                force_basic_salary_reval,
+                                }) or []
                     for reval_benefit in reval_benefits:
                         tmp_benefit = benefit.copy()
                         tmp_benefit.update(reval_benefit)
@@ -367,6 +384,11 @@ class BenefitRule(
         all_benefits = self.clean_benefits(all_benefits)
         res.extend(all_benefits)
         return res
+
+    def _execute_rule_for_benefits_with_context(self, method, rule_args,
+            context):
+        with ServerContext().set_context(**context):
+            return method(rule_args)
 
     def do_calculate_indemnification_rule(self, args):
         result = self.calculate_indemnification_rule(args, raise_errors=True)

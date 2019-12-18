@@ -1,6 +1,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import PoolMeta
+from trytond.server_context import ServerContext
 
 from trytond.modules.coog_core import fields
 from trytond.pyson import Eval, And, Bool
@@ -43,6 +44,8 @@ class BenefitRule(metaclass=PoolMeta):
         return option_benefit
 
     def process_revaluation_on_basic_salary(self, service):
+        if ServerContext().get('force_revaluation_on_basic_salary'):
+            return True
         if not self.is_group or self.force_revaluation_on_basic_salary:
             return self.revaluation_on_basic_salary
         else:
@@ -59,11 +62,12 @@ class BenefitRule(metaclass=PoolMeta):
         return super(BenefitRule, self).do_calculate_revaluation_rule(args)
 
     @classmethod
-    def calculation_dates(cls, indemnification, start_date, end_date):
+    def calculation_dates(cls, indemnification, start_date, end_date,
+            no_revaluation_dates):
         # Call revaluation rule to know revaluation date change in order to
         # force recalculation of basic salary
         dates = super(BenefitRule, cls).calculation_dates(indemnification,
-            start_date, end_date)
+            start_date, end_date, no_revaluation_dates)
         benefit_rule = indemnification.service.benefit.benefit_rules[0]
         if Transaction().context.get('force_no_revaluation', False):
             return dates

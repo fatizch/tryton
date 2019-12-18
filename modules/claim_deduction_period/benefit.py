@@ -66,13 +66,43 @@ class BenefitRule(metaclass=PoolMeta):
     __name__ = 'benefit.rule'
 
     @classmethod
-    def calculation_dates(cls, indemnification, start_date, end_date):
+    def _add_no_revaluation_date_if_needed(cls, indemnification, period,
+            end_date, no_revaluation_dates):
+        benefit, = indemnification.service.option.current_version.benefits
+        if not benefit.revaluation_on_basic_salary_deduction_periods:
+            return
+        periods_kinds = \
+            benefit.revaluation_on_basic_salary_deduction_periods.periods_kinds
+        if period.deduction_kind in periods_kinds:
+            no_revaluation_dates.append(
+                (period.start_date, period.end_date or end_date))
+
+    @classmethod
+    def calculation_dates(cls, indemnification, start_date, end_date,
+            no_revaluation_dates):
         dates = super(BenefitRule, cls).calculation_dates(indemnification,
-            start_date, end_date)
+            start_date, end_date, no_revaluation_dates)
         loss = indemnification.service.loss
         for period in loss.deduction_periods:
             if start_date <= period.start_date <= end_date:
                 dates.add(period.start_date)
+                cls._add_no_revaluation_date_if_needed(indemnification, period,
+                    end_date, no_revaluation_dates)
             if period.end_date and start_date <= period.end_date <= end_date:
                 dates.add(period.end_date + relativedelta(days=1))
+
+        if no_revaluation_dates:
+            for reval_start, reval_end in no_revaluation_dates:
+                args = {
+                    'indemnification_detail_start_date': reval_start,
+                    'indemnification_detail_end_date': reval_end,
+                    'base_amount': 1,
+                    'date': indemnification.start_date,
+                    'description': '',
+                    }
+                indemnification.init_dict_for_rule_engine(args)
+                res = indemnification.service.benefit.benefit_rules[
+                    0].calculate_revaluation_rule(args)
+                for period in res:
+                    dates.add(period['start_date'])
         return dates

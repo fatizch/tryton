@@ -5,6 +5,7 @@ from trytond.pool import Pool
 from . import claim
 from . import benefit
 from . import rule_engine
+from .import contract
 
 
 def register():
@@ -16,3 +17,12 @@ def register():
         rule_engine.RuleEngine,
         rule_engine.RuleEngineRuntime,
         module='claim_group_life_fr', type_='model')
+    Pool.register(
+        contract.OptionBenefitSalaryFr,
+        module='claim_group_life_fr', type_='model',
+        depends=['claim_salary_fr', 'claim_deduction_period'])
+    Pool.register(
+        contract.ManageOptionBenefitsDisplayer,
+        module='claim_group_life_fr', type_='model',
+        depends=['claim_salary_fr', 'endorsement_option_benefit']
+        )

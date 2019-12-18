@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<data>
+    <xpath expr="/form/field[@name='revaluation_on_basic_salary']" position="after">
+        <label name="revaluation_on_basic_salary_if_period" colspan="1"/>
+        <group id= "revaluation_deduction_period" colspan="1" col="2">
+            <field name="revaluation_on_basic_salary_if_period"/>
+            <field name="revaluation_on_basic_salary_deduction_periods" widget="selection"/>
+            <field name="possible_revaluation_deduction_periods" invisible="1"/>
+        </group>
+    </xpath>
+</data>

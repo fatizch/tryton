@@ -1,3 +1,4 @@
+* FEA#11792 Gestion de la revalorisation sur les indemnisations si il y à des périodes de déduction
 * BUG#13916 Le montant des périodes de déduction n'est plus arrondis afin de ne pas avoir d'écarts de centimes
 
 Version 2.6 - 2019-10-11

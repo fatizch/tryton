@@ -74,9 +74,63 @@ msgctxt "field:benefit.rule,is_group:"
 msgid "Is Group"
 msgstr "Prestation collective"
 
+msgctxt "field:benefit.rule,revaluation_on_basic_salary_period_rule:"
+msgid "Revaluation On Basic Salary Periods Rule"
+msgstr "Règle de revalorisation sur le salaire de base"
+
 msgctxt "field:benefit.rule,revaluation_rules:"
 msgid "Revaluation Rules"
 msgstr "Règes de revalorisation"
+
+msgctxt "field:benefit.salary_revaluation.deduction_period.rule,benefit_rule:"
+msgid "Benefit Rule"
+msgstr "Règle de Prestation"
+
+#, fuzzy
+msgctxt "field:benefit.salary_revaluation.deduction_period.rule,code:"
+msgid "Code"
+msgstr "Code"
+
+msgctxt "field:benefit.salary_revaluation.deduction_period.rule,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:benefit.salary_revaluation.deduction_period.rule,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:benefit.salary_revaluation.deduction_period.rule,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:benefit.salary_revaluation.deduction_period.rule,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:benefit.salary_revaluation.deduction_period.rule,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt ""
+"field:benefit.salary_revaluation.deduction_period.rule,periods_kinds:"
+msgid "Periods Kinds"
+msgstr "Types de périodes"
+
+msgctxt "field:benefit.salary_revaluation.deduction_period.rule,rec_name:"
+msgid "Record Name"
+msgstr "Numéro de l'enregistrement"
+
+msgctxt "field:benefit.salary_revaluation.deduction_period.rule,write_date:"
+msgid "Write Date"
+msgstr "Modifié le"
+
+msgctxt "field:benefit.salary_revaluation.deduction_period.rule,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:benefit.salary_revaluation.deduction_period.rule,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
 
 msgctxt "field:benefit_rule-deductible_rule,benefit:"
 msgid "Benefit"
@@ -411,6 +465,38 @@ msgctxt "field:contract.option.version,benefits_description:"
 msgid "Benefits Description"
 msgstr "Prestations"
 
+msgctxt "field:deduction_period.rule-period_kind,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:deduction_period.rule-period_kind,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:deduction_period.rule-period_kind,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:deduction_period.rule-period_kind,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:deduction_period.rule-period_kind,rec_name:"
+msgid "Record Name"
+msgstr "Numéro de l'enregistrement"
+
+msgctxt "field:deduction_period.rule-period_kind,write_date:"
+msgid "Write Date"
+msgstr "Modifié le"
+
+msgctxt "field:deduction_period.rule-period_kind,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:deduction_period.rule-period_kind,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
 msgctxt "help:benefit,company_products:"
 msgid "Products available when paying a company"
 msgstr "Produits disponible en cas de paiement direct à la société"
@@ -422,6 +508,11 @@ msgstr "Retourne la fréquence définie au produit si vrai"
 msgctxt "model:benefit-company_product,name:"
 msgid "Benefit Company Product relation"
 msgstr "Relation Prestation - Produit de la société"
+
+msgctxt "model:benefit.salary_revaluation.deduction_period.rule,name:"
+msgid "Benefit Salary Revaluation Deduction Period Rule"
+msgstr ""
+"Règle de revalorisation sur le salaire de base si période de déduction"
 
 msgctxt "model:benefit_rule-deductible_rule,name:"
 msgid "Benefit Rule - Deductible"
@@ -450,6 +541,10 @@ msgstr "Contrats du transfert de sinistres"
 msgctxt "model:contract.option.benefit,name:"
 msgid "Option Benefit"
 msgstr "Prestation"
+
+msgctxt "model:deduction_period.rule-period_kind,name:"
+msgid "Deduction Period Rule Period Kind Relation"
+msgstr "Relation Règle de période et période de deduction"
 
 msgctxt "model:event.type,name:event_transferred_service"
 msgid "Transferred Services"

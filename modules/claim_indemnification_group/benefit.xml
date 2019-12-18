@@ -20,4 +20,27 @@ this repository contains the full copyright notices and license terms. -->
             <field name="name">benefit_rule_form</field>
         </record>
     </data>
+    <data depends="claim_deduction_period">
+        <!-- ######################## -->
+        <!-- # Deductible Kind Rule # -->
+        <!-- ######################## -->
+        <record model="ir.ui.view" id="benefit_deduction_period_rule_view_form">
+            <field name="model">benefit.salary_revaluation.deduction_period.rule</field>
+            <field name="type">form</field>
+            <field name="name">benefit_deduction_rule_form</field>
+        </record>
+        <record model="ir.ui.view" id="benefit_deduction_period_rule_view_list">
+            <field name="model">benefit.salary_revaluation.deduction_period.rule</field>
+            <field name="type">tree</field>
+            <field name="name">benefit_deduction_rule_list</field>
+        </record>
+        <!-- ################ -->
+        <!-- # Benefit Rule # -->
+        <!-- ################ -->
+        <record model="ir.ui.view" id="benefit_rule_deduction_period_view_form">
+            <field name="model">benefit.rule</field>
+            <field name="inherit" ref="claim_indemnification.benefit_rule_view_form"/>
+            <field name="name">benefit_rule_deduction_period_form</field>
+        </record>
+    </data>
 </tryton>

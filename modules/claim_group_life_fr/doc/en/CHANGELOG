@@ -1,3 +1,4 @@
+* FEA#11792 Handle revaluation on basic salary if deduction periods
 * BUG#13916 The deduction period amount is no more rounded to avoid cents gaps
 
 Version 2.6 - 2019-10-11

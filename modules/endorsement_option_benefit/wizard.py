@@ -139,7 +139,8 @@ class ManageOptionBenefits(EndorsementWizardStepMixin):
                 ],
             'contract.option.benefit': Displayer.get_option_benefit_fields() +
             ('available_deductible_rules', 'available_indemnification_rules',
-                'available_revaluation_rules', 'contract_status')}
+                'available_revaluation_rules', 'contract_status',
+                'possible_revaluation_deduction_periods')}
 
     @classmethod
     def get_version_fields(cls):
@@ -151,7 +152,8 @@ class ManageOptionBenefits(EndorsementWizardStepMixin):
                 ],
             'contract.option.benefit': Displayer.get_option_benefit_fields() +
             ('available_deductible_rules', 'available_indemnification_rules',
-                'available_revaluation_rules')}
+                'available_revaluation_rules',
+                'possible_revaluation_deduction_periods')}
 
     def get_updated_options_from_contract(self, contract_endorsement):
         contract = contract_endorsement.contract
@@ -286,7 +288,10 @@ class ManageOptionBenefitsDisplayer(model.CoogView):
         return ('benefit', 'annuity_frequency', 'annuity_frequency_required',
             'deductible_rule', 'indemnification_rule', 'revaluation_rule',
             'indemnification_rule_extra_data', 'deductible_rule_extra_data',
-            'revaluation_rule_extra_data')
+            'revaluation_rule_extra_data',
+            'revaluation_on_basic_salary_if_period',
+            'revaluation_on_basic_salary_deduction_periods',
+            'possible_revaluation_deduction_periods')
 
 
 class StartEndorsement(metaclass=PoolMeta):

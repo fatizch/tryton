@@ -31,6 +31,13 @@ def register():
         module='claim_indemnification_group', type_='model')
 
     Pool.register(
+        benefit.BenefitRuleDeductionPeriod,
+        benefit.BenefitSalaryRevaluationDeductionPeriod,
+        benefit.DeductionPeriodRulePeriodKind,
+        module='claim_indemnification_group', type_='model',
+        depends=['claim_deduction_period'])
+
+    Pool.register(
         wizard.CreateIndemnification,
         wizard.TransferServices,
         module='claim_indemnification_group', type_='wizard')
