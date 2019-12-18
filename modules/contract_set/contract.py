@@ -153,8 +153,8 @@ class ContractSet(Printable, model.CoogSQL, model.CoogView):
         return all([(x.status == 'declined') for x in self.contracts])
 
     def get_subscribers(self, name):
-        return '\n'.join(contract.subscriber.rec_name
-            for contract in self.contracts)
+        return '\n'.join(contract.subscriber.rec_name if contract.subscriber
+            else '' for contract in self.contracts)
 
     @classmethod
     def search_subscribers(cls, name, clause):
