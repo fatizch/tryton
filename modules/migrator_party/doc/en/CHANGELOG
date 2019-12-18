@@ -1,3 +1,4 @@
+* BUG#13951 Fix where clause in run_query method of migrator.address
 * FEA#13902 Add migration of birth data fields
 * FIX#00000 Fix address migration: all addresses are imported in each job
 * FEA#12844 Add start_date and end_date to party_relation migrator

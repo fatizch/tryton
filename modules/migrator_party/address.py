@@ -138,10 +138,11 @@ class MigratorAddress(migrator.Migrator):
         for func_key in ids:
             sequence = func_key.split('_')[0]
             party = func_key.split('_')[1]
-            where_clause = ((cls.table.party == party) |
+            where_clause = ((cls.table.party == party) &
                     (cls.table.sequence == sequence))
             where = where & where_clause if where else where_clause
         select.order_by = (Column(cls.table, cls.columns['start_date']))
+        select.where = where
         return select
 
     @classmethod

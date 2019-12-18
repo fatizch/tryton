@@ -1,3 +1,4 @@
+* BUG#13951 Correctif de la clause where dans la méthode run_query de migrator address
 * FEA#13902 Ajout de la migration des champs de naissance
 * FIX#00000 Correction de la migration des adresses: toutes les adresses sont importées pour chaque job
 * FEA#12844 Ajout des dates de début et de fin au migrateur de relation tiers
