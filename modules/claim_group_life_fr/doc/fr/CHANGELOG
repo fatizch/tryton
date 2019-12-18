@@ -1,3 +1,5 @@
+* BUG#13916 Le montant des périodes de déduction n'est plus arrondis afin de ne pas avoir d'écarts de centimes
+
 Version 2.6 - 2019-10-11
 Version 2.4 - 2019-04-12
 * BUG#11383 Correctif du calcul du montant d'une période dans la règle par défaut de limitation des prestations annexes

@@ -206,7 +206,7 @@ traitement_de_reference = param_traitement_de_reference()
 
 traitement_journalier_base = traitement_journalier_base_originel
 traitement_reference_journalier = arrondir(traitement_de_reference / 365, 0.01)
-montant_mi_temps = arrondir(montant_de_deduction('part_time', date_debut_periode, date_fin_periode), 0.001)
+montant_mi_temps = montant_de_deduction('part_time', date_debut_periode, date_fin_periode)
 # Application de la règle de mi-temps thérapeutique si il y à un montant de mi-temps
 if montant_mi_temps:
     montant_mi_temps_total = montant_mi_temps * ((date_fin_periode - date_debut_periode).days + 1)
