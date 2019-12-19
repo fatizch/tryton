@@ -85,7 +85,10 @@ class EndorsementPartyRelation(relation_mixin(
         return self.party_endorsement.definition.id
 
     def get_rec_name(self, name):
-        if self.relationship:
+        if self.action in ('update', 'remove') and \
+                self.base_instance and hasattr(self.base_instance, 'func_key'):
+            return self.base_instance.func_key
+        elif self.relationship:
             return self.relationship.rec_name
         else:
             return gettext('endorsement_party.msg_new_relation')

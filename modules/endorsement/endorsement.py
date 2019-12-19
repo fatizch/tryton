@@ -808,6 +808,10 @@ def relation_mixin(value_model, field, model, name):
             return super(Mixin, self).get_diff(model, base_object)
 
         def get_func_key(self, name):
+            if self.action in ('update', 'remove') and \
+                    self.base_instance and hasattr(self.base_instance,
+                        'func_key'):
+                return self.base_instance.func_key
             return getattr(self, field).func_key if getattr(self, field) and \
                 hasattr(getattr(self, field), 'func_key') else ''
 

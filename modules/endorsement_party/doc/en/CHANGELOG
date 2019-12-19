@@ -1,3 +1,4 @@
+* BUG#13904 Read error on json export of an endorsement deleting a relation
 * FEA#12673 Manage death date on person record
 * BUG#00000 Fix call to update party address
 * BUG#11342 Allow endorsements on contracts on hold
