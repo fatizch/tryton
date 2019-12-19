@@ -1,3 +1,4 @@
+* BUG#13948 Correction du calcul du mode de facturation par défaut qui ne tenait plus compte de l'ordre défini au produit (suite à l'évolution 11728)
 * FEA#13245 Génération des données d'échéancier de paiement sur un tiers à des fins d'impression
 * FEA#13843 Ajoute les informations de quittancement dans l'API simulate
 * BUG#13398 Mettre à jour correctement la date de paiement des lignes de paiement en cas de trop perçu

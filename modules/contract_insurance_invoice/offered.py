@@ -479,6 +479,7 @@ class ProductBillingRule(
         required=True, select=True)
     billing_modes = fields.Many2Many('offered.product-offered.billing_mode',
         'billing_rule', 'billing_mode', 'Billing Modes',
+        order=[('order', 'ASC')],
         states={'invisible': Bool(Eval('change_billing_modes_order'))},
         help="Billing mode available to invoice the contract")
     change_billing_modes_order = fields.Function(
