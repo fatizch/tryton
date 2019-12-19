@@ -84,6 +84,8 @@ class CreatePremiumModificationMixin:
                         'one_day_overlap', 'proportion']:
                     invoice_term_including_start = True
                     break
+            if invoice_term_including_start:
+                break
         if invoice_term_including_start:
             to_reinvoice = ContractInvoice.search([
                     ('contract', '=', contract_id),

@@ -2283,8 +2283,6 @@ class ContractInvoice(model.CoogSQL, model.CoogView):
     def reinvoice(cls, contract_invoices):
         invoices = [i for i in contract_invoices if i.invoice_state != 'cancel']
         invoices.sort(key=lambda i: i.contract)
-        cls.cancel(contract_invoices)
-
         for contract, contract_invoices in groupby(
                 invoices, lambda i: i.contract):
             contract_invoices = list(contract_invoices)
