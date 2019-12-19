@@ -109,8 +109,6 @@ class APIContract(metaclass=PoolMeta):
 
     @classmethod
     def _simulate_update_premium_field(cls, target, source):
-        super(APIContract,
-            cls)._simulate_update_premium_field(target, source)
         if 'discount' in source:
             amount = source['discount']['amount']
             code = source['discount']['code']
@@ -124,27 +122,35 @@ class APIContract(metaclass=PoolMeta):
                         'amount': Decimal(amount),
                         })
             target['total'] += Decimal(amount)
+        else:
+            super(APIContract,
+                cls)._simulate_update_premium_field(target, source)
 
     @classmethod
     def _simulate_init_premium_field(cls):
         res = super(APIContract, cls)._simulate_init_premium_field()
         res['premium']['discounts'] = []
+        res['premium']['total_discounts'] = Decimal(0)
         return res
 
     @classmethod
     def _simulate_convert_premium_field(cls, premium):
-        for total in premium:
-            if total == 'discounts':
+        for key in premium:
+            if key == 'discounts':
+                premium['total_discounts'] = amount_for_api(
+                    sum(discount['amount']
+                        for discount in premium['discounts']))
                 premium['discounts'] = [{
                         'code': discount['code'],
                         'amount': amount_for_api(discount['amount']),
                         } for discount in premium['discounts']]
-            else:
-                premium[total] = amount_for_api(premium[total])
+            elif key != 'total_discounts':
+                premium[key] = amount_for_api(premium[key])
 
     @classmethod
     def _simulate_premium_output_schema(cls):
         schema = super(APIContract, cls)._simulate_premium_output_schema()
+        schema['premium']['properties']['total_discounts'] = AMOUNT_SCHEMA
         schema['premium']['properties']['discounts'] = {
             'type': 'array',
             'items': {

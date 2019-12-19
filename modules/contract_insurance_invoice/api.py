@@ -837,15 +837,9 @@ class APIContract(metaclass=PoolMeta):
             add_to_result = cls._simulate_get_schedule(contract, parameters,
                 created)
             add_to_result.pop('contract')
-            add_to_result['premium'] = {}
-            add_to_result['premium']['total'] = add_to_result['total']
             add_to_result.pop('total')
-            add_to_result['premium']['total_fee'] = add_to_result['total_fee']
             add_to_result.pop('total_fee')
-            add_to_result['premium']['total_premium'] = \
-                add_to_result['total_premium']
             add_to_result.pop('total_premium')
-            add_to_result['premium']['total_tax'] = add_to_result['total_tax']
             add_to_result.pop('total_tax')
             results[i].update(add_to_result)
             cls._aggregate_schedule(contract, results[i])
@@ -856,8 +850,11 @@ class APIContract(metaclass=PoolMeta):
         contract_coverages = {}
         contract_covereds = {}
         covereds_coverages = {}
+        contract_global_summary = cls._simulate_init_premium_field()
         for schedule in contract_data['schedule']:
             for detail in schedule['details']:
+                cls._simulate_update_premium_field(
+                    contract_global_summary['premium'], detail)
                 coverage = detail['origin']['option']['coverage']
                 cov_code = coverage['code']
                 contract_coverage = cls._aggregate_get_field(
@@ -889,6 +886,8 @@ class APIContract(metaclass=PoolMeta):
         cls._simulate_convert_premium_fields(contract_covereds)
         for covered_coverages in covereds_coverages.values():
             cls._simulate_convert_premium_fields(covered_coverages)
+        cls._simulate_convert_premium_field(contract_global_summary['premium'])
+        contract_data.update(contract_global_summary)
 
     @classmethod
     def _aggregate_get_field(cls, data, cache, cache_key, test_field):

@@ -1544,10 +1544,13 @@ class Contract(metaclass=PoolMeta):
             displayer['details'].append(details)
             displayer['tax_amount'] += details['tax_amount']
             displayer['total_amount'] += details['total_amount']
-            if details['premium'].fee:
-                displayer['fee'] += details['fee']
-            else:
-                displayer['amount'] += details['amount']
+            self.update_displayer_from_details(displayer, details)
+
+    def update_displayer_from_details(self, displayer, details):
+        if details['premium'].fee:
+            displayer['fee'] += details['fee']
+        else:
+            displayer['amount'] += details['amount']
 
     def _get_schedule_displayer_details(self, line, contract_invoice):
         pool = Pool()

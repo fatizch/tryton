@@ -366,6 +366,11 @@ class Contract(metaclass=PoolMeta):
                 }
         return details
 
+    def update_displayer_from_details(self, displayer, details):
+        if details.get('discount'):
+            return
+        super().update_displayer_from_details(displayer, details)
+
 
 class ContractOption(metaclass=PoolMeta):
     __name__ = 'contract.option'
