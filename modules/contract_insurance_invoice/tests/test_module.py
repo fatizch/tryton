@@ -1572,6 +1572,8 @@ class ModuleTestCase(test_framework.CoogTestCase):
                     ('2020-07-01', '2020-09-30', '660.00'),
                     ('2020-10-01', '2020-12-31', '660.00'),
                     ])
+        self.assertEqual(schedule[0]['premium_summary_kind'],
+            'contract_first_term')
 
     @test_framework.prepare_test(
         'account_cog.test0001_create_period',

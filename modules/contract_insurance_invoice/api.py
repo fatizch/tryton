@@ -198,7 +198,7 @@ class APIContract(metaclass=PoolMeta):
     def _update_contract_parameters(cls, contract_data, created):
         super()._update_contract_parameters(contract_data, created)
         if (isinstance(contract_data['billing']['payer'], dict) and
-                    'ref' in contract_data['billing']['payer']):
+                'ref' in contract_data['billing']['payer']):
             contract_data['billing']['payer'] = created['parties'][
                 contract_data['billing']['payer']['ref']]
         elif contract_data['billing']['payer'] is None:
@@ -841,6 +841,8 @@ class APIContract(metaclass=PoolMeta):
             add_to_result.pop('total_fee')
             add_to_result.pop('total_premium')
             add_to_result.pop('total_tax')
+            add_to_result.update({'premium_summary_kind':
+                    'contract_first_term'})
             results[i].update(add_to_result)
             cls._aggregate_schedule(contract, results[i])
         return results
@@ -990,6 +992,8 @@ class APIContract(metaclass=PoolMeta):
         base['items']['properties'].update(
             cls._simulate_premium_output_schema())
         schema['properties'].update(base['items']['properties'])
+        schema['properties']['premium_summary_kind'] = {'type': 'string',
+            'enum': ['contract_first_term']}
         return schema
 
     @classmethod
@@ -1219,6 +1223,7 @@ class APIContract(metaclass=PoolMeta):
                             'total': '254.59',
                             },
                         'ref': '1',
+                        'premium_summary_kind': 'contract_first_term',
                         },
                     ],
                 },
