@@ -13,3 +13,10 @@ Fonctionnalités
 ---------------
 
 .. include:: features.rst
+
+
+Développement
+-------------
+
+.. include:: development.rst
+
