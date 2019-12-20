@@ -1,3 +1,4 @@
+* BUG#13822 Définit le compte pour les prestations au compte actuel pour les indemnisations
 * FEA#13839 Activation des sous-statuts bloquants pour le statut réouvert
 * OTH#00000 Correctif fonctionnalité 11618
 * FEA#11618 Générer un modèle de document sur un sinistre à partir d'un groupe de paiement ou d'une quittance

@@ -1,3 +1,4 @@
+* BUG#13822 Set claim bank account to current bank account on indemnifications
 * FEA#13839 Enabling blocking substatuses on reoponed status
 * OTH#00000 Hotfix for feature 11618
 * FEA#11618 Generate document template on claims from payment groups and invoices

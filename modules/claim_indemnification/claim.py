@@ -1231,7 +1231,9 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
         if not self.journal or not self.journal.needs_bank_account():
             return
         invoice = self._invoice()
-        date = invoice.invoice_date if invoice else utils.today()
+        date = utils.today()
+        if invoice:
+            date = max(invoice.invoice_date, date)
         if self.service.benefit.beneficiary_kind == 'subscriber':
             account = self.service.contract.get_claim_bank_account_at_date(
                 at_date=date)
