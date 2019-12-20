@@ -325,7 +325,7 @@ class Loss(metaclass=PoolMeta):
 
     def check_activation(self):
         super(Loss, self).check_activation()
-        if self.loss_kind == 'death' and (
+        if self.loss_desc_kind == 'death' and (
                 not self.covered_person.death_date or
                 self.start_date != self.covered_person.death_date):
             self.append_functional_error(
