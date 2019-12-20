@@ -323,10 +323,9 @@ return True'''
         contract_extra_data.string = 'Extra Data Contract'
         contract_extra_data.type_ = 'selection'
         contract_extra_data.selection = 'formula1: Formula 1\n'\
-            'formula2: Formula 2,formula3: Formula 3'
+            'formula2: Formula 2\nformula3: Formula 3'
         contract_extra_data.kind = 'contract'
         contract_extra_data.save()
-        product.extra_data_def = [contract_extra_data]
 
         # Add extra_data on coverage 1
         option_extra_data = self.ExtraData()
@@ -353,9 +352,21 @@ return True'''
         item_desc.extra_data_def = [covered_extra_data]
         item_desc.save()
 
+        # add contract extra data not forced by packages
+        variable_contract_extra_data = self.ExtraData()
+        variable_contract_extra_data.name = 'variable_extra_data_contract'
+        variable_contract_extra_data.string = 'Variable Extra Data Contract'
+        variable_contract_extra_data.type_ = 'boolean'
+        variable_contract_extra_data.kind = 'contract'
+        variable_contract_extra_data.save()
+
+        product.extra_data_def = [contract_extra_data,
+            variable_contract_extra_data]
+
         product.packages_defined_per_covered = False
         package1 = create_package('Package 1', 'P1',
-            [(c1, {'extra_data_coverage_alpha': 'option2'}), (c2, {})], {})
+            [(c1, {'extra_data_coverage_alpha': 'option2'}), (c2, {})],
+            {'extra_data_contract': 'formula1'})
         package2 = create_package('Package 2', 'P2',
             [(c1, {'extra_data_coverage_alpha': 'option3'}), (c3, {}),
                 (c4, {}), (c5, {})],
@@ -419,6 +430,10 @@ return True'''
         package_a.save()
 
         package_b = Package()
+        package_b.extra_data = {
+            'covered_1': Decimal('100'),
+            'contract_1': Decimal('1000'),
+            }
         package_b.name = 'Package B'
         package_b.code = 'package_b'
         package_b.option_relations = [
@@ -430,6 +445,10 @@ return True'''
         package_b.save()
 
         package_c = Package()
+        package_c.extra_data = {
+            'covered_1': Decimal('100'),
+            'contract_1': Decimal('1000'),
+            }
         package_c.name = 'Package C'
         package_c.code = 'package_c'
         package_c.option_relations = [
@@ -743,22 +762,10 @@ return True'''
                     'description': '',
                     'extra_data': [
                         {
-                            'code': 'extra_data_contract',
-                            'name': 'Extra Data Contract',
-                            'selection': [
-                                {
-                                    'name': 'Formula 1',
-                                    'sequence': 0,
-                                    'value': 'formula1',
-                                    },
-                                {
-                                    'name': 'Formula 2,formula3: Formula 3',
-                                    'sequence': 1,
-                                    'value': 'formula2',
-                                    },
-                                ],
-                            'sequence': 1,
-                            'type': 'selection',
+                            'code': 'variable_extra_data_contract',
+                            'name': 'Variable Extra Data Contract',
+                            'sequence': 4,
+                            'type': 'boolean',
                             },
                         ],
                     'id': product.id,
@@ -838,7 +845,7 @@ return True'''
                                             'code': 'variable_data_1',
                                             'digits': 2,
                                             'name': 'Variable Data 1',
-                                            'sequence': 4,
+                                            'sequence': 5,
                                             'type': 'numeric',
                                         }
                                     ],
@@ -868,7 +875,6 @@ return True'''
                     'packages': [
                         {
                             'code': 'P1',
-                            'extra_data': {},
                             'id': package_1.id,
                             'name': 'Package 1',
                             'coverages': [
@@ -884,9 +890,6 @@ return True'''
                             },
                         {
                             'code': 'P2',
-                            'extra_data': {
-                                'extra_data_contract': 'formula2',
-                                },
                             'id': package_2.id,
                             'name': 'Package 2',
                             'coverages': [
@@ -910,9 +913,6 @@ return True'''
                             },
                         {
                             'code': 'P3',
-                            'extra_data': {
-                                'extra_data_contract': 'formula3',
-                                },
                             'id': package_3.id,
                             'name': 'Package 3',
                             'coverages': [

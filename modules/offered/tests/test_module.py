@@ -194,6 +194,9 @@ class ModuleTestCase(test_framework.CoogTestCase):
         package_a.save()
 
         package_b = Package()
+        package_b.extra_data = {
+            'contract_1': '18.10',
+            }
         package_b.name = 'Package B'
         package_b.code = 'package_b'
         package_b.option_relations = [
@@ -695,9 +698,9 @@ class ModuleTestCase(test_framework.CoogTestCase):
         package_b, = Package.search([('code', '=', 'package_b')])
 
         # Add some API resources on extra_data
-        contract_1, = pool.get('extra_data').search(
-            [('name', '=', 'contract_1')])
-        contract_1.web_ui_resources = [
+        contract_2, = pool.get('extra_data').search(
+            [('name', '=', 'contract_2')])
+        contract_2.web_ui_resources = [
             {
                 'key': helper_resource,
                 'value': '"some value"',
@@ -709,7 +712,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
                 'origin_resource': extra_data,
                 },
             ]
-        contract_1.save()
+        contract_2.save()
 
         self.maxDiff = None
         self.assertEqual(
@@ -723,22 +726,15 @@ class ModuleTestCase(test_framework.CoogTestCase):
                     'description': '',
                     'extra_data': [
                         {
-                            'code': 'contract_1',
-                            'name': 'Contract 1',
-                            'type': 'numeric',
-                            'sequence': 1,
-                            'digits': 2,
-                            'custom_resources': {
-                                'title': '1234',
-                                'helper': '"some value"',
-                                },
-                            },
-                        {
                             'code': 'contract_2',
                             'name':
                             'Contract 2',
                             'type': 'boolean',
                             'sequence': 2,
+                            'custom_resources': {
+                                'title': '1234',
+                                'helper': '"some value"',
+                                },
                             },
                         {
                             'code': 'contract_3',
@@ -804,9 +800,6 @@ class ModuleTestCase(test_framework.CoogTestCase):
                                     'code': 'BET',
                                     }
                                 ],
-                            'extra_data': {
-                                'contract_1': '16.10',
-                                },
                             },
                         {
                             'id': package_b.id,
@@ -818,7 +811,6 @@ class ModuleTestCase(test_framework.CoogTestCase):
                                     'code': 'ALP',
                                     },
                                 ],
-                            'extra_data': {},
                             },
                         ],
                     'subscriber': {

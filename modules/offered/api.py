@@ -3,6 +3,7 @@
 import datetime
 from collections import defaultdict
 from decimal import Decimal, InvalidOperation
+from itertools import chain
 
 from trytond.pool import PoolMeta, Pool
 
@@ -497,9 +498,12 @@ class APIProduct(APIMixin):
                 for package in product.packages
                 for rel in package.option_relations
                 ], []))
+        extra_codes_to_mask |= set(sum([list(package.extra_data)
+                for package in product.packages], []))
+
         coverage_descs = cls._coverages_in_description(description)
-        cls._remove_coverage_extra_description(coverage_descs,
-            extra_codes_to_mask)
+        cls._remove_extra_from_descriptions(chain(coverage_descs,
+                (description,)), extra_codes_to_mask)
 
     @classmethod
     def _coverages_in_description(cls, description):
@@ -507,10 +511,10 @@ class APIProduct(APIMixin):
             yield desc
 
     @classmethod
-    def _remove_coverage_extra_description(cls, coverage_descs,
+    def _remove_extra_from_descriptions(cls, descs,
             extra_codes_to_mask):
-        for cov in coverage_descs:
-            cov['extra_data'] = [x for x in cov.get('extra_data', [])
+        for desc in descs:
+            desc['extra_data'] = [x for x in desc.get('extra_data', [])
                 if x['code'] not in extra_codes_to_mask]
 
     @classmethod
@@ -533,8 +537,6 @@ class APIProduct(APIMixin):
             'id': package.id,
             'code': package.code,
             'name': package.name,
-            # Maybe remove "package" extra_data ?
-            'extra_data': package.extra_data,
             'coverages': [cls._describe_package_option(x)
                 for x in package.option_relations],
             }

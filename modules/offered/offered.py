@@ -154,18 +154,21 @@ class Product(model.CodedMixin, model.CoogView, Printable,
 
     def check_packages_forced_keys(self):
         """
-            If an Extra Data value is forced by a package for a coverage, then
-            the said Extra Data will not be displayed by the Product
-            Description API. The Extra Data in question should never be entered
-            manually. So, all packages containing the coverage must force the
-            value.  See: https://support.coopengo.com/issues/13273
+
+            If an Extra Data value is forced by a package, then the said Extra
+            Data will not be displayed by the Product Description API. The
+            Extra Data in question should never be entered manually. So, all
+            packages must force the value.  See:
+            https://support.coopengo.com/issues/13273
+
         """
-        data_by_coverage = defaultdict(list)
+        data_by_target = defaultdict(list)
         for package in self.packages:
             for rel in package.option_relations:
-                data_by_coverage[rel.option].append(set(rel.extra_data))
+                data_by_target[rel.option].append(set(rel.extra_data))
+            data_by_target[self].append(set(package.extra_data))
 
-        for option, extras in data_by_coverage.items():
+        for target, extras in data_by_target.items():
             diff = set()
             previous = None
             for extra in extras:
@@ -176,9 +179,14 @@ class Product(model.CodedMixin, model.CoogView, Printable,
                 previous = extra
             if diff:
                 diff = ', '.join(list(diff))
-                raise ValidationError(gettext(
-                        'offered.msg_must_force_extra_on_all_packages',
-                        diff=diff, option=option.rec_name))
+                if target.__name__ == 'offered.option.description':
+                    raise ValidationError(gettext(
+                        'offered.msg_must_force_coverage_extra_on_all_packages',
+                        diff=diff, target=target.rec_name))
+                else:
+                    raise ValidationError(gettext(
+                        'offered.msg_must_force_contract_extra_on_all_packages',
+                        diff=diff))
 
     @classmethod
     def validate_contract_extra_data(cls, instances):
