@@ -1276,10 +1276,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
         # Partial subscription
         data_dict = copy.deepcopy(data_ref)
         data_dict['contracts'][0]['package']['code'] = 'package_b'
-        data_dict['contracts'][0]['extra_data'] = {
-            'contract_1': '1000'}
         for covered in data_dict['contracts'][0]['covereds']:
-            covered['extra_data'] = {'covered_1': '100'}
             covered['coverages'] = [
                 {
                     'coverage': {'code': 'ALP'},
@@ -1419,10 +1416,6 @@ class ModuleTestCase(test_framework.CoogTestCase):
         data_dict['contracts'][0]['covereds'][1]['package'] = {
             'code': 'package_c'}
 
-        # We must set covered / option extra data because package_c does not
-        # set them
-        data_dict['contracts'][0]['covereds'][1]['extra_data'] = {
-            'covered_1': '20'}
         data_dict['contracts'][0]['covereds'][1]['coverages'] = [
             {
                 'coverage': {'code': 'ALP'},
@@ -1457,7 +1450,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
             [{'option_1': Decimal(1)}, {}])
 
         self.assertEqual(contract.covered_elements[1].current_extra_data,
-            {'covered_1': Decimal('20')})
+            {'covered_1': Decimal('100')})
         self.assertEqual([x.coverage.code
                 for x in contract.covered_elements[1].options],
             ['ALP', 'BET', 'GAM'])
@@ -1558,11 +1551,15 @@ class ModuleTestCase(test_framework.CoogTestCase):
                 {'extra_data_coverage_alpha': 'option3'},
                 {'extra_data_coverage_alpha': 'option3'}])
         self.assertEqual(contract.extra_datas[0].extra_data_values, {
-                'extra_data_contract': 'formula2'})
+                'extra_data_contract': 'formula2',
+                'variable_extra_data_contract': None,
+                })
         # apply package 3
         apply_package([product.packages[2]], contract)
         self.assertEqual(contract.extra_datas[0].extra_data_values, {
-                'extra_data_contract': 'formula3'})
+                'extra_data_contract': 'formula3',
+                'variable_extra_data_contract': None,
+                })
         self.assertEqual(len(contract.options), 1)
         self.assertEqual(
             [a.coverage.code for c in contract.covered_elements
@@ -1572,6 +1569,12 @@ class ModuleTestCase(test_framework.CoogTestCase):
 
         # test package per covered
         packages = self.Package.search([('code', 'in', ('P1', 'P4'))])
+        for package in packages:
+            if package.code == 'P1':
+                package.extra_data = {'extra_data_covered': 'covered1'}
+                package.save()
+                break
+
         product.packages_defined_per_covered = True
         product.packages = packages
         product.save()
@@ -1588,7 +1591,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
                 {'extra_data_coverage_alpha': 'option1'}])
         self.assertEqual([c.versions[0].extra_data
                 for c in contract.covered_elements], [
-                {'extra_data_covered': None},
+                {'extra_data_covered': 'covered1'},
                 {'extra_data_covered': 'covered3'}])
         # apply package 1 to covered1 and package 2 to covered2
         apply_package([product.packages[1], product.packages[0]], contract)
@@ -1598,7 +1601,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
         self.assertEqual([c.versions[0].extra_data
                 for c in contract.covered_elements], [
                 {'extra_data_covered': 'covered3'},
-                {'extra_data_covered': 'covered3'}])
+                {'extra_data_covered': 'covered1'}])
 
     @test_framework.prepare_test(
         'contract_insurance.test0001_testPersonCreation',
@@ -1820,7 +1823,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
         covereds = simulation[0]['covereds']
         self.assertEqual(len(covereds), 2)
         self.assertEqual(len(covereds[0]['coverages']), 2)
-        self.assertEqual(covereds[0]['ref'], '1')
+        self.assertEqual(covereds[0]['party']['ref'], '1')
 
     def test0200_test_api_rule_tree_elements(self):
         APIRuleRuntime = Pool().get('api.rule_runtime')

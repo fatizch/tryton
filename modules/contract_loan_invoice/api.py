@@ -143,8 +143,8 @@ class APIContract(metaclass=PoolMeta):
             Contract.calculate_prices(loan_contracts)
 
     @classmethod
-    def _simulate_parse_created(cls, created):
-        super()._simulate_parse_created(created)
+    def _simulate_parse_created(cls, parameters, created):
+        super()._simulate_parse_created(parameters, created)
         if 'loans' in created:
             created['loan_ref_per_id'] = {
                 x['id']: x['ref'] for x in created['loans']}

@@ -1450,18 +1450,27 @@ class ModuleTestCase(test_framework.CoogTestCase):
                     ])
 
     @test_framework.prepare_test(
+        'contract_insurance.test0001_testPersonCreation',
         'contract_insurance_invoice.test0006_prepare_product_for_subscription',
-
         )
     def test9910_test_simulate_API(self):
         pool = Pool()
         ContractAPI = pool.get('api.contract')
+        baby, = self.Party.search([('name', '=', 'Antoine'),
+                ('first_name', '=', 'Jeff')])
         data_ref = {
             'parties': [
                 {
                     'ref': '1',
                     'is_person': True,
                     'birth_date': '1978-01-14',
+                    'relations': [
+                        {
+                            'ref': '1',
+                            'type': 'parent',
+                            'to': {'id': baby.id},
+                            },
+                        ],
                     },
                 {
                     'ref': '2',
@@ -1490,6 +1499,20 @@ class ModuleTestCase(test_framework.CoogTestCase):
                                     'extra_data': {},
                                     },
                                 ],
+                            },
+                        {
+                            'party': {'id': baby.id},
+                            'item_descriptor': {'code': 'person'},
+                            'coverages': [
+                                {
+                                    'coverage': {'code': 'ALP'},
+                                    'extra_data': {},
+                                    },
+                                {
+                                    'coverage': {'code': 'BET'},
+                                    'extra_data': {},
+                                    },
+                                ]
                             },
                         {
                             'party': {'ref': '2'},
@@ -1530,23 +1553,23 @@ class ModuleTestCase(test_framework.CoogTestCase):
 
         # Coverage A is 10 per month, 12 months + 2 covereds = 240
         # Coverage B is 100 per month, 12 months + 2 covereds = 2400
-        self.assertEqual(schedule[0]['premium']['total'], '2640.00')
+        self.assertEqual(schedule[0]['premium']['total'], '3960.00')
 
         self.assertEqual([(x['start'], x['end'], x['total'])
                     for x in schedule[0]['schedule']],
                 [
-                    ('2020-01-01', '2020-01-31', '220.00'),
-                    ('2020-02-01', '2020-02-29', '220.00'),
-                    ('2020-03-01', '2020-03-31', '220.00'),
-                    ('2020-04-01', '2020-04-30', '220.00'),
-                    ('2020-05-01', '2020-05-31', '220.00'),
-                    ('2020-06-01', '2020-06-30', '220.00'),
-                    ('2020-07-01', '2020-07-31', '220.00'),
-                    ('2020-08-01', '2020-08-31', '220.00'),
-                    ('2020-09-01', '2020-09-30', '220.00'),
-                    ('2020-10-01', '2020-10-31', '220.00'),
-                    ('2020-11-01', '2020-11-30', '220.00'),
-                    ('2020-12-01', '2020-12-31', '220.00'),
+                    ('2020-01-01', '2020-01-31', '330.00'),
+                    ('2020-02-01', '2020-02-29', '330.00'),
+                    ('2020-03-01', '2020-03-31', '330.00'),
+                    ('2020-04-01', '2020-04-30', '330.00'),
+                    ('2020-05-01', '2020-05-31', '330.00'),
+                    ('2020-06-01', '2020-06-30', '330.00'),
+                    ('2020-07-01', '2020-07-31', '330.00'),
+                    ('2020-08-01', '2020-08-31', '330.00'),
+                    ('2020-09-01', '2020-09-30', '330.00'),
+                    ('2020-10-01', '2020-10-31', '330.00'),
+                    ('2020-11-01', '2020-11-30', '330.00'),
+                    ('2020-12-01', '2020-12-31', '330.00'),
                     ])
 
         data_dict = copy.deepcopy(data_ref)
@@ -1563,14 +1586,14 @@ class ModuleTestCase(test_framework.CoogTestCase):
 
         # Quarterly billing
         self.assertEqual(len(schedule[0]['schedule']), 4)
-        self.assertEqual(schedule[0]['premium']['total'], '2640.00')
+        self.assertEqual(schedule[0]['premium']['total'], '3960.00')
         self.assertEqual([(x['start'], x['end'], x['total'])
                     for x in schedule[0]['schedule']],
                 [
-                    ('2020-01-01', '2020-03-31', '660.00'),
-                    ('2020-04-01', '2020-06-30', '660.00'),
-                    ('2020-07-01', '2020-09-30', '660.00'),
-                    ('2020-10-01', '2020-12-31', '660.00'),
+                    ('2020-01-01', '2020-03-31', '990.00'),
+                    ('2020-04-01', '2020-06-30', '990.00'),
+                    ('2020-07-01', '2020-09-30', '990.00'),
+                    ('2020-10-01', '2020-12-31', '990.00'),
                     ])
         self.assertEqual(schedule[0]['premium_summary_kind'],
             'contract_first_term')

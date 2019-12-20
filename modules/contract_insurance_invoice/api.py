@@ -1,5 +1,6 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+from collections import defaultdict
 from decimal import Decimal
 
 from trytond.pool import PoolMeta, Pool
@@ -822,7 +823,6 @@ class APIContract(metaclass=PoolMeta):
 
     @classmethod
     def _simulate_create_contracts(cls, parameters):
-        # Hardcore
         with api_input_error_manager():
             Pool().get('api').ignore_input_errors('missing_bank_account')
 
@@ -850,8 +850,8 @@ class APIContract(metaclass=PoolMeta):
     @classmethod
     def _aggregate_schedule(cls, contract, contract_data):
         contract_coverages = {}
-        contract_covereds = {}
-        covereds_coverages = {}
+        contract_covereds = defaultdict(dict)
+        covereds_coverages = defaultdict(dict)
         contract_global_summary = cls._simulate_init_premium_field()
         for schedule in contract_data['schedule']:
             for detail in schedule['details']:
@@ -867,29 +867,57 @@ class APIContract(metaclass=PoolMeta):
                         contract_coverage['premium'], detail)
                 if 'covered' in detail['origin']:
                     covered = detail['origin']['covered']
-                    contract_covered = cls._aggregate_get_field(
-                        contract_data['covereds'], contract_covereds,
-                        covered['party']['ref'], lambda x: x['ref'])
+                    contract_covered, cache, cache_key = \
+                        cls._aggregate_get_covered_field(
+                            contract_data['covereds'], contract_covereds,
+                            covered)
                     if not contract_covered:
                         continue
                     cls._simulate_update_premium_field(
                         contract_covered['premium'], detail)
-                    covered_ref = contract_covered['ref']
-                    if covered_ref not in covereds_coverages:
-                        covereds_coverages[covered_ref] = {}
+                    if cache_key not in covereds_coverages[cache]:
+                        covereds_coverages[cache][cache_key] = {}
                     covered_coverage = cls._aggregate_get_field(
                         contract_covered['coverages'],
-                        covereds_coverages[covered_ref], cov_code,
+                        covereds_coverages[cache][cache_key], cov_code,
                         lambda x: x['coverage']['code'])
                     if covered_coverage:
                         cls._simulate_update_premium_field(
                             covered_coverage['premium'], detail)
         cls._simulate_convert_premium_fields(contract_coverages)
-        cls._simulate_convert_premium_fields(contract_covereds)
-        for covered_coverages in covereds_coverages.values():
-            cls._simulate_convert_premium_fields(covered_coverages)
+        covereds_caches = ['party_ref', 'party_id', 'name']
+        for cache in covereds_caches:
+            cls._simulate_convert_premium_fields(contract_covereds[cache])
+        for cache in covereds_caches:
+            for covered_coverages in covereds_coverages[cache].values():
+                cls._simulate_convert_premium_fields(covered_coverages)
         cls._simulate_convert_premium_field(contract_global_summary['premium'])
         contract_data.update(contract_global_summary)
+
+    @classmethod
+    def _aggregate_get_covered_field(cls, covereds_data, covereds_cache,
+            covered):
+        if 'party' in covered:
+            if 'ref' in covered['party']:
+                cache = 'party_ref'
+                cache_key = covered['party']['ref']
+
+                def test(x):
+                    return x.get('party', {}).get('ref')
+            else:
+                cache = 'party_id'
+                cache_key = covered['party']['id']
+
+                def test(x):
+                    return x.get('party', {}).get('id')
+        else:
+            cache = 'name'
+            cache_key = covered['name']
+
+            def test(x):
+                return x.get('name')
+        return cls._aggregate_get_field(covereds_data, covereds_cache[cache],
+            cache_key, test), cache, cache_key
 
     @classmethod
     def _aggregate_get_field(cls, data, cache, cache_key, test_field):
@@ -1038,8 +1066,6 @@ class APIContract(metaclass=PoolMeta):
         origin = base['properties']['origin']['properties']
         del origin['option']['properties']['id']
         del origin['covered']['properties']['id']
-        del origin['covered']['properties']['party']['properties']['id']
-        del origin['covered']['properties']['party']['properties']['code']
         origin['covered']['properties']['party']['properties']['ref'] = {
             'type': 'string'}
 

@@ -63,8 +63,8 @@ class APIContract(APIMixin):
                 'simulate': {
                     'public': False,
                     'readonly': True,
-                    'description': 'Simulate contracts computations based '
-                    'on provided informations',
+                    'description': 'Simulate contract creation and return '
+                    'relevant informations',
                     },
                 })
 
@@ -766,7 +766,7 @@ class APIContract(APIMixin):
                         created = cls._simulate_create_contracts(
                             parameters)
 
-                        cls._simulate_parse_created(created)
+                        cls._simulate_parse_created(parameters, created)
                         contracts = created['contract_instances']
                         cls._simulate_prepare_contracts(contracts,
                             parameters)
@@ -789,8 +789,9 @@ class APIContract(APIMixin):
                         } for option in contract.options],
                 'ref': created['contract_ref_per_id'][contract.id],
                 }
-            package = contract.get_package()
-            if package:
+            package = created['contract_parameters_per_id'][contract.id].get(
+                'package')
+            if package is not None:
                 result['package'] = {
                     'code': package.code,
                     }
@@ -798,7 +799,7 @@ class APIContract(APIMixin):
         return results
 
     @classmethod
-    def _simulate_parse_created(cls, created):
+    def _simulate_parse_created(cls, parameters, created):
         Contract = Pool().get('contract')
         created['party_ref_per_id'] = {
             x['id']: x['ref'] for x in created['parties']}
@@ -806,6 +807,9 @@ class APIContract(APIMixin):
             x['id']: x['ref'] for x in created['contracts']}
         created['contract_instances'] = Contract.browse(
             [x['id'] for x in created['contracts']])
+        created['contract_parameters_per_id'] = {c['id']: x
+            for c in created['contracts'] for x in parameters['contracts']
+            if c['ref'] == x['ref']}
 
     @classmethod
     def _simulate_create_contracts(cls, parameters):
@@ -889,8 +893,8 @@ class APIContract(APIMixin):
             'type': 'array',
             'items': {
                 'type': 'object',
+                'additionalProperties': False,
                 'properties': {
-                    'additionalProperties': False,
                     'coverage': CODED_OBJECT_SCHEMA,
                     }
                 }

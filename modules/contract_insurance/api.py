@@ -2,7 +2,7 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import PoolMeta, Pool
 
-from trytond.modules.coog_core.api import CODED_OBJECT_SCHEMA
+from trytond.modules.coog_core.api import CODED_OBJECT_SCHEMA, CODE_SCHEMA
 from trytond.modules.rule_engine import check_args
 from trytond.modules.party_cog.api import PARTY_RELATION_SCHEMA
 from trytond.modules.offered.api import EXTRA_DATA_VALUES_SCHEMA
@@ -466,12 +466,19 @@ class APIContract(metaclass=PoolMeta):
                 desc = {'coverages': [
                         cls._simulate_contract_extract_covered_option(
                             option) for option in covered.all_options]}
-                created_party = created['party_ref_per_id'].get(
-                    covered.party.id)
-                if created_party:
-                    desc['ref'] = created_party
-                elif covered.party:
-                    desc['party'] = {'id': covered.party.id}
+                if covered.party:
+                    created_party = created['party_ref_per_id'].get(
+                        covered.party.id)
+                    if created_party:
+                        desc['party'] = {'ref': created_party}
+                    else:
+                        desc['party'] = {
+                            'id': covered.party.id,
+                            'code': covered.party.code,
+                            'name': covered.party.full_name,
+                            }
+                elif covered.name is not None:
+                    desc['name'] = covered.name
                 descriptions.append(desc)
             results[i].update({'covereds': descriptions})
         return results
@@ -495,13 +502,28 @@ class APIContract(metaclass=PoolMeta):
                 'type': 'object',
                 'additionalProperties': False,
                 'properties': {
-                    'ref': {'type': 'string'},
                     'party': {
                         'type': 'object',
-                        'properties': {
-                            'id': {'type': 'integer'}
-                        },
+                        'oneOf': [
+                            {
+                                'additionalProperties': False,
+                                'properties': {
+                                    'ref': {'type': 'string'},
+                                    },
+                                'required': ['ref'],
+                                },
+                            {
+                                'additionalProperties': False,
+                                'properties': {
+                                    'id': {'type': 'integer'},
+                                    'code': CODE_SCHEMA,
+                                    'name': {'type': 'string'},
+                                    },
+                                'required': ['id', 'code', 'name'],
+                                },
+                            ],
                     },
+                    'name': {'type': 'string'},
                     'coverages': cls._simulate_coverages_output_schema(),
                     },
                 }
