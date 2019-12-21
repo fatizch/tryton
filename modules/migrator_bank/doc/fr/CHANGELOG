@@ -1,3 +1,4 @@
+* BUG#13975 Correctif de la méthode get_batch_configuration
 * BUG#13876 correctif de la migration des comptes bancaires avec une option
 delete
 * FEA#13808 Grouper les comptes bancaires qui nécessitent un traitement par un

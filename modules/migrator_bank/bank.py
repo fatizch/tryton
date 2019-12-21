@@ -159,6 +159,7 @@ class MigratorBankAccount(migrator.Migrator):
             config['with_sepa_mandate'] = config['with_sepa_mandate'].lower()
             config['with_sepa_mandate'] = True \
                 if config['with_sepa_mandate'] == 'true' else False
+        return config
 
     @classmethod
     def init_update_cache(cls, rows):
