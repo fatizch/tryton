@@ -25,8 +25,13 @@ coog_daily_report() { # batches execution report generation
     coog_celery_report "$@" | python "$COOG_BIN/batch_report_generate.py" "$template"
 }
 
-coog_daily_mail() { # batches execution mail report
-    local dates="$(date -d "$(date --iso) -1 day" +%Y-%m-%d)T12:00:00~$(date +%Y-%m-%d)T23:59:59"
+coog_daily_mail() { # batches execution mail report - [from_date~to_date] where dates are formated YYYY-MM-DDTHH:mm:SS
+    local dates
+    if [ -z "$1" ]; then
+        dates="$(date -d "$(date --iso) -1 day" +%Y-%m-%d)T12:00:00~$(date +%Y-%m-%d)T23:59:59"
+    else
+        dates="$1"
+    fi
     [ $# -ne 0 ] && dates=$1 && shift 1
     local fromemail=$(python "$COOG_BIN/parse-config.py" batch_report fromemail < "$COOG_CONF_SRV" | sed -e "s/.*://" 2> /dev/null)
     local toemail=$(python "$COOG_BIN/parse-config.py" batch_report toemail < "$COOG_CONF_SRV" | sed -e "s/.*://" 2> /dev/null)

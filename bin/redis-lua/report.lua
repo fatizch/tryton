@@ -11,6 +11,11 @@ Usage: only ARGV are used (no KEYS). Possible commands are:
 ]]
 
 -- general
+local transco_coog = {}
+transco_coog['pending'] = 'pending'
+transco_coog['success'] = 'success'
+transco_coog['fail'] = 'failed'
+transco_coog['archive'] = 'archive'
 
 local STATUS = {'pending', 'success', 'failed', 'archive'}
 
@@ -76,6 +81,7 @@ broker.prepare = function(id)
     local meta = redis.call('GET', broker.patterns[2] .. id)
     if meta then
         meta = cjson.decode(meta)
+
         if not job.status then
             if meta.status == 'SUCCESS' then
                 job.status = STATUS[2]
@@ -83,6 +89,8 @@ broker.prepare = function(id)
                 job.status = STATUS[3]
                 job.traceback = meta.traceback or '-'
             end
+        else
+            job.status = transco_coog[job.status]
         end
         job.result = meta.result or '-'
     else

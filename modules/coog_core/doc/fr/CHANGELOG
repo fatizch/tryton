@@ -1,3 +1,4 @@
+* BUG#13984 Correction de la commande de rapport de batch (script lua, template html et filtre par date)
 * BUG#13905 Ajout de la chaine BPIJ dans la chaine journalière
 * BUG#12337 Export Configuration peut maintenant être dupliqué avec "Ctrl + Shift + d"
 * OTH#00000 Retrait du support des caractères majuscules dans le nommage des variables de configuration trytond

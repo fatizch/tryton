@@ -1,3 +1,4 @@
+* BUG#13984 Fixes on daily report command (lua script, html template and date filter)
 * BUG#13905 Add BPIJ chain in daily
 * BUG#12337 Export Configuration can now be duplicated using "Ctrl + Shift + d"
 * OTH#00000 Remove the support of upper case in the naming of trytond config variables
