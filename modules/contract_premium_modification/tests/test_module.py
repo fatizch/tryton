@@ -306,6 +306,10 @@ class ModuleTestCase(test_framework.CoogTestCase):
                                     'coverage': {'code': 'BET'},
                                     'extra_data': {},
                                     },
+                                {
+                                    'coverage': {'code': 'ALP'},
+                                    'extra_data': {},
+                                    },
                                 ],
                             },
                         {
@@ -341,26 +345,27 @@ class ModuleTestCase(test_framework.CoogTestCase):
         # 1 year
         self.assertEqual(len(schedule[0]['schedule']), 12)
 
+        # Coverage A is 10 per month, 1 covered = 120
         # Coverage B is 100 per month, 12 months + 2 covereds = 2400
         # DISCOUNT_BET is 10% : so 2400 - 240 = 2160
-        self.assertEqual(schedule[0]['premium']['total'], '2160.00')
-        self.assertEqual(schedule[0]['premium']['total_premium'], '2400.00')
+        self.assertEqual(schedule[0]['premium']['total'], '2280.00')
+        self.assertEqual(schedule[0]['premium']['total_premium'], '2520.00')
 
         self.assertEqual([(x['start'], x['end'], x['total'])
                     for x in schedule[0]['schedule']],
                 [
-                    ('2020-01-01', '2020-01-31', '180.00'),
-                    ('2020-02-01', '2020-02-29', '180.00'),
-                    ('2020-03-01', '2020-03-31', '180.00'),
-                    ('2020-04-01', '2020-04-30', '180.00'),
-                    ('2020-05-01', '2020-05-31', '180.00'),
-                    ('2020-06-01', '2020-06-30', '180.00'),
-                    ('2020-07-01', '2020-07-31', '180.00'),
-                    ('2020-08-01', '2020-08-31', '180.00'),
-                    ('2020-09-01', '2020-09-30', '180.00'),
-                    ('2020-10-01', '2020-10-31', '180.00'),
-                    ('2020-11-01', '2020-11-30', '180.00'),
-                    ('2020-12-01', '2020-12-31', '180.00'),
+                    ('2020-01-01', '2020-01-31', '190.00'),
+                    ('2020-02-01', '2020-02-29', '190.00'),
+                    ('2020-03-01', '2020-03-31', '190.00'),
+                    ('2020-04-01', '2020-04-30', '190.00'),
+                    ('2020-05-01', '2020-05-31', '190.00'),
+                    ('2020-06-01', '2020-06-30', '190.00'),
+                    ('2020-07-01', '2020-07-31', '190.00'),
+                    ('2020-08-01', '2020-08-31', '190.00'),
+                    ('2020-09-01', '2020-09-30', '190.00'),
+                    ('2020-10-01', '2020-10-31', '190.00'),
+                    ('2020-11-01', '2020-11-30', '190.00'),
+                    ('2020-12-01', '2020-12-31', '190.00'),
                     ])
 
         data_dict = copy.deepcopy(data_ref)
@@ -377,25 +382,26 @@ class ModuleTestCase(test_framework.CoogTestCase):
 
         # Quarterly billing
         self.assertEqual(len(output[0]['schedule']), 4)
+        # Coverage A is 10 per month, 1 covered = 120
         # Coverage B is 100 per month, 12 months + 2 covereds = 2400
-        # DISCOUNT_BET is 10% : so 2400 - 240 = 2160
-        self.assertEqual(output[0]['premium']['total'], '2160.00')
-        self.assertEqual(output[0]['premium']['total_premium'], '2400.00')
+        # DISCOUNT_BET is 10% : so 2400 - 240  + 120 = 2280
+        self.assertEqual(output[0]['premium']['total'], '2280.00')
+        self.assertEqual(output[0]['premium']['total_premium'], '2520.00')
         self.assertEqual([(x['start'], x['end'], x['total'])
                     for x in output[0]['schedule']],
                 [
                     # (BET 300 * 2 covered)
                     #  +  (DISCOUNT_BET discount -30 * 2 covered)
-                    ('2020-01-01', '2020-03-31', '540.00'),
-                    ('2020-04-01', '2020-06-30', '540.00'),
-                    ('2020-07-01', '2020-09-30', '540.00'),
-                    ('2020-10-01', '2020-12-31', '540.00'),
+                    ('2020-01-01', '2020-03-31', '570.00'),
+                    ('2020-04-01', '2020-06-30', '570.00'),
+                    ('2020-07-01', '2020-09-30', '570.00'),
+                    ('2020-10-01', '2020-12-31', '570.00'),
                     ])
 
         expected_cov_premium = {
-            "total": "1080.00",
+            "total": "1200.00",
             "total_fee": "0",
-            "total_premium": "1200.00",
+            "total_premium": "1320.00",
             "total_tax": "0",
             "discounts": [
                 {
@@ -410,9 +416,9 @@ class ModuleTestCase(test_framework.CoogTestCase):
             expected_cov_premium)
 
         expected_contract_premium = {
-            "total": "2160.00",
+            "total": "2280.00",
             "total_fee": "0",
-            "total_premium": "2400.00",
+            "total_premium": "2520.00",
             "total_tax": "0",
             "discounts": [{
                 "code": "DISCOUNT_BET",

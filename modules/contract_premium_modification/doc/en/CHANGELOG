@@ -1,3 +1,4 @@
+* BUG#14014 Crash in simulate API in case no discounts is applied
 * FEA#13843 Add commercial discounts informations in simulate API
 * FEA#13410 Add automatic and time-bound commercial discounts
 * FEA#12989 Manage discounts in subscription API

@@ -1,3 +1,4 @@
+* BUG#14014 Erreur lors de la simulation en absence de discounts
 * FEA#13843 Ajout des informations de réductions commerciales dans l'API simulate
 * FEA#13410 Ajout des réductions commerciales automatiques et limitées dans le temps
 * FEA#12989 Ajout des réductions commerciale à l'API de souscription

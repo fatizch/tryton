@@ -139,7 +139,7 @@ class APIContract(metaclass=PoolMeta):
             if key == 'discounts':
                 premium['total_discounts'] = amount_for_api(
                     sum(discount['amount']
-                        for discount in premium['discounts']))
+                        for discount in premium['discounts']) or Decimal(0))
                 premium['discounts'] = [{
                         'code': discount['code'],
                         'amount': amount_for_api(discount['amount']),
