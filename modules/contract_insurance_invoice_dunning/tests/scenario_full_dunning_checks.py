@@ -199,6 +199,8 @@ direct_debit_contract.company = company
 direct_debit_contract.subscriber = direct_debit_subscriber
 direct_debit_contract.start_date = today_plus(-31)
 direct_debit_contract.product = Product(product.id)
+direct_debit_contract.billing_informations[-1].billing_mode = \
+    product.billing_rules[-1].billing_modes[-1]
 direct_debit_contract.billing_informations[-1].direct_debit_day = 15
 direct_debit_contract.billing_informations[-1].direct_debit_account = Account(
     subscriber_account.id)
