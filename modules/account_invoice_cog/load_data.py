@@ -1,5 +1,6 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+from trytond.i18n import gettext
 from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
 
@@ -26,16 +27,16 @@ class FiscalYearSetWizard(metaclass=PoolMeta):
         in_credit_note_sequence = Sequence(**{
                 'company': company,
                 'name': '%s - %s %s' % (
-                    cls.translate('in_credit_note_sequence'),
-                    cls.translate('fiscal_year'), start_date.year),
+                    gettext('in_credit_note_sequence'),
+                    gettext('fiscal_year'), start_date.year),
                 'code': 'account.invoice',
                 'prefix': str(start_date.year),
                 'padding': 9,
                 })
         in_invoice_sequence = Sequence(**{
                 'company': company,
-                'name': '%s - %s %s' % (cls.translate('in_invoice_sequence'),
-                    cls.translate('fiscal_year'), start_date.year),
+                'name': '%s - %s %s' % (gettext('in_invoice_sequence'),
+                    gettext('fiscal_year'), start_date.year),
                 'code': 'account.invoice',
                 'prefix': str(start_date.year),
                 'padding': 9,
@@ -43,16 +44,16 @@ class FiscalYearSetWizard(metaclass=PoolMeta):
         out_credit_note_sequence = Sequence(**{
                 'company': company,
                 'name': '%s - %s %s' % (
-                    cls.translate('out_credit_note_sequence'),
-                    cls.translate('fiscal_year'), start_date.year),
+                    gettext('out_credit_note_sequence'),
+                    gettext('fiscal_year'), start_date.year),
                 'code': 'account.invoice',
                 'prefix': str(start_date.year),
                 'padding': 9,
                 })
         out_invoice_sequence = Sequence(**{
                 'company': company,
-                'name': '%s - %s %s' % (cls.translate('out_invoice_sequence'),
-                    cls.translate('Fiscal Year'), start_date.year),
+                'name': '%s - %s %s' % (gettext('out_invoice_sequence'),
+                    gettext('Fiscal Year'), start_date.year),
                 'code': 'account.invoice',
                 'prefix': str(start_date.year),
                 'padding': 9,

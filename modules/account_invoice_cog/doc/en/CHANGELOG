@@ -1,3 +1,5 @@
+* BUG#14015 Fix fiscal year creation wizard
+
 Version 2.6 - 2019-10-11
 * BUG#12907 Fix error when changing payment terms
 
