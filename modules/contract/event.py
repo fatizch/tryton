@@ -80,11 +80,11 @@ class EventTypeAction(metaclass=PoolMeta):
             self).get_filtering_objects_from_event_object(
                 event_object) + self.get_contracts_from_object(event_object)
 
-    def get_templates_list(self, filtering_object):
+    @classmethod
+    def get_templates_list(cls, filtering_object):
         if filtering_object.__name__ == 'contract':
             return filtering_object.product.report_templates
-        return super(EventTypeAction, self).get_templates_list(
-            filtering_object)
+        return super().get_templates_list(filtering_object)
 
     def create_contract_notification(self, contracts):
         notifications = []

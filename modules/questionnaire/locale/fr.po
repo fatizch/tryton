@@ -222,6 +222,10 @@ msgctxt "field:questionnaire,rec_name:"
 msgid "Record Name"
 msgstr "Nom"
 
+msgctxt "field:questionnaire,report_templates:"
+msgid "Report Templates"
+msgstr "Modèles de courrier"
+
 msgctxt "field:questionnaire,sequence:"
 msgid "Sequence"
 msgstr "Séquence"
@@ -739,6 +743,10 @@ msgctxt "model:questionnaire-offered.product,name:"
 msgid "Product to Questionnaire Rule Relation"
 msgstr "Relation entre questionnaire et produit"
 
+msgctxt "model:questionnaire-report.template,name:"
+msgid "Report Template to Questionnaire Relation"
+msgstr "Relation de Template de Rapports vers Questionnaire"
+
 msgctxt "model:questionnaire.part,name:"
 msgid "Questionnaire Part"
 msgstr "Élément de questionnaire"
@@ -786,6 +794,10 @@ msgstr "Administration"
 msgctxt "view:questionnaire:"
 msgid "Products"
 msgstr "Produits"
+
+msgctxt "view:questionnaire:"
+msgid "Report Templates"
+msgstr "Modèles de courrier"
 
 msgctxt "wizard_button:questionnaire.run,answer,check_proposition:"
 msgid "Next"

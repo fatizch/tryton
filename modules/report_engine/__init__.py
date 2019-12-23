@@ -11,6 +11,7 @@ from . import batch
 from . import res
 from . import party
 from . import wizard
+from . import api
 
 
 def register():
@@ -52,3 +53,7 @@ def register():
         event.TreatReportProductionRequest,
         wizard.PrintUnboundReport,
         module='report_engine', type_='wizard')
+
+    Pool.register(
+        api.APIReport,
+        module='report_engine', type_='model', depends=['api'])

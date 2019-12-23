@@ -1,11 +1,14 @@
 # -*- coding:utf-8 -*-
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
-from dateutil.relativedelta import relativedelta
 import copy
+import zipfile
+import io
 import datetime
 import unittest
+from pathlib import Path
 from decimal import Decimal
+from dateutil.relativedelta import relativedelta
 
 import trytond.tests.test_tryton
 
@@ -714,11 +717,11 @@ class ModuleTestCase(test_framework.CoogTestCase):
             end_reason.item_descs = [item_desc]
             end_reason.save()
 
-            return party, party1, party2, party3,\
-                   contract, coverage_a, end_reason
+            return party, party1, party2, party3, \
+                contract, coverage_a, end_reason
 
-        party, party1, party2, party3,\
-             contract, coverage_a, end_reason = _test_prepare_data()
+        party, party1, party2, party3, contract, \
+            coverage_a, end_reason = _test_prepare_data()
 
         def test_method_raises_an_error(func):
             """
@@ -1857,7 +1860,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
         'contract_insurance.test0012_testContractCreation',
         'contract_insurance.test0001_testPersonCreation',
         )
-    def test001_test_overlapping_options(self):
+    def test0300_test_overlapping_options(self):
         contract = self.Contract.search([])[0]
         coverage_a, = self.Coverage.search([('code', '=', 'ALP')])
         coverage_b, = self.Coverage.search([('code', '=', 'BET')])
@@ -1936,6 +1939,52 @@ class ModuleTestCase(test_framework.CoogTestCase):
         coverage_a.save()
         current_contract_1.contract_number = '1234'
         current_contract_1.activate_contract()
+
+    @test_framework.prepare_test(
+        'report_engine.test0003_create_report_template',
+        'contract_insurance.test0012_testContractCreation')
+    def test0400_generate_documents_api(self):
+        pool = Pool()
+        ReportTemplate = pool.get('report.template')
+        APIReport = pool.get('api.report')
+        ReportTemplate = pool.get('report.template')
+        Attachment = pool.get('ir.attachment')
+        template, = ReportTemplate.search([
+                ('code', '=', 'report_template_for_test')])
+
+        version = template.versions[0]
+        with open(Path(__file__).parent / 'basic_contract_odt_template.fodt',
+                'rb') as f:
+            version.data = f.read()
+        version.save()
+
+        contract, = self.Contract.search([])
+        number = contract.contract_number
+        self.assertTrue(bool(number))
+        product = contract.product
+        product.report_templates += (template,)
+        product.save()
+
+        input_data = {
+            'records': [
+                {
+                    'model': 'contract',
+                    'id': contract.id,
+                }
+            ],
+            'documents': [{'code': 'tester'}],
+        }
+
+        result = APIReport.generate_documents(input_data,
+            {'_debug_server': True})
+        self.assertEqual(result, {'documents': [{'edm_id': '1'}]})
+
+        attachment, = Attachment.search([('resource', '=', str(contract))])
+        data = io.BytesIO()
+        data.write(attachment.data)
+        with zipfile.ZipFile(data, mode='r') as z:
+            content = z.read('content.xml')
+        self.assertTrue(bytes(number, 'utf8') in content)
 
 
 def suite():

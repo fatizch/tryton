@@ -15,6 +15,7 @@ def register():
         questionnaire.Questionnaire,
         questionnaire.QuestionnairePart,
         questionnaire.ProductQuestionnaireRuleRelation,
+        questionnaire.ProductQuestionnaireReportTemplateRelation,
         questionnaire.QuestionnaireExtraDataRelation,
         extra_data.ExtraData,
         rule_engine.RuleEngine,

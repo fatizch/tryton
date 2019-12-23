@@ -1,3 +1,4 @@
+* FEA#13775 Ajout d'un API technique pour la génération de documents
 * FEA#13591 Ajout de paramétrage sur les actions par type d'événement pour filtrer sur les objets cibles et non pas d'événement
 * BUG#13140 Correction d'un crash lors de la génération de rapports ayant une pièce jointe avec formattage pour la GED interne
 

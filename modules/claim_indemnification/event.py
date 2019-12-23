@@ -13,9 +13,9 @@ __all__ = [
 class EventTypeAction(metaclass=PoolMeta):
     __name__ = 'event.type.action'
 
-    def get_templates_list(self, filtering_object):
-        res = super(EventTypeAction, self).get_templates_list(
-            filtering_object)
+    @classmethod
+    def get_templates_list(cls, filtering_object):
+        res = super().get_templates_list(filtering_object)
         if filtering_object.__name__ == 'account.invoice':
             return res + Pool().get('report.template').search(
                 [('on_model.model', '=', 'claim')])

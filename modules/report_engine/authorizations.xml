@@ -33,4 +33,14 @@ this repository contains the full copyright notices and license terms. -->
             <field name="perm_delete" eval="False"/>
         </record>
     </data>
+    <data depends="api">
+        <record model="ir.api.access" id="generate_documents_default_access">
+            <field name="api">api.report.generate_documents</field>
+            <field name="group" ref="api.group_default_api"/>
+        </record>
+        <record model="ir.api.access" id="get_document_default_access">
+            <field name="api">api.report.get_document</field>
+            <field name="group" ref="api.group_default_api"/>
+        </record>
+    </data>
 </tryton>

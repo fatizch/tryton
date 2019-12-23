@@ -48,18 +48,18 @@ class EventTypeAction(metaclass=PoolMeta):
         return [x.id for x in pool.get('report.template').search(
             [('on_model', '=', model_id)])]
 
-    def get_templates_list(self, filtering_object):
+    @classmethod
+    def get_templates_list(cls, filtering_object):
         if filtering_object.__name__ == 'account.invoice':
             ReportInvoiceDef = Pool().get('invoice.report.definition')
             definitions = ReportInvoiceDef.get_invoice_report_definition(
                 parties=None, report_templates=None,
                 business_kinds=[filtering_object.business_kind])
             if not definitions:
-                return super(EventTypeAction, self).get_templates_list(
-                    filtering_object)
+                return super().get_templates_list(filtering_object)
             return [x.report_template for x in definitions
                 if not x.party or x.party == filtering_object.party]
-        return super(EventTypeAction, self).get_templates_list(filtering_object)
+        return super().get_templates_list(filtering_object)
 
     def execute(self, objects, event_code, description=None, **kwargs):
         if self.action != 'generate_invoice_commission_doc':

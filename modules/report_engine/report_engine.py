@@ -551,6 +551,8 @@ class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
         for report in reports:
             attachments.append(self._create_attachment_from_report(report))
         Attachment.save(attachments)
+        for report, attachment in zip(reports, attachments):
+            report['edm_id'] = str(attachment.id)
         return attachments
 
     def _generate_report(self, objects, context_):
@@ -735,13 +737,17 @@ class ReportData(object):
         raise AttributeError
 
     def instantiate(self, data):
-        Report = Pool().get('report.generate', type='report')
+        pool = Pool()
+        Report = pool.get('report.generate', type='report')
+        API = pool.get('api')
         if isinstance(data, list):
             return [self.instantiate(x) for x in data]
         elif isinstance(data, dict) and '__name__' in data:
-            assert set(data.keys()) == {'__name__', 'id'}
+            model_name = data.pop('__name__')
+            instance = API.instantiate_code_object(model_name,
+                data)
             return Report._get_records(
-                [data['id']], data['__name__'], {})[0]
+                [instance.id], model_name, {})[0]
         elif isinstance(data, dict):
             return ReportData(data)
         else:

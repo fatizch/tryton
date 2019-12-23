@@ -163,6 +163,23 @@ DOMAIN_SCHEMA = {
     'additionalProperties': False,
     }
 
+TECHNICAL_RECORD_SCHEMA = {
+    'type': 'object',
+    'additionalProperties': False,
+    'properties': {
+        'model': {'type': 'string'},
+        'id': {'type': 'integer'},
+        },
+    'required': ['model', 'id'],
+    }
+
+TECHNICAL_RECORD_ARRAY_SCHEMA = {
+    'type': 'array',
+    'items': TECHNICAL_RECORD_SCHEMA,
+    'minItems': 1,
+    'additionalItems': False,
+    }
+
 IDENTIFIER_KINDS = [
     ('generic', 'Generic'),
     ('google', 'Google'),

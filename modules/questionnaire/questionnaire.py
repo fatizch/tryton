@@ -19,6 +19,7 @@ __all__ = [
     'QuestionnairePart',
     'ProductQuestionnaireRuleRelation',
     'QuestionnaireExtraDataRelation',
+    'ProductQuestionnaireReportTemplateRelation',
     'QuestionnaireDistribution',
     ]
 
@@ -39,6 +40,9 @@ class Questionnaire(model.CodedMixin, model.CoogView, model.SequenceMixin,
     description = fields.Text('Description',
         help='A short text that can be used to describe the purpose of this '
         'questionnaire')
+    report_templates = fields.Many2Many('questionnaire-report.template',
+        'questionnaire', 'report', 'Report Templates',
+        domain=[('on_model', '=', None)])
 
     @classmethod
     def _export_light(cls):
@@ -197,6 +201,16 @@ class ProductQuestionnaireRuleRelation(model.CoogSQL):
     questionnaire = fields.Many2One('questionnaire', 'Questionnaire',
         ondelete='CASCADE', required=True, select=True)
     product = fields.Many2One('offered.product', 'Product', ondelete='RESTRICT',
+        required=True, select=True)
+
+
+class ProductQuestionnaireReportTemplateRelation(model.CoogSQL):
+    'Report Template to Questionnaire Relation'
+    __name__ = 'questionnaire-report.template'
+
+    questionnaire = fields.Many2One('questionnaire', 'Questionnaire',
+        ondelete='CASCADE', required=True, select=True)
+    report = fields.Many2One('report.template', 'Report', ondelete='RESTRICT',
         required=True, select=True)
 
 

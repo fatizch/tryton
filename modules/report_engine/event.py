@@ -151,7 +151,8 @@ class EventTypeAction(metaclass=PoolMeta):
             if template.matches_pyson(filtering_object)]
         return all(res) if res else False
 
-    def get_templates_list(self, filtering_object):
+    @classmethod
+    def get_templates_list(cls, filtering_object):
         '''To allow filtering of report templates by event, this method
         should be overloaded to return the list of report_templates associated
         with a filtering_object.'''

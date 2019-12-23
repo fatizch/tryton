@@ -17,6 +17,9 @@ this repository contains the full copyright notices and license terms. -->
         <page string="Products" id="products">
             <field name="products" colspan="4"/>
         </page>
+        <page string="Report Templates" id="report_templates">
+            <field name="report_templates" colspan="4"/>
+        </page>
         <page string="Administration" id="admin">
             <label name="icon"/>
             <field name="icon"/>
