@@ -755,9 +755,10 @@ class ModuleTestCase(test_framework.CoogTestCase):
                 wizard.select_date.date = at_date
                 wizard.select_date.party = john
                 wizard.select_date.currency = currency
+                wizard.select_date.and_future_loans = True
                 wizard._execute('insured_outstanding_loan_balance_view')
                 lines = wizard.get_insured_outstanding_loan_balances(
-                    john, at_date, currency)
+                    john, at_date, currency, True)
                 return lines
 
         test_date = base_date - datetime.timedelta(weeks=20)

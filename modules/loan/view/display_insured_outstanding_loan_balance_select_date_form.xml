@@ -5,6 +5,9 @@ this repository contains the full copyright notices and license terms. -->
     <label name="date"/>
     <field name="date"/>
     <newline/>
+    <label name="and_future_loans"/>
+    <field name="and_future_loans"/>
+    <newline/>
     <label name="currency"/>
     <field name="currency" widget="selection" xexpand="0"/>
     <field name="possible_currencies" invisible="1"/>

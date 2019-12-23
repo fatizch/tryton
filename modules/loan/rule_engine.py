@@ -60,19 +60,22 @@ class RuleEngineRuntime(metaclass=PoolMeta):
 
     @classmethod
     @check_args('loan')
-    def _re_get_outstanding_loan_balance(cls, args, date=None):
+    def _re_get_outstanding_loan_balance(cls, args, date=None,
+            and_future_loans=False):
         if not date:
             date = args['date']
-        return args['loan'].get_outstanding_loan_balance(at_date=date)
+        return args['loan'].get_outstanding_loan_balance(at_date=date,
+            and_future_loans=and_future_loans)
 
     @classmethod
     @check_args('contract', 'loan')
-    def _re_get_outstanding_loan_balance_previous_anniversary_date(cls, args):
+    def _re_get_outstanding_loan_balance_previous_anniversary_date(cls, args,
+            and_future_loans=False):
         calculation_date = cls._re_calculation_date(args)
         start_date = args['contract'].initial_start_date
         return args['loan'].get_outstanding_loan_balance(
             at_date=coog_date.get_latest_anniversary(start_date,
-                calculation_date))
+                calculation_date), and_future_loans=and_future_loans)
 
     @classmethod
     @check_args('share')
@@ -109,24 +112,30 @@ class RuleEngineRuntime(metaclass=PoolMeta):
 
     @classmethod
     @check_args('option')
-    def _re_get_insured_outstanding_loan_balance(cls, args, date=None):
+    def _re_get_insured_outstanding_loan_balance(cls, args, date=None,
+            and_future_loans=False):
         if not date:
             date = args['date']
         option = args['option']
-        return option.get_insured_outstanding_loan_balance(date)
+        return option.get_insured_outstanding_loan_balance(date,
+            and_future_loans=and_future_loans)
 
     @classmethod
     @check_args('option')
-    def _re_get_option_loan_balance(cls, args, date=None):
+    def _re_get_option_loan_balance(cls, args, date=None,
+            and_future_loans=False):
         if not date:
             date = args['date']
         option = args['option']
-        return option.get_option_loan_balance(date)
+        return option.get_option_loan_balance(date,
+            and_future_loans=and_future_loans)
 
     @classmethod
     @check_args('option')
-    def _re_get_total_loan_balance(cls, args, date=None):
+    def _re_get_total_loan_balance(cls, args, date=None,
+            and_future_loans=False):
         if not date:
             date = args['date']
         option = args['option']
-        return option.get_total_loan_balance(date)
+        return option.get_total_loan_balance(date,
+            and_future_loans=and_future_loans)

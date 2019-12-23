@@ -121,7 +121,7 @@ this repository contains the full copyright notices and license terms. -->
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_get_outstanding_loan_balance</field>
-            <field name="fct_args">date</field>
+            <field name="fct_args">date, inclure_les_futurs_prets_non_encore_debloques</field>
             <field name="long_description">Retourne le montant du capital restant
  dû à la date passée en paramètre. Si aucune date n'est passée en paramètre, la date
  d'exécution de la règle est utilisée</field>
@@ -134,6 +134,7 @@ this repository contains the full copyright notices and license terms. -->
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_get_outstanding_loan_balance_previous_anniversary_date</field>
+            <field name="fct_args">inclure_les_futurs_prets_non_encore_debloques</field>
             <field name="long_description">Retourne le montant du capital restant
  dû à la dernière date anniversaire.</field>
             <field name="parent" ref="pret"/>
@@ -182,7 +183,7 @@ this repository contains the full copyright notices and license terms. -->
             <field name="name">_re_get_insured_outstanding_loan_balance</field>
             <field name="long_description">Montant total assuré pour ce type
  de garantie et chez cet assureur</field>
-            <field name="fct_args">date</field>
+            <field name="fct_args">date, inclure_les_futurs_prets_non_encore_debloques</field>
             <field name="parent" ref="offered_insurance.dossier_garantie"/>
         </record>
         <record model="rule_engine.function" id="encours_garantie">
@@ -194,7 +195,7 @@ this repository contains the full copyright notices and license terms. -->
             <field name="name">_re_get_option_loan_balance</field>
             <field name="long_description">Montant de l'encours des prêts
  rattachés à cette garantie</field>
-            <field name="fct_args">date</field>
+            <field name="fct_args">date, inclure_les_futurs_prets_non_encore_debloques</field>
             <field name="parent" ref="offered_insurance.dossier_garantie"/>
         </record>
         <record model="rule_engine.function" id="encours_total_plus_garantie">
@@ -207,7 +208,7 @@ this repository contains the full copyright notices and license terms. -->
             <field name="long_description">Montant total de l'encours de
  l'ensemble des prêts définis dans le système ainsi que ceux définis sur cette
  garantie</field>
-            <field name="fct_args">date</field>
+            <field name="fct_args">date, inclure_les_futurs_prets_non_encore_debloques</field>
             <field name="parent" ref="offered_insurance.dossier_garantie"/>
         </record>
     </data>

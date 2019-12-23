@@ -700,7 +700,10 @@ class Loan(Workflow, model.CoogSQL, model.CoogView, with_extra_data(['loan'])):
         insert_idx = bisect.bisect_right(bisect_list, at_date)
         return self.payments[insert_idx - 1] if insert_idx else None
 
-    def get_outstanding_loan_balance(self, name=None, at_date=None):
+    def get_outstanding_loan_balance(self, name=None, at_date=None,
+            and_future_loans=False):
+        if at_date and and_future_loans and at_date < self.first_payment_date:
+            return self.amount
         payment = self.get_payment(at_date)
         return payment.outstanding_balance if payment else None
 

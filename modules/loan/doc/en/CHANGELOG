@@ -1,3 +1,4 @@
+* FEA#14008 Include future loans in outstanding amount
 * OTH#00000 Update prices after loan underwriting
 * OTH#0000 Add variable rate kind on loan
 * BUG#13201 Modify coverage eligibility error on a loan

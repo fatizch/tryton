@@ -390,32 +390,37 @@ class ContractOption(metaclass=PoolMeta):
     def check_at_least_one_loan(self):
         return True if self.loan_shares else False
 
-    def get_insured_outstanding_loan_balance(self, date):
+    def get_insured_outstanding_loan_balance(self, date,
+            and_future_loans=False):
         if not self.is_loan or not self.covered_element.party:
             return Decimal(0)
         party = self.covered_element.party
         return party.get_insured_outstanding_loan_balances(date,
             self.coverage.currency, self.coverage.get_insurer(date),
-            self.coverage.insurance_kind
+            self.coverage.insurance_kind,
+            and_future_loans=and_future_loans
             )[self.coverage.get_insurer(date).id][
                 self.coverage.insurance_kind][0]
 
-    def get_option_loan_balance(self, date):
+    def get_option_loan_balance(self, date, and_future_loans=False):
         # Total loan insured on this option
-        return (sum([l.get_outstanding_loan_balance(date)
+        return (sum([l.get_outstanding_loan_balance(date,
+                and_future_loans=and_future_loans)
                     for l in self.loan_shares])
             if self.status not in ['declined', 'void'] else Decimal(0))
 
-    def get_total_loan_balance(self, date):
+    def get_total_loan_balance(self, date, and_future_loans=False):
         # Returns total amount on current option and other loans
-        outstanding = self.get_insured_outstanding_loan_balance(date)
+        outstanding = self.get_insured_outstanding_loan_balance(date,
+            and_future_loans=and_future_loans)
         if self.status == 'active' and self.parent_contract.status == 'active':
             # When contract and option is active
             # get_insured_outstanding_loan_balance
             # returns also current option outstanding loans amount
             return outstanding
         else:
-            return outstanding + self.get_option_loan_balance(date)
+            return outstanding + self.get_option_loan_balance(date,
+                and_future_loans=and_future_loans)
 
     def check_eligibility_loan(self):
         exec_context = {'date': self.start_date}
@@ -666,11 +671,13 @@ class LoanShare(model.CoogSQL, model.CoogView, model.ExpandTreeMixin):
                 self.contract else None):
             return '%s (%s%%)' % (self.loan.rec_name, self.share * 100)
 
-    def get_outstanding_loan_balance(self, at_date=None):
+    def get_outstanding_loan_balance(self, at_date=None,
+            and_future_loans=False):
         if not at_date:
             at_date = self.loan.first_payment_date
         return self.loan.currency.round(self.share * (
-                self.loan.get_outstanding_loan_balance(at_date=at_date) or 0))
+                self.loan.get_outstanding_loan_balance(at_date=at_date,
+                    and_future_loans=and_future_loans) or 0))
 
     def _expand_tree(self, name):
         return True

@@ -1,3 +1,4 @@
+* FEA#14008 Inclure le montant total du prêt dans le calcul de l'encours quand le prêt n'est pas encore débloqué. Géré via une option dans le moteur de règle pour ne pas changer le comportement existant.
 * OTH#00000 Mise a jour des primes après une analyse de risque emprunteur
 * OTH#0000 Ajout du taux variable dans les types de prêt
 * BUG#13201 Modifier le message d'erreur d'éligibilité d'une garantie d'un prêt

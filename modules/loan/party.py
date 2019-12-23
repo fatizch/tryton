@@ -96,7 +96,7 @@ class Party(metaclass=PoolMeta):
             self.lender_role = [Lender()]
 
     def get_insured_outstanding_loan_balances(self, date, currency,
-            insurer_role=None, ins_kind=None):
+            insurer_role=None, ins_kind=None, and_future_loans=False):
         cursor = Transaction().connection.cursor()
         pool = Pool()
         Loan = pool.get('loan')
@@ -155,7 +155,8 @@ class Party(metaclass=PoolMeta):
                 cursor.fetchall()):
             share = LoanShare(share_id)
             aggregate_amounts[insurer][insurance_kind][0] += \
-                share.get_outstanding_loan_balance(date)
+                share.get_outstanding_loan_balance(date,
+                    and_future_loans=and_future_loans)
             aggregate_amounts[insurer][insurance_kind][1] = Coverage(
                 coverage_id).insurance_kind_string
         return aggregate_amounts
@@ -304,12 +305,14 @@ class DisplayInsuredOutstandingLoanBalance(Wizard):
             'party': selected_party.id,
             'possible_currencies': currencies,
             'currency': default_currency,
+            'and_future_loans': True,
             }
 
-    def get_insured_outstanding_loan_balances(self, party, date, currency):
+    def get_insured_outstanding_loan_balances(self, party, date, currency,
+            and_future_loans):
         Insurer = Pool().get('insurer')
         aggregate_amounts = party.get_insured_outstanding_loan_balances(date,
-            currency)
+            currency, and_future_loans=and_future_loans)
         res = []
         for insurer_id, values in aggregate_amounts.items():
             insurer = Insurer(insurer_id)
@@ -348,7 +351,7 @@ class DisplayInsuredOutstandingLoanBalance(Wizard):
         currency = self.select_date.currency
         return {
             'insurers': self.get_insured_outstanding_loan_balances(
-                party, date, currency),
+                party, date, currency, self.select_date.and_future_loans),
             'date': self.select_date.date,
             }
 
@@ -392,6 +395,9 @@ class InsuredOutstandingLoanBalanceSelectDate(model.CoogView):
             domain=[('id', 'in', Eval('possible_currencies'))])
     possible_currencies = fields.Many2Many('currency.currency',
              None, None, 'Possible Currencies')
+    and_future_loans = fields.Boolean('Include future loans',
+        help='Include total loan amount when funds release date is in the '
+        'future')
 
 
 class PartyReplace(metaclass=PoolMeta):
