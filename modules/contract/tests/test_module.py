@@ -1166,6 +1166,79 @@ class ModuleTestCase(test_framework.CoogTestCase):
                         },
                     }])
 
+        # Now, test multiselection extra data
+
+        Product = pool.get('offered.product')
+        Coverage = pool.get('offered.option.description')
+        aaa, = Product.search([('code', '=', 'AAA')])
+        alpha, = Coverage.search([('code', '=', 'ALP')])
+
+        option_multi_extra = self.ExtraData()
+        option_multi_extra.name = 'my_choices'
+        option_multi_extra.string = 'Contract 2'
+        option_multi_extra.kind = 'option'
+        option_multi_extra.type_ = 'multiselection'
+        option_multi_extra.selection = 'a: A\nb:B\nc:C'
+        option_multi_extra.save()
+
+        alpha.extra_data_def = [option_multi_extra]
+        alpha.save()
+
+        aaa.coverages = [alpha]
+        aaa.save()
+
+        multi_selection_data = {
+            'parties': [
+                {
+                    'ref': '1',
+                    'is_person': True,
+                    'name': 'Doe',
+                    'first_name': 'Father',
+                    'birth_date': '1980-01-20',
+                    'gender': 'male',
+                    'addresses': [
+                        {
+                            'street': 'Somewhere along the street',
+                            'zip': '75002',
+                            'city': 'Paris',
+                            'country': 'fr',
+                            },
+                        ],
+                    },
+                ],
+            'contracts': [
+                {
+                    'ref': '1',
+                    'product': {'code': 'AAA'},
+                    'subscriber': {'ref': '1'},
+                    'extra_data': {
+                        'contract_1': '16.10',
+                        'contract_2': False,
+                        'contract_3': '2',
+                        },
+                    'coverages': [
+                        {
+                            'coverage': {'code': 'ALP'},
+                            'extra_data': {
+                                'my_choices': ['a', 'b'],
+                                },
+                            },
+                        ],
+                    },
+                ],
+            'options': {
+                'activate': True,
+                },
+            }
+
+        input_ = copy.deepcopy(multi_selection_data)
+        result = ContractAPI.subscribe_contracts(input_,
+            {'_debug_server': True})
+        Contract = pool.get('contract')
+        res_contract = Contract(result['contracts'][0]['id'])
+        self.assertEqual(res_contract.options[0].current_extra_data,
+            {'my_choices': ['a', 'b']})
+
     @test_framework.prepare_test(
         'offered.test0030_testProductCoverageRelation',
         'contract.test0002_testCountryCreation',
@@ -1236,6 +1309,10 @@ class ModuleTestCase(test_framework.CoogTestCase):
         self.assertEqual(simulation[0]['ref'], '1')
         self.assertEqual(simulation[0]['product']['code'], 'AAA')
         self.assertEqual(len(simulation[0]['coverages']), 2)
+
+    # CAREFUL: The test above has commited transactions
+    # The test addeded below this one will have all the configuration
+    # (coverages, product, etc) already in DB
 
     def test0200_test_api_rule_tree_elements(self):
         APIRuleRuntime = Pool().get('api.rule_runtime')

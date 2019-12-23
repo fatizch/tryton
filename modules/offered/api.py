@@ -18,7 +18,7 @@ EXTRA_DATA_VALUES_SCHEMA = {
     'additionalProperties': False,
     'patternProperties': {
         r'^[a-zA-Z0-9_\-]*$': {
-            'type': ['boolean', 'integer', 'string'],
+            'type': ['boolean', 'integer', 'string', 'array'],
             },
         },
     'additionalProperties': False,
@@ -400,6 +400,32 @@ class APICore(metaclass=PoolMeta):
                             })
                     continue
                 result[code] = value
+            elif structure['technical_kind'] == 'multiselection':
+                if not isinstance(value, list):
+                    API.add_input_error({
+                            'type': 'extra_data_type',
+                            'data': {
+                                'extra_data': code,
+                                'expected_type': 'array',
+                                'given_type': str(type(value)),
+                                },
+                            })
+                    continue
+                if any(v not in [x[0] for x in structure['selection']]
+                        for v in value):
+                    API.add_input_error({
+                            'type': 'extra_data_conversion',
+                            'data': {
+                                'extra_data': code,
+                                'expected_format': [x[0] for x in
+                                    structure['selection']],
+                                'given_value': value,
+                                },
+                            })
+                    continue
+                result[code] = value
+            else:
+                raise NotImplementedError
         return result
 
 

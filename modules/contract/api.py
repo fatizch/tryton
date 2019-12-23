@@ -167,7 +167,7 @@ class APIContract(APIMixin):
             subscriber)
         '''
         if (isinstance(contract_data['subscriber'], dict) and
-                    'ref' in contract_data['subscriber']):
+                'ref' in contract_data['subscriber']):
             contract_data['subscriber'] = created['parties'][
                 contract_data['subscriber']['ref']]
 
