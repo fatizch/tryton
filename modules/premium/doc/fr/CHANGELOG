@@ -1,5 +1,7 @@
+* FEA#12197 Nouvelle possibilité dans les règles de calcul des dates de primes pour pouvoir se synchroniser mensuellement par rapport à une date paramétrée
 * BUG#12444 La Règle "Date de prime" a maintenant le type Booléen associé
 * FEA#12906 Afficher le nom de la personne couverte lorsque cela est possible dans la vue des primes dans le champ nom
+
 Version 2.6 - 2019-10-11
 * BUG#12448 Générer une erreur si deux tarifs avec des montants non nulls sont sauvegardés pour le même élément facturé
 * BUG#12463 Correction du calcul des primes lorsque sur une garantie une règle de fin est définie et que sur le produit une règle de renouvellement est paramétrée.
@@ -7,7 +9,7 @@ Version 2.6 - 2019-10-11
 * OTH#00000 Itération sur les développements de la fonctionnalité des règles de taxe par subdivision (#12265)
 * FEA#12345 Afficher en gras la somme des tarifs
 * FEA#12294 Règle d'éligibilité sur les patterns de date de calcul
-* FEA#12197 Nouvelle possibilité dans les règles de calcul des dates de primes de pouvoir se synchroniser mensuellement par rapport à la date initiale du contrat. Peut-être utile quand une seule prime dans l'année a un montant différent.
+* FEA#12197 Nouvelle possibilité dans les règles de calcul des dates de primes de pouvoir se synchroniser mensuellement par rapport à la date initiale du contrat
 
 Version 2.4 - 2019-04-12
 * BUG#10625 Calcul des dates de requittancement sur la base de la date d'effet initiale du contrat et pas de la date de début du terme courant

@@ -134,6 +134,9 @@ class ProductPremiumDate(
         elif self.type_ == 'monthly_on_start_date':
             monthly_dates = []
             cur_date = contract.initial_start_date
+            if self.custom_date:
+                cur_date = coog_date.get_next_date_in_sync_with(cur_date,
+                    self.custom_date.day)
             while cur_date < max_date:
                 monthly_dates.append(datetime.datetime.combine(
                         cur_date, datetime.time.min))

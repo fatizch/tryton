@@ -6,7 +6,7 @@ from trytond.pool import Pool
 from trytond.transaction import Transaction
 from trytond.pyson import Eval, If
 
-from trytond.modules.coog_core import model, fields, coog_string
+from trytond.modules.coog_core import model, fields
 from trytond.modules.currency_cog import ModelCurrency
 
 FEE_FREQUENCIES = [
