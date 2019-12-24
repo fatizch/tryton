@@ -1,0 +1,40 @@
+#!/bin/bash
+# vim: set ft=sh:
+# This is the exact same script as payment
+# (modules/account_payment_sepa_cog/chain/payment) taking in account
+# working days, conf code and connection date
+
+CHAIN_NAME=payment_fail_working_days
+
+CHAIN_PARAMETERS=('TREATMENT_DATE' 'WORKING_DAYS' 'CONF_CODE' \
+                    'IN_DIRECTORY' 'ARCHIVE')
+CHAIN_REQUIRED=('WORKING_DAYS' 'CONF_CODE')
+
+
+chain_params "$@"
+chain_begin
+
+if [ -n "$IN_DIRECTORY" ]; then
+    chain_step account.payment.fail      \
+        --in_directory="$IN_DIRECTORY"   \
+        --working_days="$WORKING_DAYS"   \
+        --conf_code="$CONF_CODE"
+else
+    chain_step account.payment.fail
+fi
+
+chain_wait account.payment.fail || chain_end
+
+if [[ -n "$IN_DIRECTORY" ]] && [[ -n "$ARCHIVE" ]]; then
+    chain_step account.payment.fail.message.create    \
+        --in_directory="$IN_DIRECTORY"                \
+        --archive="$ARCHIVE"                          \
+        --working_days="$WORKING_DAYS"                \
+        --conf_code="$CONF_CODE"
+else
+    chain_step account.payment.fail.message.create
+fi
+
+chain_wait account.payment.fail.message.create || chain_end
+
+chain_end

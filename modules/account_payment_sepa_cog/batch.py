@@ -79,7 +79,7 @@ class PaymentFailBatch(batch.BatchRootNoSelect):
                 })
 
     @classmethod
-    def select_ids(cls, in_directory=None):
+    def select_ids(cls, in_directory=None, treatment_date=None):
         in_directory = in_directory or\
             cls.get_batch_configuration().get('in_directory', None)
         if not in_directory:
@@ -102,11 +102,12 @@ class PaymentFailBatch(batch.BatchRootNoSelect):
         return all_elements
 
     @classmethod
-    def execute(cls, objects, ids, in_directory=None):
+    def execute(cls, objects, ids, in_directory=None, treatment_date=None):
         if not ids:
             return
         handler = CAMT054CoogPassive()
-        with ServerContext().set_context(disable_auto_aggregate=True):
+        with ServerContext().set_context(disable_auto_aggregate=True,
+                treatment_date=treatment_date):
             for text_element in ids:
                 element = etree.fromstring(text_element)
                 handler.handle_entry(element)

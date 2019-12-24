@@ -330,8 +330,19 @@ class Invoice(metaclass=PoolMeta):
         if hasattr(line, 'payments'):
             payment_dates = list(filter(None, [x.date for x in line.payments]))
         if present_again_after and payment_dates:
-            new_date = self._present_again_after_next_date(line,
-                billing_information, payment_dates, present_again_after)
+            # When fail payment batch is executed with working days:
+            # take care of the treatment_date to avoid mismatching dates with
+            # the payment creation date
+            treatment_date = ServerContext().get('treatment_date', None)
+            if treatment_date:
+                with Transaction().set_context(
+                        client_defined_date=treatment_date):
+                    new_date = self._present_again_after_next_date(line,
+                        billing_information,
+                            payment_dates, present_again_after)
+            else:
+                new_date = self._present_again_after_next_date(line,
+                    billing_information, payment_dates, present_again_after)
         else:
             new_date = billing_information.get_direct_debit_planned_date(line)
         if new_date and (getattr(line, 'payment_date', None) or

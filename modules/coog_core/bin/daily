@@ -34,7 +34,7 @@ coog_daily_run() {
 
         (
         _coog_daily_check_modules "account_payment_sepa_cog" || return 0 &&     \
-            coog_chain_main account_payment_sepa_cog payment_fail
+            coog_chain_main account_payment_sepa_cog payment_fail_working_days
         )
         [ "$?" -ne 0 ] && GLOBAL_SUCCESS=1
 
