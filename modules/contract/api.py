@@ -891,13 +891,7 @@ class APIContract(APIMixin):
     def _simulate_coverages_output_schema(cls):
         return {
             'type': 'array',
-            'items': {
-                'type': 'object',
-                'additionalProperties': False,
-                'properties': {
-                    'coverage': CODED_OBJECT_SCHEMA,
-                    }
-                }
+            'items': cls._contract_option_schema()
             }
 
     @classmethod

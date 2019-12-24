@@ -252,10 +252,10 @@ class ModuleTestCase(test_framework.CoogTestCase):
             output = self.ContractAPI.simulate(input_, {'_debug_server': True})
             summary = defaultdict(list)
             for covered in output[0]['covereds']:
-                if 'ref' not in covered:
+                if 'ref' not in covered['party']:
                     key = 'party:id:' + str(covered['party']['id'])
                 else:
-                    key = 'ref:' + covered['ref']
+                    key = 'ref:' + covered['party']['ref']
                 for coverage in covered['coverages']:
                     desc = coverage['coverage']
                     summary[key].append((desc['code'], coverage['eligibility']))
