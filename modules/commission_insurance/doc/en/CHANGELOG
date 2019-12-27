@@ -1,3 +1,4 @@
+* BUG#14048 Unable to edit party with commission agents if the party is both insurer and broker
 * OTH#00000 Make contract field readonly on commissions
 * BUG#13653 Add tests for the two distribution networks APIS 
 * FEA#13326 Add two APIs to close and reopen distribution networks

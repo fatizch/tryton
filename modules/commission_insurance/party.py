@@ -29,10 +29,9 @@ class Party(metaclass=PoolMeta):
         'get_broker', searcher='search_broker_code')
     agents = fields.One2Many('commission.agent', 'party', 'Agents',
         depends=['is_broker', 'is_insurer'],
-        domain=[If(Bool(Eval('is_broker')),
-                [('type_', '=', 'agent')], []),
-            If(Bool(Eval('is_insurer')),
-                [('type_', '=', 'principal')], [])])
+        domain=['OR',
+            [If(Bool(Eval('is_broker')), [('type_', '=', 'agent')], [])],
+            [If(Bool(Eval('is_insurer')), [('type_', '=', 'principal')], [])]])
     automatic_wire_transfer = fields.Boolean(
         'Use Broker Bank Transfer Journal',
         depends=['is_broker'], states={'invisible': ~Eval('is_broker')})
