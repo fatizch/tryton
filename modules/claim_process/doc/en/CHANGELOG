@@ -1,3 +1,4 @@
+* BUG#13824 Allow to select only available loss desc in the process
 BUG#13804 Fix crash in claim creation wizard
 
 Version 2.6 - 2019-10-11

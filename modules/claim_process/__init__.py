@@ -10,6 +10,7 @@ from . import document
 def register():
     Pool.register(
         claim.Claim,
+        claim.Loss,
         process.Process,
         process.ClaimDeclarationElement,
         process.ProcessLossDescRelation,

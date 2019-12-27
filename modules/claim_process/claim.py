@@ -2,7 +2,8 @@
 # this repository contains the full copyright notices and license terms.
 from collections import defaultdict
 
-from trytond.pool import Pool
+from trytond.pool import Pool, PoolMeta
+
 from trytond.modules.process import ClassAttr
 from trytond.modules.coog_core import utils, fields
 from trytond.modules.process_cog.process import CoogProcessFramework
@@ -10,6 +11,7 @@ from trytond.modules.process_cog.process import CoogProcessFramework
 
 __all__ = [
     'Claim',
+    'Loss',
     ]
 
 
@@ -120,3 +122,18 @@ class Claim(CoogProcessFramework, metaclass=ClassAttr):
         sub_status = SubStatus.get_sub_status(sub_status_code)
         self.sub_status = sub_status
         self.save()
+
+
+class Loss(metaclass=PoolMeta):
+    __name__ = 'claim.loss'
+
+    @fields.depends('claim', 'loss_desc')
+    def on_change_with_possible_loss_descs(self, name=None):
+        possible_loss_descs = super().on_change_with_possible_loss_descs(name)
+        if self.claim and self.claim.current_state and \
+                self.claim.current_state.process.for_loss_descs:
+            allowed_ids = [loss_desc.id for loss_desc in
+                self.claim.current_state.process.for_loss_descs]
+            possible_loss_descs = [loss_desc for loss_desc in
+                possible_loss_descs if loss_desc in allowed_ids]
+        return possible_loss_descs
