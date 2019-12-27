@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <record model="benefit.loss.description" id="loss_desc_cmo">
+            <field name="code">cmo</field>
+            <field name="name">Congé Maladie Ordinaire</field>
+            <field name="item_kind">person</field>
+            <field name="loss_kind">std</field>
+            <field name="has_end_date">True</field>
+        </record>
+        <record model="benefit.loss.description" id="loss_desc_clm">
+            <field name="code">clm</field>
+            <field name="name">Congé de Longue Maladie</field>
+            <field name="item_kind">person</field>
+            <field name="loss_kind">std</field>
+            <field name="has_end_date">True</field>
+        </record>
+        <record model="benefit.loss.description" id="loss_desc_cld">
+            <field name="code">cld</field>
+            <field name="name">Congé de Longue Durée</field>
+            <field name="item_kind">person</field>
+            <field name="loss_kind">std</field>
+            <field name="has_end_date">True</field>
+        </record>
+        <record model="benefit.loss.description" id="loss_desc_cgm">
+            <field name="code">cgm</field>
+            <field name="name">Congé de Grave Maladie</field>
+            <field name="item_kind">person</field>
+            <field name="loss_kind">std</field>
+            <field name="has_end_date">True</field>
+        </record>
+        <record model="benefit.loss.description" id="loss_desc_dprs">
+            <field name="code">dprs</field>
+            <field name="name">Disponibilité pour raison de santé</field>
+            <field name="item_kind">person</field>
+            <field name="loss_kind">std</field>
+            <field name="has_end_date">True</field>
+        </record>
+    </data>
+</tryton>

@@ -1,0 +1,1 @@
+This module allows to add Predefined configuration for french public std claim management.

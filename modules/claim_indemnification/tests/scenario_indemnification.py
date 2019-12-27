@@ -110,7 +110,6 @@ LossDesc = Model.get('benefit.loss.description')
 loss_desc = LossDesc()
 loss_desc.code = 'disability'
 loss_desc.name = 'Disability'
-loss_desc.company = company
 loss_desc.loss_kind = 'generic'
 loss_desc.save()
 

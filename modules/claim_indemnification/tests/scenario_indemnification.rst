@@ -108,7 +108,6 @@ Create Claim Configuration::
     >>> loss_desc = LossDesc()
     >>> loss_desc.code = 'disability'
     >>> loss_desc.name = 'Disability'
-    >>> loss_desc.company = company
     >>> loss_desc.loss_kind = 'generic'
     >>> loss_desc.save()
     >>> EventDesc = Model.get('benefit.event.description')

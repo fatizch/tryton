@@ -54,15 +54,14 @@ class EventDescription(model.CodedMixin, model.CoogView):
     __name__ = 'benefit.event.description'
 
     loss_descs = fields.Many2Many('benefit.event.description-loss.description',
-        'event_desc', 'loss_desc', 'Loss Descriptions',
-        domain=[('company', '=', Eval('company'))],
-        depends=['company'])
-    company = fields.Many2One('company.company', 'Company', required=True,
-        ondelete='RESTRICT')
+        'event_desc', 'loss_desc', 'Loss Descriptions')
     sequence = fields.Integer('Sequence')
 
     @classmethod
     def __register__(cls, module_name):
+        table = backend.get('TableHandler')(cls, module_name)
+        if table.column_exist('company'):
+            table.drop_column('company')
         super(EventDescription, cls).__register__(module_name)
         table = cls.__table__()
         # Migration from 2.6: Name is required
@@ -78,20 +77,12 @@ class EventDescription(model.CodedMixin, model.CoogView):
         cls._order.insert(0, ('sequence', 'ASC'))
 
     @classmethod
-    def _export_light(cls):
-        return super(EventDescription, cls)._export_light() | {'company'}
-
-    @classmethod
     def _export_skips(cls):
         return super(EventDescription, cls)._export_skips() | {'loss_descs'}
 
     @classmethod
     def is_master_object(cls):
         return True
-
-    @classmethod
-    def default_company(cls):
-        return Transaction().context.get('company', None)
 
 
 class LossDescription(model.CodedMixin, model.CoogView, with_extra_data_def(
@@ -103,13 +94,10 @@ class LossDescription(model.CodedMixin, model.CoogView, with_extra_data_def(
     event_descs = fields.Many2Many(
         'benefit.event.description-loss.description', 'loss_desc',
         'event_desc', 'Events Descriptions',
-        order=[('event_desc.sequence', 'ASC')],
-        domain=[('company', '=', Eval('company'))], depends=['company'])
+        order=[('event_desc.sequence', 'ASC')])
     item_kind = fields.Selection([('', '')], 'Kind')
     item_kind_string = item_kind.translated('item_kind')
     has_end_date = fields.Boolean('With End Date')
-    company = fields.Many2One('company.company', 'Company', required=True,
-        ondelete='RESTRICT')
     loss_kind = fields.Selection([('generic', 'Generic')], 'Loss Kind')
     closing_reasons = fields.Many2Many('loss.description-claim.closing_reason',
         'loss_description', 'closing_reason', 'Closing Reasons')
@@ -128,6 +116,8 @@ class LossDescription(model.CodedMixin, model.CoogView, with_extra_data_def(
         # Migration from 2.0: Rename with_end_date
         if table.column_exist('with_end_date'):
             table.column_rename('with_end_date', 'has_end_date')
+        if table.column_exist('company'):
+            table.drop_column('company')
         # Migration from 2.6: Name is required
         super(LossDescription, cls).__register__(module)
         cursor = Transaction().connection.cursor()
@@ -142,16 +132,11 @@ class LossDescription(model.CodedMixin, model.CoogView, with_extra_data_def(
 
     @classmethod
     def _export_light(cls):
-        return super(LossDescription, cls)._export_light() | {'company',
-            'event_descs'}
+        return super(LossDescription, cls)._export_light() | {'event_descs'}
 
     @classmethod
     def default_loss_kind(cls):
         return 'generic'
-
-    @classmethod
-    def default_company(cls):
-        return Transaction().context.get('company') or None
 
     @classmethod
     def create(cls, vlist):
@@ -219,7 +204,6 @@ class Benefit(model.CodedMixin, model.CoogView,
     loss_descs = fields.Many2Many('benefit-loss.description', 'benefit',
         'loss_desc', 'Loss Descriptions',
         help='Loss description list when the benefit can be delivered',
-        domain=[('company', '=', Eval('company'))], depends=['company'],
         required=True)
     beneficiary_kind = fields.Selection('get_beneficiary_kind',
         'Beneficiary Kind', help='Define who will benefit of the benefit',
