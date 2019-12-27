@@ -152,6 +152,10 @@ class BankDataSetWizard(metaclass=PoolMeta):
         for bic, record_key in bic_id_data.items():
             for item in agencies_data[record_key]:
                 code = item.get('code')
+                # We don't understand how to map the code with the bank
+                # and branch code in this case
+                if len(code) < 10:
+                    continue
                 row = item.get('row')
                 country = item.get('country')
                 bank = Bank.search(['bic', '=', bic])[0]

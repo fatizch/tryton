@@ -1,3 +1,4 @@
+* OTH#00000 Fix bug import agencies when national id is less then ten
 * OTH#00000 import agencies for swift banks
 * BUG#13048 Fix bank loader: if the address party changes, we should create a new address, not update the party on the existing one
 
