@@ -1,3 +1,4 @@
+* OTH#00000 Par défaut l'option auto_remove_not_subscriptable est défini à Vrai dans l'API de souscription
 * FEA#13780 Gestion de la souscriptabilité dans les APIs
 * FEA#13843 Déplacement de l'API simulate dans le module contrat
 * BUG#13518 Vérification du type métier des données complémentaires

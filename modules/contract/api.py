@@ -268,7 +268,7 @@ class APIContract(APIMixin):
                     'error_type': 'cannot_activate_contract',
                     },
                 )
-        if options.get('auto_remove_not_subscriptable', False):
+        if options.get('auto_remove_not_subscriptable', True):
             result.append(
                 {
                     'priority': 1,
