@@ -724,13 +724,12 @@ class SelectEndorsement(model.CoogView):
         super(SelectEndorsement, cls).__setup__()
         cls.endorsement_definition.domain = ['AND',
             cls.endorsement_definition.domain,
-            If(~Eval('party', False),
+            If(Eval('contract', False),
                 [('ordered_endorsement_parts.endorsement_part.kind', '!=',
-                        'party')],
-                If(~Eval('contract', False),
+                    'party')],
+                If(Eval('party', False),
                     [('ordered_endorsement_parts.endorsement_part.kind', '=',
-                            'party')],
-                    []))]
+                        'party')], []))]
         cls.endorsement_definition.depends += ['contract', 'party']
         cls.contract.domain = [
             If(Bool(Eval('party', False)),
@@ -750,8 +749,6 @@ class SelectEndorsement(model.CoogView):
     def on_change_party(self):
         if self.party:
             self.applicant = self.party
-        if not self.contract:
-            self.contract = utils.auto_complete_with_domain(self, 'contract')
 
     @fields.depends('party', 'possible_parties')
     def on_change_effective_date(self):
