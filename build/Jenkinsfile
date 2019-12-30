@@ -1,0 +1,88 @@
+pipeline {
+
+  agent {
+    kubernetes {
+      yamlFile 'build/DockerPod.yaml'
+    }
+  }
+
+  parameters {
+     string(name: 'ref', defaultValue: '/refs/heads/master', description: 'ref value')
+  }
+
+  environment {
+    def DOCKERIMAGE = ''
+    def REGISTRY = 'coopengo/coog'
+    def REGISTRYCREDENTIAL = 'DockerHub'
+    def TAG = get_tag()
+  }
+
+  triggers {
+    GenericTrigger(
+      genericVariables: [
+        [key: 'ref', value: '$.ref'],
+        [key: 'after', value: '$.after']
+      ],
+      causeString: 'Triggered on $ref',
+      token: get_github_trigger_token(),
+      printContributedVariables: true,
+      printPostContent: true
+    )
+  }
+
+  stages {
+    stage('Checkout') {
+      steps {
+        checkout scm: [$class: 'GitSCM',
+          userRemoteConfigs:
+            [[url: 'https://github.com/coopengo/coog',
+            credentialsId: 'Github',
+            refspec: '+refs/heads/master:refs/remotes/origin/master' ]],
+            branches: [[name: '${after}']]],
+          poll: false
+      }
+    }
+
+    stage('Building image') {
+      steps{
+        slackSend (color: '#FFFF00', message: "STARTED: Job '${env.JOB_NAME}:${TAG} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
+        container('docker') {
+          script {
+            withCredentials([string(credentialsId: 'github_access_token', variable: 'TOKEN')]) {
+              dockerImage = docker.build('${REGISTRY}:${TAG}','-f ./build/Dockerfile ./ --no-cache --build-arg VERSION=${TAG} --build-arg TOKEN=${TOKEN}')
+            }
+            docker.withRegistry('https://registry-1.docker.io/v2/', REGISTRYCREDENTIAL) {
+              dockerImage.push()
+            }
+          }
+        }
+      }
+    }
+  }
+
+  post {
+    success {
+      slackSend (color: '#00FF00', message: "SUCCESSFUL: Job '${env.JOB_NAME}:${TAG} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
+    }
+    failure {
+      slackSend (color: '#FF0000', message: "FAILED: Job '${env.JOB_NAME}:${TAG} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
+    }
+  }
+
+}
+
+def get_tag() {
+    node('master') {
+        return env.ref.split('/')[-1]
+    }
+}
+
+def get_github_trigger_token() {
+  node('master') {
+    def github_trigger_token;
+    withCredentials([string(credentialsId: 'github_trigger_token', variable: 'github_trigger_token')]) {
+      github_trigger_token = env.github_trigger_token;
+    }
+  return github_trigger_token
+  }
+}
