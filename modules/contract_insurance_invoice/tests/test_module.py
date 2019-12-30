@@ -1110,7 +1110,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
                     'billing': {
                         'payer': {'ref': '1'},
                         'billing_mode': {'code': 'quarterly'},
-                        'direct_debit_day': 4,
+                        'direct_debit_day': 5,
                         },
                     'covereds': [
                         {
@@ -1155,7 +1155,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
         contract = Contract(result['contracts'][0]['id'])
         billing_info = contract.billing_informations[-1]
         self.assertEqual(billing_info.billing_mode.code, 'quarterly')
-        self.assertEqual(billing_info.direct_debit_day, 4)
+        self.assertEqual(billing_info.direct_debit_day, 5)
         self.assertEqual(billing_info.payer.first_name, 'Mother')
         self.assertEqual(
             billing_info.direct_debit_account.numbers[0].number_compact,
@@ -1273,6 +1273,18 @@ class ModuleTestCase(test_framework.CoogTestCase):
                         },
                     }])
 
+        # Invalid debit day
+        data_dict = copy.deepcopy(data_ref)
+        data_dict['contracts'][0]['billing'] = {
+            'payer': {'ref': '1'},
+            'billing_mode': {'code': 'quarterly'},
+            'direct_debit_day': 4,
+            }
+        result = ContractAPI.subscribe_contracts(data_dict, {})
+        self.assertEqual(result.data['message'],
+            'The direct debit day is invalid for this contract. The allowed '
+            'days are 5,10,15.')
+
     @test_framework.prepare_test(
         'contract_insurance_invoice.test0006_prepare_product_for_subscription',
         )
@@ -1380,7 +1392,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
                     'billing': {
                         'payer': {'ref': '1'},
                         'billing_mode': {'code': 'quarterly'},
-                        'direct_debit_day': 4,
+                        'direct_debit_day': 5,
                         },
                     'covereds': [
                         {

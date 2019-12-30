@@ -42,5 +42,8 @@ There are %(count)s invoice(s) with a start date after %(date)s on contract %(co
         <record model="ir.message" id="msg_wrong_rule_format">
             <field name="text">The return value of the rule must be a dictionnary.</field>
         </record>
+        <record model="ir.message" id="msg_invalid_debit_day">
+            <field name="text">The direct debit day is invalid for this contract. The allowed days are %(allowed)s.</field>
+        </record>
     </data>
 </tryton>

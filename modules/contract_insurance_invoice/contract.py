@@ -1811,6 +1811,20 @@ class ContractBillingInformation(model._RevisionMixin, model.CoogSQL,
         cls.date.depends = _CONTRACT_STATUS_DEPENDS
 
     @classmethod
+    def validate(cls, billing_informations):
+        super(ContractBillingInformation, cls).validate(billing_informations)
+        with model.error_manager():
+            for info in billing_informations:
+                allowed = [int(x[0]) for x in
+                    info.get_allowed_direct_debit_days()
+                    if x[0]]
+                if allowed and info.direct_debit_day:
+                    if info.direct_debit_day not in allowed:
+                        raise ValidationError(gettext(
+                            'contract_insurance_invoice.msg_invalid_debit_day',
+                            allowed=','.join(map(str, allowed))))
+
+    @classmethod
     def suspension_values(cls, billing_id, payment, **kwargs):
         values = {
             'billing_info': billing_id,

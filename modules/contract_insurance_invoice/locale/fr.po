@@ -1364,6 +1364,10 @@ msgstr ""
 "\n"
 "\t%(invoices)s"
 
+msgctxt "model:ir.message,text:msg_invalid_debit_day"
+msgid "The direct debit day is invalid for this contract. The allowed days are%(allowed)s."
+msgstr "Le jour de prélèvement est incorrect pour ce contrat. Les jours autorisés sont %(allowed)s"
+
 msgctxt "model:ir.message,text:msg_missing_invoices"
 msgid ""
 "This contract can not be renewed because there are missing invoices on the "

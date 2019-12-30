@@ -1,3 +1,4 @@
+* BUG#13798 Check whether the direct debit day is allowed
 * BUG#13945 Do not cancel invoices as rebill does that in reinvoice method
 * BUG#13948 Fix default billing mode computation. the order defined at product level was not used following 11728
 * FEA#13245 Generate payment schedule data on a party in order to be able to print it
