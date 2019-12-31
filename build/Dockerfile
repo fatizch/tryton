@@ -37,6 +37,7 @@ RUN set -eux; \
     ln -s /workspace/trytond/bin/trytond-cron /workspace/bin/trytond-cron; \
     /workspace/bin/ep link; \
     chown coog /workspace -R; \
+    pip3 install --upgrade pip; \
     pip3 install -r /workspace/requirements.txt --no-cache-dir; \
     rm -rf /root/.cache; \
     find / -name "__pycache__" -prune -exec rm -rf {} \;

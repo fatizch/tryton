@@ -12,7 +12,7 @@ pipeline {
 
   environment {
     def DOCKERIMAGE = ''
-    def REGISTRY = 'coopengo/coog'
+    def REGISTRY = 'coopengo/static'
     def REGISTRYCREDENTIAL = 'DockerHub'
     def TAG = get_tag()
   }
@@ -53,7 +53,7 @@ pipeline {
         container('docker') {
           script {
             withCredentials([string(credentialsId: 'github_access_token', variable: 'TOKEN')]) {
-              dockerImage = docker.build('${REGISTRY}:${TAG}','-f ./build/Dockerfile ./ --no-cache --build-arg VERSION=${TAG} --build-arg TOKEN=${TOKEN}')
+              dockerImage = docker.build('${REGISTRY}:${TAG}','-f ./build/static/Dockerfile ./ --no-cache --build-arg VERSION=${TAG} --build-arg TOKEN=${TOKEN}')
             }
             docker.withRegistry('https://registry-1.docker.io/v2/', REGISTRYCREDENTIAL) {
               dockerImage.push()
@@ -84,7 +84,7 @@ def get_tag() {
 def get_github_trigger_token() {
   node('master') {
     def github_trigger_token;
-    withCredentials([string(credentialsId: 'github_trigger_token_coog', variable: 'github_trigger_token')]) {
+    withCredentials([string(credentialsId: 'github_trigger_token_static', variable: 'github_trigger_token')]) {
       github_trigger_token = env.github_trigger_token;
     }
   return github_trigger_token
