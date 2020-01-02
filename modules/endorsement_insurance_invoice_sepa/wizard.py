@@ -99,10 +99,19 @@ class ChangeBillingInformation(metaclass=PoolMeta):
             new_info.sepa_mandate = None
             return
         if (new_account == prev_account and
-                new_info.payer == previous_info.payer):
+                new_info.payer == previous_info.payer
+                and previous_info.sepa_mandate):
             self.mandate_needed = False
             self.amend_previous_mandate = False
             new_info.sepa_mandate = previous_info.sepa_mandate
+            return
+        if (new_account == prev_account and
+                new_info.payer == previous_info.payer
+                and prev_account.numbers
+                and prev_account.numbers[-1].mandates):
+            self.mandate_needed = False
+            self.amend_previous_mandate = False
+            new_info.sepa_mandate = prev_account.numbers[-1].mandates[-1]
             return
         possible_mandates = None
         if new_info.payer and new_account:

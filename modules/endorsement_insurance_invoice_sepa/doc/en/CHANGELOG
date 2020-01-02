@@ -1,3 +1,5 @@
+* BUG#14040 Find existing sepa mandate when switching from manual to automatic paiement
+
 Version 2.6 - 2019-10-11
 Version 2.4 - 2019-04-12
 * BUG#11182 Existing mandates selection should include mandates starting at endorsement effective date
