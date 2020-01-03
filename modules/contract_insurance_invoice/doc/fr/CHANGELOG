@@ -1,3 +1,4 @@
+* FEA#14026 Ajout d'une option pour ne retourner un résumé que de la première quittance non nulle dans l'API simulate
 * BUG#13798 Vérifie si le jour de prélèvement est autorisé
 * BUG#13945 Ne pas annuler les quittances dans la méthode reinvoice car cela est fait dans la méthode rebill
 * BUG#13948 Correction du calcul du mode de facturation par défaut qui ne tenait plus compte de l'ordre défini au produit (suite à l'évolution 11728)

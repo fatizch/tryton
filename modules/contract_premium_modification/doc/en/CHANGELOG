@@ -1,3 +1,4 @@
+* FEA#14026 Add option to return a premium summary of the first invoice only in simulate API
 * BUG#14014 Crash in simulate API in case no discounts is applied
 * FEA#13843 Add commercial discounts informations in simulate API
 * FEA#13410 Add automatic and time-bound commercial discounts

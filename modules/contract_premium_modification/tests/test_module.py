@@ -153,7 +153,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
                     'billing': {
                         'payer': {'ref': '1'},
                         'billing_mode': {'code': 'quarterly'},
-                        'direct_debit_day': 4,
+                        'direct_debit_day': 5,
                         },
                     'discounts': [
                         {'code': 'DISCOUNT_BET'}
@@ -325,6 +325,9 @@ class ModuleTestCase(test_framework.CoogTestCase):
                         ],
                     },
                 ],
+            'options': {
+                'premium_summary_kind': 'contract_first_term',
+                }
             }
 
         # We have to commit here because simulate is executed in a new
@@ -446,6 +449,29 @@ class ModuleTestCase(test_framework.CoogTestCase):
                 self.assertTrue(bool(len(covered['coverages'])))
                 for coverage in covered['coverages']:
                     check_amounts(coverage['premium'])
+
+        data_dict = copy.deepcopy(data_ref)
+        data_dict['options']['premium_summary_kind'] = 'first_invoice'
+        output = ContractAPI.simulate(
+            data_dict, {'_debug_server': True})
+
+        self.assertEqual(output[0]['premium_summary_kind'], 'first_invoice')
+        self.assertEqual(output[0]['premium']['total'], '190.00')
+        self.assertEqual(output[0]['premium']['total_discounts'], '-20.00')
+        self.assertEqual(output[0]['premium']['total_premium'], '210.00')
+
+        self.assertEqual(output[0]['covereds'][0]['premium']['total'],
+            '100.00')
+        self.assertEqual(output[0]['covereds'][0]['premium'][
+                'total_discounts'], '-10.00')
+        self.assertEqual(output[0]['covereds'][0]['premium']['total_premium'],
+            '110.00')
+
+        self.assertEqual(output[0]['covereds'][1]['premium']['total'], '90.00')
+        self.assertEqual(output[0]['covereds'][1]['premium']['total_discounts'],
+            '-10.00')
+        self.assertEqual(output[0]['covereds'][1]['premium']['total_premium'],
+            '100.00')
 
 
 def suite():

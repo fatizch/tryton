@@ -1,3 +1,4 @@
+* FEA#14026 Add option to return a premium summary of the first invoice only in simulate API
 * BUG#13798 Check whether the direct debit day is allowed
 * BUG#13945 Do not cancel invoices as rebill does that in reinvoice method
 * BUG#13948 Fix default billing mode computation. the order defined at product level was not used following 11728

@@ -27,6 +27,8 @@ __all__ = [
     'APIContract',
     ]
 
+PREMIUM_SUMMARY_KINDS = ['contract_first_term', 'first_invoice']
+
 
 class APIProduct(metaclass=PoolMeta):
     __name__ = 'api.product'
@@ -842,18 +844,22 @@ class APIContract(metaclass=PoolMeta):
             add_to_result.pop('total_premium')
             add_to_result.pop('total_tax')
             add_to_result.update({'premium_summary_kind':
-                    'contract_first_term'})
+                    parameters['options']['premium_summary_kind']})
             results[i].update(add_to_result)
-            cls._aggregate_schedule(contract, results[i])
+            cls._aggregate_schedule(contract, results[i],
+                        parameters['options']['premium_summary_kind'])
         return results
 
     @classmethod
-    def _aggregate_schedule(cls, contract, contract_data):
+    def _aggregate_schedule(cls, contract, contract_data, premium_summary_kind):
         contract_coverages = {}
         contract_covereds = defaultdict(dict)
         covereds_coverages = defaultdict(dict)
         contract_global_summary = cls._simulate_init_premium_field()
         for schedule in contract_data['schedule']:
+            if (premium_summary_kind == 'first_invoice' and
+                    Decimal(schedule['total']) <= Decimal(0)):
+                continue
             for detail in schedule['details']:
                 cls._simulate_update_premium_field(
                     contract_global_summary['premium'], detail)
@@ -884,6 +890,8 @@ class APIContract(metaclass=PoolMeta):
                     if covered_coverage:
                         cls._simulate_update_premium_field(
                             covered_coverage['premium'], detail)
+            if premium_summary_kind == 'first_invoice':
+                break
         cls._simulate_convert_premium_fields(contract_coverages)
         covereds_caches = ['party_ref', 'party_id', 'name']
         for cache in covereds_caches:
@@ -988,6 +996,31 @@ class APIContract(metaclass=PoolMeta):
                         'party_ref_per_id'][party_id]
 
     @classmethod
+    def _simulate_allowed_options(cls):
+        options = super(APIContract, cls)._simulate_allowed_options()
+        options.add('premium_summary_kind')
+        return options
+
+    @classmethod
+    def _simulate_default_options(cls):
+        options = super(APIContract, cls)._simulate_default_options()
+        options.update({
+                'premium_summary_kind': 'contract_first_term',
+                })
+        return options
+
+    @classmethod
+    def _simulate_schema(cls):
+        schema = super(APIContract, cls)._simulate_schema()
+        schema['properties']['options']['properties'].update({
+                'premium_summary_kind': {
+                    'type': 'string',
+                    'enum': PREMIUM_SUMMARY_KINDS,
+                    },
+                })
+        return schema
+
+    @classmethod
     def _simulate_convert_input(cls, parameters):
         result = super(APIContract, cls)._simulate_convert_input(parameters)
         cls._simulate_convert_contract_input(parameters)
@@ -1020,8 +1053,10 @@ class APIContract(metaclass=PoolMeta):
         base['items']['properties'].update(
             cls._simulate_premium_output_schema())
         schema['properties'].update(base['items']['properties'])
-        schema['properties']['premium_summary_kind'] = {'type': 'string',
-            'enum': ['contract_first_term']}
+        schema['properties']['premium_summary_kind'] = {
+            'type': 'string',
+            'enum': PREMIUM_SUMMARY_KINDS,
+            }
         return schema
 
     @classmethod
@@ -1153,6 +1188,9 @@ class APIContract(metaclass=PoolMeta):
                                 ],
                             },
                         ],
+                    'options': {
+                        'premium_summary_kind': 'contract_first_term',
+                        },
                     },
                 'output': [
                     {

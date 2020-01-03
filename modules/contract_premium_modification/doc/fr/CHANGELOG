@@ -1,3 +1,4 @@
+* FEA#14026 Ajout d'une option pour ne retourner un résumé que de la première quittance non nulle dans l'API simulate
 * BUG#14014 Erreur lors de la simulation en absence de discounts
 * FEA#13843 Ajout des informations de réductions commerciales dans l'API simulate
 * FEA#13410 Ajout des réductions commerciales automatiques et limitées dans le temps

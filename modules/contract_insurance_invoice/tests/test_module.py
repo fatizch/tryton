@@ -220,6 +220,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
         product.currency = currency
         product.code = 'AAA'
         product.name = 'Awesome Alternative Allowance'
+        product.start_date = datetime.date(2020, 1, 1)
         product.contract_generator = generator
         product.quote_number_sequence = quote_generator
         product.billing_rules = [{}]
@@ -1543,6 +1544,9 @@ class ModuleTestCase(test_framework.CoogTestCase):
                         ],
                     },
                 ],
+            'options': {
+                'premium_summary_kind': 'contract_first_term',
+                },
             }
 
         # We have to commit here because simulate is executed in a new
@@ -1563,8 +1567,8 @@ class ModuleTestCase(test_framework.CoogTestCase):
         # 1 year
         self.assertEqual(len(schedule[0]['schedule']), 12)
 
-        # Coverage A is 10 per month, 12 months + 2 covereds = 240
-        # Coverage B is 100 per month, 12 months + 2 covereds = 2400
+        # Coverage A is 10 per month * 12 months * 3 covereds = 360
+        # Coverage B is 100 per month * 12 months * 3 covereds = 3600
         self.assertEqual(schedule[0]['premium']['total'], '3960.00')
 
         self.assertEqual([(x['start'], x['end'], x['total'])
@@ -1609,6 +1613,16 @@ class ModuleTestCase(test_framework.CoogTestCase):
                     ])
         self.assertEqual(schedule[0]['premium_summary_kind'],
             'contract_first_term')
+
+        data_dict = copy.deepcopy(data_ref)
+        data_dict['options']['premium_summary_kind'] = 'first_invoice'
+        schedule = ContractAPI.simulate(
+            data_dict, {'_debug_server': True})
+
+        self.assertEqual(schedule[0]['premium_summary_kind'], 'first_invoice')
+        self.assertEqual(schedule[0]['premium']['total'], '330.00')
+        for covered in schedule[0]['covereds']:
+            self.assertEqual(covered['premium']['total'], '110.00')
 
     @test_framework.prepare_test(
         'account_cog.test0001_create_period',
