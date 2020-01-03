@@ -134,7 +134,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
                     'allowed_payment_terms': [
                         ('add', [payment_term.id])],
                     'direct_debit': True,
-                    'allowed_direct_debit_days': '5, 10, 15'
+                    'allowed_direct_debit_days': '4, 5, 10, 15'
                     }, {
                     'code': 'once_per_contract',
                     'name': 'once_per_contract',
@@ -259,7 +259,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
                 'allowed_payment_terms': [
                         ('add', [payment_term.id])],
                 'direct_debit': True,
-                'allowed_direct_debit_days': '5, 10, 15'
+                'allowed_direct_debit_days': '4, 5, 10, 15'
                 }, {
                 'code': 'once_per_contract',
                 'name': 'once_per_contract',
@@ -1279,12 +1279,12 @@ class ModuleTestCase(test_framework.CoogTestCase):
         data_dict['contracts'][0]['billing'] = {
             'payer': {'ref': '1'},
             'billing_mode': {'code': 'quarterly'},
-            'direct_debit_day': 4,
+            'direct_debit_day': 3,
             }
         result = ContractAPI.subscribe_contracts(data_dict, {})
         self.assertEqual(result.data['message'],
             'The direct debit day is invalid for this contract. The allowed '
-            'days are 5,10,15.')
+            'days are 4,5,10,15.')
 
     @test_framework.prepare_test(
         'contract_insurance_invoice.test0006_prepare_product_for_subscription',
@@ -1331,7 +1331,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
                             },
                         {
                             'code': 'quarterly',
-                            'direct_debit_days': [5, 10, 15],
+                            'direct_debit_days': [4, 5, 10, 15],
                             'frequency': 'Quarterly',
                             'id': quarterly.id,
                             'is_direct_debit': True,

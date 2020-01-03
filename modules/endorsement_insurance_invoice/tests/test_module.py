@@ -90,7 +90,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
                 'allowed_payment_terms': [
                         ('add', [payment_term.id])],
                 'direct_debit': True,
-                'allowed_direct_debit_days': '5, 10, 15'
+                'allowed_direct_debit_days': '4, 5, 10, 15'
                 }, {
                 'code': 'once_per_contract',
                 'name': 'once_per_contract',
