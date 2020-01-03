@@ -230,6 +230,66 @@ msgctxt "field:table,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:table.2d.import.param,col_dimension:"
+msgid "Column"
+msgstr "Colonne"
+
+msgctxt "field:table.2d.import.param,data:"
+msgid "Data"
+msgstr "Données"
+
+msgctxt "field:table.2d.import.param,fixed_dimension10:"
+msgid "Fixed Dimension 10"
+msgstr "Dimension Figée 10"
+
+msgctxt "field:table.2d.import.param,fixed_dimension1:"
+msgid "Fixed Dimension 1"
+msgstr "Dimension Figée 1"
+
+msgctxt "field:table.2d.import.param,fixed_dimension2:"
+msgid "Fixed Dimension 2"
+msgstr "Dimension Figée 2"
+
+msgctxt "field:table.2d.import.param,fixed_dimension3:"
+msgid "Fixed Dimension 3"
+msgstr "Dimension Figée 3"
+
+msgctxt "field:table.2d.import.param,fixed_dimension4:"
+msgid "Fixed Dimension 4"
+msgstr "Dimension Figée 4"
+
+msgctxt "field:table.2d.import.param,fixed_dimension5:"
+msgid "Fixed Dimension 5"
+msgstr "Dimension Figée 5"
+
+msgctxt "field:table.2d.import.param,fixed_dimension6:"
+msgid "Fixed Dimension 6"
+msgstr "Dimension Figée 6"
+
+msgctxt "field:table.2d.import.param,fixed_dimension7:"
+msgid "Fixed Dimension 7"
+msgstr "Dimension Figée 7"
+
+msgctxt "field:table.2d.import.param,fixed_dimension8:"
+msgid "Fixed Dimension 8"
+msgstr "Dimension Figée 8"
+
+msgctxt "field:table.2d.import.param,fixed_dimension9:"
+msgid "Fixed Dimension 9"
+msgstr "Dimension Figée 9"
+
+msgctxt "field:table.2d.import.param,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:table.2d.import.param,line_dimension:"
+msgid "Line"
+msgstr "Ligne"
+
+msgctxt "field:table.2d.import.param,table:"
+msgid "Table"
+msgstr "Table"
+
 msgctxt "field:table.cell,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
@@ -408,6 +468,10 @@ msgstr ""
 "Liste des labels sur l'objet de configuration. Permet ensuite de rechercher "
 "l'ensemble des objets de configuration liés à un même label."
 
+msgctxt "help:table.2d.import.param,data:"
+msgid "Copy/Paste from Excel"
+msgstr "Copier/Coller depuis Excel"
+
 msgctxt "help:table.dimension.value,end:"
 msgid "Value Excluded"
 msgstr "Valeur exclue"
@@ -443,6 +507,10 @@ msgstr "Valeurs des dimensions"
 msgctxt "model:ir.action,name:act_dimension_value_open"
 msgid "Define Dimension Value"
 msgstr "Valeurs des dimensions"
+
+msgctxt "model:ir.action,name:act_table_2D_import"
+msgid "Import 2D table"
+msgstr "Importer table 2D"
 
 msgctxt "model:ir.action,name:act_table_definition_form"
 msgid "Tables"
@@ -483,6 +551,10 @@ msgstr "Tables"
 msgctxt "model:table,name:"
 msgid "Table Definition"
 msgstr "Table"
+
+msgctxt "model:table.2d.import.param,name:"
+msgid "Parameters"
+msgstr "Paramètres"
 
 msgctxt "model:table.cell,name:"
 msgid "Cell"
@@ -887,6 +959,14 @@ msgstr "Dimensions"
 msgctxt "view:table:"
 msgid "Dimensions"
 msgstr "Dimensions"
+
+msgctxt "wizard_button:table.2d.import,param,end:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt "wizard_button:table.2d.import,param,import_:"
+msgid "Import"
+msgstr "Importer"
 
 msgctxt "wizard_button:table.dimension.value.open,ask_type,end:"
 msgid "Cancel"

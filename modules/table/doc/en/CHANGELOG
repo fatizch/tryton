@@ -1,3 +1,4 @@
+* OTH#00000 Restore wrongly deleted "import from Excel" feature
 * BUG#13646 Drop deprecated Table2D feature
 * BUG#13004 Fix import cells from csv file
 

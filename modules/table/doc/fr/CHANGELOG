@@ -1,3 +1,4 @@
+* OTH#00000 Restauration de la fonctionnalité d'import de tables depuis Excel
 * BUG#13646 Suppression de la fonctionnalité dépréciée Table2D
 * BUG#13004 Correction de l'import de cellules depuis un fichier CSV
 
