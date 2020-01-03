@@ -31,9 +31,10 @@ class DiscountModification(
 
     @fields.depends('options')
     def on_change_with_option_names(self, name=None):
-        return ', '.join(
-            '%s - %s' % (o.covered_element.party.full_name, o.coverage.name)
-            for o in self.options)
+        return ', '.join([
+                '%s - %s' % (o.covered_element.party.full_name, o.coverage.name)
+                if o.covered_element and o.covered_element.party else
+                o.coverage.name for o in self.options])
 
     def get_rec_name(self, name):
         return self.discount_options[0].discount_rule.commercial_discount.name

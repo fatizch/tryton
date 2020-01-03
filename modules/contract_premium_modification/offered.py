@@ -476,7 +476,7 @@ class CommercialDiscountModificationRule(
             if self.commercial_discount not in modifications:
                 return False
         if self.eligibility_rule is not None:
-            data = {}
+            data = {'date': option.start_date}
             option.init_dict_for_rule_engine(data)
             return self.calculate_eligibility_rule(data)
         else:

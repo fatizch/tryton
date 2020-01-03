@@ -62,7 +62,7 @@ class Contract(metaclass=PoolMeta):
 
     def get_possible_discounts(self, name=None):
         discounts = []
-        for option in self.covered_element_options:
+        for option in self.options + self.covered_element_options:
             discounts.extend([dr.commercial_discount.id
                     for dr in option.coverage.discount_rules])
         return discounts
@@ -316,8 +316,8 @@ class Contract(metaclass=PoolMeta):
                 for discount in self.possible_discounts
                 for rule in discount.rules):
             self.discounts = manual_discounts + self.get_new_modifications(
-                self.covered_element_options, self.start_date, self.end_date,
-                automatic=True)
+                self.options + self.covered_element_options, self.start_date,
+                self.end_date, automatic=True)
         else:
             self.discounts = manual_discounts
 
