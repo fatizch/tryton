@@ -64,7 +64,7 @@ class Claim(CoogProcessFramework, metaclass=ClassAttr):
             for delivered in loss.services:
                 if not (hasattr(delivered, 'benefit') and delivered.benefit):
                     continue
-                args = {}
+                args = {'date': delivered.loss.get_date()}
                 delivered.init_dict_for_rule_engine(args)
                 default_docs_per_loss[loss].update(
                     delivered.benefit.calculate_required_documents(args))
