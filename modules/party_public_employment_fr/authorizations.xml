@@ -1,0 +1,83 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- Right for CSRH  -->
+        <record model="ir.model.access" id="access_csrh">
+            <field name="model" search="[('model', '=', 'csrh')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_csrh_global_config">
+            <field name="model" search="[('model', '=', 'csrh')]"/>
+            <field name="group" ref="coog_core.group_global_config"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_configuration_csrh_global_config">
+            <field name="menu" ref="menu_csrh_form"/>
+            <field name="group" ref="coog_core.group_global_config"/>
+        </record>
+        <!-- Right for SLR/payroll service  -->
+        <record model="ir.model.access" id="access_payroll_service">
+            <field name="model" search="[('model', '=', 'party.payroll_service')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_payroll_service_global_config">
+            <field name="model" search="[('model', '=', 'party.payroll_service')]"/>
+            <field name="group" ref="coog_core.group_global_config"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_configuration_payroll_service_global_config">
+            <field name="menu" ref="menu_payroll_service_form"/>
+            <field name="group" ref="coog_core.group_global_config"/>
+        </record>
+        <!-- Right for salary withdraw service  -->
+        <record model="ir.model.access" id="access_salary_deduction_service">
+            <field name="model" search="[('model', '=', 'party.salary_deduction_service')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_salary_deduction_service_global_config">
+            <field name="model" search="[('model', '=', 'party.salary_deduction_service')]"/>
+            <field name="group" ref="coog_core.group_global_config"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_configuration_salary_deduction_service_global_config">
+            <field name="menu" ref="menu_salary_deduction_service_form"/>
+            <field name="group" ref="coog_core.group_global_config"/>
+        </record>        
+        <!-- Right for Many2many work section subdivision  -->
+        <record model="ir.model.access" id="access_work_section_subdivision">
+            <field name="model" search="[('model', '=', 'party.work_section-country.subdivision')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_work_section_subdivision_global_config">
+            <field name="model" search="[('model', '=', 'party.work_section-country.subdivision')]"/>
+            <field name="group" ref="coog_core.group_global_config"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+    </data>
+</tryton>

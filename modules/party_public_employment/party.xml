@@ -62,6 +62,17 @@ this repository contains the full copyright notices and license terms. -->
              <field name="type">tree</field>
             <field name="name">administrative_situation_sub_status_list</field>
         </record>
+        <!-- Model public_service_work_category-->
+        <record model="ir.ui.view" id="public_service_work_category_view_form">
+            <field name="model">party.public_service_work_category</field>
+             <field name="type">form</field>
+            <field name="name">public_service_work_category_form</field>
+        </record>
+         <record model="ir.ui.view" id="public_service_work_category_view_list">
+            <field name="model">party.public_service_work_category</field>
+             <field name="type">tree</field>
+            <field name="name">public_service_work_category_list</field>
+        </record>
         <!-- Menu for administrative_situation_sub_status-->
         <record model="ir.action.act_window" id="act_administrative_situation_sub_status">
             <field name="name">Admin Situation Sub Status</field>
@@ -78,6 +89,22 @@ this repository contains the full copyright notices and license terms. -->
             <field name="act_window" ref="act_administrative_situation_sub_status"/>
         </record>
         <menuitem parent="party_employment.menu_employment_configuration" action="act_administrative_situation_sub_status" id="menu_configuration_admin_situation_sub_status" sequence="5" icon="tryton-list"/>
+        <!-- Menu for public_service_work_category-->
+        <record model="ir.action.act_window" id="act_public_service_work_category">
+            <field name="name">Public Service Work Category</field>
+            <field name="res_model">party.public_service_work_category</field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_public_service_work_category_view_form">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="public_service_work_category_view_form"/>
+            <field name="act_window" ref="act_public_service_work_category"/>
+        </record>
+         <record model="ir.action.act_window.view" id="act_public_service_work_category_view_list">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="public_service_work_category_view_list"/>
+            <field name="act_window" ref="act_public_service_work_category"/>
+        </record>
+        <menuitem parent="party_employment.menu_employment_configuration" action="act_public_service_work_category" id="menu_configuration_public_service_work_status" sequence="5" icon="tryton-list"/>
         <!-- Menu for public index-->
         <record model="ir.action.act_window" id="act_public_index">
             <field name="name">Public Employment Index</field>

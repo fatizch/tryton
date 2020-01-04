@@ -52,7 +52,7 @@ msgstr "Emploi dans la Fonction Publique"
 
 msgctxt "field:party.employment,is_retired:"
 msgid "Is retired"
-msgstr ""
+msgstr "Est en retraite"
 
 msgctxt "field:party.employment,retirement_pension_identifier:"
 msgid "Retirement Pension Identifier"
@@ -73,6 +73,10 @@ msgstr "Indice Brut"
 msgctxt "field:party.employment.version,increased_index:"
 msgid "Increased Index"
 msgstr "Indice Majoré"
+
+msgctxt "field:party.employment.version,public_service_work_category:"
+msgid "Public Service Work Category"
+msgstr "Catégorie statutaire de la fonction publique"
 
 msgctxt "field:party.employment.version,work_country:"
 msgid "Work Country"
@@ -130,6 +134,55 @@ msgctxt "field:party.public_employment_index,xml_id:"
 msgid "XML Id"
 msgstr "XML Id"
 
+msgctxt "field:party.public_service_work_category,code:"
+msgid "Code"
+msgstr "Code"
+
+msgctxt "field:party.public_service_work_category,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:party.public_service_work_category,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:party.public_service_work_category,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:party.public_service_work_category,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:party.public_service_work_category,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:party.public_service_work_category,rec_name:"
+msgid "Record Name"
+msgstr "Nom de l'enregistrement"
+
+msgctxt "field:party.public_service_work_category,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:party.public_service_work_category,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:party.public_service_work_category,xml_id:"
+msgid "XML Id"
+msgstr "XML Id"
+
+msgctxt "help:party.administrative_situation_sub_status,code:"
+msgid ""
+"The string that will be used to identify this record across the "
+"configuration. It should not be modified without checking first if it is "
+"used somewhere"
+msgstr ""
+"L'identifiant pour cet enregistrement dans la configuration. Il ne doit pas "
+"être modifié sans s'assurer au préalable des endroits y faisant référence"
+
 msgctxt "help:party.administrative_situation_sub_status,name:"
 msgid "Name of Administrative Situation Sub Status"
 msgstr "Nom du sous statut de la situation administrative "
@@ -152,6 +205,11 @@ msgid "Increased public service index used to defined salary"
 msgstr ""
 "Indice majoré de la fonction publique servant de base au calcul du salaire"
 
+msgctxt "help:party.employment.version,public_service_work_category:"
+msgid ""
+"Define the work category in public service administration of the employee"
+msgstr "Défini la catégorie statutaire de la fonction publique de l'employé"
+
 msgctxt "help:party.employment.version,work_country:"
 msgid "Country where the employee works"
 msgstr "Le pays où l'employé travaille"
@@ -162,11 +220,24 @@ msgstr "Département du lieu de travail de l'employé"
 
 msgctxt "help:party.employment_kind,is_civil_service_employment:"
 msgid "Is Civil Service Employment"
-msgstr ""
+msgstr "Est un emploi de la fonction publique"
 
 msgctxt "help:party.public_employment_index,effective_date:"
 msgid "Date used to versionned the index"
 msgstr "Date utilisée pour versionner les correspondances d'indices"
+
+msgctxt "help:party.public_service_work_category,code:"
+msgid ""
+"The string that will be used to identify this record across the "
+"configuration. It should not be modified without checking first if it is "
+"used somewhere"
+msgstr ""
+"L'identifiant pour cet enregistrement dans la configuration. Il ne doit pas "
+"être modifié sans s'assurer au préalable des endroits y faisant référence"
+
+msgctxt "help:party.public_service_work_category,name:"
+msgid "The name that will be displayed to the end user"
+msgstr "Nom qui sera affiché à l'utilisateur"
 
 msgctxt "model:ir.action,name:act_administrative_situation_sub_status"
 msgid "Admin Situation Sub Status"
@@ -176,6 +247,10 @@ msgctxt "model:ir.action,name:act_public_index"
 msgid "Public Employment Index"
 msgstr "Indice de la fonction publique"
 
+msgctxt "model:ir.action,name:act_public_service_work_category"
+msgid "Public Service Work Category"
+msgstr "Catégorie statutaire de la fonction publique"
+
 msgctxt "model:ir.ui.menu,name:menu_configuration_admin_situation_sub_status"
 msgid "Admin Situation Sub Status"
 msgstr "Sous statut de la situation administrative"
@@ -184,6 +259,10 @@ msgctxt "model:ir.ui.menu,name:menu_configuration_public_index"
 msgid "Public Employment Index"
 msgstr "Indice de la fonction publique"
 
+msgctxt "model:ir.ui.menu,name:menu_configuration_public_service_work_status"
+msgid "Public Service Work Category"
+msgstr "Catégorie statutaire de la fonction publique"
+
 msgctxt "model:party.administrative_situation_sub_status,name:"
 msgid "Administrative Situation Sub Status"
 msgstr "Sous statut de la situation administrative"
@@ -191,6 +270,10 @@ msgstr "Sous statut de la situation administrative"
 msgctxt "model:party.public_employment_index,name:"
 msgid "Public Employment Index Table"
 msgstr "Table des indices de la fonction publique"
+
+msgctxt "model:party.public_service_work_category,name:"
+msgid "Public Service Work Category"
+msgstr "Catégorie statutaire de la fonction publique"
 
 msgctxt "selection:party.administrative_situation_sub_status,situation:"
 msgid "Active"

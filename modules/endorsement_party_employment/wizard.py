@@ -48,15 +48,22 @@ class ManagePartyEmployment(EndorsementWizardStepMixin):
     def step_default(self, field_names):
         pool = Pool()
         Party = pool.get('party.party')
+        Endorsement = pool.get('endorsement')
         defaults = super(ManagePartyEmployment, self).step_default()
 
         if len(Transaction().context.get('active_ids')) > 1:
             raise UserError(gettext(
                     'endorsement_party_employment.msg_invalid_active_ids'))
 
-        current_party_id = Transaction().context.get('active_id')
-        current_party = Party(current_party_id)
-        if not current_party.is_person:
+        current_party = None
+        if Transaction().context.get('active_model') == 'party.party':
+            current_party = Party(Transaction().context.get('active_id'))
+        elif Transaction().context.get('active_model') == 'endorsement':
+            endorsement = Endorsement(Transaction().context.get('active_id'))
+            if endorsement.parties:
+                current_party = endorsement.parties[0]
+
+        if not current_party or not current_party.is_person:
             raise UserError(gettext(
                     'endorsement_party_employment.msg_invalid_type'))
         possible_employments = [x.id for x in current_party.employments]

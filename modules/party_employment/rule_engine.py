@@ -42,3 +42,11 @@ class RuleEngineRuntime(metaclass=PoolMeta):
         at_date = datetime.date(args['date'].year, 1, 1)
         return args['contract'].subscriber.get_employment_version_data(
             'gross_salary', at_date)
+
+    @classmethod
+    @check_args('date')
+    def _re_employment_work_time_type_code(cls, args):
+        at_date = args['date']
+        work_time_type = cls.get_person(args).get_employment_version_data(
+            'work_time_type', at_date)
+        return work_time_type.code if work_time_type else ''

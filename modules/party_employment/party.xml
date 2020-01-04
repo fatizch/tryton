@@ -135,7 +135,7 @@ this repository contains the full copyright notices and license terms. -->
         <record model="ir.action.act_window" id="act_work_section_relation">
             <field name="name">Work Sections</field>
             <field name="res_model">party.work_section</field>
-            <field name="domain" eval="[('party', '=', Eval('active_id'))]" pyson="1"/>
+            <field name="domain" eval="[('legal_entity', '=', Eval('active_id'))]" pyson="1"/>
         </record>
         <record model="ir.action.act_window.view" id="act_work_section_relation_view_1">
             <field name="sequence" eval="1"/>

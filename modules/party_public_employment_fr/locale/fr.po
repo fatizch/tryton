@@ -2,7 +2,348 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "field:csrh,code:"
+msgid "Code"
+msgstr "Code"
+
+msgctxt "field:csrh,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:csrh,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:csrh,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:csrh,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:csrh,party:"
+msgid "CSRH"
+msgstr "CSRH"
+
+msgctxt "field:csrh,payroll_service:"
+msgid "Payroll Service"
+msgstr "Centre paie"
+
+msgctxt "field:csrh,rec_name:"
+msgid "Record Name"
+msgstr "Nom de l'enregistrement"
+
+msgctxt "field:csrh,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:csrh,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:csrh,xml_id:"
+msgid "XML Id"
+msgstr "XML Id"
+
+msgctxt "field:party.employment,csrh:"
+msgid "CSRH"
+msgstr "CSRH"
+
+msgctxt "field:party.employment,payroll_assignment_number:"
+msgid "Payroll Assignment Number"
+msgstr "Numéro de service d'affectation"
+
+msgctxt "field:party.employment,payroll_care_number:"
+msgid "Payroll Care Number"
+msgstr "Numéro de prise en charge"
+
+msgctxt "field:party.employment,payroll_service:"
+msgid "Payroll Service"
+msgstr "Centre paie"
+
+msgctxt "field:party.employment,payroll_subdivision:"
+msgid "Payroll Subdivision"
+msgstr "Département affectation"
+
+msgctxt "field:party.employment,possible_subdivision:"
+msgid "Possible Payroll Subdivision"
+msgstr "Centres paie possibles"
+
+msgctxt "field:party.employment,salary_deduction_service:"
+msgid "Salary Deduction Service"
+msgstr "Organisme précompteur"
+
+msgctxt "field:party.party,csrh_role:"
+msgid "CSRH"
+msgstr "CSRH"
+
+msgctxt "field:party.party,is_csrh:"
+msgid "Is CSRH"
+msgstr "Est un CSRH"
+
+msgctxt "field:party.party,is_payroll_service:"
+msgid "Is Payroll Service"
+msgstr "Est un centre paie"
+
+msgctxt "field:party.party,payroll_service_role:"
+msgid "Payroll Service"
+msgstr "Centre paie"
+
+msgctxt "field:party.payroll_service,code:"
+msgid "Code"
+msgstr "Code"
+
+msgctxt "field:party.payroll_service,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:party.payroll_service,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:party.payroll_service,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:party.payroll_service,func_key:"
+msgid "Functional Key"
+msgstr "Clé fonctionnelle"
+
+msgctxt "field:party.payroll_service,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:party.payroll_service,party:"
+msgid "Payroll Service"
+msgstr "Centre paie"
+
+msgctxt "field:party.payroll_service,rec_name:"
+msgid "Record Name"
+msgstr "Nom de l'enregistrement"
+
+msgctxt "field:party.payroll_service,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:party.payroll_service,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:party.payroll_service,xml_id:"
+msgid "XML Id"
+msgstr "XML Id"
+
+msgctxt "field:party.salary_deduction_service,code:"
+msgid "Code"
+msgstr "Code"
+
+msgctxt "field:party.salary_deduction_service,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:party.salary_deduction_service,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:party.salary_deduction_service,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:party.salary_deduction_service,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:party.salary_deduction_service,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:party.salary_deduction_service,rec_name:"
+msgid "Record Name"
+msgstr "Nom de l'enregistrement"
+
+msgctxt "field:party.salary_deduction_service,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:party.salary_deduction_service,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:party.salary_deduction_service,xml_id:"
+msgid "XML Id"
+msgstr "XML Id"
+
+msgctxt "field:party.work_section,attached_subdivision:"
+msgid "Subdivisions"
+msgstr "Département"
+
+msgctxt "field:party.work_section,csrh:"
+msgid "CSRH"
+msgstr "CSRH"
+
+msgctxt "field:party.work_section,func_key:"
+msgid "Functional Key"
+msgstr "Clé fonctionnelle"
+
+msgctxt "field:party.work_section,legal_entity:"
+msgid "Legal Entity"
+msgstr "Société"
+
+msgctxt "field:party.work_section-country.subdivision,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:party.work_section-country.subdivision,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:party.work_section-country.subdivision,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:party.work_section-country.subdivision,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:party.work_section-country.subdivision,rec_name:"
+msgid "Record Name"
+msgstr "Nom de l'enregistrement"
+
+msgctxt "field:party.work_section-country.subdivision,subdivision:"
+msgid "Subdivision"
+msgstr "Département"
+
+msgctxt "field:party.work_section-country.subdivision,work_section:"
+msgid "Work Section"
+msgstr "Service gestionnaire"
+
+msgctxt "field:party.work_section-country.subdivision,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:party.work_section-country.subdivision,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:party.work_section-country.subdivision,xml_id:"
+msgid "XML Id"
+msgstr "XML Id"
+
+msgctxt "help:csrh,code:"
+msgid ""
+"The string that will be used to identify this record across the "
+"configuration. It should not be modified without checking first if it is "
+"used somewhere"
+msgstr ""
+"L'identifiant pour cet enregistrement dans la configuration. Il ne doit pas "
+"être modifié sans s'assurer au préalable des endroits y faisant référence"
+
+msgctxt "help:party.employment,payroll_assignment_number:"
+msgid "Number assign by payroll civil service updated by EDI"
+msgstr "Numéro assigné par le centre paie et mis à jour par flux"
+
+msgctxt "help:party.employment,payroll_service:"
+msgid "French payroll service for civil service"
+msgstr "Centre des Services des Ressources Humaines"
+
+msgctxt "help:party.employment,salary_deduction_service:"
+msgid "Service responsible to deduct insurance premium from salary"
+msgstr ""
+"Organisme responsable du précompte de la cotisation assurance sur la paie de"
+" l'assuré"
+
+msgctxt "help:party.party,csrh_role:"
+msgid "French Human Ressources for Public Service"
+msgstr "Centre des Services des Ressources Humaines"
+
+msgctxt "help:party.party,payroll_service_role:"
+msgid "French Payroll Service for Public Service"
+msgstr "Centre paie du service publique"
+
+msgctxt "help:party.payroll_service,code:"
+msgid ""
+"The string that will be used to identify this record across the "
+"configuration. It should not be modified without checking first if it is "
+"used somewhere"
+msgstr ""
+"L'identifiant pour cet enregistrement dans la configuration. Il ne doit pas "
+"être modifié sans s'assurer au préalable des endroits y faisant référence"
+
+msgctxt "help:party.salary_deduction_service,code:"
+msgid ""
+"The string that will be used to identify this record across the "
+"configuration. It should not be modified without checking first if it is "
+"used somewhere"
+msgstr ""
+"L'identifiant pour cet enregistrement dans la configuration. Il ne doit pas "
+"être modifié sans s'assurer au préalable des endroits y faisant référence"
+
+msgctxt "help:party.salary_deduction_service,name:"
+msgid "The name that will be displayed to the end user"
+msgstr "Nom qui sera affiché à l'utilisateur"
+
+msgctxt "help:party.work_section,csrh:"
+msgid "CSRH used by this work section"
+msgstr "CSRH du service gestionnaire"
+
+msgctxt "model:csrh,name:"
+msgid "CSRH"
+msgstr "CSRH"
+
+msgctxt "model:ir.action,name:act_csrh_form"
+msgid "CSRH"
+msgstr "Csrh"
+
+msgctxt "model:ir.action,name:act_payroll_service_form"
+msgid "Payroll Services"
+msgstr "Centres paie"
+
+msgctxt "model:ir.action,name:act_salary_deduction_service_form"
+msgid "Salary Deduction Services"
+msgstr "Organismes précompteur"
+
 msgctxt "model:ir.message,text:msg_invalid_employment_identifier"
 msgid ""
 "Employment Identifier must have 15 digits if the employment is is civil."
 msgstr "Le numéro de liaison administratif doit avoir 15 chiffres."
+
+msgctxt "model:ir.message,text:msg_payroll_care_number"
+msgid "Payroll care number must have 1 or 2 digits."
+msgstr "Le numéro du service d'affectation doit avoir 1 ou 2 chiffres"
+
+msgctxt "model:ir.ui.menu,name:menu_csrh_form"
+msgid "CSRH"
+msgstr "Csrh"
+
+msgctxt "model:ir.ui.menu,name:menu_payroll_service_form"
+msgid "Payroll Services"
+msgstr "Centres paie"
+
+msgctxt "model:ir.ui.menu,name:menu_salary_deduction_service_form"
+msgid "Salary Deduction Services"
+msgstr "Organismes précompteur"
+
+msgctxt "model:party.payroll_service,name:"
+msgid "Payroll Service"
+msgstr "Centre paie"
+
+msgctxt "model:party.salary_deduction_service,name:"
+msgid "Party Salary Deduction Service"
+msgstr "Organisme précompteur"
+
+msgctxt "model:party.work_section-country.subdivision,name:"
+msgid "Party Work Section Subdivision Relation"
+msgstr "Relation service gestionnaire département"
+
+msgctxt "view:party.employment:"
+msgid "Payroll Prepayment Information"
+msgstr "Information précompte"
+
+msgctxt "view:party.party:"
+msgid "CSRH"
+msgstr "CSRH"
+
+msgctxt "view:party.party:"
+msgid "Payroll Service"
+msgstr "Centre paie"

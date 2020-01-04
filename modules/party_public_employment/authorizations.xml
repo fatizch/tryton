@@ -3,14 +3,17 @@
 this repository contains the full copyright notices and license terms. -->
 <tryton>
     <data>
-        <!-- Group Global Config -->
+        <!-- Index authorization -->
         <record model="ir.ui.menu-res.group" id="menu_configuration_public_index_global_config">
             <field name="menu" ref="menu_configuration_public_index"/>
             <field name="group" ref="coog_core.group_global_config"/>
         </record>
-        <record model="ir.ui.menu-res.group" id="menu_configuration_admin_situation_sub_status_global_config">
-            <field name="menu" ref="menu_configuration_admin_situation_sub_status"/>
-            <field name="group" ref="coog_core.group_global_config"/>
+        <record model="ir.model.access" id="access_party_public_employment_index">
+            <field name="model" search="[('model', '=', 'party.public_employment_index')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
         </record>
         <record model="ir.model.access" id="access_party_public_employment_index_global_config">
             <field name="model" search="[('model', '=', 'party.public_employment_index')]"/>
@@ -20,21 +23,10 @@ this repository contains the full copyright notices and license terms. -->
             <field name="perm_create" eval="True"/>
             <field name="perm_delete" eval="True"/>
         </record>
-        <record model="ir.model.access" id="access_party_administrative_situation_sub_status_global_config">
-            <field name="model" search="[('model', '=', 'party.administrative_situation_sub_status')]"/>
+        <!-- administration situation sub status authorization -->
+        <record model="ir.ui.menu-res.group" id="menu_configuration_admin_situation_sub_status_global_config">
+            <field name="menu" ref="menu_configuration_admin_situation_sub_status"/>
             <field name="group" ref="coog_core.group_global_config"/>
-            <field name="perm_read" eval="True"/>
-            <field name="perm_write" eval="True"/>
-            <field name="perm_create" eval="True"/>
-            <field name="perm_delete" eval="True"/>
-        </record>
-        <!-- Default Access -->
-        <record model="ir.model.access" id="access_party_public_employment_index">
-            <field name="model" search="[('model', '=', 'party.public_employment_index')]"/>
-            <field name="perm_read" eval="True"/>
-            <field name="perm_write" eval="False"/>
-            <field name="perm_create" eval="False"/>
-            <field name="perm_delete" eval="False"/>
         </record>
          <record model="ir.model.access" id="access_party_administrative_situation_sub_status">
             <field name="model" search="[('model', '=', 'party.administrative_situation_sub_status')]"/>
@@ -43,6 +35,35 @@ this repository contains the full copyright notices and license terms. -->
             <field name="perm_create" eval="False"/>
             <field name="perm_delete" eval="False"/>
         </record>
+        <record model="ir.model.access" id="access_party_administrative_situation_sub_status_global_config">
+            <field name="model" search="[('model', '=', 'party.administrative_situation_sub_status')]"/>
+            <field name="group" ref="coog_core.group_global_config"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <!-- Public Service Work Category -->
+        <record model="ir.ui.menu-res.group" id="menu_configuration_public_service_work_status_global_config">
+            <field name="menu" ref="menu_configuration_public_service_work_status"/>
+            <field name="group" ref="coog_core.group_global_config"/>
+        </record>
+         <record model="ir.model.access" id="access_public_service_work_status">
+            <field name="model" search="[('model', '=', 'party.party.public_service_work_category')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_public_service_work_status_global_config">
+            <field name="model" search="[('model', '=', 'party.party.public_service_work_category')]"/>
+            <field name="group" ref="coog_core.group_global_config"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+
     </data>
 </tryton>
 

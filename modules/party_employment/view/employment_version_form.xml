@@ -9,4 +9,6 @@
     <separator id="salary" string="Salary Information" colspan="4"/>
     <label name="gross_salary"/>
     <field name="gross_salary"/>
+    <label name="annual_salary_premium"/>
+    <field name="annual_salary_premium"/>
 </form>

@@ -335,7 +335,7 @@ msgstr "Cette action devrait être lancée depuis une personne physique"
 
 msgctxt "model:ir.message,text:msg_new_employment"
 msgid "New Employment"
-msgstr "Nouvel emploi"
+msgstr "Nouveau contrat de travail"
 
 msgctxt "selection:endorsement.party.employment,action:"
 msgid "Add"

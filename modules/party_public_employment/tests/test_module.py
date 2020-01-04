@@ -11,7 +11,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
     module = 'party_public_employment'
 
     @test_framework.prepare_test('party_employment.'
-                                 'test0001_testEmploymentKindCreation')
+        'test0001_testEmploymentKindCreation')
     def test0060_party_API(self):
         pool = Pool()
         Party = pool.get('party.party')

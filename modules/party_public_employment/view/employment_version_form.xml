@@ -8,13 +8,15 @@
         <newline/>
     </xpath>
     <xpath expr="/form/field[@name='work_time_type']" position="after">
+        <label name="public_service_work_category"/>
+        <field name="public_service_work_category"/>
         <newline/>
         <label name="work_subdivision"/>
         <field name="work_subdivision"/>
         <label name="work_country"/>
         <field name="work_country"/>
     </xpath>
-    <xpath expr="/form/field[@name='gross_salary']" position="after">
+    <xpath expr="/form/field[@name='annual_salary_premium']" position="after">
         <newline/>
         <label name="increased_index"/>
         <field name="increased_index"/>

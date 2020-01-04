@@ -49,5 +49,18 @@ this repository contains the full copyright notices and license terms. -->
             <field name="long_description">Salaire annuel brut défini dans les données professionnelles du souscripteur du contrat au 1er janvier</field>
             <field name="parent" ref="offered_insurance.dossier_souscripteur"/>
         </record>
+        <!-- ############################################################ -->
+        <!-- Work time type -->
+        <!-- ############################################################ -->
+        <record model="rule_engine.function" id="quotite_de_travail">
+            <field name="translated_technical_name">quotite_de_travail</field>
+            <field name="description">Quotité de travail</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_employment_work_time_type_code</field>
+            <field name="long_description">Code de la quotite de travail</field>
+            <field name="parent" ref="offered_insurance.dossier_personne_couverte"/>
+        </record>
     </data>
 </tryton>

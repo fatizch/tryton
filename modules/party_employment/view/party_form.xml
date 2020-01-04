@@ -7,6 +7,15 @@ this repository contains the full copyright notices and license terms. -->
             <field name="employments"/>
         </page>
     </xpath>
+    <xpath expr="/form/notebook/page[@id='role']/group[@id='role_group']" position="inside">
+        <label name="is_work_section"/>
+        <field name="is_work_section" xexpand="0" width="25"/>
+    </xpath>
+    <xpath expr="/form/notebook/page[@id='role']/notebook" position="inside">
+        <page id="work_section" string="Work Section">
+            <field name="work_section_role" mode="form,tree"/>
+        </page>
+    </xpath>
 </data>
 
 

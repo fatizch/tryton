@@ -12,12 +12,15 @@
     <field name="start_date"/>
     <label name="end_date"/>
     <field name="end_date"/>
-    <label name="work_section"/>
-    <field name="work_section" widget="selection"/>
+    <newline/>
     <label name="employment_kind"/>
     <field name="employment_kind" widget="selection"/>
+    <newline/>
     <label name="employment_identifier"/>
     <field name="employment_identifier"/>
+    <separator string="Work section" colspan="4" id="work_section"/>
+    <label name="work_section"/>
+    <field name="work_section"/>
     <newline/>
     <field name="versions" colspan="4"/>
 </form>

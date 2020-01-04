@@ -4,5 +4,8 @@
         <record model="ir.message" id="msg_invalid_employment_identifier">
             <field name="text">Employment Identifier must have 15 digits if the employment is is civil.</field>
         </record>
+        <record model="ir.message" id="msg_payroll_care_number">
+            <field name="text">Payroll care number must have 1 or 2 digits.</field>
+        </record>
     </data>
 </tryton>

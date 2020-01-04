@@ -20,6 +20,7 @@ __all__ = [
     'PublicEmploymentIndex',
     'EmploymentKind',
     'Employment',
+    'PublicServiceWorkCategory',
     ]
 
 
@@ -108,17 +109,26 @@ class EmploymentVersion(metaclass=PoolMeta):
         'on_change_with_gross_index', setter='setter_void')
     work_country = fields.Many2One('country.country',
         'Work Country', help='Country where the employee works',
+        states={'invisible': Eval('administrative_situation') != 'active',
+            'required': Eval('administrative_situation') == 'active'},
         ondelete='RESTRICT')
     work_subdivision = fields.Many2One('country.subdivision',
         'Subdivision Work Place', help='Subdivision where the employee works',
         domain=[('country', '=', Eval('work_country'))],
-        depends=['work_country'], ondelete='RESTRICT')
+        states={'invisible': Eval('administrative_situation') != 'active',
+            'required': Eval('administrative_situation') == 'active'},
+        depends=['work_country', 'administrative_situation'],
+        ondelete='RESTRICT')
+    public_service_work_category = fields.Many2One(
+        'party.public_service_work_category', 'Public Service Work Category',
+        help='Define the work category in public service administration of the '
+        'employee', ondelete='RESTRICT')
 
     @classmethod
     def __setup__(cls):
         super(EmploymentVersion, cls).__setup__()
         cls.work_time_type.states['invisible'] = (
-            Eval('administrative_situation', '') == 'retired')
+            Eval('administrative_situation', '') != 'active')
         cls.work_time_type.depends.append('administrative_situation')
 
     @classmethod
@@ -158,7 +168,8 @@ class EmploymentVersion(metaclass=PoolMeta):
         return super(EmploymentVersion, cls).fields_modifiable_in_endorsement()\
             + ['administrative_situation',
             'administrative_situation_sub_status', 'increased_index',
-            'gross_index', 'work_country', 'work_subdivision']
+            'gross_index', 'work_country', 'work_subdivision',
+            'public_service_work_category']
 
     @fields.depends('administrative_situation',
         'administrative_situation_sub_status')
@@ -184,6 +195,15 @@ class AdminSituationSubStatus(model.CodedMixin, model.CoogView):
     def __setup__(cls):
         super().__setup__()
         cls._order = [('code', 'ASC')]
+
+    @classmethod
+    def is_master_object(cls):
+        return True
+
+
+class PublicServiceWorkCategory(model.CodedMixin, model.CoogView):
+    'Public Service Work Category'
+    __name__ = 'party.public_service_work_category'
 
     @classmethod
     def is_master_object(cls):

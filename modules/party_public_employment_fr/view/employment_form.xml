@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<data>
+    <xpath expr="/form/field[@name='work_section']" position="after">
+        <label name="payroll_subdivision"/>
+        <field name="payroll_subdivision"/>
+        <label name="payroll_care_number"/>
+        <field name="payroll_care_number"/>
+        <newline/>
+        <label name="csrh"/>
+        <field name="csrh"/>
+        <newline/>
+        <label name="payroll_service"/>
+        <field name="payroll_service"/>
+        <label name="salary_deduction_service"/>
+        <field name="salary_deduction_service"/>
+        <newline/>
+        <label name="payroll_assignment_number"/>
+        <field name="payroll_assignment_number"/>
+        <field name="possible_subdivision"/>
+    </xpath>
+    <xpath expr="/form/separator[@id='work_section']" position="replace_attributes">
+        <separator string="Payroll Prepayment Information" colspan="4" id="work_section"/>
+    </xpath>
+</data>

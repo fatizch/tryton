@@ -3,5 +3,113 @@
 this repository contains the full copyright notices and license terms. -->
 <tryton>
     <data>
+        <!-- ######## -->
+        <!-- # CSRH # -->
+        <!-- ######## -->
+        <record model="ir.ui.view" id="csrh_view_form">
+            <field name="model">csrh</field>
+            <field name="type">form</field>
+            <field name="name">csrh_form</field>
+        </record>
+        <record model="ir.ui.view" id="csrh_view_tree">
+            <field name="model">csrh</field>
+            <field name="type">tree</field>
+            <field name="name">csrh_list</field>
+        </record>
+        <record model="ir.action.act_window" id="act_csrh_form">
+            <field name="name">CSRH</field>
+            <field name="res_model">csrh</field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_csrh_form_view_tree">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="csrh_view_tree"/>
+            <field name="act_window" ref="act_csrh_form"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_csrh_form_view_form">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="csrh_view_form"/>
+            <field name="act_window" ref="act_csrh_form"/>
+        </record>
+        <menuitem parent="party_employment.menu_employment_configuration" id="menu_csrh_form" action="act_csrh_form"/>
+        <!-- #################### -->
+        <!-- # Payroll Service  # -->
+        <!-- #################### -->
+        <record model="ir.ui.view" id="payroll_service_view_form">
+            <field name="model">party.payroll_service</field>
+            <field name="type">form</field>
+            <field name="name">payroll_service_form</field>
+        </record>
+        <record model="ir.ui.view" id="payroll_service_view_tree">
+            <field name="model">party.payroll_service</field>
+            <field name="type">tree</field>
+            <field name="name">payroll_service_list</field>
+        </record>
+        <record model="ir.action.act_window" id="act_payroll_service_form">
+            <field name="name">Payroll Services</field>
+            <field name="res_model">party.payroll_service</field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_payroll_service_form_view_tree">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="payroll_service_view_tree"/>
+            <field name="act_window" ref="act_payroll_service_form"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_payroll_service_form_view_form">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="payroll_service_view_form"/>
+            <field name="act_window" ref="act_payroll_service_form"/>
+        </record>
+        <menuitem parent="party_employment.menu_employment_configuration" id="menu_payroll_service_form" action="act_payroll_service_form"/>
+        <!-- ############################# -->
+        <!-- # Saalry Deduction Service  # -->
+        <!-- ############################# -->
+        <record model="ir.ui.view" id="salary_deduction_service_view_form">
+            <field name="model">party.salary_deduction_service</field>
+            <field name="type">form</field>
+            <field name="name">salary_deduction_service_form</field>
+        </record>
+        <record model="ir.ui.view" id="salary_deduction_service_view_tree">
+            <field name="model">party.salary_deduction_service</field>
+            <field name="type">tree</field>
+            <field name="name">salary_deduction_service_list</field>
+        </record>
+        <record model="ir.action.act_window" id="act_salary_deduction_service_form">
+            <field name="name">Salary Deduction Services</field>
+            <field name="res_model">party.salary_deduction_service</field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_salary_deduction_service_form_view_tree">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="salary_deduction_service_view_tree"/>
+            <field name="act_window" ref="act_salary_deduction_service_form"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_salary_deduction_service_form_view_form">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="salary_deduction_service_view_form"/>
+            <field name="act_window" ref="act_salary_deduction_service_form"/>
+        </record>
+        <menuitem parent="party_employment.menu_employment_configuration" id="menu_salary_deduction_service_form" action="act_salary_deduction_service_form"/>
+        <!-- ######### -->
+        <!-- # Party # -->
+        <!-- ######### -->
+        <record model="ir.ui.view" id="party_view_form">
+            <field name="model">party.party</field>
+            <field name="inherit" ref="party.party_view_form"/>
+            <field name="name">party_form</field>
+        </record>
+        <!-- ###################### -->
+        <!-- # Employment Version # -->
+        <!-- ###################### -->
+        <record model="ir.ui.view" id="employment_view_form">
+            <field name="model">party.employment</field>
+            <field name="inherit" ref="party_employment.employment_view_form"/>
+            <field name="name">employment_form</field>
+        </record>
+        <!-- ################ -->
+        <!-- # Work section # -->
+        <!-- ################ -->
+        <record model="ir.ui.view" id="work_section_view_form">
+            <field name="model">party.work_section</field>
+            <field name="inherit" ref="party_employment.work_section_view_form"/>
+            <field name="name">work_section_form</field>
+        </record>
     </data>
 </tryton>

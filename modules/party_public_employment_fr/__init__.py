@@ -6,5 +6,11 @@ from . import party
 
 def register():
     Pool.register(
+        party.Party,
         party.Employment,
+        party.CSRH,
+        party.PayrollService,
+        party.PartyWorkSection,
+        party.PartyWorkSectionSubdivisionRelation,
+        party.PartySalaryDeductionService,
         module='party_public_employment_fr', type_='model')

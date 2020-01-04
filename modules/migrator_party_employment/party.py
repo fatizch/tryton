@@ -130,8 +130,27 @@ class MigratorPartyPublicEmployment(metaclass=PoolMeta):
     def __setup__(cls):
         super(MigratorPartyPublicEmployment, cls).__setup__()
         cls.columns['administrative_situation'] = 'administrative_situation'
+        cls.columns['date'] = 'effective_date'
+        cls.columns['public_service_work_category'] = 'statutory_category'
         cls.columns['increased_index'] = 'increased_index'
-        # TO DO add administrative_sub_status (no mapping_found)
+        cls.columns['work_subdivision'] = 'work_subdivision'
+        cls.columns['administrative_situation_sub_status'] = \
+            'administrative_situation_complement'
+
+    @classmethod
+    def init_cache(cls, rows, **kwargs):
+        super(MigratorPartyPublicEmployment, cls).init_cache(rows)
+        cls.cache_obj['administrative_situation_sub_status'] = \
+            tools.cache_from_search('party.administrative_situation_sub_status',
+            'code', ('code', 'in',
+                [r['administrative_situation_sub_status'] for r in rows]))
+        cls.cache_obj['public_service_work_category'] = \
+            tools.cache_from_search('party.public_service_work_category',
+            'code', ('code', 'in',
+                list(set([r['public_service_work_category'] for r in rows]))))
+        cls.cache_obj['work_subdivision'] = tools.cache_from_search(
+            'country.subdivision', 'code', ('code', 'in',
+                list(set([r['work_subdivision'] for r in rows]))))
 
     @classmethod
     def remove_version_information(cls, row):
@@ -139,18 +158,44 @@ class MigratorPartyPublicEmployment(metaclass=PoolMeta):
             cls).remove_version_information(row)
         if 'administrative_situation' in row:
             row.pop('administrative_situation')
+        if 'administrative_situation_complement' in row:
+            row.pop('administrative_situation_complement')
         if 'increased_index' in row:
             row.pop('increased_index')
+        if 'work_subdivision' in row:
+            row.pop('work_subdivision')
         return row
 
     @classmethod
     def populate_version_row(cls, row):
         version_row_dict = super(MigratorPartyPublicEmployment,
             cls).populate_version_row(row)
-        version_row_dict.update({'administrative_situation':
-            row['administrative_situation'],
-            'increased_index': row['increased_index']})
+        version_row_dict.update({
+            'administrative_situation': row['administrative_situation'],
+            'increased_index': row['increased_index'],
+            'work_subdivision': cls.cache_obj['work_subdivision'][
+                    row['work_subdivision']]
+            if row['work_subdivision'] else None,
+            'administrative_situation_sub_status':
+                cls.cache_obj['administrative_situation_sub_status'][
+                    row['administrative_situation_sub_status']]
+                if row['administrative_situation_sub_status'] else None,
+            'public_service_work_category':
+                cls.cache_obj['public_service_work_category'][
+                    row['public_service_work_category']]
+                if row['public_service_work_category'] else None,
+            })
         return version_row_dict
+
+    @classmethod
+    def sanitize(cls, row):
+        row = super(MigratorPartyPublicEmployment, cls).sanitize(row)
+        if row['work_subdivision']:
+            suffix = row['work_subdivision']
+            if row['work_subdivision'] in mapping_fr_subdivision:
+                suffix = mapping_fr_subdivision[row['work_subdivision']]
+            row['work_subdivision'] = 'FR-' + suffix
+        return row
 
 
 class MigratorPartyPublicEmploymentFr(metaclass=PoolMeta):
@@ -160,42 +205,44 @@ class MigratorPartyPublicEmploymentFr(metaclass=PoolMeta):
     def __setup__(cls):
         super(MigratorPartyPublicEmploymentFr, cls).__setup__()
         cls.columns['csrh'] = 'csrh'
-        # it works but there is domain issue
-        # cls.columns['payroll_subdivision'] = 'payroll_management_subdivision'
-        # cls.columns['salary_deduction_service'] = 'salary_deduction_service'
+        cls.columns['payroll_subdivision'] = 'payroll_management_subdivision'
+        cls.columns['salary_deduction_service'] = 'salary_deduction_service'
         cls.columns['payroll_assignment_number'] = 'assignment_service'
         cls.columns['payroll_care_number'] = 'care_number'
 
     @classmethod
     def init_cache(cls, rows, **kwargs):
         super(MigratorPartyPublicEmploymentFr, cls).init_cache(rows)
-        csrhs = Pool().get('csrh').search([])
-        cls.cache_obj['csrh'] = {c.party.code: c.id for c in csrhs}
-        # cls.cache_obj['payroll_subdivision'] = tools.cache_from_search(
-        #     'country.subdivision', 'code',
-        #     ('code', 'in', [r['payroll_subdivision'] for r in rows]))
-        # cls.cache_obj['salary_deduction_service'] = tools.cache_from_search(
-        #     'party.salary_deduction_service','code',('code', 'in',
-        #         [r['salary_deduction_service'] for r in rows]))
+        cls.cache_obj['csrh'] = tools.cache_from_search('csrh', 'code',
+            ('code', 'in', [r['csrh'] for r in rows]))
+        cls.cache_obj['payroll_service'] = tools.cache_from_search(
+            'party.payroll_service', 'code',
+            ('code', 'in', [r['csrh'] for r in rows]))
+        cls.cache_obj['payroll_subdivision'] = tools.cache_from_search(
+            'country.subdivision', 'code',
+            ('code', 'in', [r['payroll_subdivision'] for r in rows]))
+        cls.cache_obj['salary_deduction_service'] = tools.cache_from_search(
+            'party.salary_deduction_service', 'code',
+            ('code', 'in', [r['salary_deduction_service'] for r in rows]))
 
     @classmethod
     def populate(cls, row):
         row = super(MigratorPartyPublicEmploymentFr, cls).populate(row)
         row['csrh'] = cls.cache_obj['csrh'][row['csrh']] if row['csrh'] else \
             None
-        # row['payroll_subdivision'] = cls.cache_obj['payroll_subdivision'][row[
-        #     'payroll_subdivision']] if row['payroll_subdivision'] else None
-        # row['salary_deduction_service'] = cls.cache_obj[
-        #     'salary_deduction_service'][row['salary_deduction_service']] if \
-        #     row['salary_deduction_service'] else None
+        row['payroll_subdivision'] = cls.cache_obj['payroll_subdivision'][row[
+            'payroll_subdivision']] if row['payroll_subdivision'] else None
+        row['salary_deduction_service'] = cls.cache_obj[
+            'salary_deduction_service'][row['salary_deduction_service']] if \
+            row['salary_deduction_service'] else None
         return row
 
     @classmethod
     def sanitize(cls, row):
         row = super(MigratorPartyPublicEmploymentFr, cls).sanitize(row)
-        # if row['payroll_subdivision']:
-        #     suffix = row['payroll_subdivision']
-        #     if row['payroll_subdivision'] in mapping_fr_subdivision:
-        #         suffix = mapping_fr_subdivision[row['payroll_subdivision']]
-        #     row['payroll_subdivision'] = 'FR-' + suffix
+        if row['payroll_subdivision']:
+            suffix = row['payroll_subdivision']
+            if row['payroll_subdivision'] in mapping_fr_subdivision:
+                suffix = mapping_fr_subdivision[row['payroll_subdivision']]
+            row['payroll_subdivision'] = 'FR-' + suffix
         return row
