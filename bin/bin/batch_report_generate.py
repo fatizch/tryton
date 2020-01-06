@@ -36,5 +36,4 @@ else:
     data = sys.stdin.read()
     obj = json.loads(data)
     res = generate_report(obj, template_path)
-    res = res.encode('utf-8')
     print(res)

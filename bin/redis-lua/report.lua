@@ -11,11 +11,14 @@ Usage: only ARGV are used (no KEYS). Possible commands are:
 ]]
 
 -- general
-local transco_coog = {}
-transco_coog['pending'] = 'pending'
-transco_coog['success'] = 'success'
-transco_coog['fail'] = 'failed'
-transco_coog['archive'] = 'archive'
+local transco_coog = {
+    wait = 'pending',
+    pending = 'pending',
+    success = 'success',
+    fail = 'failed',
+    failed = 'failed',
+    archive = 'archive'
+}
 
 local STATUS = {'pending', 'success', 'failed', 'archive'}
 
@@ -213,10 +216,10 @@ local function get_details(from, to, extract_failed, extract_success, extract_pe
                     nb_records=0},
                 duration_in_sec=0,
                 first_launch_date='9999-01-01T00:00:00'}
-            summary[job.chain_name][job.queue][job.status].nb_jobs = summary[job.chain_name][job.queue][job.status].nb_jobs + job.nb_jobs
-            summary[job.chain_name][job.queue][job.status].nb_records = summary[job.chain_name][job.queue][job.status].nb_records + job.nb_records
-            summary[job.chain_name][job.queue].duration_in_sec = math.max(summary[job.chain_name][job.queue].duration_in_sec, job.duration_in_sec)
-            if summary[job.chain_name][job.queue].first_launch_date > job.first_launch_date then
+            summary[job.chain_name][job.queue][job.status]['nb_jobs'] = summary[job.chain_name][job.queue][job.status]['nb_jobs'] + (job['nb_jobs'] or 1)
+            summary[job.chain_name][job.queue][job.status]['nb_records'] = summary[job.chain_name][job.queue][job.status]['nb_records'] + (job['nb_records'] or 1)
+            summary[job.chain_name][job.queue]['duration_in_sec'] = math.max(summary[job.chain_name][job.queue]['duration_in_sec'], job['duration_in_sec'] or -1)
+            if (job['first_launch_date']) and (summary[job.chain_name][job.queue].first_launch_date > job.first_launch_date) then
                 summary[job.chain_name][job.queue].first_launch_date = job.first_launch_date
             end
         end
