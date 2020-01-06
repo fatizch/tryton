@@ -47,5 +47,18 @@ this repository contains the full copyright notices and license terms. -->
             <field name="inherit" ref="account_invoice.invoice_line_view_form"/>
             <field name="name">invoice_line_form</field>
         </record>
+        <!-- ###################################### -->
+        <!-- # Account Invoice Line - Account Tax # -->
+        <!-- ###################################### -->
+       <record model="ir.ui.view" id="invoice_line_tax_view_list">
+           <field name="model">account.invoice.line-account.tax</field>
+           <field name="type">tree</field>
+           <field name="name">invoice_line_tax_list</field>
+       </record>
+       <record model="ir.ui.view" id="invoice_line_tax_view_form">
+           <field name="model">account.invoice.line-account.tax</field>
+           <field name="type">form</field>
+           <field name="name">invoice_line_tax_form</field>
+       </record>
     </data>
 </tryton>

@@ -578,6 +578,17 @@ class Invoice(metaclass=PoolMeta):
         return self.contract_invoice.get_cancelled_in_rebill() \
             if self.contract_invoice else None
 
+    @classmethod
+    def store_invoice_line_tax_cache(cls, invoices):
+        pool = Pool()
+        InvoiceTaxLine = pool.get('account.invoice.line-account.tax')
+
+        InvoiceTaxLine.store_cache([tl
+                for invoice in invoices
+                for line in invoice.lines
+                for tl in line.tax_lines
+                ])
+
 
 class InvoiceLine(metaclass=PoolMeta):
     __name__ = 'account.invoice.line'

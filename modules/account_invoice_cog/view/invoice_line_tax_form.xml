@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<form>
+    <label name="line"/>
+    <field name="line"/>
+    <label name="tax"/>
+    <field name="tax"/>
+    <label name="amount"/>
+    <field name="amount"/>
+</form>

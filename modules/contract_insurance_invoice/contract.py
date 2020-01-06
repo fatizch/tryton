@@ -507,8 +507,8 @@ class Contract(metaclass=PoolMeta):
 
         AccountInvoice.save(account_invoices)
         ContractInvoice.save(contract_invoices)
-
         AccountInvoice.post(account_invoices)
+
         lines_to_write = []
         for i, p in zip(account_invoices, payment_dates):
             lines_to_write += [list(i.lines_to_pay), p]
@@ -944,10 +944,12 @@ class Contract(metaclass=PoolMeta):
         pool = Pool()
         Invoice = pool.get('account.invoice')
         ContractInvoice = pool.get('contract.invoice')
+
         account_invoices, contract_invoices = cls._calculate_invoices(periods)
         cls._finalize_invoices(contract_invoices)
         Invoice.save(account_invoices)
         ContractInvoice.save(contract_invoices)
+        Invoice.store_invoice_line_tax_cache(account_invoices)
         return contract_invoices
 
     @classmethod

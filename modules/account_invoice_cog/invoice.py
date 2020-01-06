@@ -453,7 +453,14 @@ class Invoice(Printable, model.CoogSQL, export.ExportImportMixin):
     def post(cls, invoices):
         pool = Pool()
         Event = pool.get('event')
+        InvoiceLineTax = pool.get('account.invoice.line-account.tax')
+
         super(Invoice, cls).post(invoices)
+        tax_lines = [tl
+            for invoice in invoices
+            for line in invoice.lines
+            for tl in line.tax_lines]
+        InvoiceLineTax.store_cache(tax_lines)
         Event.notify_events(invoices, 'post_invoice')
         cls._update_postponements(invoices)
 
@@ -546,14 +553,32 @@ class Invoice(Printable, model.CoogSQL, export.ExportImportMixin):
         return self.taxes_included and self.currency
 
 
-class InvoiceLineTax(metaclass=PoolMeta):
+class InvoiceLineTax(model.CoogView, metaclass=PoolMeta):
     __name__ = 'account.invoice.line-account.tax'
 
+    currency_digits = fields.Function(
+        fields.Integer('Currency Digits'), 'on_change_with_currency_digits')
     amount = fields.Function(
         fields.Numeric('Amount'),
         'getter_amount')
+    amount_cache = fields.Numeric(
+        'Amount',
+        readonly=True,
+        digits=(16, Eval('currency_digits', 2)),
+        depends=['currency_digits'])
+
+    @fields.depends('line')
+    def on_change_with_currency_digits(self, name=None):
+        if not self.line or not self.line.invoice:
+            return 2
+        return self.line.invoice.currency_digits
 
     def getter_amount(self, name):
+        if self.amount_cache is not None:
+            return self.amount_cache
+        return self._tax_amount(name)
+
+    def _tax_amount(self, name):
         # The point of this method is to re-affect the delta between the basic
         # calculation (line per line tax) and the effective calculation (on the
         # full invoice, with all intelligent roundings) on each individual tax
@@ -642,3 +667,9 @@ class InvoiceLineTax(metaclass=PoolMeta):
     def reverse_tax_included(self):
         invoice = self.line.invoice
         return invoice.taxes_included and invoice.currency
+
+    @classmethod
+    def store_cache(cls, tax_lines):
+        for tax_line in tax_lines:
+            tax_line.amount_cache = tax_line.amount
+        cls.save(tax_lines)
