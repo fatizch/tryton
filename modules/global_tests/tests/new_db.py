@@ -5800,7 +5800,11 @@ if CREATE_CLAIMS:  # {{{
 
     do_print('    Creating a death claim')  # {{{
     config._context['client_defined_date'] = _death_claim_date
+
     claimant, = Party.find([('name', '=', 'DOE'), ('first_name', '=', 'John')])
+    claimant.death_date = _death_claim_date
+    claimant.save()
+
     CreateClaim = Wizard('claim.declare')
     CreateClaim.form.party = claimant
     CreateClaim.form.good_process = death_claim_process
