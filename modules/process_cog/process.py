@@ -282,7 +282,7 @@ class ProcessLog(model.CoogSQL, model.CoogView):
         return cls._task_models
 
     def get_rec_name(self, name):
-        return self.task.get_rec_name(name)
+        return self.task.get_rec_name(name) if self.task else ''
 
 
 class CoogProcessFramework(QueueMixin, ProcessFramework, model.CoogSQL,
