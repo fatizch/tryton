@@ -1,3 +1,4 @@
+* FEA#14122 Permettre la selection de "Format pour la GED interne" pour BDOC
 * OTH#00000 Ne pas encoder le contenu du fichier XML en base 64 car la librairie Zeep le fait automatiquement
 * FEA#13118 Impression d'un document via un appel web service à BDOC web
 

@@ -6,6 +6,7 @@ import logging
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval
 from trytond.config import config
+from trytond.i18n import gettext
 
 from trytond.modules.coog_core import fields
 
@@ -40,9 +41,6 @@ class ReportTemplate(metaclass=PoolMeta):
     @classmethod
     def __setup__(cls):
         super(ReportTemplate, cls).__setup__()
-        cls.format_for_internal_edm.states = {
-            'invisible': (Eval('input_kind') == 'bdoc') |
-                         (Eval('input_kind') == 'shared_genshi_template')}
         cls.export_dir.states = {
             'invisible': (Eval('input_kind') == 'bdoc')}
         cls.modifiable_before_printing.states = {
@@ -54,6 +52,14 @@ class ReportTemplate(metaclass=PoolMeta):
         return super().get_possible_input_kinds() + [
             ('bdoc', 'BDOC'),
         ]
+
+    @fields.depends('process_method', 'output_format')
+    def get_available_formats(self):
+        available_format = super().get_available_formats()
+        if self.process_method == 'bdoc':
+            available_format += [('original',
+                gettext('report_engine.msg_format_original'))]
+        return available_format
 
     @fields.depends('input_kind', 'possible_process_methods', 'versions')
     def on_change_input_kind(self):
