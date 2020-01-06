@@ -1,3 +1,4 @@
+* BUG#14118 Force premium calculation for each increment start date
 * OTH#00000 Check for option in premium rec_name
 
 Version 2.6 - 2019-10-11

@@ -1,3 +1,4 @@
+* BUG#14118 Force le calcul des primes au début de chaque palier
 * OTH#00000 Vérification de l'option in premium rec_name
 
 Version 2.6 - 2019-10-11

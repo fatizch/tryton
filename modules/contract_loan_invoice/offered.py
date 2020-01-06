@@ -28,7 +28,8 @@ class Product(metaclass=PoolMeta):
 
     def get_loan_dates(self, dates, loan):
         dates.add(loan.funds_release_date)
-        dates.add(loan.first_payment_date)
+        for increment in loan.increments:
+            dates.add(increment.start_date)
         dates.add(loan.end_date)
 
     def get_dates(self, contract):
