@@ -139,6 +139,7 @@ class BaseSelectPrestIj(batch.BatchRoot):
                     condition=((covered_element.item_desc == item_desc.id)
                         & (item_desc.kind == 'subsidiary'))
                 ).join(company, condition=(covered_element.party == company.id)
+                    & (claim.legal_entity == company.id)
                 ).join(benefit, condition=(service.benefit == benefit.id)
                     & (benefit.prest_ij == Literal(True))
                 ).join(loss_desc, condition=(loss.loss_desc == loss_desc.id)
