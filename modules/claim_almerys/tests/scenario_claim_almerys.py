@@ -51,8 +51,13 @@ currency = get_currency(code='EUR')
 _ = create_company(currency=currency)
 company = get_company()
 
-fiscalyear = set_fiscalyear_invoice_sequences(create_fiscalyear(company))
+fiscalyear = set_fiscalyear_invoice_sequences(create_fiscalyear(company,
+        today=datetime.date(2019, 1, 1)))
 fiscalyear.click('create_period')
+fiscalyear = set_fiscalyear_invoice_sequences(create_fiscalyear(company,
+        today=datetime.date(2020, 1, 1)))
+fiscalyear.click('create_period')
+
 
 Account = Model.get('account.account')
 AccountType = Model.get('account.account.type')
