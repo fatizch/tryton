@@ -11,7 +11,8 @@ __all__ = [
     'Invoice',
     'Tax',
     'MoveLine',
-    'InvoiceTax'
+    'InvoiceTax',
+    'InvoiceLineTax',
     ]
 
 
@@ -125,3 +126,16 @@ class InvoiceTax(metaclass=PoolMeta):
                 if self.tax.type == 'pasrau_rate':
                     line.pasrau_rates_info = (line_pasrau_rate_obj,)
         return lines
+
+
+class InvoiceLineTax(metaclass=PoolMeta):
+    __name__ = 'account.invoice.line-account.tax'
+
+    def _tax_amount(self, name):
+        if self.line.invoice.business_kind == 'claim_invoice':
+            pasrau_dict = ServerContext().get('pasrau_data')
+            if not pasrau_dict:
+                pasrau_dict = self.line.invoice._build_pasrau_dict()
+            with ServerContext().set_context(pasrau_data=pasrau_dict):
+                return super()._tax_amount(name)
+        return super()._tax_amount(name)

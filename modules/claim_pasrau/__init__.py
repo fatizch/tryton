@@ -23,6 +23,7 @@ def register():
         tax.Tax,
         tax.MoveLine,
         tax.InvoiceTax,
+        tax.InvoiceLineTax,
         batch.UpdatePartyPasrauRateBatch,
         slip.InvoiceSlipConfiguration,
         slip.Invoice,

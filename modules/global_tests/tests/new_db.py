@@ -319,6 +319,8 @@ DistributionNetwork = Model.get('distribution.network')
 Channel = Model.get('distribution.channel')
 DocumentDescription = Model.get('document.description')
 DunningProcedure = Model.get('account.dunning.procedure')
+Endorsement = Model.get('endorsement')
+EndorsementDefinition = Model.get('endorsement.definition')
 EventDesc = Model.get('benefit.event.description')
 ExclusionKind = Model.get('offered.exclusion')
 ExtraData = Model.get('extra_data')
@@ -5486,6 +5488,8 @@ if CREATE_CLAIMS:  # {{{
 
     claim_product_reduced_taxed, = AccountProduct.find(
         [('code', '=', 'reglement_sinistres_taxes_reduites')])
+    death_endorsement_definition, = EndorsementDefinition.find([
+            ('code', '=', 'change_death_date_party')])
     # }}}
     do_print('    Creating a work interruption claim')  # {{{
 
@@ -5802,8 +5806,17 @@ if CREATE_CLAIMS:  # {{{
     config._context['client_defined_date'] = _death_claim_date
 
     claimant, = Party.find([('name', '=', 'DOE'), ('first_name', '=', 'John')])
-    claimant.death_date = _death_claim_date
-    claimant.save()
+
+    death_endorsement = Endorsement()
+    death_endorsement.definition = death_endorsement_definition
+    death_endorsement.effective_date = _death_claim_date
+    death_endorsement.party_endorsements.new()
+    death_endorsement.party_endorsements[-1].values = {
+        'death_date': _death_claim_date,
+        }
+    death_endorsement.party_endorsements[-1].party = claimant
+    death_endorsement.save()
+    death_endorsement.click('apply_synchronous')
 
     CreateClaim = Wizard('claim.declare')
     CreateClaim.form.party = claimant
