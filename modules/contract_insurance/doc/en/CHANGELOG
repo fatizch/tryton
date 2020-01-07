@@ -1,3 +1,4 @@
+* OTH#00000 Take into account the default value of auto_remove_not_subscriptable in the tests
 * FEA#13843 Add covereds information to simulate API
 * FEA#13568 Update fields in party GDPR extraction
 * BUG#13518 Check extra data business kind and coherence with existing party extra data

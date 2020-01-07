@@ -1690,20 +1690,20 @@ class ModuleTestCase(test_framework.CoogTestCase):
         contract, = Contract.browse(
             [x['id'] for x in result['contracts']])
         self.assertEqual({x.coverage.code
-                for x in contract.covered_elements[0].options}, {'ALP', 'BET'})
+                for x in contract.covered_elements[0].options}, {'ALP'})
         self.assertEqual({x.coverage.code
-                for x in contract.covered_elements[1].options}, {'ALP', 'BET'})
+                for x in contract.covered_elements[1].options}, {'ALP'})
 
         data_dict = copy.deepcopy(data_ref)
-        data_dict['options'] = {'auto_remove_not_subscriptable': True}
+        data_dict['options'] = {'auto_remove_not_subscriptable': False}
         result = ContractAPI.subscribe_contracts(data_dict,
             {'_debug_server': True})
         contract, = Contract.browse(
             [x['id'] for x in result['contracts']])
         self.assertEqual({x.coverage.code
-                for x in contract.covered_elements[0].options}, {'ALP'})
+                for x in contract.covered_elements[0].options}, {'ALP', 'BET'})
         self.assertEqual({x.coverage.code
-                for x in contract.covered_elements[1].options}, {'ALP'})
+                for x in contract.covered_elements[1].options}, {'ALP', 'BET'})
 
     @test_framework.prepare_test(
         'contract_insurance.test0001_testPersonCreation',
