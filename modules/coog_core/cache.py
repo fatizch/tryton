@@ -9,7 +9,7 @@ __all__ = [
     'CoogCache',
     ]
 
-CACHE_SIZE_LIMIT = config.get('cache', 'coog_cache_size')
+CACHE_SIZE_LIMIT = config.getint('cache', 'coog_cache_size')
 
 
 class CoogCache(LRUDict):
