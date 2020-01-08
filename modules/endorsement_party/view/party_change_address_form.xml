@@ -3,7 +3,7 @@
 this repository contains the full copyright notices and license terms. -->
 <form>
     <group id="endorsement_info" colspan="2">
-        <field name="party_id"/>
+        <field name="party_id" invisible="1"/>
         <label name="effective_date"/>
         <field name="effective_date"/>
         <label name="endorsement_part"/>
