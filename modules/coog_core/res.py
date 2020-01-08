@@ -18,6 +18,7 @@ __all__ = [
     'UserGroup',
     'ResUserWarning',
     'GroupWithApi',
+    'Role',
     ]
 
 
@@ -107,3 +108,7 @@ class GroupWithApi(metaclass=PoolMeta):
     def _export_skips(cls):
         return super(GroupWithApi, cls)._export_skips() | {'api_access',
             'buttons'}
+
+
+class Role(model.CodedMixin, metaclass=PoolMeta):
+    __name__ = 'res.role'

@@ -462,6 +462,10 @@ msgctxt "field:extra_details.configuration.line,domain:"
 msgid "Domain"
 msgstr "Domaine"
 
+msgctxt "field:extra_details.configuration.line,help:"
+msgid "Help"
+msgstr "Aide"
+
 msgctxt "field:extra_details.configuration.line,id:"
 msgid "ID"
 msgstr "Identifiant"
@@ -580,6 +584,10 @@ msgstr "Code"
 
 msgctxt "field:ir.export.configuration,create_date:"
 msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:ir.export.configuration,create_date_:"
+msgid "Creation date"
 msgstr "Date de Création"
 
 msgctxt "field:ir.export.configuration,create_uid:"
@@ -990,6 +998,14 @@ msgctxt "field:ir.model.method,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:ir.module,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:ir.module,xml_id:"
+msgid "XML Id"
+msgstr "XML Id"
+
 msgctxt "field:ir.note,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
@@ -1001,6 +1017,10 @@ msgstr "Identifiant XML"
 msgctxt "field:ir.rule.group,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
+
+msgctxt "field:ir.sequence,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
 
 msgctxt "field:ir.sequence,func_key:"
 msgid "Functional Key"
@@ -1282,13 +1302,33 @@ msgctxt "field:res.group,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:res.role,code:"
+msgid "Code"
+msgstr "Code"
+
+msgctxt "field:res.role,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:res.role,xml_id:"
+msgid "XML Id"
+msgstr "XML Id"
+
 msgctxt "field:res.user,color_bg:"
 msgid "Background Color"
 msgstr "Couleur de fond"
 
+msgctxt "field:res.user,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
 msgctxt "field:res.user,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
+
+msgctxt "field:res.user-res.group,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
 
 msgctxt "field:res.user-res.group,xml_id:"
 msgid "XML Id"
@@ -1466,6 +1506,15 @@ msgid ""
 "should be run or not"
 msgstr ""
 "Le nom de la méthode utilisé pour décider si le jeux d'essai doit être lancé"
+
+msgctxt "help:res.role,code:"
+msgid ""
+"The string that will be used to identify this record across the "
+"configuration. It should not be modified without checking first if it is "
+"used somewhere"
+msgstr ""
+"L'identifiant pour cet enregistrement dans la configuration. Il ne doit pas "
+"être modifié sans s'assurer au préalable des endroits y faisant référence"
 
 msgctxt "model:api.configuration,name:"
 msgid "Api Configuration"
@@ -2049,6 +2098,10 @@ msgid "Integer"
 msgstr "Entier"
 
 msgctxt "selection:extra_details.configuration.line,type_:"
+msgid "Multi-Selection"
+msgstr ""
+
+msgctxt "selection:extra_details.configuration.line,type_:"
 msgid "Numeric"
 msgstr "Numérique"
 
@@ -2139,10 +2192,6 @@ msgstr "Si ces évenements sont générés"
 msgctxt "view:event.type.action:"
 msgid "Then this action will be realized"
 msgstr "Alors cette action est réalisée"
-
-msgctxt "view:event.type.action:"
-msgid "Event Type Action"
-msgstr "Action par type d'événement"
 
 msgctxt "view:event.type:"
 msgid "Event Type"

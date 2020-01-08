@@ -158,6 +158,9 @@ def register():
         api.APICore,
         res.GroupWithApi,
         module='coog_core', type_='model', depends=['api'])
+    Pool.register(
+        res.Role,
+        module='coog_core', type_='model', depends=['user_role'])
 
     Pool.register_post_init_hooks(cache_fields_get, module='ir')
     Pool.register_post_init_hooks(event_process_buttons, module='process')

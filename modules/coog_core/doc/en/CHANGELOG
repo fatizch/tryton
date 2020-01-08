@@ -1,3 +1,4 @@
+* FEA#14147 Make user_role inherit of CodedMixin
 * OTH#00000 Fix coog cache value getting
 * BUG#13984 Fixes on daily report command (handle extra info, default template, template encoding, documentation, make config parser compliant with kubernetes deployment)
 * BUG#13984 Fixes on daily report command (lua script, html template and date filter)

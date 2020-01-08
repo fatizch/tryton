@@ -9,4 +9,16 @@ this repository contains the full copyright notices and license terms. -->
             <field name="name">group_form</field>
         </record>
     </data>
+    <data depends="user_role">
+        <record model="ir.ui.view" id="role_view_form">
+            <field name="model">res.role</field>
+            <field name="inherit" ref="user_role.role_view_form"/>
+            <field name="name">role_form</field>
+        </record>
+        <record model="ir.ui.view" id="role_view_list">
+            <field name="model">res.role</field>
+            <field name="inherit" ref="user_role.role_view_list"/>
+            <field name="name">role_list</field>
+        </record>
+    </data>
 </tryton>
