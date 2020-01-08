@@ -370,6 +370,10 @@ msgctxt "field:net_calculation_rule-fix_extra_data,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:rule_engine,genshi_evaluated_description:"
+msgid " Genshi Evaluated"
+msgstr "Genshi évalué"
+
 msgctxt "help:benefit.rule,force_revaluation_on_basic_salary:"
 msgid "Get revaluation on basic salary from product if True"
 msgstr ""
@@ -631,16 +635,28 @@ msgid "Fréquence des revalorisations"
 msgstr "Fréquence des revalorisations"
 
 msgctxt "model:table,name:table_agirc"
-msgid "AGIRC"
-msgstr "AGIRC"
+msgid "AGIRC (Legacy)"
+msgstr "AGIRC (Legacy)"
+
+msgctxt "model:table,name:table_agirc_arrco"
+msgid "AGIRC_ARRCO"
+msgstr "AGIRC_ARRCO"
 
 msgctxt "model:table,name:table_arrco"
-msgid "ARRCO"
-msgstr "ARRCO"
+msgid "ARRCO (Legacy)"
+msgstr "ARRCO (Legacy)"
 
 msgctxt "model:table,name:table_pmss"
 msgid "PMSS"
 msgstr "PMSS"
+
+msgctxt "model:table.dimension.value,name:agirc_arrco_dimension_value_2019"
+msgid "[01/01/2019 - 01/11/2019["
+msgstr "[01/01/2019 - 01/11/2019["
+
+msgctxt "model:table.dimension.value,name:agirc_arrco_dimension_value_2020"
+msgid "[01/11/2019 - 01/11/2020["
+msgstr "[01/11/2019 - 01/11/2020["
 
 msgctxt "model:table.dimension.value,name:agirc_dimension_value_2016"
 msgid "[01/01/2016 - 01/01/2017["
@@ -655,8 +671,12 @@ msgid "[01/01/2018 - 01/01/2019["
 msgstr "[01/01/2018 - 01/01/2019["
 
 msgctxt "model:table.dimension.value,name:agirc_dimension_value_2019"
-msgid "[01/01/2019 - 01/01/2020["
-msgstr ""
+msgid "[01/01/2019 - 01/11/2019["
+msgstr "[01/01/2019 - 01/11/2019["
+
+msgctxt "model:table.dimension.value,name:agirc_dimension_value_2020"
+msgid "[01/11/2019 - 01/11/2020["
+msgstr "[01/11/2019 - 01/11/2020["
 
 msgctxt "model:table.dimension.value,name:arrco_dimension_value_2016"
 msgid "[01/01/2016 - 01/01/2017["
@@ -671,8 +691,12 @@ msgid "[01/01/2018 - 01/01/2019["
 msgstr "[01/01/2018 - 01/01/2019["
 
 msgctxt "model:table.dimension.value,name:arrco_dimension_value_2019"
-msgid "[01/01/2019 - 01/01/2020["
-msgstr ""
+msgid "[01/01/2019 - 01/11/2019["
+msgstr "[01/01/2019 - 01/11/2019["
+
+msgctxt "model:table.dimension.value,name:arrco_dimension_value_2020"
+msgid "[01/11/2019 - 01/11/2020["
+msgstr "[01/11/2019 - 01/11/2020["
 
 msgctxt "model:table.dimension.value,name:pmss_dimension_value_2000"
 msgid "[01/01/2000 - 01/01/2001["
@@ -752,7 +776,11 @@ msgstr "[01/01/2018 - 01/01/2019["
 
 msgctxt "model:table.dimension.value,name:pmss_dimension_value_2019"
 msgid "[01/01/2019 - 01/01/2020["
-msgstr ""
+msgstr "[01/01/2019 - 01/01/2020["
+
+msgctxt "model:table.dimension.value,name:pmss_dimension_value_2020"
+msgid "[01/01/2020 - 01/01/2021["
+msgstr "[01/01/2020 - 01/01/2021["
 
 msgctxt "selection:claim.service,specific_salary_mode:"
 msgid "Last 12 months"

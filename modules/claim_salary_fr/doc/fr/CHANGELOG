@@ -1,3 +1,5 @@
+* FEA#13681 Correction des dates agirc et arrco et ajout de la table fusionnée
+
 Version 2.6 - 2019-10-11
 * BUG#12308 Correction du calcul du PMSS pour le mode de salaire 'sur la dernière année'
 * BUG#12134 Correction du calcul du prorata pour les modes de salaire non mensuels
