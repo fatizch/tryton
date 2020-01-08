@@ -19,6 +19,7 @@ __all__ = [
     'ResUserWarning',
     'GroupWithApi',
     'Role',
+    'NoteType',
     ]
 
 
@@ -112,3 +113,8 @@ class GroupWithApi(metaclass=PoolMeta):
 
 class Role(model.CodedMixin, metaclass=PoolMeta):
     __name__ = 'res.role'
+
+
+class NoteType(model.CodedMixin, metaclass=PoolMeta):
+    __name__ = 'ir.note.type'
+    _func_key = 'code'

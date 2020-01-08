@@ -162,6 +162,10 @@ def register():
         res.Role,
         module='coog_core', type_='model', depends=['user_role'])
 
+    Pool.register(
+        res.NoteType,
+        module='coog_core', type_='model', depends=['note_authorizations'])
+
     Pool.register_post_init_hooks(cache_fields_get, module='ir')
     Pool.register_post_init_hooks(event_process_buttons, module='process')
     Pool.register_post_init_hooks(add_global_search_limit, module='coog_core')

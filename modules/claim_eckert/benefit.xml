@@ -19,6 +19,8 @@ this repository contains the full copyright notices and license terms. -->
             <field name="code">death_certificate</field>
             <field name="name">Death Certificate</field>
         </record>
+    </data>
+    <data noupdate="1">
         <!-- Eckert note type -->
         <record model="ir.note.type" id="eckert_note_type">
             <field name="code">eckert</field>
