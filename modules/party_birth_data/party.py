@@ -65,7 +65,7 @@ class Party(metaclass=PoolMeta):
         return 'zip'
 
     def getter_birth_zip_and_city(self, name):
-        if not self.birth_zip or not self.birth_city:
+        if not self.birth_zip:
             return None
         zip_code = self.__class__.get_birth_zip_from_code(
             self.birth_zip, self.birth_city)

@@ -1,3 +1,4 @@
+* BUG#14066 Allow initialization of birth_zip_and_city function field even if birth city is not defined
 * BUG#13466 Not reseting birth zip and city when the SSN is wrong or does not correspond to any INSEE code
 
 Version 2.6 - 2019-10-11
