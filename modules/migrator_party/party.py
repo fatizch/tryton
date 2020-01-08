@@ -2,7 +2,6 @@
 # this repository contains the full copyright notices and license terms.
 import json
 import datetime
-from itertools import groupby
 
 from sql import Table, Column, Literal, Null
 
@@ -269,20 +268,17 @@ class MigratorContactMechanism(migrator.Migrator):
             return []
         if kwargs.get('delete', False):
             ids = [(res[r]['party'].code if 'party' in res[r] else
-                    res[r]['uid'].split(':')[0], res[r]['sequence'],
-                    res[r]['type'], res[r]['value']) for r in res]
+                    res[r]['uid'].split(':')[0], res[r]['sequence']) for r in
+                    res]
             clause = Literal(False)
-            ids = sorted(ids, key=cls._group_by_party_sequence)
-            for keys, values in groupby(ids,
-                    key=cls._group_by_party_sequence):
-                values = list(values)
+            ids = set(ids)
+            for x in ids:
                 sub_clause = Literal(True)
-                for party, seq, type_, value in values:
-                    sub_clause &= (
+                party = x[0]
+                sequence = x[1]
+                sub_clause &= (
                         (cls.table.party == party) &
-                        (cls.table.sequence == seq) &
-                        (Column(cls.table, type_) == value)
-                        )
+                        (cls.table.sequence == sequence))
                 clause |= sub_clause
             cls.delete_rows(tools.CONNECT_SRC, cls.table, clause)
 
