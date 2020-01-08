@@ -1,3 +1,4 @@
+* BUG#14139 Retour de l'info du package choisi par élément couvert dans l'API simulate
 * OTH#00000 Prend en compte la valeur par défaut de auto_remove_not_subscriptable dans les tests
 * FEA#13843 Ajoute les informations de risques couverts dans l'API simulate
 * FEA#13568 Mise à jour des champs dans l'extraction RGPD d'un tiers

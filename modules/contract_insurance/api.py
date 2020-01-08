@@ -463,25 +463,37 @@ class APIContract(metaclass=PoolMeta):
         for i, contract in enumerate(contracts):
             descriptions = []
             for covered in contract.covered_elements:
-                desc = {'coverages': [
-                        cls._simulate_contract_extract_covered_option(
-                            option) for option in covered.all_options]}
-                if covered.party:
-                    created_party = created['party_ref_per_id'].get(
-                        covered.party.id)
-                    if created_party:
-                        desc['party'] = {'ref': created_party}
-                    else:
-                        desc['party'] = {
-                            'id': covered.party.id,
-                            'code': covered.party.code,
-                            'name': covered.party.full_name,
-                            }
-                elif covered.name is not None:
-                    desc['name'] = covered.name
-                descriptions.append(desc)
+                descriptions.append(cls._simulate_contract_covered_result(
+                        covered, contract, created))
             results[i].update({'covereds': descriptions})
         return results
+
+    @classmethod
+    def _simulate_contract_covered_result(cls, covered, contract, created):
+        covereds_parameters = \
+            created['contract_parameters_per_id'][contract.id].get('covereds')
+        desc = {'coverages': [cls._simulate_contract_extract_covered_option(
+                    option) for option in covered.all_options]}
+        if covered.party:
+            covered_parameters = next((cov for cov in covereds_parameters
+                if cov['party'].id == covered.party.id), None)
+            if covered_parameters:
+                package = covered_parameters.get('package')
+                if package:
+                    desc['package'] = {'code': package.code}
+            created_party = created['party_ref_per_id'].get(
+                covered.party.id)
+            if created_party:
+                desc['party'] = {'ref': created_party}
+            else:
+                desc['party'] = {
+                    'id': covered.party.id,
+                    'code': covered.party.code,
+                    'name': covered.party.full_name,
+                    }
+        elif covered.name is not None:
+            desc['name'] = covered.name
+        return desc
 
     @classmethod
     def _simulate_contract_extract_covered_option(cls, option):
@@ -525,6 +537,7 @@ class APIContract(metaclass=PoolMeta):
                     },
                     'name': {'type': 'string'},
                     'coverages': cls._simulate_coverages_output_schema(),
+                    'package': CODED_OBJECT_SCHEMA,
                     },
                 }
             }

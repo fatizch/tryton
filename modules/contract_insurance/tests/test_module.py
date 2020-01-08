@@ -1747,16 +1747,15 @@ class ModuleTestCase(test_framework.CoogTestCase):
         self.assertEqual(party.extra_data['covered_1'], False)
 
     @test_framework.prepare_test(
-        'offered.test0030_testProductCoverageRelation',
-        'contract.test0002_testCountryCreation',
+        'contract_insurance.test0001_testPersonCreation',
+        'offered_insurance.test0011ConsistentPackage_creation',
         'contract.test0005_PrepareProductForSubscription',
-        'offered.test0001_testNumberGeneratorCreation',
-        'offered_insurance.test0005_testItemDescCreation',
-        'offered_insurance.test0005_testInsurerCreation',
+        'contract.test0002_testCountryCreation',
         )
     def test9910_test_simulate_API(self):
         pool = Pool()
         ContractAPI = pool.get('api.contract')
+        Product = pool.get('offered.product')
         data_ref = {
             'parties': [
                 {
@@ -1827,6 +1826,24 @@ class ModuleTestCase(test_framework.CoogTestCase):
         self.assertEqual(len(covereds), 2)
         self.assertEqual(len(covereds[0]['coverages']), 2)
         self.assertEqual(covereds[0]['party']['ref'], '1')
+
+        product, = Product.search(['code', '=', 'AAA'])
+        product.packages_defined_per_covered = True
+        product.save()
+
+        data_dict = copy.deepcopy(data_ref)
+        data_dict['contracts'][0]['covereds'][0]['package'] = \
+            {'code': 'package_a'}
+        del data_dict['contracts'][0]['covereds'][0]['coverages']
+        data_dict['contracts'][0]['covereds'][1]['package'] = \
+            {'code': 'package_b'}
+        del data_dict['contracts'][0]['covereds'][1]['coverages']
+
+        simulation = ContractAPI.simulate(data_dict, {'_debug_server': True})
+
+        covereds = simulation[0]['covereds']
+        self.assertEqual(covereds[0]['package']['code'], 'package_a')
+        self.assertEqual(covereds[1]['package']['code'], 'package_b')
 
     def test0200_test_api_rule_tree_elements(self):
         APIRuleRuntime = Pool().get('api.rule_runtime')
