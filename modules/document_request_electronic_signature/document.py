@@ -39,6 +39,9 @@ class DocumentDescription(metaclass=PoolMeta):
     sub_documents = fields.One2Many('document.description.part', 'parent_doc',
         'Composed Of', delete_missing=True,
         states={'invisible': ~Eval('digital_signature_required')},
+        help="Ordered set of documents that will be merged before signing "
+        "if they are individualy requested. "
+        "Those not requested will be ignored",
         depends=['digital_signature_required'])
     signature_coordinates = fields.One2Many(
         'document.description.signature.coordinate', 'doc_desc',
@@ -176,13 +179,21 @@ class DocumentRequestLine(metaclass=PoolMeta):
         for request in [r for r in requests if r.document_desc]:
             attachments_grouped[request.document_desc] = ([request.attachment]
                 if request.attachment and request.attachment.data else [])
-
         for request in [r for r in requests
                 if r.document_desc and r.document_desc.sub_documents
                 and not r.attachment]:
-            for doc in [s.doc for s in request.document_desc.sub_documents]:
-                if len(attachments_grouped[doc]) == 1:
-                    attachment = attachments_grouped[doc][0]
+            all_received = None
+            for sub_doc in [s.doc for s in request.document_desc.sub_documents]:
+                if sub_doc not in attachments_grouped:
+                    # This sub document is not required
+                    continue
+                attachments = attachments_grouped[sub_doc]
+                if not attachments:
+                    # The sub doc is required but not yet received, can't merge
+                    all_received = False
+                    break
+                elif len(attachments) == 1:
+                    attachment = attachments[0]
                     try:
                         # Checking it is a real pdf file
                         PdfFileReader(BytesIO(attachment.data))
@@ -193,9 +204,9 @@ class DocumentRequestLine(metaclass=PoolMeta):
                                 'document_request_electronic_signature.'
                                 'msg_pdf_not_valid',
                                 name=attachment.name))
+                    all_received = True
 
-            if len(attachments_grouped[request.document_desc]) != len(
-                    request.document_desc.sub_documents):
+            if not all_received:
                 continue
             merger = PdfFileMerger()
             for attachment in attachments_grouped[request.document_desc]:
