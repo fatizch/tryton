@@ -97,7 +97,8 @@ class Mandate(model.CoogSQL, model.CoogView):
         # TODO : Maybe add a unique constraint on amendment_of?
         cls.identification.select = True
         cls.signature_date.domain = ['OR',
-            ('signature_date', '<=', Date()),
+            ('signature_date', '<=',
+                Date(start=Eval('context', {}).get('client_defined_date'))),
             ('signature_date', '=', None)]
 
     @classmethod
