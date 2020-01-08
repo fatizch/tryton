@@ -636,7 +636,7 @@ msgstr "Fréquence des revalorisations"
 
 msgctxt "model:table,name:table_agirc"
 msgid "AGIRC (Legacy)"
-msgstr "AGIRC (Legacy)"
+msgstr "AGIRC (Compatibilité)"
 
 msgctxt "model:table,name:table_agirc_arrco"
 msgid "AGIRC_ARRCO"
@@ -644,7 +644,7 @@ msgstr "AGIRC_ARRCO"
 
 msgctxt "model:table,name:table_arrco"
 msgid "ARRCO (Legacy)"
-msgstr "ARRCO (Legacy)"
+msgstr "ARRCO (Compatibilité)"
 
 msgctxt "model:table,name:table_pmss"
 msgid "PMSS"
