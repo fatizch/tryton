@@ -164,7 +164,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
 
         data_dict = copy.deepcopy(data_ref)
         self.APICore.update_distribution_networks(
-            data_dict, {'_debug_server': True})
+            data_dict, {'_debug_server': True, 'language': 'en'})
         self.assertEqual(node_1.name, 'titi')
         self.assertEqual(node_1.party.name, 'tototo')
 
