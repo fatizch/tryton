@@ -1,3 +1,4 @@
+* FEA#14090 The ssn is only required on subscription via API if the item description says so
 * BUG#13778 Only display health folder if party is a person
 * OTH#0000 Add child number function in rule engine
 * FEA#13248 API, handle party birth order

@@ -158,7 +158,13 @@ class ModuleTestCase(test_framework.CoogTestCase):
         'contract.test0002_testCountryCreation',
         )
     def test0060_subscribe_contract_API(self):
-        ContractAPI = Pool().get('api.contract')
+        pool = Pool()
+        ContractAPI = pool.get('api.contract')
+        person, = pool.get('offered.item.description').search([
+            ('code', '=', 'person')])
+        person.ssn_required = True
+        person.save()
+
         data_ref = {
             'parties': [
                 {
@@ -225,12 +231,9 @@ class ModuleTestCase(test_framework.CoogTestCase):
         data_dict = copy.deepcopy(data_ref)
         data_dict['parties'][0]['first_name'] = 'Auntie'
         del data_dict['parties'][0]['ssn']
-        self.assertEqual(
-            ContractAPI.subscribe_contracts(data_dict, {}).data,
-            [{
-                    'type': 'missing_ssn',
-                    'data': {'field': 'covered.party'},
-                    }])
+        error = ContractAPI.subscribe_contracts(data_dict, {})
+        self.assertEqual(error.format_error()['error_data']['message'],
+            'SSN required for this insured person [10] Mrs. DOE Auntie')
 
         data_dict = copy.deepcopy(data_ref)
         data_dict['parties'][0]['first_name'] = 'Auntie'

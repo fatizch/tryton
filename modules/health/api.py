@@ -1,7 +1,6 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
-from trytond.pool import PoolMeta, Pool
-
+from trytond.pool import PoolMeta
 
 __name__ = [
     'APIParty',
@@ -34,21 +33,3 @@ class APIParty(metaclass=PoolMeta):
 
 class APIContract(metaclass=PoolMeta):
     __name__ = 'api.contract'
-
-    @classmethod
-    def _check_contract_parameters_covereds(cls, data, contract_data):
-        API = Pool().get('api')
-
-        super()._check_contract_parameters_covereds(data, contract_data)
-
-        # Maybe some day there will be some sort of "ssn_required" on item
-        # descs
-        if contract_data['product'].is_health:
-            party = data.get('party', None)
-            if not party or not party.ssn:
-                API.add_input_error({
-                        'type': 'missing_ssn',
-                        'data': {
-                            'field': 'covered.party',
-                            },
-                        })
