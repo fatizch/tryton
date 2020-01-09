@@ -1,2 +1,3 @@
+* FEA#13666 Amélioration de la méthode init cache
 * FEA#14051 Ajout de l'option delete dans le code de la méthode migrate
 * FEA#12781 Création de module

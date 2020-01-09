@@ -47,18 +47,21 @@ class MigratorPartyEmployment(migrator.Migrator):
 
     @classmethod
     def init_cache(cls, rows, **kwargs):
+        work_sections = set([r['work_section'] for r in rows])
+        employees = [r['employee'] for r in rows]
+        employers = set([r['employer'] for r in rows])
+        work_time_types = set([r['work_time_type'] for r in rows])
         cls.cache_obj['work_section'] = tools.cache_from_search(
-            'party.work_section', 'code', ('code', 'in', [r['work_section']
-                for r in rows]))
+            'party.work_section', 'code', ('code', 'in', work_sections))
         cls.cache_obj['employment_kind'] = tools.cache_from_search(
             'party.employment_kind', 'code')
         cls.cache_obj['employee'] = tools.cache_from_search('party.party',
-            'code', ('code', 'in', [r['employee'] for r in rows]))
+            'code', ('code', 'in', employees))
         cls.cache_obj['employer'] = tools.cache_from_search('party.identifier',
-            'code', ('code', 'in', [r['employer'] for r in rows]))
+            'code', 'in', employers)
         cls.cache_obj['work_time_type'] = tools.cache_from_search(
             'party.employment_work_time_type', 'code', ('code', 'in',
-            [r['work_time_type'] for r in rows]))
+                work_time_types))
 
     @classmethod
     def populate(cls, row):
