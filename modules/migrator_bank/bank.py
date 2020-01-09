@@ -388,3 +388,13 @@ class MigratorSepaMandat(migrator.Migrator):
             'account_number']].id
         row['party'] = cls.cache_obj['party'][row['party']].id
         return row
+
+    @classmethod
+    def migrate(cls, ids, **kwargs):
+        res = super(MigratorSepaMandat, cls).migrate(ids, **kwargs)
+        if not res:
+            return []
+        if kwargs.get('delete', False):
+            ids = [res[r]['identification'] for r in res]
+            clause = Column(cls.table, cls.func_key).in_(ids)
+            cls.delete_rows(tools.CONNECT_SRC, cls.table, clause)

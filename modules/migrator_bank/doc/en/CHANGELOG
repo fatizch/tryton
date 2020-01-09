@@ -1,3 +1,4 @@
+* FEA#14061 Add delete option in migrate method of sepa mandate migrator
 * BUG#13975 Fix get_batch_configuration method
 * BUG#13876 Fix bank_account migration with delete option
 * FEA#13808 Group together bank accounts that must be handled by same job

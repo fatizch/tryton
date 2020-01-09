@@ -1,3 +1,4 @@
+* FEA#14061 Ajout de l'option delete dans la méthode migrate du migrator sepa mandate
 * BUG#13975 Correctif de la méthode get_batch_configuration
 * BUG#13876 correctif de la migration des comptes bancaires avec une option
 delete
