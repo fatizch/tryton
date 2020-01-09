@@ -12,7 +12,7 @@ from trytond.pool import Pool
 from trytond.model import Unique
 from trytond.exceptions import UserError
 from trytond.model.exceptions import ValidationError
-from trytond.pyson import Eval, Bool
+from trytond.pyson import Eval, Bool, If
 from trytond.transaction import Transaction
 from trytond import backend
 
@@ -120,6 +120,21 @@ class Product(model.CodedMixin, model.CoogView, Printable,
         cls.extra_data_def.help = 'List of extra data that will be requested '\
             'to subscribe a contract. These data can be used in rule engine '\
             'and will be versioned and stored on the contract'
+        cls.extra_data_def.domain = ['OR',
+            [('kind', 'in', cls.kind_list_for_extra_data_domain())],
+            [If(Eval('subscriber_kind') == 'person',
+                    [('kind', '=', 'party_person')],
+                    []),
+                If(Eval('subscriber_kind') == 'company',
+                    [('kind', '=', 'party_company')],
+                    []),
+                If(Eval('subscriber_kind') == 'all',
+                    ['OR',
+                        [('kind', '=', 'party_company')],
+                        [('kind', '=', 'party_person')]],
+                    [])
+            ]]
+        cls.extra_data_def.depends += ['subscriber_kind']
 
     @classmethod
     def __register__(cls, module_name):
@@ -146,6 +161,10 @@ class Product(model.CodedMixin, model.CoogView, Printable,
         super(Product, cls).validate(instances)
         cls.validate_contract_extra_data(instances)
         cls.validate_packages(instances)
+
+    @classmethod
+    def kind_list_for_extra_data_domain(cls):
+        return ['contract']
 
     @classmethod
     def validate_packages(cls, instances):
@@ -200,6 +219,10 @@ class Product(model.CodedMixin, model.CoogView, Printable,
                         'offered.msg_missing_contract_extra_data',
                         product=', '.join((extra_data.string
                                 for extra_data in remaining))))
+
+    def refresh_extra_data(self, base_data, kinds=None):
+        return super(Product, self).refresh_extra_data(base_data,
+            self.kind_list_for_extra_data_domain())
 
     def getter_icon_name(self, name):
         if self.icon:

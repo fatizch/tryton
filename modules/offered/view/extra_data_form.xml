@@ -10,7 +10,8 @@ this repository contains the full copyright notices and license terms. -->
         <page id="main" string="Main">
             <label name="kind"/>
             <field name="kind"/>
-            <newline/>
+            <label name="store_on_party"/>
+            <field name="store_on_party"/>
             <label name="type_"/>
             <field name="type_"/>
             <newline/>

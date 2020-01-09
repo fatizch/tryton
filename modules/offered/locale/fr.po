@@ -90,6 +90,10 @@ msgctxt "field:extra_data,sequence_order:"
 msgid "Sequence Order"
 msgstr "Ordre d'affichage"
 
+msgctxt "field:extra_data,store_on_party:"
+msgid "Store a copy on party"
+msgstr "Conserver une copie sur le tiers"
+
 msgctxt "field:extra_data,string:"
 msgid "Name"
 msgstr "Nom"
@@ -1030,6 +1034,10 @@ msgstr ""
 "Cette valeur sera utilisée pour ordonner les différentes données "
 "complémentaires lors de l'affichage utilisateur"
 
+msgctxt "help:extra_data,store_on_party:"
+msgid "If the covered element is a party, will store a copy on it"
+msgstr "Si le risque couvert est un tiers, en conservera une copie sur ce dernier"
+
 msgctxt "help:extra_data,tags:"
 msgid "Add and search all related configuration objects based on a tag"
 msgstr ""
@@ -1470,6 +1478,10 @@ msgid "Benefit"
 msgstr "Prestation"
 
 msgctxt "selection:extra_data,kind:"
+msgid "Company"
+msgstr "Société"
+
+msgctxt "selection:extra_data,kind:"
 msgid "Contract"
 msgstr "Contrat"
 
@@ -1488,6 +1500,10 @@ msgstr "Option"
 msgctxt "selection:extra_data,kind:"
 msgid "Package"
 msgstr "Formule"
+
+msgctxt "selection:extra_data,kind:"
+msgid "Person"
+msgstr "Personne Physique"
 
 msgctxt "selection:extra_data,kind:"
 msgid "Product"

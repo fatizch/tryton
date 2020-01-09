@@ -1558,15 +1558,23 @@ class CoveredElement(Printable,
 
     @classmethod
     def set_party_extra_data(cls, instances, name, vals):
-        Party = Pool().get('party.party')
+        pool = Pool()
+        Party = pool.get('party.party')
+        ExtraData = pool.get('extra_data')
         to_save = []
         for covered in instances:
+            need_to_save = False
             if not covered.party:
                 continue
             covered.party.extra_data = covered.party.extra_data or {}
-            covered.party.extra_data.update({
-                    k: v for k, v in vals.items() if v})
-            to_save.append(covered.party)
+            for k, v in vals.items():
+                if not v:
+                    continue
+                if ExtraData._extra_data_struct(k)['store_on_party']:
+                    covered.party.extra_data[k] = v
+                    need_to_save = True
+            if need_to_save:
+                to_save.append(covered.party)
         if to_save:
             Party.save(to_save)
 
@@ -1799,9 +1807,9 @@ class CoveredElement(Printable,
 
     def is_valid_at_date(self, at_date):
         '''
-            Return true if the covered element is active `at_date`. This checks
-            covered_element dates, the contract's activation dates and the
-            contract's company.
+        Return true if the covered element is active `at_date`. This checks
+        covered_element dates, the contract's activation dates and the
+        contract's company.
         '''
         assert at_date
         # Filter out lines for which manual dates were set which do not

@@ -11,11 +11,13 @@ from . import rule_engine
 from . import global_search
 from . import test_case
 from . import api
+from . import party
 
 
 def register():
     Pool.register(
         configuration.Configuration,
+        party.Party,
         offered.OptionDescription,
         offered.Product,
         offered.ProductOptionDescriptionRelation,

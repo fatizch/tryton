@@ -42,14 +42,8 @@ class Product(metaclass=PoolMeta):
         'covered')
 
     @classmethod
-    def kind_list_for_extra_data_domain(cls):
-        return ['contract']
-
-    @classmethod
     def __setup__(cls):
         super(Product, cls).__setup__()
-        cls.extra_data_def.domain = [
-            ('kind', 'in', cls.kind_list_for_extra_data_domain())]
         cls._function_auto_cache_fields.append('item_descriptors')
 
     @classmethod

@@ -59,12 +59,18 @@ class ExtraData(model.CoogDictSchema, model.ConfigurationMixin, model.CoogView,
             ('', ''),
             ('contract', 'Contract'),
             ('product', 'Product'),
+            ('party_person', 'Person'),
+            ('party_company', 'Company'),
             ('package', 'Package'),
             ('covered_element', 'Covered Element'),
             ('option', 'Option'),
             ('loss', 'Loss'),
             ('benefit', 'Benefit'),
             ], 'Kind', required=True)
+    store_on_party = fields.Boolean('Store a copy on party',
+        states={'invisible': Eval('kind') != 'covered_element'},
+        depends=['kind'], help="If the covered element is a party, will store "
+        "a copy on it")
     gdpr = fields.Boolean('GDPR Extraction',
         help='Specify if the data should be used in GDPR extractions')
     sub_datas = fields.One2Many('extra_data-sub_extra_data', 'master',
@@ -103,16 +109,15 @@ class ExtraData(model.CoogDictSchema, model.ConfigurationMixin, model.CoogView,
 
     @classmethod
     def __register__(cls, module_name):
-        # Migration from 1.10: Rename with_default_value
         TableHandler = backend.get('TableHandler')
-        extra_data = TableHandler(cls)
-        if extra_data.column_exist('with_default_value'):
-            extra_data.column_rename('with_default_value',
-            'has_default_value')
+        extra_data_h = TableHandler(cls)
 
         # Migration from 2.4: Add sequence_order
-        create_order = (extra_data.table_exist('table_name')
-            and not extra_data.column_exist('sequence_order'))
+        create_order = (extra_data_h.table_exist('table_name')
+            and not extra_data_h.column_exist('sequence_order'))
+
+        # Migration from 2.4: New option store on party
+        migrate_store_option = not extra_data_h.column_exist('store_on_party')
 
         super(ExtraData, cls).__register__(module_name)
 
@@ -141,6 +146,14 @@ class ExtraData(model.CoogDictSchema, model.ConfigurationMixin, model.CoogView,
                 where=(values.name == extra_data.name)
                 & (values.kind == extra_data.kind))
             cursor.execute(*query)
+
+        if migrate_store_option:
+            table = cls.__table__()
+            cursor.execute(*table.update(
+                    columns=[table.store_on_party],
+                    values=[True],
+                    where=(table.kind == 'covered_element')
+                    ))
 
     @classmethod
     def _export_skips(cls):
@@ -185,7 +198,7 @@ class ExtraData(model.CoogDictSchema, model.ConfigurationMixin, model.CoogView,
     @classmethod
     def default_sequence_order(cls):
         '''
-            Adds one to the latest value
+        Adds one to the latest value
         '''
         cursor = Transaction().connection.cursor()
         table = cls.__table__()
@@ -499,6 +512,7 @@ class ExtraData(model.CoogDictSchema, model.ConfigurationMixin, model.CoogView,
             'type_': self.type_,
             'kind': self.kind,
             'id': self.id,
+            'store_on_party': self.store_on_party,
             }
 
 
@@ -531,9 +545,9 @@ class ExtraDataSubExtraDataRelation(model.ConfigurationMixin, model.CoogView):
 
 class ExtraDataDefTable(model.ConfigurationMixin):
     '''
-        This should be used when creating a M2M intermediate table in order to
-        make sure the cache is properly cleaned up when adding / removing
-        elements in the list
+    This should be used when creating a M2M intermediate table in order to
+    make sure the cache is properly cleaned up when adding / removing
+    elements in the list
     '''
     @classmethod
     def create(cls, vlist):
@@ -611,8 +625,8 @@ def with_extra_data_def(reverse_model_name, reverse_field_name, kind,
         getter=None):
     class WithExtraDataDefMixin(HasExtraDataDef):
         '''
-            Mixin to add extra data definitions (i.e. to define a list of
-            extra_data to automatically set on linked objects)
+        Mixin to add extra data definitions (i.e. to define a list of
+        extra_data to automatically set on linked objects)
         '''
         @classmethod
         def __setup__(cls):
@@ -659,21 +673,22 @@ def with_extra_data_def(reverse_model_name, reverse_field_name, kind,
                         extra['business_kind'] == kind}
             return {k: filter_extra(extras) for k, extras in res.items()}
 
-        def _extra_data_structure(self):
+        def _extra_data_structure(self, kinds=None):
             cache = Pool().get('extra_data')._extra_data_structure_cache
             cached = cache.get(str(self), -1)
             if cached != -1:
                 return cached
 
             bases = {x.name: x._get_structure() for x in self.extra_data_def
-                if not any([y for y in self.extra_data_def if y in x.parents])}
+                if not any([y for y in self.extra_data_def if y in x.parents])
+                and (not kinds or x.kind in kinds)}
 
             cache.set(str(self), bases)
             return bases
 
-        def refresh_extra_data(self, base_data):
+        def refresh_extra_data(self, base_data, kinds=None):
             return Pool().get('extra_data')._refresh_extra_data(base_data,
-                self._extra_data_structure())
+                self._extra_data_structure(kinds))
 
     extra_data_def = fields.Many2Many(
         reverse_model_name, reverse_field_name, 'extra_data_def',

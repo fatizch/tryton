@@ -1,3 +1,4 @@
+* FEA#14145 Manage party extra data : Until now, the only way to add extra data on a party was to use a covered element extra data, wich was used by the projects but was not optimal. Coog now deals with party extra data and makes a difference between person and company. Furthermore Coog always stored the covered element extra data on a party, which was usefull in some cases (smoker) but not always. The behavior is now optional and deactivated by default but without changing existing implementations. Now we can add extra data on a subscriber and not only on the insured person (a company or a person) and store the configuration on the associated product
 * FEA#13356 Add multiselection extra data
 * BUG#13854 Handle extra data uppercase in apis
 * BUG#13732 Filter extra data returned in extra data groups by API

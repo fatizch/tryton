@@ -258,6 +258,12 @@ class Contract(model.CoogSQL, model.CoogView, with_extra_data(['contract'],
                 [])],
         states=_STATES, depends=['subscriber_kind', 'status'],
         ondelete='RESTRICT')
+    subscriber_extra_data = fields.Function(
+        fields.Dict('extra_data', 'Subscriber Extra Data',
+            states={'invisible': ~Eval('subscriber_extra_data')}),
+        'get_subscriber_extra_data', 'set_subscriber_extra_data')
+    subscriber_extra_data_string = subscriber_extra_data.translated(
+        'subscriber_extra_data')
     parties = fields.Function(
         fields.Many2Many('party.party', None, None, 'Parties'),
         'get_parties', searcher='search_parties', setter='setter_void')
@@ -668,7 +674,6 @@ class Contract(model.CoogSQL, model.CoogView, with_extra_data(['contract'],
         with _history = True, to manage request on history
         tables
         '''
-
         def convert(value):
             if value:
                 if not isinstance(value, datetime.date):
@@ -806,9 +811,10 @@ class Contract(model.CoogSQL, model.CoogView, with_extra_data(['contract'],
             self.product_subscriber_kind = 'all'
         self.extra_data_values = self.extra_data_values
 
+    @fields.depends('subscriber')
     def on_change_subscriber(self):
         # So that overrides can properly call super
-        pass
+        self.subscriber_extra_data = self.get_subscriber_extra_data()
 
     @fields.depends('subscriber')
     def on_change_with_current_policy_owner(self, name=None):
@@ -1084,6 +1090,40 @@ class Contract(model.CoogSQL, model.CoogView, with_extra_data(['contract'],
                 object_hook=JSONDecoder())
         return result
 
+    def get_subscriber_extra_data(self, name=None):
+        res = {}
+        if not self.subscriber:
+            return res
+        for extra_data_def in [x for x in self.product.extra_data_def
+            if (x.kind == 'party_person' and self.subscriber.is_person
+                ) or (x.kind == 'party_company'
+                and not self.subscriber.is_person)]:
+            if extra_data_def.name in self.subscriber.extra_data:
+                res[extra_data_def.name] = self.subscriber.extra_data[
+                    extra_data_def.name]
+            else:
+                res[extra_data_def.name] = None
+        return res
+
+    @classmethod
+    def set_subscriber_extra_data(cls, instances, name, vals):
+        pool = Pool()
+        Party = pool.get('party.party')
+        to_save = []
+        for contract in instances:
+            need_to_save = False
+            contract.subscriber.extra_data = (
+                contract.subscriber.extra_data or {})
+            for k, v in vals.items():
+                if not v:
+                    continue
+                contract.subscriber.extra_data[k] = v
+                need_to_save = True
+            if need_to_save:
+                to_save.append(contract.subscriber)
+        if to_save:
+            Party.save(to_save)
+
     @classmethod
     def search_rec_name(cls, name, clause):
         return ['OR', [
@@ -1255,7 +1295,7 @@ class Contract(model.CoogSQL, model.CoogView, with_extra_data(['contract'],
 
     def get_policy_owner(self, at_date=None):
         '''
-        the owner of a contract could change over time, you should never use
+        The owner of a contract could change over time, you should never use
         the direct link subscriber
         '''
         # TODO: to enhance
