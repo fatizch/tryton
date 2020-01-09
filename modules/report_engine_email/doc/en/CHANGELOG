@@ -1,3 +1,4 @@
+* FEA#14120 Send empty paper form associated to request line by e-mail
 * BUG#13588 Fix on report context passed to the attachments when generating emails
 
 Version 2.6 - 2019-10-11

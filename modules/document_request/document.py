@@ -64,14 +64,15 @@ class DocumentDescriptionOffered(
             'document_request')):
     __name__ = 'document.description'
 
-    template = fields.Many2One('report.template', 'Template',
+    template = fields.Many2One('report.template',
+        'Template for automatic generation',
         ondelete='CASCADE', help='If set, a document will automatically be '
             'created using this template, and be attached '
             'to the associated request line')
 
     @classmethod
     def __setup__(cls):
-        super(DocumentDescription, cls).__setup__()
+        super(DocumentDescriptionOffered, cls).__setup__()
         cls.extra_data_def.states = {
             'invisible': ~Eval('template')
             }
@@ -96,6 +97,12 @@ class DocumentDescription(metaclass=PoolMeta):
     prerequisite = fields.Boolean("Prerequisite",
         help="The documents of this kind are a prerequisite for receiving "
         "any other kind of documents. Only used for frontend applications.")
+    paper_form = fields.Many2One('report.template', 'Paper Form To Complete',
+        ondelete='RESTRICT', select=True,
+        help='Empty paper form to send to the party who'
+        ' will complete it manually and send it back',
+        domain=[('input_kind', '=', 'flat_document')],  # For the moment
+        )
 
 
 class DocumentRequestLine(Printable, model.CoogSQL, model.CoogView):

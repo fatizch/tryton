@@ -2,11 +2,9 @@
 # this repository contains the full copyright notices and license terms.
 from itertools import groupby
 from collections import defaultdict
-
 from sql import Null
 from sql.aggregate import Count
 from sql.operators import NotIn
-
 from trytond.i18n import gettext
 from trytond.pool import Pool, PoolMeta
 from trytond.transaction import Transaction
@@ -16,10 +14,13 @@ from trytond.model.exceptions import ValidationError
 
 from trytond.modules.coog_core import fields
 from trytond.modules.document_request.document import RemindableInterface
+from trytond.modules.contract_insurance.contract import COVERED_READ_ONLY
+from trytond.modules.contract_insurance.contract import COVERED_STATUS_DEPENDS
 
 
 __all__ = [
     'Contract',
+    'CoveredElement',
     ]
 
 
@@ -96,31 +97,15 @@ class Contract(RemindableInterface, metaclass=PoolMeta):
         return documents_per_contract
 
     @classmethod
-    def get_hidden_waiting_request_lines(cls, contracts, name):
-        # This getter allows the user to know if there are request lines which
-        # he is not allowed to view, and which are not yet received.
-        pool = Pool()
-        line = pool.get('document.request.line').__table__()
-        allowed_document_descs = pool.get('document.description').search([])
+    def get_hidden_waiting_request_lines(cls, instances, name):
+        Line = Pool().get('document.request.line')
+        return Line.get_hidden_waiting_request_lines(instances, 'contract')
 
-        where_clause = line.contract.in_([x.id for x in contracts]) & (
-            line.reception_date == Null)
-        if allowed_document_descs:
-            where_clause &= NotIn(line.document_desc, [x.id for x in
-                    allowed_document_descs])
-        else:
-            where_clause &= line.document_desc == Null
-
-        cursor = Transaction().connection.cursor()
-        cursor.execute(*line.select(line.id, line.contract,
-                where=where_clause,
-                group_by=[line.contract, line.id],
-                having=Count(line.id) > 0))
-
-        result = {x.id: [] for x in contracts}
-        for line_id, contract_id, in cursor.fetchall():
-            result[contract_id].append(line_id)
-        return result
+    def get_request_lines(self, with_hidden=True, only_pending=True):
+        lines = self.document_request_lines
+        if with_hidden:
+            lines += self.hidden_waiting_request_lines
+        return [l for l in lines if not only_pending or not l.received]
 
     @classmethod
     def get_hidden_waiting_requests(cls, contracts, name):
@@ -306,3 +291,27 @@ class Contract(RemindableInterface, metaclass=PoolMeta):
             treatment_date=None):
         super(Contract, cls).generate_reminds_documents(contracts,
             treatment_date)
+
+
+class CoveredElement(metaclass=PoolMeta):
+    __name__ = 'contract.covered_element'
+
+    document_request_lines = fields.One2Many('document.request.line',
+        'for_object', 'Requested Documents',
+        states={'readonly': COVERED_READ_ONLY},
+        depends=COVERED_STATUS_DEPENDS, delete_missing=True,
+        target_not_required=True)
+    hidden_waiting_request_lines = fields.Function(
+        fields.Many2Many('document.request.line', None, None,
+            'Hidden Waiting Request Lines'),
+        'get_hidden_waiting_request_lines')
+
+    def get_request_lines(self, with_hidden=True, only_pending=True):
+        lines = list(self.document_request_lines) + list(
+            self.hidden_waiting_request_lines)
+        return [l for l in lines if not only_pending or not l.received]
+
+    @classmethod
+    def get_hidden_waiting_request_lines(cls, instances, name):
+        Line = Pool().get('document.request.line')
+        return Line.get_hidden_waiting_request_lines(instances, 'for_object')

@@ -9,5 +9,8 @@ this repository contains the full copyright notices and license terms. -->
         <newline/>
         <label name="prerequisite"/>
         <field name="prerequisite"/>
+        <newline/>
+        <label name="paper_form"/>
+        <field name="paper_form"/>
     </xpath>
 </data>

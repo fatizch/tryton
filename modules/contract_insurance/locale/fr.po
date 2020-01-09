@@ -956,6 +956,10 @@ msgctxt "model:ir.action,name:act_contract_activation_history_relate_form"
 msgid "Activation History"
 msgstr "Historique d'activation"
 
+msgctxt "model:ir.action,name:act_covered_element_relate_form"
+msgid "Covered Elements"
+msgstr "Risques Couverts"
+
 msgctxt "model:ir.action,name:act_create_extra_premium"
 msgid "Create Extra Premium"
 msgstr "Créer une surprime"

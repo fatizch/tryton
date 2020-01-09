@@ -10,6 +10,10 @@ msgctxt "field:document.description,extra_data_def:"
 msgid "Extra Data"
 msgstr "Données Complémentaires"
 
+msgctxt "field:document.description,paper_form:"
+msgid "Paper Form To Complete"
+msgstr "Formulaire papier à compléter"
+
 msgctxt "field:document.description,prerequisite:"
 msgid "Prerequisite"
 msgstr "Prérequis"
@@ -19,8 +23,8 @@ msgid "Reception Requires Attachment"
 msgstr "La réception requiert la pièce jointe"
 
 msgctxt "field:document.description,template:"
-msgid "Template"
-msgstr "Modèle de courrier"
+msgid "Template for automatic generation"
+msgstr "Modèle de courrier pour la génération automatique"
 
 msgctxt "field:document.description,web_ui_resources:"
 msgid "Web UI Resources"
@@ -298,6 +302,62 @@ msgctxt "field:ir.attachment,status_change_date:"
 msgid "Status Change Date"
 msgstr "Date de changement de statut"
 
+msgctxt "field:report.template,paper_form_descs:"
+msgid "Paper Forms Descriptions"
+msgstr "Formulaires papier"
+
+msgctxt "field:report.template,requested_paper_forms:"
+msgid "Paper forms associated to request lines"
+msgstr "Formulaires papier associés aux documents requis"
+
+msgctxt "field:report.template-paper_form,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:report.template-paper_form,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:report.template-paper_form,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:report.template-paper_form,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:report.template-paper_form,mail_template:"
+msgid "Mail Template"
+msgstr "Modèle de mail"
+
+msgctxt "field:report.template-paper_form,paper_form:"
+msgid "Paper Form"
+msgstr "Formulaire papier"
+
+msgctxt "field:report.template-paper_form,rec_name:"
+msgid "Record Name"
+msgstr "Nom de l'enregistrement"
+
+msgctxt "field:report.template-paper_form,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:report.template-paper_form,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:report.template-paper_form,xml_id:"
+msgid "XML Id"
+msgstr "XML Id"
+
+msgctxt "help:document.description,paper_form:"
+msgid ""
+"Empty paper form to send to the party who will complete it manually and send"
+" it back"
+msgstr ""
+"Formulaire papier vierge à envoyer au tiers qui doit le compléter "
+"manuellement et le renvoyer"
+
 msgctxt "help:document.description,prerequisite:"
 msgid ""
 "The documents of this kind are a prerequisite for receiving any other kind "
@@ -337,6 +397,14 @@ msgstr "Référence l'objet pour lequel le document est demandé."
 msgctxt "help:ir.attachment,status_change_date:"
 msgid "Date of Last Status Change"
 msgstr "Date du dernier changement de statut"
+
+msgctxt "help:report.template,requested_paper_forms:"
+msgid ""
+"Will dynamically attach empty paper form for the receiver to complete if he "
+"has a pending request line associated to this form"
+msgstr ""
+"Ajoute le formulaire papier vierge en tant que pièce jointe si le "
+"destinataire a un document requis en cours associé à ce formulaire"
 
 msgctxt "model:batch.remind.documents,name:"
 msgid "Batch Remind Documents"
@@ -397,6 +465,10 @@ msgstr "Documents reçus"
 msgctxt "model:ir.ui.menu,name:menu_document_request_line_form"
 msgid "Document Request Lines"
 msgstr "Demandes de document"
+
+msgctxt "model:report.template-paper_form,name:"
+msgid "Report Template Paper Form Relation"
+msgstr "Relation Modèle de courrier - Formulaire Papier"
 
 msgctxt "selection:document.request,needed_by:"
 msgid ""

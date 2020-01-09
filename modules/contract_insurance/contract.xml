@@ -149,5 +149,20 @@ this repository contains the full copyright notices and license terms. -->
             <field name="model">contract,-1</field>
             <field name="action" ref="act_contract_activation_history_relate_form"/>
         </record>
+        <record model="ir.action.act_window" id="act_covered_element_relate_form">
+            <field name="name">Covered Elements</field>
+            <field name="res_model">contract.covered_element</field>
+            <field name="domain" eval="[('contract', '=', Eval('active_id'))]" pyson="1"></field>
+        </record>
+        <record model="ir.action.keyword" id="act_covered_element_relate_keyword">
+            <field name="keyword">form_relate</field>
+            <field name="model">contract,-1</field>
+            <field name="action" ref="act_covered_element_relate_form"/>
+        </record>
+        <record model="ir.action.keyword" id="report_covered_element_keyword">
+            <field name="keyword">form_print</field>
+            <field name="model">contract.covered_element,-1</field>
+            <field name="action" ref="report_engine.letter_generation_wizard"/>
+        </record>
     </data>
 </tryton>

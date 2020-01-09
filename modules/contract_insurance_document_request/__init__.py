@@ -19,6 +19,7 @@ def register():
         offered.Product,
         offered.OptionDescription,
         contract.Contract,
+        contract.CoveredElement,
         document.DocumentRequest,
         document.DocumentDescription,
         document.DocumentDescriptionProduct,

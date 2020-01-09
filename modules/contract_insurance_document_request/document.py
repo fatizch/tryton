@@ -1,7 +1,9 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
-from sql import Cast
+from sql import Cast, Null
 from sql.functions import Substring
+from sql.aggregate import Count
+from sql.operators import NotIn
 from collections import defaultdict
 
 from trytond import backend
@@ -121,6 +123,38 @@ class DocumentRequestLine(metaclass=PoolMeta):
         if self.contract:
             return self.contract
         return super(DocumentRequestLine, self).get_reference_object_for_edm()
+
+    @classmethod
+    def get_hidden_waiting_request_lines(cls, instances, var_name):
+        # This getter allows the user to know if there are request lines which
+        # he is not allowed to view, and which are not yet received.
+        pool = Pool()
+        line = cls.__table__()
+        allowed_document_descs = pool.get('document.description').search([])
+
+        if var_name == 'for_object':
+            where_clause = getattr(line, var_name).in_(
+                [str(x) for x in instances])
+        else:
+            where_clause = getattr(line, var_name).in_(
+                [x.id for x in instances])
+        where_clause &= (line.reception_date == Null)
+        if allowed_document_descs:
+            where_clause &= NotIn(line.document_desc, [x.id for x in
+                    allowed_document_descs])
+        else:
+            where_clause &= line.document_desc == Null
+
+        cursor = Transaction().connection.cursor()
+        cursor.execute(*line.select(line.id, getattr(line, var_name),
+                where=where_clause,
+                group_by=[getattr(line, var_name), line.id],
+                having=Count(line.id) > 0))
+
+        result = {x.id: [] for x in instances}
+        for line_id, _id, in cursor.fetchall():
+            result[_id].append(line_id)
+        return result
 
 
 class DocumentRequest(metaclass=PoolMeta):

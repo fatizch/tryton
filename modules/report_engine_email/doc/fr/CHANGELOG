@@ -1,3 +1,4 @@
+* FEA#14120 Ajout des formulaires papier à compléter en tant que pièces jointes dans le mail de demandes de pièces
 * BUG#13588 Correctif sur le context d'impression passé aux pièces jointes des emails
 
 Version 2.6 - 2019-10-11

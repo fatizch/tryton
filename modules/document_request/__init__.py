@@ -42,3 +42,8 @@ def register():
         api.APIPartyWebConfiguration,
         document.DocumentDescriptionWebConfiguration,
         module='document_request', type_='model', depends=['web_configuration'])
+    Pool.register(
+        report_engine.ReportTemplateEmail,
+        report_engine.ReportTemplatePaperFormRelation,
+        module='document_request', type_='model',
+        depends=['report_engine_email'])

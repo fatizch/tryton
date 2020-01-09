@@ -91,9 +91,10 @@ class ReportGenerate(metaclass=PoolMeta):
         Warning = pool.get('res.user.warning')
         attachments = []
         msg = None
-        if selected_letter.attachments or selected_letter.images:
+        attachments_to_add = selected_letter.get_attachments(cur_objects)
+        if attachments_to_add or selected_letter.images:
             fake_event_action = Pool().get('event.type.action')()
-            for tmpl in selected_letter.attachments:
+            for tmpl in attachments_to_add:
                 fake_event_action.report_templates = [tmpl]
                 valid_objects = fake_event_action.filter_objects_for_report(
                     cur_objects, tmpl)
@@ -105,9 +106,9 @@ class ReportGenerate(metaclass=PoolMeta):
                 if tmpl.format_for_internal_edm:
                     tmpl.save_reports_in_edm(generated_reports)
                 attachments += generated_reports
-            if selected_letter.attachments and not attachments:
+            if attachments_to_add and not attachments:
                 key = ('configuration_mismatch_%s' %
-                    ','.join([str(x.id) for x in selected_letter.attachments]))
+                    ','.join([str(x.id) for x in attachments_to_add]))
                 if Warning.check(key):
                     raise UserWarning(key, gettext(
                             'report_engine_email.msg_configuration_mismatch'))
@@ -268,7 +269,7 @@ class ReportTemplate(metaclass=PoolMeta):
         for record in records:
             if record.input_kind == 'email' and not record.split_reports:
                 if Warning.check(str(record)):
-                    raise UserWarning(
+                    raise UserWarning(str(record),
                         gettext('report_engine_email.msg_split_email'))
 
     @classmethod
@@ -319,6 +320,9 @@ class ReportTemplate(metaclass=PoolMeta):
         if self.input_kind == 'email':
             return None
         return super(ReportTemplate, self).print_reports(reports, context_)
+
+    def get_attachments(self, for_objects):
+        return list(self.attachments)
 
 
 class ReportGenerateEmail(Report):
