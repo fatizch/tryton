@@ -1,3 +1,4 @@
+* BUG#14161 Handle automatic discounts in simulate API
 * OTH#00000 Handle commercial discount on contract option
 * FEA#14026 Add option to return a premium summary of the first invoice only in simulate API
 * BUG#14014 Crash in simulate API in case no discounts is applied

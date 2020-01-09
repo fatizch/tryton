@@ -1,3 +1,4 @@
+* BUG#14161 Gestion des réductions commerciales automatiques dans l'API simulate
 * OTH#00000 Gestion des réductions commerciales sur des garanties contrats
 * FEA#14026 Ajout d'une option pour ne retourner un résumé que de la première quittance non nulle dans l'API simulate
 * BUG#14014 Erreur lors de la simulation en absence de discounts

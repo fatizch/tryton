@@ -49,7 +49,8 @@ class CreatePremiumModificationMixin:
         self.check_no_overlaps()
         new_modifications = self.choice.contract.get_new_modifications(
             self.choice.options, self.choice.start_date, self.choice.end_date,
-            modifications=[self.choice.discount])
+            filter_on=[self.choice.discount]
+            if self.modification_kind == 'discount' else [])
 
         waivers, discounts = [], []
         if self.modification_kind == 'waiver':

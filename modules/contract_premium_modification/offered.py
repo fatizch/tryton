@@ -126,7 +126,7 @@ class PremiumModificationRuleMixin(
             line.description += modification_ctx.get('discount_description')
         return line
 
-    def eligible(self, option, modifications):
+    def eligible(self, option):
         raise NotImplementedError
 
 
@@ -379,7 +379,7 @@ class WaiverPremiumRule(
         else:
             return self.coverage.get_account_for_billing(line)
 
-    def eligible(self, option, modifications):
+    def eligible(self, option):
         return True
 
 
@@ -471,10 +471,7 @@ class CommercialDiscountModificationRule(
     def get_account_for_modification_line(self, line):
         return self.account_for_modification
 
-    def eligible(self, option, modifications):
-        if modifications:
-            if self.commercial_discount not in modifications:
-                return False
+    def eligible(self, option):
         if self.eligibility_rule is not None:
             data = {'date': option.start_date}
             option.init_dict_for_rule_engine(data)

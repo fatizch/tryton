@@ -1,0 +1,45 @@
+{
+    "parties": [
+        {
+            "ref": "1",
+            "is_person": true,
+            "name": "Doe",
+            "first_name": "John",
+            "birth_date": "1990-10-14"
+        }
+    ],
+    "contracts": [
+        {
+            "ref": "1",
+            "product": {
+                "code": "test_product"
+            },
+            "subscriber": {
+                "ref": "1"
+            },
+            "extra_data": {},
+            "start": "2014-01-01",
+            "covereds": [
+                {
+                    "party": {
+                        "ref": "1"
+                    },
+                    "item_descriptor": {
+                        "code": "test_item_description"
+                    },
+                    "coverages": [
+                        {
+                            "coverage": {
+                                "code": "test_coverage"
+                            },
+                            "extra_data": {}
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "options": {
+        "premium_summary_kind": "first_invoice"
+    }
+}

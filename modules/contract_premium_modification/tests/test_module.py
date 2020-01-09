@@ -10,6 +10,7 @@ from trytond.pool import Pool
 
 import trytond.tests.test_tryton
 from trytond.modules.coog_core import test_framework
+from trytond.modules.api import APIInputError
 from trytond.tests.test_tryton import doctest_teardown
 from trytond.modules.contract_premium_modification.exceptions import \
     WaiverDiscountValidationError
@@ -43,7 +44,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
         coverage_alpha.save()
         coverage_beta = Coverage.search(['code', '=', 'BET'])[0]
 
-        discount_alpha = CommercialDiscount(name="Discount Alpha")
+        discount_alpha = CommercialDiscount(name='Discount Alpha')
         discount_alpha.code = 'ALP'
         discount_alpha.rules = [{}]
         discount_alpha.rules[-1].rate = Decimal('0.5')
@@ -53,7 +54,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
         discount_alpha.rules[-1].coverages = [Coverage(coverage_alpha.id)]
         discount_alpha.save()
 
-        discount_beta = CommercialDiscount(name="Discount Beta")
+        discount_beta = CommercialDiscount(name='Discount Beta')
         discount_beta.code = 'DISCOUNT_BET'
         discount_beta.rules = [{}]
         discount_beta.rules[-1].rate = Decimal('0.1')
@@ -63,7 +64,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
         discount_beta.rules[-1].coverages = [Coverage(coverage_beta.id)]
         discount_beta.save()
 
-        discount_zeta = CommercialDiscount(name="Discount Zeta")
+        discount_zeta = CommercialDiscount(name='Discount Zeta')
         discount_zeta.code = 'ZET'
         discount_zeta.rules = [{}]
         discount_zeta.rules[-1].rate = Decimal('0.5')
@@ -74,7 +75,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
 
         rule_context = RuleEngineContext(1)
 
-        duration_rule = RuleEngine(name="Discount Duration")
+        duration_rule = RuleEngine(name='Discount Duration')
         duration_rule.algorithm = ('start_date=date_effet_initiale_contrat()\n'
             'end_date=ajouter_annees(date_effet_initiale_contrat(),1,False)\n'
             'end_date=ajouter_jours(end_date, -1)\n'
@@ -87,8 +88,8 @@ class ModuleTestCase(test_framework.CoogTestCase):
         duration_rule.type_ = 'discount_duration'
         duration_rule.save()
 
-        discount_delta = CommercialDiscount(name="Discount Delta")
-        discount_delta.code = 'DEL'
+        discount_delta = CommercialDiscount(name='Discount Delta')
+        discount_delta.code = 'discount_auto_on_alpha'
         discount_delta.rules = [{}]
         discount_delta.rules[-1].rate = Decimal('0.2')
         discount_delta.rules[-1].account_for_modification = account.id
@@ -236,7 +237,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
 
         rule_context = RuleEngineContext(1)
 
-        duration_rule = RuleEngine(name="Discount Duration")
+        duration_rule = RuleEngine(name='Discount Duration')
         duration_rule.algorithm = ('start_date=date_effet_initiale_contrat()\n'
             'end_date=ajouter_annees(date_effet_initiale_contrat(),1,False)\n'
             'end_date=ajouter_jours(end_date, -1)\n'
@@ -249,8 +250,8 @@ class ModuleTestCase(test_framework.CoogTestCase):
         duration_rule.type_ = 'discount_duration'
         duration_rule.save()
 
-        discount_delta = CommercialDiscount(name="Discount Delta")
-        discount_delta.code = 'DEL'
+        discount_delta = CommercialDiscount(name='Incoherent Discount')
+        discount_delta.code = 'INCOHERENT'
         discount_delta.rules = [{}, {}]
         discount_delta.rules[-1].rate = Decimal('0.2')
         discount_delta.rules[-1].account_for_modification = account.id
@@ -349,26 +350,27 @@ class ModuleTestCase(test_framework.CoogTestCase):
         self.assertEqual(len(schedule[0]['schedule']), 12)
 
         # Coverage A is 10 per month, 1 covered = 120
+        # discount_auto_on_alpha is 20%: 120 - 24 = 96
         # Coverage B is 100 per month, 12 months + 2 covereds = 2400
-        # DISCOUNT_BET is 10% : so 2400 - 240 = 2160
-        self.assertEqual(schedule[0]['premium']['total'], '2280.00')
+        # DISCOUNT_BET is 10%: so 2400 - 240 = 2160
+        self.assertEqual(schedule[0]['premium']['total'], '2256.00')
         self.assertEqual(schedule[0]['premium']['total_premium'], '2520.00')
 
         self.assertEqual([(x['start'], x['end'], x['total'])
                     for x in schedule[0]['schedule']],
                 [
-                    ('2020-01-01', '2020-01-31', '190.00'),
-                    ('2020-02-01', '2020-02-29', '190.00'),
-                    ('2020-03-01', '2020-03-31', '190.00'),
-                    ('2020-04-01', '2020-04-30', '190.00'),
-                    ('2020-05-01', '2020-05-31', '190.00'),
-                    ('2020-06-01', '2020-06-30', '190.00'),
-                    ('2020-07-01', '2020-07-31', '190.00'),
-                    ('2020-08-01', '2020-08-31', '190.00'),
-                    ('2020-09-01', '2020-09-30', '190.00'),
-                    ('2020-10-01', '2020-10-31', '190.00'),
-                    ('2020-11-01', '2020-11-30', '190.00'),
-                    ('2020-12-01', '2020-12-31', '190.00'),
+                    ('2020-01-01', '2020-01-31', '188.00'),
+                    ('2020-02-01', '2020-02-29', '188.00'),
+                    ('2020-03-01', '2020-03-31', '188.00'),
+                    ('2020-04-01', '2020-04-30', '188.00'),
+                    ('2020-05-01', '2020-05-31', '188.00'),
+                    ('2020-06-01', '2020-06-30', '188.00'),
+                    ('2020-07-01', '2020-07-31', '188.00'),
+                    ('2020-08-01', '2020-08-31', '188.00'),
+                    ('2020-09-01', '2020-09-30', '188.00'),
+                    ('2020-10-01', '2020-10-31', '188.00'),
+                    ('2020-11-01', '2020-11-30', '188.00'),
+                    ('2020-12-01', '2020-12-31', '188.00'),
                     ])
 
         data_dict = copy.deepcopy(data_ref)
@@ -386,57 +388,67 @@ class ModuleTestCase(test_framework.CoogTestCase):
         # Quarterly billing
         self.assertEqual(len(output[0]['schedule']), 4)
         # Coverage A is 10 per month, 1 covered = 120
+        # discount_auto_on_alpha (auto) is 20%: 120 - 24 = 96
         # Coverage B is 100 per month, 12 months + 2 covereds = 2400
         # DISCOUNT_BET is 10% : so 2400 - 240  + 120 = 2280
-        self.assertEqual(output[0]['premium']['total'], '2280.00')
+        self.assertEqual(output[0]['premium']['total'], '2256.00')
         self.assertEqual(output[0]['premium']['total_premium'], '2520.00')
         self.assertEqual([(x['start'], x['end'], x['total'])
                     for x in output[0]['schedule']],
                 [
                     # (BET 300 * 2 covered)
                     #  +  (DISCOUNT_BET discount -30 * 2 covered)
-                    ('2020-01-01', '2020-03-31', '570.00'),
-                    ('2020-04-01', '2020-06-30', '570.00'),
-                    ('2020-07-01', '2020-09-30', '570.00'),
-                    ('2020-10-01', '2020-12-31', '570.00'),
+                    ('2020-01-01', '2020-03-31', '564.00'),
+                    ('2020-04-01', '2020-06-30', '564.00'),
+                    ('2020-07-01', '2020-09-30', '564.00'),
+                    ('2020-10-01', '2020-12-31', '564.00'),
                     ])
 
         expected_cov_premium = {
-            "total": "1200.00",
-            "total_fee": "0",
-            "total_premium": "1320.00",
-            "total_tax": "0",
-            "discounts": [
+            'total': '1176.00',
+            'total_fee': '0',
+            'total_premium': '1320.00',
+            'total_tax': '0',
+            'discounts': [
                 {
-                    "code": "DISCOUNT_BET",
-                    "amount": "-120.00"
-                }
-            ],
-            "total_discounts": "-120.00",
+                    'code': 'discount_auto_on_alpha',
+                    'amount': '-24.00',
+                    },
+                {
+                    'code': 'DISCOUNT_BET',
+                    'amount': '-120.00',
+                }],
+            'total_discounts': '-144.00',
         }
 
-        self.assertEqual(output[0]["covereds"][0]["premium"],
+        self.assertEqual(output[0]['covereds'][0]['premium'],
             expected_cov_premium)
 
         expected_contract_premium = {
-            "total": "2280.00",
-            "total_fee": "0",
-            "total_premium": "2520.00",
-            "total_tax": "0",
-            "discounts": [{
-                "code": "DISCOUNT_BET",
-                "amount": "-240.00"
-                }],
-            "total_discounts": "-240.00",
+            'total': '2256.00',
+            'total_fee': '0',
+            'total_premium': '2520.00',
+            'total_tax': '0',
+            'discounts': [
+                {
+                    'code': 'discount_auto_on_alpha',
+                    'amount': '-24.00',
+                    },
+                {
+                    'code': 'DISCOUNT_BET',
+                    'amount': '-240.00',
+                    },
+                ],
+            'total_discounts': '-264.00',
             }
 
-        self.assertEqual(output[0]["premium"], expected_contract_premium)
+        self.assertEqual(output[0]['premium'], expected_contract_premium)
 
         def check_amounts(p):
             sum_ = sum(Decimal(p[key]) for key in ('total_fee',
                     'total_premium', 'total_tax'))
             discounts = p.get('discounts', [])
-            discount_sum = sum([Decimal(x["amount"]) for x in discounts])
+            discount_sum = sum([Decimal(x['amount']) for x in discounts])
             all_summed = sum_ + discount_sum
             self.assertEqual(Decimal(p['total']), all_summed)
 
@@ -452,18 +464,17 @@ class ModuleTestCase(test_framework.CoogTestCase):
 
         data_dict = copy.deepcopy(data_ref)
         data_dict['options']['premium_summary_kind'] = 'first_invoice'
-        output = ContractAPI.simulate(
-            data_dict, {'_debug_server': True})
+        output = ContractAPI.simulate(data_dict, {'_debug_server': True})
 
         self.assertEqual(output[0]['premium_summary_kind'], 'first_invoice')
-        self.assertEqual(output[0]['premium']['total'], '190.00')
-        self.assertEqual(output[0]['premium']['total_discounts'], '-20.00')
+        self.assertEqual(output[0]['premium']['total'], '188.00')
+        self.assertEqual(output[0]['premium']['total_discounts'], '-22.00')
         self.assertEqual(output[0]['premium']['total_premium'], '210.00')
 
         self.assertEqual(output[0]['covereds'][0]['premium']['total'],
-            '100.00')
+            '98.00')
         self.assertEqual(output[0]['covereds'][0]['premium'][
-                'total_discounts'], '-10.00')
+                'total_discounts'], '-12.00')
         self.assertEqual(output[0]['covereds'][0]['premium']['total_premium'],
             '110.00')
 
@@ -472,6 +483,53 @@ class ModuleTestCase(test_framework.CoogTestCase):
             '-10.00')
         self.assertEqual(output[0]['covereds'][1]['premium']['total_premium'],
             '100.00')
+
+        data_dict = {
+            'parties': [
+                {
+                    'ref': '1',
+                    'is_person': True,
+                    'birth_date': '1978-01-14',
+                    },
+                ],
+            'contracts': [
+                {
+                    'ref': '1',
+                    'product': {'code': 'AAA'},
+                    'subscriber': {'ref': '1'},
+                    'extra_data': {},
+                    'start': '2020-01-01',
+                    'covereds': [
+                        {
+                            'party': {'ref': '1'},
+                            'item_descriptor': {'code': 'person'},
+                            'coverages': [
+                                {
+                                    'coverage': {'code': 'ALP'},
+                                    'extra_data': {},
+                                    },
+                                ],
+                            },
+                        ],
+                    },
+                ],
+            'options': {
+                'premium_summary_kind': 'contract_first_term',
+                }
+            }
+
+        output = ContractAPI.simulate(copy.deepcopy(data_dict),
+            {'_debug_server': True})
+        self.assertEqual(output[0]['premium']['discounts'][0]['code'],
+            'discount_auto_on_alpha')
+
+        erroneous = copy.deepcopy(data_dict)
+        erroneous['contracts'][0]['discounts'] = [
+            {'code': 'discount_auto_on_alpha'}]
+        output = ContractAPI.simulate(erroneous, {})
+        self.assertEqual(output, APIInputError([{
+                    'type': 'forced_discount_is_automatic',
+                    'data': ['discount_auto_on_alpha']}]))
 
 
 def suite():

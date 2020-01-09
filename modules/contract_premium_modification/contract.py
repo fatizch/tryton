@@ -100,8 +100,7 @@ class Contract(metaclass=PoolMeta):
                         and contract.final_end_date < start)):
                 continue
             new_modifications += contract.get_new_modifications(
-                contract.covered_element_options, start, end,
-                automatic=True)
+                contract.covered_element_options, start, end)
         if new_modifications:
             PremiumModification.save(new_modifications)
         if rebill:
@@ -110,7 +109,7 @@ class Contract(metaclass=PoolMeta):
 
     def get_new_modifications(
             self, options, start_date, end_date, automatic=False,
-            modifications=None):
+            filter_on=None):
         """
         If automatic is set to True end_date and start_date will be ignored
         """
@@ -125,14 +124,16 @@ class Contract(metaclass=PoolMeta):
         DiscountOption = pool.get(
             'contract.premium_modification.discount-contract.option')
 
-        if not modifications:
-            modifications = []
+        if not filter_on:
+            filter_on = []
         eligible_modifications = defaultdict(lambda: defaultdict(list))
         for option in options:
             if option.status in {'void', 'quote', 'refused', 'declined'}:
                 continue
             for rule in option.coverage.premium_modification_rules:
-                if not rule.eligible(option, modifications):
+                if filter_on and rule.modification not in filter_on:
+                    continue
+                if not rule.eligible(option):
                     continue
                 if automatic and not rule.automatic:
                     continue
@@ -154,8 +155,13 @@ class Contract(metaclass=PoolMeta):
             for rule, options in rule_options.items():
                 for option in options:
                     if automatic:
-                        start_date, end_date = \
-                            option.calculate_automatic_discount_duration(rule)
+                        if isinstance(prem_mod, DiscountModification):
+                            start_date, end_date = \
+                                option.calculate_automatic_discount_duration(
+                                    rule)
+                        elif isinstance(prem_mod, WaiverPremium):
+                            start_date, end_date = \
+                                option.calculate_automatic_waiver_duration()
                     premmod = PremModOption(
                         start_date=start_date, end_date=end_date,
                         option=option, modification_rule=rule)
@@ -243,6 +249,8 @@ class Contract(metaclass=PoolMeta):
             if modification_option is None:
                 modification_option = PremModOption(option=option)
                 modification_options.append(modification_option)
+            # TODO: make this compatible also with discounts:
+            # handle date calculations, handle eligibility
             dates = option.calculate_automatic_waiver_duration()
             if dates and len(dates) == 2:
                 modification_option.start_date = dates[0]
@@ -253,7 +261,7 @@ class Contract(metaclass=PoolMeta):
 
         return modification_options
 
-    def _create_modifications(self, modifications, options):
+    def _update_or_create_automatic_modifications(self, modifications, options):
         """
         modifications: a list of contract.waiver_premium
                        or a list of contract.premium_modification.discount
@@ -271,8 +279,15 @@ class Contract(metaclass=PoolMeta):
         if isinstance(modifications[0], WaiverPremium):
             PremMod = WaiverPremium
         elif isinstance(modifications[0], DiscountModification):
-            PremMod = DiscountModification
+            # for now discounts are created once and for all
+            # at contract activation: no need to update or create new ones
+            # while waiver need to be recreated for each contract period
+            # TODO: share as much code as possible, maybe remove
+            # init_automatic_discount and handle everything in
+            # create_automatic_premium_modifications ?
+            return modifications
 
+        all_modifications = []
         manual_modifications = []
         old_automatic_mods = []
         current_automatic_mods = []
@@ -291,27 +306,27 @@ class Contract(metaclass=PoolMeta):
                 mod_options = self._get_modification_options(
                     modification, options)
                 modification.premium_modification_options = mod_options
-                modification.start_date = modification.get_start_date()
+                all_modifications.append(modification)
         else:
             modification = PremMod(
                 automatic=True, premium_modification_options=[])
             mod_options = self._get_modification_options(
                 modification, options)
             modification.premium_modification_options = mod_options
-            modification.start_date = modification.get_start_date()
+            if (modification.start_date
+                    and modification.premium_modification_options):
+                all_modifications.append(modification)
 
-        new_modifications = old_automatic_mods + manual_modifications
-        if (modification.start_date
-                and modification.premium_modification_options):
-            if current_automatic_mods:
-                new_modifications.extend(current_automatic_mods)
-            else:
-                new_modifications.append(modification)
-        return new_modifications
+        all_modifications.extend(old_automatic_mods + manual_modifications)
+        return all_modifications
 
     def init_automatic_discount(self):
         manual_discounts = [x for x in self.discounts if not
             x.discount_options[0].discount_rule.automatic]
+        auto_discounts = [x for x in self.discounts if
+            x.discount_options[0].discount_rule.automatic]
+        if auto_discounts:
+            return
         if any(rule.automatic
                 for discount in self.possible_discounts
                 for rule in discount.rules):
@@ -336,9 +351,9 @@ class Contract(metaclass=PoolMeta):
         if not waiver_options and not discount_options:
             return
 
-        self.waivers = self._create_modifications(
+        self.waivers = self._update_or_create_automatic_modifications(
             self.waivers, waiver_options)
-        self.discounts = self._create_modifications(
+        self.discounts = self._update_or_create_automatic_modifications(
             self.discounts, discount_options)
 
     def get_invoice_periods(self, up_to_date, from_date=None,

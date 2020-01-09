@@ -2,6 +2,9 @@
 # this repository contains the full copyright notices and license terms.
 # #Comment# #Imports
 import datetime
+from pathlib import Path
+import json
+import copy
 from dateutil.relativedelta import relativedelta
 from decimal import Decimal
 from proteus import Model, Wizard
@@ -246,6 +249,26 @@ coverage.item_desc = item_description
 coverage.start_date = product_start_date
 coverage.account_for_billing = product_account
 coverage.allow_subscribe_coverage_multiple_times = True
+
+RuleEngine = Model.get('rule_engine')
+RuleEngineContext = Model.get('rule_engine.context')
+default_context, = RuleEngineContext.find([('name', '=', 'Context par défaut')])
+algo = '\n'.join(['return Decimal(120)'])
+
+premium_rule = RuleEngine()
+premium_rule.name = 'yearly_120'
+premium_rule.short_name = 'yearly_120'
+premium_rule.algorithm = algo
+premium_rule.status = 'validated'
+premium_rule.type_ = 'premium'
+premium_rule.context = default_context
+premium_rule.save()
+
+rule = coverage.premium_rules.new()
+rule.frequency = 'yearly'
+rule.rule = premium_rule
+premium_rule.save()
+
 coverage.save()
 product.company = company
 product.currency = currency
@@ -255,7 +278,6 @@ product.contract_generator = contract_sequence
 product.quote_number_sequence = quote_sequence
 product.start_date = product_start_date
 product.coverages.append(coverage)
-product.billing_rules[-1].billing_modes.append(freq_quarterly)
 product.billing_rules[-1].billing_modes.append(freq_yearly)
 product.save()
 
@@ -417,22 +439,11 @@ contract.start_date = contract_start_date
 contract.product = product
 contract.status = 'quote'
 contract.billing_informations.append(BillingInformation(date=None,
-    billing_mode=freq_yearly, payment_term=payment_term))
+    billing_mode=freq_yearly, payment_term=payment_term_y))
 covered_element = contract.covered_elements.new()
 covered_element.party = subscriber
-option = covered_element.options[0]
-option.coverage = coverage
 contract.save()
 Wizard('contract.activate', models=[contract]).execute('apply')
-premium_0 = ContractPremium.create([{
-            'option': contract.covered_elements[0].options[0].id,
-            'start': contract_start_date,
-            'amount': Decimal('120'),
-            'frequency': 'yearly',
-            'account': product_account.id,
-            'rated_entity': (coverage.__class__.__name__ + ','
-                + str(coverage.id)),
-            }], config.context)
 contract.save()
 
 # #Comment# #Create invoices
@@ -459,3 +470,40 @@ third_invoice.invoice.total_amount
 fourth_invoice = contract_invoices[-4]
 fourth_invoice.invoice.total_amount
 # #Res# #Decimal('120.00')
+
+
+ContractAPI = Model.get('api.contract')
+with open(Path(__file__).parent / 'simulate_data.json', 'rb') as f:
+    input_ = json.loads(f.read())
+
+output = ContractAPI.simulate(copy.deepcopy(input_), {'_debug_server': True},
+    {})
+output[0]['premium']['total']
+# #Res# #'80.00'
+# 120 for a year - 20 for two free months - 20 for 10 months at 20%
+
+payment_term_m = PaymentTerm()
+payment_term_m.name = 'direct'
+payment_term_m.lines.append(PaymentTermLine())
+payment_term_m.save()
+
+freq_monthly = BillingMode()
+freq_monthly.name = 'Monthly'
+freq_monthly.code = 'monthly'
+freq_monthly.frequency = 'monthly'
+freq_monthly.allowed_payment_terms.append(payment_term_m)
+freq_monthly.save()
+
+product.billing_rules[-1].billing_modes.append(freq_monthly)
+product.save()
+
+monthly_input = copy.deepcopy(input_)
+monthly_input['contracts'][0]['billing'] = {'billing_mode': {'code': 'monthly'}}
+output = ContractAPI.simulate(monthly_input, {'_debug_server': True},
+    {})
+output[0]['premium']['total']
+# #Res# #'8.15'
+# 2 first months are free: they are ignored.
+# First paying month is for march with a 10.19 premium
+# (monthly premium at ten, but the months is 31 days long)
+# which is discounted at 20%, so: 8.15

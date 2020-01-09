@@ -42,27 +42,37 @@ class APIContract(metaclass=PoolMeta):
     @classmethod
     def _subscribe_contracts_create_contracts(cls, parameters, created,
             options):
-        DiscountModification = Pool().get(
-            'contract.premium_modification.discount')
+        pool = Pool()
+        API = pool.get('api')
+        Contract = pool.get('contract')
+
         super()._subscribe_contracts_create_contracts(parameters, created,
             options)
 
-        discount_modifications = []
+        to_save = []
         for contract_data in parameters['contracts']:
             contract_discounts = contract_data.get('discounts')
-            if contract_discounts is None:
-                continue
-            contract = created['contracts'][contract_data['ref']]
-            options = list(contract.covered_element_options) + list(
-                contract.options)
-            new_modifications = contract.get_new_modifications(
-                options, contract.start_date, contract.end_date,
-                modifications=contract_discounts)
-            discount_modifications.extend(new_modifications)
-            contract.discounts = discount_modifications
+            auto_discounts = [x for x in contract_discounts if
+                any(rule.automatic for rule in x.rules)]
+            if auto_discounts:
+                API.add_input_error({
+                        'type': 'forced_discount_is_automatic',
+                        'data': [x.code for x in auto_discounts],
+                        })
 
-        if discount_modifications:
-            DiscountModification.save(discount_modifications)
+            contract = created['contracts'][contract_data['ref']]
+            if contract_discounts:
+                options = list(contract.covered_element_options) + list(
+                    contract.options)
+                new_modifications = contract.get_new_modifications(
+                    options, contract.start_date, contract.end_date,
+                    filter_on=contract_discounts)
+                contract.discounts = new_modifications
+            contract.init_automatic_discount()
+            to_save.append(contract)
+
+        if to_save:
+            Contract.save(to_save)
 
     @classmethod
     def _contract_schema(cls, minimum=False):
