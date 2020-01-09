@@ -1,3 +1,4 @@
+* OTH#00000 Ajout de l'export_light des groupes pour la classe Role
 * FEA#14147 Faire hériter user_role de CodedMixin
 * OTH#00000 Correctif sur la récupération de la valeur du cache Coog
 * BUG#13984 Correction de la commande de rapport de batch (gestion des informations complémentaires, template par défaut, encoding du template, documentation, rendre l'analyseur syntaxique de configuration compatible avec les déploiements kubernetes)

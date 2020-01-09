@@ -114,6 +114,10 @@ class GroupWithApi(metaclass=PoolMeta):
 class Role(model.CodedMixin, metaclass=PoolMeta):
     __name__ = 'res.role'
 
+    @classmethod
+    def _export_light(cls):
+        return super()._export_light() | {'groups'}
+
 
 class NoteType(model.CodedMixin, metaclass=PoolMeta):
     __name__ = 'ir.note.type'
