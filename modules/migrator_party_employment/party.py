@@ -1,6 +1,6 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
-from sql import Table
+from sql import Table, Column
 from itertools import groupby
 
 from trytond.modules.migrator import tools
@@ -121,6 +121,16 @@ class MigratorPartyEmployment(migrator.Migrator):
             'work_time_type']] if row['work_time_type'] else None
         return {'work_time_type': row['work_time_type'],
             'gross_salary': row['gross_salary'], 'date': row['date']}
+
+    @classmethod
+    def migrate(cls, ids, **kwargs):
+        res = super(MigratorPartyEmployment, cls).migrate(ids, **kwargs)
+        if not res:
+            return []
+        if kwargs.get('delete', False):
+            parties = [res[r]['employee'].code for r in res]
+            clause = Column(cls.table, cls.func_key).in_(parties)
+            cls.delete_rows(tools.CONNECT_SRC, cls.table, clause)
 
 
 class MigratorPartyPublicEmployment(metaclass=PoolMeta):
