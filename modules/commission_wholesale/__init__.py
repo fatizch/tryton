@@ -3,6 +3,7 @@
 from . import commission
 from . import invoice
 from . import report_engine
+from . import slip
 
 from trytond.pool import Pool
 
@@ -13,6 +14,7 @@ def register():
         commission.Commission,
         invoice.Invoice,
         report_engine.ReportTemplate,
+        slip.InvoiceSlipConfiguration,
         module='commission_wholesale', type_='model')
     Pool.register(
         commission.FilterCommissions,

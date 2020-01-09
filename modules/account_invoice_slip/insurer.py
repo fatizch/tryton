@@ -26,6 +26,13 @@ class Insurer(metaclass=PoolMeta):
         'will be grouped in one')
 
     @classmethod
+    def get_insurers_waiting_accounts(cls, insurers, notice_kind):
+        if notice_kind == 'options':
+            return list({(i, opt.account_for_billing) for i in insurers
+                    for opt in i.options if opt.account_for_billing})
+        return []
+
+    @classmethod
     def generate_slip_parameters(cls, notice_kind, parties=None):
         insurers = cls._get_insurers_from_notice_kind(notice_kind, parties)
         return [x._generate_slip_parameter(notice_kind) for x in insurers]
@@ -69,6 +76,7 @@ class Insurer(metaclass=PoolMeta):
             'accounts': list(accounts),
             'slip_kind': self._get_slip_business_kind(notice_kind),
             'journal': self.get_journal_from_notice_kind(notice_kind),
+            'notice_kind': notice_kind,
             }
 
     def _get_slip_accounts(self, notice_kind):
