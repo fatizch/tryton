@@ -389,13 +389,19 @@ class MigratorPartyRelation(migrator.Migrator):
     @classmethod
     def query_data(cls, ids):
         select = cls.table.select(*cls.select_columns())
-        if ids:
-            from_ids = [id.split('_')[0] for id in ids]
-            to_ids = [id.split('_')[1] for id in ids]
-            type_ids = [id.split('_')[2] for id in ids]
-            select.where = (Column(cls.table, 'from_').in_(from_ids) &
-                            Column(cls.table, 'to').in_(to_ids) &
-                            Column(cls.table, 'type').in_(type_ids))
+        clause = Literal(False)
+        for func_key in ids:
+            sub_clause = Literal(True)
+            from_ = func_key.split('_')[0]
+            to_ = func_key.split('_')[1]
+            type = func_key.split('_')[2]
+            sub_clause &= (
+                (cls.table.from_ == from_) &
+                (cls.table.to == to_) &
+                (cls.table.type == type)
+            )
+            clause |= sub_clause
+        select.where = clause
         return select
 
     @classmethod
