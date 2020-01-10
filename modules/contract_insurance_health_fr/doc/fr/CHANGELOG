@@ -1,3 +1,5 @@
+* BUG#14196 Correctif sur le calcul des périodes RSI
+
 Version 2.6 - 2019-10-11
 * BUG#12092 Refonte de l'écran tiers en santé
 * BUG#11918 Autoriser l'édition des tiers même s'il est ayant droit

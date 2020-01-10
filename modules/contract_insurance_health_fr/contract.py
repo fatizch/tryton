@@ -55,11 +55,13 @@ class ContractWithInvoice(metaclass=PoolMeta):
 
     def _get_subscriber_rsi_periods(self, start_date, end_date):
         all_periods = []
+        prev_complement = None
         for idx, complement in enumerate(self.subscriber.health_complement):
             if all_periods:
                 all_periods[idx - 1] += (
                     coog_date.add_day(complement.date, -1),
-                    complement.hc_system)
+                    prev_complement.hc_system)
+            prev_complement = complement
             all_periods.append((complement.date or datetime.date.min,))
         if all_periods:
             all_periods[-1] += (datetime.date.max, complement.hc_system)
