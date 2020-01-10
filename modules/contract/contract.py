@@ -811,7 +811,7 @@ class Contract(model.CoogSQL, model.CoogView, with_extra_data(['contract'],
             self.product_subscriber_kind = 'all'
         self.extra_data_values = self.extra_data_values
 
-    @fields.depends('subscriber')
+    @fields.depends('subscriber', 'product')
     def on_change_subscriber(self):
         # So that overrides can properly call super
         self.subscriber_extra_data = self.get_subscriber_extra_data()
@@ -1092,7 +1092,7 @@ class Contract(model.CoogSQL, model.CoogView, with_extra_data(['contract'],
 
     def get_subscriber_extra_data(self, name=None):
         res = {}
-        if not self.subscriber:
+        if not self.subscriber or not self.product:
             return res
         for extra_data_def in [x for x in self.product.extra_data_def
             if (x.kind == 'party_person' and self.subscriber.is_person
