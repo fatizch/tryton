@@ -1,3 +1,4 @@
+* BUG#14049 Refactoring of run query method in migrator address
 * BUG#14075 Refactor of query_data method of migrator.party.relation
 * FEA#13990 Refactoring of migrate method in contact migrator
 * BUG#13951 Fix where clause in run_query method of migrator.address

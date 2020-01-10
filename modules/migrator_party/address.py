@@ -1,7 +1,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 from itertools import groupby
-from sql import Column, Table
+from sql import Column, Table, Literal
 
 from trytond.pool import Pool
 from trytond.transaction import Transaction
@@ -134,15 +134,17 @@ class MigratorAddress(migrator.Migrator):
     @classmethod
     def query_data(cls, ids):
         select = cls.table.select(*cls.select_columns())
-        where = None
+        clause = Literal(False)
         for func_key in ids:
             sequence = func_key.split('_')[0]
             party = func_key.split('_')[1]
-            where_clause = ((cls.table.party == party) &
-                    (cls.table.sequence == sequence))
-            where = where & where_clause if where else where_clause
+            sub_clause = (
+                (cls.table.party == party) &
+                (cls.table.sequence == sequence)
+                )
+            clause |= sub_clause
         select.order_by = (Column(cls.table, cls.columns['start_date']))
-        select.where = where
+        select.where = clause
         return select
 
     @classmethod
