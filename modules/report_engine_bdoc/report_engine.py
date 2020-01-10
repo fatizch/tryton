@@ -61,7 +61,7 @@ class ReportTemplate(metaclass=PoolMeta):
                 gettext('report_engine.msg_format_original'))]
         return available_format
 
-    @fields.depends('input_kind', 'possible_process_methods', 'versions')
+    @fields.depends('input_kind', 'versions')
     def on_change_input_kind(self):
         super().on_change_input_kind()
         if self.input_kind == 'bdoc':

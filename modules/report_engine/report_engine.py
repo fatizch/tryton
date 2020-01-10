@@ -429,7 +429,7 @@ class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
                 'report_engine.msg_no_version_match',
                 date=date, language=language))
 
-    @fields.depends('input_kind', 'possible_process_methods', 'versions')
+    @fields.depends('input_kind', 'versions')
     def on_change_input_kind(self):
         possible_process_methods = self.get_possible_process_methods()
         if len(possible_process_methods) == 1:
