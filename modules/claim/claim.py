@@ -846,8 +846,7 @@ class Loss(model.CoogSQL, model.CoogView,
                     Claim.hold_contracts([x[0] for x in payers], sub_status)
             pool.get('event').notify_events(to_write, 'activate_loss')
 
-    @fields.depends('start_date', 'claim', 'claimant', 'declaration_date',
-        'losses')
+    @fields.depends('start_date', 'claim')
     def on_change_start_date(self):
         if self.claim:
             self.claim.possible_contracts = \

@@ -292,8 +292,8 @@ class ReportTemplate(metaclass=PoolMeta):
             [('email', gettext('report_engine_email.msg_input_email'))]
 
     @fields.depends('input_kind', 'email_subject',
-        'email_body', 'email_blocking,' 'split_reports', 'email_dest',
-        'email_cc', 'email_bcc', 'email_sender', 'atachments')
+        'email_body', 'email_blocking', 'split_reports', 'email_dest',
+        'email_cc', 'email_bcc', 'email_sender', 'attachments')
     def on_change_input_kind(self):
         if self.input_kind == 'email':
             self.split_reports = True
