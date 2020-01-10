@@ -675,7 +675,8 @@ def with_extra_data_def(reverse_model_name, reverse_field_name, kind,
 
         def _extra_data_structure(self, kinds=None):
             cache = Pool().get('extra_data')._extra_data_structure_cache
-            cached = cache.get(str(self), -1)
+            cache_key = str(self) + (str(sorted(kinds)) if kinds else '')
+            cached = cache.get(cache_key, -1)
             if cached != -1:
                 return cached
 
@@ -683,7 +684,7 @@ def with_extra_data_def(reverse_model_name, reverse_field_name, kind,
                 if not any([y for y in self.extra_data_def if y in x.parents])
                 and (not kinds or x.kind in kinds)}
 
-            cache.set(str(self), bases)
+            cache.set(cache_key, bases)
             return bases
 
         def refresh_extra_data(self, base_data, kinds=None):

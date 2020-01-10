@@ -2736,6 +2736,19 @@ net: Net
     children_in_care.save()
     # }}}
 
+    do_print('    Subscriber')  # {{{
+    diabetique = ExtraData()
+    diabetique.type_ = 'selection'
+    diabetique.kind = 'party_person'
+    diabetique.string = 'Diabétique'
+    diabetique.name = 'diabetique'
+    diabetique.selection = '''oui: Oui
+non: Non
+'''
+    diabetique.has_default_value = False
+    diabetique.save()
+    # }}}
+
     do_print('\nFetching pre-configured rules')  # {{{
     option_age_eligibility_rule, = RuleEngine.find(
         [('short_name', '=', 'option_age_eligibility')])
@@ -4451,6 +4464,7 @@ else:
     loan_product.com_products[0].dist_authorized_channels.append(
         Channel(web_channel.id))
     loan_product.extra_data_def.append(ExtraData(reduction_libre.id))
+    loan_product.extra_data_def.append(ExtraData(diabetique.id))
     loan_product.extra_data = {'libelle_editique': 'Prêt / voyez tout'}
     loan_product.document_rules.new()
     loan_product.document_rules[0].documents.new()
@@ -5135,6 +5149,9 @@ if CREATE_CONTRACTS:  # {{{
     process_next(loan_contract)
     assert_eq(loan_contract.extra_data_values, {'reduction_libre': '0'})
     loan_contract.extra_data_values = {'reduction_libre': '10'}
+    assert_eq(list(loan_contract.subscriber_extra_data.keys()),
+        ['diabetique'])
+    loan_contract.subscriber_extra_data = {'diabetique': 'oui'}
     loan_contract.covered_elements[0].current_extra_data = {
         'job_category': 'csp2',
         'co_borrower_relation': 'pacs',
@@ -5153,6 +5170,11 @@ if CREATE_CONTRACTS:  # {{{
     SubscriptionWizard.form.options[8].is_selected = True
     SubscriptionWizard.execute('update_options')
     loan_contract.reload()
+
+    assert_eq(loan_contract.subscriber_extra_data,
+        {'diabetique': 'oui'})
+    assert_eq(loan_contract.subscriber.extra_data,
+        {'diabetique': 'oui'})
 
     death_option = loan_contract.covered_elements[0].options[0]
     death_option.beneficiaries_clause = loan_beneficiary_clause

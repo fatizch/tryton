@@ -47,14 +47,14 @@ class Benefit(metaclass=PoolMeta):
                     '.msg_subsidiaries_covered_subscriber_enum')),
             ]
 
-    def _extra_data_structure(self):
-        base = super(Benefit, self)._extra_data_structure()
+    def _extra_data_structure(self, kinds=None):
+        base = super(Benefit, self)._extra_data_structure(kinds=kinds)
         service = ServerContext().get('service', None)
         if not service or not service.benefit.is_group:
             return base
         version = service.option.get_version_at_date(service.loss.get_date())
         option_benefit = version.get_benefit(service.benefit)
-        base.update(option_benefit._extra_data_structure())
+        base.update(option_benefit._extra_data_structure(kinds=kinds))
         return base
 
     def get_benefit_accounts(self):

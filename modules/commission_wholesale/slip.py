@@ -55,16 +55,9 @@ class InvoiceSlipConfiguration(metaclass=PoolMeta):
     def _add_wholesale_broker_invoice_line(cls, slip_parameter, account_data):
         pool = Pool()
         Line = pool.get('account.move.line')
-        Insurer = pool.get('insurer')
 
         commission_invoice = account_data['invoice']
-        accounts = list({x[1]
-                for x in Insurer.get_insurers_waiting_accounts(
-                    [commission_invoice.insurer_role],
-                    slip_parameter['notice_kind'])})
-        if not accounts:
-            return [commission_invoice]
-        for account in accounts:
+        for account in slip_parameter['accounts']:
             lines = Line.search(
                 cls.get_wholesale_brokers_line_domain(account,
                     commission_invoice.party, commission_invoice.invoice_date),
