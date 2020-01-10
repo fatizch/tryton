@@ -60,6 +60,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
             'Configuration1': 'coog_core.test_configuration_1',
             'Configuration2': 'coog_core.test_configuration_2',
             'Configuration3': 'coog_core.test_configuration_3',
+            'TestDependsOnChangeMethod': 'coog_core.test_depends_on_change',
             }
 
     def test0010class_injection(self):
@@ -1874,6 +1875,13 @@ class ModuleTestCase(test_framework.CoogTestCase):
         self.assertEqual(target_2.some_dict, {})
         self.assertEqual(target_3.some_dict, {})
         self.assertEqual(target_4.some_dict, {'test_2_renamed': True})
+
+    def test0500_depends_on_change(self):
+        TestDependsOnChangeMethod = Pool().get(
+            'coog_core.test_depends_on_change')
+        self.assertEqual(
+            set(TestDependsOnChangeMethod._fields['configuration'].depends),
+            {'value', 'extra_data'})
 
     def test_9001_identity_api(self):
         user = self.User(1)

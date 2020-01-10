@@ -748,6 +748,18 @@ class CoogView(ModelView, FunctionalErrorMixIn):
         return decorator
 
     @classmethod
+    def __post_setup__(cls):
+        """
+        Add the depends of a on_change to the corresponding field.
+        Without this the fields listed in the fields.depends will not be loaded
+        for the on change.
+        """
+        super().__post_setup__()
+        for field_name, field in cls._fields.items():
+            field.depends = list(field.on_change.union(set(field.depends or
+                [])))
+
+    @classmethod
     def set_fields_readonly_condition(cls, pyson_condition, depends,
             to_skip=None):
         to_skip = to_skip or []

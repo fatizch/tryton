@@ -1,3 +1,4 @@
+* BUG#13632 Ajout des dépendances pour la méthode on_change
 * OTH#00000 Ajout de l'export_light des groupes pour la classe Role
 * FEA#14147 Faire hériter user_role de CodedMixin
 * OTH#00000 Correctif sur la récupération de la valeur du cache Coog

@@ -1,3 +1,4 @@
+* BUG#13632 Add field depends for on_change method
 * OTH#00000 Add export_light for groups in Role class
 * FEA#14147 Make user_role inherit of CodedMixin
 * OTH#00000 Fix coog cache value getting

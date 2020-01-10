@@ -35,6 +35,7 @@ __all__ = [
     'TestConfiguration1',
     'TestConfiguration2',
     'TestConfiguration3',
+    'TestDependsOnChangeMethod',
     'TestAPIs',
     ]
 
@@ -397,6 +398,22 @@ class TestConfiguration3(model.CoogSQL):
     value = fields.Integer('Value')
     configuration_1 = fields.Many2One('coog_core.test_configuration_1',
         'Configuration 1', ondelete='CASCADE', select=True)
+
+
+class TestDependsOnChangeMethod(model.CoogView):
+    'Test Depends OnChange Method'
+    __name__ = 'coog_core.test_depends_on_change'
+
+    value = fields.Integer('Value')
+    extra_data = fields.Integer('Extra Data')
+    configuration = fields.Many2One('coog_core.test_configurtion_3',
+        'Configuration', ondelete='CASCADE',
+        domain=[('value', '=', 3)], depends=['value'])
+
+    @fields.depends('extra_data')
+    def on_change_configuration(self):
+        if not self.extra_data:
+            return
 
 
 class TestAPIs(APIMixin):

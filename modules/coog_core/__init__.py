@@ -131,6 +131,7 @@ def register():
             models_for_tests.TestConfiguration1,
             models_for_tests.TestConfiguration2,
             models_for_tests.TestConfiguration3,
+            models_for_tests.TestDependsOnChangeMethod,
             module='coog_core', type_='model')
 
         Pool.register(
