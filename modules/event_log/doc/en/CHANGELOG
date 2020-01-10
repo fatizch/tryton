@@ -1,3 +1,5 @@
+* OTH#00000 Fix to avoid objects duplicate when using event aggregate configuration
+
 Version 2.6 - 2019-10-11
 Version 2.4 - 2019-04-12
 * FEA#10942 Add configuration to aggregate event notifications in a given period and notify another event only once

@@ -1,3 +1,5 @@
+OTH #00000 Blindage pour éviter des duplicats d'objet possible lors de l'utilisation de l'agrégation des événements
+
 Version 2.6 - 2019-10-11
 Version 2.4 - 2019-04-12
 * FEA#10942 Ajout de configuration pour concentrer des notifications d'événements dans une période et notifier un autre événement seulement une seule fois
