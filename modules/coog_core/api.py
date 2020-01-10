@@ -185,6 +185,7 @@ IDENTIFIER_KINDS = [
     ('google', 'Google'),
     ('facebook', 'Facebook'),
     ('salesforce', 'SalesForce'),
+    ('azuread', 'Azure active directory'),
     ]
 
 __all__ = [

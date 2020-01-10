@@ -1,3 +1,4 @@
+* FEA#14156 Ajout de l'identity azure active directory
 * BUG#13632 Ajout des dépendances pour la méthode on_change
 * OTH#00000 Ajout de l'export_light des groupes pour la classe Role
 * FEA#14147 Faire hériter user_role de CodedMixin
