@@ -863,8 +863,10 @@ class APIContract(metaclass=PoolMeta):
             for detail in schedule['details']:
                 cls._simulate_update_premium_field(
                     contract_global_summary['premium'], detail)
-                coverage = detail['origin']['option']['coverage']
-                cov_code = coverage['code']
+                option = detail['origin'].get('option')
+                if not option:
+                    continue
+                cov_code = option['coverage']['code']
                 contract_coverage = cls._aggregate_get_field(
                     contract_data['coverages'], contract_coverages, cov_code,
                     lambda x: x['coverage']['code'])
