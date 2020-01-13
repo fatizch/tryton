@@ -1941,14 +1941,14 @@ class CoveredElement(Printable,
             # TODO to enhance if the party is not created yet
             self.party, = Pool().get('party.party').search(
                 [('code', '=', cov_dict['party']['code'])], limit=1, order=[])
+        else:
+            self.party = None
         self.product = product
         self.item_desc = item_desc
+        self.parent = None
         if 'name' in cov_dict:
             self.name = cov_dict['name']
-
-        self.on_change_item_desc()
-        if 'extra_data' in cov_dict:
-            self.extra_data.update(cov_dict['extra_data'])
+        self.recalculate()
 
     def fill_list_with_covered_options(self, at_date):
         options = [option for option in self.options
