@@ -256,6 +256,7 @@ class BankAccountNumber(export.ExportImportMixin):
     @classmethod
     def __setup__(cls):
         super(BankAccountNumber, cls).__setup__()
+        cls.number_compact.select = True
         t = cls.__table__()
         cls._sql_constraints += [
             ('number_uniq', Unique(t, t.number), 'The number must be unique!'),

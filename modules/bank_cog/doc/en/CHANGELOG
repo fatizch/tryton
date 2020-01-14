@@ -1,3 +1,4 @@
+* FEA#14059 Add index on number compact field of bank.account.number model
 * FEA#13568 Update fields in party GDPR extraction
 * FEA#13658 Import swift file bank by batch
 * OTH#00000 Fix a regression following #13206
