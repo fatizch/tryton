@@ -1,3 +1,4 @@
+* FEA#14001 Réfactorisation de la méthode migrate du migrator des addresses
 * BUG#14049 Réfactorisation de la méthode run_query de migrator address
 * BUG#14075 Réfactorisation de la méthode query_data du migrator.party.relation
 * FEA#13990 Refactorisation de la méthode migrate du migrator des données de contact

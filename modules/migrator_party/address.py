@@ -251,13 +251,14 @@ class MigratorAddress(migrator.Migrator):
         if not res:
             return []
         if kwargs.get('delete', False):
-            ids = []
-            Party = Pool().get('party.party')
+            clause = Literal(False)
             for r in res:
-                party_code = Party(res[r]['party']).code
-                ids.append(
-                    (party_code, res[r]['sequence']),
-                    )
-            clause = Column(cls.table, 'party').in_([x[0] for x in ids]
-                ) & Column(cls.table, 'sequence').in_([x[1] for x in ids])
+                party = res[r]['party'].code if 'party' in res[r] else\
+                    res[r]['uid'].split(':')[1]
+                sequence = res[r]['sequence']
+                sub_clause = (
+                        (cls.table.party == party) &
+                        (cls.table.sequence == sequence)
+                )
+                clause |= sub_clause
             cls.delete_rows(tools.CONNECT_SRC, cls.table, clause)
