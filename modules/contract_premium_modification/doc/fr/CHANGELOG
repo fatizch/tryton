@@ -1,3 +1,4 @@
+* OTH#00000 Correction du montant total des taxes dans l'API de simulation
 * BUG#14161 Gestion des réductions commerciales automatiques dans l'API simulate
 * OTH#00000 Gestion des réductions commerciales sur des garanties contrats
 * FEA#14026 Ajout d'une option pour ne retourner un résumé que de la première quittance non nulle dans l'API simulate

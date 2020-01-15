@@ -131,7 +131,8 @@ class APIContract(metaclass=PoolMeta):
                         'code': code,
                         'amount': Decimal(amount),
                         })
-            target['total'] += Decimal(amount)
+            target['total'] += Decimal(source['total'])
+            target['total_tax'] += Decimal(source['tax'])
         else:
             super(APIContract,
                 cls)._simulate_update_premium_field(target, source)
