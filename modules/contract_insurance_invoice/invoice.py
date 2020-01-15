@@ -300,8 +300,9 @@ class Invoice(metaclass=PoolMeta):
             max_payment_date_line, present_again_after)
         direct_debit_planned_date = \
             billing_information.get_direct_debit_planned_date(line)
-        new_date = min(new_date, direct_debit_planned_date)
-        return new_date
+        if direct_debit_planned_date:
+            return min(new_date, direct_debit_planned_date)
+        return None
 
     def update_move_line_from_billing_information(self, line):
         if line.contract is None:
