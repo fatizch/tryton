@@ -2,7 +2,9 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import PoolMeta, Pool
 
-from trytond.modules.api.api.core import POSITIVE_AMOUNT_SCHEMA, amount_from_api
+from trytond.modules.api.api.core import POSITIVE_AMOUNT_SCHEMA
+from trytond.modules.api.api.core import amount_for_api, amount_from_api
+from trytond.modules.coog_core import utils
 from trytond.modules.coog_core.api import FIELD_SCHEMA
 from trytond.modules.rule_engine import check_args
 
@@ -23,11 +25,13 @@ class APIProduct(metaclass=PoolMeta):
         result = super()._describe_coverage(coverage)
 
         if coverage.coverage_amount_rules:
+            rule = coverage.coverage_amount_rules[-1]
+            if rule.amount_mode == 'calculated_amount':
+                return result
             field_base = Core._field_description('contract.option.version',
                 'coverage_amount', required=True, sequence=0,
                 force_type='amount')
-            rule = coverage.coverage_amount_rules[-1]
-            if not rule.free_input:
+            if rule.amount_mode == 'selection':
                 field_base['enum'] = [
                     str(x) for x in rule.calculate_rule({})]
             result['coverage_amount'] = field_base
@@ -42,6 +46,18 @@ class APIProduct(metaclass=PoolMeta):
 
 class APIContract(metaclass=PoolMeta):
     __name__ = 'api.contract'
+
+    @classmethod
+    def _create_option(cls, option_data, contract, created):
+        option = super(APIContract, cls)._create_option(option_data, contract,
+            created)
+        if (option.coverage.coverage_amount_rules and
+                option.coverage.coverage_amount_rules[0].amount_mode ==
+                'calculated_amount'):
+            option.versions[0].coverage_amount = \
+                option.coverage.get_coverage_amount_rule_result(
+                    {'date': utils.today()})
+        return option
 
     @classmethod
     def _contract_option_schema(cls, minimum=False):
@@ -64,7 +80,9 @@ class APIContract(metaclass=PoolMeta):
 
         API = Pool().get('api')
         if data['coverage'].coverage_amount_rules:
-            if 'coverage_amount' not in data:
+            rule = data['coverage'].coverage_amount_rules[0]
+            if (rule.amount_mode != 'calculated_amount'
+                    and 'coverage_amount' not in data):
                 API.add_input_error({
                         'type': 'missing_coverage_amount',
                         'data': {
@@ -80,6 +98,34 @@ class APIContract(metaclass=PoolMeta):
             option.current_coverage_amount = option_data['coverage_amount']
             option.versions[-1].coverage_amount = option_data['coverage_amount']
         return option
+
+    @classmethod
+    def _simulate_contract_extract_option(cls, option):
+        result = super(APIContract, cls)._simulate_contract_extract_option(
+            option)
+        if option.coverage_amount_mode != 'calculated_amount':
+            return result
+        result['coverage_amount'] = {
+            'amount': amount_for_api(option.current_coverage_amount),
+            'label': option.coverage.coverage_amount_rules[0].label or '',
+            }
+        return result
+
+    @classmethod
+    def _simulate_coverages_output_schema(cls):
+        schema = super(APIContract, cls)._simulate_coverages_output_schema()
+        schema['items']['properties'].update({
+                'coverage_amount': {
+                    'type': 'object',
+                    'additionalProperties': False,
+                    'properties': {
+                        'amount': POSITIVE_AMOUNT_SCHEMA,
+                        'label': {'type': 'string'},
+                        },
+                    'required': ['amount'],
+                    }
+                })
+        return schema
 
 
 class APIRuleRuntime(metaclass=PoolMeta):

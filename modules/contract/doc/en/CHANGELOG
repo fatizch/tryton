@@ -1,3 +1,4 @@
+* FEA#13644 Calculate coverage amount and return to API
 * OTH#00000 Set auto_remove_not_subscriptable default to True in subscribe API
 * FEA#13780 Handle subscriptability in APIs
 * FEA#13843 Replace simulate API in contract module

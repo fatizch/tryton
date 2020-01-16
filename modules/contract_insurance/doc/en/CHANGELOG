@@ -1,3 +1,4 @@
+* FEA#13644 Calculate coverage amount and return to API
 * BUG#13758 Prevent crash when initializing some item descriptors
 * BUG#14139 Return chosen package per covered in simulate API
 * OTH#00000 Take into account the default value of auto_remove_not_subscriptable in the tests

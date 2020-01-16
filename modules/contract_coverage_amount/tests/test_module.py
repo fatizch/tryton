@@ -7,6 +7,7 @@ from decimal import Decimal
 import trytond.tests.test_tryton
 from trytond.pool import Pool
 from trytond.server_context import ServerContext
+from trytond.transaction import Transaction
 
 from trytond.modules.coog_core import test_framework
 from trytond.modules.rule_engine.tests.test_module import test_tree_element
@@ -36,6 +37,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
         product_a, = Product.search([('code', '=', 'AAA')])
         coverage_a, = Coverage.search([('code', '=', 'ALP')])
         coverage_b, = Coverage.search([('code', '=', 'BET')])
+        coverage_c, = Coverage.search([('code', '=', 'GAM')])
         rule_context, = RuleContext.search([('name', '=', 'test_context')])
         english, = Language.search([('code', '=', 'en')])
 
@@ -78,17 +80,40 @@ return coverage_amount() < 1000
 '''
         rule_coverage_validation.save()
 
+        rule_coverage_calculation = RuleEngine()
+        rule_coverage_calculation.type_ = 'coverage_amount_calculation'
+        rule_coverage_calculation.context = rule_context
+        rule_coverage_calculation.status = 'validated'
+        rule_coverage_calculation.name = 'Regle Coverage Amount'
+        rule_coverage_calculation.short_name = 'rule_coverage_calculation'
+        rule_coverage_calculation.description = 'dulce periculum'
+        rule_coverage_calculation.algorithm = '''
+return Decimal('100.00')
+'''
+        rule_coverage_calculation.save()
+
         coverage_a.coverage_amount_rules = [
-            CoverageAmountRule(free_input=True, rule=rule_coverage_validation)
+            CoverageAmountRule(amount_mode='free_input',
+                rule=rule_coverage_validation)
             ]
         coverage_a.save()
 
         coverage_b.coverage_amount_rules = [
-            CoverageAmountRule(rule=rule_coverage_amount)
+            CoverageAmountRule(amount_mode='selection',
+                rule=rule_coverage_amount)
             ]
         coverage_b.save()
 
-        product_a.coverages = [coverage_a, coverage_b]
+        coverage_c.coverage_amount_rules = [
+            CoverageAmountRule(
+                amount_mode='calculated_amount',
+                rule=rule_coverage_calculation,
+                label='Montant calculé',
+                )
+            ]
+        coverage_c.save()
+
+        product_a.coverages = [coverage_a, coverage_b, coverage_c]
         product_a.save()
 
     @test_framework.prepare_test(
@@ -99,6 +124,7 @@ return coverage_amount() < 1000
         product, = self.Product.search([('code', '=', 'AAA')])
         alpha, = self.OptionDescription.search([('code', '=', 'ALP')])
         beta, = self.OptionDescription.search([('code', '=', 'BET')])
+        gamma, = self.OptionDescription.search([('code', '=', 'GAM')])
         item_desc, = self.ItemDesc.search([('code', '=', 'person')])
 
         self.maxDiff = None
@@ -148,7 +174,15 @@ return coverage_amount() < 1000
                                         'help': '',
                                         'type': 'amount'
                                         },
-                                    }
+                                    },
+                                {
+                                    'code': 'GAM',
+                                    'description': '',
+                                    'extra_data': [],
+                                    'id': gamma.id,
+                                    'mandatory': False,
+                                    'name': 'GammaCoverage',
+                                    },
                                 ],
                             'extra_data': [],
                             'party': {
@@ -309,6 +343,9 @@ return coverage_amount() < 1000
                                     'extra_data': {},
                                     'coverage_amount': '100.00',
                                     },
+                                {
+                                    'coverage': {'code': 'GAM'},
+                                    }
                                 ],
                             },
                         ],
@@ -329,6 +366,12 @@ return coverage_amount() < 1000
         self.assertEqual(
             contract.covered_elements[0].options[1].current_coverage_amount,
             Decimal('100.00'))
+        self.assertEqual(
+            contract.covered_elements[0].options[2].current_coverage_amount,
+            Decimal('100.00'))
+        self.assertEqual(
+            contract.covered_elements[0].options[2].coverage_amount_label,
+            'Montant calculé')
 
         data_dict = copy.deepcopy(data_ref)
         data_dict['contracts'][0]['covereds'][0]['coverages'][1][
@@ -364,6 +407,84 @@ return coverage_amount() < 1000
                             {'coverage_amount': Decimal('123.45')}}
                         ).result,
                     Decimal('123.45'))
+
+    @test_framework.prepare_test(
+        'contract_coverage_amount.test0005_AddCoverageAmountRule',
+        'contract.test0005_PrepareProductForSubscription',
+        'contract.test0002_testCountryCreation',
+        )
+    def test9910_test_simulate_API(self):
+        pool = Pool()
+        ContractAPI = pool.get('api.contract')
+
+        data_ref = {
+            'parties': [
+                {
+                    'ref': '1',
+                    'is_person': True,
+                    'name': 'Doe',
+                    'first_name': 'Mother',
+                    'birth_date': '1978-01-14',
+                    'gender': 'female',
+                    'addresses': [
+                        {
+                            'street': 'Somewhere along the street',
+                            'zip': '75002',
+                            'city': 'Paris',
+                            'country': 'fr',
+                            },
+                        ],
+                    },
+                ],
+            'contracts': [
+                {
+                    'ref': '1',
+                    'product': {'code': 'AAA'},
+                    'subscriber': {'ref': '1'},
+                    'extra_data': {},
+                    'covereds': [
+                        {
+                            'party': {'ref': '1'},
+                            'item_descriptor': {'code': 'person'},
+                            'coverages': [
+                                {
+                                    'coverage': {'code': 'ALP'},
+                                    'extra_data': {},
+                                    'coverage_amount': '501.23',
+                                    },
+                                {
+                                    'coverage': {'code': 'BET'},
+                                    'extra_data': {},
+                                    'coverage_amount': '100.00',
+                                    },
+                                {
+                                    'coverage': {'code': 'GAM'},
+                                    }
+                                ],
+                            },
+                        ],
+                    },
+                ],
+            'options': {},
+            }
+
+        # We have to commit here because simulate is executed in a new
+        # transaction, which cannot have access to the contents of the testing
+        # transaction
+        Transaction().commit()
+
+        data_dict = copy.deepcopy(data_ref)
+        simulation = ContractAPI.simulate(data_dict, {'_debug_server': True})
+
+        self.assertEqual(len(simulation), 1)
+        self.assertEqual(simulation[0]['ref'], '1')
+        self.assertEqual(simulation[0]['product']['code'], 'AAA')
+        coverages = simulation[0]['covereds'][0]['coverages']
+        self.assertEqual(len(coverages), 3)
+        self.assertEqual(coverages[2]['coverage_amount'], {
+                'amount': '100.00',
+                'label': 'Montant calculé',
+                })
 
 
 def suite():

@@ -784,9 +784,8 @@ class APIContract(APIMixin):
                 'product': {
                     'code': contract.product.code,
                     },
-                'coverages': [{
-                        'coverage': {'code': option.coverage.code},
-                        } for option in contract.options],
+                'coverages': [cls._simulate_contract_extract_option(option)
+                    for option in contract.options],
                 'ref': created['contract_ref_per_id'][contract.id],
                 }
             package = created['contract_parameters_per_id'][contract.id].get(
@@ -797,6 +796,16 @@ class APIContract(APIMixin):
                     }
             results.append(result)
         return results
+
+    @classmethod
+    def _simulate_contract_extract_option(cls, option):
+        return {
+            'coverage': {
+                'code': option.coverage.code,
+                'id': option.coverage.id,
+                'name': option.coverage.name,
+                },
+            }
 
     @classmethod
     def _simulate_parse_created(cls, parameters, created):
@@ -891,7 +900,28 @@ class APIContract(APIMixin):
     def _simulate_coverages_output_schema(cls):
         return {
             'type': 'array',
-            'items': cls._contract_option_schema()
+            'items': cls._simulate_option_schema()
+            }
+
+    @classmethod
+    def _simulate_option_schema(cls):
+        return {
+            'type': 'object',
+            'additionalProperties': False,
+            'properties': {
+                'coverage': {
+                    'type': 'object',
+                    'additionalProperties': False,
+                    'properties': {
+                        'id': OBJECT_ID_SCHEMA,
+                        'code': CODE_SCHEMA,
+                        'name': {'type': 'string'},
+                        },
+                    'required': ['id', 'code', 'name'],
+                    },
+                'extra_data': EXTRA_DATA_VALUES_SCHEMA,
+                },
+            'required': ['coverage'],
             }
 
     @classmethod
@@ -948,8 +978,20 @@ class APIContract(APIMixin):
                     },
                 'output': [{
                         'coverages': [
-                            {'coverage': {'code': 'ALP'}},
-                            {'coverage': {'code': 'BET'}},
+                            {
+                                'coverage': {
+                                    'code': 'ALP',
+                                    'id': 1,
+                                    'name': 'Coverage A',
+                                    },
+                                },
+                            {
+                                'coverage': {
+                                    'code': 'BET',
+                                    'id': 2,
+                                    'name': 'Coverage 2',
+                                    },
+                                },
                             ],
                         'product': {'code': 'AAA'},
                         'ref': '1',

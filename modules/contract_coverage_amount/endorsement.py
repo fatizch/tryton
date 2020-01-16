@@ -16,24 +16,27 @@ __all__ = [
 class OptionDisplayer(metaclass=PoolMeta):
     __name__ = 'contract.manage_options.option_displayer'
 
-    has_coverage_amount = fields.Boolean('Has Coverage Amount', readonly=True)
-    free_coverage_amount = fields.Boolean('Free Coverage Amount',
-        readonly=True)
+    coverage_amount_mode = fields.Char('Coverage Amount Mode')
+    coverage_amount_label = fields.Char('Coverage Amount Label')
     coverage_amount = fields.Numeric('Coverage Amount', digits=(16, 2),
-        states={'invisible': ~Eval('has_coverage_amount') |
-            ~Eval('free_coverage_amount')})
+        states={
+            'invisible': Eval('coverage_amount_mode') == 'selection',
+            'readonly': Eval('coverage_amount_mode') == 'calculated_amount',
+            })
     coverage_amount_selection = fields.Selection('select_coverage_amounts',
-        'Coverage Amount', states={'invisible': ~Eval('has_coverage_amount') |
-            ~~Eval('free_coverage_amount')})
+        'Coverage Amount', states={
+            'invisible': Eval('coverage_amount_mode') != 'selection',
+            })
 
     @fields.depends('action', 'coverage_amount', 'effective_date',
-        'cur_option_id', 'has_coverage_amount')
+        'cur_option_id', 'coverage_amount_mode')
     def on_change_action(self):
         super(OptionDisplayer, self).on_change_action()
         if self.action not in ('modified', 'added'):
-            self.coverage_amount = Pool().get('contract.option')(
-                self.cur_option_id).get_version_at_date(
-                self.effective_date).coverage_amount
+            if self.coverage_amount_mode != 'calculated_amount':
+                self.coverage_amount = Pool().get('contract.option')(
+                    self.cur_option_id).get_version_at_date(
+                    self.effective_date).coverage_amount
             self.coverage_amount_selection = str(self.coverage_amount or '')
 
     @fields.depends('coverage_amount_selection', methods=['on_change_action'])
@@ -46,23 +49,22 @@ class OptionDisplayer(metaclass=PoolMeta):
         self.coverage_amount_selection = str(self.coverage_amount or '')
         self.update_action()
 
-    @fields.depends('has_coverage_amount', 'free_coverage_amount',
-        'coverage_amount', 'cur_option_id', 'effective_date', 'manager',
-        'coverage_id')
+    @fields.depends('coverage_amount_mode', 'coverage_amount', 'cur_option_id',
+        'effective_date', 'manager', 'coverage_id')
     def select_coverage_amounts(self):
         pool = Pool()
         Option = pool.get('contract.option')
         RuleEngine = pool.get('rule_engine')
         selection, values = [('', '')], []
-        if not self.has_coverage_amount:
+        if self.coverage_amount_mode is None:
             return selection
         if self.cur_option_id:
             option = Option(self.cur_option_id)
         else:
             option = Option(coverage=self.coverage,
                 currency=self.coverage.currency,
-                has_coverage_amount=self.has_coverage_amount)
-        if not self.free_coverage_amount:
+                coverage_amount_mode=self.coverage_amount_mode)
+        if self.coverage_amount_mode == 'selection':
             with ServerContext().set_context(
                     endorsement_context=RuleEngine.build_endorsement_context(
                         self.manager, action='in_progress')):
@@ -76,11 +78,11 @@ class OptionDisplayer(metaclass=PoolMeta):
                     option.currency.amount_as_string(self.coverage_amount)))
         return selection
 
-    @fields.depends('coverage_amount', 'has_coverage_amount')
+    @fields.depends('coverage_amount', 'coverage_amount_mode')
     def _check_modified(self, option, version):
         modified = super(OptionDisplayer, self)._check_modified(option,
             version)
-        if not modified and self.has_coverage_amount:
+        if not modified and self.coverage_amount_mode is not None:
             modified = self.coverage_amount != version.coverage_amount
         return modified
 
@@ -94,15 +96,15 @@ class OptionDisplayer(metaclass=PoolMeta):
     def new_displayer(cls, option, effective_date):
         displayer = super(OptionDisplayer, cls).new_displayer(option,
             effective_date)
-        displayer.has_coverage_amount = bool(
-            option.coverage.coverage_amount_rules)
-        displayer.free_coverage_amount = False
-        if displayer.has_coverage_amount:
-            displayer.free_coverage_amount = \
-                option.coverage.coverage_amount_rules[0].free_input
-        displayer.coverage_amount = getattr(
-            option.get_version_at_date(effective_date), 'coverage_amount',
-            None)
+        displayer.coverage_amount_mode = option.coverage_amount_mode
+        displayer.coverage_amount_label = option.coverage_amount_label
+        if displayer.coverage_amount_mode == 'calculated_amount':
+            displayer.coverage_amount = option.get_coverage_amount_rule_result(
+                effective_date)
+        else:
+            displayer.coverage_amount = getattr(
+                option.get_version_at_date(effective_date), 'coverage_amount',
+                None)
         displayer.coverage_amount_selection = str(displayer.coverage_amount
              or '')
         return displayer

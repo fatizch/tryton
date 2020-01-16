@@ -1,3 +1,4 @@
+* FEA#13644 Calcul du montant de couverture et retour dans l'API
 * BUG#13758 Correctif du crash lors de l'initialisation de certains descripteurs de risque
 * BUG#14139 Retour de l'info du package choisi par élément couvert dans l'API simulate
 * OTH#00000 Prend en compte la valeur par défaut de auto_remove_not_subscriptable dans les tests

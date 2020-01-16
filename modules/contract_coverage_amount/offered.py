@@ -1,8 +1,11 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+from sql import Literal
+
 from trytond import backend
 from trytond.pool import PoolMeta
-from trytond.pyson import If, Bool, Eval
+from trytond.pyson import If, Eval
+from trytond.transaction import Transaction
 
 from trytond.modules.coog_core import model, fields, coog_string
 from trytond.modules.rule_engine import get_rule_mixin
@@ -42,20 +45,29 @@ class CoverageAmountRule(
 
     coverage = fields.Many2One('offered.option.description', 'Coverage',
         ondelete='CASCADE', required=True, select=True)
-    free_input = fields.Boolean('Free Input', help='If True, the rule '
-        'must return a boolean to validate the entry, otherwise the rule must '
-        'return a list of possible values')
+    amount_mode = fields.Selection([
+            ('calculated_amount', 'Calculated Amount'),
+            ('free_input', 'Free Input'),
+            ('selection', 'Selection'),
+            ], 'Amount Mode', help='If set to free input, the rule must return'
+        'a boolean to validate the entry, otherwise the rule must return a '
+        'list of possible values for selection or the amount if calculated')
+    label = fields.Char('Label', help='This label will be used for the contract'
+        ' option display if the amount is calculated')
 
     @classmethod
     def __setup__(cls):
         super(CoverageAmountRule, cls).__setup__()
         cls.rule.required = True
         cls.rule.domain.append(If(
-                Bool(Eval('free_input', False)),
+                Eval('amount_mode', '') == 'free_input',
                 [('type_', '=', 'coverage_amount_validation')],
-                [('type_', '=', 'coverage_amount_selection')],
+                If(
+                    Eval('amount_mode', '') == 'selection',
+                    [('type_', '=', 'coverage_amount_selection')],
+                    [('type_', '=', 'coverage_amount_calculation')]),
                 ))
-        cls.rule.depends.append('free_input')
+        cls.rule.depends.append('amount_mode')
         cls.rule.help = 'The rule must return the list of possible coverage '\
             'amounts'
 
@@ -71,6 +83,19 @@ class CoverageAmountRule(
                 'config_kind']:
             if rule.column_exist(var_name):
                 rule.drop_column(var_name)
+        # Migration from 2.6
+        if rule.column_exist('free_input'):
+            cursor = Transaction().connection.cursor()
+            rules = cls.__table__()
+            cursor.execute(*rules.update(
+                    where=rules.free_input == Literal(True),
+                    columns=[rules.amount_mode],
+                    values=['free_input']))
+            rule.drop_column('free_input')
+
+    @classmethod
+    def default_amount_mode(cls):
+        return 'selection'
 
     def get_rule_documentation_structure(self):
         return [

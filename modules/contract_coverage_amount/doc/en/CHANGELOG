@@ -1,3 +1,4 @@
+* FEA#13644 Calculate coverage amount and return to API
 * OTH#00000 Update contract_coverage_amount tests following
 
 Version 2.6 - 2019-10-11

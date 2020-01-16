@@ -4098,7 +4098,7 @@ else:
         'maximum_amount': 100000,
         'amount_step': 10000,
         }
-    death_coverage.coverage_amount_rules[0].free_input = False
+    death_coverage.coverage_amount_rules[0].amount_mode = 'selection'
     death_coverage.eligibility_rules.new()
     death_coverage.eligibility_rules[0].rule = option_age_eligibility_rule
     death_coverage.eligibility_rules[0].rule_extra_data = {

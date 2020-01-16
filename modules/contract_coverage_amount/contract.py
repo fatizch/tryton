@@ -5,7 +5,7 @@ from decimal import Decimal
 from trytond.i18n import gettext
 from trytond.model.exceptions import ValidationError
 from trytond.pool import PoolMeta
-from trytond.pyson import Eval, Bool
+from trytond.pyson import Eval
 from trytond.rpc import RPC
 
 from trytond.modules.coog_core import fields, utils, model
@@ -22,17 +22,31 @@ __all__ = [
 class Contract(metaclass=PoolMeta):
     __name__ = 'contract'
 
+    def apply_coverage_amount(self):
+        self.update_coverage_amount()
+        self.check_coverage_amount()
+
+    def update_coverage_amount(self):
+        for covered_element in self.covered_elements:
+            covered_element.update_coverage_amount()
+        self.covered_elements = list(self.covered_elements)
+
     def check_coverage_amount(self):
         for covered_element in self.covered_elements:
             covered_element.check_coverage_amount()
 
     def before_activate(self):
-        self.check_coverage_amount()
+        self.apply_coverage_amount()
         super().before_activate()
 
 
 class CoveredElement(metaclass=PoolMeta):
     __name__ = 'contract.covered_element'
+
+    def update_coverage_amount(self):
+        for option in self.options:
+            option.update_coverage_amount()
+        self.options = list(self.options)
 
     def check_coverage_amount(self):
         for option in self.options:
@@ -45,35 +59,31 @@ class ContractOption(metaclass=PoolMeta):
     current_coverage_amount = fields.Function(
         fields.Numeric('Coverage Amount',
             states={
-                'invisible': ~Eval('has_coverage_amount') | ~(
-                    Eval('free_coverage_amount')),
-                'required': (Eval('contract_status') == 'active') & Bool(
-                    Eval('has_coverage_amount')),
-                'readonly': Eval('contract_status') == 'active',
+                'invisible': Eval('coverage_amount_mode') == 'selection',
+                'required': (Eval('contract_status') == 'active') & (
+                    Eval('coverage_amount_mode') == 'free_input'),
+                'readonly': (Eval('contract_status') == 'active') | (
+                    Eval('coverage_amount_mode') == 'calculated_amount'),
             },
-            depends=['has_coverage_amount', 'free_coverage_amount',
-                'contract_status']),
+            depends=['coverage_amount_mode', 'contract_status']),
         'get_current_version', setter='setter_void')
     current_coverage_amount_selection = fields.Function(
         fields.Selection('get_possible_amounts', 'Coverage Amount',
             states={
-                'invisible': ~Eval('has_coverage_amount') | Bool(
-                    Eval('free_coverage_amount')),
-                'required': ((Eval('contract_status') == 'active') &
-                    Bool(Eval('has_coverage_amount')) & ~(
-                    Eval('free_coverage_amount'))),
+                'invisible': Eval('coverage_amount_mode') != 'selection',
+                'required': ((Eval('contract_status') == 'active') & (
+                    Eval('coverage_amount_mode', '') == 'selection')),
                 'readonly': Eval('contract_status') == 'active',
                 },
-            depends=['free_coverage_amount', 'contract_status',
-                'has_coverage_amount'],
+            depends=['coverage_amount_mode', 'contract_status'],
             sort=False),
         'on_change_with_current_coverage_amount_selection', 'setter_void')
-    has_coverage_amount = fields.Function(
-        fields.Boolean('Has Coverage Amount'),
-        'on_change_with_has_coverage_amount')
-    free_coverage_amount = fields.Function(
-        fields.Boolean('Free Coverage Amount'),
-        'on_change_with_free_coverage_amount')
+    coverage_amount_mode = fields.Function(
+        fields.Char('Coverage Amount Mode'),
+        'on_change_with_coverage_amount_mode')
+    coverage_amount_label = fields.Function(
+        fields.Char('Coverage Amount Label'),
+        'on_change_with_coverage_amount_label')
 
     @classmethod
     def __setup__(cls):
@@ -88,11 +98,10 @@ class ContractOption(metaclass=PoolMeta):
 
     @fields.depends('parent_contract', 'coverage', 'start_date',
         'covered_element', 'currency', 'appliable_conditions_date',
-        'has_coverage_amount', 'free_coverage_amount',
-        'current_coverage_amount')
+        'coverage_amount_mode', 'current_coverage_amount')
     def get_possible_amounts(self):
         selection, values = [('', '')], []
-        if self.has_coverage_amount and not self.free_coverage_amount:
+        if self.coverage_amount_mode == 'selection':
             values = self.get_coverage_amount_rule_result(utils.today())
             if values:
                 selection += [(str(x), self.currency.amount_as_string(x))
@@ -105,21 +114,30 @@ class ContractOption(metaclass=PoolMeta):
         return selection
 
     def get_coverage_amount_rule_result(self, at_date):
-        if not self.has_coverage_amount:
+        if self.coverage_amount_mode is None:
             return None
         context = {'date': at_date}
         self.init_dict_for_rule_engine(context)
         return self.coverage.get_coverage_amount_rule_result(context)
 
+    def update_coverage_amount(self):
+        if self.coverage_amount_mode == 'calculated_amount':
+            for version in self.versions:
+                version.coverage_amount = self.get_coverage_amount_rule_result(
+                        version.start_date)
+            self.versions = list(self.versions)
+
     def check_coverage_amount(self):
-        if not self.has_coverage_amount:
+        if self.coverage_amount_mode is None:
             return
         for version in self.versions:
             rule_result = self.get_coverage_amount_rule_result(
                 version.start_date)
-            if (self.free_coverage_amount
-                    and not rule_result or not self.free_coverage_amount
-                    and version.coverage_amount not in rule_result):
+            if ((self.coverage_amount_mode == 'free_input' and not rule_result)
+                    or (self.coverage_amount_mode == 'selection'
+                        and version.coverage_amount not in rule_result)
+                    or (self.coverage_amount_mode == 'calculated_amount'
+                        and version.coverage_amount != rule_result)):
                 raise ValidationError(gettext(
                         'contract_coverage_amount.msg_invalid_coverage_amount',
                         coverage=self.coverage.rec_name,
@@ -147,15 +165,16 @@ class ContractOption(metaclass=PoolMeta):
         return str(self.current_coverage_amount or '')
 
     @fields.depends('coverage')
-    def on_change_with_has_coverage_amount(self, name=None):
-        return (bool(self.coverage.coverage_amount_rules)
-            if self.coverage else False)
+    def on_change_with_coverage_amount_mode(self, name=None):
+        if not self.coverage or not self.coverage.coverage_amount_rules:
+            return None
+        return self.coverage.coverage_amount_rules[0].amount_mode
 
     @fields.depends('coverage')
-    def on_change_with_free_coverage_amount(self, name=None):
+    def on_change_with_coverage_amount_label(self, name=None):
         if not self.coverage or not self.coverage.coverage_amount_rules:
-            return False
-        return self.coverage.coverage_amount_rules[0].free_input
+            return ''
+        return self.coverage.coverage_amount_rules[0].label
 
     def new_version_at_date(self, at_date):
         prev_version = self.get_version_at_date(at_date)
@@ -192,7 +211,7 @@ class ContractOption(metaclass=PoolMeta):
             elif prev_coverage != version.coverage_amount:
                 prev_coverage = version.coverage_amount
             prev_date = date
-        return self.start_date if self.has_coverage_amount else None
+        return self.start_date if self.coverage_amount_mode is None else None
 
 
 class ContractOptionVersion(model.CoogSQL, model.CoogView, ModelCurrency):
@@ -201,7 +220,7 @@ class ContractOptionVersion(model.CoogSQL, model.CoogView, ModelCurrency):
     coverage_amount = fields.Numeric('Coverage Amount',
         states={
             'invisible': ~Eval('_parent_option', {}).get(
-                'has_coverage_amount', False),
+                'coverage_amount_mode', False),
             'readonly': Eval('contract_status') != 'quote',
             },
         depends=['option', 'contract_status'])

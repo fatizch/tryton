@@ -497,7 +497,7 @@ class APIContract(metaclass=PoolMeta):
 
     @classmethod
     def _simulate_contract_extract_covered_option(cls, option):
-        return {'coverage': {'code': option.coverage.code}}
+        return cls._simulate_contract_extract_option(option)
 
     @classmethod
     def _simulate_contract_output_schema(cls):

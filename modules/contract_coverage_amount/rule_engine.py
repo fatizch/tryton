@@ -18,9 +18,11 @@ class RuleEngine(metaclass=PoolMeta):
     def __setup__(cls):
         super(RuleEngine, cls).__setup__()
         cls.type_.selection.append(('coverage_amount_validation',
-            'Coverage Amount Validation'))
+                'Coverage Amount Validation'))
         cls.type_.selection.append(('coverage_amount_selection',
-            'Coverage Amount Selection'))
+                'Coverage Amount Selection'))
+        cls.type_.selection.append(('coverage_amount_calculation',
+                'Coverage Amount Calculation'))
 
     @fields.depends('type_')
     def on_change_with_result_type(self, name=None):
@@ -28,6 +30,8 @@ class RuleEngine(metaclass=PoolMeta):
             return 'boolean'
         elif self.type_ == 'coverage_amount_selection':
             return 'list'
+        elif self.type_ == 'coverage_amount_calculation':
+            return 'decimal'
         return super(RuleEngine, self).on_change_with_result_type(name)
 
 

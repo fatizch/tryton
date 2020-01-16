@@ -10,8 +10,8 @@ this repository contains the full copyright notices and license terms. -->
         <label name="current_coverage_amount_selection"/>
         <field name="current_coverage_amount_selection"/>
         <newline/>
-        <field name="has_coverage_amount" invisible="1"/>
-        <field name="free_coverage_amount" invisible="1"/>
+        <field name="coverage_amount_label" invisible="1"/>
+        <field name="coverage_amount_mode" invisible="1"/>
         <field name="currency" invisible="1"/>
     </xpath>
 </data>

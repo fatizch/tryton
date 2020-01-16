@@ -42,13 +42,14 @@ class ContractOption(metaclass=PoolMeta):
     __name__ = 'contract.option'
 
     @fields.depends('versions')
-    def on_change_with_free_coverage_amount(self, name=None):
+    def on_change_with_coverage_amount_mode(self, name=None):
         result = super(ContractOption,
-            self).on_change_with_free_coverage_amount(name)
-        if result or not self.versions:
+            self).on_change_with_coverage_amount_mode(name)
+        if result != 'selection' or not self.versions:
             return result
         current_version = self.get_version_at_date(utils.today())
-        return current_version and current_version.coverage_amount_revaluation
+        return 'free_input' if current_version and \
+            current_version.coverage_amount_revaluation else 'selection'
 
     @fields.depends('versions')
     def on_change_with_current_coverage_amount_selection(self, name=None):

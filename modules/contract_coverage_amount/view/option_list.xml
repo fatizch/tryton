@@ -7,6 +7,7 @@ this repository contains the full copyright notices and license terms. -->
             <suffix name="currency_symbol"/>
         </field>
         <field name="currency" tree_invisible="1"/>
-        <field name="has_coverage_amount" tree_invisible="1"/>
+        <field name="coverage_amount_mode" tree_invisible="1"/>
+        <field name="coverage_amount_label" tree_invisible="1"/>
     </xpath>
 </data>
