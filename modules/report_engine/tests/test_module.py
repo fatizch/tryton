@@ -145,8 +145,13 @@ class ModuleTestCase(test_framework.CoogTestCase):
         result = APIReport.generate_documents(input_data,
             {'_debug_server': True})
         attachment, = Attachment.search([('resource', '=', str(test_template))])
-        self.assertEqual(result, {'documents': [{
-                        'edm_id': str(attachment.id)}]})
+        document = result['documents'][0]
+        self.assertEqual(document['edm_id'], str(attachment.id))
+        self.assertEqual(document['metadata']['extension'], 'odt')
+        self.assertEqual(document['metadata']['document_desc'],
+            {'code': 'tester'})
+        self.assertEqual(document['metadata']['template'],
+            {'code': 'report_template_for_test'})
 
         data = io.BytesIO()
         data.write(attachment.data)

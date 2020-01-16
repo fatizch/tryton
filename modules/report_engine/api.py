@@ -69,9 +69,22 @@ class APIReport(APIMixin):
             filtered_templates = [x for x in templates
                 if x.document_desc in document_descs]
             for template in filtered_templates:
-                reports.append(cls._api_generate_report(template, record))
-        return {'documents': [{'edm_id': report['edm_id']}
-                for report in reports]}
+                report = cls._api_generate_report(template, record)
+                reports.append(cls._generate_report_result(report, template))
+        return {'documents': reports}
+
+    @classmethod
+    def _generate_report_result(cls, report, template):
+        return {
+            'edm_id': report['edm_id'],
+            'metadata': {
+                    'document_desc': {'code': template.document_desc.code if
+                        template.document_desc else ''},
+                    'template': {'code': template.code},
+                    'extension': report['report_type'],
+                    'name': report['report_name'],
+                    },
+            }
 
     @classmethod
     def _api_generate_report(cls, template, record):
@@ -144,6 +157,7 @@ class APIReport(APIMixin):
                         'additionalProperties': False,
                         'properties': {
                             'edm_id': api.CODE_SCHEMA,
+                            'metadata': {'type': 'object'},
                             },
                         'required': ['edm_id'],
                         },
