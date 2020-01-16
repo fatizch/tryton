@@ -30,10 +30,10 @@ sudo apt-get install postgresql postgresql-contrib redis-server \
 
 ```bash
 # Create a privileged user for database management
-sudo su postgres -c 'psql -c "CREATE ROLE tryton WITH SUPERUSER"'
+sudo su postgres -c 'psql -c "CREATE USER tryton WITH SUPERUSER"'
 
 # Add a password
-sudo su postgres -c "psql -c \"ALTER ROLE tryton WITH PASSWORD 'tryton'\""
+sudo su postgres -c "psql -c \"ALTER USER tryton WITH PASSWORD 'tryton'\""
 
 # Force database connections to authenticate using md5
 sudo sed -i 's/\(local\s*all\s*all\s*\)peer/\1md5/' \
