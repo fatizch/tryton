@@ -877,6 +877,10 @@ class APIContract(APIMixin):
                     party_data['gender'] = 'male'
 
     @classmethod
+    def _simulate_validate_input(cls, parameters):
+        return cls._subscribe_contracts_validate_input(parameters)
+
+    @classmethod
     def _simulate_output_schema(cls):
         return {
             'type': 'array',

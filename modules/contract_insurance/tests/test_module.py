@@ -1774,16 +1774,23 @@ class ModuleTestCase(test_framework.CoogTestCase):
                     'ref': '1',
                     'product': {'code': 'AAA'},
                     'subscriber': {'ref': '1'},
-                    'extra_data': {},
+                    'extra_data': {'contract_1': 1},
                     'start': '2020-01-01',
+                    'coverages': [
+                        {
+                            'coverage': {'code': 'DEL'},
+                            'extra_data': {},
+                            },
+                        ],
                     'covereds': [
                         {
                             'party': {'ref': '1'},
                             'item_descriptor': {'code': 'person'},
+                            'extra_data': {'covered_1': 2},
                             'coverages': [
                                 {
                                     'coverage': {'code': 'ALP'},
-                                    'extra_data': {},
+                                    'extra_data': {'option_1': 1},
                                     },
                                 {
                                     'coverage': {'code': 'BET'},
@@ -1794,10 +1801,11 @@ class ModuleTestCase(test_framework.CoogTestCase):
                         {
                             'party': {'ref': '2'},
                             'item_descriptor': {'code': 'person'},
+                            'extra_data': {'covered_1': 3},
                             'coverages': [
                                 {
                                     'coverage': {'code': 'ALP'},
-                                    'extra_data': {},
+                                    'extra_data': {'option_1': 1},
                                     },
                                 {
                                     'coverage': {'code': 'BET'},
@@ -1821,7 +1829,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
         self.assertEqual(len(simulation), 1)
         self.assertEqual(simulation[0]['ref'], '1')
         self.assertEqual(simulation[0]['product']['code'], 'AAA')
-        self.assertEqual(len(simulation[0]['coverages']), 0)
+        self.assertEqual(len(simulation[0]['coverages']), 1)
         covereds = simulation[0]['covereds']
         self.assertEqual(len(covereds), 2)
         self.assertEqual(len(covereds[0]['coverages']), 2)
@@ -1838,6 +1846,8 @@ class ModuleTestCase(test_framework.CoogTestCase):
         data_dict['contracts'][0]['covereds'][1]['package'] = \
             {'code': 'package_b'}
         del data_dict['contracts'][0]['covereds'][1]['coverages']
+        del data_dict['contracts'][0]['covereds'][0]['extra_data']
+        del data_dict['contracts'][0]['covereds'][1]['extra_data']
 
         simulation = ContractAPI.simulate(data_dict, {'_debug_server': True})
 

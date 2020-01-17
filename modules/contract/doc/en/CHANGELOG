@@ -1,3 +1,4 @@
+* BUG#14303 Plug in basic controls on contract simulation API
 * FEA#13644 Calculate coverage amount and return to API
 * OTH#00000 Set auto_remove_not_subscriptable default to True in subscribe API
 * FEA#13780 Handle subscriptability in APIs

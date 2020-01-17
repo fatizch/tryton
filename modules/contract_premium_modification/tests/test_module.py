@@ -508,6 +508,10 @@ class ModuleTestCase(test_framework.CoogTestCase):
                                     'coverage': {'code': 'ALP'},
                                     'extra_data': {},
                                     },
+                                {
+                                    'coverage': {'code': 'BET'},
+                                    'extra_data': {},
+                                    },
                                 ],
                             },
                         ],
