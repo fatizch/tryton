@@ -66,3 +66,16 @@ class APIContract(metaclass=PoolMeta):
             extraction.update({'eligibility': {'eligible': False,
                         'message': option.eligibility_message}})
         return extraction
+
+    @classmethod
+    def _simulate_option_schema(cls):
+        schema = super(APIContract, cls)._simulate_option_schema()
+        schema['properties']['eligibility'] = {
+            'type': 'object',
+            'additionalProperties': False,
+            'properties': {
+                'eligible': {'type': 'boolean'},
+                'message': {'type': 'string'},
+                }
+            }
+        return schema
