@@ -1014,11 +1014,6 @@ class Contract(metaclass=PoolMeta):
                 invoice.invoice_address = invoice_address
 
     @classmethod
-    def prorate_premiums(cls):
-        return Pool().get(
-            'offered.configuration').get_cached_prorate_premiums()
-
-    @classmethod
     def premium_intervals_cache(cls):
         cache_holder = get_cache_holder()
         interval_cache = cache_holder.get('premium_intervals_cache')
@@ -2132,11 +2127,6 @@ class Premium(metaclass=PoolMeta):
         result = super(Premium, self).same_value(other)
         return result and self.account == other.account
 
-    @property
-    def prorate_premiums(self):
-        return Pool().get(
-            'offered.configuration').get_cached_prorate_premiums()
-
     @classmethod
     def new_line(cls, line, start_date, end_date):
         new_line = super(Premium, cls).new_line(line, start_date, end_date)
@@ -2154,7 +2144,7 @@ class Premium(metaclass=PoolMeta):
         frequency = frequency or self.frequency
         amount = amount if amount is not None else self.amount
         proportion = proportion if proportion is not None \
-            else self.prorate_premiums
+            else self.main_contract.product.prorate_premiums
         sync_date = sync_date or self.main_contract.start_date
         recursion = False
         interval_start = interval_start or self.start
@@ -2180,6 +2170,13 @@ class Premium(metaclass=PoolMeta):
         pool = Pool()
         InvoiceLine = pool.get('account.invoice.line')
         InvoiceLineDetail = pool.get('account.invoice.line.detail')
+
+        # If invoice lines aren't prorated, the period of the lines will always
+        # be the period of the invoice
+        invoice_start = start
+        invoice_end = end
+        prorate = self.main_contract.product.prorate_premiums
+
         if start is not None and end is not None:
             if ((self.start or datetime.date.min) > end
                     or (self.end or datetime.date.max) < start):
@@ -2201,8 +2198,8 @@ class Premium(metaclass=PoolMeta):
                 taxes=self.taxes,
                 invoice_type='out',
                 account=self.account,
-                coverage_start=start,
-                coverage_end=end,
+                coverage_start=start if prorate else invoice_start,
+                coverage_end=end if prorate else invoice_end,
                 details=[InvoiceLineDetail.new_detail_from_premium(self)],
                 )]
 

@@ -80,7 +80,7 @@ coog_test_join() { # wait for tests execution
 }
 
 coog_test_convert() { # convert test scenarios from python to rst
-    for i in $(find "$COOG_COOG" -name "scenario*.py")
+    for i in $(find "$COOG_COOG/modules/${1:-}" -name "scenario*.py")
     do
         "$COOG_COOG"/misc/python_scripts/test_converter.py "$i" "${i::-2}"rst
     done

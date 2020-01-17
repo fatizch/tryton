@@ -12,7 +12,6 @@ from . import move
 from . import rule_engine
 from . import event
 from . import bank
-from . import configuration
 from . import payment
 from . import wizard
 from . import api
@@ -31,7 +30,6 @@ def register():
         batch.SetNumberInvoiceContractBatch,
         batch.BulkSetNumberInvoiceContractBatch,
         batch.RebillBatch,
-        configuration.OfferedConfiguration,
         offered.ProductBillingRule,
         offered.RuleEngine,
         offered.BillingMode,

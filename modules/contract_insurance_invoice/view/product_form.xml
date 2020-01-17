@@ -5,6 +5,8 @@ this repository contains the full copyright notices and license terms. -->
     <xpath expr="/form/notebook/page[@id='option']/field[@name='coverages']" position="before">
         <label name="taxes_included_in_premium"/>
         <field name="taxes_included_in_premium"/>
+        <label name="prorate_premiums"/>
+        <field name="prorate_premiums"/>
         <newline/>
     </xpath>
     <xpath expr="/form/notebook/page[@id='managers']/notebook" position="inside">

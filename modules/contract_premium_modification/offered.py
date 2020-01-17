@@ -174,7 +174,7 @@ class Product(metaclass=PoolMeta):
             self.id, -1)
         if value != -1:
             return value
-        if Pool().get('offered.configuration').get_cached_prorate_premiums():
+        if self.prorate_premiums:
             self.__class__._must_invoice_after_contract_end_cache.set(
                 self.id, False)
             return False

@@ -235,6 +235,7 @@ Create Contract Fee::
     >>> product.fees.append(contract_fee)
     >>> product.billing_rules[-1].billing_modes.append(freq_monthly)
     >>> product.billing_rules[-1].billing_modes.append(freq_yearly)
+    >>> product.prorate_premiums = False
     >>> product.save()
     >>> config = switch_user('contract_user')
     >>> Account = Model.get('account.account')
@@ -298,7 +299,7 @@ Create Test Contract::
     >>> all_invoices[0].invoice.state
     'posted'
 
-Test invoicing::
+Test non prorated invoicing::
 
     >>> Contract.first_invoice([contract.id], config.context)
     >>> all_invoices = ContractInvoice.find([('contract', '=', contract.id)])
@@ -307,7 +308,24 @@ Test invoicing::
     True
     >>> first_invoice = sorted(ContractInvoice.find([('contract', '=', contract.id),
     ...             ('invoice.state', '=', 'validated')]), key=lambda x: x.start)[0]
-    >>> first_invoice.invoice.total_amount
+    >>> first_invoice.invoice.total_amount  # No prorata
+    Decimal('300.00')
+    >>> config = switch_user('product_user')
+    >>> product, = Product.find([('code', '=', 'test_product')])
+    >>> product.prorate_premiums = True
+    >>> product.save()
+
+Test prorated invoicing::
+
+    >>> config = switch_user('contract_user')
+    >>> Contract.first_invoice([contract.id], config.context)
+    >>> all_invoices = ContractInvoice.find([('contract', '=', contract.id)])
+    >>> len(all_invoices) == 2 + relativedelta(datetime.date.today(),
+    ...     contract.start_date).years
+    True
+    >>> first_invoice = sorted(ContractInvoice.find([('contract', '=', contract.id),
+    ...             ('invoice.state', '=', 'validated')]), key=lambda x: x.start)[0]
+    >>> first_invoice.invoice.total_amount  # Prorated
     Decimal('297.81')
     >>> expected = [
     ...     (Decimal('17.81'),

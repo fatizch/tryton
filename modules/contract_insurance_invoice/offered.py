@@ -383,6 +383,11 @@ class Product(metaclass=PoolMeta):
                     ('taxes_included_in_premium', '=', False)], [])],
         states={'readonly': Eval('tax_rounding') == 'document'},
         depends=['tax_rounding'])
+    prorate_premiums = fields.Boolean('Prorate Premiums',
+        help='If checked, the invoiced amount for a given period is the '
+        'premium prorated by the period duration if the period is smaller '
+        'than the frequency. If unchecked the invoiced amount is the whole '
+        'premium.')
     tax_rounding = fields.Function(
         fields.Char('Tax_Rounding'),
         'get_tax_rounding')
@@ -393,12 +398,28 @@ class Product(metaclass=PoolMeta):
 
     @classmethod
     def __register__(cls, module_name):
-        super(Product, cls).__register__(module_name)
-        # Migration from 1.3: Drop account_for_billing column
+        pool = Pool()
+        OfferedConfiguration = pool.get('offered.configuration')
+
+        # Migration from 1.14 : per-product prorate-premiums
         TableHandler = backend.get('TableHandler')
-        product = TableHandler(cls)
-        if product.column_exist('account_for_billing'):
-            product.drop_column('account_for_billing')
+        offered_configuration = TableHandler(OfferedConfiguration)
+        migrate = offered_configuration.column_exist('prorate_premiums')
+
+        super(Product, cls).__register__(module_name)
+
+        if migrate:
+            cursor = Transaction().connection.cursor()
+            configuration = OfferedConfiguration.__table__()
+            product = cls.__table__()
+            cursor.execute(*configuration.select(
+                    configuration.prorate_premiums))
+            for value in cursor.fetchall():
+                cursor.execute(*product.update(
+                        columns=[product.prorate_premiums],
+                        values=[Literal(value)]))
+                break
+            offered_configuration.drop_column('prorate_premiums')
 
     @classmethod
     def __setup__(cls):
@@ -415,6 +436,10 @@ class Product(metaclass=PoolMeta):
     @classmethod
     def default_tax_rounding(cls):
         return Pool().get('account.configuration')(1).tax_rounding
+
+    @staticmethod
+    def default_prorate_premiums():
+        return True
 
     @fields.depends('coverages')
     def on_change_taxes_included_in_premium(self):

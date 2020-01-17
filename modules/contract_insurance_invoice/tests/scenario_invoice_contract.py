@@ -242,6 +242,7 @@ product.coverages.append(coverage)
 product.fees.append(contract_fee)
 product.billing_rules[-1].billing_modes.append(freq_monthly)
 product.billing_rules[-1].billing_modes.append(freq_yearly)
+product.prorate_premiums = False
 product.save()
 
 config = switch_user('contract_user')
@@ -308,7 +309,7 @@ len(all_invoices)
 all_invoices[0].invoice.state
 # #Res# #'posted'
 
-# #Comment# #Test invoicing
+# #Comment# #Test non prorated invoicing
 Contract.first_invoice([contract.id], config.context)
 all_invoices = ContractInvoice.find([('contract', '=', contract.id)])
 # 2 is for : non periodic invoice + a one year difference means two invoices
@@ -318,7 +319,27 @@ len(all_invoices) == 2 + relativedelta(datetime.date.today(),
 
 first_invoice = sorted(ContractInvoice.find([('contract', '=', contract.id),
             ('invoice.state', '=', 'validated')]), key=lambda x: x.start)[0]
-first_invoice.invoice.total_amount
+first_invoice.invoice.total_amount  # No prorata
+# #Res# #Decimal('300.00')
+
+# Update configuration for prorata
+config = switch_user('product_user')
+product, = Product.find([('code', '=', 'test_product')])
+product.prorate_premiums = True
+product.save()
+
+# #Comment# #Test prorated invoicing
+config = switch_user('contract_user')
+Contract.first_invoice([contract.id], config.context)
+all_invoices = ContractInvoice.find([('contract', '=', contract.id)])
+# 2 is for : non periodic invoice + a one year difference means two invoices
+len(all_invoices) == 2 + relativedelta(datetime.date.today(),
+    contract.start_date).years
+# #Res# #True
+
+first_invoice = sorted(ContractInvoice.find([('contract', '=', contract.id),
+            ('invoice.state', '=', 'validated')]), key=lambda x: x.start)[0]
+first_invoice.invoice.total_amount  # Prorated
 # #Res# #Decimal('297.81')
 
 expected = [
