@@ -664,28 +664,24 @@ def with_extra_data_def(reverse_model_name, reverse_field_name, kind,
         @classmethod
         def extra_data_structure(cls, ids, kind):
             instances = cls.browse(ids)
-            res = {x.id: x._extra_data_structure() for x in instances}
-            if not kind:
-                return res
+            return {x.id: x._extra_data_structure([kind] if kind else None)
+                for x in instances}
 
-            def filter_extra(extras):
-                return {k: extra for k, extra in extras.items() if
-                        extra['business_kind'] == kind}
-            return {k: filter_extra(extras) for k, extras in res.items()}
-
-        def _extra_data_structure(self, kinds=None):
+        def _extra_data_cache(self):
             cache = Pool().get('extra_data')._extra_data_structure_cache
-            cache_key = str(self) + (str(sorted(kinds)) if kinds else '')
-            cached = cache.get(cache_key, -1)
+            cached = cache.get(str(self), -1)
             if cached != -1:
                 return cached
 
             bases = {x.name: x._get_structure() for x in self.extra_data_def
-                if not any([y for y in self.extra_data_def if y in x.parents])
-                and (not kinds or x.kind in kinds)}
+                if not any([y for y in self.extra_data_def if y in x.parents])}
 
-            cache.set(cache_key, bases)
+            cache.set(str(self), bases)
             return bases
+
+        def _extra_data_structure(self, kinds=None):
+            return dict([(k, v) for (k, v) in self._extra_data_cache().items()
+                    if not kinds or v['business_kind'] in kinds])
 
         def refresh_extra_data(self, base_data, kinds=None):
             return Pool().get('extra_data')._refresh_extra_data(base_data,
