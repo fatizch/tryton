@@ -23,6 +23,7 @@ def register():
 
     Pool.register(
         api.APIIdentity,
+        api.User,
         api.APICore,
         module='distribution', type_='model', depends=['api'])
 

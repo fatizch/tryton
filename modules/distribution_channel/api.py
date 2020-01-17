@@ -18,14 +18,14 @@ class APIIdentity(metaclass=PoolMeta):
 
     def get_api_context(self):
         context = super().get_api_context()
-        if (self.user and self.user.dist_network and
-                self.user.dist_network.all_net_channels):
+        if (self.distribution_network
+                and self.distribution_network.all_net_channels):
             context['distribution_channels'] = [
                 {
                     'id': channel.id,
                     'code': channel.code,
                     'name': channel.name,
-                } for channel in self.user.dist_network.all_net_channels]
+                } for channel in self.distribution_network.all_net_channels]
         return context
 
 

@@ -2,6 +2,21 @@
 <!-- This file is part of Coog. The COPYRIGHT file at the top level of
 this repository contains the full copyright notices and license terms. -->
 <tryton>
+    <data depends="api">
+        <!-- ############## -->
+        <!-- # Identities # -->
+        <!-- ############## -->
+        <record model="ir.ui.view" id="api_identity_view_form">
+            <field name="model">ir.api.identity</field>
+            <field name="inherit" ref="coog_core.api_identity_view_form"/>
+            <field name="name">api_identity_form</field>
+        </record>
+        <record model="ir.ui.view" id="api_identity_view_list">
+            <field name="model">ir.api.identity</field>
+            <field name="inherit" ref="coog_core.api_identity_view_list"/>
+            <field name="name">api_identity_list</field>
+        </record>
+    </data>
     <data depends="web_configuration">
         <!-- ######################## -->
         <!-- # web configuration Relate # -->

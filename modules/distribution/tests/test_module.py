@@ -8,6 +8,7 @@ import trytond.tests.test_tryton
 from trytond.modules.api import APIInputError
 from trytond.transaction import Transaction
 from trytond.pool import Pool
+from trytond.model.exceptions import ValidationError
 
 from trytond.modules.coog_core import test_framework
 
@@ -195,6 +196,8 @@ class ModuleTestCase(test_framework.CoogTestCase):
         APICore = pool.get('api.core')
         WebUIResourceKey = pool.get('web.ui.resource.key')
         node_1, = DistNetwork.search([('code', '=', 'node_1')])
+        node_2, = DistNetwork.search([('code', '=', 'node_2')])
+        node_1_1, = DistNetwork.search([('code', '=', 'node_1_1')])
         key_id = WebUIResourceKey.search([('code', '=', 'theme')])
         node_1.web_ui_resources = [
                 {
@@ -224,6 +227,18 @@ class ModuleTestCase(test_framework.CoogTestCase):
         network_identity.user = test_user
         network_identity.save()
 
+        network_identity_1 = APIIdentity()
+        network_identity_1.identifier = '312412'
+        network_identity_1.user = test_user
+        network_identity_1.custom_distribution_network = node_1_1
+        network_identity_1.save()
+
+        network_identity_2 = APIIdentity()
+        network_identity_2.identifier = '123124A'
+        network_identity_2.user = test_user
+        network_identity_2.custom_distribution_network = node_2
+        self.assertRaises(ValidationError, network_identity_2.save)
+
         with Transaction().set_user(User.search(
                     [('login', '=', 'coog_api_user')])[0].id):
             self.assertEqual(
@@ -238,6 +253,16 @@ class ModuleTestCase(test_framework.CoogTestCase):
                     {'_debug_server': True}),
                 {'user': {'id': test_user.id, 'login': 'test'},
                     'dist_network': node_1.id})
+
+            self.assertEqual(
+                APICore.identity_context(
+                    {'kind': 'generic', 'identifier': '312412'},
+                    {'_debug_server': True}),
+                {'user': {'id': test_user.id, 'login': 'test'},
+                    'dist_network': node_1_1.id})
+
+        test_user.dist_network = node_2
+        self.assertRaises(ValidationError, test_user.save)
 
 
 def suite():

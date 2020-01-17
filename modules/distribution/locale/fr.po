@@ -168,6 +168,18 @@ msgctxt "field:distribution_network-party.contact_mechanism,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:ir.api.identity,allowed_networks:"
+msgid "Allowed Networks"
+msgstr "Réseaux autorisés"
+
+msgctxt "field:ir.api.identity,custom_distribution_network:"
+msgid "Custom Distribution Network"
+msgstr "Réseau de distribution personnalisé"
+
+msgctxt "field:ir.api.identity,distribution_network:"
+msgid "Distribution Network"
+msgstr "Réseau de distribution"
+
 msgctxt "field:party.party,network:"
 msgid "Network"
 msgstr "Réseau"
@@ -179,6 +191,10 @@ msgstr "Portefeuille"
 msgctxt "field:res.user,dist_network:"
 msgid "Distribution Network"
 msgstr "Réseau de Distribution"
+
+msgctxt "help:ir.api.identity,distribution_network:"
+msgid "The distribution network that will be associated to this identity"
+msgstr "Le réseau de distribution associé à cette identité"
 
 msgctxt "model:distribution.network,name:"
 msgid "Distribution Network"
@@ -204,6 +220,10 @@ msgctxt ""
 "model:ir.action.act_window.domain,name:act_dist_network_domain_parent"
 msgid "Tree"
 msgstr "Arbre"
+
+msgctxt "model:ir.message,text:msg_invalid_identity_network"
+msgid "Incompatible network on Identity %(identity)s for user %(user)s"
+msgstr "Réseau incompatible pour l'identité %(identity)s de l'utilisateur %(user)s"
 
 msgctxt "model:ir.rule.group,name:rule_group_dist_network"
 msgid "User in company"

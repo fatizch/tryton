@@ -1,14 +1,20 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import PoolMeta, Pool
+from trytond.pyson import Eval
+from trytond.i18n import gettext
+from trytond.model.exceptions import ValidationError
 
 from trytond.modules.api import api_context
 from trytond.modules.coog_core.api import CODED_OBJECT_SCHEMA, OBJECT_ID_SCHEMA
 from trytond.modules.web_configuration.resource import WebUIResourceMixin
 from trytond.modules.party_cog.api import PARTY_RELATION_SCHEMA
 
+from trytond.modules.coog_core import fields
+
 __all__ = [
     'APIIdentity',
+    'User',
     'APIIdentityWebResources',
     'APICore',
     'DistributionNetwork',
@@ -18,11 +24,81 @@ __all__ = [
 class APIIdentity(metaclass=PoolMeta):
     __name__ = 'ir.api.identity'
 
+    distribution_network = fields.Function(
+        fields.Many2One('distribution.network', 'Distribution Network',
+            domain=[('id', 'in', Eval('allowed_networks'))],
+            depends=['allowed_networks'],
+            help='The distribution network that will be associated to this '
+            'identity'),
+        'getter_distribution_network', setter='setter_void')
+    custom_distribution_network = fields.Many2One('distribution.network',
+        'Custom Distribution Network', ondelete='RESTRICT',
+        domain=[('id', 'in', Eval('allowed_networks'))],
+        depends=['allowed_networks'],
+        states={'invisible': True})
+    allowed_networks = fields.Function(
+        fields.Many2Many('distribution.network', None, None, 'Allowed Networks',
+            states={'invisible': True}),
+        'on_change_with_allowed_networks')
+
+    @fields.depends('user')
+    def on_change_with_allowed_networks(self, name=None):
+        Network = Pool().get('distribution.network')
+        if not self.user or not self.user.dist_network:
+            return [x.id for x in Network.search([])]
+        else:
+            return [x.id for x in Network.search([
+                        ('left', '>=', self.user.dist_network.left),
+                        ('right', '<=', self.user.dist_network.right),
+                        ])]
+
+    @fields.depends('distribution_network', 'user')
+    def on_change_distribution_network(self):
+        if self.distribution_network and self.user and (
+                self.user.dist_network == self.distribution_network):
+            self.custom_distribution_network = None
+        else:
+            self.custom_distribution_network = self.distribution_network
+
+    def getter_distribution_network(self, name):
+        if self.custom_distribution_network:
+            return self.custom_distribution_network.id
+        if self.user and self.user.dist_network:
+            return self.user.dist_network.id
+
     def get_api_context(self):
         context = super().get_api_context()
-        if self.user and self.user.dist_network:
-            context['dist_network'] = self.user.dist_network.id
+        if self.distribution_network:
+            context['dist_network'] = self.distribution_network.id
         return context
+
+
+class User(metaclass=PoolMeta):
+    __name__ = 'res.user'
+
+    @classmethod
+    def validate(cls, users):
+        pool = Pool()
+        Identity = pool.get('ir.api.identity')
+
+        super().validate(users)
+        for user in users:
+            if not user.dist_network:
+                continue
+            conflicts = Identity.search([
+                    ('user', '=', user.id),
+                    ('custom_distribution_network', '!=', None),
+                    ['OR',
+                        ('custom_distribution_network.left', '<',
+                            user.dist_network.left),
+                        ('custom_distribution_network.right', '>',
+                            user.dist_network.right),
+                        ]])
+            if conflicts:
+                raise ValidationError(gettext(
+                        'distribution.msg_invalid_identity_network',
+                        user=user.name,
+                        identity=conflicts[0].identifier))
 
 
 class APIIdentityWebResources(metaclass=PoolMeta):
@@ -30,8 +106,8 @@ class APIIdentityWebResources(metaclass=PoolMeta):
 
     def get_api_context(self):
         context = super().get_api_context()
-        if self.user and self.user.dist_network:
-            for parent in self.user.dist_network.parents:
+        if self.distribution_network:
+            for parent in self.distribution_network.parents:
                 try:
                     context['theme'] = parent.get_web_resource_by_key('theme')
                     return context
