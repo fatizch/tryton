@@ -1,5 +1,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+import logging
+
 from trytond.i18n import gettext
 from trytond.pyson import Eval
 from trytond.pool import Pool
@@ -13,6 +15,8 @@ from . import model
 from . import fields
 from . import coog_string
 from . import utils
+
+event_logger = logging.getLogger('coog_event')
 
 __all__ = [
     'Event',
@@ -67,6 +71,10 @@ class Event(Model):
         pool = Pool()
         EventTypeAction = pool.get('event.type.action')
         event_type_data = cls.get_event_type_data_from_code(event_code)
+
+        if event_logger.isEnabledFor(logging.DEBUG):
+            event_logger.debug('%s:%s' % (event_code, str(objects)))
+
         actions = [EventTypeAction(**x) for x in event_type_data['actions']]
         if actions and objects:
             for action in actions:
