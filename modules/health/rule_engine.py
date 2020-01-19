@@ -55,4 +55,4 @@ class RuleEngineRuntime(metaclass=PoolMeta):
     @classmethod
     @check_args('contract')
     def _re_child_number_order_by_age(cls, args):
-        cls._re_relation_number_order_by_age(args, 'child')
+        return cls._re_relation_number_order_by_age(args, 'child')
