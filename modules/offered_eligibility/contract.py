@@ -74,7 +74,7 @@ class ContractOption(metaclass=PoolMeta):
             Warning = pool.get('res.user.warning')
             key = 'bad_dates_%s' % ' - '.join([
                     self.rec_name,
-                    Date.date_as_string(self.initial_start_date)]),
+                    Date.date_as_string(self.initial_start_date)])
             if Warning.check(key):
                 raise UserWarning(key, gettext('contract.msg_bad_dates',
                     option=self.rec_name))

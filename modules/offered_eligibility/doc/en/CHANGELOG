@@ -1,4 +1,6 @@
+* OTH#00000 Fix typo in option eligibility check method
 * OTH#00000 Update simulate API output schema
+* BUG#14012 Fix tests
 * FEA#13716 Extraction of eligibility information in simulation API
 
 Version 2.6 - 2019-10-11
