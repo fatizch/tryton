@@ -63,6 +63,8 @@ class EventTypeAction(metaclass=PoolMeta):
         elif object_.__name__ == 'contract.option':
             if object_.parent_contract:
                 contracts = [object_.parent_contract]
+        elif getattr(object_, 'contract', None):
+            contracts = [object_.contract]
         return contracts
 
     def get_targets_and_origin_from_object_and_template(self, object_,

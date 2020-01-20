@@ -1986,10 +1986,6 @@ class CoveredElement(Printable,
     def get_sender(self):
         return self.party or self.contract.get_sender()
 
-    def get_template_holders_sub_domains(self):
-        return super(CoveredElement, self).get_template_holders_sub_domains(
-            ) + [[('products', '=', self.contract.product.id)]]
-
 
 class CoveredElementVersion(model.CoogSQL, model.CoogView,
         with_extra_data(['covered_element'],

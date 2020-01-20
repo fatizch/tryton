@@ -1,3 +1,4 @@
+* OTH#0000 Properly filter document desc for covered element so that doc on commercial product work
 * FEA#13644 Calculate coverage amount and return to API
 * BUG#13758 Prevent crash when initializing some item descriptors
 * BUG#14139 Return chosen package per covered in simulate API

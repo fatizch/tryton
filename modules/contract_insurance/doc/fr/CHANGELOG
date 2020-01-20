@@ -1,3 +1,4 @@
+* OTH#0000 Filtrage plus propre pour les modèles de courrier d'élement couvert pour que l'ajout de courrier sur les produits commerciaux fonctionne
 * FEA#13644 Calcul du montant de couverture et retour dans l'API
 * BUG#13758 Correctif du crash lors de l'initialisation de certains descripteurs de risque
 * BUG#14139 Retour de l'info du package choisi par élément couvert dans l'API simulate

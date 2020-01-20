@@ -16,11 +16,6 @@ class EventTypeAction(metaclass=PoolMeta):
             return [object_]
         return []
 
-    def get_covered_elements_from_object(self, object_):
-        if object_.__name__ == 'contract.covered_element':
-            return [object_]
-        return []
-
     def get_targets_and_origin_from_object_and_template(self, object_,
             template):
         if template.on_model and template.on_model.model == 'contract.option':
@@ -34,15 +29,13 @@ class EventTypeAction(metaclass=PoolMeta):
     def get_filtering_objects_from_event_object(self, event_object):
         return super(EventTypeAction, self
             ).get_filtering_objects_from_event_object(event_object
-            ) + self.get_options_from_object(event_object
-            ) + self.get_covered_elements_from_object(event_object)
+            ) + self.get_options_from_object(event_object)
+        # RSE : IMHO adding options is useless
 
     @classmethod
     def get_templates_list(cls, filtering_object):
         if filtering_object.__name__ == 'contract.option':
             return filtering_object.covered_element.product.report_templates
-        elif filtering_object.__name__ == 'contract.covered_element':
-            return filtering_object.product.report_templates
         return super(EventTypeAction, cls).get_templates_list(
             filtering_object)
 
