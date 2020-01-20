@@ -3,4 +3,5 @@
 this repository contains the full copyright notices and license terms. -->
 <tree>
     <field name="rule"/>
+    <field name="label"/>
 </tree>

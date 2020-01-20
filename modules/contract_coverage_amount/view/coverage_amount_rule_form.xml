@@ -5,6 +5,9 @@ this repository contains the full copyright notices and license terms. -->
     <label name="amount_mode"/>
     <field name="amount_mode"/>
     <newline/>
+    <label name="label"/>
+    <field name="label"/>
+    <newline/>
     <label name="rule"/>
     <field name="rule"/>
     <field name="rule_extra_data" no_command="1" colspan="4"/>

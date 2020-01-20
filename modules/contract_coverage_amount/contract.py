@@ -59,7 +59,8 @@ class ContractOption(metaclass=PoolMeta):
     current_coverage_amount = fields.Function(
         fields.Numeric('Coverage Amount',
             states={
-                'invisible': Eval('coverage_amount_mode') == 'selection',
+                'invisible': Eval('coverage_amount_mode') in ['selection',
+                    None],
                 'required': (Eval('contract_status') == 'active') & (
                     Eval('coverage_amount_mode') == 'free_input'),
                 'readonly': (Eval('contract_status') == 'active') | (

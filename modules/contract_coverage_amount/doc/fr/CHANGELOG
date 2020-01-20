@@ -1,3 +1,4 @@
+* OTH#00000 Correction du calcul du montant de couverture dans l'API de simulation
 * FEA#13644 Calcul du montant de couverture et retour dans l'API
 * OTH#00000 Résolution des tests journaliers
 

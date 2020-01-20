@@ -20,7 +20,7 @@ class OptionDisplayer(metaclass=PoolMeta):
     coverage_amount_label = fields.Char('Coverage Amount Label')
     coverage_amount = fields.Numeric('Coverage Amount', digits=(16, 2),
         states={
-            'invisible': Eval('coverage_amount_mode') == 'selection',
+            'invisible': Eval('coverage_amount_mode') in ['selection', None],
             'readonly': Eval('coverage_amount_mode') == 'calculated_amount',
             })
     coverage_amount_selection = fields.Selection('select_coverage_amounts',
@@ -96,8 +96,10 @@ class OptionDisplayer(metaclass=PoolMeta):
     def new_displayer(cls, option, effective_date):
         displayer = super(OptionDisplayer, cls).new_displayer(option,
             effective_date)
-        displayer.coverage_amount_mode = option.coverage_amount_mode
-        displayer.coverage_amount_label = option.coverage_amount_label
+        displayer.coverage_amount_mode = \
+            option.on_change_with_coverage_amount_mode()
+        displayer.coverage_amount_label = \
+            option.on_change_with_coverage_amount_label()
         if displayer.coverage_amount_mode == 'calculated_amount':
             displayer.coverage_amount = option.get_coverage_amount_rule_result(
                 effective_date)

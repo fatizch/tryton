@@ -4,7 +4,6 @@ from trytond.pool import PoolMeta, Pool
 
 from trytond.modules.api.api.core import POSITIVE_AMOUNT_SCHEMA
 from trytond.modules.api.api.core import amount_for_api, amount_from_api
-from trytond.modules.coog_core import utils
 from trytond.modules.coog_core.api import FIELD_SCHEMA
 from trytond.modules.rule_engine import check_args
 
@@ -55,8 +54,11 @@ class APIContract(metaclass=PoolMeta):
                 option.coverage.coverage_amount_rules[0].amount_mode ==
                 'calculated_amount'):
             option.versions[0].coverage_amount = \
-                option.coverage.get_coverage_amount_rule_result(
-                    {'date': utils.today()})
+                option.coverage.get_coverage_amount_rule_result({
+                        'date': contract.start_date,
+                        'person': contract.subscriber,
+                        'contract': contract,
+                        })
         return option
 
     @classmethod
