@@ -204,7 +204,7 @@ class RuleEngineRuntime(metaclass=PoolMeta):
                 ValidationError(gettext(
                         'claim_indemnification.msg_wrong_parameters')))
         return coog_date.calculate_periods_from_dates(dates, period_start_date,
-            period_end_date)
+            period_end_date, dates_included=True)
 
     @classmethod
     @check_args('description')

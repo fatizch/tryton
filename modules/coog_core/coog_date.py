@@ -59,11 +59,16 @@ def period_overlap(p1_start, p1_end, p2_start, p2_end):
     return (min(p1_end, p2_end) - max(p1_start, p2_start)).days + 1 > 0
 
 
-def calculate_periods_from_dates(dates, period_start_date, period_end_date):
+def calculate_periods_from_dates(dates, period_start_date, period_end_date,
+        dates_included=False):
     periods = []
     start_date = period_start_date
-    filtered_dates = [x for x in dates if x >
-        period_start_date and x < period_end_date]
+    if not dates_included:
+        filtered_dates = [x for x in dates if x >
+            period_start_date and x < period_end_date]
+    else:
+        filtered_dates = [x for x in dates if x >=
+            period_start_date and x <= period_end_date]
     filtered_dates.sort()
     for date in filtered_dates:
         end_date = add_day(date, -1)
