@@ -9,8 +9,33 @@ from trytond.server_context import ServerContext
 from trytond.modules.coog_core import fields
 
 __all__ = [
+    'ManageOptions',
     'OptionDisplayer',
     ]
+
+
+class ManageOptions(metaclass=PoolMeta):
+    __name__ = 'contract.manage_options'
+
+    def new_option(self):
+        new_option = super(ManageOptions, self).new_option()
+        if self.new_coverage.coverage_amount_rules:
+            new_option.coverage_amount_mode = \
+                self.new_coverage.coverage_amount_rules[0].amount_mode
+            new_option.coverage_amount_label = \
+                self.new_coverage.coverage_amount_rules[0].label
+        else:
+            new_option.coverage_amount_mode = None
+            new_option.coverage_amount_label = ''
+        if new_option.coverage_amount_mode == 'calculated_amount':
+            new_option.coverage_amount = \
+                self.new_coverage.get_coverage_amount_rule_result(
+                    {'date': self.effective_date})
+        else:
+            new_option.coverage_amount = None
+        new_option.coverage_amount_selection = str(new_option.coverage_amount
+             or '')
+        return new_option
 
 
 class OptionDisplayer(metaclass=PoolMeta):

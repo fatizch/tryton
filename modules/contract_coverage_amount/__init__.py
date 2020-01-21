@@ -21,6 +21,7 @@ def register():
         contract.ContractOptionVersion,
         module='contract_coverage_amount', type_='model')
     Pool.register(
+        endorsement.ManageOptions,
         endorsement.OptionDisplayer,
         module='contract_coverage_amount', type_='model',
         depends=['endorsement'])
