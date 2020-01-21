@@ -101,6 +101,10 @@ class Benefit(metaclass=PoolMeta):
                                 'claim.msg_different_product_accounts',
                                 benefit=benefit.rec_name)))
 
+    @classmethod
+    def _export_light(cls):
+        return super(Benefit, cls)._export_light() | {'payment_journals'}
+
     def has_automatic_period_calculation(self):
         return self.automatic_period_calculation and \
             self.indemnification_kind == 'period'

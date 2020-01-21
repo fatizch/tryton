@@ -53,7 +53,7 @@ class Template(export.ExportImportMixin):
     @classmethod
     def _export_light(cls):
         return (super(Template, cls)._export_light() |
-            set(['default_uom']))
+            set(['default_uom', 'company']))
 
     @classmethod
     def _export_skips(cls):
@@ -103,6 +103,10 @@ class Product(export.ExportImportMixin):
 
     def get_rec_name(self, name):
         return self.name
+
+    @classmethod
+    def _export_light(cls):
+        return super(Product, cls)._export_light() | {'company'}
 
 
 class Uom(export.ExportImportMixin):
@@ -254,6 +258,10 @@ class ProductCostPrice(export.ExportImportMixin):
         return [('product.code', '=', product_code),
             ('cost_price', '=', Decimal(cost_price))]
 
+    @classmethod
+    def _export_light(cls):
+        return super(ProductCostPrice, cls)._export_light() | {'company'}
+
 
 class ProductListPrice(export.ExportImportMixin):
     __name__ = 'product.list_price'
@@ -275,6 +283,10 @@ class ProductListPrice(export.ExportImportMixin):
         return [('template.name', '=', template_name),
             ('list_price', '=', Decimal(list_price))]
 
+    @classmethod
+    def _export_light(cls):
+        return super(ProductListPrice, cls)._export_light() | {'company'}
+
 
 class ProductCostPriceMethod(export.ExportImportMixin):
     __name__ = 'product.cost_price_method'
@@ -295,6 +307,10 @@ class ProductCostPriceMethod(export.ExportImportMixin):
         template, cost_price_method = clause[2].split('|')
         return [('template.name', '=', template),
             ('cost_price_method', '=', cost_price_method)]
+
+    @classmethod
+    def _export_light(cls):
+        return super(ProductCostPriceMethod, cls)._export_light() | {'company'}
 
 
 class CategoryAccount(export.ExportImportMixin, metaclass=PoolMeta):

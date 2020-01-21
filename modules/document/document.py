@@ -69,6 +69,10 @@ class DocumentDescription(model.CoogSQL, model.CoogView):
         return super(DocumentDescription, cls)._export_light() | {'groups', }
 
     @classmethod
+    def is_master_object(cls):
+        return True
+
+    @classmethod
     def search_rec_name(cls, name, clause):
         return ['OR',
             ('code',) + tuple(clause[1:]),

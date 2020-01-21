@@ -256,7 +256,8 @@ class Benefit(model.CodedMixin, model.CoogView,
 
     @classmethod
     def _export_light(cls):
-        return super(Benefit, cls)._export_light() | {'company', 'loss_descs'}
+        return super(Benefit, cls)._export_light() | {
+            'company', 'loss_descs', 'insurer'}
 
     @classmethod
     def _export_skips(cls):
