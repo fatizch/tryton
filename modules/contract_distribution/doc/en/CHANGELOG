@@ -1,3 +1,5 @@
+* OTH#00000 Add checks in order to avoid crashes. This is complementary to commit 241e1ee
+
 Version 2.6 - 2019-10-11
 * OTH#00000 Handle is distributor flag in network creation API
 

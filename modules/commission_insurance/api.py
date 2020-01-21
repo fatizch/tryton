@@ -121,11 +121,12 @@ class APIContract(metaclass=PoolMeta):
 
     @classmethod
     def _validate_contract_input(cls, data):
+        super()._validate_contract_input(data)
+        if not data['agent']:
+            return
         pool = Pool()
         API = pool.get('api')
         Agent = pool.get('commission.agent')
-
-        super()._validate_contract_input(data)
 
         network = data['dist_network']
         agent = data['agent']

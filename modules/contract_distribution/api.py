@@ -251,10 +251,11 @@ class APIContract(metaclass=PoolMeta):
 
     @classmethod
     def _validate_contract_input(cls, data):
+        super()._validate_contract_input(data)
+        if not data['commercial_product']:
+            return
         pool = Pool()
         API = pool.get('api')
-
-        super()._validate_contract_input(data)
 
         network = data['dist_network']
         if data['commercial_product'].product != data['product']:

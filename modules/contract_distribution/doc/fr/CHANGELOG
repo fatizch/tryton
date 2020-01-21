@@ -1,3 +1,5 @@
+* OTH#00000 Ajout de vérifications afin d'éviter des plantages. Ceci est complémentaire au commit 241e1ee
+
 Version 2.6 - 2019-10-11
 * OTH#00000 Ajout du champs "est distributeur" dans l'API de création des réseaux de distribution
 
