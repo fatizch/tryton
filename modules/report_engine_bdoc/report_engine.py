@@ -9,6 +9,7 @@ from trytond.config import config
 from trytond.i18n import gettext
 
 from trytond.modules.coog_core import fields
+from trytond.server_context import ServerContext
 
 BDOC_FORMAT = [
     ('', ''),
@@ -103,8 +104,10 @@ class ReportGenerate(metaclass=PoolMeta):
         wsdl_url = config.get('bdoc', 'bdoc_web_wsdl')
         report_template = Pool().get('report.template')(data['doc_template'][0])
         # Compute xml file
-        _, xml_file, _, filename = cls.process_shared_genshi_template(
+        extension, xml_file, d, filename = cls.process_shared_genshi_template(
             ids, data)
+        if ServerContext().get('from_batch', None):
+            return 'xmlstandard', xml_file, d, filename
         # Call BDOC generation web service
         client = Client(wsdl_url)
         # arg0: BDOC_template_domain of the report template;

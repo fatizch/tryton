@@ -1,3 +1,4 @@
+* OTH#00000 Do not call web service when generating file per Batch
 * FEA#14122 Allow to select the GED format original for BDOC
 * OTH#00000 Do not encode in base 64 since the zeep library encode it
 * FEA#13118 Allow to call BDOC via webservice
