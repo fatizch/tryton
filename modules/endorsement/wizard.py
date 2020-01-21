@@ -1281,7 +1281,7 @@ class OptionDisplayer(model.CoogView):
         option.versions = [Version(**Version.get_default_version())]
         option.manual_start_date = self.effective_date
         option.start_date = self.effective_date
-        option.update_option_version(
+        self.update_option_version(
             option.get_version_at_date(self.effective_date))
         option.versions = list(option.versions)
         return option
