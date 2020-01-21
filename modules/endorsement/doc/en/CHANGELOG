@@ -1,3 +1,4 @@
+* OTH#00000 No update of version data on an endorsement if the endorsement is at the effective date of the option. Improve code to add a method that updates the option version and can be overridden easily
 * BUG#13146 Removed check eligibility in TerminateContract
 * BUG#11342 Allow endorsements on contracts on hold
 * BUG#13039 Endorsement summary did not display records deleted by endorsement

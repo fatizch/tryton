@@ -1000,11 +1000,13 @@ class ManageOptions(EndorsementWizardStepMixin):
                 if not v.start or v.start <= new_option.effective_date],
             key=lambda x: x.start or datetime.date.min)
         current_version = new_versions[-1]
-        if (getattr(current_version, 'start_date', -1) ==
-                new_option.effective_date):
-            current_version.extra_data = new_option.extra_data
-        elif not current_version.start or (current_version.start !=
-                new_option.effective_date):
+        if ((getattr(current_version, 'start_date', -1) ==
+                new_option.effective_date) or (current_version.start and
+                current_version.start == new_option.effective_date)):
+            # if version already exist we just update the version
+            new_option.update_option_version(current_version)
+        else:
+            # else we create a new version
             current_version = new_option.to_version(
                 previous_version=new_versions[-1])
             new_versions.append(current_version)
@@ -1279,10 +1281,13 @@ class OptionDisplayer(model.CoogView):
         option.versions = [Version(**Version.get_default_version())]
         option.manual_start_date = self.effective_date
         option.start_date = self.effective_date
-        option.get_version_at_date(self.effective_date).extra_data = \
-            self.extra_data
+        option.update_option_version(
+            option.get_version_at_date(self.effective_date))
         option.versions = list(option.versions)
         return option
+
+    def update_option_version(self, version):
+        version.extra_data = self.extra_data
 
     def to_version(self, previous_version=None):
         Version = Pool().get('contract.option.version')
@@ -1293,7 +1298,7 @@ class OptionDisplayer(model.CoogView):
                     self._option_fields_to_extract()))
             version.start = self.effective_date
         version.start_date = self.effective_date
-        version.extra_data = self.extra_data
+        self.update_option_version(version)
         return version
 
     def update_from_new_option(self, new_option):

@@ -69,7 +69,7 @@ class OptionDisplayer(metaclass=PoolMeta):
         self.coverage_amount = Decimal(self.coverage_amount_selection or 0)
         self.update_action()
 
-    @fields.depends(methods=['on_change_action'])
+    @fields.depends('coverage_amount', methods=['on_change_action'])
     def on_change_coverage_amount(self):
         self.coverage_amount_selection = str(self.coverage_amount or '')
         self.update_action()
@@ -125,6 +125,10 @@ class OptionDisplayer(metaclass=PoolMeta):
             option.on_change_with_coverage_amount_mode()
         displayer.coverage_amount_label = \
             option.on_change_with_coverage_amount_label()
+        if displayer.coverage_amount_mode is None:
+            displayer.coverage_amount = None
+            displayer.coverage_amount_selection = None
+            return displayer
         if displayer.coverage_amount_mode == 'calculated_amount':
             displayer.coverage_amount = option.get_coverage_amount_rule_result(
                 effective_date)
@@ -136,10 +140,9 @@ class OptionDisplayer(metaclass=PoolMeta):
              or '')
         return displayer
 
-    def to_version(self, previous_version=None):
-        version = super(OptionDisplayer, self).to_version(previous_version)
+    def update_option_version(self, version):
+        super().update_option_version(version)
         version.coverage_amount = getattr(self, 'coverage_amount', None)
-        return version
 
     def update_from_new_option(self, new_option):
         super(OptionDisplayer, self).update_from_new_option(new_option)
