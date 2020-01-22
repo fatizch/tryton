@@ -67,7 +67,7 @@ def calculate_periods_from_dates(dates, period_start_date, period_end_date,
         filtered_dates = [x for x in dates if x >
             period_start_date and x < period_end_date]
     else:
-        filtered_dates = [x for x in dates if x >=
+        filtered_dates = [x for x in dates if x >
             period_start_date and x <= period_end_date]
     filtered_dates.sort()
     for date in filtered_dates:
