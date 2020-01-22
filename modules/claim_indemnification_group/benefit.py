@@ -228,7 +228,9 @@ class BenefitRule(metaclass=PoolMeta):
             return getattr(OriginalBenefitRule, 'calculate_' + rule_name)(
                 self, args, **kwargs)
         # Use option defined rule
-        version = option.get_version_at_date(args['date'])
+        version_date = args['loss'].start_date \
+            if args['loss'] else args['date']
+        version = option.get_version_at_date(version_date)
         option_benefit = version.get_benefit(self.benefit)
         if not option_benefit or not getattr(option_benefit, rule_name):
             return default_value
