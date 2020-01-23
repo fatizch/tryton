@@ -419,6 +419,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
                     'amount': '-120.00',
                 }],
             'total_discounts': '-144.00',
+            'fees': [],
         }
 
         self.assertEqual(output[0]['covereds'][0]['premium'],
@@ -427,6 +428,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
         expected_contract_premium = {
             'total': '2256.00',
             'total_fee': '0',
+            'fees': [],
             'total_premium': '2520.00',
             'total_tax': '0',
             'discounts': [

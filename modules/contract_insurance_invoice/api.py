@@ -1,7 +1,9 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+import datetime
 from collections import defaultdict
 from decimal import Decimal
+from dateutil.relativedelta import relativedelta
 
 from trytond.pool import PoolMeta, Pool
 from trytond.server_context import ServerContext
@@ -856,10 +858,18 @@ class APIContract(metaclass=PoolMeta):
         contract_covereds = defaultdict(dict)
         covereds_coverages = defaultdict(dict)
         contract_global_summary = cls._simulate_init_premium_field()
-        for schedule in contract_data['schedule']:
+        for i, schedule in enumerate(contract_data['schedule']):
+            start = datetime.datetime.strptime(schedule['start'], '%Y-%m-%d')
+            end = datetime.datetime.strptime(schedule['end'], '%Y-%m-%d')
+            if i == 0:
+                first_start_plus_one_year = start + relativedelta(years=1)
             if (premium_summary_kind == 'first_invoice' and
                     Decimal(schedule['total']) <= Decimal(0)):
                 continue
+            elif premium_summary_kind == 'first_year':
+                if start >= first_start_plus_one_year or \
+                        end >= first_start_plus_one_year:
+                    break
             for detail in schedule['details']:
                 cls._simulate_update_premium_field(
                     contract_global_summary['premium'], detail)
@@ -947,6 +957,18 @@ class APIContract(metaclass=PoolMeta):
         target['total_fee'] += Decimal(source['fee'])
         target['total_premium'] += Decimal(source['premium'])
         target['total_tax'] += Decimal(source['tax'])
+        if 'fee' in source.get('origin', {}):
+            amount = source['fee']
+            code = source['origin']['fee']['code']
+            fee = next((f for f in target['fees']
+                    if f['code'] == code), None)
+            if fee:
+                fee['amount'] += Decimal(amount)
+            else:
+                target['fees'].append({
+                        'code': code,
+                        'amount': Decimal(amount),
+                        })
 
     @classmethod
     def _simulate_init_premium_field(cls):
@@ -956,6 +978,7 @@ class APIContract(metaclass=PoolMeta):
                 'total_fee': Decimal(0),
                 'total_premium': Decimal(0),
                 'total_tax': Decimal(0),
+                'fees': [],
                 },
             }
 
@@ -967,8 +990,16 @@ class APIContract(metaclass=PoolMeta):
 
     @classmethod
     def _simulate_convert_premium_field(cls, premium):
-        for total in premium:
-            premium[total] = amount_for_api(premium[total])
+        for key in premium:
+            cls._simulate_convert_premium_key(premium, key)
+
+    @classmethod
+    def _simulate_convert_premium_key(cls, premium, key):
+        if key == 'fees':
+            for fee in premium['fees']:
+                fee['amount'] = amount_for_api(fee['amount'])
+        else:
+            premium[key] = amount_for_api(premium[key])
 
     @classmethod
     def _simulate_get_schedule(cls, contract, parameters, created):
@@ -1086,6 +1117,17 @@ class APIContract(metaclass=PoolMeta):
                     'total_premium': POSITIVE_AMOUNT_SCHEMA,
                     'total_fee': POSITIVE_AMOUNT_SCHEMA,
                     'total_tax': POSITIVE_AMOUNT_SCHEMA,
+                    'fees': {
+                        'type': 'array',
+                        'items': {
+                            'type': 'object',
+                            'additionalProperties': False,
+                            'properties': {
+                                'code': CODE_SCHEMA,
+                                'amount': POSITIVE_AMOUNT_SCHEMA,
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -1287,6 +1329,7 @@ class APIContract(metaclass=PoolMeta):
                             'total_fee': '0',
                             'total_tax': '0.00',
                             'total': '254.59',
+                            'fees': [],
                             },
                         'ref': '1',
                         'premium_summary_kind': 'contract_first_term',

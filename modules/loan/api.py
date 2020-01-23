@@ -245,7 +245,6 @@ class APIContract(metaclass=PoolMeta):
 
         # Always deferral, by definition
         del schema['properties']['deferral']
-        del schema['properties']['deferral_duration']
         del schema['dependencies']['deferral_duration']
         if len(schema['dependencies']) == 0:
             del schema['dependencies']
@@ -267,10 +266,7 @@ class APIContract(metaclass=PoolMeta):
                         'oneOf': [POSITIVE_AMOUNT_SCHEMA, {'type': 'null'}],
                         'default': None,
                         },
-                    'rate': {
-                        'oneOf': [RATE_SCHEMA, {'type': 'null'}],
-                        'default': None,
-                        },
+                    'rate': RATE_SCHEMA,
                     'payment_frequency': {
                         'type': 'string',
                         'enum': ['day', 'week', 'month', 'quarter',

@@ -6,6 +6,7 @@ from trytond.pool import Pool
 from trytond.model import Model
 from trytond.server_context import ServerContext
 from trytond.transaction import Transaction
+from trytond.rpc import RPC
 
 from trytond.modules.coog_core import utils, model
 from trytond.modules.rule_engine import check_args
@@ -67,6 +68,7 @@ class APIContract(APIMixin):
                     'relevant informations',
                     },
                 })
+        cls.__rpc__.update({'legacy_quotation': RPC(readonly=False)})
 
     @classmethod
     def _get_contract(cls, data, status_filter=None):
@@ -1002,6 +1004,11 @@ class APIContract(APIMixin):
                         },
                     ],
                 }]
+
+    @classmethod
+    def legacy_quotation(cls, quotation):
+        from . import legacy_quotation
+        return legacy_quotation.LegacyQuotation(quotation).get_prices_board()
 
 
 class APIRuleRuntime(Model):

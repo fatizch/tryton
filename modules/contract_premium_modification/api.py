@@ -145,18 +145,17 @@ class APIContract(metaclass=PoolMeta):
         return res
 
     @classmethod
-    def _simulate_convert_premium_field(cls, premium):
-        for key in premium:
-            if key == 'discounts':
-                premium['total_discounts'] = amount_for_api(
-                    sum(discount['amount']
-                        for discount in premium['discounts']) or Decimal(0))
-                premium['discounts'] = [{
-                        'code': discount['code'],
-                        'amount': amount_for_api(discount['amount']),
-                        } for discount in premium['discounts']]
-            elif key != 'total_discounts':
-                premium[key] = amount_for_api(premium[key])
+    def _simulate_convert_premium_key(cls, premium, key):
+        if key == 'discounts':
+            premium['total_discounts'] = amount_for_api(
+                sum(discount['amount']
+                    for discount in premium['discounts']) or Decimal(0))
+            premium['discounts'] = [{
+                    'code': discount['code'],
+                    'amount': amount_for_api(discount['amount']),
+                    } for discount in premium['discounts']]
+        elif key != 'total_discounts':
+            super()._simulate_convert_premium_key(premium, key)
 
     @classmethod
     def _simulate_premium_output_schema(cls):

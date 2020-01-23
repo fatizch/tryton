@@ -553,6 +553,8 @@ class DocumentRequestLineOffered(
 
     @classmethod
     def _generate_template_documents(cls, request_lines):
+        if Transaction().context.get('_will_be_rollbacked', False):
+            return
         pool = Pool()
         Attachment = pool.get('ir.attachment')
         date_today = utils.today()
