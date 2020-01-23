@@ -1,3 +1,4 @@
+* BUG#14274 Fix on the present again date if the rejected fee's action specify a date
 * FEA#13397 Move prorata configuration on products
 * BUG#14231 Fix crash when the billing mode is manual at payments fail integration with a present again after action
 * OTH#00000 Fix allowed debit days for the tests

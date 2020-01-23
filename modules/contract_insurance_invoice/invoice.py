@@ -314,6 +314,7 @@ class Invoice(metaclass=PoolMeta):
         if billing_information.suspended:
             return
         term_change = ServerContext().context.get('_payment_term_change', False)
+        present_again_after = ServerContext().get('present_again_after', None)
         if not term_change and self.contract and self.fees and \
                 billing_information.direct_debit:
             all_fee_in_product = True
@@ -322,12 +323,11 @@ class Invoice(metaclass=PoolMeta):
                         cur_line.detail.fee not in self.contract.product.fees):
                     all_fee_in_product = False
                     break
-            if all_fee_in_product:
+            if all_fee_in_product and not present_again_after:
                 line.payment_date = \
                     self.contract.get_non_periodic_payment_date()
                 return
         payment_dates = []
-        present_again_after = ServerContext().get('present_again_after', None)
         if hasattr(line, 'payments'):
             payment_dates = list(filter(None, [x.date for x in line.payments]))
         if present_again_after and payment_dates:
