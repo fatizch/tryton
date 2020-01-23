@@ -3,7 +3,7 @@
 from trytond.pool import PoolMeta
 from trytond.pyson import Eval, Bool
 
-from trytond.modules.coog_core import fields
+from trytond.modules.coog_core import fields, coog_string
 
 __all__ = [
     'Product',

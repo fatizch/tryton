@@ -1,3 +1,5 @@
+* BUG#14383 Fix get beneficiaries data when calculating indemnification period
+
 Version 2.6 - 2019-10-11
 * BUG#11509 Fix on terminated contract group reactivation
 

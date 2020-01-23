@@ -40,6 +40,7 @@ class ClaimService(metaclass=PoolMeta):
                 return [(self.contract.subscriber, 1)]
             elif (not covered.contract_exit_date or
                     covered.contract_exit_date >= at_date):
-                return [(covered.affiliated_to, 1)]
+                return [(covered.affiliated_to or
+                        covered.contract.subscriber, 1)]
             return [(covered.party, 1)]
         return super(ClaimService, self).get_beneficiaries_data(at_date)

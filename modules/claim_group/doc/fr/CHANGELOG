@@ -1,3 +1,5 @@
+* BUG#14383 Correctif sur la récupération du beneficiaire lors de la création de périodes d'indemnisation
+
 Version 2.6 - 2019-10-11
 * BUG#11509 Correctif sur la réactivation des contrats collectifs résiliés
 
