@@ -2,7 +2,7 @@
 # this repository contains the full copyright notices and license terms.
 import re
 import zipfile
-from io import StringIO
+from io import BytesIO
 from collections import defaultdict
 
 from trytond.exceptions import UserWarning
@@ -72,7 +72,7 @@ class ConvertTemplate(Wizard):
                 per_template[Version(match.template_id)].append((match.section,
                         match.match, match.new_value))
         for template, matches in per_template.items():
-            template.data = self.replace_in_file(StringIO(template.data),
+            template.data = self.replace_in_file(BytesIO(template.data),
                 matches)
             template.data = memoryview(template.data.getvalue())
             to_save.append(template)
@@ -120,7 +120,7 @@ class ConvertTemplate(Wizard):
             return '<text:placeholder text:placeholder-type="text">&lt;' + \
                 x + '&gt;</text:placeholder>'
 
-        data_out = StringIO()
+        data_out = BytesIO()
         matches = [(section, prepare_match(x), prepare_match(y))
             for section, x, y in matches]
         with zipfile.ZipFile(data_in, 'r') as zin, \
@@ -180,12 +180,13 @@ class SelectTemplatesForConversion(model.CoogView):
             for version in template.versions:
                 if not version.data:
                     continue
-                all_matches = Converter.find_in_file(StringIO(version.data),
-                    self.search_for)
+                all_matches = Converter.find_in_file(BytesIO(
+                        version.data), self.search_for)
                 for section, matches in all_matches.items():
                     for match in set(matches):
                         match = Displayer(to_update=bool(self.replace_with),
-                            model_name=template.on_model.name,
+                            model_name=template.on_model.name
+                                if template.on_model else '',
                             name=template.name, language=version.language.name,
                             match=match, new_value=match,
                             template_id=version.id, section=section)

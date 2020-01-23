@@ -703,6 +703,9 @@ class ReportData(object):
     def __contains__(self, item):
         return self.__data.__contains__(item)
 
+    def __repr__(self):
+        return repr(self.__data)
+
     def keys(self):
         return list(self.keys())
 
@@ -725,6 +728,8 @@ class ReportData(object):
         return self.__data.__iter__()
 
     def __getattr__(self, name):
+        if name == '__data':
+            return self.__data
         if name in self.__parsed:
             return self.__parsed[name]
         if name in self.__data:
