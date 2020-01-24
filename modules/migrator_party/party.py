@@ -440,6 +440,25 @@ class MigratorPartyRelation(migrator.Migrator):
                 {'start_date': 'start_date', 'end_date': 'end_date'})
         super(MigratorPartyRelation, cls).execute(objects, ids, **kwargs)
 
+    @classmethod
+    def migrate(cls, ids, **kwargs):
+        res = super(MigratorPartyRelation, cls).migrate(ids, **kwargs)
+        if not res:
+            return []
+        if kwargs.get('delete', False):
+            clause = Literal(False)
+            for r in res:
+                from_ = res[r]['uid'].split('_')[0]
+                type = res[r]['uid'].split('_')[2]
+                to_ = res[r]['uid'].split('_')[1]
+                sub_clause = (
+                        (cls.table.from_ == from_) &
+                        (cls.table.type == type) &
+                        (cls.table.to == to_)
+                )
+                clause |= sub_clause
+            cls.delete_rows(tools.CONNECT_SRC, cls.table, clause)
+
 
 class MigratorInterlocutor(migrator.Migrator):
     'Migrate Interlocutors'
