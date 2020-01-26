@@ -474,7 +474,7 @@ class AlmerysProtocolBatch(batch.BatchRoot):
                                         tp_period.end_date.isoformat()))
                             beneficiaire.append(produit)
 
-                    noemise = (covered.item_desc.is_noemie
+                    noemise = (covered.is_noemie
                             and covered.noemie_status == 'waiting'
                             and health_complement
                             and health_complement.hc_system

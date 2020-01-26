@@ -1,3 +1,4 @@
+* BUG#14404 Fix is_noemie condition in third_party_protocol.batch.almerys
 * BUG#13523 Fix almerys feedbak chain batch and archive mechanism
 * OTH#00000 Handle unknown error codes in Almerys feedback batch
 * OTH#00000 Fix ssn and perimetre service in batch
