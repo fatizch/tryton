@@ -43,7 +43,7 @@ class APIParty(metaclass=PoolMeta):
 
         super()._party_convert(data, options, parameters)
 
-        if 'ssn' in data:
+        if 'ssn' in data and data['ssn']:
             try:
                 # SSN control api is completely broken
                 test_party = Party(ssn=data['ssn'], gender=data['gender'],

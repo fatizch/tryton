@@ -1,5 +1,8 @@
+* OTH#00000 Correction de l'API de création d'un tiers si le NIR est vide
+
 Version 2.6 - 2019-10-11
 * FEA#12428 Ajout de Vérification du NIR avec les informations de la personne
+
 Version 2.4 - 2019-04-12
 * BUG#10981 Correction d'une erreur lors de l'anonymisation d'un tiers
 * BUG#10131 Autoriser les numéros SSN qui ne commencent pas par 1 ou 2
