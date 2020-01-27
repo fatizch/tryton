@@ -376,6 +376,7 @@ return Decimal('100.00')
         data_dict = copy.deepcopy(data_ref)
         data_dict['contracts'][0]['covereds'][0]['coverages'][1][
             'coverage_amount'] = '10000.00'
+        self.maxDiff = None
         self.assertEqual(ContractAPI.subscribe_contracts(data_dict, {}).data,
             {
                 'code': 1,

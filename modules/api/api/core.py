@@ -41,7 +41,6 @@
 import logging
 import fastjsonschema
 import datetime
-import traceback
 
 from decimal import Decimal, InvalidOperation
 from contextlib import contextmanager
@@ -253,7 +252,6 @@ class APIServerError(APIError):
             'error_message': 'Internal Error',
             'error_data': (self.exception.args[0] if self.exception.args
                 else 'Unknown Error'),
-            'trace': ' '.join(traceback.format_tb(self.exception.__traceback__))
             }
 
 
@@ -546,7 +544,6 @@ class APIModel(Model):
                     'message': error.message,
                     'description': error.description,
                     'code': error.code,
-                    'trace': ' '.join(traceback.format_tb(error.__traceback__))
                     })
         # TODO: Trigger sentry if it is available
         api_logger.exception(error)
