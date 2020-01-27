@@ -1,3 +1,5 @@
+* BUG#14365 Fix error in displaying the start date label of a loss in a claim
+
 Version 2.6 - 2019-10-11
 * BUG#11975 Take care of the covered element computed end date into the delivered service theoretical covered element filter method
 * BUG#11692 Only considerer covered elements that existed at the beginning of the contract for in_complement options claims

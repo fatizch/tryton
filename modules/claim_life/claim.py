@@ -209,10 +209,10 @@ class Loss(metaclass=PoolMeta):
 
     @fields.depends('loss_desc', 'loss_desc_kind')
     def on_change_with_start_date_string(self, name=None):
-        if self.loss_desc and self.loss_desc.has_end_date:
-            return self.date_string('start_date_string')
-        else:
+        if self.loss_desc_kind == 'death':
             return self.date_string('loss_date_string')
+        else:
+            return self.date_string('start_date_string')
 
     @fields.depends('loss_desc', 'loss_desc_kind')
     def on_change_with_end_date_string(self, name=None):
