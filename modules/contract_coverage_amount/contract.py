@@ -138,6 +138,7 @@ class ContractOption(metaclass=PoolMeta):
                     or (self.coverage_amount_mode == 'selection'
                         and version.coverage_amount not in rule_result)
                     or (self.coverage_amount_mode == 'calculated_amount'
+                        and version.coverage_amount
                         and version.coverage_amount != rule_result)):
                 raise ValidationError(gettext(
                         'contract_coverage_amount.msg_invalid_coverage_amount',
