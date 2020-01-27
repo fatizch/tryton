@@ -836,6 +836,9 @@ class Journal(metaclass=PoolMeta):
     remittance_info = fields.Char('Remittance information', size=140,
         states={'invisible': Eval('process_method') != 'sepa'},
         help='Sepa remittance information')
+    sepa_file_export_directory = fields.Char('Sepa file export directory',
+        states={'invisible': Eval('process_method') != 'sepa'},
+        help='Directory where messages SEPA will be exported')
 
     @classmethod
     def __register__(cls, module):
@@ -911,9 +914,17 @@ class Message(metaclass=PoolMeta):
 
     def send(self):
         outdir = config.get('sepa_payment', 'out_dir')
-        if outdir:
-            outdir = os.path.normpath(outdir)
-            self.dump_sepa_message(outdir)
+        Group = Pool().get('account.payment.group')
+        is_sepa_file_export_directory = isinstance(self.origin, Group) and \
+            self.origin.journal.sepa_file_export_directory
+        if not outdir:
+            raise ValidationError(gettext(
+                'account_payment_sepa_cog.msg_missing_out_dir'))
+        outdir = os.path.normpath(outdir)
+        if is_sepa_file_export_directory:
+            outdir = os.path.join(outdir,
+                self.origin.journal.sepa_file_export_directory)
+        self.dump_sepa_message(outdir)
         Event = Pool().get('event')
         super(Message, self).send()
         Event.notify_events([self], 'send_sepa_message')

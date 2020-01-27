@@ -1,3 +1,4 @@
+* FEA#14301 Permettre de configurer le dossier de sortie des fichiers SEPA en fonction du journal
 * BUG#13991 Ajout d'une chaine pour définir la date de traitement des rejets en fonction des jours ouvrés
 * BUG#13573 Performance dégradée de la génération du message SEPA en cas d'amendement
 * FEA#12943 Ajout d'une contrainte sur la date de signature de mandat SEPA

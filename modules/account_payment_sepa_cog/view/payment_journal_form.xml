@@ -16,5 +16,7 @@ this repository contains the full copyright notices and license terms. -->
         <field name="force_smnda"/>
         <label name="remittance_info"/>
         <field name="remittance_info"/>
+        <label name="sepa_file_export_directory"/>
+        <field name="sepa_file_export_directory"/>
     </xpath>
 </data>

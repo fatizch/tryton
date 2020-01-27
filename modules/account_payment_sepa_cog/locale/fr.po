@@ -71,6 +71,10 @@ msgctxt "field:account.payment.journal,remittance_info:"
 msgid "Remittance information"
 msgstr "Motif affiché (Remittance Information)"
 
+msgctxt "field:account.payment.journal,sepa_file_export_directory:"
+msgid "Sepa file export directory"
+msgstr "Dossier de sortie des fichiers SEPA"
+
 msgctxt "field:account.payment.journal,sepa_party:"
 msgid "Sepa Creditor / Debtor"
 msgstr "Créditeur / Débiteur Sepa"
@@ -143,6 +147,10 @@ msgstr ""
 msgctxt "help:account.payment.journal,remittance_info:"
 msgid "Sepa remittance information"
 msgstr "Libellé des prélèvements sur le compte des clients"
+
+msgctxt "help:account.payment.journal,sepa_file_export_directory:"
+msgid "Directory where messages SEPA will be exported"
+msgstr "Dossier de sortie des fichiers SEPA"
 
 msgctxt "help:account.payment.journal,sepa_party:"
 msgid ""
@@ -362,6 +370,10 @@ msgstr "Prélèvement du"
 msgctxt "model:ir.message,text:msg_missing_bank_acount"
 msgid "Missing bank account for \"%(party)s\" at \"%(date)s\"."
 msgstr "Compte bancaire manquant pour  \"%(party)s\" au \"%(date)s\"."
+
+msgctxt "model:ir.message,text:msg_missing_out_dir"
+msgid "Missing configuration for output directory."
+msgstr "La configuration pour le dossier de sortie est manquante."
 
 msgctxt "model:ir.message,text:msg_origin_must_be_same"
 msgid ""
