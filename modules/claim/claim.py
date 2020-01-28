@@ -134,7 +134,7 @@ class Claim(export.ExportImportMixin, Printable, model.CoogView):
     @classmethod
     def __post_setup__(cls):
         super(Claim, cls).__post_setup__()
-        cls.set_fields_readonly_condition(~Eval('status').in_
+        cls.set_fields_readonly_condition(Eval('status').in_
             (['closed', 'dropped']),
             ['status'], cls._get_skip_set_readonly_fields())
 

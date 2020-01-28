@@ -1,3 +1,4 @@
+* BUG#14487 Correction de l'impossibilité d'ajouter un bénéficiaire sur un sinistre décès
 * FEA#13851 Permettre de livrer des configurations par défaut de description de préjudice et d'évenement
 * BUG#13754 L'onglet beneficiaire va être caché pour les prestations de type souscription
 * FEA#13546 Permettre la fermeture facile des contrats avec le nouveau status 'sans suite'
