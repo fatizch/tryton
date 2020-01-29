@@ -49,7 +49,8 @@ class ContractOption(metaclass=PoolMeta):
             return result
         current_version = self.get_version_at_date(utils.today())
         return 'free_input' if current_version and \
-            current_version.coverage_amount_revaluation else 'selection'
+            getattr(current_version, 'coverage_amount_revaluation', None) else \
+            'selection'
 
     @fields.depends('versions')
     def on_change_with_current_coverage_amount_selection(self, name=None):
