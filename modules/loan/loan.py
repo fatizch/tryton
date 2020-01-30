@@ -40,7 +40,7 @@ LOAN_KIND = [
     ]
 
 DEFERRALS = [
-    ('', ''),
+    ('', 'None'),
     ('partially', 'Partially Deferred'),
     ('fully', 'Fully deferred'),
     ]
@@ -650,7 +650,7 @@ class Loan(Workflow, model.CoogSQL, model.CoogView, with_extra_data(['loan'])):
 
     def get_deferral(self, name):
         increment = self.get_deferral_increment()
-        return increment.deferral if increment else None
+        return increment.deferral if increment else ''
 
     def get_deferral_duration(self, name):
         increment = self.get_deferral_increment()

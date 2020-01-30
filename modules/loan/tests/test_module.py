@@ -242,7 +242,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
         increment_1 = loan.increments[0]
         self.assertTrue(increment_1)
         self.assertEqual(increment_1.deferral, 'partially')
-        self.assertIsNone(loan.deferral)
+        self.assertEqual(loan.deferral, '')
         self.assertEqual(increment_1.number_of_payments, 29)
         self.assertEqual(increment_1.start_date, datetime.date(2014, 9, 5))
         self.assertEqual(increment_1.begin_balance, loan.amount)

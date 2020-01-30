@@ -948,8 +948,8 @@ msgid "Loan"
 msgstr "Prêt"
 
 msgctxt "selection:loan,deferral:"
-msgid ""
-msgstr " "
+msgid "None"
+msgstr "Aucun"
 
 msgctxt "selection:loan,deferral:"
 msgid "Fully deferred"
@@ -973,7 +973,7 @@ msgstr "In fine"
 
 msgctxt "selection:loan,kind:"
 msgid "Fixed Rate"
-msgstr "Amortissable"
+msgstr "Amortissable à taux fixe"
 
 msgctxt "selection:loan,kind:"
 msgid "Graduated"
@@ -989,7 +989,7 @@ msgstr "Relais"
 
 msgctxt "selection:loan,kind:"
 msgid "Variable Rate"
-msgstr "Taux variable"
+msgstr "Amortissable à taux variable"
 
 msgctxt "selection:loan,payment_frequency:"
 msgid "Half-year"
@@ -1016,8 +1016,8 @@ msgid "Draft"
 msgstr "Brouillon"
 
 msgctxt "selection:loan.increment,deferral:"
-msgid ""
-msgstr " "
+msgid "None"
+msgstr "Aucun"
 
 msgctxt "selection:loan.increment,deferral:"
 msgid "Fully deferred"
