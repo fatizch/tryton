@@ -8,3 +8,4 @@ Administration
    export_tools
    import_export_parametrage_tuto
    referentiel_organisme_destinataire
+   roles_groupe_tuto
