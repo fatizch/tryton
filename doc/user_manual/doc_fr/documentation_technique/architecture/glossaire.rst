@@ -28,24 +28,33 @@ Données contrat
 - ``loan`` : Un prêt, utilisé pour les contrats d'assurance emprunteur
 - ``share`` / ``loan_share`` / ``loan.share`` : Une quotité de prêt, autrement
   dit à quel pourcentage un prêt donné est couvert pour une garantie donnée
+- ``underwriting`` / ``contract.underwriting`` : Une analyse de risque lors de
+  la souscription
 
 Données sinistre
 ----------------
 
 - ``claim`` : un dossier sinistre
-- ``covered`` / ``covered_element`` / ``contract.covered_element`` : le risque
-  couvert par le contrat (la personne / la voiture / etc.)
-- ``option`` / ``contract.option`` : la garantie souscrite sur le contrat
-  d'assurance
-- ``extra_data`` : les « données complémentaires » issues du paramétrage
-- ``loan`` un prêt couvert dans le cadre d'un contrat emprunteur
-- ``premium`` / ``contract.premium`` : une information de tarif stockée sur le
-  contrat, utilsiée pour ensuite générer les quittances
-- ``billing_information`` / ``contract.billing_information`` : les données de
-  facturation du contrat (compte bancaire, fréquence, etc.)
-- ``loan`` : Un prêt, utilisé pour les contrats d'assurance emprunteur
-- ``share`` / ``loan_share`` / ``loan.share`` : Une quotité de prêt, autrement
-  dit à quel pourcentage un prêt donné est couvert pour une garantie donnée
+- ``loss`` / ``claim.loss`` : Le préjudice à l'origine du sinistre. Contiendra
+  notamment, outre la date de survenance, le type d'événement ainsi que le type
+  de préjudice
+- ``loss_desc`` / ``benefit.loss_desc`` : Un type de préjudice. Par exemple,
+  « Arrêt de travail », « Décès », etc.
+- ``event_desc`` / ``benefit.event_desc`` : Un événement / fait générateur. Il
+  s'agit concrètement de la cause du préjudice. Par exemple « Maladie », «
+  Accident », etc.
+- ``service`` / ``claim.service`` : Une prestation pour un préjudice. Par
+  exemple, pour un préjudice de type « Décès », on pourra avoir comme
+  prestations un capital, une rente conjoint, une rente éducation, etc... Les
+  prestations sont calculées automatiquement à partir des contrats souscrits
+  par la personne concernée par le sinistre
+- ``indemnification`` / ``claim.service.indemnification`` : Un remboursement
+  pour une prestation. Certaines prestations ne donneront lieu qu'à un seul
+  versement (ex : Capital décès), d'autres seront récurrentes (Arrêts de
+  travail, rentes, etc.)
+- ``beneficiary`` / ``claim.service.beneficiary`` : Un bénéficiaire, nommé,
+  d'une prestation. Principalement utilisé en cas de décès, où l'assuré ne peut
+  pas être lui-même bénéficiaire
 
 Données de paramétrage
 ----------------------
@@ -55,6 +64,7 @@ Données de paramétrage
   souscrite
 - ``item_desc`` / ``offered.item.description`` : la description du risque
   couvert
+- ``benefit`` : un type de prestation sinistre
 
 Données comptabilité
 --------------------
