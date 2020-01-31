@@ -1285,10 +1285,10 @@ msgstr "Valeur invalide pour la donnée %(key)s du champ %(field)s de %(name)s"
 
 msgctxt "model:ir.message,text:msg_missing_contract_extra_data"
 msgid ""
-"The following contract extra data should be set on the product: %(product)s."
+"The following contract extra data should be set: %(extras)s."
 msgstr ""
-"La donnée complémentaire contrat suivante doit être définie sur le produit: "
-"%(product)s"
+"Les données complémentaires suivante doivent être renseignées: "
+"%(extras)s"
 
 msgctxt "model:ir.message,text:msg_missing_sub_data_def"
 msgid "Data %(sub_data)s is missing from the configuration."

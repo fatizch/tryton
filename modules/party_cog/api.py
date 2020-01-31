@@ -590,11 +590,18 @@ class APIParty(APIMixin):
 
     @classmethod
     def _find_party_domain(cls, data, options):
+        pool = Pool()
+        API = pool.get('api')
         if 'id' in data:
             return [('id', '=', data['id'])]
         if 'code' in data:
             return [('code', '=', data['code'])]
         if data.get('is_person', None):
+            if 'birth_date' not in data:
+                API.add_input_error({
+                        'type': 'birth_date_required',
+                        'data': data},
+                        )
             return [
                 ('name', '=', data['name']),
                 ('first_name', '=', data['first_name']),

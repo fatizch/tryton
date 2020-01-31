@@ -101,4 +101,12 @@
             <field name="text">You're not allowed to manage options if the contract status not quote.</field>
         </record>
     </data>
+    <data depends="api">
+        <record model="ir.message" id="msg_legacy_quotation_no_coverage">
+            <field name="text">Please choose a coverage for covered %(number)s</field>
+        </record>
+        <record model="ir.message" id="msg_legacy_quotation_birth_date_required">
+            <field name="text">The birth date is required</field>
+        </record>
+    </data>
 </tryton>

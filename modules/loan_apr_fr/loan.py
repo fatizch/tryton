@@ -99,6 +99,9 @@ class Loan(metaclass=PoolMeta):
 
         rule = contract.product.average_loan_premium_rule
         premiums = contract.calculate_premium_per_loan()
+        used_loans_ratios = contract.get_used_loans_ratios()
+        if not used_loans_ratios:
+            return Decimal(0)
         ratios = contract.get_used_loans_ratios()[self.id]
         ratios['do_not_use'] = 0
 

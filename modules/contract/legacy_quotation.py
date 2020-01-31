@@ -2,13 +2,13 @@ import copy
 from uuid import uuid4
 from decimal import Decimal
 from collections import namedtuple, defaultdict
+from trytond.exceptions import UserError
+from trytond.i18n import gettext
 
 from trytond.pool import Pool
 from trytond.modules.api import APIError
 
-# TODO : create fake non person if subscriber_kind == company
 # TODO: get insured capital at each invoice start
-# TODO: handle billing mode entered in quotation
 
 
 def nanoid():
@@ -30,17 +30,35 @@ class LegacyColumn(namedtuple('LegacyColumn', 'id label type party_ref')):
 
 class LegacyQuotation(object):
 
-    def __init__(self, legacy_input):
+    def __init__(self, legacy_input, action='quotation', only_validate=False):
         pool = Pool()
         APIContract = pool.get('api.contract')
+        self.action = action
         self.legacy_input = legacy_input
-        self.simulate_input = self.quotation_to_simulate_input()
+        broker_id = legacy_input['broker']
+        self.broker_id = broker_id
+        self.simulate_input = self.quotation_to_api_input(action)
         api_context = {
-            'dist_network': legacy_input['broker']}
-        res = APIContract.simulate(self.simulate_input, api_context)
-        self.sim_results = res
-        if isinstance(self.sim_results, APIError):
-            return
+            'dist_network': broker_id}
+        if action == 'quotation':
+            res = APIContract.simulate(self.simulate_input, api_context)
+            self.sim_results = res
+            if isinstance(self.sim_results, APIError):
+                return
+            else:
+                self.build_prices_data()
+        elif action == 'subscription':
+            res = APIContract.subscribe_contracts(self.simulate_input,
+                api_context)
+            self.subscribe_result = res
+
+    @property
+    def generated_contracts(self):
+        if isinstance(self.subscribe_result, APIError):
+            return self.subscribe_result
+        return [x['id'] for x in self.subscribe_result['contracts']]
+
+    def build_prices_data(self):
         self.first_invoice_data = self.get_premium_contract_data(
             self.sim_results, 'first_invoice')
         self.first_year_data = self.get_premium_contract_data(
@@ -50,7 +68,7 @@ class LegacyQuotation(object):
             self.per_loan_data = self.build_per_loan_data()
         self.build_premium_summary()
 
-    def quotation_to_simulate_input(self):
+    def quotation_to_api_input(self, action):
         pool = Pool()
         legacy_input = self.legacy_input
         sim_loans = []
@@ -98,9 +116,16 @@ class LegacyQuotation(object):
                 sim_party_coverage['package'] = {'code': covered_package}
             # ? only subscribe by package or not ?
             sim_party_coverage['coverages'] = []
+            if 'coverage' not in legacy_covered:
+                raise UserError(gettext(
+                        'contract.msg_legacy_quotation_no_coverage',
+                        number=str(i + 1)))
             for code, selection in legacy_covered['coverage'].items():
                 if selection['selected']:
                     sim_option = {'coverage': {'code': code}}
+                    coverage_extra = selection.get('extra')
+                    if coverage_extra:
+                        sim_option['extra_data'] = coverage_extra
                     if self.is_loan:
                         sim_shares = [
                             {
@@ -113,54 +138,147 @@ class LegacyQuotation(object):
                     # should we handle beneficiary clauses ?
             sim_party_coverages.append(sim_party_coverage)
 
+        self.sim_parties = sim_parties
+
+        self.build_subscription_data(legacy_input.get('subscriptions', []))
+
         Product = pool.get('offered.product')
         product = Product(legacy_input['product'])
         self.product = product
-        yearly, = [x for x in product.billing_rules[0].billing_modes
-            if x.frequency == 'yearly']
-        billing_ref = {'billing_mode': {'id': yearly.id}}
+        if action == 'quotation' and product.subscriber_kind == 'company':
+            ref = str(len(sim_parties))
+            fake_non_person = {'is_person': False, 'ref': ref}
+            self.sim_parties.append(fake_non_person)
+            self.fake_non_person = fake_non_person
+        else:
+            self.fake_non_person = None
 
         if self.is_loan:  # This should be: product.single_covered
             contracts = []
             for i, sim_party_coverage in enumerate(sim_party_coverages):
                 contract = {
                         'ref': str(i),
-                        'subscriber': {'ref': str(i)},
+                        'subscriber': {'ref': self.get_subscriber_ref(
+                            i)},
                         'product': {'id':
                             legacy_input['product']},
                         'commercial_product': {'id': legacy_input[
                             'commercial_product']['id']},
                         'covereds': [sim_party_coverage],
                         'extra_data': legacy_input['extra'],
-                        'billing': dict(billing_ref),
+                        'billing': self.get_billing_data(i, action),
                         }
                 contracts.append(contract)
         else:
             contracts = [{
                     'ref': '0',
-                    'subscriber': {'ref': '0'},  # arbitrary
+                    'subscriber': {'ref':
+                        self.get_subscriber_ref(0)},
                     'product': {'id':
                         legacy_input['product']},
                     'commercial_product': {'id': legacy_input[
                         'commercial_product']['id']},
                     'covereds': sim_party_coverages,
                     'extra_data': legacy_input['extra'],
-                    'billing': dict(billing_ref),
+                    'billing': self.get_billing_data(0, action),
                     }]
+        if self.action == 'subscription':
+            for contract in contracts:
+                contract['agent'] = {'id': self.get_agent_id()}
         summary_kind = 'contract_first_term'
         sim_input = {
-            'options': {
-                'premium_summary_kind': summary_kind,
-            },
-            'parties': sim_parties,
+            'parties': self.sim_parties,
             'contracts': contracts,
         }
+        if action == 'quotation':
+            sim_input['options'] = {
+                'premium_summary_kind': summary_kind,
+                }
+        elif action == 'subscription':
+            sim_input['options'] = {
+                'start_process': True,
+                'fast_forward': True,
+                }
+
         if self.is_loan:
             sim_input['loans'] = sim_loans
             self.fee_holding_loan_ref = self.get_fee_holding_loan_ref(
                 sim_loans)
 
         return sim_input
+
+    def get_agent_id(self):
+        pool = Pool()
+        Agent = pool.get('commission.agent')
+        Network = pool.get('distribution.network')
+        agent_parameters = {
+            'products': [self.product],
+            'dist_network': Network(self.broker_id),
+            'type_': 'agent',
+            }
+        possible_agents = Agent.find_agents(**agent_parameters)
+        if not possible_agents:
+            raise UserError("No Commission Agent Found")
+        return possible_agents[0].id
+
+    def build_subscription_data(self, subscriptions):
+        self.subscriptions = []
+        if self.action == 'quotation':
+            return
+        for sub in subscriptions:
+            billing = {'billing_mode': {'id': sub['billing_mode']}}
+            iban = sub.get('iban')
+            if iban:
+                billing['bank_account_number'] = iban
+            debit_day = sub.get('allowed_direct_debit_day')
+            if debit_day:
+                billing['direct_debit_day'] = debit_day
+            sub['billing'] = billing
+            if 'party' in sub:
+                sub_party = sub['party']
+                sub_party['ref'] = str(len(self.sim_parties))
+                if iban:
+                    sub_party['bank_accounts'] = [
+                        {"number": iban}
+                        ]
+                sub['billing']['payer'] = {'ref':
+                    sub_party['ref']}
+                addresses = sub.get('addresses')
+                if addresses:
+                    for address in addresses:
+                        address['country'] = 'fr'
+                    sub_party['addresses'] = addresses
+                self.sim_parties.append(sub['party'])
+            else:
+                sub['billing']['payer'] = {'ref': str(sub['covered'])}
+                if iban:
+                    self.sim_parties[sub['covered']]['bank_accounts'] = [
+                            {"number": iban}
+                            ]
+                addresses = sub.get('addresses')
+                if addresses:
+                    for address in addresses:
+                        address['country'] = 'fr'
+                self.sim_parties[sub['covered']]['addresses'] = addresses
+            self.subscriptions.append(sub)
+
+    def get_subscriber_ref(self, covered_idx):
+        if self.fake_non_person is not None:
+            return self.fake_non_person['ref']
+        if self.subscriptions:
+            sub = self.subscriptions[covered_idx]
+            return sub['billing']['payer']['ref']
+        else:
+            return '0'
+
+    def get_billing_data(self, covered_idx, action='quotation'):
+        if action == 'quotation':
+            yearly, = [x for x in self.product.billing_rules[0].billing_modes
+                if x.frequency == 'yearly']
+            billing_ref = {'billing_mode': {'id': yearly.id}}
+            return billing_ref
+        else:
+            return self.subscriptions[covered_idx]['billing']
 
     def get_fee_holding_loan_ref(self, sim_loans):
         apr_rule = self.product.average_loan_premium_rule
@@ -180,9 +298,34 @@ class LegacyQuotation(object):
             return sorted(sim_loans,
                 key=lambda x: x['amount'])[-1]['ref']
 
+    def format_api_error(self, api_error):
+        pool = Pool()
+        all_missing = set()
+        if hasattr(api_error, 'data'):
+            for error in api_error.data:
+                if error.get('type', '').startswith('invalid_extra_data'):
+                    expected = error.get('data', {}).get('expected_keys', None)
+                    received = error.get('data', {}).get('extra_data', None)
+                    if expected is not None and received is not None:
+                        missing = set(expected) - set(received)
+                        if missing:
+                            all_missing |= missing
+                if error.get('type', '') == 'birth_date_required':
+                    raise UserError(
+                        gettext('contract'
+                            '.msg_legacy_quotation_birth_date_required'))
+
+            if all_missing:
+                names = [x.string for x in pool.get('extra_data').search([(
+                                'name', 'in', list(all_missing))])]
+                raise UserError(gettext(
+                        'offered.msg_missing_contract_extra_data',
+                        extras=" | ".join(names)))
+        return api_error.format_error()
+
     def get_prices_board(self):
         if isinstance(self.sim_results, APIError):
-            return self.sim_results.format_error()
+            return self.format_api_error(self.sim_results)
         board = self.build_prices_board()
         return board
 
@@ -278,12 +421,19 @@ class LegacyQuotation(object):
                 coverage_data = {}
                 for key, reference_data in data_map.items():
                     # TODO: product.single_covered
-                    premium = reference_data[i]['covereds'][0][
-                        'coverages'][j].get('premium') if self.is_loan else \
+                    coverage_info = reference_data[i]['covereds'][0][
+                        'coverages'][j] if self.is_loan else \
                             reference_data[0]['covereds'][i][
-                                'coverages'][j].get('premium')
+                                'coverages'][j]
+                    premium = coverage_info.get('premium')
                     coverage_data[key] = self.format_premium_tax_included(
                         premium)
+                basic_coverage_info = self.sim_results[i]['covereds'][0][
+                    'coverages'][j] if self.is_loan else \
+                        self.sim_results[0]['covereds'][i][
+                            'coverages'][j]
+                coverage_data['eligibility'] = basic_coverage_info.get(
+                    'eligibility')
                 covered_coverages[code] = coverage_data
 
             covered_data['by_coverage'] = covered_coverages
@@ -349,6 +499,9 @@ class LegacyQuotation(object):
                         'format': 'percent'}
                 else:
                     party_sim_res = reference_data[party_idx]['covereds'][0]
+                    if 'premium' not in party_sim_res:
+                        row[covered_col.full_id] = 'not eligible'
+                        continue
                     row[covered_col.full_id] = self.format_amount(
                         party_sim_res['premium']['total'])
             rows.append(row)
@@ -444,6 +597,8 @@ class LegacyQuotation(object):
             nb_invoices = len(contract_data['schedule'])
 
             for covered in contract_data['covereds']:
+                if 'premium' not in covered:
+                    continue
                 average_premium(covered['premium'], nb_invoices)
                 for coverage in covered['coverages']:
                     if coverage.get('premium'):

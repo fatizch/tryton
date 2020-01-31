@@ -69,6 +69,7 @@ class APIContract(APIMixin):
                     },
                 })
         cls.__rpc__.update({'legacy_quotation': RPC(readonly=False)})
+        cls.__rpc__.update({'legacy_subscription': RPC(readonly=False)})
 
     @classmethod
     def _get_contract(cls, data, status_filter=None):
@@ -1006,9 +1007,17 @@ class APIContract(APIMixin):
                 }]
 
     @classmethod
-    def legacy_quotation(cls, quotation):
+    def legacy_quotation(cls, quotation, only_validate=False):
         from . import legacy_quotation
-        return legacy_quotation.LegacyQuotation(quotation).get_prices_board()
+        return legacy_quotation.LegacyQuotation(quotation, action='quotation',
+            only_validate=only_validate).get_prices_board()
+
+    @classmethod
+    def legacy_subscription(cls, quotation, only_validate=False):
+        from . import legacy_quotation
+        return legacy_quotation.LegacyQuotation(quotation,
+            action='subscription',
+            only_validate=only_validate).generated_contracts
 
 
 class APIRuleRuntime(Model):

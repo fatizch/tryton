@@ -217,7 +217,7 @@ class Product(model.CodedMixin, model.CoogView, Printable,
             if remaining:
                 raise ValidationError(gettext(
                         'offered.msg_missing_contract_extra_data',
-                        product=', '.join((extra_data.string
+                        extras=', '.join((extra_data.string
                                 for extra_data in remaining))))
 
     def refresh_extra_data(self, base_data, kinds=None):
