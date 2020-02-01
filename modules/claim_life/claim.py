@@ -325,7 +325,7 @@ class Loss(metaclass=PoolMeta):
 
     def check_activation(self):
         super(Loss, self).check_activation()
-        if self.loss_desc_kind == 'death' and (
+        if self.loss_desc.loss_kind == 'death' and (
                 not self.covered_person.death_date or
                 self.start_date != self.covered_person.death_date):
             self.append_functional_error(
@@ -555,7 +555,8 @@ class ClaimBeneficiary(model.CoogSQL, model.CoogView,
         fields.Date('Documents Reception Date',
             help='Reception date of the last document, empty if all documents '
             'are not received yet',
-            states={'invisible': ~Eval('identified')}, depends=['identified']),
+            states={'invisible': ~Eval('identified')},
+            depends=['identified', 'document_request_lines']),
         'getter_documents_reception_date')
     ignore_share = fields.Function(fields.Boolean('Ignore Share'),
         'on_change_with_ignore_share')
@@ -645,7 +646,8 @@ class ClaimBeneficiary(model.CoogSQL, model.CoogView,
                 group_by=[request_line.for_object]))
         loss_documents = {}
         for loss, date in cursor.fetchall():
-            loss_documents[int(loss.split(',')[1])] = date
+            loss_documents[int(loss.split(',')[1])] = date \
+                if date != datetime.date.max else None
         cursor.execute(*request_line.select(request_line.for_object,
                 Max(Coalesce(request_line.reception_date, datetime.date.max)),
                 where=(request_line.blocking == Literal(True))
@@ -664,7 +666,7 @@ class ClaimBeneficiary(model.CoogSQL, model.CoogView,
                     (claim_document_date, loss_document_date)):
                 date = None
             dates[beneficiary_id] = max(date, claim_document_date,
-                loss_document_date) if date else None
+                loss_document_date) if date and loss_document_date else None
         return dates
 
     @model.CoogView.button_change('document_request_lines', 'identified',
@@ -688,6 +690,7 @@ class ClaimBeneficiary(model.CoogSQL, model.CoogView,
                     for_object=self,
                     claim=self.service.claim,
                     blocking=True,
+                    data_status='done'
                     )
             new_line.on_change_document_desc()
             documents.append(new_line)
