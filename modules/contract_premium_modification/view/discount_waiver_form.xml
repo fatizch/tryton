@@ -21,7 +21,7 @@
     <label name="eligibility_rule"/>
     <field name="eligibility_rule"/>
     <newline/>
-    <label name="eligibility_rule_extra_data" colspan="4"/>
+    <field name="eligibility_rule_extra_data" colspan="4"/>
     <newline/>
     <label name="account_for_modification"/>
     <field name="account_for_modification"/>
