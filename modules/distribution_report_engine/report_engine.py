@@ -29,5 +29,11 @@ class ReportTemplate(metaclass=PoolMeta):
         'report_template', 'com_product', 'Commercial Products')
 
     @classmethod
+    def copy(cls, instances, default=None):
+        default = default.copy() if default else {}
+        default.setdefault('com_products', None)
+        return super(ReportTemplate, cls).copy(instances, default=default)
+
+    @classmethod
     def _export_skips(cls):
         return super(ReportTemplate, cls)._export_skips() | {'com_products'}
