@@ -134,6 +134,8 @@ class DocumentRequestLine(Printable, model.CoogSQL, model.CoogView):
             ('document_desc', '=', Eval('document_desc'))
             ],
         depends=['for_object', 'document_desc'], ondelete='RESTRICT')
+    attachment_status = fields.Function(
+        fields.Char('Status'), 'on_change_with_attachment_status')
     attachment_name = fields.Function(fields.Char('Attachment Name',
             depends=['attachment']),
         'get_attachment_info', 'set_attachment_data')
@@ -160,8 +162,12 @@ class DocumentRequestLine(Printable, model.CoogSQL, model.CoogView):
         cls._order = [('for_object', 'ASC'), ('document_desc', 'ASC')]
         cls._buttons.update({
                 'validate_attachment': {
-                    'invisible': ~Eval('attachment') | (
-                        Eval('received')),
+                    'invisible': (Eval('attachment_status')
+                        != 'waiting_validation'),
+                    },
+                'invalidate_attachment': {
+                    'invisible': (Eval('attachment_status')
+                        != 'waiting_validation'),
                     },
                 })
 
@@ -271,10 +277,13 @@ class DocumentRequestLine(Printable, model.CoogSQL, model.CoogView):
         # Then the attachment status will default to valid
 
     @fields.depends('attachment', 'attachment_data', 'reception_date',
-        'first_reception_date', 'allow_force_receive')
+        'first_reception_date', 'allow_force_receive', 'attachment_status')
     def update_lines_fields(self, uncheck_receive=False):
         if self.attachment:
             self.attachment_data = self.attachment.data
+            self.attachment_status = self.attachment.status
+        elif self.attachment_data:
+            self.attachment_status = 'valid'
         if self.attachment_ok():
             if not self.reception_date and not uncheck_receive:
                 self.reception_date = utils.today()
@@ -312,10 +321,10 @@ class DocumentRequestLine(Printable, model.CoogSQL, model.CoogView):
         self.update_lines_fields(**kwargs)
 
     @fields.depends('reception_date', 'attachment', 'attachment_data',
-        'allow_force_receive')
+        'allow_force_receive', 'attachment_status')
     def on_change_with_received(self, name=None):
         return bool(self.reception_date) and (
-            (bool(self.attachment) or bool(self.attachment_data)) or
+            self.attachment_status == 'valid' or
             self.allow_force_receive)
 
     @fields.depends('attachment', 'attachment_data', 'reception_date',
@@ -332,6 +341,10 @@ class DocumentRequestLine(Printable, model.CoogSQL, model.CoogView):
         if not self.attachment_data:
             self.attachment = None
         self.update_lines_fields()
+
+    @fields.depends('attachment')
+    def on_change_with_attachment_status(self, name=None):
+        return self.attachment.status if self.attachment else ''
 
     def get_rec_name(self, name):
         return self.document_desc.name if self.document_desc else ''
@@ -455,19 +468,29 @@ class DocumentRequestLine(Printable, model.CoogSQL, model.CoogView):
     @classmethod
     @ModelView.button
     def validate_attachment(cls, lines):
-        cls.update_lines(lines)
+        cls.update_lines(lines, 'valid')
         cls.save(lines)
         return 'reload'
 
     @classmethod
-    def update_lines(cls, lines):
+    @ModelView.button
+    def invalidate_attachment(cls, lines):
+        cls.update_lines(lines, 'invalid')
+        cls.save(lines)
+        return 'reload'
+
+    @classmethod
+    def update_lines(cls, lines, action):
         Attachment = Pool().get('ir.attachment')
         to_update = []
         for line in lines:
-            line.reception_date = line.reception_date or utils.today()
+            if action == 'valid':
+                line.reception_date = line.reception_date or utils.today()
+            elif action == 'invalid':
+                line.reception_date = None
             to_update.append(line.attachment)
         if to_update:
-            Attachment.valid(to_update)
+            getattr(Attachment, action)(to_update)
         return lines
 
 
@@ -985,7 +1008,7 @@ class DocumentRuleMixin(
         get_rule_mixin('rule', 'Rule Engine', extra_string='Rule Extra Data'),
         model.CoogSQL, model.CoogView):
     '''
-        Mixin class to create document rules.
+    Mixin class to create document rules.
     '''
     reminder_delay = fields.Integer('Reminder Delay')
     reminder_unit = fields.Selection([

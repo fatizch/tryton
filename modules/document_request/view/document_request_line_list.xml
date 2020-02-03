@@ -7,11 +7,13 @@ this repository contains the full copyright notices and license terms. -->
     <field name="request_date"/>
     <field name="send_date"/>
     <field name="reception_date"/>
-    <field name="document_desc"/>
+    <field name="document_desc" expand="1"/>
     <field name="for_object"/>
     <field name="attachment"/>
     <field name="attachment_data"/>
+    <button string="Validate" name="validate_attachment"/>
     <field name="details"/>
+    <button string="Invalidate" name="invalidate_attachment"/>
     <field name="allow_force_receive" tree_invisible="1"/>
-    <button string="Validate Attachment" name="validate_attachment"/>
+    <field name="attachment_status" tree_invisible="1"/>
 </tree>

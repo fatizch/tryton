@@ -1,3 +1,4 @@
+* FEA#13461 Ajout d'un bouton pour invalider les pièces jointes
 * BUG#13518 Vérification du type métier des données complémentaires
 * BUG#13461 Ajout d'un bouton pour valider les pièces jointes uploadées par API B2C
 * BUG#13092 Domaine erronée sur demande de document lors de la déclaration de sinistre
@@ -26,7 +27,7 @@ Version 2.0 - 2018-04-13
 * FEA#7638 Ajout de la possibilitée de bloquer la reception manuelle de ligne de demande de document
 
 Version 1.14 - 2017-11-09
-* BUG#7314 Filtrer les modèles disponibles sur l'objet de la demande de document 
+* BUG#7314 Filtrer les modèles disponibles sur l'objet de la demande de document
 * FEA#6408 Nouveau point d'entrée global montrant les demandes de document en cours
 
 Version 1.12 - 2017-04-28

@@ -178,6 +178,10 @@ msgctxt "field:document.request.line,attachment_name:"
 msgid "Attachment Name"
 msgstr "Nom de la pièce jointe"
 
+msgctxt "field:document.request.line,attachment_status:"
+msgid "Status"
+msgstr "Statut"
+
 msgctxt "field:document.request.line,blocking:"
 msgid "Blocking"
 msgstr "Bloquant"
@@ -502,6 +506,10 @@ msgctxt "selection:ir.attachment,status:"
 msgid "Waiting Validation"
 msgstr "En attente de validation"
 
+msgctxt "view:document.request.line:"
+msgid "Invalidate"
+msgstr "Invalider"
+
 msgctxt "view:document.receive.line:"
 msgid "Lines"
 msgstr "Lignes"
@@ -515,8 +523,8 @@ msgid "Details"
 msgstr "Commentaire"
 
 msgctxt "view:document.request.line:"
-msgid "Validate Attachment"
-msgstr "Valider la pièce jointe"
+msgid "Validate"
+msgstr "Valider"
 
 msgctxt "view:document.request:"
 msgid "Send Request"
