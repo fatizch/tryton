@@ -4,7 +4,7 @@ this repository contains the full copyright notices and license terms. -->
 <tree>
     <field name="active" tree_invisible="1"/>
     <field name="code"/>
-    <field name="name"/>
+    <field name="name" expand="1"/>
     <field name="commercial_name"/>
-    <field name="main_address"/>
+    <field name="main_address" expand="1"/>
 </tree>

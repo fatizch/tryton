@@ -5,11 +5,10 @@ this repository contains the full copyright notices and license terms. -->
     <field name="active" tree_invisible="1"/>
     <field name="code"/>
     <field name="gender"/>
-    <field name="name"/>
-    <field name="first_name"/>
+    <field name="name" expand="1"/>
+    <field name="first_name" expand="1"/>
     <field name="birth_date"/>
     <field name="main_address"/>
     <field name="color" tree_invisible="1"/>
     <field name="is_person" tree_invisible="1"/>
-    <field name="planned_anonymization_date"/>
 </tree>
