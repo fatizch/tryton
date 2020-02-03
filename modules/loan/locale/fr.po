@@ -1075,6 +1075,10 @@ msgctxt "selection:offered.option.description,family:"
 msgid "Loan"
 msgstr "Emprunteur"
 
+msgctxt "selection:offered.product.premium_date,type_:"
+msgid "Yearly At Loan Anniversary Date"
+msgstr "Annuellement à l'anniversaire du prêt"
+
 msgctxt "view:contract-loan:"
 msgid "Contract Loan"
 msgstr "Prêt du contrat"

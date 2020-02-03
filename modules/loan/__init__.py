@@ -10,6 +10,7 @@ from . import wizard
 from . import extra_data
 from . import commission
 from . import api
+from . import premium
 
 from trytond.modules.coog_core import model
 LoanShareTreeExpansion = model.expand_tree('loan.share')
@@ -45,6 +46,10 @@ def register():
         commission.SimulateCommissionsParameters,
         module='loan', type_='model',
         depends=['commission_insurance'])
+    Pool.register(
+        premium.ProductPremiumDate,
+        module='loan', type_='model',
+        depends=['premium'])
     Pool.register(
         contract.OptionSubscription,
         wizard.OptionSubscription,
