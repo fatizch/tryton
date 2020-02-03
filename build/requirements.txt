@@ -22,7 +22,7 @@ python-magic
 python-sql
 python-stdnum
 raven
-redis==3.4.0
+redis==3.3.11
 relatorio
 requests
 rq
