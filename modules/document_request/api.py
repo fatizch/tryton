@@ -47,6 +47,10 @@ class DocumentTokenMixin(Printable):
         'linked to the holder')
 
     def generate_document_token(self):
+        jwt_secret = config.get('document_api', 'document_token_secret')
+        if not jwt_secret:
+            return
+
         pool = Pool()
         current_token = self.document_token
         if current_token:
@@ -58,7 +62,6 @@ class DocumentTokenMixin(Printable):
                 return
 
         data = self._generate_document_token_data()
-        jwt_secret = config.get('document_api', 'document_token_secret')
         encoded_jwt = jwt.encode(data, jwt_secret, algorithm='HS256')
         self.document_token = encoded_jwt.decode('utf8')
         self.save()

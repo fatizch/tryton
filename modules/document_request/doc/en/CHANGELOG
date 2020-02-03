@@ -1,3 +1,4 @@
+* BUG#14550 Bypass document token generation when documentation_api not configured
 * FEA#13461 Add button to invalidate attachments
 * BUG#13518 Check extra data business kind
 * BUG#13461 Add button to validate attachments uploaded by B2C API

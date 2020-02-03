@@ -1,3 +1,4 @@
+* BUG#14550 Pas de tentative de génération de jeton lorsque la documentation_api n'est pas configurée
 * FEA#13461 Ajout d'un bouton pour invalider les pièces jointes
 * BUG#13518 Vérification du type métier des données complémentaires
 * BUG#13461 Ajout d'un bouton pour valider les pièces jointes uploadées par API B2C
