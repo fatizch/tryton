@@ -565,8 +565,8 @@ class OptionDescription(model.CodedMixin, model.CoogView,
             return res
         return {
             'behaviour': self.subscription_behaviour,
-            'options_required': self.options_required,
-            'options_excluded': self.options_excluded,
+            'options_required': [x.code for x in self.options_required],
+            'options_excluded': [x.code for x in self.options_excluded],
             }
 
     def get_currency(self):

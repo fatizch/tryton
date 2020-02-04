@@ -196,10 +196,10 @@ class OptionsDisplayer(model.CoogView):
             excluded += subscription_behaviour['options_excluded']
             required += subscription_behaviour['options_required']
         for x in [x for x in self.options if getattr(x, 'coverage', None)]:
-            if x.coverage in excluded:
+            if x.coverage.code in excluded:
                 is_selected = False
                 selection = 'automatic'
-            elif x.coverage in required:
+            elif x.coverage.code in required:
                 is_selected = True
                 selection = 'automatic'
             elif x.selection == 'automatic':

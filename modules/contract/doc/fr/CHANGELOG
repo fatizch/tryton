@@ -1,3 +1,4 @@
+* BUG#14640 L'API de simulation retirait trop de garanties quand une garantie définissait des options requises sans passer par une règle
 * BUG#14303 Branchement des contrôles de surface dans l'API de simulation
 * FEA#13644 Calcul du montant de couverture et retour dans l'API
 * OTH#00000 Par défaut l'option auto_remove_not_subscriptable est défini à Vrai dans l'API de souscription
