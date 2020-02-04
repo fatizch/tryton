@@ -1316,7 +1316,7 @@ class ClaimServiceExtraDataRevision(model.CoogSQL, model.CoogView,
             self.benefit = None
 
     def getter_benefit(self, name):
-        return self.service.benefit.id
+        return self.claim_service.benefit.id
 
     def get_claim_status(self, name):
         if self.claim_service and self.claim_service.claim:
