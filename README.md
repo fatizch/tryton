@@ -162,6 +162,9 @@ coog test manual -- <module_name> [module_2] ...
 
 # Use /tmp/test_cache for caching test databases
 DB_CACHE=/tmp/test_cache coog test manual -- <module_name> [module_2] ...
+
+# Convert py scenarios to rst
+coog test convert [module_name]
 ```
 
 ### Batches
