@@ -261,11 +261,19 @@ coog_daily_run() {
         [ "$?" -ne 0 ] && GLOBAL_SUCCESS=1
 
         (
-        _coog_daily_check_modules "claim_prest_ij_service" || return 0 &&  \
+        _coog_daily_check_modules "claim_prest_ij_service" || return 0 &&
             coog_chain_main claim_prest_ij_service submit     \
             --treatment_date="$TODAY_DATE"
+        )
+        [ "$?" -ne 0 ] && GLOBAL_SUCCESS=1
+        (
+        _coog_daily_check_modules "claim_prest_ij_service" || return 0 &&
             coog_chain_main claim_prest_ij_service gestip     \
             --treatment_date="$TODAY_DATE"
+        )
+        [ "$?" -ne 0 ] && GLOBAL_SUCCESS=1
+        (
+        _coog_daily_check_modules "claim_prest_ij_service" || return 0 &&
             coog_chain_main claim_prest_ij_service bpij       \
             --treatment_date="$TODAY_DATE"
         )

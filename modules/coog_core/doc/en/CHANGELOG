@@ -1,3 +1,4 @@
+* BUG#14548 Fix prest ij chains in daily chain
 * FEA#14156 Add azure active directory to identity
 * BUG#13632 Add field depends for on_change method
 * OTH#00000 Add export_light for groups in Role class
