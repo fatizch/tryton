@@ -983,7 +983,18 @@ class Contract(metaclass=PoolMeta):
 
     @classmethod
     def _finalize_invoices(cls, contract_invoices):
+        account_per_party = {}
+
         for contract_invoice in contract_invoices:
+            invoice = contract_invoice.invoice
+            contract = contract_invoice.contract
+            if not invoice.account:
+                if contract.subscriber.id not in account_per_party:
+                    # Getting this field is expensive, be efficient
+                    account_per_party[contract.subscriber.id] = \
+                        contract.subscriber.account_receivable_used
+                invoice.account = account_per_party[contract.subscriber.id]
+
             invoice = contract_invoice.invoice
             invoice.taxes = [x for x in list(invoice._compute_taxes().values())]
             if getattr(invoice, 'invoice_address', None) is None:
@@ -1066,7 +1077,7 @@ class Contract(metaclass=PoolMeta):
             journal=None,
             party=self.subscriber,
             currency=self.currency,
-            account=self.subscriber.account_receivable_used,
+            account=None,
             payment_term=payment_term,
             state='validated',
             invoice_date=start,

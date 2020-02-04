@@ -1036,7 +1036,7 @@ class APIContract(metaclass=PoolMeta):
 
     @classmethod
     def _simulate_default_options(cls):
-        options = super(APIContract, cls)._simulate_default_options()
+        options = super()._simulate_default_options()
         options.update({
                 'premium_summary_kind': 'contract_first_term',
                 })

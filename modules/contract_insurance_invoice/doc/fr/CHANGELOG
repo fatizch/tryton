@@ -1,3 +1,4 @@
+* OTH#00000 Amélioration des performances de la génération des quittances en regroupant le calcul des comptes à recevoir
 * BUG#14274 Correctif sur la date de re-présentation des rejets de frais si l'action porte sur une date précise
 * FEA#13397 Déplacement de la configuration du prorata des primes sur les produits
 * BUG#14231 Correctif du crash lorsque le mode de quittancement est manuel a l'intégration d'un rejet avec représentation à une date
