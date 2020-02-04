@@ -1,3 +1,4 @@
+* BUG#14628 Ne pas générer l'analyse de risque par défaut lors de la simulation des contrats
 * BUG#0000 Contourne la validation du type des données complémentaires des options et des contracts à la soucription
 
 Version 2.6 - 2019-10-11

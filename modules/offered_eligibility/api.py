@@ -16,9 +16,11 @@ class APIContract(metaclass=PoolMeta):
 
     @classmethod
     def _simulate_default_options(cls):
-        return {
+        options = super()._simulate_default_options()
+        options.update({
             'decline_non_eligible': True,
-            }
+                })
+        return options
 
     @classmethod
     def _contract_option_schema(cls, minimum=False):

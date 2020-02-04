@@ -406,20 +406,22 @@ class Contract(metaclass=PoolMeta):
         if self.underwritings:
             self.underwritings[-1].check_decision()
 
-    def update_underwritings(self):
+    @classmethod
+    def update_underwritings(cls, contracts):
         pool = Pool()
         ContractUnderwriting = pool.get('contract.underwriting')
-        underwritings = self.underwritings
-        if not underwritings:
-            underwritings = [ContractUnderwriting(contract=self,
-                extra_data={})]
-        ContractUnderwriting.update_extra_data(underwritings)
-        ContractUnderwriting.update_underwriting_options(underwritings)
-        if underwritings[-1].underwriting_options:
-            self.underwritings = underwritings
-        else:
-            self.underwritings = []
-        self.save()
+        for contract in contracts:
+            underwritings = contract.underwritings
+            if not underwritings:
+                underwritings = [ContractUnderwriting(contract=contract,
+                    extra_data={})]
+            ContractUnderwriting.update_extra_data(underwritings)
+            ContractUnderwriting.update_underwriting_options(underwritings)
+            if underwritings[-1].underwriting_options:
+                contract.underwritings = underwritings
+            else:
+                contract.underwritings = []
+        cls.save(contracts)
 
     def decline_options_after_underwriting(self):
         options_to_decline = []

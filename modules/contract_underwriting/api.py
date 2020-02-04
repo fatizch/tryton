@@ -37,16 +37,26 @@ class ContractAPI(metaclass=PoolMeta):
                 })
 
     @classmethod
-    def _subscribe_contracts_execute(cls, created, options):
-        # Override to trigger underwriting generation. Maybe this could be done
-        # in calculate, but there is a high risk of failure in existing
-        # processes
-        contracts = list(created['contracts'].values())
+    def _subscribe_contracts_execute_methods(cls, options):
+        result = super()._subscribe_contracts_execute_methods(options)
+        if options.get('update_underwritings', True):
+            result.append(
+                {
+                    'priority': 80,
+                    'name': 'update_underwritings',
+                    'params': None,
+                    'error_type': 'failed_underwriting_initialization',
+                    },
+                )
+        return result
 
-        for contract in contracts:
-            contract.update_underwritings()
-
-        super()._subscribe_contracts_execute(created, options)
+    @classmethod
+    def _simulate_default_options(cls):
+        options = super()._simulate_default_options()
+        options.update({
+                'update_underwritings': False,
+                })
+        return options
 
     @classmethod
     def _validate_contract_input(cls, data):

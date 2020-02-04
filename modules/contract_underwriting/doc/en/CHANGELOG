@@ -1,3 +1,4 @@
+* BUG#14628 Do not compute underwritings when simulating a contract by default
 * BUG#0000 Dodge contract/option extra data kind validation on subscription
 
 Version 2.6 - 2019-10-11
