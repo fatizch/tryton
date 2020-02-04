@@ -1,3 +1,5 @@
+* FEA#14590 Add a rule engine function to get the number of covered parties in
+* relation to the subscriber under an age limit
 * FEA#14090 The ssn is only required on subscription via API if the item description says so
 * BUG#13778 Only display health folder if party is a person
 * OTH#0000 Add child number function in rule engine

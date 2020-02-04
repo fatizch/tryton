@@ -1,5 +1,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+from dateutil.relativedelta import relativedelta
+
 from trytond.pool import PoolMeta
 
 from trytond.modules.rule_engine import check_args
@@ -22,6 +24,34 @@ class RuleEngineRuntime(metaclass=PoolMeta):
         subscriber = args['contract'].subscriber
         parties = [x.party for x in contract.covered_elements
             if x.party and x.is_covered_at_date(date, allow_quotes=True)]
+        parties.sort(key=lambda x: x.birth_date)
+        x = 0
+        for party in parties:
+            kinds = [rel.type.code for rel in
+                utils.get_good_versions_at_date(party, 'relations', date)
+                if rel.to.id == subscriber.id]
+            if relation_name in kinds:
+                x += 1
+                if party == person:
+                    return x
+            if party == person:
+                return 0
+        return x
+
+    @classmethod
+    @check_args('contract', 'date')
+    def _re_relation_number_order_by_age_under_limit(cls, args, relation_name,
+            max_age, date_reference_age=None):
+        contract = args['contract']
+        date = args['date']
+        if date_reference_age is None:
+            date_reference_age = args['date']
+        person = cls.get_person(args)
+        subscriber = args['contract'].subscriber
+        parties = [x.party for x in contract.covered_elements
+            if x.party and x.is_covered_at_date(date, allow_quotes=True)
+            and relativedelta(date_reference_age, x.party.birth_date).years <
+            max_age]
         parties.sort(key=lambda x: x.birth_date)
         x = 0
         for party in parties:

@@ -11,23 +11,29 @@ this repository contains the full copyright notices and license terms. -->
             <field name="parent" ref="offered_insurance.dossier_donnees_couverture"/>
             <field name="translated_technical_name">numero_relation_par_age</field>
             <field name="language" ref="ir.lang_fr"/>
-            <field name="long_description">Retourne le rang de l'assuré selon 
-l'âge (en commençant par 1e plus âgé) dans le contrat. La fonction 
-prend le code de la relation entre l'assuré et le souscripteur 
+            <field name="long_description">Retourne le rang de l'assuré selon
+l'âge (par ordre décroissant) dans le contrat. La fonction
+prend le code de la relation entre l'assuré et le souscripteur
 (ex d'utilisation: rang de naissance d'un enfant)</field>
             <field name="fct_args">code_relation</field>
         </record>
-        <record model="rule_engine.function" id="te_number_of_covered_with_relation">
-            <field name="description">Nombre de personnes couvertes avec la relation</field>
-            <field name="name">_re_number_of_covered_with_relation</field>
+        <record model="rule_engine.function" id="te_relation_number_under_limit">
+            <field name="description">Numéro de la relation par âge sous un âge limite</field>
+            <field name="name">_re_relation_number_order_by_age_under_limit</field>
             <field name="namespace">rule_engine.runtime</field>
             <field name="type">function</field>
             <field name="parent" ref="offered_insurance.dossier_donnees_couverture"/>
-            <field name="translated_technical_name">nombre_relation</field>
+            <field name="translated_technical_name">numero_relation_par_age_sous_limite</field>
             <field name="language" ref="ir.lang_fr"/>
-            <field name="long_description">Retourne le nombre d'assuré actif sur 
-le contrat ayant la relation dans leurs relations</field>
+            <field name="long_description">Retourne le rang de l'assuré selon
+l'âge (par ordre décroissant) dans le contrat
+parmi les assurés ayant moins d'un certain âge. La fonction
+prend le code de la relation entre l'assuré et le souscripteur
+(ex d'utilisation: rang de naissance d'un enfant) ainsi que
+l'âge limite et la date de référence pour le calcul de l'âge.</field>
             <field name="fct_args">code_relation</field>
+            <field name="fct_args">maximum_age</field>
+            <field name="fct_args">date_reference</field>
         </record>
         <record model="rule_engine.function" id="te_child_number">
             <field name="description">Numéro de l'enfant par âge</field>
@@ -37,8 +43,20 @@ le contrat ayant la relation dans leurs relations</field>
             <field name="parent" ref="offered_insurance.dossier_donnees_couverture"/>
             <field name="translated_technical_name">numero_enfant_par_age</field>
             <field name="language" ref="ir.lang_fr"/>
-            <field name="long_description">Retourne le rang de l'enfant selon 
+            <field name="long_description">Retourne le rang de l'enfant selon
 l'âge (en commençant par 1e plus âgé) dans le contrat.</field>
+        </record>
+        <record model="rule_engine.function" id="te_number_of_covered_with_relation">
+            <field name="description">Nombre de personnes couvertes avec la relation</field>
+            <field name="name">_re_number_of_covered_with_relation</field>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="type">function</field>
+            <field name="parent" ref="offered_insurance.dossier_donnees_couverture"/>
+            <field name="translated_technical_name">nombre_relation</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="long_description">Retourne le nombre d'assurés actifs sur
+le contrat ayant la relation dans leurs relations</field>
+            <field name="fct_args">code_relation</field>
         </record>
     </data>
 </tryton>
