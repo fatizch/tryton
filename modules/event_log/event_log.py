@@ -35,7 +35,7 @@ class EventTypeAction(metaclass=PoolMeta):
         Description = pool.get('event.aggregate.description')
         to_notify = defaultdict(list)
         to_ignore = []
-        for object_ in list({x for x in objects}):
+        for object_ in objects:
             notify_list = Description.check_for_notification(
                 object_, utils.today(), event_code)
             if not notify_list:
