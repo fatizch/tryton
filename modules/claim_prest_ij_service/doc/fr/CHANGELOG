@@ -1,3 +1,4 @@
+* BUG#14611 Correctif sur l'intégration de BPIJ sans libellé de rejet
 * BUG#14159 Correctif sur le batch création des flux gestip (souscription affilié)
 * BUG#13841 Correctif pour supporter les BPIJ lorsque les personnes couvertes sont des filiales
 * BUG#12706 Correctif sur l'assistant de souscription manuelle d'une personne couverte avec les filiales

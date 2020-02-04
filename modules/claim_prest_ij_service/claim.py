@@ -378,8 +378,11 @@ class ClaimIjSubscriptionRequestGroup(Workflow, model.CoogSQL, model.CoogView):
             if op_state == 'R':
                 op_reject_cause = diag.xpath('n:Cause/text()',
                         namespaces=ns_arg)[0]
-                op_reject_label = diag.xpath('n:Libelle/text()',
-                        namespaces=ns_arg)[0]
+                # Label could empty
+                label_placeholder = diag.xpath(
+                    'n:Libelle/text()', namespaces=ns_arg)
+                op_reject_label = label_placeholder[0] if label_placeholder \
+                    else ''
                 Request.fail(requests, cause=op_reject_cause,
                     label=op_reject_label)
             else:
