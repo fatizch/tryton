@@ -47,6 +47,9 @@ class Party(metaclass=PoolMeta):
                 key=lambda x: x.start_date, reverse=True):
             if covered.affiliated_to:
                 results.append(covered.affiliated_to.id)
+            elif covered.subscriber and not \
+                    covered.contract.subscriber.is_person:
+                results.append(covered.contract.subscriber.id)
         return results
 
     @classmethod

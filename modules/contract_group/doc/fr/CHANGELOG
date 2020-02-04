@@ -1,3 +1,5 @@
+* BUG#14428 Correctif pour supporter l'initialisation de l'entité légale sur le sinistre lorsque le souscripteur est la filiale
+
 Version 2.6 - 2019-10-11
 * BUG#11993 Ajout du champ 'active' dans la vérifications des doublons d'éléments couverts
 * BUG#11862 Amélioration de libellé des filiales dans la vue arborescente des organisations

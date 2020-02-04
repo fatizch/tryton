@@ -1,3 +1,5 @@
+* BUG#14428 Fix legal entity initialization when subsidiary is the contract subscriber
+
 Version 2.6 - 2019-10-11
 * BUG#11993 Add 'active' field in covered element overlapping checks
 * BUG#11862 Improve subsidiaries label in the organization hierarchy
