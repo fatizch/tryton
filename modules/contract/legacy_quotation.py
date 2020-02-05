@@ -7,6 +7,7 @@ from trytond.i18n import gettext
 
 from trytond.pool import Pool
 from trytond.modules.api import APIError
+from trytond.modules.api.api.core import APIServerError
 
 # TODO: get insured capital at each invoice start
 
@@ -55,7 +56,7 @@ class LegacyQuotation(object):
     @property
     def generated_contracts(self):
         if isinstance(self.subscribe_result, APIError):
-            return self.subscribe_result
+            return self.format_api_error(self.subscribe_result)
         return [x['id'] for x in self.subscribe_result['contracts']]
 
     def build_prices_data(self):
@@ -83,6 +84,8 @@ class LegacyQuotation(object):
                 for k in ('rate', 'amount'):
                     if k in sim_loan:
                         sim_loan[k] = str(sim_loan[k])
+                if sim_loan.get('deferral', -1) in (None, ''):
+                    sim_loan.pop('deferral')
                 if sim_loan.get('kind') == 'interest_free':
                     sim_loan.pop('deferral', None)
                 if sim_loan.get('kind') == 'graduated':
@@ -321,6 +324,8 @@ class LegacyQuotation(object):
                 raise UserError(gettext(
                         'offered.msg_missing_contract_extra_data',
                         extras=" | ".join(names)))
+        if isinstance(api_error, APIServerError):
+            raise api_error
         return api_error.format_error()
 
     def get_prices_board(self):
@@ -333,7 +338,8 @@ class LegacyQuotation(object):
         first_column_label = '' if self.is_loan else 'coverages'
         detailsColumn = LegacyColumn(nanoid(), first_column_label, 'string',
             None)
-        feesColumn = LegacyColumn(nanoid(), 'fees', 'currency',
+        fee_label = gettext('contract.msg_legacy_quotation_fees')
+        feesColumn = LegacyColumn(nanoid(), fee_label, 'currency',
             None)  # To be translated portal-side
         totalColumn = LegacyColumn(nanoid(), 'total', 'currency',
             None)
@@ -471,8 +477,7 @@ class LegacyQuotation(object):
             }
 
         for row_kind in ('premium_sum', 'premium_mean',
-                'premium_first_year_sum', 'premium_first',
-                'premium_taea'):
+                'premium_first_year_sum', 'premium_taea'):
             row_desc = 'quotation.offer.' + row_kind
             row = {
                 'id': row_desc + nanoid(),
@@ -552,7 +557,7 @@ class LegacyQuotation(object):
 
         fees_row = {
             'id': nanoid(),
-            row_name_col.full_id: 'Fees',
+            row_name_col.full_id: gettext('contract.msg_legacy_quotation_fees'),
             total_col.full_id: self.format_amount(fees)}
 
         total_row = {

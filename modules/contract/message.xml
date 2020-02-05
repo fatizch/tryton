@@ -108,5 +108,8 @@
         <record model="ir.message" id="msg_legacy_quotation_birth_date_required">
             <field name="text">The birth date is required</field>
         </record>
+        <record model="ir.message" id="msg_legacy_quotation_fees">
+            <field name="text">Fees</field>
+        </record>
     </data>
 </tryton>

@@ -1675,6 +1675,10 @@ msgctxt "model:ir.message,text:msg_legacy_quotation_birth_date_required"
 msgid "The birth date is required"
 msgstr "La date de naissance est requise"
 
+msgctxt "model:ir.message,text:msg_legacy_quotation_fees"
+msgid "Fees"
+msgstr "Frais"
+
 msgctxt "model:ir.message,text:msg_legacy_quotation_no_coverage"
 msgid "Please choose a coverage for covered %(number)s"
 msgstr "Veuillez choisir les garanties pour l'assuré %(number)s"
