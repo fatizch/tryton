@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the toop level of
+this repository contains the full copyright notices and license terms. -->
+<data>
+    <xpath expr="/form/notebook/page/field[@name='domain']" position="after">
+        <label name="used_by_api"/>
+        <field name="used_by_api"/>
+    </xpath>
+</data>

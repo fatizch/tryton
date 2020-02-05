@@ -16,6 +16,7 @@ from . import event
 from . import notification
 from . import test_case
 from . import api
+from . import extra_data
 
 from .contract import _STATES, _DEPENDS
 from .contract import _CONTRACT_STATUS_STATES, _CONTRACT_STATUS_DEPENDS
@@ -90,6 +91,7 @@ def register():
         module='contract', type_='wizard')
 
     Pool.register(
+        extra_data.ExtraData,
         api.APIContract,
         api.APIRuleRuntime,
         module='contract', type_='model', depends=['api'])

@@ -1020,6 +1020,10 @@ msgctxt "field:event.type.action,notification_delay:"
 msgid "Notification Delay (in days)"
 msgstr "Délai avant notifications (en jours)"
 
+msgctxt "field:extra_data,used_by_api:"
+msgid "Used by API"
+msgstr "Utilisé par l'API"
+
 msgctxt "field:ir.sequence,name:default_quote_contract_sequence"
 msgid "Default Quote Contract Sequence"
 msgstr "Séquence par défaut des numéros de devis"
@@ -1991,6 +1995,18 @@ msgctxt ""
 "selection:contract.wizard.option_subscription.options_displayer.option,selection:"
 msgid "Manual"
 msgstr "Manuelle"
+
+msgctxt "selection:extra_data,used_by_api:"
+msgid "Activation"
+msgstr "Activation"
+
+msgctxt "selection:extra_data,used_by_api:"
+msgid "Quote creation"
+msgstr "Création de devis"
+
+msgctxt "selection:extra_data,used_by_api:"
+msgid "Simulation"
+msgstr "Simulation"
 
 msgctxt "selection:party.interaction,for_object_ref:"
 msgid "Contract"
