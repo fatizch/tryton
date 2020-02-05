@@ -21,6 +21,7 @@ class APIContract(metaclass=PoolMeta):
                     'priority': 0,
                     'name': 'attach_to_process',
                     'params': ['subscription'],
+                    'error_type': 'failed_to_attach_to_process',
                     },
                 ]
 
@@ -30,6 +31,7 @@ class APIContract(metaclass=PoolMeta):
                     'priority': 1000,
                     'name': 'fast_forward_process',
                     'params': [False],
+                    'error_type': 'failed_to_fast_forward_process',
                     },
                 ]
 
