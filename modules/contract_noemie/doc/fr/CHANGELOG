@@ -1,3 +1,4 @@
+* BUG#14665 Utilisation du SSN, la date de naissance et rang de naissance afin de retrouver les éléments couverts du flux 929
 * BUG#12991 Extension des codes noémie supportés dans le batch de flux 929
 
 Version 2.6 - 2019-10-11

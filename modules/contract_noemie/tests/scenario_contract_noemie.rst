@@ -190,7 +190,9 @@ Create Subscriber::
     >>> subscriber.gender = 'male'
     >>> subscriber.account_receivable = receivable_account
     >>> subscriber.account_payable = payable_account
-    >>> subscriber.birth_date = datetime.date(1980, 10, 14)
+    >>> subscriber.birth_date = datetime.date(1988, 5, 1)
+    >>> subscriber.ssn = '188054501103159'
+    >>> subscriber.birth_order = 1
     >>> subscriber.save()
 
 Create Test Contract::

@@ -1,3 +1,4 @@
+* BUG#14665 Use SSN, Birth date, birth order to retrieve the coog's covered_element from 929 flux
 * BUG#12991 Extend set of supported noemie codes for Flow 929 batch
 
 Version 2.6 - 2019-10-11

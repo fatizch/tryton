@@ -41,13 +41,19 @@ class ContractNoemieFlowBatch(batch.BatchRootNoSelect):
         return line[4:].split('@')
 
     @classmethod
+    def _sort_files(cls, files):
+        return sorted(files, key=lambda x: x[0])
+
+    @classmethod
     def select_ids(cls, in_directory=None, out_directory=None):
         if not in_directory and not out_directory:
             raise Exception("'in_directory', 'out_directory' are required")
         files = cls.get_file_names_and_paths(in_directory)
+        files = cls._sort_files(files)
         all_elements = []
         date = None
-        line_140 = None
+        line_110 = None
+        line_120 = None
         for file_name, file_path in files:
             with open(file_path, 'r') as _file:
                 for line in _file:
@@ -55,30 +61,52 @@ class ContractNoemieFlowBatch(batch.BatchRootNoSelect):
                     for element in line_contents:
                         if element.startswith('000'):
                             date = element[55:61]
-                        elif element.startswith("140"):
-                            line_140 = element
+                        elif element.startswith("110"):
+                            line_110 = element
+                        elif element.startswith("120"):
+                            line_120 = element
                         elif element.startswith("290"):
                             line_290 = element
-                            all_elements.extend([(date, line_140, line_290)])
+                            all_elements.extend(
+                                [(date, line_110, line_120, line_290)])
             shutil.move(file_path, out_directory)
 
         return all_elements
 
     @classmethod
+    def _covered_element_from_element(cls, element):
+        CoveredElement = Pool().get('contract.covered_element')
+        line_110 = element[1]
+        line_120 = element[2]
+        ssn = line_110[5:20]
+        birth_date = datetime.datetime.strptime(
+            line_120[5:11], '%d%m%y').date()
+        birth_order = line_120[11:12]
+
+        domain = [
+            ('party.ssn', '=', ssn),
+            ('party.birth_date', '=', birth_date),
+            ('party.birth_order', '=', int(birth_order)),
+            ]
+        return CoveredElement.search(domain)
+
+    @classmethod
     def execute(cls, objects, ids, in_directory, out_directory):
         for element in objects:
-            party_code = element[1][5:13].strip()
             noemie_update_date = datetime.datetime.strptime(
                 element[0], '%y%m%d')
-            noemie_return_code = element[2][14:16]
+            noemie_return_code = element[3][14:16]
             if noemie_return_code not in dict(NOEMIE_CODE):
                 logging.getLogger('contract.noemie.flow.batch').warning(
                     'Unknown return code %s' % noemie_return_code)
             else:
                 CoveredElement = Pool().get('contract.covered_element')
-                covered_elements = CoveredElement.search([
-                    ('party.code', '=', party_code)])
+                covered_elements = cls._covered_element_from_element(element)
                 if covered_elements:
                     CoveredElement.update_noemie_status(
                         covered_elements, noemie_return_code,
                         noemie_update_date)
+                else:
+                    logging.getLogger('contract.noemie.flow.batch').warning(
+                        'Unknown covered element with ssn %s' % element[
+                            1][5:20])
