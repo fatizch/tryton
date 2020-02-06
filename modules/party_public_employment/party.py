@@ -89,6 +89,9 @@ class Employment(metaclass=PoolMeta):
 class EmploymentVersion(metaclass=PoolMeta):
     __name__ = 'party.employment.version'
 
+    is_civil_service_employment = fields.Function(
+        fields.Boolean('Civil Service Employment', depends=['employment']),
+        'getter_is_civil_service_employment')
     administrative_situation = fields.Selection(ADMINISTRATIVE_SITUATION,
         'Administrative Situtation',
         required=True)
@@ -109,20 +112,27 @@ class EmploymentVersion(metaclass=PoolMeta):
         'on_change_with_gross_index', setter='setter_void')
     work_country = fields.Many2One('country.country',
         'Work Country', help='Country where the employee works',
+        depends=['is_civil_service_employment', 'administrative_situation'],
         states={'invisible': Eval('administrative_situation') != 'active',
-            'required': Eval('administrative_situation') == 'active'},
+            'required': Bool(Eval('administrative_situation') == 'active') &
+            Bool(Eval('is_civil_service_employment'))},
         ondelete='RESTRICT')
     work_subdivision = fields.Many2One('country.subdivision',
         'Subdivision Work Place', help='Subdivision where the employee works',
         domain=[('country', '=', Eval('work_country'))],
         states={'invisible': Eval('administrative_situation') != 'active',
-            'required': Eval('administrative_situation') == 'active'},
-        depends=['work_country', 'administrative_situation'],
+            'required': Bool(Eval('administrative_situation') == 'active') &
+            Bool(Eval('is_civil_service_employment'))},
+        depends=['work_country', 'administrative_situation',
+            'is_civil_service_employment'],
         ondelete='RESTRICT')
     public_service_work_category = fields.Many2One(
         'party.public_service_work_category', 'Public Service Work Category',
         help='Define the work category in public service administration of the '
-        'employee', ondelete='RESTRICT')
+        'employee',
+        states={'invisible': ~Eval('is_civil_service_employment')},
+        depends=['is_civil_service_employment'],
+        ondelete='RESTRICT')
 
     @classmethod
     def __setup__(cls):
@@ -138,6 +148,18 @@ class EmploymentVersion(metaclass=PoolMeta):
         country = Country.search([('code', '=', code)])
         if country:
             return country[0].id
+
+    def getter_is_civil_service_employment(self, name):
+        if self.employment:
+            return self.employment.is_civil_service_employment
+
+    @fields.depends('employment')
+    def on_change_employment(self):
+        if self.employment:
+            self.is_civil_service_employment = self.employment. \
+                is_civil_service_employment
+        else:
+            self.is_civil_service_employment = False
 
     @fields.depends('increased_index', 'date')
     def on_change_with_gross_index(self, name=None):

@@ -74,6 +74,10 @@ msgctxt "field:party.employment.version,increased_index:"
 msgid "Increased Index"
 msgstr "Indice Majoré"
 
+msgctxt "field:party.employment.version,is_civil_service_employment:"
+msgid "Civil Service Employment"
+msgstr "Emploi de la Service Publique"
+
 msgctxt "field:party.employment.version,public_service_work_category:"
 msgid "Public Service Work Category"
 msgstr "Catégorie statutaire de la fonction publique"

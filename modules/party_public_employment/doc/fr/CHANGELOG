@@ -1,3 +1,4 @@
+* OTH#00000 Le département et la pays d'emploi ne sont requis que dans le cadre de la fonction publique
 * FEA#13436 Ajout des champs pays et département d'affectation sur un emploi
 * BUG#13193 Mettre à null la donnée administrative_situation_sub_status lorsque la donnée administrative_situation est modifiée
 

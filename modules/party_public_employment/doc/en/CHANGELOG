@@ -1,3 +1,4 @@
+* OTH#00000 Work department and country must mandatory only for public employment
 * FEA#13436 Allow to fill work_country and work_subdivision on a party employment
 * BUG#13193 Set the administrative_situation_sub_status data to null when the administrative_situation data is modified
 

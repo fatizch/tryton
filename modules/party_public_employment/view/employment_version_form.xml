@@ -15,6 +15,7 @@
         <field name="work_subdivision"/>
         <label name="work_country"/>
         <field name="work_country"/>
+        <field name="is_civil_service_employment" invisible="1"/>
     </xpath>
     <xpath expr="/form/field[@name='annual_salary_premium']" position="after">
         <newline/>
