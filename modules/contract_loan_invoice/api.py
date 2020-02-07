@@ -3,6 +3,7 @@
 from trytond.pool import PoolMeta, Pool
 
 from trytond.modules.coog_core.api import CODE_SCHEMA, OBJECT_ID_SCHEMA
+from trytond.modules.api.api.core import amount_for_api, POSITIVE_AMOUNT_SCHEMA
 
 
 __all__ = [
@@ -18,10 +19,20 @@ class APIContract(metaclass=PoolMeta):
         invoice_detail = super()._payment_schedule_format_invoice_detail(detail)
         loan = detail['loan']
         if loan:
+            insured_amount = None
+            option = detail['premium'].option
+            if option:
+                share = [x for x in option.loan_shares if x.loan == loan]
+                if share:
+                    insured_amount = share[0].get_outstanding_loan_balance(
+                        at_date=detail['start'])
             invoice_detail['loan'] = {
                 'id': loan.id,
                 'number': loan.number,
                 }
+            if insured_amount is not None:
+                invoice_detail['insured_amount'] = amount_for_api(
+                    insured_amount)
         return invoice_detail
 
     @classmethod
@@ -35,6 +46,7 @@ class APIContract(metaclass=PoolMeta):
                 'number': CODE_SCHEMA,
                 },
             }
+        schema['properties']['insured_amount'] = POSITIVE_AMOUNT_SCHEMA
         return schema
 
     @classmethod
