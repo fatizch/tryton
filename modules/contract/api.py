@@ -2,11 +2,12 @@
 # this repository contains the full copyright notices and license terms.
 import logging
 
-from trytond.pool import Pool
+from trytond.pool import Pool, PoolMeta
 from trytond.model import Model
 from trytond.server_context import ServerContext
 from trytond.transaction import Transaction
 from trytond.rpc import RPC
+from trytond.i18n import gettext
 
 from trytond.modules.coog_core import utils, model
 from trytond.modules.rule_engine import check_args
@@ -1010,14 +1011,14 @@ class APIContract(APIMixin):
     def legacy_quotation(cls, quotation, only_validate=False):
         from . import legacy_quotation
         return legacy_quotation.LegacyQuotation(quotation, action='quotation',
-            only_validate=only_validate).get_prices_board()
+            only_validate=only_validate).quotation_results
 
     @classmethod
     def legacy_subscription(cls, quotation, only_validate=False):
         from . import legacy_quotation
         return legacy_quotation.LegacyQuotation(quotation,
             action='subscription',
-            only_validate=only_validate).generated_contracts
+            only_validate=only_validate).subscription_results
 
 
 class APIRuleRuntime(Model):
@@ -1138,3 +1139,29 @@ class APIRuleRuntime(Model):
                         },
                     })
         return result
+
+
+class APICore(metaclass=PoolMeta):
+    __name__ = 'api.core'
+
+    @classmethod
+    def translate_api_input_error_data(cls, error_type, error_data):
+        pool = Pool()
+        if error_type.startswith('invalid_extra_data'):
+            expected = error_data.get('expected_keys', None)
+            received = error_data.get('extra_data', None)
+            if expected is not None and received is not None:
+                missing = set(expected) - set(received)
+                names = [x.string for x in pool.get('extra_data').search([(
+                                'name', 'in', list(missing))])]
+                message = gettext(
+                    'offered.msg_missing_contract_extra_data',
+                    extras=" | ".join(names))
+                return message
+        elif error_type == 'unknown_extra_data':
+            message = gettext(
+                'offered.msg_unknown_contract_extra_data',
+                extra_code=error_data['code'])
+            return message
+        return super().translate_api_input_error_data(error_type,
+            error_data)

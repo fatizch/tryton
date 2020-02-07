@@ -1024,6 +1024,10 @@ msgctxt "model:ir.message,text:msg_invalid_email"
 msgid "Invalid Email."
 msgstr "e-Mail Invalide"
 
+msgctxt "model:ir.message,text:msg_legacy_quotation_birth_date_required"
+msgid "The birth date is required"
+msgstr "La date de naissance est requise"
+
 msgctxt "model:ir.message,text:msg_line_exceeds_max_length"
 msgid ""
 "\"%(value)s\" into the address line \"%(line)s\" exceeds the configuration "

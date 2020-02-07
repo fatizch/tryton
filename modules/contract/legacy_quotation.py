@@ -7,7 +7,6 @@ from trytond.i18n import gettext
 
 from trytond.pool import Pool
 from trytond.modules.api import APIError
-from trytond.modules.api.api.core import APIServerError
 
 # TODO: get insured capital at each invoice start
 
@@ -19,7 +18,7 @@ def nanoid():
 class LegacyColumn(namedtuple('LegacyColumn', 'id label type party_ref')):
 
     def to_json(self):
-        dict_ = dict(self._asdict())  # _asdict returns an orderdict
+        dict_ = dict(self._asdict())  # _asdict returns an ordereddict
         dict_.pop('party_ref')
         dict_['id'] = self.full_id
         return dict_
@@ -36,15 +35,18 @@ class LegacyQuotation(object):
         APIContract = pool.get('api.contract')
         self.action = action
         self.legacy_input = legacy_input
+        self.only_validate = only_validate
         broker_id = legacy_input['broker']
         self.broker_id = broker_id
         self.simulate_input = self.quotation_to_api_input(action)
         api_context = {
             'dist_network': broker_id}
+        if only_validate:
+            api_context['_validate'] = True
         if action == 'quotation':
             res = APIContract.simulate(self.simulate_input, api_context)
             self.sim_results = res
-            if isinstance(self.sim_results, APIError):
+            if self.only_validate or isinstance(self.sim_results, APIError):
                 return
             else:
                 self.build_prices_data()
@@ -54,10 +56,40 @@ class LegacyQuotation(object):
             self.subscribe_result = res
 
     @property
-    def generated_contracts(self):
-        if isinstance(self.subscribe_result, APIError):
+    def subscription_results(self):
+        if not self.only_validate and isinstance(self.subscribe_result,
+                APIError):
             return self.format_api_error(self.subscribe_result)
+        elif self.only_validate:
+            return self.format_validation_result(self.subscribe_result)
         return [x['id'] for x in self.subscribe_result['contracts']]
+
+    @property
+    def quotation_results(self):
+        if not self.only_validate and isinstance(self.sim_results, APIError):
+            return self.format_api_error(self.sim_results)
+        elif self.only_validate:
+            return self.format_validation_result(self.sim_results)
+        board = self.build_prices_board()
+        return board
+
+    def format_validation_result(self, res):
+        if res is True:
+            return {'valid': res, 'messages': []}
+        else:
+            resp = {'valid': False}
+            text_messages = self.build_validation_messages(res)
+            messages = [{'type': 'error', 'message': x}
+                for x in list(set(text_messages))]
+            resp.update({'messages': messages})
+            return resp
+
+    def build_validation_messages(self, res):
+        if isinstance(res, APIError):
+            messages = self.format_api_error(res, raise_errors=False)
+            return messages
+        else:
+            return [str(res)]
 
     def build_prices_data(self):
         self.first_invoice_data = self.get_premium_contract_data(
@@ -100,7 +132,7 @@ class LegacyQuotation(object):
                         if rate and not inc.get('rate'):
                             inc['rate'] = rate
                 sim_loan['ref'] = str(i)
-                sim_loan.pop('lender')
+                sim_loan.pop('lender', None)
                 release_date = sim_loan.pop('release_date', None)
                 sim_loan['funds_release_date'] = release_date
                 sim_loans.append(sim_loan)
@@ -251,18 +283,30 @@ class LegacyQuotation(object):
                     for address in addresses:
                         address['country'] = 'fr'
                     sub_party['addresses'] = addresses
+                elif self.action == 'subscription':
+                    raise UserError(gettext(
+                            'contract.'
+                            'msg_legacy_quotation_no_subscription_address',
+                            name=sub_party.get('name', '')))
                 self.sim_parties.append(sub['party'])
             else:
-                sub['billing']['payer'] = {'ref': str(sub['covered'])}
+                sub['billing']['payer'] = {'ref': str(sub['subscriber'])}
                 if iban:
-                    self.sim_parties[sub['covered']]['bank_accounts'] = [
+                    self.sim_parties[sub['subscriber']]['bank_accounts'] = [
                             {"number": iban}
                             ]
                 addresses = sub.get('addresses')
                 if addresses:
                     for address in addresses:
                         address['country'] = 'fr'
-                self.sim_parties[sub['covered']]['addresses'] = addresses
+                elif self.action == 'subscription':
+                    raise UserError(gettext(
+                            'contract.'
+                            'msg_legacy_quotation_no_subscription_address',
+                            name=self.sim_parties[sub['subscriber']].get(
+                                'name', '')
+                            ))
+                self.sim_parties[sub['subscriber']]['addresses'] = addresses
             self.subscriptions.append(sub)
 
     def get_subscriber_ref(self, covered_idx):
@@ -301,32 +345,22 @@ class LegacyQuotation(object):
             return sorted(sim_loans,
                 key=lambda x: x['amount'])[-1]['ref']
 
-    def format_api_error(self, api_error):
-        pool = Pool()
-        all_missing = set()
-        if hasattr(api_error, 'data'):
-            for error in api_error.data:
-                if error.get('type', '').startswith('invalid_extra_data'):
-                    expected = error.get('data', {}).get('expected_keys', None)
-                    received = error.get('data', {}).get('extra_data', None)
-                    if expected is not None and received is not None:
-                        missing = set(expected) - set(received)
-                        if missing:
-                            all_missing |= missing
-                if error.get('type', '') == 'birth_date_required':
-                    raise UserError(
-                        gettext('contract'
-                            '.msg_legacy_quotation_birth_date_required'))
-
-            if all_missing:
-                names = [x.string for x in pool.get('extra_data').search([(
-                                'name', 'in', list(all_missing))])]
-                raise UserError(gettext(
-                        'offered.msg_missing_contract_extra_data',
-                        extras=" | ".join(names)))
-        if isinstance(api_error, APIServerError):
+    def format_api_error(self, api_error, raise_errors=True):
+        if hasattr(api_error, 'human_readable_messages'):
+            messages = api_error.human_readable_messages
+            if not raise_errors:
+                return messages
+            elif messages:
+                raise UserError('. '.join(messages))
+            else:
+                raise api_error
+        if raise_errors:
             raise api_error
-        return api_error.format_error()
+        else:
+            try:
+                return [str(api_error.format_error())]
+            except NotImplementedError:
+                return [str(api_error)]
 
     def get_prices_board(self):
         if isinstance(self.sim_results, APIError):

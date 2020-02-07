@@ -56,6 +56,7 @@ from trytond.model.modelstorage import AccessError, ImportDataError, \
     RequiredValidationError, SizeValidationError, \
     DigitsValidationError, SelectionValidationError, TimeFormatValidationError
 from trytond.server_context import ServerContext
+from trytond.i18n import gettext
 
 
 DEFAULT_INPUT_SCHEMA = {
@@ -292,6 +293,12 @@ class APIInputError(APIError):
             'error_message': 'Input Validation Error',
             'error_data': self.data,
             }
+
+    @property
+    def human_readable_messages(self):
+        pool = Pool()
+        Core = pool.get('api.core')
+        return Core.extract_human_error_messages(self)
 
 
 class APIUserError(APIError):
@@ -853,3 +860,19 @@ class APICore(APIMixin):
                             'type': 'object'}},
                     },
                 }]
+
+    @classmethod
+    def extract_human_error_messages(cls, api_input_error):
+        messages = []
+        for error in api_input_error.data:
+            type_ = error.get('type', '')
+            data = error.get('data', {})
+            messages.append(cls.translate_api_input_error_data(type_, data))
+        return messages
+
+    @classmethod
+    def translate_api_input_error_data(cls, error_type, error_data):
+        # error_type is a str
+        # error_data is a python object
+        return gettext('api.msg_default_api_input_error',
+            error_type=error_type, error_data=str(error_data))

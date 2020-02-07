@@ -1,5 +1,6 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms
+from trytond.i18n import gettext
 from trytond.pool import PoolMeta, Pool
 from trytond.modules.coog_core.api import OBJECT_ID_SCHEMA
 
@@ -98,3 +99,17 @@ class APIParty(metaclass=PoolMeta):
                 data['bank'] = {'id': bank.id}
         else:
             super()._party_bank_account_convert(data, options, parameters)
+
+
+class APICore(metaclass=PoolMeta):
+    __name__ = 'api.core'
+
+    @classmethod
+    def translate_api_input_error_data(cls, error_type, error_data):
+        if error_type == 'cannot_detect_bank':
+            message = gettext(
+                'bank_fr.msg_no_bank_detected_for_number',
+                number=error_data['number'])
+            return message
+        return super().translate_api_input_error_data(error_type,
+            error_data)

@@ -11,4 +11,9 @@
             <field name="text">The IBAN and bank do not match.</field>
         </record>
     </data>
+    <data depends="api">
+        <record model="ir.message" id="msg_no_bank_detected_for_number">
+            <field name="text">The bank for account number %(number)s cannot be detected</field>
+        </record>
+    </data>
 </tryton>

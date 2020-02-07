@@ -1,6 +1,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import PoolMeta, Pool
+from trytond.i18n import gettext
 
 from trytond.modules.api import APIMixin, DATE_SCHEMA
 from trytond.modules.api import date_from_api
@@ -8,6 +9,7 @@ from trytond.modules.coog_core.api import OBJECT_ID_SCHEMA
 
 from trytond.modules.coog_core import fields
 from trytond.modules.coog_core import utils
+
 
 PARTY_RELATION_SCHEMA = {
     'oneOf': [
@@ -145,6 +147,14 @@ class APICore(metaclass=PoolMeta):
                     required=True, sequence=30, force_type='string'),
                 ],
             }
+
+    @classmethod
+    def translate_api_input_error_data(cls, error_type, error_data):
+        if error_type == 'birth_date_required':
+            return gettext('party_cog'
+                    '.msg_legacy_quotation_birth_date_required')
+        return super().translate_api_input_error_data(error_type,
+            error_data)
 
 
 class APIParty(APIMixin):

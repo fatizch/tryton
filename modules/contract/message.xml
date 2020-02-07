@@ -105,11 +105,11 @@
         <record model="ir.message" id="msg_legacy_quotation_no_coverage">
             <field name="text">Please choose a coverage for covered %(number)s</field>
         </record>
-        <record model="ir.message" id="msg_legacy_quotation_birth_date_required">
-            <field name="text">The birth date is required</field>
-        </record>
         <record model="ir.message" id="msg_legacy_quotation_fees">
             <field name="text">Fees</field>
+        </record>
+        <record model="ir.message" id="msg_legacy_quotation_no_subscription_address">
+            <field name="text">An address is required for the subscription of %(name)s</field>
         </record>
     </data>
 </tryton>

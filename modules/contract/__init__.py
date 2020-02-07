@@ -94,4 +94,5 @@ def register():
         extra_data.ExtraData,
         api.APIContract,
         api.APIRuleRuntime,
+        api.APICore,
         module='contract', type_='model', depends=['api'])

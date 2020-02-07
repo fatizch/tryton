@@ -5,7 +5,10 @@
             <field name="text">The code must be unique.</field>
         </record>
         <record model="ir.message" id="msg_missing_contract_extra_data">
-            <field name="text">The following contract extra data should be set: %(extras)s.</field>
+            <field name="text">The following contract extra data should be set on the product: %(product)s.</field>
+        </record>
+        <record model="ir.message" id="msg_unknown_contract_extra_data">
+            <field name="text">Unknown extra data: %(extra_code)s</field>
         </record>
         <record model="ir.message" id="msg_invalid_value">
             <field name="text">Invalid value for key %(key)s in field %(field)s of %(name)s.</field>

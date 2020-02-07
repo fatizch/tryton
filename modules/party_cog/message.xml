@@ -33,4 +33,9 @@ Going on will break the links.</field>
 as it is used in other addresses. Add a new zipcode instead.</field>
         </record>
     </data>
+    <data depends="api">
+        <record model="ir.message" id="msg_legacy_quotation_birth_date_required">
+            <field name="text">The birth date is required.</field>
+        </record>
+    </data>
 </tryton>

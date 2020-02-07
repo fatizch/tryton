@@ -22,4 +22,5 @@ def register():
 
     Pool.register(
         api.APIParty,
+        api.APICore,
         module='bank_fr', type_='model', depends=['api'])
