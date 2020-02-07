@@ -378,6 +378,7 @@ class Contract(metaclass=PoolMeta):
                 'code': discount.discount_options[0].discount_rule
                 .commercial_discount.code,
                 'amount': details['amount'],
+                'rate': discount.discount_options[0].discount_rule.rate,
                 }
         return details
 

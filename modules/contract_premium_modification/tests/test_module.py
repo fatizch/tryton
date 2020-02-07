@@ -413,10 +413,12 @@ class ModuleTestCase(test_framework.CoogTestCase):
                 {
                     'code': 'discount_auto_on_alpha',
                     'amount': '-24.00',
+                    'rate': '0.2',
                     },
                 {
                     'code': 'DISCOUNT_BET',
                     'amount': '-120.00',
+                    'rate': '0.1',
                 }],
             'total_discounts': '-144.00',
             'fees': [],
@@ -435,10 +437,12 @@ class ModuleTestCase(test_framework.CoogTestCase):
                 {
                     'code': 'discount_auto_on_alpha',
                     'amount': '-24.00',
+                    'rate': '0.2',
                     },
                 {
                     'code': 'DISCOUNT_BET',
                     'amount': '-240.00',
+                    'rate': '0.1',
                     },
                 ],
             'total_discounts': '-264.00',

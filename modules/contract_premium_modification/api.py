@@ -98,6 +98,7 @@ class APIContract(metaclass=PoolMeta):
             res['discount'] = {
                 'code': detail['discount']['code'],
                 'amount': amount_for_api(detail['discount']['amount']),
+                'rate': amount_for_api(detail['discount']['rate']),
                 }
         return res
 
@@ -111,6 +112,7 @@ class APIContract(metaclass=PoolMeta):
             'properties': {
                 'code': CODE_SCHEMA,
                 'amount': AMOUNT_SCHEMA,
+                'rate': AMOUNT_SCHEMA,
                 }
             }
         schema['properties']['premium'] = AMOUNT_SCHEMA
@@ -122,6 +124,7 @@ class APIContract(metaclass=PoolMeta):
         if 'discount' in source:
             amount = source['discount']['amount']
             code = source['discount']['code']
+            rate = source['discount']['rate']
             discount = next((d for d in target['discounts']
                     if d['code'] == code), None)
             if discount:
@@ -130,6 +133,7 @@ class APIContract(metaclass=PoolMeta):
                 target['discounts'].append({
                         'code': code,
                         'amount': Decimal(amount),
+                        'rate': Decimal(rate)
                         })
             target['total'] += Decimal(source['total'])
             target['total_tax'] += Decimal(source['tax'])
@@ -153,6 +157,7 @@ class APIContract(metaclass=PoolMeta):
             premium['discounts'] = [{
                     'code': discount['code'],
                     'amount': amount_for_api(discount['amount']),
+                    'rate': amount_for_api(discount['rate']),
                     } for discount in premium['discounts']]
         elif key != 'total_discounts':
             super()._simulate_convert_premium_key(premium, key)
@@ -169,6 +174,7 @@ class APIContract(metaclass=PoolMeta):
                 'properties': {
                     'code': CODE_SCHEMA,
                     'amount': AMOUNT_SCHEMA,
+                    'rate': AMOUNT_SCHEMA,
                     }
                 }
             }

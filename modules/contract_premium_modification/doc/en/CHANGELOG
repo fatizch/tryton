@@ -1,3 +1,4 @@
+* FEA#14682 Add applied discount rate in simulation API output
 * OTH#00000 Fix total tax amount in simulate API
 * BUG#14161 Handle automatic discounts in simulate API
 * OTH#00000 Handle commercial discount on contract option
