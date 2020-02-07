@@ -271,6 +271,10 @@ class LegacyQuotation(object):
             sub['billing'] = billing
             if 'party' in sub:
                 sub_party = sub['party']
+                if 'email' in sub:
+                    sub_party['email'] = sub['email']
+                if 'phone' in sub:
+                    sub_party['phone'] = sub['phone']
                 sub_party['ref'] = str(len(self.sim_parties))
                 if iban:
                     sub_party['bank_accounts'] = [
