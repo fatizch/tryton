@@ -581,10 +581,12 @@ class Contract(model.CoogSQL, model.CoogView, with_extra_data(['contract'],
                 if option.status in ('active', 'quote')]
         return []
 
-    def update_options_automatic_end_date(self, caller=None):
-        for option in self._get_calculate_targets('options'):
-            option.set_automatic_end_date()
-        self.save()
+    @classmethod
+    def update_options_automatic_end_date(cls, contracts, caller=None):
+        for contract in contracts:
+            for option in contract._get_calculate_targets('options'):
+                option.set_automatic_end_date()
+        cls.save(contracts)
 
     @classmethod
     @model.CoogView.button
