@@ -1,3 +1,4 @@
+* OTH#00000 Add a dedicated function to set the contract number on a contract
 * FEA#14343 Specify for which API extra datas are needed
 * BUG#14640 Simulation API removed too much options when a coverage defined required coverages without using a rule engine
 * BUG#14303 Plug in basic controls on contract simulation API

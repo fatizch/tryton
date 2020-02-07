@@ -57,6 +57,8 @@ this repository contains the full copyright notices and license terms. -->
                 <field name="signature_date"/>
                 <label name="appliable_conditions_date"/>
                 <field name="appliable_conditions_date"/>
+                <label name="contract_number"/>
+                <field name="contract_number"/>
                 <label name="quote_number"/>
                 <field name="quote_number"/>
             </group>

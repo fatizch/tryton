@@ -165,7 +165,8 @@ class Contract(model.CoogSQL, model.CoogView, with_extra_data(['contract'],
             'readonly': (~Eval('manual_contract_number') |
                 (Eval('status') != 'quote')),
             'invisible': (~Eval('manual_contract_number') &
-                (Eval('status') == 'quote')),
+                (Eval('status') == 'quote') &
+                ~Eval('contract_number')),
             }, depends=['status', 'manual_contract_number'])
     manual_contract_number = fields.Function(
         fields.Boolean('Manual Contract Number'),
@@ -1288,10 +1289,15 @@ class Contract(model.CoogSQL, model.CoogView, with_extra_data(['contract'],
             return self.product.new_contract_number()
 
     def after_activate(self):
-        if not getattr(self, 'contract_number', None):
-            self.contract_number = self.get_new_contract_number()
+        self.set_contract_number_if_needed()
         # if contract was hold remove sub status reason
         self.sub_status = None
+
+    def set_contract_number_if_needed(self):
+        # May be called by anticipation in some processes. This is safe because
+        # deletion will be forbidden anyway
+        if not getattr(self, 'contract_number', None):
+            self.contract_number = self.get_new_contract_number()
 
     def get_policy_owner(self, at_date=None):
         '''

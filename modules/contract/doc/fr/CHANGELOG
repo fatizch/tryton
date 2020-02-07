@@ -1,3 +1,4 @@
+* OTH#00000 Ajout d'une fonction permettant de déclencher la génération du numéro de contrat
 * FEA#14343 Spécification de la nécessité des données complémentaires dans les APIs
 * BUG#14640 L'API de simulation retirait trop de garanties quand une garantie définissait des options requises sans passer par une règle
 * BUG#14303 Branchement des contrôles de surface dans l'API de simulation
