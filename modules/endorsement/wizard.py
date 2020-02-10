@@ -2008,7 +2008,7 @@ class SelectEndorsement(model.CoogView):
         self.effective_date_before_today = self.effective_date < utils.today()
         self.on_change_contract()
 
-    @fields.depends('effective_date', 'endorsement_definition',
+    @fields.depends('effective_date', 'endorsement_definition', 'endorsement',
         'signature_date')
     def init_dict(self, data_dict, action='in_progress'):
         RuleEngine = Pool().get('rule_engine')
@@ -2017,6 +2017,7 @@ class SelectEndorsement(model.CoogView):
         if contract:
             with ServerContext().set_context(endorsement_context=context_):
                 contract.init_dict_for_rule_engine(data_dict)
+        data_dict['endorsement'] = self.endorsement
 
     def init_new_endorsement(self):
         endorsement = self._get_new_endorsement()

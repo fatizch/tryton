@@ -33,5 +33,21 @@ this repository contains the full copyright notices and license terms. -->
             <field name="kind">option</field>
             <field name="view">manage_beneficiaries</field>
         </record>
+        <!-- ################### -->
+        <!-- # Manage Insured  # -->
+        <!-- ################### -->
+        <record model="endorsement.definition-endorsement.part" id="manage_insured_relation_beneficiary">
+            <field name="definition" ref="endorsement.definition_manage_insured"/>
+            <field name="endorsement_part" ref="change_beneficiary_revision_part"/>
+            <field name="order">2</field>
+        </record>
+        <!-- ################### -->
+        <!-- # Manage options  # -->
+        <!-- ################### -->
+        <record model="endorsement.definition-endorsement.part" id="manage_options_relation_beneficiary">
+            <field name="definition" ref="endorsement.definition_manage_options"/>
+            <field name="endorsement_part" ref="change_beneficiary_revision_part"/>
+            <field name="order">2</field>
+        </record>
     </data>
 </tryton>

@@ -191,6 +191,27 @@ class ManageBeneficiaries(EndorsementWizardStepMixin):
             'contract.option.beneficiary': ['reference', 'share', 'party',
                 'address', 'accepting', 'id']}
 
+    @classmethod
+    def has_beneficiary_clause(cls, contracts):
+        for contract in contracts:
+            for covered in contract.covered_elements:
+                for option in covered.options:
+                    if option.coverage \
+                            and option.coverage.beneficiaries_clauses:
+                        return True
+        return False
+
+    @classmethod
+    def must_skip_step(cls, data_dict):
+        contract = data_dict.get('contract', None)
+        endorsement = data_dict.get('endorsement', None)
+        if not endorsement or not contract:
+            return True
+        if cls.has_beneficiary_clause([contract]) or \
+                cls.has_beneficiary_clause(endorsement.contract_endorsements):
+            return False
+        return True
+
 
 class ManageBeneficiariesOptionDisplayer(model.CoogView):
     'Manage Beneficiaries Option Displayer'

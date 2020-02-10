@@ -8,7 +8,7 @@ this repository contains the full copyright notices and license terms. -->
     <field name="beneficiary_clause"/>
     <field name="customized_beneficiary_clause" colspan="2"/>
     <group id="beneficiaries" string="" colspan="2" col="1" yexpand="1" yfill="1">
-        <field name="beneficiaries" group="beneficiaries" mode="tree" yexpand="0"/>
+        <field name="beneficiaries" group="beneficiaries" mode="tree" yexpand="0" height="100"/>
         <field name="beneficiaries" group="beneficiaries" mode="form" expand_toolbar="0"/>
     </group>
     <newline/>
