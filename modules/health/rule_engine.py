@@ -52,6 +52,8 @@ class RuleEngineRuntime(metaclass=PoolMeta):
             if x.party and x.is_covered_at_date(date, allow_quotes=True)
             and relativedelta(date_reference_age, x.party.birth_date).years <
             max_age]
+        if person not in parties:
+            return 0
         parties.sort(key=lambda x: x.birth_date)
         x = 0
         for party in parties:

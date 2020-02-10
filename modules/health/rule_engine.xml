@@ -31,9 +31,7 @@ parmi les assurés ayant moins d'un certain âge. La fonction
 prend le code de la relation entre l'assuré et le souscripteur
 (ex d'utilisation: rang de naissance d'un enfant) ainsi que
 l'âge limite et la date de référence pour le calcul de l'âge.</field>
-            <field name="fct_args">code_relation</field>
-            <field name="fct_args">maximum_age</field>
-            <field name="fct_args">date_reference</field>
+            <field name="fct_args">code_relation, age_maximum, [date_reference]</field>
         </record>
         <record model="rule_engine.function" id="te_child_number">
             <field name="description">Numéro de l'enfant par âge</field>

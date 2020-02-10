@@ -141,6 +141,29 @@ class ModuleTestCase(test_framework.CoogTestCase):
         self.assertEqual(
             self.RuleEngineRuntime._re_relation_number_order_by_age(args,
                 'child'), 1)
+        # test _re_relation_number_order_by_age_under_limit
+        args = {'contract': contract, 'person': party_child1,
+            'date': datetime.date(2014, 1, 1)}
+        self.assertEqual(
+            self.RuleEngineRuntime._re_relation_number_order_by_age_under_limit(
+                args, 'child', 1), 0)
+        self.assertEqual(
+            self.RuleEngineRuntime._re_relation_number_order_by_age_under_limit(
+                args, 'child', 4), 1)
+        self.assertEqual(
+            self.RuleEngineRuntime._re_relation_number_order_by_age_under_limit(
+                args, 'child', 10), 2)
+        args = {'contract': contract, 'person': party_child2,
+            'date': datetime.date(2014, 1, 1)}
+        self.assertEqual(
+            self.RuleEngineRuntime._re_relation_number_order_by_age_under_limit(
+                args, 'child', 1), 0)
+        self.assertEqual(
+            self.RuleEngineRuntime._re_relation_number_order_by_age_under_limit(
+                args, 'child', 4), 0)
+        self.assertEqual(
+            self.RuleEngineRuntime._re_relation_number_order_by_age_under_limit(
+                args, 'child', 10), 1)
         # test _re_number_of_covered_with_relation
         args = {'contract': contract, 'date': datetime.date(2014, 1, 1)}
         self.assertEqual(self.RuleEngineRuntime.
