@@ -1,3 +1,4 @@
+* BUG#12051 Exclure les lignes de mouvement comptable d'un mouvement comptable brouillon de la requête de sélection du batch de création des paiements
 * BUG#13398 Mettre à jour correctement la date de paiement des lignes de paiement en cas de trop perçu
 * FEA#11618 Notifie l'évènement d'accusé réception d'un groupe de paiement
 

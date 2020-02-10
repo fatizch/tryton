@@ -1,8 +1,9 @@
+* BUG#12051 Exclude move line with draft move from payment creation batch query
 * BUG#13398 Correctly update move line payment date when there is an outstanding amount
 * FEA#11618 Notify payment group acknowledged event
 
 Version 2.6 - 2019-10-11
-* OTH#00000 Fix succeed payment method to call right behavior according to date 
+* OTH#00000 Fix succeed payment method to call right behavior according to date
 * BUG#11103 The payment date was not removed on failure if the payment was used to pay a different line than the original one
 
 Version 2.4 - 2019-04-12

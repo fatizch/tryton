@@ -388,6 +388,7 @@ class PaymentCreationBatch(batch.BatchRoot):
         pool = Pool()
         payment = pool.get('account.payment').__table__()
         move_line = pool.get('account.move.line').__table__()
+        move = pool.get('account.move').__table__()
         account = pool.get('account.account').__table__()
         account_type = pool.get('account.account.type').__table__()
         party = pool.get('party.party').__table__()
@@ -414,6 +415,8 @@ class PaymentCreationBatch(batch.BatchRoot):
             join_acc_cond &= (move_line.debit < 0) | (move_line.credit > 0)
         query_table = move_line.join(party,
             condition=(move_line.party == party.id)
+        ).join(move, condition=((move_line.move == move.id)
+            & (move.state != 'draft'))
         ).join(account, condition=join_acc_cond).join(account_type,
             condition=(
                 (account.type == account_type.id)
