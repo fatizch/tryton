@@ -4,7 +4,7 @@ import datetime
 from collections import defaultdict
 from dateutil.relativedelta import relativedelta
 
-from trytond.exceptions import UserWarning
+from trytond.exceptions import UserWarning, UserError
 from trytond.i18n import gettext
 from trytond.pool import Pool
 from trytond.model import Model, fields as tryton_fields
@@ -2168,8 +2168,11 @@ class StartEndorsement(Wizard):
         Date = pool.get('ir.date')
         EndorsementContract = pool.get('endorsement.contract')
         if Transaction().context.get('active_model') == 'contract':
-            contract = pool.get('contract')(
-                Transaction().context.get('active_id'))
+            active_id = Transaction().context.get('active_id')
+            if not active_id:
+                raise UserError(
+                    gettext('endorsement.msg_no_contract_selected'))
+            contract = pool.get('contract')(active_id)
             EndorsementContract.check_contracts_status([contract, ])
             return {
                 'effective_date': max(contract.start_date
