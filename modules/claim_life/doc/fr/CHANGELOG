@@ -1,3 +1,4 @@
+* OTH#00000 Ajout de la donnée 'Date de naissance du bénéficiaire' dans le moteur de règle
 * BUG#14543 Correction d'un crash lors de l'affichage d'un bénéficiaire une fois identifié et si des documents requis sont manquants sur le préjudice
 * BUG#14365 Correction d'erreur d'affichage du libellé de la date de début d'un préjudice dans un sinistre
 

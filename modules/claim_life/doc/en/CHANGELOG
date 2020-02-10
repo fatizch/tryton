@@ -1,3 +1,4 @@
+* OTH#00000 Add beneficiairy birth date in rule engine
 * BUG#14543 Fix crash when displaying beneficiaries once identify and if documents are missing
 * BUG#14365 Fix error in displaying the start date label of a loss in a claim
 

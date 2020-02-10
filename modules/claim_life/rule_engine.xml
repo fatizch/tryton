@@ -35,6 +35,16 @@ est le bénéficiaire</field>
             <field name="long_description">Part du bénéficiaire</field>
             <field name="parent" ref="claim.dossier_sinistre"/>
         </record>
+        <record model="rule_engine.function" id="date_naissance_beneficiaire">
+            <field name="translated_technical_name">date_naissance_beneficiaire</field>
+            <field name="description">Date de naissance du bénéficiaire</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_beneficiary_birth_date</field>
+            <field name="long_description">Date de naissance du bénéficiaire</field>
+            <field name="parent" ref="claim.dossier_sinistre"/>
+        </record>
         <record model="rule_engine.function" id="date_debut_arret_de_travail">
             <field name="translated_technical_name">date_debut_arret_de_travail</field>
             <field name="description">Date de début de l'arrêt de travail</field>

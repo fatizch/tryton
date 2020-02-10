@@ -29,6 +29,12 @@ class RuleEngineRuntime(metaclass=PoolMeta):
         return args['beneficiary_definition'].share
 
     @classmethod
+    @check_args('beneficiary_definition')
+    def _re_beneficiary_birth_date(cls, args):
+        return args['beneficiary_definition'].party.birth_date \
+            if args['beneficiary_definition'].party else None
+
+    @classmethod
     def _re_initial_std_start_date(cls, args):
         if 'loss' in args and args['loss'].initial_std_start_date:
             return args['loss'].initial_std_start_date
