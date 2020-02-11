@@ -9,6 +9,7 @@ from . import protocol
 from . import endorsement
 from . import rule_engine
 from . import suspension
+from . import contract
 
 
 def register():
@@ -23,6 +24,7 @@ def register():
         protocol.ProtocolEventType,
         rule_engine.RuleEngine,
         rule_engine.RuleTools,
+        contract.Contract,
         module='third_party_right_management', type_='model')
     Pool.register(
         protocol.ProtocolEndorsement,

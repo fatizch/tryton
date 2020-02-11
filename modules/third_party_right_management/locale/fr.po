@@ -386,6 +386,10 @@ msgctxt "selection:rule_engine,type_:"
 msgid "Third Party Management"
 msgstr "Gestion des Délégataires"
 
+msgctxt "view:contract:"
+msgid "Recompute Period"
+msgstr "Re-calcul des périodes de délégation"
+
 msgctxt "wizard_button:third_party_manager.recompute_period,ask_date,end:"
 msgid "Cancel"
 msgstr "Annuler"

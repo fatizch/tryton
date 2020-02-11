@@ -46,11 +46,6 @@
             <field name="name">Recompute Period</field>
             <field name="wiz_name">third_party_manager.recompute_period</field>
         </record>
-        <record model="ir.action.keyword" id="act_wizard_recompute_period_keyword">
-            <field name="action" ref="wizard_recompute_period"/>
-            <field name="keyword">form_action</field>
-            <field name="model">contract,-1</field>
-        </record>
         <record model="ir.ui.view" id="recompute_period_ask_date_view_form">
             <field name="model">third_party_manager.recompute_period.ask_date</field>
             <field name="type">form</field>

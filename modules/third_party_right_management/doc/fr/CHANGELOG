@@ -1,3 +1,4 @@
+* BUG#14655 Cache l'action de re-calcul des périodes sur les devis
 * BUG#13781 Le renouvellement de contrat doit ajuster les périodes délégataires en fonction des changements apportés au contract
 
 Version 2.6 - 2019-10-11

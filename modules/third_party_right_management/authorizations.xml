@@ -50,5 +50,13 @@ this repository contains the full copyright notices and license terms. -->
             <field name="perm_create" eval="False"/>
             <field name="perm_delete" eval="False"/>
         </record>
+        <record model="ir.model.button-res.group" id="button_recompute_period_group_contract_manage">
+            <field name="button" ref="third_party_right_management.button_recompute_period"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+        </record>
+        <record model="ir.action-res.group" id="wizard_recompute_period_group_contract_manage">
+            <field name="action" ref="third_party_right_management.wizard_recompute_period"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+        </record>
     </data>
 </tryton>
