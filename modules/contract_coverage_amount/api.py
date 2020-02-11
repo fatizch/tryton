@@ -105,7 +105,7 @@ class APIContract(metaclass=PoolMeta):
     def _simulate_contract_extract_option(cls, option):
         result = super(APIContract, cls)._simulate_contract_extract_option(
             option)
-        if option.coverage_amount_mode != 'calculated_amount':
+        if not option.coverage_amount_mode:
             return result
         result['coverage_amount'] = {
             'amount': amount_for_api(option.current_coverage_amount),

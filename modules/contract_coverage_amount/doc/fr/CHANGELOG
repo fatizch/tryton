@@ -1,3 +1,4 @@
+* OTH#00000 Ne restreindre coverage_amount sur la simulation d'options que s'il n'y a aucun mode de montant de couverture défini sur l'option
 * OTH#00000 Ajout d'un test sur le montant de couverture afin d'éviter un plantage lorsqu'on effectue des vérifications dessus
 * OTH#00000 Correction du calcul du montant de couverture dans l'API de simulation
 * FEA#13644 Calcul du montant de couverture et retour dans l'API

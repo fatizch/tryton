@@ -1,3 +1,4 @@
+* OTH#00000 Only restrict coverage_amount on options simulation if there is no coverage amount mode defined on option
 * OTH#00000 Add test on coverage amount to prevent crash when computing check on it
 * OTH#00000 Fix simulate API for calculated coverage amount
 * FEA#13644 Calculate coverage amount and return to API
