@@ -1,3 +1,4 @@
+* FEA#14358 Add API to list the commercial products available to a user
 * OTH#00000 Add checks in order to avoid crashes. This is complementary to commit 241e1ee
 
 Version 2.6 - 2019-10-11

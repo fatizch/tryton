@@ -104,6 +104,8 @@ class CommercialProduct(model.CodedMixin, model.CoogView):
     start_date = fields.Date('Start Date', required=True)
     end_date = fields.Date('End Date')
     description = fields.Text('Description', translate=True)
+    attachments = fields.One2Many('ir.attachment', 'resource', 'Attachments',
+        delete_missing=True)
 
     @classmethod
     def copy(cls, products, default=None):

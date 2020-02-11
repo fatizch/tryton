@@ -39,6 +39,10 @@ msgctxt "field:contract.subscribe.find_process,distributor:"
 msgid "Distributor"
 msgstr "Distributeur"
 
+msgctxt "field:distribution.commercial_product,attachments:"
+msgid "Attachments"
+msgstr "Pièces jointes"
+
 msgctxt "field:distribution.commercial_product,code:"
 msgid "Code"
 msgstr "Code"

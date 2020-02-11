@@ -6,6 +6,8 @@ from trytond.pool import PoolMeta, Pool
 from trytond.modules.coog_core.api import CODED_OBJECT_SCHEMA, OBJECT_ID_SCHEMA
 from trytond.modules.coog_core.api import CODED_OBJECT_ARRAY_SCHEMA, CODE_SCHEMA
 from trytond.modules.web_configuration.resource import WebUIResourceMixin
+from trytond.modules.api import DATE_SCHEMA
+from trytond.modules.api import api_context
 
 
 __all__ = [
@@ -78,6 +80,18 @@ class APICore(metaclass=PoolMeta):
 
 class APIProduct(metaclass=PoolMeta):
     __name__ = 'api.product'
+
+    @classmethod
+    def __setup__(cls):
+        super().__setup__()
+        cls._apis.update({
+                'list_commercial_products': {
+                    'description': 'Provides the list of commercial products '
+                    'a given user can sell.',
+                    'readonly': True,
+                    'public': False,
+                    },
+                })
 
     @classmethod
     def describe_products(cls, products):
@@ -212,6 +226,93 @@ class APIProduct(metaclass=PoolMeta):
                 },
             ]
         return examples
+
+    @classmethod
+    def list_commercial_products(cls, parameters):
+        product_list = []
+        com_products = cls._find_commercial_products()
+
+        for product in com_products:
+            documents = [a for a in product.attachments if a.type == 'link'] \
+                or []
+            public_doc = cls._build_documents_list(documents)
+            product_list.append({'code': product.code, 'name': product.name,
+                'start_date': str(product.start_date), 'technical_product':
+                {'code': product.product.code, 'name': product.product.name},
+                'public_documents': public_doc})
+        return product_list
+
+    @classmethod
+    def _find_commercial_products(cls):
+        pool = Pool()
+        DistNetwork = pool.get('distribution.network')
+        API = pool.get('api')
+
+        context = api_context()
+        if 'dist_network' in context and context['dist_network']:
+            network = DistNetwork(context['dist_network'])
+            return network.all_com_products
+        else:
+            API.add_input_error({
+                'type': 'cannot_find_distribution_network',
+                })
+
+    @classmethod
+    def _build_documents_list(cls, documents):
+        public_doc = []
+        for document in documents:
+            doc = {'name': document.name, 'url': document.link}
+            public_doc.append(doc)
+        return public_doc
+
+    @classmethod
+    def _list_commercial_products_schema(cls):
+        return {}
+
+    @classmethod
+    def _list_commercial_products_output_schema(cls):
+        return {
+            'type': 'array',
+            'additionalProperties': False,
+            'properties': {
+                'code': {'type': 'string'},
+                'name': {'type': 'string'},
+                'start_date': DATE_SCHEMA,
+                'technical_product': {'code': 'string', 'name': 'string'},
+                'public_documents': cls._public_document_output_schema(),
+                },
+            }
+
+    @classmethod
+    def _public_document_output_schema(cls):
+        return {
+            'type': 'array',
+            'additionalProperties': False,
+            'properties': {
+                'name': {'type': 'string'},
+                'url': {'type': 'string'},
+                },
+            }
+
+    @classmethod
+    def _list_commercial_products_examples(cls):
+        return [{
+            'input': None,
+            'output': [
+                {
+                    'code': 'habitation',
+                    'name': 'Assurance habitation',
+                    'start_date': '2020-01-01',
+                    'technical_product': {'code': 'house_product',
+                            'name': 'habitation'},
+                    'public_documents': [
+                        {
+                            'name': 'doc',
+                            'url': 'http://google.fr',
+                            },
+                        ]
+                    },
+                ]}]
 
 
 class APIContract(metaclass=PoolMeta):

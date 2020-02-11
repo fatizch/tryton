@@ -68,4 +68,10 @@ this repository contains the full copyright notices and license terms. -->
             <field name="group" ref="offered.group_product_read"/>
         </record>
     </data>
+    <data depends="api">
+        <record model="ir.api.access" id="list_commercial_products_default_access">
+            <field name="api">api.product.list_commercial_products</field>
+            <field name="group" ref="api.group_default_api"/>
+        </record>
+    </data>
 </tryton>
