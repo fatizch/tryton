@@ -79,15 +79,20 @@ class ContractNoemieFlowBatch(batch.BatchRootNoSelect):
         line_110 = element[1]
         line_120 = element[2]
         ssn = line_110[5:20]
-        birth_date = datetime.datetime.strptime(
-            line_120[5:11], '%d%m%y').date()
-        birth_order = line_120[11:12]
+        birth_date = None
+        if line_120[5:11] != '000000':
+            birth_date = datetime.datetime.strptime(
+                line_120[5:11], '%d%m%y').date()
+            birth_order = line_120[11:12]
 
         domain = [
             ('party.ssn', '=', ssn),
-            ('party.birth_date', '=', birth_date),
-            ('party.birth_order', '=', int(birth_order)),
             ]
+        if birth_date:
+            domain.extend([
+                ('party.birth_date', '=', birth_date),
+                ('party.birth_order', '=', int(birth_order)),
+                ])
         return CoveredElement.search(domain)
 
     @classmethod
