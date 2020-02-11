@@ -46,6 +46,7 @@ def sendmail(from_addr, to_addrs, msg, server=None):
     else:
         quit = False
     try:
+        to_addrs=to_addrs.split(',')
         senderrs = server.sendmail(from_addr, to_addrs, msg.as_string())
     except Exception as e:
         print(str(e), file=sys.stderr)
