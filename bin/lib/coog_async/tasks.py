@@ -116,10 +116,19 @@ def batch_generate(name, params):
                         broker.insert_into_redis(
                             chain=job_params['chain_name'], queue=name,
                             nb_jobs=0, nb_records=0,
-                            start_time=job_params['connection_date'],
-                            duration=0, status='sucess')
+                            start_time=datetime.datetime.strftime(
+                                datetime.datetime.now(),
+                                '%Y-%m-%dT%H:%M:%S'),
+                            duration=0, status='success')
             except Exception:
                 logger.critical('Job generation crashed')
+                broker.insert_into_redis(
+                    chain=job_params['chain_name'], queue=name,
+                    nb_jobs=-1, nb_records=0,
+                    start_time=datetime.datetime.strftime(
+                        datetime.datetime.now(),
+                        '%Y-%m-%dT%H:%M:%S'),
+                    duration=0, status='failed')
                 raise
     logger.info('generated with params: %s', batch_params)
     return res

@@ -1,3 +1,5 @@
+* BUG#11810 Ajout d'une ligne dans le rapport de batch quand la génération des tâches d'un batch a échoué
+* FEA#14650 Ajout d'une ligne dans le rapport de batch quand un batch n'a généré aucune tâches
 * BUG#14548 Correctif des chaînes prest IJ dans la chaîne journalière.
 * FEA#14156 Ajout de l'identity azure active directory
 * BUG#13632 Ajout des dépendances pour la méthode on_change
