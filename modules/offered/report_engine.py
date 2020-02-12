@@ -18,6 +18,9 @@ class ReportTemplate(metaclass=PoolMeta):
 
     products = fields.Many2Many('report.template-offered.product',
         'report_template', 'product', 'Products')
+    products_name = fields.Function(
+        fields.Char('Products'),
+        'on_change_with_products_name')
 
     @classmethod
     def _export_skips(cls):
@@ -36,6 +39,10 @@ class ReportTemplate(metaclass=PoolMeta):
         if self.on_model.model == 'offered.product':
             result.append(('documentation', 'Documentation'))
         return result
+
+    @fields.depends('products')
+    def on_change_with_products_name(self, name=None):
+        return ', '.join([p.code for p in self.products])
 
 
 class ReportProductRelation(model.CoogSQL):

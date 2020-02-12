@@ -1125,6 +1125,10 @@ msgid "Automatic Generation"
 msgstr "Génération automatique"
 
 msgctxt "view:report.template:"
+msgid "Filters"
+msgstr "Filtres"
+
+msgctxt "view:report.template:"
 msgid "Versions"
 msgstr "Versions"
 

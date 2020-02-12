@@ -978,6 +978,10 @@ msgctxt "field:report.template,products:"
 msgid "Products"
 msgstr "Produits"
 
+msgctxt "field:report.template,products_name:"
+msgid "Products"
+msgstr "Produits"
+
 msgctxt "field:report.template-offered.product,create_date:"
 msgid "Create Date"
 msgstr "Date de Création"
