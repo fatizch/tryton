@@ -714,7 +714,7 @@ class ProductExtraDataRelation(ExtraDataDefTable):
         ondelete='RESTRICT')
 
 
-class OptionDescriptionRequired(model.CoogSQL):
+class OptionDescriptionRequired(model.ConfigurationMixin):
     'Option Description Required'
 
     __name__ = 'offered.option.description.required'
@@ -725,7 +725,7 @@ class OptionDescriptionRequired(model.CoogSQL):
         'To Option Description', ondelete='RESTRICT')
 
 
-class OptionDescriptionExcluded(model.CoogSQL):
+class OptionDescriptionExcluded(model.ConfigurationMixin):
     'Option Description Excluded'
 
     __name__ = 'offered.option.description.excluded'

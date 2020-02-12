@@ -1,6 +1,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 import logging
+import copy
 
 from trytond.pool import Pool, PoolMeta
 from trytond.model import Model
@@ -779,6 +780,19 @@ class APIContract(APIMixin):
                             created)
                     finally:
                         transaction.rollback()
+
+    @classmethod
+    def _simulate_offload_input(cls, parameters, api_context):
+        data_calls = []
+        for contract_data in parameters.get('contracts', []):
+            call_dict = copy.deepcopy(parameters)
+            call_dict['contracts'] = [contract_data]
+            data_calls.append(call_dict)
+        return data_calls
+
+    @classmethod
+    def _simulate_offload_result(cls, parameters, results):
+        return sum(results, [])
 
     @classmethod
     def _simulate_result(cls, contracts, parameters, created):

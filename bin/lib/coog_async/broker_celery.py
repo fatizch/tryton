@@ -93,6 +93,32 @@ app.task(_execute, base=CoogTask, name='async_method_execution',
     serializer='json')
 
 
+def api_offloading(api_model, api_name, database, user, context,
+        *args, **kwargs):
+    '''
+        Execute an API call as an external call, and returns the result. Can be
+        used to "parallelize" api calls by offloading them on celery processes
+    '''
+    from trytond.pool import Pool
+    from trytond.transaction import Transaction
+
+    with Transaction().start(database, user) as transaction:
+        Pool(database).init()
+        with transaction.set_context(**context) as transaction:
+            pool = Pool()
+            Model = pool.get(api_model)
+            API = pool.get('api')
+
+            # The apify wrapper will properly wrap errors, we just need to make
+            # sure they are serialized the same way the dispatcher would
+            return API.convert_result(
+                Model, api_name, getattr(Model, api_name)(*args, **kwargs))
+
+
+app.task(api_offloading, base=CoogTask, name='api_offloading',
+    serializer='json', queue='api_offloading')
+
+
 def log_job(job, queue, fname, args, kwargs):
     # not stored by celery
     connection.setex('coog:job:%s' % str(job), config.JOB_RESULT_TTL,

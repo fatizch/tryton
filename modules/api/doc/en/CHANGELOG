@@ -1,3 +1,4 @@
+* FEA#14629 API offloading through celery
 * FEA#13843 Add a negative amount schema
 * OTH#00000 Return a user-friendly error when API context is missing
 

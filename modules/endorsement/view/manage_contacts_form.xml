@@ -5,7 +5,7 @@ this repository contains the full copyright notices and license terms. -->
     <label name="contract"/>
     <field name="contract" widget="selection" colspan="3"/>
     <group id="contacts" string="" colspan="4" col="1" yexpand="1" yfill="1">
-        <field name="current_contacts" group="current_contacts" mode="tree" expand_toolbar="0" yexpand="0" yfill="1"/>
+        <field name="current_contacts" group="current_contacts" mode="tree" expand_toolbar="0" yexpand="0" yfill="1" height="150"/>
         <field name="current_contacts" group="current_contacts" mode="form"/>
     </group>
     <group id="invisible" string="">

@@ -38,6 +38,7 @@
 
 # Fastest json schema parsing using
 # https://www.peterbe.com/plog/jsonschema-validate-10x-faster-in-python
+import copy
 import logging
 import fastjsonschema
 import datetime
@@ -57,6 +58,20 @@ from trytond.model.modelstorage import AccessError, ImportDataError, \
     DigitsValidationError, SelectionValidationError, TimeFormatValidationError
 from trytond.server_context import ServerContext
 from trytond.i18n import gettext
+
+if config.getboolean('api', 'offload') is True:
+    try:
+        import coog_async.broker as async_broker
+        if not config.getboolean('env', 'testing'):
+            async_broker.set_module('celery')
+            offload_broker = async_broker.get_module()
+        offload_database = config.get('api', 'offload_database')
+        offload_timeout = config.getint('api', 'offload_timeout') or 0
+    except ImportError as error:
+        logging.getLogger(__name__).error(error)
+        offload_broker = None
+else:
+    offload_broker = None
 
 
 DEFAULT_INPUT_SCHEMA = {
@@ -109,12 +124,84 @@ def api_input_error_manager():
                 raise APIInputError(api_input_errors)
 
 
-def apify(klass, api_name):
+if offload_broker is not None:
+    # We want to allow API offloading to celery processes
+    offload_task = offload_broker.app.tasks['api_offloading']
+
+    def offload_calls(api_model, api_name, arg_list):
+        from celery import group
+        from celery.exceptions import TimeoutError
+
+        database = offload_database or Transaction().database.name
+        user = Transaction().user
+        context = Transaction().context
+
+        # We create one group of celery task which will be made of all the
+        # calls. We then wait for those calls to complete and return the result
+        runner = group([offload_task.s(
+                    api_model, api_name, database, user,
+                    copy.deepcopy(context),
+                    *arg[0], **arg[1])
+                for arg in arg_list])()
+        if offload_timeout:
+            try:
+                result = runner.get(timeout=offload_timeout)
+            except TimeoutError:
+                api_logger.error('Could not offload api call, is celery '
+                    'started?')
+                runner.revoke()
+                raise
+        else:
+            result = runner.get()
+        return result
+else:
+    # Fallback behaviour when no offloading is configured
+
+    def _run_api_task(api_model, api_name, *args, **kwargs):
+        return getattr(Pool().get(api_model), api_name)(*args, **kwargs)
+
+    def offload_calls(api_model, api_name, arg_list):
+        return [_run_api_task(api_model, api_name, *arg[0], **arg[1])
+                for arg in arg_list]
+
+
+def treat_offload_errors(results):
+    # Yuck!
+    errors = {
+        'User Error': [],
+        'Input Validation Error': [],
+        }
+
+    for result in results:
+        # We'll have to settle for this as a error detecton mechanism
+        if isinstance(result, dict) and 'error_code' in result:
+            if result['error_code'] == 500:
+                # Server Error, stop everything here
+                raise APIServerError(Exception(result['error_data']))
+            elif result['error_code'] == 401:
+                # Authorization Error, stop everything here as well
+                raise APIAuthorizationError(result['error_data']['api_name'])
+            elif result['error_code'] == 400:
+                errors[result['error_message']].append(result['error_data'])
+            else:
+                raise NotImplementedError
+
+    if errors['User Error']:
+        raise APIUserError(errors['User Error'][0])
+    elif errors['Input Validation Error']:
+        raise APIInputError(sum(errors['Input Validation Error'], []))
+
+
+def apify(klass, api_name, offload):
     '''
         Transforms a standard method into an API. This mainly means:
+
         - calling the appropriate checks / input conversions
         - executing the method
         - handling of errors
+
+        If "offload" is set, the api will be considered "offloadable" and will
+        automatically be split on available offload processes
     '''
     function = getattr(klass, api_name)
     model_name = klass.__name__
@@ -149,6 +236,26 @@ def apify(klass, api_name):
                 '_api_context': context,
                 'auto_accept_warnings': True,
                 }
+
+        if (offload and offload_broker is not None and not supered and
+                not context.get('_disable_api_offloading', False)):
+            # Offloading is enabled, and we did not yet split the calls
+            context['_disable_api_offloading'] = True
+
+            try:
+                calls = [([x, copy.deepcopy(context)], {})
+                    for x in getattr(Model, '_%s_offload_input' % api_name)(
+                        parameters, api_context)]
+
+                results = offload_calls(model_name, api_name, calls)
+
+                treat_offload_errors(results)
+
+                return getattr(Model, '_%s_offload_result' % api_name)(
+                    parameters, results)
+            except Exception as e:
+                return Api.handle_error(e)
+
         with Transaction().set_context(**transaction_context):
             with ServerContext().set_context(**api_context):
                 try:
@@ -430,8 +537,13 @@ class APIModel(Model):
         setattr(Model, '%s_description' % name,
             lambda: data['description_complete'])
 
+        # Check for offloading compatibility
+        offload = bool(
+            hasattr(Model, '_%s_offload_input' % name) and
+            hasattr(Model, '_%s_offload_result' % name))
+
         # Transform the method into an api
-        setattr(Model, name, apify(Model, name))
+        setattr(Model, name, apify(Model, name, offload=offload))
 
     @classmethod
     def add_input_error(cls, error_data):
@@ -705,6 +817,32 @@ class APIMixin(Model):
                         'output': 4,
                         },
                     ]
+
+        Optionnally, for computationnally intensive APIs, it is possible to
+        offload the load to celery processes, providing the required
+        configuration is done (see the "API" section of the configuration
+        file) and the following methods are implemented:
+
+        - _my_api_offload_input: takes an input dict for the API, and returns a
+          list of input dicts which will be offloaded
+
+            @classmethod
+            def _my_api_offload_input(cls, parameters):
+                calls = []
+                for party_data in parameters['parties']:
+                    data = copy.deepcopy(parameters)
+                    data['parties'] = [party_data]
+                    calls.append(data)
+                return calls
+
+        - _my_api_offload_result: Will be called with the inital parameters, as
+          well as the list of results of the offloaded calls. There is no
+          guarantee over the result orders. It is expected to transform the
+          result of unit offloading calls into one aggregate call.
+
+            @classmethod
+            def _my_api_offload_result(cls, parameters, results):
+                return sum(results, [])
 
         When calling an API via JSON-RPC, one should pass the following
         parameters:
