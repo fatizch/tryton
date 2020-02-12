@@ -73,7 +73,12 @@ class APIContract(metaclass=PoolMeta):
         coverage = data['coverage']
         if (coverage.beneficiaries_clauses and
                 'beneficiary_clause' not in data):
-            if len(coverage.beneficiaries_clauses) == 1:
+            if coverage.default_beneficiary_clause:
+                data['beneficiary_clause'] = {
+                    'clause': {'code':
+                        coverage.default_beneficiary_clause.code},
+                    }
+            elif len(coverage.beneficiaries_clauses) == 1:
                 data['beneficiary_clause'] = {
                     'clause': {'code': coverage.beneficiaries_clauses[0].code},
                     }

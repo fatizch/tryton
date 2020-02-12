@@ -55,7 +55,6 @@ class ModuleTestCase(test_framework.CoogTestCase):
         clause_benef_3.save()
 
         coverage_a.beneficiaries_clauses = [clause_benef_1, clause_benef_2]
-        coverage_a.default_beneficiary_clause = clause_benef_2
         coverage_a.save()
 
     @test_framework.prepare_test(
