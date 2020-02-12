@@ -210,19 +210,20 @@ class APIContract(metaclass=PoolMeta):
             contract_data['billing']['payer'] = contract_data['subscriber']
 
     @classmethod
-    def _check_updated_contract_parameters(cls, contract_data):
-        super()._check_updated_contract_parameters(contract_data)
-        cls._check_contract_parameters_payer(contract_data)
+    def _check_updated_contract_parameters(cls, contract_data, options):
+        super()._check_updated_contract_parameters(contract_data, options)
+        cls._check_contract_parameters_payer(contract_data, options)
 
     @classmethod
-    def _check_contract_parameters_payer(cls, contract_data):
+    def _check_contract_parameters_payer(cls, contract_data, options):
         API = Pool().get('api')
 
         billing_mode = contract_data['billing']['billing_mode']
         subscriber = contract_data['subscriber']
         payer = contract_data['billing']['payer']
 
-        if billing_mode.direct_debit and not payer.bank_accounts:
+        if options.get('activate', False) and billing_mode.direct_debit \
+                and not payer.bank_accounts:
             API.add_input_error({
                     'type': 'missing_bank_account',
                     'data': {

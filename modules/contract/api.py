@@ -156,7 +156,7 @@ class APIContract(APIMixin):
         contracts = []
         for contract in parameters['contracts']:
             cls._update_contract_parameters(contract, created)
-            cls._check_updated_contract_parameters(contract)
+            cls._check_updated_contract_parameters(contract, options)
             contracts.append(cls._create_contract(contract, created))
 
         Pool().get('contract').save(contracts)
@@ -176,11 +176,11 @@ class APIContract(APIMixin):
                 contract_data['subscriber']['ref']]
 
     @classmethod
-    def _check_updated_contract_parameters(cls, contract_data):
-        cls._check_contract_parameters_subscriber(contract_data)
+    def _check_updated_contract_parameters(cls, contract_data, options):
+        cls._check_contract_parameters_subscriber(contract_data, options)
 
     @classmethod
-    def _check_contract_parameters_subscriber(cls, contract_data):
+    def _check_contract_parameters_subscriber(cls, contract_data, options):
         API = Pool().get('api')
         product = contract_data['product']
         subscriber = contract_data['subscriber']

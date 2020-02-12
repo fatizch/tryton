@@ -77,8 +77,8 @@ class APIContract(metaclass=PoolMeta):
                 covered['party'] = created['parties'][covered['party']['ref']]
 
     @classmethod
-    def _check_updated_contract_parameters(cls, contract_data):
-        super()._check_updated_contract_parameters(contract_data)
+    def _check_updated_contract_parameters(cls, contract_data, options):
+        super()._check_updated_contract_parameters(contract_data, options)
         for covered_data in contract_data.get('covereds', []):
             cls._check_contract_parameters_covereds(covered_data, contract_data)
 
