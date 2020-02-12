@@ -416,6 +416,8 @@ class DocumentRequestLine(Printable, model.CoogSQL, model.CoogView):
         attachment.resource = self.get_reference_object_for_edm()
         attachment.document_desc = self.document_desc
         attachment.name = self.document_desc.name
+        # Set function field as hack because will be necesary for get_party
+        attachment.request_line = self
         if name == 'attachment_data':
             attachment.data = value
         elif name == 'attachment_name':
@@ -592,10 +594,10 @@ class DocumentRequestLineOffered(
                     request_line.document_desc.template.produce_reports(
                         [object_to_print], {}, request_line.document_desc)
                 if attachments:
-                    Attachment.write([attachments[0]], {
-                        'resource': str(
-                            request_line.get_reference_object_for_edm()),
-                        'document_desc': request_line.document_desc.id})
+                    attachments[0].resource = str(
+                        request_line.get_reference_object_for_edm())
+                    attachments[0].document_desc = request_line.document_desc
+                    Attachment.save(attachments)
             cls.write([request_line], {
                     'data_status': 'done',
                     'attachment': attachments[0].id if attachments else None,

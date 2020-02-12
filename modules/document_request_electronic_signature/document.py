@@ -57,6 +57,11 @@ class DocumentDescription(metaclass=PoolMeta):
                 {'invisible': ~Eval('digital_signature_required')}
                 )]
 
+    @classmethod
+    def _export_light(cls):
+        return super(DocumentDescription, cls)._export_light() \
+            | {'signature_configuration', 'signature_credential'}
+
     @fields.depends('digital_signature_required',
         'reception_requires_attachment', 'signature_configuration',
         'signature_credential', 'sub_documents')
@@ -67,17 +72,9 @@ class DocumentDescription(metaclass=PoolMeta):
             self.signature_credential = None
             self.sub_documents = []
 
-    def init_signature(self, report=None, attachment=None, from_object=None):
+    def get_coordinates(self, report=None):
         if not self.digital_signature_required:
             return
-        signer = ((report.get('party') or report.get('origin')
-                or report.get('resource'))
-            if report else attachment.resource).get_contact()
-        if not report and attachment:
-            report = {
-                'report_name': attachment.name,
-                'data': attachment.data,
-                }
         report['coordinates'] = []
         for coordinate in self.signature_coordinates:
             report['coordinates'].append({
@@ -85,14 +82,7 @@ class DocumentDescription(metaclass=PoolMeta):
                    'coordinate_x': coordinate.signature_coordinate_x,
                    'coordinate_y': coordinate.signature_coordinate_y,
                     })
-        # No need to try an electronic signature if we can't go through
-        if signer and signer.email and (signer.mobile or signer.phone):
-            report['signers'] = [signer]
-            Signature = Pool().get('document.signature')
-            Signature.request_transaction(report, attachment,
-                config=self.signature_configuration,
-                credential=self.signature_credential,
-                from_object=from_object)
+        return report
 
 
 class DocumentDescriptionPart(model.CoogSQL, model.CoogView):
@@ -223,8 +213,7 @@ class DocumentRequestLine(metaclass=PoolMeta):
     def new_attachment(self, value, name='attachment_data'):
         attachment = super(DocumentRequestLine, self).new_attachment(value,
             name)
-        self.document_desc.init_signature(attachment=attachment,
-            from_object=self)
+        attachment.create_new_signature(from_object=self)
         return attachment
 
     def format_signature_url(self, url):

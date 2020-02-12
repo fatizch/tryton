@@ -16,6 +16,11 @@ class ReportTemplate(metaclass=PoolMeta):
         if doc_desc and doc_desc.digital_signature_required:
             for report, attachment in zip(reports,
                     attachments or [None] * len(reports)):
-                doc_desc.init_signature(report, attachment,
-                    from_object=report.get('origin'))
+                if not attachment:
+                    continue
+                attachment.create_new_signature(report, report.get('origin'),
+                    credential=doc_desc.signature_credential if doc_desc
+                    else None,
+                    config=doc_desc.signature_configuration if doc_desc
+                    else None)
         return reports, attachments

@@ -1,6 +1,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 import datetime
+from unidecode import unidecode
 
 from trytond.pool import PoolMeta
 
@@ -20,8 +21,8 @@ class Signature(metaclass=PoolMeta):
     def signer_structure(cls, conf, signer):
         struct = super(Signature, cls).signer_structure(conf, signer)
         if signer.is_person:
-            struct['first_name'] = signer.first_name
-            struct['last_name'] = signer.name
+            struct['first_name'] = unidecode(signer.first_name)
+            struct['last_name'] = unidecode(signer.name)
             struct['birth_date'] = datetime.datetime.combine(signer.birth_date,
                 datetime.datetime.min.time())
         return struct
@@ -54,3 +55,4 @@ class SignatureCredential(export.ExportImportMixin, metaclass=PoolMeta):
 
 class SignatureConfiguration(export.ExportImportMixin, metaclass=PoolMeta):
     __name__ = 'document.signature.configuration'
+    _func_key = 'profile'

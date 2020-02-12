@@ -1,3 +1,4 @@
+* FEA#14763 Possibilité de découper le procecssus de signature électronique en deux étapes. Génération du document puis envoi au fournisseur. Ajout d'une option sur la configuration du service électronique pour passer en manuel. Une fois le document generé, le gestionnaire peut en vérifier le contenu avant de déclencher manuellement le processus.
 * FEA#14121 Gestion des liasses dynamiques en ne fusionnant que les documents requis. Il est donc possible d'ajouter n documents dans la définition d'une liasse mais ils ne seront ajoutés que si ces documents sont réellement requis pour le dossier en cours.
 * OTH#0000 Vérification que les pdfs sont conformes avant de les fusionner
 * OTH#0000 Positionnement de la date de réception lors du call back de la signature électronique

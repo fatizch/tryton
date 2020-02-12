@@ -1,3 +1,5 @@
+* FEA#14763 Allow to call electronic signature provider in two passes. The electronic signature process could be considered as 'too fast' because the user can not check what document will be send to the provider.
+The idea is to add an option to set the process to manual, so that the user can use the generated document to manually process the electronic signature
 * FEA#14121 Manage dynamic set of documents by only merging documents that are requested
 * OTH#0000 Check pdf are real pdf documents before merging
 * OTH#0000 Set reception date when receiving electronic signature callback
