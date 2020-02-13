@@ -70,6 +70,10 @@ msgctxt "model:ir.action,name:act_agency_relate_form"
 msgid "Agencies"
 msgstr "Agences"
 
+msgctxt "model:ir.message,text:msg_no_bank_detected_for_number"
+msgid "The bank for account number %(number)s cannot be detected"
+msgstr "La banque pour le compte %(number)s ne peut pas être détectée"
+
 msgctxt "model:ir.message,text:msg_iban_bank_mismatch"
 msgid "The IBAN and bank do not match."
 msgstr "L'IBAN et la banque ne correspondent pas."
