@@ -1,3 +1,4 @@
+* FEA#14830 Permettre de demander manuellement des documents
 * BUG#14550 Pas de tentative de génération de jeton lorsque la documentation_api n'est pas configurée
 * FEA#13461 Ajout d'un bouton pour invalider les pièces jointes
 * BUG#13518 Vérification du type métier des données complémentaires

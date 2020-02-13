@@ -8,6 +8,7 @@ from sql.aggregate import Count, Sum
 from sql.conditionals import Case
 
 from trytond.i18n import gettext
+from trytond.rpc import RPC
 from trytond.model.exceptions import ValidationError
 from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval, Bool
@@ -155,6 +156,11 @@ class DocumentRequestLine(Printable, model.CoogSQL, model.CoogView):
     allow_force_receive = fields.Function(fields.Boolean('Force Receive'),
         'get_allow_force_receive')
     _models_get_request_line_cache = Cache('models_get_request_line')
+    added_manually = fields.Boolean('Added Manually', states={'readonly': True})
+    for_object_selection = fields.Function(
+        fields.Selection('get_possible_objects', 'Needed For',
+            states={'readonly': ~Eval('added_manually')}, sort=False),
+        'getter_for_object_selection', 'setter_void')
 
     @classmethod
     def __setup__(cls):
@@ -170,6 +176,7 @@ class DocumentRequestLine(Printable, model.CoogSQL, model.CoogView):
                         != 'waiting_validation'),
                     },
                 })
+        cls.__rpc__.update({'get_possible_objects': RPC(instantiate=0)})
 
     @classmethod
     def __register__(cls, module_name):
@@ -177,7 +184,12 @@ class DocumentRequestLine(Printable, model.CoogSQL, model.CoogView):
         cursor = Transaction().connection.cursor()
         doc_h = TableHandler(cls, module_name)
         to_migrate = not doc_h.column_exist('last_reminder_date')
+
+        # Migrate from 2.6 : Add "added_manually" column
+        to_migrate_too = not doc_h.column_exist('added_manually')
+
         super(DocumentRequestLine, cls).__register__(module_name)
+
         to_update = cls.__table__()
         if to_migrate:
             cursor.execute(*to_update.update(
@@ -186,6 +198,10 @@ class DocumentRequestLine(Printable, model.CoogSQL, model.CoogView):
                         to_update.reminders_sent],
                     values=[CurrentDate(), 0],
                     where=to_update.last_reminder_date == Null,))
+        if to_migrate_too:
+            cursor.execute(*to_update.update(
+                    columns=[to_update.added_manually],
+                    values=[Literal(False)]))
 
     @classmethod
     def search(cls, domain, *args, **kwargs):
@@ -494,6 +510,21 @@ class DocumentRequestLine(Printable, model.CoogSQL, model.CoogView):
         if to_update:
             getattr(Attachment, action)(to_update)
         return lines
+
+    @classmethod
+    def default_added_manually(cls):
+        return True
+
+    @fields.depends('document_desc', 'for_object')
+    def get_possible_objects(self):
+        return []
+
+    @fields.depends('for_object', 'for_object_selection')
+    def on_change_for_object_selection(self):
+        self.for_object = self.for_object_selection
+
+    def getter_for_object_selection(self, name):
+        return str(self.for_object) if self.for_object else None
 
 
 class DocumentRequestLineOffered(

@@ -145,7 +145,8 @@ class ClaimIndemnification(metaclass=PoolMeta):
             request = DocumentRequestLine(
                 document_desc=document,
                 for_object=self,
-                claim=self.service.claim)
+                claim=self.service.claim,
+                added_manually=False)
             for k, v in required_documents[document.code].items():
                 setattr(request, k, v)
             requests.append(request)

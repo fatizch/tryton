@@ -226,6 +226,10 @@ msgctxt "field:document.request.line,for_object:"
 msgid "Needed For"
 msgstr "Requis pour"
 
+msgctxt "field:document.request.line,for_object_selection:"
+msgid "Needed For"
+msgstr "Requis pour"
+
 msgctxt "field:document.request.line,id:"
 msgid "ID"
 msgstr "ID"

@@ -11,7 +11,7 @@ from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
 from trytond.pyson import Eval
 
-from trytond.modules.coog_core import fields, model
+from trytond.modules.coog_core import fields, model, coog_string
 
 
 __all__ = [
@@ -88,8 +88,9 @@ class DocumentRequestLine(metaclass=PoolMeta):
 
     @fields.depends('contract', 'for_object')
     def on_change_contract(self):
-        if self.for_object is None:
+        if self.for_object is None and self.contract:
             self.for_object = self.contract
+            self.for_object_selection = str(self.contract)
 
     @fields.depends('contract')
     def on_change_with_product(self, name=None):
@@ -155,6 +156,16 @@ class DocumentRequestLine(metaclass=PoolMeta):
         for line_id, _id, in cursor.fetchall():
             result[_id].append(line_id)
         return result
+
+    @fields.depends('contract')
+    def get_possible_objects(self):
+        selection = super().get_possible_objects()
+        if self.contract:
+            selection.append((str(self.contract),
+                coog_string.translate_label(self, 'contract')))
+            for element in self.contract.covered_elements:
+                selection.append((str(element), element.rec_name))
+        return selection
 
 
 class DocumentRequest(metaclass=PoolMeta):

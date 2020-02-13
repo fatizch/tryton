@@ -8,7 +8,7 @@ from trytond import backend
 from trytond.pyson import Eval
 from trytond.transaction import Transaction
 
-from trytond.modules.coog_core import fields
+from trytond.modules.coog_core import fields, coog_string
 
 
 __all__ = [
@@ -88,13 +88,24 @@ class DocumentRequestLine(metaclass=PoolMeta):
 
     @fields.depends('claim', 'for_object')
     def on_change_claim(self):
-        if self.for_object is None:
+        if self.for_object is None and self.claim:
             self.for_object = self.claim
+            self.for_object_selection = str(self.claim)
 
     @classmethod
     def for_object_models(cls):
         return super(DocumentRequestLine, cls).for_object_models() + \
             ['claim', 'claim.loss']
+
+    @fields.depends('claim')
+    def get_possible_objects(self):
+        selection = super().get_possible_objects()
+        if self.claim:
+            selection.append((str(self.claim),
+                coog_string.translate_label(self, 'claim')))
+            for loss in self.claim.losses:
+                selection.append((str(loss), loss.rec_name))
+        return selection
 
 
 class DocumentRequest(metaclass=PoolMeta):

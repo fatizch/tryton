@@ -1,3 +1,4 @@
+* FEA#14830 Allow to manually request documents
 * BUG#14550 Bypass document token generation when documentation_api not configured
 * FEA#13461 Add button to invalidate attachments
 * BUG#13518 Check extra data business kind

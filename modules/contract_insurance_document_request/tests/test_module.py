@@ -420,7 +420,8 @@ class ModuleTestCase(test_framework.CoogTestCase):
         document_desc_4, = self.DocumentDesc.search(
             [('code', '=', 'document_desc_4')])
         outer = self.DocumentRequestLine(for_object=str(contract),
-            document_desc=document_desc_4, data_status='waiting')
+            document_desc=document_desc_4, data_status='waiting',
+            added_manually=False)
         outer.save()
         self.assertEqual(len(contract.document_request_lines), 6)
         test_reinit()
@@ -431,10 +432,44 @@ class ModuleTestCase(test_framework.CoogTestCase):
             [('code', '=', 'document_desc_4')])
         outer = self.DocumentRequestLine(for_object=str(contract),
             document_desc=document_desc_4, data_status='waiting',
-            send_date=datetime.date.today())
+            send_date=datetime.date.today(), added_manually=False)
         outer.save()
         self.assertEqual(len(contract.document_request_lines), 6)
         contract.init_subscription_document_request()
+        self.assertEqual(len(contract.document_request_lines), 6)
+
+    @test_framework.prepare_test(
+        'contract_insurance_document_request.'
+        'test0040_TestContractDocumentRequest',
+        )
+    def test0050_TestContractDocumentRequestManual(self):
+        contract = self.Contract.search([])[0]
+        self.assertEqual(len(contract.document_request_lines), 5)
+
+        document_desc_6 = self.DocumentDesc(name='Document 6', code='document6')
+        document_desc_6.save()
+
+        # we add a document with a description not requested
+        outer = self.DocumentRequestLine(for_object=str(contract),
+            document_desc=document_desc_6, data_status='waiting',
+            added_manually=False)
+        outer.save()
+        self.assertEqual(len(contract.document_request_lines), 6)
+        contract.init_subscription_document_request()
+
+        # the document is deleted
+        self.assertEqual(len(contract.document_request_lines), 5)
+
+        # we MANUALLY add a document with a description not requested
+        outer = self.DocumentRequestLine(for_object=str(contract),
+            document_desc=document_desc_6, data_status='waiting',
+            added_manually=True)
+        outer.save()
+
+        self.assertEqual(len(contract.document_request_lines), 6)
+        contract.init_subscription_document_request()
+
+        # the document is not deleted
         self.assertEqual(len(contract.document_request_lines), 6)
 
 

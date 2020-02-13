@@ -690,7 +690,8 @@ class ClaimBeneficiary(model.CoogSQL, model.CoogView,
                     for_object=self,
                     claim=self.service.claim,
                     blocking=True,
-                    data_status='done'
+                    data_status='done',
+                    added_manually=False
                     )
             new_line.on_change_document_desc()
             documents.append(new_line)

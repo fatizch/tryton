@@ -172,6 +172,7 @@ class Contract(RemindableInterface, metaclass=PoolMeta):
                 for k, v in rule_result_values.items():
                     setattr(line, k, v)
                 line.on_change_document_desc()
+                line.added_manually = False
                 to_save.append(line)
         if to_save:
             DocumentRequestLine.save(to_save)
@@ -188,6 +189,8 @@ class Contract(RemindableInterface, metaclass=PoolMeta):
         to_delete = []
         with Transaction().set_context(remove_document_desc_filter=True):
             for request in self.document_request_lines:
+                if request.added_manually is True:
+                    continue
                 rule_codes = rule_codes_by_for_object[request.for_object]
                 if request.document_desc.code not in rule_codes \
                         and not request.send_date and not \
