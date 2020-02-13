@@ -210,8 +210,6 @@ class APIContract(metaclass=PoolMeta):
                 'deferral_duration': {'required': ['deferral']},
                 },
             }
-        if mode == 'full':
-            schema['required'].append('lender_address')
         return schema
 
     @classmethod

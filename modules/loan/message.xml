@@ -48,5 +48,8 @@
         <record model="ir.message" id="msg_remaining_capital_per_mil_label">
             <field name="text">Remaining Capital Per Mil</field>
         </record>
+        <record model="ir.message" id="msg_loans_without_lender_address">
+            <field name="text">The lender address should be set on loans: %(loans)s</field>
+        </record>
     </data>
 </tryton>

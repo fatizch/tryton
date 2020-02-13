@@ -13,6 +13,8 @@ this repository contains the full copyright notices and license terms. -->
         <label name="lender_address"/>
         <field name="lender_address"/>
         <newline/>
+        <field name="lender_data_required" invisible="1"/>
+        <newline/>
         <label name="kind"/>
         <field name="kind"/>
         <label name="amount"/>

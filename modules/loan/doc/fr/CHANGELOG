@@ -1,3 +1,4 @@
+* OTH#00000 Retrait de la contrainte sur la présence de l'adresse de l'organisme prêteur sur la table des prêts
 * FEA#14566 Possibilité de calculer les primes à l'anniversaire du prêt (utile quand la date de déblocage des fonds du prêt n'est pas synchronisée avec la date d'effet du contrat)
 * OTH#0000 Clarification sur les traductions des prêts amortissables et du différé
 * FEA#14008 Inclure le montant total du prêt dans le calcul de l'encours quand le prêt n'est pas encore débloqué. Géré via une option dans le moteur de règle pour ne pas changer le comportement existant.

@@ -62,13 +62,22 @@ class Loan(Workflow, model.CoogSQL, model.CoogView, with_extra_data(['loan'])):
     number = fields.Char('Number', required=True, readonly=True, select=True)
     lender = fields.Function(
         fields.Many2One('party.party', 'Lender',
-        domain=[('is_lender', '=', True)], states=_STATES, depends=_DEPENDS),
+            domain=[('is_lender', '=', True)],
+            states={
+                'readonly': Bool(Eval('lender_data_required')),
+                'required': Bool(Eval('lender_data_required'))
+                },
+            depends=['contracts', 'lender_data_required']),
         'on_change_with_lender', setter='setter_void',
         searcher='search_lender')
     lender_address = fields.Many2One('party.address', 'Lender Address',
-        required=True, ondelete='RESTRICT',
-        domain=[('party', '=', Eval('lender'))], states=_STATES,
-        depends=['lender', 'state'])
+        ondelete='RESTRICT',
+        domain=[('party', '=', Eval('lender'))],
+        states={
+            'readonly': Bool(Eval('lender_data_required')),
+            'required': Bool(Eval('lender_data_required'))
+            },
+        depends=['lender', 'contracts', 'lender_data_required'])
     company = fields.Many2One('company.company', 'Company', required=True,
         select=True, ondelete='RESTRICT',
         domain=[
@@ -196,6 +205,17 @@ class Loan(Workflow, model.CoogSQL, model.CoogView, with_extra_data(['loan'])):
         'on_change_with_display_warning')
     last_modification = fields.Function(fields.DateTime('Last Modification'),
         'get_last_modification')
+    lender_data_required = fields.Function(
+        fields.Boolean('Lender Data Required'),
+        'on_change_with_lender_data_required')
+
+    @classmethod
+    def __register__(cls, module_name):
+        # Migration from 2.6 Remove not null constraint on lender_address
+        super(Loan, cls).__register__(module_name)
+        TableHandler = backend.get('TableHandler')
+        loan_h = TableHandler(cls, module_name)
+        loan_h.not_null_action('lender_address', action='remove')
 
     @classmethod
     def __setup__(cls):
@@ -873,6 +893,11 @@ class Loan(Workflow, model.CoogSQL, model.CoogView, with_extra_data(['loan'])):
     def on_change_with_lender(self, name=None):
         if self.lender_address:
             return self.lender_address.party.id
+
+    @fields.depends('contracts')
+    def on_change_with_lender_data_required(self, name=None):
+        return bool(any(
+            [x.status not in ('void', 'quote') for x in self.contracts]))
 
     @fields.depends('lender')
     def on_change_with_lender_address(self, name=None):

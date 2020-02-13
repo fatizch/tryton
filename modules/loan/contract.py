@@ -207,6 +207,25 @@ class Contract(metaclass=PoolMeta):
                 True, at_date, lang))
         return res
 
+    def before_activate(self):
+        super(Contract, self).before_activate()
+        self.check_loans_for_activation()
+
+    def check_loans_for_activation(self):
+        loans = self.loans
+        if not loans:
+            return
+        self.check_loans_lender_address(loans)
+
+    def check_loans_lender_address(self, loans):
+        missing_lender = [x for x in self.loans
+            if not x.lender_address]
+        if missing_lender:
+            self.append_functional_error(
+                ValidationError(gettext(
+                        'loan.msg_loans_without_lender_address',
+                        loans=', '.join([x.rec_name for x in missing_lender]))))
+
 
 class ContractLoan(model.CoogSQL, model.CoogView):
     'Contract Loan'

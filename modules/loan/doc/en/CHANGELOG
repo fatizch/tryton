@@ -1,3 +1,4 @@
+* OTH#00000 Remove required constraint on lender address in loan table
 * FEA#14566 Allow to calculate premium at loan anniversary date
 * FEA#14008 Include future loans in outstanding amount
 * OTH#00000 Update prices after loan underwriting
