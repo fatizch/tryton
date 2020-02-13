@@ -99,6 +99,6 @@ class CoverageAmountRule(
 
     def get_rule_documentation_structure(self):
         return [
-            coog_string.doc_for_field(self, 'free_input'),
+            coog_string.doc_for_field(self, 'amount_mode'),
             self.get_rule_rule_engine_documentation_structure()
             ]
