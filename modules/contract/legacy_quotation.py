@@ -1,4 +1,5 @@
 import copy
+import datetime
 from uuid import uuid4
 from decimal import Decimal
 from collections import namedtuple, defaultdict
@@ -7,6 +8,7 @@ from trytond.i18n import gettext
 
 from trytond.pool import Pool
 from trytond.modules.api import APIError
+from trytond.modules.coog_core import utils
 
 # TODO: get insured capital at each invoice start
 
@@ -179,6 +181,9 @@ class LegacyQuotation(object):
 
         Product = pool.get('offered.product')
         product = Product(legacy_input['product'])
+        today_str = datetime.datetime.strftime(utils.today(), '%Y-%m-%d')
+        legacy_date = legacy_input.get('date', today_str)
+        legacy_signature_date = today_str
         self.product = product
         if action == 'quotation' and product.subscriber_kind == 'company':
             ref = str(len(sim_parties))
@@ -202,6 +207,8 @@ class LegacyQuotation(object):
                         'covereds': [sim_party_coverage],
                         'extra_data': legacy_input['extra'],
                         'billing': self.get_billing_data(i, action),
+                        'start': legacy_date,
+                        'signature_date': legacy_signature_date,
                         }
                 contracts.append(contract)
         else:
@@ -216,6 +223,8 @@ class LegacyQuotation(object):
                     'covereds': sim_party_coverages,
                     'extra_data': legacy_input['extra'],
                     'billing': self.get_billing_data(0, action),
+                    'start': legacy_date,
+                    'signature_date': legacy_signature_date,
                     }]
         if self.action == 'subscription':
             for contract in contracts:

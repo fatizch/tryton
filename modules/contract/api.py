@@ -591,6 +591,7 @@ class APIContract(APIMixin):
                 'subscriber': PARTY_RELATION_SCHEMA,
                 'product': CODED_OBJECT_SCHEMA,
                 'start': DATE_SCHEMA,
+                'signature_date': DATE_SCHEMA,
                 'extra_data': EXTRA_DATA_VALUES_SCHEMA,
                 'coverages': {
                     'type': 'array',
