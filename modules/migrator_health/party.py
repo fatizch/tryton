@@ -22,10 +22,10 @@ class MigratorParty(metaclass=PoolMeta):
         cls.columns.update({'hc_system': 'hc_system',
             'insurance_fund_number': 'insurance_fund_number'})
         cls.error_messages.update({
-            'inexistent_insurance_fund_num': 'The insurance fund number %s'
-            ' is inexistent in the data base',
-            'inexistent_hc_system': 'The health care system %s'
-            ' is inexistent in the data base',
+            'not_found_insurance_fund_number': 'The insurance fund number %s'
+            ' is not in the database',
+            'not_found_hc_system': 'The health care system %s'
+            ' is not found in the database',
             })
 
     @classmethod
@@ -39,7 +39,7 @@ class MigratorParty(metaclass=PoolMeta):
         insurance_fund = [r['insurance_fund_number'] for r in rows
         if r.get('insurance_fund_number')]
         if insurance_fund:
-            cls.cache_obj['health_care_system_number'] =\
+            cls.cache_obj['health_insurance_fund'] =\
                 tools.cache_from_search('health.insurance_fund',
                     'code', ('code', 'in', insurance_fund))
 
@@ -91,19 +91,21 @@ class MigratorParty(metaclass=PoolMeta):
         HealthPartyComplement = pool.get('health.party_complement')
         health_complement_create = {}
         party_rows = list(rows)
+        cls.cache_obj['party'] = tools.cache_from_query('party_party',
+            ('code', ), ('code', [r['code'] for r in party_rows]))
         for party_row in party_rows:
             if party_row['hc_system'] and party_row['insurance_fund_number']:
                 if party_row['hc_system'] in cls.cache_obj['h_care_system']:
                     if (party_row['insurance_fund_number']
-                            in cls.cache_obj['health_care_system_number']):
+                            in cls.cache_obj['health_insurance_fund']):
                         cls.resolve_key(party_row, 'hc_system', 'h_care_system')
                         cls.resolve_key(party_row, 'insurance_fund_number',
-                        'health_care_system_number')
-                        cls.cache_obj['party'] = tools.cache_from_query(
-                            'party_party', ('code', ),
-                            ('code', [r['code'] for r in rows]))
-                        party, = Party.search([('code', '=',
-                            party_row['code'])])
+                            'health_insurance_fund')
+
+                        code = party_row['code']
+                        party = None
+                        if code in cls.cache_obj['party']:
+                            party = Party(cls.cache_obj['party'][code])
                         # create health complement for first time
                         if party and not party.health_complement:
                             health_complement_create[party_row['code']] = {
@@ -115,7 +117,7 @@ class MigratorParty(metaclass=PoolMeta):
                             }
                         # Check existing health_complement and update it
                         # if necessary or create a new one
-                        else:
+                        elif party:
                             to_create_health_complement =\
                                 cls.check_existing_health_complement(party_row,
                                     party)
@@ -128,13 +130,17 @@ class MigratorParty(metaclass=PoolMeta):
                                         'code']],
                                     'date': utils.today(),
                                 }
+                        else:
+                            cls.logger.error(cls.error_message(
+                                'inexistent_party') %
+                                (party_row['code'], party_row['code']))
                     else:
                         cls.logger.error(cls.error_message(
-                            'inexistent_insurance_fund_num') %
+                            'not_found_insurance_fund_number') %
                             (party_row['code'],
                                 party_row['insurance_fund_number']))
                 else:
-                    cls.logger.error(cls.error_message('inexistent_hc_system') %
+                    cls.logger.error(cls.error_message('not_found_hc_system') %
                         (party_row['code'], party_row['hc_system']))
         if health_complement_create:
             HealthPartyComplement.create(

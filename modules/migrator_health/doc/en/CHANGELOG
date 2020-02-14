@@ -1,2 +1,4 @@
+* FEA#13910 Updating the migrator of health party in order to improve batch performance
+
 Version 2.6 - 2019-10-11
 * FEA#0000 Module creation
