@@ -1,3 +1,4 @@
+* OTH#0000 Add overridable method for process log creation
 * FEA#12761 Allow to automaticaly activate a contrat once the required document signature confirmation is sent to Coog
 
 Version 2.6 - 2019-10-11

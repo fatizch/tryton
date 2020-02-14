@@ -284,6 +284,17 @@ class ProcessLog(model.CoogSQL, model.CoogView):
     def get_rec_name(self, name):
         return self.task.get_rec_name(name) if self.task else ''
 
+    @classmethod
+    def new_log(cls, from_instance, init_log=None):
+        log = cls()
+        log.user = Transaction().user
+        log.task = from_instance
+        log.from_state = from_instance.current_state
+        log.start_time = datetime.datetime.now()
+        log.process_start = init_log.process_start if init_log \
+            else datetime.datetime.now()
+        return log
+
 
 class CoogProcessFramework(QueueMixin, ProcessFramework, model.CoogSQL,
             model.CoogView):
@@ -448,16 +459,11 @@ class CoogProcessFramework(QueueMixin, ProcessFramework, model.CoogSQL,
     def update_logs(self, init_log=None):
         pool = Pool()
         Log = pool.get('process.log')
-        User = pool.get('res.user')
         if init_log is None:
             init_log = self.current_log
         if init_log is None:
             if self.current_state:
-                return [Log(user=Transaction().user, task=str(self),
-                        start_time=datetime.datetime.now(),
-                        process_start=datetime.datetime.now(),
-                        from_state=self.current_state.id,
-                        )]
+                return [Log.new_log(self)]
             return []
         if self.current_state == init_log.from_state:
             return []
@@ -470,9 +476,7 @@ class CoogProcessFramework(QueueMixin, ProcessFramework, model.CoogSQL,
         if not self.current_state:
             return [init_log]
 
-        self.current_log = Log(user=User(Transaction().user), task=self,
-            process_start=init_log.process_start,
-            start_time=datetime.datetime.now(), from_state=self.current_state)
+        self.current_log = Log.new_log(self, init_log)
         return [init_log, self.current_log]
 
     def get_next_execution(self):
@@ -1473,13 +1477,7 @@ class ProcessResume(Wizard):
             active_log.end_time = datetime.datetime.now()
             active_log.to_state = active_log.from_state
             active_log.save()
-        new_log = Log()
-        new_log.user = Transaction().user
-        new_log.task = instance
-        new_log.from_state = instance.current_state
-        new_log.start_time = datetime.datetime.now()
-        new_log.process_start = active_log.process_start if active_log \
-            else datetime.datetime.now()
+        new_log = Log.new_log(instance, active_log)
         new_log.save()
 
         process = instance.current_state.process
