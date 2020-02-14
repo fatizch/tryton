@@ -1,3 +1,4 @@
+* FEA#14576 Ajout d'un champ pour identifier des contrats avec des prêts en communs
 * OTH#00000 Retrait de la contrainte sur la présence de l'adresse de l'organisme prêteur sur la table des prêts
 * FEA#14566 Possibilité de calculer les primes à l'anniversaire du prêt (utile quand la date de déblocage des fonds du prêt n'est pas synchronisée avec la date d'effet du contrat)
 * OTH#0000 Clarification sur les traductions des prêts amortissables et du différé

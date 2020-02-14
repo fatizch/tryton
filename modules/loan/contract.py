@@ -74,6 +74,17 @@ class Contract(metaclass=PoolMeta):
         fields.Many2Many('loan.share', None, None, 'Shares per Loan',
             context={'contract': Eval('id')}),
         'get_shares_per_loan')
+    linked_loan_contracts = fields.Function(
+        fields.Many2Many('contract', None,
+            None, 'Contracts With Shared Loan',
+            states={'invisible': ~Eval('linked_loan_contracts')},
+            help='Contains the list of contracts '
+            'which share at least one loan with this contract'),
+        'getter_linked_loan_contracts')
+    co_borrowers = fields.Function(
+        fields.Many2Many('party.party', None, None, 'Co-borrowers',
+            states={'invisible': ~Eval('co_borrowers')}),
+        'getter_co_borrowers')
 
     @classmethod
     def __setup__(cls):
@@ -134,6 +145,36 @@ class Contract(metaclass=PoolMeta):
         return [share.id
             for loan in sorted(per_loan.keys(), key=lambda x: orders[x.id])
             for share in per_loan[loan]]
+
+    def getter_co_borrowers(self, name):
+        insured_persons_in_contract = {loan_insured_persons.id
+            for loan in self.loans
+            for loan_insured_persons in loan.insured_persons}
+        return sorted(list({covered_element.party.id
+                for contract in self.linked_loan_contracts
+                for covered_element in contract.covered_elements
+                if covered_element.party.id not in
+                insured_persons_in_contract}))
+
+    @classmethod
+    def getter_linked_loan_contracts(cls, contracts, name):
+        res = {contract.id: set() for contract in contracts}
+        ContractLoan = Pool().get('contract-loan')
+        contract_loan = ContractLoan.__table__()
+        other_contract_loan = ContractLoan.__table__()
+        cursor = Transaction().connection.cursor()
+
+        query = contract_loan.join(other_contract_loan,
+            condition=((other_contract_loan.contract != contract_loan.contract)
+                & (other_contract_loan.loan == contract_loan.loan)
+                & (contract_loan.contract.in_(
+                    [contract.id for contract in contracts]))))
+        cursor.execute(*query.select(contract_loan.contract,
+            other_contract_loan.contract))
+
+        for source_contract, linked_contract in cursor.fetchall():
+            res[source_contract].add(linked_contract)
+        return {k: sorted(list(v)) for k, v in res.items()}
 
     @classmethod
     def setter_void(cls, objects, name, values):
@@ -225,6 +266,12 @@ class Contract(metaclass=PoolMeta):
                 ValidationError(gettext(
                         'loan.msg_loans_without_lender_address',
                         loans=', '.join([x.rec_name for x in missing_lender]))))
+
+    @classmethod
+    def view_attributes(cls):
+        return super(Contract, cls).view_attributes() + [
+            ('/form/notebook/page[@id="loan"]', 'states',
+                {'invisible': ~Bool(Eval('is_loan', False))})]
 
 
 class ContractLoan(model.CoogSQL, model.CoogView):

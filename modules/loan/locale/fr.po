@@ -2,9 +2,17 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "field:contract,co_borrowers:"
+msgid "Co-borrowers"
+msgstr "Co-emprunteurs"
+
 msgctxt "field:contract,is_loan:"
 msgid "Is Loan"
 msgstr "Emprunteur"
+
+msgctxt "field:contract,linked_loan_contracts:"
+msgid "Contracts With Shared Loan"
+msgstr "Contrat(s) des co-emprunteurs"
 
 msgctxt "field:contract,loans:"
 msgid "Loans"
@@ -728,6 +736,13 @@ msgctxt "field:party.synthesis.menu.loan,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "help:contract,linked_loan_contracts:"
+msgid ""
+"Contains the list of contracts which share at least one loan with this one"
+msgstr ""
+"Contient une liste de contrats qui partagent au moins un prêt avec ce "
+"contrat"
+
 msgctxt "help:loan,duration:"
 msgid "Deferral included"
 msgstr "Différé inclus"
@@ -948,12 +963,12 @@ msgid "Loan"
 msgstr "Prêt"
 
 msgctxt "selection:loan,deferral:"
-msgid "None"
-msgstr "Aucun"
-
-msgctxt "selection:loan,deferral:"
 msgid "Fully deferred"
 msgstr "Différé Total"
+
+msgctxt "selection:loan,deferral:"
+msgid "None"
+msgstr "Aucun"
 
 msgctxt "selection:loan,deferral:"
 msgid "Partially Deferred"
@@ -1016,12 +1031,12 @@ msgid "Draft"
 msgstr "Brouillon"
 
 msgctxt "selection:loan.increment,deferral:"
-msgid "None"
-msgstr "Aucun"
-
-msgctxt "selection:loan.increment,deferral:"
 msgid "Fully deferred"
 msgstr "Différé Total"
+
+msgctxt "selection:loan.increment,deferral:"
+msgid "None"
+msgstr "Aucun"
 
 msgctxt "selection:loan.increment,deferral:"
 msgid "Partially Deferred"
@@ -1104,8 +1119,8 @@ msgid "Create Loan"
 msgstr "Créer un prêt"
 
 msgctxt "view:contract:"
-msgid "Loans"
-msgstr "Prêts"
+msgid "Loan"
+msgstr "Prêt"
 
 msgctxt "view:insurer:"
 msgid "Insurers"
