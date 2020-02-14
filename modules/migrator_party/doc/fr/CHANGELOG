@@ -1,3 +1,4 @@
+* FEA#14874 Importer la date de décès dans le migrator party
 * FEA#14327 Gestion de l'option de suppression dans migrator.party.relation
 * FEA#14001 Réfactorisation de la méthode migrate du migrator des addresses
 * BUG#14049 Réfactorisation de la méthode run_query de migrator address

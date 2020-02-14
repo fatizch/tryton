@@ -1,3 +1,4 @@
+* FEA#14874 Import death date in party migrator
 * FEA#14327 Handle delete option in party relation migrator
 * FEA#14001 Refactoring of migrate method in address migrator
 * BUG#14049 Refactoring of run query method in migrator address

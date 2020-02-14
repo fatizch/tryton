@@ -39,7 +39,7 @@ class MigratorParty(migrator.Migrator):
                 })
         cls.columns = {k: k for k in ('code', 'name', 'first_name',
                 'birth_name', 'gender', 'birth_date', 'extra_data',
-                'identifiers')}
+                'identifiers', 'death_date')}
 
     @classmethod
     def init_update_cache(cls, rows):
