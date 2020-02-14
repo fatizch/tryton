@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <record model="rule_engine.function" id="detail_contract">
+            <field name="translated_technical_name">detail_contrat</field>
+            <field name="description">Détail contrat</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_contract_extra_detail</field>
+            <field name="long_description">Permet d'accéder aux détails calculés sur le contrat</field>
+            <field name="fct_args">Identifiant du detail, date</field>
+            <field name="parent" ref="contract.te_contract"/>
+        </record>
+    </data>
+</tryton>

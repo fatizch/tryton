@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- ###################### -->
+        <!-- # Method Definitions # -->
+        <!-- ###################### -->
+        <record model="ir.model.method" id="update_extra_details_after_endorsement_method">
+            <field name="method_name">update_extra_details_after_endorsement</field>
+            <field name="name">Compute endorsement details</field>
+            <field name="model" search="[('model', '=', 'contract')]"/>
+            <field name="priority">350</field>
+        </record>
+    </data>
+</tryton>

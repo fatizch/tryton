@@ -1,0 +1,87 @@
+#
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:contract,current_extra_details:"
+msgid "Current Details"
+msgstr "Détails actuels"
+
+msgctxt "field:contract.extra_data,extra_details:"
+msgid "Extra Details"
+msgstr "Détails Complémentaires"
+
+msgctxt "field:contract.extra_data,extra_summary:"
+msgid "Extra Summary"
+msgstr "Résumé Complémentaire"
+
+msgctxt "field:offered.product,extra_details_rule:"
+msgid "Extra Details Rule"
+msgstr "Règle de Détails"
+
+msgctxt "field:offered.product.extra_details_rule,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:offered.product.extra_details_rule,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:offered.product.extra_details_rule,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:offered.product.extra_details_rule,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:offered.product.extra_details_rule,product:"
+msgid "Product"
+msgstr "Produit"
+
+msgctxt "field:offered.product.extra_details_rule,rec_name:"
+msgid "Record Name"
+msgstr "Nom de l'enregistrement"
+
+msgctxt "field:offered.product.extra_details_rule,rule:"
+msgid "Rule Engine"
+msgstr "Moteur de Règle"
+
+msgctxt "field:offered.product.extra_details_rule,rule_extra_data:"
+msgid "Rule Extra Data"
+msgstr "Paramètres de règle"
+
+msgctxt "field:offered.product.extra_details_rule,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:offered.product.extra_details_rule,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:offered.product.extra_details_rule,xml_id:"
+msgid "XML Id"
+msgstr "XML Id"
+
+msgctxt "help:offered.product,extra_details_rule:"
+msgid "Rule used to update extra details"
+msgstr "Règle utilisée pour mettre à jour les détails"
+
+msgctxt "help:offered.product.extra_details_rule,rule:"
+msgid ""
+"When contract recalculation is triggered, this rule will be called, and its "
+"result (a dict) will be set on the contract extra details"
+msgstr ""
+"Lors du recalcul du contrat, cette règle sera appelée et son résultat (un "
+"dictionnaire) sera renseigné comme \"Détails du Contrat\"."
+
+msgctxt "model:offered.product.extra_details_rule,name:"
+msgid "Product Extra Details"
+msgstr "Détails du Produit"
+
+msgctxt "selection:rule_engine,type_:"
+msgid "Contract Extra Detail"
+msgstr "Détails du Contrat"
+
+msgctxt "view:offered.product:"
+msgid "Extra Details Rule"
+msgstr "Règle de Détails"
