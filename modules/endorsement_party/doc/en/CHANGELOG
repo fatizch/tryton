@@ -1,3 +1,4 @@
+* BUG#14884 block validation if death date is not set in Change death date endorsement
 * BUG#13561 Hide party_id in address endorsement process
 * BUG#13825 Allow to display only party endorsement when starting an endorsement on a party
 * BUG#13904 Read error on json export of an endorsement deleting a relation

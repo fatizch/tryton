@@ -1,3 +1,4 @@
+* BUG#14884 bloquer la validation si la date de décès n'est pas définie dans l'avenant 'Changer date de décès'
 * BUG#13561 Correction de l'affichage du champ party_id dans l'avenant changement d'addresse
 * BUG#13825 Permettre à afficher uniquement les avenants de tiers lors de lancement d'un nouvel avenant sur le tiers
 * BUG#13904 Erreur de lecture lors de l'export d'avenant supprimant une relation

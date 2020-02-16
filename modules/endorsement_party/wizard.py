@@ -345,7 +345,8 @@ class ChangePartyDeathDate(EndorsementWizardStepMixin):
     current_death_date = fields.Date('Current Death Date', readonly=True,
         states={'invisible': ~Bool(Eval('current_death_date'))})
     death_date = fields.Date('Death Date', domain=['OR',
-        [('death_date', '=', None)], [('death_date', '<=', Date())]])
+        [('death_date', '=', None)], [('death_date', '<=', Date())]],
+            required=True)
 
     @classmethod
     def is_multi_instance(cls):
@@ -371,10 +372,8 @@ class ChangePartyDeathDate(EndorsementWizardStepMixin):
         party = Party(list(parties.keys())[0])
         party_endorsement = list(parties.values())[0]
         values = party_endorsement.values
-        if 'death_date' in values:
-            defaults['death_date'] = values['death_date']
-        else:
-            defaults['death_date'] = party.death_date
+        defaults['death_date'] = values.get('death_date') or party.death_date \
+            or self.effective_date
         defaults['current_death_date'] = party.death_date
         return defaults
 
