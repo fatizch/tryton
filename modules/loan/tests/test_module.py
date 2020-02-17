@@ -79,6 +79,43 @@ class ModuleTestCase(test_framework.CoogTestCase):
         address.save()
         self.Sequence(name='Loan', code='loan', company=company).save()
 
+    def test0011_create_extra_data(self):
+        extra_data_ok_1 = self.ExtraData(kind='loan', type_='integer',
+            string='Loan Extra Data OK', name='loan_extra_data_ok_1')
+        extra_data_ok_1.save()
+        extra_data_ok_2 = self.ExtraData(kind='loan', type_='char',
+            string='Loan Extra Data OK', name='loan_extra_data_ok_2')
+        extra_data_ok_2.save()
+        extra_data_ok_3 = self.ExtraData(kind='loan', type_='selection',
+            string='Loan Extra Data OK', name='loan_extra_data_ok_3',
+            selection='''1000: 1000
+                         2000: 2000
+                         5000: 5000''')
+        extra_data_ok_3.save()
+        extra_data_ok_4 = self.ExtraData(kind='loan', type_='numeric',
+            string='Loan Extra Data OK', name='loan_extra_data_ok_4')
+        extra_data_ok_4.save()
+
+        extra_data_wrong_kind = self.ExtraData(kind='contract',
+            name='loan_extra_data_wrong_kind',
+            string='Loan Extra Data Wrong Kind', type_='integer')
+        extra_data_wrong_kind.save()
+        extra_data_wrong_type_char = self.ExtraData(kind='loan',
+            name='loan_extra_data_wrong_type_char',
+            string='Loan Extra Data Wrong Type Char', type_='char')
+        extra_data_wrong_type_char.save()
+        extra_data_wrong_type_numeric = self.ExtraData(kind='loan',
+            name='loan_extra_data_wrong_type_numeric',
+            string='Loan Extra Data Wrong Type Numeric', type_='numeric')
+        extra_data_wrong_type_numeric.save()
+        extra_data_wrong_selection = self.ExtraData(kind='loan',
+            name='loan_extra_data_wrong_selection',
+            string='Loan Extra Data Wrong Selection', type_='selection',
+            selection='''1000: 1000
+                         2000: 2000
+                         5000: 5000''')
+        extra_data_wrong_selection.save()
+
     def assert_payment(self, loan, at_date, number=None,
             begin_balance=None, amount=None, principal=None, interest=None,
             outstanding_balance=None):
@@ -913,6 +950,194 @@ class ModuleTestCase(test_framework.CoogTestCase):
                 self.ContractAPI.compute_loan(example['input'],
                     {'_debug_server': True}),
                 example['output'])
+
+    @test_framework.prepare_test(
+        'loan.test0011_create_extra_data',
+        'company_cog.test0001_testCompanyCreation',
+        )
+    def test0095_compute_loan_api_extra_data(self):
+        # Created different cases to test loan extra data in api:
+        # loan 1-4 KO
+        # loan 5-8 OK
+        ContractAPI = Pool().get('api.contract')
+        data_dict = {
+            'loan': {
+                'ref': '1',
+                'amount': '100000.00',
+                'kind': 'fixed_rate',
+                'rate': '0.04',
+                'funds_release_date': '2020-01-01',
+                'duration': 10,
+                'currency': 'EUR',
+                'extra_data': {
+                    'loan_extra_data_wrong_kind': 1,
+                    },
+                },
+            }
+        try:
+            ContractAPI._create_loan_convert_input(data_dict['loan'])
+        except trytond.modules.api.api.core.APIInputError as error_message:
+            self.assertEqual(error_message.data,
+                [{
+                    'type': 'extra_data_business_kind',
+                    'data': {
+                        'extra_data': 'loan_extra_data_wrong_kind',
+                        'expected_business_kinds': ['loan'],
+                        },
+                }])
+
+        data_dict = {
+            'loan': {
+                'ref': '2',
+                'amount': '100000.00',
+                'kind': 'fixed_rate',
+                'rate': '0.04',
+                'funds_release_date': '2020-01-01',
+                'duration': 10,
+                'currency': 'EUR',
+                'extra_data': {
+                    'loan_extra_data_wrong_type_char': 1,
+                    },
+                },
+            }
+        try:
+            ContractAPI._create_loan_convert_input(data_dict['loan'])
+        except trytond.modules.api.api.core.APIInputError as error_message:
+            self.assertEqual(error_message.data,
+                [{
+                    'type': 'extra_data_type',
+                    'data': {
+                        'extra_data': 'loan_extra_data_wrong_type_char',
+                        'expected_type': 'string',
+                        'given_type': "<class 'int'>",
+                        },
+                }])
+
+        data_dict = {
+            'loan': {
+                'ref': '3',
+                'amount': '100000.00',
+                'kind': 'fixed_rate',
+                'rate': '0.04',
+                'funds_release_date': '2020-01-01',
+                'duration': 10,
+                'currency': 'EUR',
+                'extra_data': {
+                    'loan_extra_data_wrong_type_numeric': '1111.1111',
+                    },
+                },
+            }
+        try:
+            ContractAPI._create_loan_convert_input(data_dict['loan'])
+        except trytond.modules.api.api.core.APIInputError as error_message:
+            self.assertEqual(error_message.data,
+                [{
+                    'type': 'extra_data_conversion',
+                    'data': {
+                        'extra_data': 'loan_extra_data_wrong_type_numeric',
+                        'expected_format': '1111.11',
+                        'given_value': '1111.1111',
+                        },
+                }])
+
+        data_dict = {
+            'loan': {
+                'ref': '4',
+                'amount': '100000.00',
+                'kind': 'fixed_rate',
+                'rate': '0.04',
+                'funds_release_date': '2020-01-01',
+                'duration': 10,
+                'currency': 'EUR',
+                'extra_data': {
+                    'loan_extra_data_wrong_selection': '100',
+                    },
+                },
+            }
+        try:
+            ContractAPI._create_loan_convert_input(data_dict['loan'])
+        except trytond.modules.api.api.core.APIInputError as error_message:
+            self.assertEqual(error_message.data,
+                [{
+                    'type': 'extra_data_conversion',
+                    'data': {
+                        'extra_data': 'loan_extra_data_wrong_selection',
+                        'expected_format': ['1000', '2000', '5000'],
+                        'given_value': '100',
+                        },
+                }])
+
+        data_dict = {
+            'loan': {
+                'ref': '5',
+                'amount': '100000.00',
+                'kind': 'fixed_rate',
+                'rate': '0.04',
+                'funds_release_date': '2020-01-01',
+                'duration': 10,
+                'currency': 'EUR',
+                'extra_data': {
+                    'loan_extra_data_ok_1': 1,
+                    },
+                },
+            }
+        self.assertEqual(ContractAPI._create_loan_convert_input(
+            data_dict['loan'])['extra_data'],
+            {'loan_extra_data_ok_1': 1})
+
+        data_dict = {
+            'loan': {
+                'ref': '6',
+                'amount': '100000.00',
+                'kind': 'fixed_rate',
+                'rate': '0.04',
+                'funds_release_date': '2020-01-01',
+                'duration': 10,
+                'currency': 'EUR',
+                'extra_data': {
+                    'loan_extra_data_ok_2': 'test_extra_data',
+                    },
+                },
+            }
+        self.assertEqual(ContractAPI._create_loan_convert_input(
+            data_dict['loan'])['extra_data'],
+            {'loan_extra_data_ok_2': 'test_extra_data'})
+
+        data_dict = {
+            'loan': {
+                'ref': '7',
+                'amount': '100000.00',
+                'kind': 'fixed_rate',
+                'rate': '0.04',
+                'funds_release_date': '2020-01-01',
+                'duration': 10,
+                'currency': 'EUR',
+                'extra_data': {
+                    'loan_extra_data_ok_3': '1000',
+                    },
+                },
+            }
+        self.assertEqual(ContractAPI._create_loan_convert_input(
+            data_dict['loan'])['extra_data'],
+            {'loan_extra_data_ok_3': '1000'})
+
+        data_dict = {
+            'loan': {
+                'ref': '8',
+                'amount': '100000.00',
+                'kind': 'fixed_rate',
+                'rate': '0.04',
+                'funds_release_date': '2020-01-01',
+                'duration': 10,
+                'currency': 'EUR',
+                'extra_data': {
+                    'loan_extra_data_ok_4': '1111.11',
+                    },
+                },
+            }
+        self.assertEqual(ContractAPI._create_loan_convert_input(
+            data_dict['loan'])['extra_data'],
+            {'loan_extra_data_ok_4': Decimal('1111.11')})
 
     @test_framework.prepare_test(
         'offered_insurance.test0010Coverage_creation',

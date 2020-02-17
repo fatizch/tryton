@@ -12,6 +12,7 @@ from trytond.modules.api.api.core import DATE_SCHEMA, POSITIVE_AMOUNT_SCHEMA
 from trytond.modules.api.api.core import RATE_SCHEMA
 from trytond.modules.coog_core.api import FIELD_SCHEMA, OBJECT_ID_SCHEMA
 from trytond.modules.coog_core.api import REF_ID_SCHEMA
+from trytond.modules.offered.api import EXTRA_DATA_VALUES_SCHEMA
 
 
 __all__ = [
@@ -127,6 +128,7 @@ class APIContract(metaclass=PoolMeta):
         loan.duration_unit = parameters.get('duration_unit', None)
         loan.currency = parameters.get('currency', None)
         loan.increments = parameters.get('increments', [])
+        loan.extra_data = parameters.get('extra_data', None)
 
         loan.deferral = parameters.get('deferral', '')
         loan.deferral_duration = parameters.get('deferral_duration', None)
@@ -204,6 +206,7 @@ class APIContract(metaclass=PoolMeta):
                 'deferral_duration': {'type': 'integer', 'minimum': 0},
                 'deferral': {'type': 'string', 'enum': ['partially', 'fully']},
                 'lender_address': {'type': 'integer'},
+                'extra_data': EXTRA_DATA_VALUES_SCHEMA,
                 },
             'required': ['ref', 'kind', 'amount', 'duration'],
             'dependencies': {
@@ -329,6 +332,7 @@ class APIContract(metaclass=PoolMeta):
     @classmethod
     def _create_loan_convert_input(cls, loan_data):
         API = Pool().get('api')
+        Core = Pool().get('api.core')
         loan_data['amount'] = amount_from_api(loan_data['amount'])
         if 'funds_release_date' in loan_data:
             loan_data['funds_release_date'] = date_from_api(
@@ -357,6 +361,10 @@ class APIContract(metaclass=PoolMeta):
         if loan_data.get('lender_address', None):
             loan_data['lender_address'] = API.instantiate_code_object(
                 'party.address', {'id': loan_data['lender_address']})
+
+        if 'extra_data' in loan_data:
+            loan_data['extra_data'] = Core._extra_data_convert(
+                loan_data.get('extra_data', {}), ['loan'])
         return loan_data
 
     @classmethod

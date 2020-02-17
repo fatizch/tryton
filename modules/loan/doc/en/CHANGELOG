@@ -1,3 +1,4 @@
+* FEA#14707 Allow to set extra data and access to it by using APIs
 * FEA#14576 Add a field to identify shared loan contract
 * OTH#00000 Remove required constraint on lender address in loan table
 * FEA#14566 Allow to calculate premium at loan anniversary date
