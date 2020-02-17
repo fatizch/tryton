@@ -212,8 +212,14 @@ class SimulateCommissionsParameters(model.CoogView,
             invoice_line.invoice = invoice
             invoice_line.product = None
             invoice_line.amount = invoice_line.get_amount(None)
-            invoice_line.principal = contract.find_insurer_agent(
-                line=invoice_line)
+            details = getattr(invoice_line, 'details', [])
+            if (invoice_line.coverage_start and details
+                    and details[0].rated_entity
+                    and details[0].rated_entity.__name__ ==
+                    'offered.option.description'):
+                invoice_line.principal = contract.find_insurer_agent(
+                    details[0].rated_entity,
+                    invoice_line.coverage_start)
             if not invoice_line.principal:
                 continue
             for commission in invoice_line.get_commissions():

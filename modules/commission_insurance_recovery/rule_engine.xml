@@ -12,7 +12,7 @@ this repository contains the full copyright notices and license terms. -->
             <field name="name">re_commission_sum_for_option</field>
             <field name="long_description">Retourne la somme des commissions 
 générée pour une option qui ne sont pas des reprises</field>
-            <field name="parent" ref="commission_insurance_rule_engine.dossier_commission"/>
+            <field name="parent" ref="commission_insurance.dossier_commission"/>
         </record>
         <record model="rule_engine.function" id="paid_invoice_end_date">
             <field name="translated_technical_name">date_derniere_quittance_payee</field>
@@ -22,7 +22,7 @@ générée pour une option qui ne sont pas des reprises</field>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">re_last_paid_invoice_end_date</field>
             <field name="long_description">Retourne la date de la dernière quittance payée pour le contrat</field>
-            <field name="parent" ref="commission_insurance_rule_engine.dossier_commission"/>
+            <field name="parent" ref="commission_insurance.dossier_commission"/>
         </record>
         <record model="rule_engine.function" id="recovery_for_yearly_prepayment">
             <field name="translated_technical_name">montant_reprise_sur_n_mois</field>
@@ -36,7 +36,7 @@ générée pour une option qui ne sont pas des reprises</field>
 d'un précompte annuel proratisé à une date selon un nombre de mois. Cette 
 donnée prend la date à laquelle calculer la reprise et le nombre de mois de 
 reprise (ex: 24 dans le cas d'une reprise de précompte sur 24 mois)</field>
-            <field name="parent" ref="commission_insurance_rule_engine.dossier_commission"/>
+            <field name="parent" ref="commission_insurance.dossier_commission"/>
         </record>
     </data>
 </tryton>

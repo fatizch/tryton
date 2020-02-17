@@ -210,6 +210,7 @@ class APIContract(APIMixin):
         contract.subscriber = contract_data['subscriber']
         contract.signature_date = contract_data['signature_date']
         contract.start_date = contract_data['start']
+        contract.initial_start_date = contract.start_date
         contract.appliable_conditions_date = contract_data['conditions_date']
 
         contract.extra_datas = [
@@ -235,6 +236,7 @@ class APIContract(APIMixin):
         option.versions = [
             {'date': None, 'extra_data': option_data['extra_data']},
             ]
+        option.initial_start_date = contract.initial_start_date
         return option
 
     @classmethod

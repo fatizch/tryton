@@ -597,7 +597,8 @@ class ContractOption(metaclass=PoolMeta):
         if self.parent_contract.agent:
             used.append((self.parent_contract.agent,
                 self.parent_contract.agent.plan))
-        insurer = self.parent_contract.find_insurer_agent(option=self)
+        insurer = self.parent_contract.find_insurer_agent(self.coverage,
+            self.start_date)
         if insurer:
             used.append((insurer, insurer.plan))
         return used

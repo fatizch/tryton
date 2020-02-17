@@ -13,6 +13,27 @@ this repository contains the full copyright notices and license terms. -->
         <field name="start_date"/>
         <label name="end_date"/>
         <field name="end_date"/>
+        <newline/>
+        <label name="per_contract_rate_override"/>
+        <field name="per_contract_rate_override"/>
+        <field name="rate_override_allowed"/>
+        <group name="per_contract_rate_override" colspan="4" string="">
+            <label name="rate_minimum"/>
+            <group name="rate_minimum" string="">
+                <field name="rate_minimum" xexpand="0" factor="100"/>
+                <label string="%" id="rate_minimum_percent" xexpand="1" xalign="0"/>
+            </group>
+            <label name="rate_maximum"/>
+            <group name="rate_maximum" string="">
+                <field name="rate_maximum" xexpand="0" factor="100"/>
+                <label string="%" id="rate_maximum_percent" xexpand="1" xalign="0"/>
+            </group>
+            <label name="rate_default"/>
+            <group name="rate_default" string="">
+                <field name="rate_default" xexpand="0" factor="100"/>
+                <label string="%" id="rate_default_percent" xexpand="1" xalign="0"/>
+            </group>
+        </group>
         <notebook>
             <page name="commissioned_products">
                 <field name="commissioned_products" colspan="4"/>

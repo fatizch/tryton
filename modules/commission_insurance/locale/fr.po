@@ -134,6 +134,10 @@ msgctxt "field:commission.agent,commissioned_products_name:"
 msgid "Commissioned Products"
 msgstr "Produits commissionnés"
 
+msgctxt "field:commission.agent,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
 msgctxt "field:commission.agent,end_date:"
 msgid "End Date"
 msgstr "Date de Fin"
@@ -141,6 +145,26 @@ msgstr "Date de Fin"
 msgctxt "field:commission.agent,icon:"
 msgid "Icon"
 msgstr "Icône"
+
+msgctxt "field:commission.agent,per_contract_rate_override:"
+msgid "Allow Rate Override"
+msgstr "Autoriser les taux surchargeables par contrat"
+
+msgctxt "field:commission.agent,rate_default:"
+msgid "Default Rate"
+msgstr "Taux par défaut"
+
+msgctxt "field:commission.agent,rate_maximum:"
+msgid "Maximum Rate"
+msgstr "Taux maximum"
+
+msgctxt "field:commission.agent,rate_minimum:"
+msgid "Minimum Rate"
+msgstr "Taux minimum"
+
+msgctxt "field:commission.agent,rate_override_allowed:"
+msgid "Rate Override Allowed"
+msgstr "Modification des taux autorisée"
 
 msgctxt "field:commission.agent,start_date:"
 msgid "Start Date"
@@ -414,6 +438,10 @@ msgctxt "field:commission.plan,active:"
 msgid "Active"
 msgstr "Actif"
 
+msgctxt "field:commission.plan,allow_rate_override:"
+msgid "Allow Rate Override"
+msgstr "Autoriser la surcharge des taux"
+
 msgctxt "field:commission.plan,code:"
 msgid "Code"
 msgstr "Code"
@@ -437,6 +465,10 @@ msgstr "Date de Création"
 msgctxt "field:commission.plan,insurer_plan:"
 msgid "Insurer Plan"
 msgstr "Plan lié"
+
+msgctxt "field:commission.plan,premium_rate_default:"
+msgid "Default Premium Rate"
+msgstr "Taux de chargement pour les primes"
 
 msgctxt "field:commission.plan,tags:"
 msgid "Tags"
@@ -814,9 +846,97 @@ msgctxt "field:contract,broker_party:"
 msgid "Broker"
 msgstr "Courtier"
 
+msgctxt "field:contract,commission_data:"
+msgid "Commission Data"
+msgstr "Données de commissionnement"
+
+msgctxt "field:contract,commission_rate_overrides:"
+msgid "Commission rate overrides"
+msgstr "Surcharges de taux"
+
 msgctxt "field:contract,show_premium:"
 msgid "Show Premium"
 msgstr "Visualiser les primes"
+
+msgctxt "field:contract.commission_data,agent:"
+msgid "Agent"
+msgstr "Protocole de commissionnement"
+
+msgctxt "field:contract.commission_data,contract:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "field:contract.commission_data,contract_status:"
+msgid "Contract Status"
+msgstr "Statut du contrat"
+
+msgctxt "field:contract.commission_data,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:contract.commission_data,premium_rate:"
+msgid "Premium Rate"
+msgstr "Taux de chargement appliqué"
+
+msgctxt "field:contract.commission_data,rate:"
+msgid "Rate"
+msgstr "Taux"
+
+msgctxt "field:contract.commission_data,rate_maximum:"
+msgid "Maximum Value for the Rate"
+msgstr "Taux maximum"
+
+msgctxt "field:contract.commission_data,rate_minimum:"
+msgid "Minimum Value for the Rate"
+msgstr "Taux minimum"
+
+msgctxt "field:contract.commission_data,rate_override_allowed:"
+msgid "Rate Override Allowed"
+msgstr "Surcharge de taux autorisée"
+
+msgctxt "field:contract.commission_rate,agent:"
+msgid "Agent"
+msgstr "Protocole de commissionnement"
+
+msgctxt "field:contract.commission_rate,contract:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "field:contract.commission_rate,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:contract.commission_rate,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:contract.commission_rate,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:contract.commission_rate,custom_rate:"
+msgid "Custom Rate"
+msgstr "Taux surchargé"
+
+msgctxt "field:contract.commission_rate,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:contract.commission_rate,rec_name:"
+msgid "Record Name"
+msgstr "Nom de l'enregistrement"
+
+msgctxt "field:contract.commission_rate,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:contract.commission_rate,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:contract.commission_rate,xml_id:"
+msgid "XML Id"
+msgstr "XML Id"
 
 msgctxt "field:contract.option,annual_premium_excl_tax:"
 msgid "Annual Premium Excluding Taxes"
@@ -916,17 +1036,64 @@ msgstr ""
 "Si défini, cette condition de paiement sera prioritaire face à celle sur le "
 "tiers ainsi que sur la configuration globale"
 
+msgctxt "help:commission.agent,per_contract_rate_override:"
+msgid "Allow per-contract rate override"
+msgstr "Autorise la modification par contrat du taux de commissionnement"
+
+msgctxt "help:commission.agent,rate_default:"
+msgid "The default value for the rate for this agent"
+msgstr "Le taux par défaut qui sera utilisé sur les contrats"
+
+msgctxt "help:commission.agent,rate_maximum:"
+msgid "The minimum value for the custom rate for this agent"
+msgstr "Taux maximum autorisé"
+
+msgctxt "help:commission.agent,rate_minimum:"
+msgid "The minimum value for the custom rate for this agent"
+msgstr "Le taux minimum qui devra être saisi sur le contrat"
+
+msgctxt "help:commission.agent,rate_override_allowed:"
+msgid "Rate override is allowed for this agent"
+msgstr ""
+"Le plan de commissionnement autorise la dérogation au taux de "
+"commissionnement contrat par contrat"
+
 msgctxt "help:commission.description.configuration,linear_commission_title:"
 msgid ""
 "Contains the string which will be used to introduce linear commissions "
 "calculation details"
 msgstr "Contient l'introduction au détail des commissions linéaires"
 
+msgctxt "help:commission.plan,allow_rate_override:"
+msgid ""
+"If set, agents will be allowed to modify their commission rate, according to"
+" the associated min / max values. Warning: This will only allow to override "
+"the rate, there is no automatic application except in the default rules"
+msgstr ""
+"Si renseigné, les protocoles basés sur ce plan pourront autoriser des "
+"changements de taux de commissionnement contrat par contrat, en fonction de "
+"bornes min / max. Le taux dérogé sera accessible dans les règles de calcul, "
+"et automatiquement utilisé dans la \"Commission Linéaire avec "
+"Personnalisation\"."
+
 msgctxt "help:commission.plan,commission_method:"
 msgid ""
 ". If \"On Payment And Accounted\" is selected, a commission is due after its"
 " invoice's accounting date, if the invoice is paid."
 msgstr ""
+"Si \"Au paiement et à la comptabilisation\" est sélectionné, les commissions"
+" seront dues après la date de comptabilisation de la quittance, si elle a "
+"été payée."
+
+msgctxt "help:commission.plan,premium_rate_default:"
+msgid ""
+"The rate that will be made available in contract premium rules as the "
+"commission rate for this plan. If the rate is overriden on the contract, the"
+" overriden value will be used instead"
+msgstr ""
+"Ce taux sera utilisé lors des calculs de primes pour prendre en compte le "
+"chargement des commissions. Si les modifications de taux sont autorisées, le"
+" taux modifié sera utilisé à la place."
 
 msgctxt "help:commission.plan,tags:"
 msgid "Add and search all related configuration objects based on a tag"
@@ -937,6 +1104,23 @@ msgstr ""
 msgctxt "help:commission.plan.date,first_match_only:"
 msgid "If True, only the first matching date will be considered."
 msgstr "Si 'Vrai', seule la première occurence sera prise en compte"
+
+msgctxt "help:contract.commission_data,premium_rate:"
+msgid "The commission rate that will be used when calculating premiums"
+msgstr ""
+"Le taux de chargement qui sera pris en compte au moment du calcul des primes"
+
+msgctxt "help:contract.commission_data,rate:"
+msgid "The custom rate for this contract"
+msgstr "Le taux de commission qui sera appliqué pour ce contrat"
+
+msgctxt "help:contract.commission_data,rate_override_allowed:"
+msgid "If True, it will be possible to override the rate for this contract"
+msgstr "Si \"Vrai\", la surcharge de taux est possible sur ce contrat"
+
+msgctxt "help:contract.commission_rate,custom_rate:"
+msgid "The custom rate for this contract for this agent"
+msgstr "Le taux surchargé qui sera appliqué pour ce protocole"
 
 msgctxt "model:commission.aggregated,name:"
 msgid "Commission Aggregated"
@@ -1001,6 +1185,14 @@ msgstr "Ouvrir la synthèse des commissions - Ligne par année"
 msgctxt "model:commission_plan-commission_plan,name:"
 msgid "Commission Plan - Commission Plan"
 msgstr "Lien entre plans de commissionnement"
+
+msgctxt "model:contract.commission_data,name:"
+msgid "Contract Commission Data"
+msgstr "Données de commissionnement"
+
+msgctxt "model:contract.commission_rate,name:"
+msgid "Contract Commission Rate"
+msgstr "Taux de commission personnalisé"
 
 msgctxt "model:event.type,name:event_contract_broker_changed"
 msgid "Broker Changed"
@@ -1539,6 +1731,10 @@ msgctxt "view:account.invoice:"
 msgid "Validate"
 msgstr "Valider"
 
+msgctxt "view:commission.agent:"
+msgid "%"
+msgstr "%"
+
 msgctxt "view:commission.aggregated:"
 msgid "Total"
 msgstr "Total"
@@ -1558,6 +1754,10 @@ msgstr "Créer les protocoles de commissionnement"
 msgctxt "view:commission.plan.date:"
 msgid "Calculation Dates"
 msgstr "Dates de calcul"
+
+msgctxt "view:commission.plan:"
+msgid "%"
+msgstr "%"
 
 msgctxt "view:commission.plan:"
 msgid "Data"
@@ -1598,6 +1798,10 @@ msgstr "%"
 msgctxt "view:commission:"
 msgid "Amount"
 msgstr "Montant"
+
+msgctxt "view:contract.commission_data:"
+msgid "%"
+msgstr "%"
 
 msgctxt "view:contract:"
 msgid "Distribution"
@@ -1685,21 +1889,21 @@ msgctxt "model:commission.create_invoice.ask,name:commission."
 msgid "Create Commission Invoice"
 msgstr "Générer les bordereaux de commission"
 
-msgctxt "model:ir.action,name:commission.act_commission_create_invoice"
-msgid "Create Commission Invoices"
-msgstr "Générer les bordereaux de commission"
-
 msgctxt "model:ir.action,name:commission.act_agent_form"
 msgid "Agents"
 msgstr "Protocoles de commissionnement"
 
-msgctxt "model:ir.ui.menu,name:commission.menu_agent_form"
-msgid "Agents"
-msgstr "Protocoles de commissionnement"
+msgctxt "model:ir.action,name:commission.act_commission_create_invoice"
+msgid "Create Commission Invoices"
+msgstr "Générer les bordereaux de commission"
 
 msgctxt "model:ir.ui.menu,name:commission.menu_commission_create_invoice"
 msgid "Create Commission Invoices"
 msgstr "Générer les bordereaux de commission"
+
+msgctxt "model:ir.ui.menu,name:commission.menu_agent_form"
+msgid "Agents"
+msgstr "Protocoles de commissionnement"
 
 msgctxt "model:product.template-commission.agent,name:commission."
 msgid "Product Template - Commission Agent"

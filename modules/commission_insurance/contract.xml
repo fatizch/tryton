@@ -3,6 +3,9 @@
 this repository contains the full copyright notices and license terms. -->
 <tryton>
     <data>
+        <!-- ############ -->
+        <!-- # Contract # -->
+        <!-- ############ -->
         <record model="ir.ui.view" id="contract_view_form">
             <field name="model">contract</field>
             <field name="inherit" ref="contract.contract_view_form"/>
@@ -12,6 +15,14 @@ this repository contains the full copyright notices and license terms. -->
             <field name="model">contract</field>
             <field name="inherit" ref="contract.contract_view_tree"/>
             <field name="name">contract_list</field>
+        </record>
+        <!-- ################### -->
+        <!-- # Commission Data # -->
+        <!-- ################### -->
+        <record model="ir.ui.view" id="contract_commission_data_view_list">
+            <field name="model">contract.commission_data</field>
+            <field name="type">tree</field>
+            <field name="name">contract_commission_data_list</field>
         </record>
         <!-- ############################################################ -->
         <!-- ########### Commission relate on contract ########### -->

@@ -28,5 +28,13 @@ this repository contains the full copyright notices and license terms. -->
         <label name="insurer_plan"/>
         <field name="insurer_plan"/>
         <newline/>
+        <label name="allow_rate_override"/>
+        <field name="allow_rate_override"/>
+        <label name="premium_rate_default"/>
+        <group name="premium_rate_default" string="">
+            <field name="premium_rate_default" xexpand="0" factor="100"/>
+            <label string="%" id="premium_rate_default_percent" xexpand="1" xalign="0"/>
+        </group>
+        <newline/>
     </xpath>
 </data>

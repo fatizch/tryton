@@ -586,6 +586,18 @@ class Plan(model.ConfigurationMixin, model.CoogView, model.TaggedMixin):
         fields.Char('Commissioned Products'),
         'get_commissioned_products_name',
         searcher='search_commissioned_products')
+    allow_rate_override = fields.Boolean('Allow Rate Override',
+        help='If set, agents will be allowed to modify their commission rate, '
+        'according to the associated min / max values. Warning: This will '
+        'only allow to override the rate, there is no automatic application '
+        'except in the default rules')
+    premium_rate_default = fields.Numeric('Default Premium Rate', digits=(5, 4),
+        domain=['OR',
+            ('premium_rate_default', '=', None),
+            ('premium_rate_default', '>=', 0)],
+        help='The rate that will be made available in contract premium rules '
+        'as the commission rate for this plan. If the rate is overriden on '
+        'the contract, the overriden value will be used instead')
 
     @classmethod
     def __setup__(cls):
@@ -605,19 +617,15 @@ class Plan(model.ConfigurationMixin, model.CoogView, model.TaggedMixin):
     @classmethod
     def create(cls, vlist):
         pool = Pool()
-        Contract = pool.get('contract')
         Invoice = pool.get('account.invoice')
         Invoice._agent_commission_method_cache.clear()
-        Contract.insurer_agent_cache.clear()
         return super(Plan, cls).create(vlist)
 
     @classmethod
     def write(cls, *args):
         pool = Pool()
-        Contract = pool.get('contract')
         Invoice = pool.get('account.invoice')
         Invoice._agent_commission_method_cache.clear()
-        Contract.insurer_agent_cache.clear()
         super(Plan, cls).write(*args)
 
     @classmethod
@@ -653,13 +661,20 @@ class Plan(model.ConfigurationMixin, model.CoogView, model.TaggedMixin):
 
     def get_context_formula(self, amount, product, pattern=None):
         context = super(Plan, self).get_context_formula(amount, product)
-        context['names']['nb_years'] = (pattern or {}).get('nb_years', 0)
-        context['names']['commission_end_date'] = (pattern or {}).get(
+        pattern = pattern or {}
+        context['names']['nb_years'] = pattern.get('nb_years', 0)
+        context['names']['commission_end_date'] = pattern.get(
             'commission_end_date', 0)
-        context['names']['commission_start_date'] = (pattern or {}).get(
+        context['names']['commission_start_date'] = pattern.get(
             'commission_start_date', 0)
-        context['names']['invoice_line'] = (pattern or {}).get('invoice_line',
+        context['names']['invoice_line'] = pattern.get('invoice_line',
             None)
+        context['names']['commission_data'] = pattern.get('commission_data',
+            None)
+        context['names']['overriden_commission_rate'] = None
+        if context['names']['commission_data']:
+            context['names']['overriden_commission_rate'] = context['names'][
+                'commission_data'].rate
         return context
 
     def get_matching_line(self, pattern=None):
@@ -918,7 +933,7 @@ class PlanCalculationDate(model.ConfigurationMixin, model.CoogView):
             return invoice_line.details[0].get_option().initial_start_date
 
 
-class Agent(export.ExportImportMixin, model.FunctionalErrorMixIn):
+class Agent(model.CoogSQL):
     __name__ = 'commission.agent'
     _func_key = 'code'
 
@@ -940,6 +955,48 @@ class Agent(export.ExportImportMixin, model.FunctionalErrorMixIn):
         'get_commissioned_products_name',
         searcher='search_commissioned_products')
     icon = fields.Function(fields.Char('Icon'), 'on_change_with_icon')
+    rate_override_allowed = fields.Function(
+        fields.Boolean('Rate Override Allowed',
+            states={'invisible': True},
+            help='Rate override is allowed for this agent'),
+        'getter_rate_override_allowed')
+    per_contract_rate_override = fields.Function(
+        fields.Boolean('Allow Rate Override',
+            states={
+                'invisible': ~Eval('rate_override_allowed'),
+                'readonly': ~Eval('rate_override_allowed'),
+                },
+            depends=['rate_override_allowed'],
+            help='Allow per-contract rate override'),
+        'getter_per_contract_rate_override', setter='setter_void')
+    rate_minimum = fields.Numeric('Minimum Rate', digits=(5, 4),
+        states={
+            'invisible': ~Eval('per_contract_rate_override'),
+            'readonly': ~Eval('per_contract_rate_override'),
+            'required': ~~Eval('per_contract_rate_override'),
+            },
+        domain=['OR', ('rate_minimum', '=', None), ('rate_minimum', '>=', 0)],
+        depends=['per_contract_rate_override', 'rate_maximum', 'rate_minimum'],
+        help='The minimum value for the custom rate for this agent')
+    rate_maximum = fields.Numeric('Maximum Rate', digits=(5, 4),
+        states={
+            'invisible': ~Eval('per_contract_rate_override'),
+            'readonly': ~Eval('per_contract_rate_override'),
+            'required': ~~Eval('per_contract_rate_override'),
+            },
+        depends=['per_contract_rate_override', 'rate_minimum'],
+        help='The minimum value for the custom rate for this agent')
+    rate_default = fields.Numeric('Default Rate', digits=(5, 4),
+        states={
+            'invisible': ~Eval('per_contract_rate_override'),
+            'readonly': ~Eval('per_contract_rate_override'),
+            'required': ~~Eval('per_contract_rate_override'),
+            },
+        domain=['OR', ('rate_default', '=', None),
+            [('rate_default', '<=', Eval('rate_maximum')),
+                ('rate_default', '>=', Eval('rate_minimum'))]],
+        depends=['per_contract_rate_override', 'rate_maximum', 'rate_minimum'],
+        help='The default value for the rate for this agent')
 
     @classmethod
     def __register__(cls, module_name):
@@ -975,19 +1032,15 @@ class Agent(export.ExportImportMixin, model.FunctionalErrorMixIn):
     @classmethod
     def create(cls, vlist):
         pool = Pool()
-        Contract = pool.get('contract')
         Invoice = pool.get('account.invoice')
         Invoice._agent_commission_method_cache.clear()
-        Contract.insurer_agent_cache.clear()
         return super(Agent, cls).create(vlist)
 
     @classmethod
     def write(cls, *args):
         pool = Pool()
-        Contract = pool.get('contract')
         Invoice = pool.get('account.invoice')
         Invoice._agent_commission_method_cache.clear()
-        Contract.insurer_agent_cache.clear()
         super(Agent, cls).write(*args)
 
     @classmethod
@@ -1012,6 +1065,32 @@ class Agent(export.ExportImportMixin, model.FunctionalErrorMixIn):
             return self.code
         else:
             return coog_string.slugify(self.party.code + '_' + self.plan.code)
+
+    def getter_rate_override_allowed(self, name):
+        return bool(self.plan.allow_rate_override)
+
+    def getter_per_contract_rate_override(self, name):
+        return bool(self.rate_default)
+
+    @fields.depends('plan', 'rate_override_allowed')
+    def on_change_plan(self):
+        if not self.plan:
+            self.rate_override_allowed = False
+            self.per_contract_rate_override = False
+            self._clear_rate_override_data()
+        elif self.plan.allow_rate_override != self.rate_override_allowed:
+            self.rate_override_allowed = self.plan.allow_rate_override
+            self.per_contract_rate_override = False
+            self._clear_rate_override_data()
+
+    @fields.depends('per_contract_rate_override')
+    def on_change_per_contract_rate_override(self):
+        self._clear_rate_override_data()
+
+    def _clear_rate_override_data(self):
+        self.rate_default = None
+        self.rate_minimum = None
+        self.rate_maximum = None
 
     def get_payment_term_from_party(self, type_):
         AccountConfiguration = Pool().get('account.configuration')

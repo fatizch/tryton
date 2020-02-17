@@ -13,7 +13,6 @@ def register():
         commission.Plan,
         commission.PlanLines,
         commission.Agent,
-        rule_engine.RuleEngineRuntime,
         rule_engine.RuleEngine,
         extra_data.ExtraData,
         extra_data.CommissionPlanExtraDataRelation,

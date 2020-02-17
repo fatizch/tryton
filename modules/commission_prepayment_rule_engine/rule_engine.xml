@@ -12,7 +12,7 @@ this repository contains the full copyright notices and license terms. -->
             <field name="name">_re_option_first_year_premium</field>
             <field name="long_description">Retourne la somme des primes de la 
 première année pour l'option commissionnée</field>
-            <field name="parent" ref="commission_insurance_rule_engine.dossier_commission"/>
+            <field name="parent" ref="commission_insurance.dossier_commission"/>
         </record>
         <record model="rule_engine.function" id="will_delete_unredeemed_prepayment">
             <field name="translated_technical_name">suppression_precomptes_non_amortis</field>
@@ -23,7 +23,7 @@ première année pour l'option commissionnée</field>
             <field name="name">re_will_delete_unredeemed_prepayment</field>
             <field name="long_description">Retourne vrai si les précomptes non 
 amortis seront supprimés</field>
-            <field name="parent" ref="commission_insurance_rule_engine.dossier_commission"/>
+            <field name="parent" ref="commission_insurance.dossier_commission"/>
         </record>
     </data>
 </tryton>

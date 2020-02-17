@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <record model="rule_engine.function" id="dossier_commission">
+            <field name="translated_technical_name">dossier_commission</field>
+            <field name="description">Commission</field>
+            <field name="type">folder</field>
+            <field name="language" ref="ir.lang_fr"/>
+        </record>
+        <record model="rule_engine.function" id="montant_ligne_quittance">
+            <field name="translated_technical_name">montant_ligne_quittance</field>
+            <field name="description">Montant de la ligne de la quittance</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_invoice_line_amount</field>
+            <field name="long_description">Retourne le montant de la ligne de 
+quittance pour lequel on calcule la commission</field>
+            <field name="parent" ref="dossier_commission"/>
+        </record>
+        <record model="rule_engine.function" id="date_debut_ligne_quittance">
+            <field name="translated_technical_name">date_debut_ligne_quittance</field>
+            <field name="description">Date de debut de la ligne de la quittance</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_invoice_line_start_date</field>
+            <field name="long_description">Retourne la date de début de la 
+ligne de quittance pour lequel on calcule la commission</field>
+            <field name="parent" ref="dossier_commission"/>
+        </record>
+        <record model="rule_engine.function" id="date_fin_ligne_quittance">
+            <field name="translated_technical_name">date_fin_ligne_quittance</field>
+            <field name="description">Date de fin de la ligne de la quittance</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_invoice_line_end_date</field>
+            <field name="long_description">Retourne la date de fin de la ligne 
+de quittance pour lequel on calcule la commission</field>
+            <field name="parent" ref="dossier_commission"/>
+        </record>
+        <record model="rule_engine.function" id="date_debut_ligne_commission">
+            <field name="translated_technical_name">date_debut_ligne_commission</field>
+            <field name="description">Date de début de la ligne de commission</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_commission_start_date</field>
+            <field name="long_description">Date de début de la ligne de commission. Cette date peut être différente de la date de début de la ligne de quittance dans le cas où des dates de calcul ont été définies sur le plan de commissionnement</field>
+            <field name="parent" ref="dossier_commission"/>
+        </record>
+        <record model="rule_engine.function" id="date_fin_ligne_commission">
+            <field name="translated_technical_name">date_fin_ligne_commission</field>
+            <field name="description">Date de fin de la ligne de commission</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_commission_end_date</field>
+            <field name="long_description">Date de fin de la ligne de commission. Cette date peut être différente de la date de fin de la ligne de quittance dans le cas où des dates de calcul ont été définies sur le plan de commissionnement</field>
+            <field name="parent" ref="dossier_commission"/>
+        </record>
+        <record model="rule_engine.function" id="taux_de_commission_personnalise">
+            <field name="translated_technical_name">taux_de_commission_personnalise</field>
+            <field name="description">Taux de commission personnalisé</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_agent_custom_commission_rate</field>
+            <field name="long_description">Si autorisé et renseigné, le taux de commission personnalisé sélectionné pour cet apporteur au moment de la souscription du contrat</field>
+            <field name="parent" ref="dossier_commission"/>
+        </record>
+        <record model="rule_engine.function" id="taux_commission_tarification">
+            <field name="translated_technical_name">taux_de_commission_tarification</field>
+            <field name="description">Taux de commission pour la tarification</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_contract_premium_commission_rate</field>
+            <field name="long_description">Le taux de commission total à prendre en compte pour le calcul des primes</field>
+            <field name="parent" ref="contract.te_contract"/>
+        </record>
+    </data>
+</tryton>

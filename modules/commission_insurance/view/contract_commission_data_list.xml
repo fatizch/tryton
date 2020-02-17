@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tree editable="bottom">
+    <field name="rate_override_allowed"/>
+    <field name="agent" expand="1"/>
+    <field name="rate" factor="100">
+        <suffix id="suffix" string="%"/>
+    </field>
+    <field name="rate_minimum" factor="100">
+        <suffix id="suffix" string="%"/>
+    </field>
+    <field name="rate_maximum" factor="100">
+        <suffix id="suffix" string="%"/>
+    </field>
+    <field name="premium_rate" factor="100">
+        <suffix id="suffix" string="%"/>
+    </field>
+    <field name="contract_status" tree_invisible="1"/>
+</tree>

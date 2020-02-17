@@ -11,8 +11,8 @@ this repository contains the full copyright notices and license terms. -->
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_contract_rank_on_period</field>
             <field name="fct_args">debut_de_periode, fin_de_periode</field>
-            <field name="long_description"></field>
-            <field name="parent" ref="commission_insurance_rule_engine.dossier_commission"/>
+            <field name="long_description"/>
+            <field name="parent" ref="commission_insurance.dossier_commission"/>
         </record>
     </data>
 </tryton>

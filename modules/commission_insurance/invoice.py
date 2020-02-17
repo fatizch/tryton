@@ -99,6 +99,9 @@ class InvoiceLine(metaclass=PoolMeta):
     def _get_commission_pattern(self, plan, agent, start, end):
         product = self.product
         pattern = {'agent': agent, 'date_start': start, 'date_end': end}
+        if self.invoice.contract:
+            pattern['commission_data'] = \
+                self.invoice.contract._get_commission_data(agent)
         if self.details:
             option = self.details[0].get_option()
             if option:

@@ -115,8 +115,8 @@ class Contract(Printable):
         return instances
 
     def get_all_options(self):
-        return (super(Contract, self).get_all_options()
-            + self.covered_element_options)
+        return super(Contract, self).get_all_options() + sum(
+            [tuple(x.options) for x in self.covered_elements], tuple())
 
     @fields.depends('product')
     def on_change_product(self):

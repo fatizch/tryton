@@ -4,10 +4,11 @@ import copy
 
 from trytond.pool import PoolMeta, Pool
 
-from trytond.modules.coog_core import utils
-
 from trytond.modules.api import date_from_api
 from trytond.modules.api import DATE_SCHEMA
+from trytond.modules.api import AMOUNT_SCHEMA, amount_for_api, amount_from_api
+
+from trytond.modules.coog_core import utils
 from trytond.modules.coog_core.api import CODED_OBJECT_SCHEMA, OBJECT_ID_SCHEMA
 
 
@@ -52,11 +53,16 @@ class APIProduct(metaclass=PoolMeta):
 
     @classmethod
     def _describe_agent(cls, agent):
-        return {
+        values = {
             'id': agent.id,
             'code': agent.code,
             'plan': agent.plan.code,
             }
+        if agent.per_contract_rate_override:
+            values['default_rate'] = amount_for_api(agent.rate_default * 100)
+            values['minimum_rate'] = amount_for_api(agent.rate_minimum * 100)
+            values['maximum_rate'] = amount_for_api(agent.rate_maximum * 100)
+        return values
 
     @classmethod
     def _describe_product_schema(cls):
@@ -77,6 +83,9 @@ class APIProduct(metaclass=PoolMeta):
                 'id': OBJECT_ID_SCHEMA,
                 'code': {'type': 'string'},
                 'plan': {'type': 'string'},
+                'default_rate': AMOUNT_SCHEMA,
+                'minimum_rate': AMOUNT_SCHEMA,
+                'maximum_rate': AMOUNT_SCHEMA,
                 },
             'required': ['id', 'code', 'plan'],
             }
@@ -89,6 +98,14 @@ class APIProduct(metaclass=PoolMeta):
                 'id': 1,
                 'code': 'agent_1',
                 'plan': 'plan_10_percents',
+                },
+            {
+                'id': 2,
+                'code': 'agent_2',
+                'plan': 'plan_flexible',
+                'default_rate': '15',
+                'minimum_rate': '10',
+                'maximum_rate': '30',
                 },
             ]
         return examples
@@ -103,21 +120,52 @@ class APIContract(metaclass=PoolMeta):
 
         if contract_data['agent']:
             contract.agent = contract_data['agent']
-
+            if 'agent_rate' in contract_data:
+                contract.commission_rate_overrides = [
+                    {'agent': contract.agent.id,
+                        'rate': contract_data['agent_rate']},
+                    ]
         return contract
 
     @classmethod
     def _contract_convert(cls, data, options, parameters, minimum=False):
+        super()._contract_convert(data, options, parameters, minimum=minimum)
+        cls._contract_convert_commission_data(data, options, parameters,
+            minimum=minimum)
+
+    @classmethod
+    def _contract_convert_commission_data(cls, data, options, parameters,
+            minimum=False):
         pool = Pool()
         API = pool.get('api')
-
-        super()._contract_convert(data, options, parameters, minimum=minimum)
 
         if minimum is False or 'agent' in data:
             data['agent'] = API.instantiate_code_object('commission.agent',
                 data['agent'])
         else:
             data['agent'] = None
+
+        if data['agent'] and data['agent'].per_contract_rate_override:
+            if 'agent_rate' in data:
+                data['agent_rate'] = amount_from_api(data['agent_rate']) / 100
+                if (data['agent_rate'] > data['agent'].rate_maximum or
+                        data['agent_rate'] < data['agent'].rate_minimum):
+                    API.add_input_error({
+                            'type': 'invalid_custom_rate',
+                            'data': {
+                                'value': amount_for_api(
+                                    data['agent_rate'] * 100),
+                                'minimum': amount_for_api(
+                                    data['agent'].rate_minimum * 100),
+                                'maximum': amount_for_api(
+                                    data['agent'].rate_maximum * 100),
+                                }
+                            })
+        elif 'agent_rate' in data:
+            API.add_input_error({
+                    'type': 'unauthorized_commission_rate_modification',
+                    'data': {},
+                    })
 
     @classmethod
     def _validate_contract_input(cls, data):
@@ -155,6 +203,7 @@ class APIContract(metaclass=PoolMeta):
     def _contract_schema(cls, minimum=False):
         schema = super()._contract_schema(minimum=minimum)
         schema['properties']['agent'] = CODED_OBJECT_SCHEMA
+        schema['properties']['agent_rate'] = AMOUNT_SCHEMA
         if not minimum:
             schema['required'].append('agent')
         return schema
@@ -165,6 +214,7 @@ class APIContract(metaclass=PoolMeta):
         for example in examples:
             for contract_data in example['input']['contracts']:
                 contract_data['agent'] = {'code': 'agent_007'}
+        examples[-1]['input']['contracts'][-1]['agent_rate'] = '20.00'
         return examples
 
     @classmethod

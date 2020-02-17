@@ -25,6 +25,14 @@ class Contract(metaclass=PoolMeta):
                 for x in self.agent.commissioned_agents)
         return result
 
+    def _calculate_agents(self):
+        agents = super()._calculate_agents()
+        if self.agent:
+            for agent in self.agent.fill_commissioned_agents():
+                if agent not in agents:
+                    agents[agent.id] = agent
+        return agents
+
 
 class ContractOption(metaclass=PoolMeta):
     __name__ = 'contract.option'

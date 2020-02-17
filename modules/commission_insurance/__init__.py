@@ -2,6 +2,7 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
 
+from . import rule_engine
 from . import contract
 from . import commission
 from . import invoice
@@ -21,8 +22,11 @@ from . import api
 def register():
     Pool.register(
         distribution.DistributionNetwork,
+        rule_engine.RuleEngineRuntime,
         contract.Contract,
         contract.ContractOption,
+        contract.ContractCommissionRate,
+        contract.ContractCommissionData,
         commission.AggregatedCommission,
         commission.AggregatedCommissionByAgent,
         commission.Commission,

@@ -63,5 +63,28 @@ else:
             <field name="sequence_order" eval="1"/>
             <field name="parent_rule" ref="commission_lineaire"/>
         </record>
+        <!-- ##################################### -->
+        <!-- # Commission Linéaire Personnalisée # -->
+        <!-- ##################################### -->
+        <record model="rule_engine" id="commission_lineaire_personnalisee">
+            <field name="name">Commission Linéaire avec Personnalisation</field>
+            <field name="short_name">commission_lineaire_avec_personnalisation</field>
+            <field name="algorithm">
+taux = taux_de_commission_personnalise()
+if taux is None:  # 0 est une valeur potentiellement normale
+    taux = param_taux_par_defaut()
+return montant_ligne_quittance() * taux</field>
+            <field name="status">validated</field>
+            <field name="type_">commission</field>
+            <field name="context" ref="commission_insurance_rule_engine.commission_context"/>
+        </record>
+        <record model="rule_engine.rule_parameter" id="lineaire_personnalise_taux_par_defaut">
+            <field name="name">taux_par_defaut</field>
+            <field name="type_">numeric</field>
+            <field name="digits">2</field>
+            <field name="string">Pourcentage par défaut</field>
+            <field name="sequence_order" eval="1"/>
+            <field name="parent_rule" ref="commission_lineaire_personnalisee"/>
+        </record>
     </data>
 </tryton>

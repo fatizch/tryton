@@ -6,10 +6,11 @@ this repository contains the full copyright notices and license terms. -->
         <page name="broker" string="Distribution">
             <label name="broker"/>
             <field name="broker"/>
-            <label name="agent"/>
-            <field name="agent"/>
             <label name="dist_network"/>
             <field name="dist_network"/>
+            <newline/>
+            <separator name="commission_data" colspan="4"/>
+            <field name="commission_data" colspan="4" expand_toolbar="0"/>
         </page>
     </xpath>
 </data>

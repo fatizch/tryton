@@ -197,8 +197,9 @@ class ModuleTestCase(test_framework.CoogTestCase):
         wonder_plan.type_ = 'agent'
         wonder_plan.lines = [{
                 'options': [x.id for x in product.coverages],
-                'formula': 'amount * 0.5',
+                'formula': 'amount * (overriden_commission_rate or 20)',
                 }]
+        wonder_plan.allow_rate_override = True
         wonder_plan.save()
 
         bad_agent_broker = Agent()
@@ -209,6 +210,9 @@ class ModuleTestCase(test_framework.CoogTestCase):
         bad_agent_broker.plan = bad_plan
         bad_agent_broker.currency = product.company.currency
         bad_agent_broker.save()
+
+        self.assertFalse(bad_agent_broker.rate_override_allowed)
+        self.assertFalse(bad_agent_broker.per_contract_rate_override)
 
         wonder_agent_broker = Agent()
         wonder_agent_broker.company = product.company
@@ -228,6 +232,17 @@ class ModuleTestCase(test_framework.CoogTestCase):
         agent_broker.currency = product.company.currency
         agent_broker.start_date = '2020-01-01'
         agent_broker.save()
+
+        self.assertTrue(wonder_agent_broker.rate_override_allowed)
+        self.assertFalse(wonder_agent_broker.per_contract_rate_override)
+
+        wonder_agent_broker.rate_default = Decimal('0.2')
+        wonder_agent_broker.rate_minimum = Decimal('0.1')
+        wonder_agent_broker.rate_maximum = Decimal('0.3')
+        wonder_agent_broker.save()
+
+        self.assertTrue(wonder_agent_broker.rate_override_allowed)
+        self.assertTrue(wonder_agent_broker.per_contract_rate_override)
 
     @test_framework.prepare_test(
         'commission_insurance.test0004_create_commission_agents',
@@ -299,6 +314,9 @@ class ModuleTestCase(test_framework.CoogTestCase):
                     'id': Agent.search([('code', '=', 'wonder')])[0].id,
                     'code': 'wonder',
                     'plan': 'wonder_plan',
+                    'minimum_rate': '10.0',
+                    'maximum_rate': '30.0',
+                    'default_rate': '20.0',
                     },
                 ])
 
@@ -314,6 +332,9 @@ class ModuleTestCase(test_framework.CoogTestCase):
                     'id': Agent.search([('code', '=', 'wonder')])[0].id,
                     'code': 'wonder',
                     'plan': 'wonder_plan',
+                    'minimum_rate': '10.0',
+                    'maximum_rate': '30.0',
+                    'default_rate': '20.0',
                     },
                 ])
 
@@ -326,10 +347,12 @@ class ModuleTestCase(test_framework.CoogTestCase):
         pool = Pool()
         ContractAPI = pool.get('api.contract')
         DistNetwork = pool.get('distribution.network')
+        Contract = pool.get('contract')
+        Coverage = pool.get('offered.option.description')
 
         node_1, = DistNetwork.search([('code', '=', 'node_1')])
         node_1_1, = DistNetwork.search([('code', '=', 'node_1_1')])
-        coverages = self.Coverage.search([('code', 'in', ('BET', 'ALP'))])
+        coverages = Coverage.search([('code', 'in', ('BET', 'ALP'))])
         for coverage in coverages:
             coverage.allow_subscribe_coverage_multiple_times = True
             coverage.save()
@@ -442,8 +465,60 @@ class ModuleTestCase(test_framework.CoogTestCase):
 
         data_dict = copy.deepcopy(data_ref)
         data_dict['contracts'][0]['agent'] = {'code': 'wonder'}
-        ContractAPI.subscribe_contracts(data_dict,
+        result = ContractAPI.subscribe_contracts(data_dict,
             {'dist_network': node_1_1.id, '_debug_server': True})
+        contract = Contract(result['contracts'][0]['id'])
+
+        # Premium amounts are 10 for Alpha and 100 for Beta
+        self.assertEqual(sorted(x.amount for x in contract.all_premiums),
+            [Decimal(10), Decimal(10), Decimal(100), Decimal(100)])
+
+        commission_data = contract._calculated_commission_data
+        self.assertEqual(len(commission_data), 1)
+        self.assertEqual(commission_data[0].agent, contract.agent)
+        self.assertEqual(contract.agent.code, 'wonder')
+        self.assertTrue(commission_data[0].rate_override_allowed)
+
+        # Default rate
+        self.assertEqual(commission_data[0].rate, Decimal('0.2'))
+
+        data_dict = copy.deepcopy(data_ref)
+        data_dict['contracts'][0]['agent'] = {'code': 'wonder'}
+        data_dict['contracts'][0]['agent_rate'] = '0'
+        self.assertEqual(ContractAPI.subscribe_contracts(data_dict,
+            {'dist_network': node_1_1.id}).data,
+            [{
+                    'type': 'invalid_custom_rate',
+                    'data': {
+                        'value': '0',
+                        'minimum': '10.0',
+                        'maximum': '30.0',
+                        },
+                    }])
+
+        data_dict = copy.deepcopy(data_ref)
+        data_dict['contracts'][0]['agent'] = {'code': 'wonder'}
+        data_dict['contracts'][0]['agent_rate'] = '40'
+        self.assertEqual(ContractAPI.subscribe_contracts(data_dict,
+            {'dist_network': node_1_1.id}).data,
+            [{
+                    'type': 'invalid_custom_rate',
+                    'data': {
+                        'value': '40.0',
+                        'minimum': '10.0',
+                        'maximum': '30.0',
+                        },
+                    }])
+
+        data_dict = copy.deepcopy(data_ref)
+        data_dict['contracts'][0]['agent'] = {'code': 'bad'}
+        data_dict['contracts'][0]['agent_rate'] = '20'
+        self.assertEqual(ContractAPI.subscribe_contracts(data_dict,
+            {'dist_network': node_1_1.id}).data,
+            [{
+                    'type': 'unauthorized_commission_rate_modification',
+                    'data': {},
+                    }])
 
     def test0020_date_calculations(self):
         invoice_line = mock.Mock()
