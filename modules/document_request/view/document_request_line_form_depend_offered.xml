@@ -2,10 +2,15 @@
 <!-- This file is part of Coog. The COPYRIGHT file at the top level of
 this repository contains the full copyright notices and license terms. -->
 <data>
-    <xpath expr="/form/field[@name='first_reception_date']" position="after">
-        <field name="extra_data" no_command="1" colspan="2"/>
-        <label name="data_status" xalign="0"/>
-        <field name="data_status"/>
+    <xpath expr="//page[@name='details']" position="after">
+        <page name="extra_data">
+            <label name="data_status" xalign="0"/>
+            <field name="data_status"/>
+            <newline/>
+            <field name="extra_data" no_command="1" colspan="4"/>
+        </page>
+    </xpath>
+    <xpath expr="//notebook" position="after">
         <group col="99" id="buttons">
             <button name="confirm_attachment" string="Confirm"/>
         </group>
