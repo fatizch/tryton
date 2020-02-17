@@ -1,3 +1,5 @@
+* OTH#00000 Do not check channels if no commercial product is provided
+
 Version 2.6 - 2019-10-11
 * OTH#00000 Fix validation
 * OTH#00000 Add default web channel

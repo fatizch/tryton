@@ -1,3 +1,5 @@
+* OTH#00000 Enlever la vérification des canaux de distributions si le produits commercial n'est pas renseigné
+
 Version 2.6 - 2019-10-11
 * OTH#00000 Correction de la validation
 * OTH#00000 Ajout du canal Web
