@@ -32,7 +32,7 @@ class ReportTemplateEmail(metaclass=PoolMeta):
         'report.template-paper_form', 'mail_template',
         'paper_form', 'Paper forms associated to request lines', states={
             'invisible': Eval('input_kind') != 'email'},
-        domain=[('paper_form_descs', '!=', None)],
+        domain=[('input_kind', '=', 'flat_document')],
         help='Will dynamically attach empty paper form for the receiver to '
         'complete if he has a pending request line associated to this form')
 
