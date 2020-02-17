@@ -109,7 +109,7 @@ class APIIdentityWebResources(metaclass=PoolMeta):
         if self.distribution_network:
             theme = self.distribution_network.get_web_resource_by_key('theme')
             if theme:
-                context['theme']
+                context['theme'] = theme
         return context
 
 
