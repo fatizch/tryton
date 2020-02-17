@@ -405,10 +405,10 @@ class BenefitRule(
                     elem.get(key, 0)).quantize(elem.get(key, 0))
             elem['description'] += '\n\n' + gettext(
                 'claim_indemnification.msg_beneficiary_share',
-                share=args['indemnification'].share * 100).encode('utf-8')
+                share=args['indemnification'].share * 100)
             elem['description'] += '\n\n' + gettext(
                 'claim_indemnification.msg_final_result',
-                amount=elem.get('amount')).encode('utf-8')
+                amount=elem.get('amount'))
         return result
 
     def get_forced_amount_benefits(self, indemnification):
