@@ -192,6 +192,10 @@ class DocumentDescription(metaclass=PoolMeta):
     def on_change_with_products_name(self, name=None):
         return ', '.join([p.rec_name for p in self.products])
 
+    @classmethod
+    def _export_light(cls):
+        return super(DocumentDescription, cls)._export_light() | {'products'}
+
 
 class DocumentDescriptionProduct(model.CoogSQL):
     'Document Desc To Product Relation'
