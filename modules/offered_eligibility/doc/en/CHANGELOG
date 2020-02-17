@@ -1,3 +1,4 @@
+* OTH#00000 Add option of blocking eligibility check to subscription API
 * OTH#00000 Fix typo in option eligibility check method
 * OTH#00000 Update simulate API output schema
 * BUG#14012 Fix tests

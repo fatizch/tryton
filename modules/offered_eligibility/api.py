@@ -11,6 +11,7 @@ class APIContract(metaclass=PoolMeta):
         schema = super()._subscribe_contracts_options_schema()
         schema.update({
             'decline_non_eligible': {'type': 'boolean'},
+            'check_eligibility': {'type': 'boolean'},
             })
         return schema
 
@@ -19,6 +20,7 @@ class APIContract(metaclass=PoolMeta):
         options = super()._simulate_default_options()
         options.update({
             'decline_non_eligible': True,
+            'check_eligibility': False,
                 })
         return options
 
@@ -55,6 +57,24 @@ class APIContract(metaclass=PoolMeta):
                         'name': 'decline_non_eligible_options',
                         'params': [],
                         'error_type': 'failed_to_decline_non_eligible_options',
+                }])
+        if options.get('check_eligibility', False):
+            methods.extend([
+                {
+                        'priority': 16,
+                        'name': 'calculate_activation_dates',
+                        'params': [],
+                        'error_type': 'failed_to_calculate_activation_dates',
+                }, {
+                        'priority': 18,
+                        'name': 'update_options_automatic_end_date',
+                        'params': [],
+                        'error_type': 'failed_to_calculate_options_end_date',
+                }, {
+                        'priority': 20,
+                        'name': 'check_eligibility',
+                        'params': [],
+                        'error_type': 'non_eligible',
                 }])
         return methods
 

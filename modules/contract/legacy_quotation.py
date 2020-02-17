@@ -242,6 +242,7 @@ class LegacyQuotation(object):
             sim_input['options'] = {
                 'start_process': True,
                 'fast_forward': True,
+                'check_eligibility': True,
                 }
 
         if self.is_loan:
