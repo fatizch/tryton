@@ -1,3 +1,4 @@
+* OTH#0000 Recursive search for web resource should by done by back and not by API
 * FEA#12395 Customize distribution network per API Identity
 * BUG#13653 Add test for the distribution network API
 * FEA#13326 new API Implemented: distribution network update

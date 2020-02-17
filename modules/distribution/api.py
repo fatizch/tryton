@@ -107,12 +107,9 @@ class APIIdentityWebResources(metaclass=PoolMeta):
     def get_api_context(self):
         context = super().get_api_context()
         if self.distribution_network:
-            for parent in self.distribution_network.parents:
-                try:
-                    context['theme'] = parent.get_web_resource_by_key('theme')
-                    return context
-                except KeyError:
-                    pass
+            theme = self.distribution_network.get_web_resource_by_key('theme')
+            if theme:
+                context['theme']
         return context
 
 
@@ -638,3 +635,11 @@ class DistributionNetwork(WebUIResourceMixin):
                 for x in self.web_ui_resources
                 }
         return res
+
+    def get_web_resource_by_key(self, key, instance=False):
+        try:
+            return super(DistributionNetwork, self).get_web_resource_by_key(key,
+                instance)
+        except KeyError:
+            if self.parent:
+                return self.parent.get_web_resource_by_key(key, instance)

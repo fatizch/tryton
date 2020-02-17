@@ -1,3 +1,4 @@
+* OTH#0000 La recherche récursive des ressources web doit être faite au niveau métier et pas au niveau API
 * FEA#12395 Surcharge du réseau de distribution par identité API
 * BUG#13653 Ajout de test pour l'API de réseaux de distribution
 * FEA#13326 Implémentation des API: Mise a jour des reseaux de distribution
