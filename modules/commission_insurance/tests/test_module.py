@@ -520,6 +520,18 @@ class ModuleTestCase(test_framework.CoogTestCase):
                     'data': {},
                     }])
 
+        data_dict = copy.deepcopy(data_ref)
+        data_dict['contracts'][0]['agent'] = {'code': 'wonder'}
+        data_dict['contracts'][0]['agent_rate'] = '11'
+        result = ContractAPI.subscribe_contracts(data_dict,
+            {'dist_network': node_1_1.id, '_debug_server': True})
+        contract = Contract(result['contracts'][0]['id'])
+        self.assertEqual(len(contract.commission_rate_overrides), 1)
+        self.assertEqual(contract.commission_rate_overrides[0].custom_rate,
+            Decimal('0.11'))
+        self.assertEqual(contract.commission_rate_overrides[0].agent.code,
+            'wonder')
+
     def test0020_date_calculations(self):
         invoice_line = mock.Mock()
         invoice_line.coverage_start = datetime.date(2000, 12, 31)

@@ -123,7 +123,7 @@ class APIContract(metaclass=PoolMeta):
             if 'agent_rate' in contract_data:
                 contract.commission_rate_overrides = [
                     {'agent': contract.agent.id,
-                        'rate': contract_data['agent_rate']},
+                        'custom_rate': contract_data['agent_rate']},
                     ]
         return contract
 

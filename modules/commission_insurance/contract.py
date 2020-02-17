@@ -191,7 +191,7 @@ class Contract(metaclass=PoolMeta):
 
     def getter_commission_data(self, name):
         agents = self._calculated_commission_data
-        return [model.dictionarize(x) for x in agents]
+        return [model.dictionarize(x, set_rec_names=True) for x in agents]
 
     @fields.depends('agent', 'dist_network')
     def on_change_with_broker(self, name=None):
