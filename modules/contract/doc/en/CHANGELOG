@@ -1,3 +1,4 @@
+* FEA#14344 The controls of extra data in contract API are differentiated by API
 * BUG#14626 Make update_options_automatic_end_date into a classmethod in order to improve performances
 * OTH#00000 Add a dedicated function to set the contract number on a contract
 * FEA#14343 Specify for which API extra datas are needed

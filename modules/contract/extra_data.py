@@ -2,6 +2,7 @@
 # this repository contains the full copyright notices and license terms.
 from trytond import backend
 from trytond.pool import PoolMeta
+from trytond.server_context import ServerContext
 
 from trytond.pyson import Eval
 from trytond.transaction import Transaction
@@ -38,3 +39,33 @@ class ExtraData(metaclass=PoolMeta):
             values=['simulation'], where=(
                 table.kind.in_(['contract', 'product', 'party_person',
                 'party_company', 'package', 'option', 'covered_element']))))
+
+    @classmethod
+    def filter_extra_for_validation_level(cls, extra):
+        validation_level = ServerContext().get('contract_validation_level',
+            None)
+        if validation_level is None:
+            return extra
+        # If an API validation level is given,
+        # We do not need to check for the presence
+        # of extra_data whose level ( field: used_by_api)
+        # is higher than the given validation level
+        levels = [x[0] for x in cls.used_by_api.selection]
+        level_idx = levels.index(validation_level)
+        idx_by_keys = {x.name: levels.index(x.used_by_api or '')
+            for x in cls.search([('name', 'in', sorted(list(extra)))])}
+        filtered = {}
+        for k in extra:
+            if idx_by_keys[k] > level_idx:
+                continue
+            filtered[k] = extra[k]
+        return filtered
+
+    @classmethod
+    def check_for_consistency(cls, recomputed, extra):
+        if recomputed != extra:
+            filtered_recomputed = cls.filter_extra_for_validation_level(
+                recomputed)
+            filtered_extra = cls.filter_extra_for_validation_level(extra)
+            return filtered_recomputed == filtered_extra
+        return True

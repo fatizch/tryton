@@ -314,11 +314,13 @@ class APIContract(metaclass=PoolMeta):
 
     @classmethod
     def _validate_covered_element_input(cls, data, contract_data, parties):
-        API = Pool().get('api')
+        pool = Pool()
+        API = pool.get('api')
+        ExtraData = pool.get('extra_data')
         extra = data['extra_data']
         recomputed = data['item_descriptor'].refresh_extra_data(
             extra.copy())
-        if recomputed != extra:
+        if not ExtraData.check_for_consistency(recomputed, extra):
             API.add_input_error({
                     'type': 'invalid_extra_data_for_covered',
                     'data': {

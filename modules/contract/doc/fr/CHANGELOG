@@ -1,3 +1,4 @@
+* FEA#14344 La vérification des données complémentaires dans les API est différenciée par API
 * BUG#14626 Passage de update_options_automatic_end_date en méthode de classes afin d'améliorer les performances
 * OTH#00000 Ajout d'une fonction permettant de déclencher la génération du numéro de contrat
 * FEA#14343 Spécification de la nécessité des données complémentaires dans les APIs

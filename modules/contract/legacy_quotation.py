@@ -6,6 +6,8 @@ from collections import namedtuple, defaultdict
 from trytond.exceptions import UserError
 from trytond.i18n import gettext
 
+from trytond.transaction import Transaction
+
 from trytond.pool import Pool
 from trytond.modules.api import APIError
 from trytond.modules.coog_core import utils
@@ -40,21 +42,34 @@ class LegacyQuotation(object):
         self.only_validate = only_validate
         broker_id = legacy_input['broker']
         self.broker_id = broker_id
-        self.simulate_input = self.quotation_to_api_input(action)
+        try:
+            self.simulate_input = self.quotation_to_api_input(action)
+        except Exception as e:
+            if only_validate:
+                if hasattr(e, 'message'):
+                    msg = e.message
+                else:
+                    msg = str(e)
+                self.sim_results = msg
+                self.subscribe_result = msg
+                return
+            raise
         api_context = {
             'dist_network': broker_id}
         if only_validate:
             api_context['_validate'] = True
         if action == 'quotation':
-            res = APIContract.simulate(self.simulate_input, api_context)
+            with Transaction().set_context(_check_access=False):
+                res = APIContract.simulate(self.simulate_input, api_context)
             self.sim_results = res
             if self.only_validate or isinstance(self.sim_results, APIError):
                 return
             else:
                 self.build_prices_data()
         elif action == 'subscription':
-            res = APIContract.subscribe_contracts(self.simulate_input,
-                api_context)
+            with Transaction().set_context(_check_access=False):
+                res = APIContract.subscribe_contracts(self.simulate_input,
+                    api_context)
             self.subscribe_result = res
 
     @property
@@ -141,6 +156,10 @@ class LegacyQuotation(object):
 
         for i, legacy_covered in enumerate(legacy_input['covered']):
             sim_party = dict(legacy_covered['party'])
+            if not sim_party.get('birth_date', None):
+                raise UserError(gettext(
+                        'party_cog.msg_legacy_quotation_birth_date_required'))
+
             sim_party['ref'] = str(i)
             sim_parties.append(sim_party)
             sim_party_coverage = {

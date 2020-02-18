@@ -480,10 +480,12 @@ class APIContract(APIMixin):
 
     @classmethod
     def _validate_contract_input(cls, data):
-        API = Pool().get('api')
+        pool = Pool()
+        API = pool.get('api')
+        ExtraData = pool.get('extra_data')
         extra = data['extra_data']
         recomputed = data['product'].refresh_extra_data(extra.copy())
-        if recomputed != extra:
+        if not ExtraData.check_for_consistency(recomputed, extra):
             API.add_input_error({
                     'type': 'invalid_extra_data_for_product',
                     'data': {
@@ -531,10 +533,12 @@ class APIContract(APIMixin):
 
     @classmethod
     def _validate_contract_option_input(cls, data):
-        API = Pool().get('api')
+        pool = Pool()
+        API = pool.get('api')
+        ExtraData = pool.get('extra_data')
         extra = data['extra_data']
         recomputed = data['coverage'].refresh_extra_data(extra.copy())
-        if recomputed != extra:
+        if not ExtraData.check_for_consistency(recomputed, extra):
             API.add_input_error({
                     'type': 'invalid_extra_data_for_coverage',
                     'data': {
@@ -899,7 +903,9 @@ class APIContract(APIMixin):
 
     @classmethod
     def _simulate_validate_input(cls, parameters):
-        return cls._subscribe_contracts_validate_input(parameters)
+        with ServerContext().set_context(
+                contract_validation_level='simulation'):
+            return cls._subscribe_contracts_validate_input(parameters)
 
     @classmethod
     def _simulate_output_schema(cls):
