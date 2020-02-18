@@ -308,7 +308,8 @@ class RemoveOption(EndorsementWizardStepMixin):
                         (x.option.coverage.get_subscription_behaviour(args)
                         ['behaviour'] == 'mandatory')]:
                     if (set([x.option for x in ce_endorsement.options]) !=
-                            set(CoveredElement(ce_id).options)):
+                            set([x for x in CoveredElement(ce_id).options
+                                    if x.is_active_at_date(effective_date)])):
                         raise ValidationError(gettext(
                                 'endorsement_insurance'
                                 '.msg_must_end_all_options'))

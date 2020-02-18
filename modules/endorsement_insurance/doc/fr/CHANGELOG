@@ -1,3 +1,5 @@
+* BUG#14797 Impossible de résilier une garantie obligatoire si il existe des garanties déjà résiliés dans le passé pour le même élément couvert.
+
 Version 2.6 - 2019-10-11
 * BUG#11805 Suppression de la date de début manuelle d'une garantie lors d'un
 changement de date d'effet du contrat, lorsque la garantie a une date d'effet

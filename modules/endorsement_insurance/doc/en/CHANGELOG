@@ -1,3 +1,5 @@
+* BUG#14797 It was impossible to terminate a mandatory option if previous options for the same covered had already been terminated
+
 Version 2.6 - 2019-10-11
 * BUG#11805 Remove manual start date of an option when changing contract start
 date and the option had a manual start date equal to the previous contract
