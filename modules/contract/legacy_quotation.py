@@ -46,7 +46,9 @@ class LegacyQuotation(object):
             self.simulate_input = self.quotation_to_api_input(action)
         except Exception as e:
             if only_validate:
-                if hasattr(e, 'message'):
+                if isinstance(e, UserError):
+                    msg = e
+                elif hasattr(e, 'message'):
                     msg = e.message
                 else:
                     msg = str(e)
@@ -95,8 +97,9 @@ class LegacyQuotation(object):
             return {'valid': res, 'messages': []}
         else:
             resp = {'valid': False}
-            text_messages = self.build_validation_messages(res)
-            messages = [{'type': 'error', 'message': x}
+            text_messages, type_ = self.build_validation_messages(res)
+            messages = [{'type': type_ if 'json_schema' not in x
+                    else 'error', 'message': x}
                 for x in list(set(text_messages))]
             resp.update({'messages': messages})
             return resp
@@ -104,9 +107,11 @@ class LegacyQuotation(object):
     def build_validation_messages(self, res):
         if isinstance(res, APIError):
             messages = self.format_api_error(res, raise_errors=False)
-            return messages
+            return messages, 'warning'
+        elif isinstance(res, UserError):
+            return [res.message], 'warning'
         else:
-            return [str(res)]
+            return [str(res)], 'error'
 
     def build_prices_data(self):
         self.first_invoice_data = self.get_premium_contract_data(
