@@ -152,7 +152,7 @@ class Party(export.ExportImportMixin, summary.SummaryMixin):
         'invisible': (~STATES_PERSON | ~Bool(Eval('death_date')))},
         depends=['is_person', 'birth_date'], domain=['OR',
             ('death_date', '=', None),
-            ('death_date', '>', Eval('birth_date'))],
+            ('death_date', '>=', Eval('birth_date'))],
         readonly=True, help='Death date')
     color = fields.Function(
         fields.Char('Color'),

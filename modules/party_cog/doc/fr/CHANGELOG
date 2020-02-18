@@ -1,3 +1,4 @@
+* BUG#14927 Gestion du cas d'une date de décès qui est égale à la date de naissance
 * OTH#0000 Amélioration graphique sur la vue liste des tiers
 * FEA#12673 Gestion de la date de décès sur une personne
 * FEA#13568 Mise à jour des champs dans l'extraction RGPD d'un tiers

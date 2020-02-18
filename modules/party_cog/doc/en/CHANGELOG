@@ -1,3 +1,4 @@
+* BUG#14927 Manage the case that death date could be birth date
 * OTH#0000 UI enhancements on party list view
 * FEA#12673 Manage death date on person record
 * FEA#13568 Update fields in party GDPR extraction
