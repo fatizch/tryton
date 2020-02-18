@@ -27,7 +27,8 @@ class Process(metaclass=PoolMeta):
     for_loss_descs = fields.Many2Many('process-benefit.loss.description',
         'process', 'loss_desc', 'Loss Description', states={
             'invisible': ~Eval('kind').in_(
-                ['claim_declaration', 'claim_reopening'])},
+                ['claim_declaration', 'claim_reopening',
+                    'claim_declaration_and_reopening'])},
         depends=['kind'])
 
     @classmethod

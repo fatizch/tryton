@@ -1,9 +1,10 @@
-BUG#13870 Initialize date in rule engine context when calculating required document on loss
-BUG#13824 Allow to select only available loss desc in the process
-BUG#13804 Fix crash in claim creation wizard
+* BUG#14949 Missing possibility to filter claim processes on loss descs for claim declaration and reopening type
+* BUG#13870 Initialize date in rule engine context when calculating required document on loss
+* BUG#13824 Allow to select only available loss desc in the process
+* BUG#13804 Fix crash in claim creation wizard
 
 Version 2.6 - 2019-10-11
-BUG#11416 Iteration on incomplete fix
+* BUG#11416 Iteration on incomplete fix
 
 Version 2.4 - 2019-04-12
 * BUG#11416 Fix proposed processes when selecting a claim into the process launcher assistant
