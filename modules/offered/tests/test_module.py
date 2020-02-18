@@ -234,6 +234,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
                 'sorted': True,
                 'default': '2',
                 'selection': [('1', '1'), ('2', '2'), ('3', '3')],
+                'store_on_party': False,
                 })
 
         test_numeric = self.ExtraData()
@@ -250,7 +251,9 @@ class ModuleTestCase(test_framework.CoogTestCase):
                 'technical_kind': 'numeric',
                 'business_kind': 'contract',
                 'sequence': 2,
-                'digits': (16, 4)})
+                'digits': (16, 4),
+                'store_on_party': False,
+                })
 
         # Sub data
         test_selection.sub_datas = [self.SubData(
@@ -267,6 +270,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
                 'selection': [('1', '1'), ('2', '2'), ('3', '3')],
                 'sub_data': [
                     ('=', '2', test_numeric._get_structure())],
+                'store_on_party': False,
                 })
 
         # Nested sub data
@@ -309,6 +313,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
                     ('=', '2', test_numeric._get_structure()),
                     ('=', '1', test_selection_2._get_structure()),
                     ],
+                'store_on_party': False,
                 })
 
     @test_framework.prepare_test(

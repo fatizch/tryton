@@ -43,6 +43,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
             'Coverage': 'offered.option.description',
             'CoveredElement': 'contract.covered_element',
             'CoveredElementVersion': 'contract.covered_element.version',
+            'ExtraData': 'extra_data',
             'RuleEngineRuntime': 'rule_engine.runtime',
             'SubStatus': 'contract.sub_status',
             'EndReason': 'covered_element.end_reason',
@@ -80,6 +81,55 @@ class ModuleTestCase(test_framework.CoogTestCase):
         qg.prefix = 'Quo'
         qg.suffix = 'Y${year}'
         qg.save()
+
+    def test0003_create_extra_data_for_party(self):
+        party_extra_1 = self.ExtraData()
+        party_extra_1.name = 'party_1'
+        party_extra_1.string = 'Party 1'
+        party_extra_1.kind = 'covered_element'
+        party_extra_1.type_ = 'char'
+        party_extra_1.store_on_party = True
+        party_extra_1.save()
+
+        party_extra_2 = self.ExtraData()
+        party_extra_2.name = 'party_2'
+        party_extra_2.string = 'Party 2'
+        party_extra_2.kind = 'covered_element'
+        party_extra_2.type_ = 'char'
+        party_extra_2.store_on_party = False
+        party_extra_2.save()
+
+        party_extra_3 = self.ExtraData()
+        party_extra_3.name = 'party_3'
+        party_extra_3.string = 'Party 3'
+        party_extra_3.kind = 'party_person'
+        party_extra_3.type_ = 'char'
+        party_extra_3.store_on_party = True
+        party_extra_3.save()
+
+        party_extra_4 = self.ExtraData()
+        party_extra_4.name = 'party_4'
+        party_extra_4.string = 'Party 4'
+        party_extra_4.kind = 'party_person'
+        party_extra_4.type_ = 'char'
+        party_extra_4.store_on_party = False
+        party_extra_4.save()
+
+        party_extra_5 = self.ExtraData()
+        party_extra_5.name = 'party_5'
+        party_extra_5.string = 'Party 5'
+        party_extra_5.kind = 'party_company'
+        party_extra_5.type_ = 'char'
+        party_extra_5.store_on_party = True
+        party_extra_5.save()
+
+        party_extra_6 = self.ExtraData()
+        party_extra_6.name = 'party_6'
+        party_extra_6.string = 'Party 6'
+        party_extra_6.kind = 'party_company'
+        party_extra_6.type_ = 'char'
+        party_extra_6.store_on_party = False
+        party_extra_6.save()
 
     @test_framework.prepare_test(
         'offered_insurance.test0100_testExtraPremiumKindCreation',
@@ -1085,6 +1135,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
         covered_extra_1.string = 'Covered 1'
         covered_extra_1.kind = 'covered_element'
         covered_extra_1.type_ = 'boolean'
+        covered_extra_1.store_on_party = True
         covered_extra_1.save()
 
         description, = ItemDescriptor.search([('code', '=', 'person')])
@@ -1719,6 +1770,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
         covered_extra_1.string = 'Covered 1'
         covered_extra_1.kind = 'covered_element'
         covered_extra_1.type_ = 'boolean'
+        covered_extra_1.store_on_party = True
         covered_extra_1.save()
 
         party, = Party.search([('name', '=', 'DOE')])
@@ -1745,6 +1797,242 @@ class ModuleTestCase(test_framework.CoogTestCase):
         data_dict['parties'][0]['extra_data']['covered_1'] = False
         PartyAPI.create_party(data_dict, {})
         self.assertEqual(party.extra_data['covered_1'], False)
+
+    @test_framework.prepare_test(
+        'contract_insurance.test0003_create_extra_data_for_party'
+        )
+    def test0091_tests_party_extra_data_API(self):
+        PartyAPI = Pool().get('api.party')
+        data_ref = {
+            'parties': [{
+                'ref': '1',
+                'is_person': True,
+                'name': 'Doe',
+                'first_name': 'Mother',
+                'birth_date': '1978-01-14',
+                'gender': 'female',
+                'extra_data': {
+                    'party_1': '1',
+                    },
+                }],
+            }
+        #######################################
+        # Case 1: kind = covered_element
+        #         store_on_party = True
+        #######################################
+        data_dict = copy.deepcopy(data_ref)
+        self.assertEqual(PartyAPI._create_party_convert_input(data_dict)
+            ['parties'][0]['extra_data'],
+            {'party_1': '1'})
+
+        data_dict = copy.deepcopy(data_ref)
+        data_dict['parties'][0]['is_person'] = False
+        data_dict['parties'][0]['extra_data'] = {'party_1': '1'}
+        try:
+            PartyAPI._create_party_convert_input(data_dict)
+        except trytond.modules.api.api.core.APIInputError as error_message:
+            self.assertEqual(error_message.data,
+                [{
+                    'type': 'extra_data_business_kind',
+                    'data': {
+                        'extra_data': 'party_1',
+                        'expected_business_kinds': ['party_company'],
+                        },
+                }])
+
+        #######################################
+        # Case 2: kind = covered_element
+        #         store_on_party = False
+        #######################################
+        data_dict = copy.deepcopy(data_ref)
+        data_dict['parties'][0]['extra_data'] = {'party_2': '1'}
+        try:
+            PartyAPI._create_party_convert_input(data_dict)
+        except trytond.modules.api.api.core.APIInputError as error_message:
+            self.assertEqual(error_message.data,
+                [{
+                    'type': 'extra_data_store_on_party',
+                    'data': {
+                        'extra_data': 'party_2',
+                        'expected_store_on_party': True,
+                        'given_store_on_party': False,
+                        },
+                }])
+
+        data_dict = copy.deepcopy(data_ref)
+        data_dict['parties'][0]['is_person'] = False
+        data_dict['parties'][0]['extra_data'] = {'party_2': '1'}
+        try:
+            PartyAPI._create_party_convert_input(data_dict)
+        except trytond.modules.api.api.core.APIInputError as error_message:
+            self.assertEqual(error_message.data,
+                [{
+                    'type': 'extra_data_business_kind',
+                    'data': {
+                        'extra_data': 'party_2',
+                        'expected_business_kinds': ['party_company'],
+                        },
+                }])
+
+        #######################################
+        # Case 3: kind = Party_Person
+        #         store_on_party = True
+        #######################################
+        data_dict = copy.deepcopy(data_ref)
+        data_dict['parties'][0]['extra_data'] = {'party_3': '1'}
+        self.assertEqual(PartyAPI._create_party_convert_input(data_dict)
+            ['parties'][0]['extra_data'],
+            {'party_3': '1'})
+
+        data_dict = copy.deepcopy(data_ref)
+        data_dict['parties'][0]['is_person'] = False
+        data_dict['parties'][0]['extra_data'] = {'party_3': '1'}
+        try:
+            PartyAPI._create_party_convert_input(data_dict)
+        except trytond.modules.api.api.core.APIInputError as error_message:
+            self.assertEqual(error_message.data,
+                [{
+                    'type': 'extra_data_business_kind',
+                    'data': {
+                        'extra_data': 'party_3',
+                        'expected_business_kinds': ['party_company'],
+                        },
+                }])
+
+        #######################################
+        # Case 4: kind = Party_Person
+        #         store_on_party = None
+        #######################################
+        data_dict = copy.deepcopy(data_ref)
+        data_dict['parties'][0]['extra_data'] = {'party_4': '1'}
+        self.assertEqual(PartyAPI._create_party_convert_input(data_dict)
+            ['parties'][0]['extra_data'],
+            {'party_4': '1'})
+
+        data_dict = copy.deepcopy(data_ref)
+        data_dict['parties'][0]['is_person'] = False
+        data_dict['parties'][0]['extra_data'] = {'party_4': '1'}
+        try:
+            PartyAPI._create_party_convert_input(data_dict)
+        except trytond.modules.api.api.core.APIInputError as error_message:
+            self.assertEqual(error_message.data,
+                [{
+                    'type': 'extra_data_business_kind',
+                    'data': {
+                        'extra_data': 'party_4',
+                        'expected_business_kinds': ['party_company'],
+                        },
+                }])
+
+        #######################################
+        # Case 5: kind = party_company
+        #         store_on_party = True
+        #######################################
+        data_dict = copy.deepcopy(data_ref)
+        data_dict['parties'][0]['extra_data'] = {'party_5': '1'}
+        try:
+            PartyAPI._create_party_convert_input(data_dict)
+        except trytond.modules.api.api.core.APIInputError as error_message:
+            self.assertEqual(error_message.data,
+                [{
+                    'type': 'extra_data_business_kind',
+                    'data': {
+                        'extra_data': 'party_5',
+                        'expected_business_kinds':
+                            ['party_person', 'covered_element'],
+                        },
+                }])
+
+        data_dict = copy.deepcopy(data_ref)
+        data_dict['parties'][0]['is_person'] = False
+        data_dict['parties'][0]['extra_data'] = {'party_5': '1'}
+        self.assertEqual(PartyAPI._create_party_convert_input(data_dict)
+            ['parties'][0]['extra_data'],
+            {'party_5': '1'})
+
+        #######################################
+        # Case 6: kind = party_company
+        #         store_on_party = False
+        #######################################
+        data_dict = copy.deepcopy(data_ref)
+        data_dict['parties'][0]['extra_data'] = {'party_6': '1'}
+        try:
+            PartyAPI._create_party_convert_input(data_dict)
+        except trytond.modules.api.api.core.APIInputError as error_message:
+            self.assertEqual(error_message.data,
+                [{
+                    'type': 'extra_data_business_kind',
+                    'data': {
+                        'extra_data': 'party_6',
+                        'expected_business_kinds':
+                            ['party_person', 'covered_element'],
+                        },
+                }])
+
+        data_dict = copy.deepcopy(data_ref)
+        data_dict['parties'][0]['is_person'] = False
+        data_dict['parties'][0]['extra_data'] = {'party_6': '1'}
+        self.assertEqual(PartyAPI._create_party_convert_input(data_dict)
+            ['parties'][0]['extra_data'],
+            {'party_6': '1'})
+
+        ##############################################################
+        # Case 7: multi kinds = party_person & covered_element
+        # with party_person: store_on_party = True
+        # with covered_element: store_on_party = True
+        # is_person = True
+        ##############################################################
+        data_dict = copy.deepcopy(data_ref)
+        data_dict['parties'][0]['extra_data'] = {
+            'party_3': '1',
+            'party_1': '1',
+            }
+        self.assertEqual(PartyAPI._create_party_convert_input(data_dict)
+            ['parties'][0]['extra_data'], {
+                'party_3': '1',
+                'party_1': '1'
+            })
+
+        ##############################################################
+        # Case 8: multi kinds = party_person & covered_element
+        # with party_person: store_on_party != True
+        # with covered_element: store_on_party = True
+        # is_person = True
+        ##############################################################
+        data_dict = copy.deepcopy(data_ref)
+        data_dict['parties'][0]['extra_data'] = {
+            'party_4': '1',
+            'party_1': '1',
+            }
+        self.assertEqual(PartyAPI._create_party_convert_input(data_dict)
+            ['parties'][0]['extra_data'], {
+                'party_4': '1',
+                'party_1': '1'
+            })
+
+        ##############################################################
+        # Case 9: multi kinds = party_person & covered_element
+        # with party_person: store_on_party != True
+        # with covered_element: store_on_party = False
+        # is_person = True
+        ##############################################################
+        data_dict = copy.deepcopy(data_ref)
+        data_dict['parties'][0]['extra_data'] = {
+            'party_4': '1',
+            'party_2': '1',
+            }
+        try:
+            PartyAPI._create_party_convert_input(data_dict)
+        except trytond.modules.api.api.core.APIInputError as error_message:
+            self.assertEqual(error_message.data,
+                [{
+                    'type': 'extra_data_store_on_party',
+                    'data': {
+                        'extra_data': 'party_2',
+                        'expected_store_on_party': True,
+                        'given_store_on_party': False,
+                        },
+                }])
 
     @test_framework.prepare_test(
         'contract_insurance.test0001_testPersonCreation',

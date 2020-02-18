@@ -1,3 +1,4 @@
+* FEA#14708 Allow to add party extra data in APIs
 * OTH#0000 Properly filter document desc for covered element so that doc on commercial product work
 * FEA#13644 Calculate coverage amount and return to API
 * BUG#13758 Prevent crash when initializing some item descriptors

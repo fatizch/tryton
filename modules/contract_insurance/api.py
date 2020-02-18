@@ -622,10 +622,46 @@ class APIParty(metaclass=PoolMeta):
 
     @classmethod
     def _party_convert(cls, data, options, parameters):
+        # Rules to get party extra data:
+        # If current party is not a person
+        #   -> extra data kind should only be party_company
+        # If current party is a person indeed
+        #   -> extra data kind could be both
+        #      1. party_person
+        #      2. covered_element with flag store_on_party = True
         super()._party_convert(data, options, parameters)
         APICore = Pool().get('api.core')
-        data['extra_data'] = APICore._extra_data_convert(
-            data.get('extra_data', {}), ['covered_element'])
+        party_extra_data = data.get('extra_data', {})
+
+        if not data['is_person']:
+            data['extra_data'] = APICore._extra_data_convert(
+                party_extra_data, ['party_company'])
+        else:
+            data['extra_data'] = APICore._extra_data_convert(
+                party_extra_data, ['party_person', 'covered_element'])
+            cls._check_store_on_covered_extra_data(data)
+
+    @classmethod
+    def _check_store_on_covered_extra_data(cls, data):
+        pool = Pool()
+        API = pool.get('api')
+        ExtraData = pool.get('extra_data')
+        party_extra_data = data.get('extra_data', {})
+
+        for code, value in party_extra_data.items():
+            extra_definition, = ExtraData.search([('name', '=', code)])
+            structure = extra_definition._get_structure()
+            if not structure['store_on_party'] and \
+                    structure['business_kind'] == 'covered_element':
+                API.add_input_error({
+                        'type': 'extra_data_store_on_party',
+                        'data': {
+                            'extra_data': code,
+                            'expected_store_on_party': True,
+                            'given_store_on_party':
+                                structure['store_on_party'],
+                            },
+                        })
 
     @classmethod
     def _init_new_party(cls, data, options):

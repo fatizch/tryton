@@ -417,6 +417,7 @@ class ExtraData(model.CoogDictSchema, model.ConfigurationMixin, model.CoogView,
             'technical_kind': self.type_,
             'business_kind': self.kind,
             'sequence': self.sequence_order,
+            'store_on_party': self.store_on_party,
             }
 
         if self.has_default_value:
