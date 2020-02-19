@@ -781,12 +781,13 @@ class ModifyCoveredElement(EndorsementWizardStepMixin):
             version_date = covered_element.get_version_at_date(
                 self.effective_date).start
             terminated = [x for x in covered_element.options
-                if x.manual_end_date == coog_date.add_day(
+                if hasattr(x, 'manual_end_date') and
+                    x.manual_end_date == coog_date.add_day(
                     self.effective_date, -1)]
             void_status = [x.sub_status for x in covered_element.options
                 if x.status == 'void']
             still_active = [x for x in covered_element.options
-                if not x.manual_end_date or
+                if not getattr(x, 'manual_end_date', None) or
                 x.manual_end_date >= self.effective_date]
             if terminated and not still_active:
                 displayer.action = 'terminate'

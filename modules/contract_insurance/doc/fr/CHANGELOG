@@ -1,3 +1,4 @@
+* OTH#0000 Correctif d'une erreur dans la modification d'un avenant
 * FEA#14708 Ajout de différents types de données complémentaires pour des tiers
 * OTH#0000 Filtrage plus propre pour les modèles de courrier d'élement couvert pour que l'ajout de courrier sur les produits commerciaux fonctionne
 * FEA#13644 Calcul du montant de couverture et retour dans l'API
