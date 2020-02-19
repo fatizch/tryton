@@ -1,3 +1,4 @@
+* OTH#00000 Correctif d'une erreur quand on clique trop rapidement sur Suivant dans un Avenant
 * BUG#14691 Correctif de crash lors de l'application d'un avenant sur contrat non défini
 * OTH#00000 Pas de mise à jour des modifications d'une version d'option (ex: extra data, coverage amount) si la version était à la date de souscription ou si on fait un aller retour dans le processus. Amélioration du code en ajoutant une méthode facilement surcheargeble pour mettre à jour les données d'une version d'option
 * BUG#13146 Suppression du contrôle de l'éligibilité lors de la résiliation d'un contrat

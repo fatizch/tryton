@@ -665,7 +665,7 @@ class ModifyCoveredElement(EndorsementWizardStepMixin):
                 contract_endorsement.contract._save_values)
             if not contract_endorsement.clean_up():
                 new_endorsements.append(contract_endorsement)
-        if not new_endorsements:
+        if not new_endorsements and endorsement.contract_endorsements:
             new_endorsements = [endorsement.contract_endorsements[0]]
         endorsement.contract_endorsements = new_endorsements
         endorsement.save()
