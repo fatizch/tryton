@@ -1,3 +1,4 @@
+* OTH#00000 Mise à jour de la règle de résiliation par défaut pour utiliser la fonction "creer_date"
 * FEA#13170 API Description de produits, changer l'emplacement des options de descripteurs de risques
 
 Version 2.6 - 2019-10-11

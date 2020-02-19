@@ -1,3 +1,4 @@
+* OTH#00000 Update default end date rule to use the new "creer_date" rule engine function
 * FEA#13170 APi describe product, move coverages description
 
 Version 2.6 - 2019-10-11
