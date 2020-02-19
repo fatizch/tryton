@@ -811,6 +811,18 @@ class ModuleTestCase(test_framework.CoogTestCase):
         self.assertEqual(self.Runtime._re_round({}, Decimal('2.5'), 1),
             Decimal('3'))
 
+        # Test _re_create_date
+        self.assertEqual(self.Runtime._re_create_date({},
+                2020, 2, 29), datetime.date(2020, 2, 29))
+        self.assertEqual(self.Runtime._re_create_date({},
+                2021, 2, 29), datetime.date(2021, 2, 28))
+        self.assertEqual(self.Runtime._re_create_date({},
+                2020, 4, 31), datetime.date(2020, 4, 30))
+        self.assertRaises(ValueError, self.Runtime._re_create_date, {}, 2020,
+                          4, 33)
+        self.assertRaises(ValueError, self.Runtime._re_create_date, {}, 2020,
+                          14, 30)
+
     @test_framework.prepare_test('rule_engine.test0020_testAdvancedRule')
     def test0060_testRuleEngineDebugging(self):
         # This test must be run later as execute rule with debug enabled forces

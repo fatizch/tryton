@@ -1,3 +1,4 @@
+* FEA#14773 Ajout d'une fonction "créer une date" dans le moteur de règle
 * BUG#13648 Correction de la liste de dates retournée par la fonction du moteur de règle dates_changement_table()
 
 Version 2.6 - 2019-10-11

@@ -38,6 +38,17 @@ insuffisantes pour son exécution</field>
             <field name="long_description">Retourne les objets d'un événement</field>
             <field name="parent" ref="dossier_outils"/>
         </record>
+        <record model="rule_engine.function" id="creer_date">
+            <field name="translated_technical_name">creer_date</field>
+            <field name="description">Creer une date</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_create_date</field>
+            <field name="fct_args">annee, mois, jour</field>
+            <field name="long_description">Cree une date, réajuste authomatiquement le jour si il depasse la fin du mois</field>
+            <field name="parent" ref="dossier_outils"/>
+        </record>
         <record model="rule_engine.function" id="annees_entre">
             <field name="translated_technical_name">annees_entre</field>
             <field name="description">Nombre d'années entre...</field>

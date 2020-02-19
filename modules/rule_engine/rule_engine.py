@@ -16,6 +16,7 @@ import pyflakes.messages
 import logging
 from decimal import Decimal, ROUND_HALF_UP
 from dateutil.relativedelta import relativedelta
+from calendar import monthrange
 
 from io import StringIO
 from pyflakes.checker import Checker
@@ -524,6 +525,14 @@ class RuleTools(ModelView):
         if isinstance(res[0] if isinstance(res, list) else res, Model):
             raise Exception(gettext('rule_engine.msg_cannot_return_models'))
         return res
+
+    @classmethod
+    def _re_create_date(cls, args, year, month, day):
+        if 27 < day <= 31:
+            max_day = monthrange(year, month)[1]
+            if day > max_day:
+                day = max_day
+        return datetime.date(year, month, day)
 
     @classmethod
     def _re_years_between(cls, args, date1, date2):
