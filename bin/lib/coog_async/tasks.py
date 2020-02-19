@@ -2,8 +2,15 @@ import sys
 import logging
 import datetime
 import coog_async.broker as async_broker
-from psycopg2.extensions import TransactionRollbackError
+
+try:
+    from psycopg2cffi import compat
+    compat.register()
+except ImportError:
+    pass
+
 from psycopg2 import OperationalError as DatabaseOperationalError
+from psycopg2.extensions import TransactionRollbackError
 
 
 def split_batch(l, n):
