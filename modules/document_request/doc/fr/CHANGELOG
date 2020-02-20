@@ -1,3 +1,4 @@
+* OTH#0000 Ajout du champs Requis Pour à la vue formulaire de demande de document
 * FEA#14830 Permettre de demander manuellement des documents
 * BUG#14550 Pas de tentative de génération de jeton lorsque la documentation_api n'est pas configurée
 * FEA#13461 Ajout d'un bouton pour invalider les pièces jointes

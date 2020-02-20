@@ -17,8 +17,8 @@ this repository contains the full copyright notices and license terms. -->
     <label name="first_reception_date" xalign="0"/>
     <field name="first_reception_date"/>
     <newline/>
-    <label name="for_object" xalign="0"/>
-    <field name="for_object" colspan="5"/>
+    <label name="for_object_selection" xalign="0"/>
+    <field name="for_object_selection" colspan="5"/>
     <label name="attachment" xalign="0"/>
     <field name="attachment" colspan="4"/>
     <field name="attachment_data"/>
@@ -31,4 +31,6 @@ this repository contains the full copyright notices and license terms. -->
         </page>
     </notebook>
     <field name="allow_force_receive" invisible="1"/>
+    <field name="for_object" invisible="1"/>
+    <field name="added_manually" invisible="1"/>
 </form>
