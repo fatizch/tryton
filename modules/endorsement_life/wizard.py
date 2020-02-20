@@ -270,7 +270,7 @@ class ManageBeneficiariesOptionDisplayer(model.CoogView):
         displayer.display_name = option.get_rec_name(None)
         displayer.coverage = option.coverage
         displayer.beneficiary_clause = getattr(option, 'beneficiary_clause',
-            None)
+            getattr(option.coverage, 'default_beneficiary_clause', None))
         displayer.beneficiary_clause_customizable = \
             displayer.beneficiary_clause and \
             displayer.beneficiary_clause.customizable
