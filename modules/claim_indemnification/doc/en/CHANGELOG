@@ -1,3 +1,4 @@
+* BUG#14995 Do not check share for cancel paid indemnifications
 * BUG#14904 Fix code to python 3 causing crash in indemnification calculation with beneficiary share
 * BUG#14216 Fix on revaluation which is applied the last day of the indemnification period: period wasn't splitted and the revaluation was'nt applied properly
 * BUG#13822 Set claim bank account to current bank account on indemnifications

@@ -274,12 +274,12 @@ class Loss(metaclass=PoolMeta):
                         ValidationError(gettext(
                                 'claim_indemnification'
                                 '.msg_bad_indemnification_shares',
-                                service=self.rec_name,
+                                service=service.rec_name,
                                 total_share=str(int(total_share * 100)))))
 
     def total_share_valid(self, service):
         total_share = sum(x.share for x in service.indemnifications
-            if x.status not in ['rejected', 'cancelled',
+            if x.status not in ['rejected', 'cancelled', 'cancel_paid',
                 'cancel_scheduled', 'cancel_validated', 'cancel_controlled'])
         return total_share == 1, total_share
 

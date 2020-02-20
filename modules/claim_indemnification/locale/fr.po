@@ -1565,7 +1565,7 @@ msgid ""
 "%%."
 msgstr ""
 "La somme des parts des bénéficiaires pour la prestation %(service)s doit "
-"être de 100: %(total_share)s % %."
+"être de 100: %(total_share)s %%."
 
 msgctxt "model:ir.message,text:msg_beneficiary_required"
 msgid "The beneficiary is required."
