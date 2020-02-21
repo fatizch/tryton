@@ -242,15 +242,6 @@ class ManageBeneficiariesOptionDisplayer(model.CoogView):
     beneficiaries = fields.One2Many(
         'contract.manage_beneficiaries.beneficiary', None, 'Beneficiaries')
 
-    @property
-    def _parent(self):
-        if hasattr(self, '__parent'):
-            return self.__parent
-        if not getattr(self, 'parent', None):
-            return None
-        parent_model, parent_id = self.parent.split(',')
-        return Pool().get(parent_model)(int(parent_id))
-
     @fields.depends('beneficiary_clause', 'customized_beneficiary_clause')
     def on_change_beneficiary_clause(self):
         if not self.beneficiary_clause:
@@ -267,7 +258,8 @@ class ManageBeneficiariesOptionDisplayer(model.CoogView):
         Beneficiary = pool.get('contract.manage_beneficiaries.beneficiary')
         displayer = cls()
         displayer.parent = cls.get_parent_key(option)
-        displayer.parent_name = displayer._parent.rec_name
+        displayer.parent_name = getattr(option.covered_element, 'party',
+            option.coverage).rec_name
         displayer.option_id = getattr(option, 'id', None)
         displayer.display_name = option.get_rec_name(None)
         displayer.coverage = option.coverage
@@ -300,13 +292,10 @@ class ManageBeneficiariesOptionDisplayer(model.CoogView):
 
     @classmethod
     def get_parent_key(cls, option):
-        if option.id:
-            return str(option)
-        if option.covered_element:
-            return str(option.covered_element.party)
-        if option.contract:
-            return str(option.contract)
-        raise NotImplementedError
+        # we add many informations to the key to differenciate options
+        return str(option) + str(getattr(option, 'coverage', '')) \
+                    + str(getattr(option.covered_element, 'party', '')) \
+                    + str(getattr(option, 'contract', ''))
 
     @classmethod
     def get_beneficiary_fields(cls):
