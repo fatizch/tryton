@@ -1190,16 +1190,16 @@ class ClaimIjPeriod(model.CoogSQL, model.CoogView, ModelCurrency):
             ).join(contract, condition=(service.contract == contract.id))
         if not with_subsidiary:
             query_table = query_table.join(company,
-                condition=(contract.subscriber == company.id))
+                condition=(contract.subscriber == company.id) &
+                (subscription.siren == company.siren))
         else:
             query_table = query_table.join(covered_element, condition=(
                 covered_element.contract == contract.id)
             ).join(item_desc,
                 condition=((covered_element.item_desc == item_desc.id)
                     & (item_desc.kind == 'subsidiary')))
-
-        query_table = query_table.join(company, condition=(
-            subscription.siren == company.siren))
+            query_table = query_table.join(company, condition=(
+                subscription.siren == company.siren))
 
         cursor.execute(*query_table.select(period.id, service.id,
                 where=service.benefit.in_([x.id for x in benefits])

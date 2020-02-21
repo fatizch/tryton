@@ -1,3 +1,4 @@
+* BUG#14950 Correctif d'un crash sur une double jointure sur la même table
 * BUG#14611 Correctif sur l'intégration de BPIJ sans libellé de rejet
 * BUG#14159 Correctif sur le batch création des flux gestip (souscription affilié)
 * BUG#13841 Correctif pour supporter les BPIJ lorsque les personnes couvertes sont des filiales

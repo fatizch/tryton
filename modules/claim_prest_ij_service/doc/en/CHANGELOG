@@ -1,3 +1,4 @@
+* BUG#14950 Fix Crashes on double join on same table
 * BUG#14611 Fix BPIJ integration without reject label
 * BUG#14159 Fix gestip flux creation (affiliated subscription)
 * BUG#13841 Handle BPIJ periods when covered element is a subdiary
