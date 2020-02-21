@@ -173,6 +173,11 @@ def read_file(filepath, binary=True):
         return f.read()
 
 
+def mkdir_if_not_exists(dirpath, mode=0o755):
+    if not dirpath.exists():
+        dirpath.mkdir(mode=mode, parents=True)
+
+
 def multi_column_required(table, column_names):
     clause = reduce(Add,
         (Case((Column(table, x) == Null, 0), else_=1) for x in column_names))

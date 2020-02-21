@@ -1,3 +1,5 @@
+* BUG#12202 Automatic archive directory creation if it does not exist
+
 Version 2.6 - 2019-10-11
 Version 2.4 - 2019-04-12
 * BUG#11270 Limit the length of the street field

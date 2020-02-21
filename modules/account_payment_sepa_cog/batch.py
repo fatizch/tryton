@@ -79,6 +79,10 @@ class PaymentFailBatch(batch.BatchRootNoSelect):
                 })
 
     @classmethod
+    def get_paths_to_create(cls):
+        return super().get_paths_to_create() + ['in_directory']
+
+    @classmethod
     def select_ids(cls, in_directory=None, treatment_date=None):
         in_directory = in_directory or\
             cls.get_batch_configuration().get('in_directory', None)
@@ -86,12 +90,6 @@ class PaymentFailBatch(batch.BatchRootNoSelect):
             raise Exception("'in_directory' is required")
         handler = CAMT054CoogPassive()
         files = cls.get_file_names_and_paths(in_directory)
-        if os.path.isfile(in_directory):
-            files = [(os.path.basename(in_directory), in_directory)]
-        else:
-            files = [(f, os.path.join(in_directory, f)) for f in os.listdir(
-                    in_directory) if os.path.isfile(os.path.join(
-                                in_directory, f))]
         all_elements = []
         for file_name, file_path in files:
             with codecs.open(file_path, 'r') as _file:

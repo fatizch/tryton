@@ -7,6 +7,7 @@ import configparser
 from datetime import datetime, date
 import uuid
 import itertools
+from pathlib import Path
 
 from trytond import backend
 from trytond.pool import Pool
@@ -16,6 +17,7 @@ from trytond.perf_analyzer import PerfLog, profile, logger as perf_logger
 
 from . import model
 from . import coog_string
+from . import utils
 
 DatabaseOperationalError = backend.get('DatabaseOperationalError')
 
@@ -144,12 +146,20 @@ class BatchRoot(ModelView):
         filepath_template = params.get('filepath_template', None)
         if filepath_template:
             assert('%{FILENAME}' in filepath_template)
+        for param in cls.get_paths_to_create():
+            if params.get(param, None):
+                cls.generate_filepath(filepath_template=params[param],
+                    root_dir='/')
         if not params.get('connection_date'):
             logger.warning('Missing parameter: connection_date')
         params.setdefault('connection_date', date.today())
         BatchParamsConfig = Pool().get('batch.params_config')
         params = BatchParamsConfig.get_computed_params(params)
         return params
+
+    @classmethod
+    def get_paths_to_create(cls):
+        return ['filepath_template']
 
     @classmethod
     def execute(cls, objects, ids):
@@ -212,11 +222,8 @@ class BatchRoot(ModelView):
             timestamp = datetime.now().strftime(date_format)
             filepath_template = filepath_template.replace('%{TIMESTAMP}',
                 timestamp)
-        filepath = os.path.join(kwargs['root_dir'],
-            filepath_template)
-        dirpath = os.path.dirname(filepath)
-        if makedirs and not os.path.exists(dirpath):
-            os.makedirs(dirpath, 0o755)  # 755 permissions in octal notation
+        filepath = Path(kwargs['root_dir']) / filepath_template
+        utils.mkdir_if_not_exists(filepath)
         return filepath
 
     @classmethod

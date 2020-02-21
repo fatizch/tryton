@@ -1,3 +1,5 @@
+* BUG#12202 Création automatique du dossier d'archivage s'il n'existe pas
+
 Version 2.6 - 2019-10-11
 Version 2.4 - 2019-04-12
 * BUG#11270 Limiter la longueur du champ libellé de la voie

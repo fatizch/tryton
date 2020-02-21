@@ -1,6 +1,6 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
-import os
+from pathlib import Path
 
 from trytond.exceptions import UserWarning
 from trytond.i18n import gettext
@@ -10,7 +10,7 @@ from trytond.model.exceptions import AccessError
 from trytond.pyson import Eval
 from trytond.config import config
 
-from trytond.modules.coog_core import model
+from trytond.modules.coog_core import model, utils
 
 __all__ = [
     'DsnMessage'
@@ -126,8 +126,9 @@ class DsnMessage(Workflow, model.CoogSQL, model.CoogView):
         assert archive_dir, "Please set output_dir in dsn configuration"
         for message in messages:
             if message.type == 'out':
-                filepath = os.path.join(archive_dir, message.filename)
-                with open(filepath, 'wb') as _f:
+                filepath = Path(archive_dir) / message.filename
+                utils.mkdir_if_not_exists(filepath.parent)
+                with filepath.open('wb') as _f:
                     _f.write(message.message)
         Event.notify_events(messages, 'dsn_message_sent')
 
@@ -153,7 +154,7 @@ class DsnMessage(Workflow, model.CoogSQL, model.CoogView):
         sender_code = config.get('dsn', 'sender_code', default=-1)
         if sender_code == -1:
             if Warning.check('undefined_dsn_section'):
-                    raise UserWarning (
+                raise UserWarning(
                         gettext('dsn_standard.msg_undefined_dsn_section'))
             return False
         return True

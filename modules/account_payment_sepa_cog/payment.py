@@ -11,6 +11,7 @@ from collections import defaultdict
 from sql import Null, Literal, Column
 from sql.aggregate import Max
 from sql.conditionals import Coalesce
+from pathlib import Path
 
 import genshi
 import genshi.template
@@ -902,8 +903,9 @@ class Message(metaclass=PoolMeta):
             }
 
     def dump_sepa_message(self, dirpath):
-        filepath = os.path.join(dirpath, self.filename)
-        with open(filepath, 'w') as _f:
+        filepath = Path(dirpath) / self.filename
+        utils.mkdir_if_not_exists(dirpath.parent)
+        with filepath.open('w') as _f:
             _f.write(self.message)
         return filepath
 

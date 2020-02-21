@@ -1,3 +1,4 @@
+* BUG#12202 Automatic directory creation if needed when the paths given in batch parameters do not exist
 * BUG#11810 Add a line batch report when a batch job generation failed
 * FEA#14650 Add a line in batch report when a batch generated zero jobs
 * BUG#14548 Fix prest ij chains in daily chain
