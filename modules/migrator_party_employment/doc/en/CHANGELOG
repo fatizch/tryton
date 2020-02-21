@@ -1,3 +1,4 @@
+* BUG#15002 Fix a typo in init cache method of migrator party employment
 * FEA#13666 Improve init_cache method
 * FEA#14051 Add delete option in migrate method
 * FEA#12781 Module creation

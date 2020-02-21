@@ -58,7 +58,7 @@ class MigratorPartyEmployment(migrator.Migrator):
         cls.cache_obj['employee'] = tools.cache_from_search('party.party',
             'code', ('code', 'in', employees))
         cls.cache_obj['employer'] = tools.cache_from_search('party.identifier',
-            'code', 'in', employers)
+            'code', ('code', 'in', employers))
         cls.cache_obj['work_time_type'] = tools.cache_from_search(
             'party.employment_work_time_type', 'code', ('code', 'in',
                 work_time_types))

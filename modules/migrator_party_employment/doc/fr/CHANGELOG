@@ -1,3 +1,4 @@
+* BUG#15002 Correctif d'un typo dans la méthode init cache de migrator party employment
 * FEA#13666 Amélioration de la méthode init cache
 * FEA#14051 Ajout de l'option delete dans le code de la méthode migrate
 * FEA#12781 Création de module
