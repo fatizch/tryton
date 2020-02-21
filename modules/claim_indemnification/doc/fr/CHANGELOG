@@ -1,3 +1,4 @@
+* BUG#14996 Ajout d'une méthode de contrôle pour être utilisée dans le processus sinistre afin de vérifier si la somme des parts bénéficiaires est égale à 100% sur chacun des services
 * BUG#14995 Ne pas vérifier la quote part pour les indemnisations payées annulées
 * BUG#14904 Correction du code en python 3 causant un crash lors du calcul de l'indemnisation avec part bénéficiaire
 * BUG#14216 Correctif sur la revalorisation qui tombe le dernier jour de la période d'indemnisation: la période n'était pas découpée et la revalorisation n'était pas appliquée

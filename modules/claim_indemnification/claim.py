@@ -185,6 +185,18 @@ class Claim(metaclass=PoolMeta):
                 for service in loss.services:
                     service.create_deductible_period_if_needed()
 
+    def check_total_beneficiary_share(self):
+        # This method is intended to be used in processes
+        for service in self.delivered_services:
+            total_share = sum([x.share for x in service.beneficiaries])
+            if total_share not in (0, 1):
+                service.loss.append_functional_error(
+                    ValidationError(gettext(
+                            'claim_indemnification'
+                            '.msg_bad_indemnification_shares',
+                            service=service,
+                            total_share=str(int(total_share * 100)))))
+
 
 class Loss(metaclass=PoolMeta):
     __name__ = 'claim.loss'
