@@ -1,3 +1,4 @@
+* FEA#14894 Ajout des données de naissance des tiers dans APIs
 * OTH#00000 Ajout d'un depends manquant sur on_change_with_birth_country
 * BUG#14066 Initialiser la commune de naissance lorsque le champ ville de naissance n'est pas défini
 * BUG#13466 Ne pas réinitialiser la commune de naissance lorsque le NIR est faux ou ne correspondant pas un un code insee

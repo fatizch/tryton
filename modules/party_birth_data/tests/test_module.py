@@ -1,3 +1,4 @@
+import copy
 import unittest
 
 import trytond.tests.test_tryton
@@ -118,6 +119,83 @@ class ModuleTestCase(test_framework.CoogTestCase):
             zipcode.save()
             person.birth_zip = "72265"
             self.assertRaises(UserWarning, person.save)
+
+    @test_framework.prepare_test(
+        'party_birth_data.test0001_testPersonCreation'
+    )
+    def test0100_party_birth_data_API_with_valid_values(self):
+        pool = Pool()
+        APIParty = pool.get('api.party')
+        party, = self.Party.search([('ssn', '=', '176324314251121')])
+        country, = self.Country.search([('name', '=', 'Carthage')])
+        data_ref = {
+            'parties': [{
+                    'ref': '1',
+                    'id': party.id,
+                    'name': party.name,
+                    'is_person': True,
+                    'first_name': party.first_name,
+                    'birth_date': '1980-05-30',
+                    'gender': party.gender,
+                    'birth_zip': '75002',
+                    'birth_city': 'Paris',
+                    'birth_country': {'code': 'Oz'},
+                    }],
+            }
+
+        # Check birth country convert
+        data_dict = copy.deepcopy(data_ref)
+        party_data = APIParty._create_party_convert_input(data_dict)
+        self.assertEqual(party_data['parties'][0]['birth_country'].id,
+            country.id)
+
+        # Check birth info creation
+        data_dict = copy.deepcopy(data_ref)
+        APIParty.create_party(data_dict, {})
+        self.assertEqual(party.birth_country.code, 'OZ')
+        self.assertEqual(party.birth_zip, '75002')
+        self.assertEqual(party.birth_city, 'Paris')
+
+    @test_framework.prepare_test(
+        'party_birth_data.test0001_testPersonCreation'
+    )
+    def test0101_party_birth_data_API_with_None(self):
+        pool = Pool()
+        APIParty = pool.get('api.party')
+        party, = self.Party.search([('ssn', '=', '180127226401223')])
+        data_ref = {
+            'parties': [{
+                    'ref': '1',
+                    'id': party.id,
+                    'name': party.name,
+                    'is_person': True,
+                    'first_name': party.first_name,
+                    'birth_date': '1980-05-30',
+                    'gender': party.gender,
+                    'birth_country': {'code': 'US'},
+                    }],
+            }
+
+        # Check invalid birth country convert
+        data_dict = copy.deepcopy(data_ref)
+        try:
+            APIParty._create_party_convert_input(data_dict)
+        except trytond.modules.api.api.core.APIInputError as error_message:
+            self.assertEqual(error_message.data,
+                [{
+                    'type': 'configuration_not_found',
+                    'data': {
+                        'model': 'country.country',
+                        'code': 'US',
+                        },
+                    }
+                ])
+
+        data_dict = copy.deepcopy(data_ref)
+        APIParty.create_party(data_dict, {})
+        self.assertEqual(party.birth_country, None)
+        self.assertEqual(party.birth_zip, None)
+        self.assertEqual(party.birth_city, None)
 
     @test_framework.prepare_test(
         'offered_insurance.test0010Coverage_creation',

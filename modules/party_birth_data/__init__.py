@@ -24,5 +24,6 @@ def register():
         module='party_birth_data', type_='model', depends=['offered_insurance'])
 
     Pool.register(
+        api.APIParty,
         api.APIProduct,
         module='party_birth_data', type_='model', depends=['api'])
