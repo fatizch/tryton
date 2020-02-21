@@ -1,3 +1,4 @@
+* BUG#14952 Empecher le texte de la clause bénéficiaire personnalisée d'être écrasé dans un avenant
 * BUG#14778 Initialise les clauses beneficiaires avec leur valeur par défaut dans un avenant
 * BUG#14532 Affichage d'une fenêtre de modification des bénéficiaires dans les avenants de gestion des options quand nécessaire
 

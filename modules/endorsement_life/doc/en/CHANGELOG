@@ -1,3 +1,4 @@
+* BUG#14952 Prevent from erasing customized beneficiary clause text in endorsement
 * BUG#14778 Initialize beneficiary clause with default beneficiary when possible in endorsement
 * BUG#14532 display a beneficiary clause tab in add option endorsement when needed
 

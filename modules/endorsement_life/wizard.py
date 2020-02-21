@@ -253,8 +253,10 @@ class ManageBeneficiariesOptionDisplayer(model.CoogView):
 
     @fields.depends('beneficiary_clause', 'customized_beneficiary_clause')
     def on_change_beneficiary_clause(self):
-        self.customized_beneficiary_clause = self.beneficiary_clause.content \
-            if self.beneficiary_clause else ''
+        if not self.beneficiary_clause:
+            self.customized_beneficiary_clause = ''
+        elif not self.customized_beneficiary_clause:
+            self.customized_beneficiary_clause = self.beneficiary_clause.content
         self.beneficiary_clause_customizable = bool(self.beneficiary_clause and
             self.beneficiary_clause.customizable)
 
