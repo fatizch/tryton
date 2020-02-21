@@ -1,3 +1,4 @@
+* BUG#15006 Fix code to python 3 causing crash when applying underwriting reduction
 * BUG#13631 Rewrite and test underwritings_at_date
 
 Version 2.6 - 2019-10-11

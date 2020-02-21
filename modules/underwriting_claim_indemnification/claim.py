@@ -62,7 +62,7 @@ class BenefitRule(metaclass=PoolMeta):
                         'underwriting_claim_indemnification'
                         '.msg_applied_reduction_decision',
                         reduction=decision.reduction_percentage * 100
-                        ).encode('utf-8')
+                        )
                     + '\n')
         return periods
 

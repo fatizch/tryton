@@ -1,3 +1,4 @@
+* BUG#15006 Correction du code en python 3 causant un crash lors l'application de la décision d'analyse médicale de réduction
 * BUG#13631 Réécriture et test de underwritings_at_date
 
 Version 2.6 - 2019-10-11
