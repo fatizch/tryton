@@ -748,6 +748,11 @@ class CoogView(ModelView, FunctionalErrorMixIn):
         return decorator
 
     @classmethod
+    def __setup__(cls):
+        super().__setup__()
+        cls._never_modified_fields = set()
+
+    @classmethod
     def __post_setup__(cls):
         """
         Add the depends of a on_change to the corresponding field.
@@ -772,6 +777,14 @@ class CoogView(ModelView, FunctionalErrorMixIn):
             field_.states['readonly'] = Or(readonly_state,
                 pyson_condition)
             field_.depends += depends
+
+    @classmethod
+    def fields_get(cls, field_names=None):
+        definitions = super().fields_get(field_names)
+        for field_name in cls._never_modified_fields:
+            if field_name in definitions:
+                definitions[field_name]['never_modified'] = True
+        return definitions
 
 
 class CoogDictSchema(DictSchemaMixin):

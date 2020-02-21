@@ -1,3 +1,4 @@
+* FEA#15014 Ajout de l'option never_modified_fields afin d'éviter les rechargements non nécessaires côté client
 * BUG#12202 Création automatique de dossiers si besoin quand les chemins passés en paramètres des batchs n'existent pas
 * BUG#11810 Ajout d'une ligne dans le rapport de batch quand la génération des tâches d'un batch a échoué
 * FEA#14650 Ajout d'une ligne dans le rapport de batch quand un batch n'a généré aucune tâches

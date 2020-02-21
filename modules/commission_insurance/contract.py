@@ -73,6 +73,11 @@ class Contract(metaclass=PoolMeta):
         'getter_commission_data', 'setter_void')
 
     @classmethod
+    def __setup__(cls):
+        super().__setup__()
+        cls._never_modified_fields.add('commission_data')
+
+    @classmethod
     def _export_light(cls):
         return (super(Contract, cls)._export_light() | {'agent'})
 
