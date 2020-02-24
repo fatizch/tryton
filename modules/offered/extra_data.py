@@ -34,7 +34,9 @@ class ExtraData(model.CoogDictSchema, model.ConfigurationMixin, model.CoogView,
     __name__ = 'extra_data'
     _func_key = 'name'
 
-    has_default_value = fields.Boolean('Default Value')
+    has_default_value = fields.Boolean('Default Value',
+        states={'invisible': ~In(Eval('type_'), ['boolean', 'selection'])},
+        depends=['type_'])
     default_value_boolean = fields.Function(
         fields.Boolean('Default Value',
             states={
@@ -122,9 +124,12 @@ class ExtraData(model.CoogDictSchema, model.ConfigurationMixin, model.CoogView,
         super(ExtraData, cls).__register__(module_name)
 
         # migration from a fix in 2.0 due to missing reset of default_value
+        # set a default value 'False' for has_default_value prevent crash for
+        # extra data of a different type than selection and boolean
         cursor = Transaction().connection.cursor()
         cursor.execute("update extra_data "
-            "set default_value = Null, selection = Null "
+            "set default_value = Null, selection = Null, "
+            "has_default_value = False "
             "where type_ not in ('boolean', 'selection')")
 
         if create_order:
@@ -196,6 +201,10 @@ class ExtraData(model.CoogDictSchema, model.ConfigurationMixin, model.CoogView,
         return ''
 
     @classmethod
+    def default_has_default_value(cls):
+        return False
+
+    @classmethod
     def default_sequence_order(cls):
         '''
         Adds one to the latest value
@@ -228,6 +237,7 @@ class ExtraData(model.CoogDictSchema, model.ConfigurationMixin, model.CoogView,
             self.default_selection = ''
         elif self.type_ == 'boolean':
             self.default_boolean = False
+        self.has_default_value = False
         self.default_value = ''
         self.selection = ''
         self.sub_datas = []
