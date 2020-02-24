@@ -1,3 +1,4 @@
+* BUG#14979 Updating of noemie end date when renewing contracts and terminating contracts when only the product , and not the item descriptor has "noemisation"
 * BUG#14796 Handle when birthdate is '000000' in the flux
 * BUG#14665 Use SSN, Birth date, birth order to retrieve the coog's covered_element from 929 flux
 * BUG#12991 Extend set of supported noemie codes for Flow 929 batch

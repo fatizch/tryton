@@ -105,6 +105,12 @@ class Contract(metaclass=PoolMeta):
             covered_element.update_noemie_dates()
         self.save()
 
+    @classmethod
+    def after_renew(cls, contracts, new_start_date):
+        super().after_renew(contracts, new_start_date)
+        for contract in contracts:
+            contract.compute_noemie_dates()
+
 
 class CoveredElement(metaclass=PoolMeta):
     __name__ = 'contract.covered_element'
@@ -228,7 +234,7 @@ class CoveredElement(metaclass=PoolMeta):
         return ''
 
     def update_noemie_dates(self):
-        if self.party and self.item_desc.is_noemie:
+        if self.party and self.is_noemie:
             prev_start_date = getattr(self, 'noemie_start_date', None)
             prev_end_date = getattr(self, 'noemie_end_date', None)
             if self.contract_status == 'void' or all(
@@ -241,7 +247,7 @@ class CoveredElement(metaclass=PoolMeta):
             CoveredElement = Pool().get('contract.covered_element')
             covered_elements = CoveredElement.search([
                     ('id', '!=', self.id),
-                    ('item_desc.is_noemie', '=', True),
+                    ('is_noemie', '=', True),
                     ('party', '=', self.party.id)])
             if covered_elements:
                 self.noemie_return_code = covered_elements[0].noemie_return_code

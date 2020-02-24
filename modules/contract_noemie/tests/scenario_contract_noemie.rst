@@ -5,6 +5,7 @@ Imports::
     >>> import os
     >>> import shutil
     >>> from proteus import Model, Wizard
+    >>> from dateutil.relativedelta import relativedelta
     >>> from trytond.tests.tools import activate_modules
     >>> from trytond.modules.company.tests.tools import get_company
     >>> from trytond.modules.company_cog.tests.tools import create_company
@@ -13,7 +14,8 @@ Imports::
 
 Install Modules::
 
-    >>> config = activate_modules(['contract_noemie', 'batch_launcher'])
+    >>> config = activate_modules(['contract_noemie', 'contract_term_renewal',
+    ...         'endorsement_insurance', 'batch_launcher'])
 
 Get Models::
 
@@ -40,7 +42,8 @@ Constants::
 
     >>> today = datetime.date.today()
     >>> product_start_date = datetime.date(2014, 1, 1)
-    >>> contract_start_date = datetime.date(2014, 4, 1)
+    >>> contract_start_date = datetime.date(2015, 4, 1)
+    >>> contract_end_date = datetime.date(2016, 3, 31)
 
 Create or fetch Currency::
 
@@ -125,7 +128,6 @@ Create Item Description::
     >>> item_description.name = 'Test Item Description'
     >>> item_description.code = 'test_item_description'
     >>> item_description.kind = 'person'
-    >>> item_description.is_noemie = True
     >>> item_description.save()
 
 Create Insurer::
@@ -179,6 +181,16 @@ Create Product::
     >>> product.quote_number_sequence = quote_sequence
     >>> product.start_date = product_start_date
     >>> product.coverages.append(coverage)
+    >>> product.is_noemie = True
+    >>> product.save()
+    >>> Rule = Model.get('rule_engine')
+    >>> renewal_rule = product.term_renewal_rule.new()
+    >>> renewal_rule.allow_renewal = True
+    >>> subscription_date_sync_rule, = Rule.find([
+    ...         ('short_name', '=', 'product_term_renewal_sync_sub_date')])
+    >>> renewal_rule.rule = subscription_date_sync_rule
+    >>> renewal_rule.product = product
+    >>> renewal_rule.save()
     >>> product.save()
 
 Create Subscriber::
@@ -206,11 +218,14 @@ Create Test Contract::
     >>> contract.status = 'quote'
     >>> covered_element = contract.covered_elements.new()
     >>> covered_element.party = subscriber
-    >>> covered_element.item_desc.is_noemie = True
     >>> covered_element.item_desc.save()
     >>> option = covered_element.options[0]
     >>> option.coverage = coverage
     >>> contract.save()
+    >>> Wizard('contract.activate', models=[contract]).execute('apply')
+    >>> contract.reload()
+    >>> assert contract.start_date == contract_start_date
+    >>> assert contract.end_date == contract_end_date
     >>> IrModel = Model.get('ir.model')
     >>> noemie_flow_batch, = IrModel.find([
     ...     ('model', '=', 'contract.noemie.flow.batch')])
@@ -242,3 +257,37 @@ Create Test Contract::
     True
     >>> covered_ele.noemie_update_date == datetime.date(2019, 2, 17)
     True
+    >>> assert contract.covered_elements[0].noemie_end_date == contract.end_date
+    >>> renew = Wizard('contract_term_renewal.renew', models=[contract])
+    >>> renew.execute('renew')
+    >>> contract.save()
+    >>> contract.reload()
+    >>> assert len(contract.activation_history) == 2
+    >>> assert contract.end_date == datetime.date(2017, 3, 31)
+    >>> assert contract.covered_elements[0].noemie_end_date == contract.end_date, (
+    ...     'after renewal', contract.covered_elements[0].noemie_end_date,
+    ...     contract.end_date)
+    >>> EndorsementDefinition = Model.get('endorsement.definition')
+    >>> terminate_contract, = EndorsementDefinition.find(
+    ...     [('code', '=', 'stop_contract')])
+    >>> SubStatus = Model.get('contract.sub_status')
+    >>> terminated_status, = SubStatus.find([('code', '=', 'terminated')])
+    >>> effective_date = contract.start_date + relativedelta(months=3)
+    >>> new_endorsement = Wizard('endorsement.start')
+    >>> new_endorsement.form.contract = contract
+    >>> new_endorsement.form.endorsement_definition = terminate_contract
+    >>> new_endorsement.form.endorsement = None
+    >>> new_endorsement.form.applicant = None
+    >>> new_endorsement.form.effective_date = effective_date
+    >>> new_endorsement.execute('start_endorsement')
+    >>> new_endorsement.form.termination_reason = terminated_status
+    >>> new_endorsement.execute('terminate_contract_next')
+    >>> new_endorsement.execute('apply_endorsement')
+    >>> contract.reload()
+    >>> assert contract.end_date == effective_date
+    >>> assert contract.covered_elements[0].noemie_end_date == effective_date, (
+    ...     'after termination', contract.covered_elements[0].noemie_end_date,
+    ...     effective_date)
+    >>> assert contract.covered_elements[0].noemie_end_date == contract.end_date, (
+    ...     'after termination', contract.covered_elements[0].noemie_end_date,
+    ...     contract.end_date)
