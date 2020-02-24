@@ -1,3 +1,4 @@
+* BUG#15037 Correction de l'annulation de mandat SEPA
 * BUG#13529 Correction sur la date de paiement initialisée pour les quittances de frais de rejet
 
 Version 2.6 - 2019-10-11

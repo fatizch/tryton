@@ -1,3 +1,4 @@
+* BUG#15037 Fix cancellation of SEPA mandate
 * BUG#13529 Fix payment date initialization for rejection fee invoice
 
 Version 2.6 - 2019-10-11

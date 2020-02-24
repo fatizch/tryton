@@ -221,7 +221,7 @@ class Mandate(metaclass=PoolMeta):
 
     @classmethod
     @model.CoogView.button
-    @Workflow.transition('approved')
+    @Workflow.transition('canceled')
     def cancel(cls, mandates):
         BillingInfo = Pool().get('contract.billing_information')
         # Get all the billing informations using the sepa mandate in the future
