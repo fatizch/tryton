@@ -627,7 +627,6 @@ class DocumentRequestLineOffered(
                 if attachments:
                     attachments[0].resource = str(
                         request_line.get_reference_object_for_edm())
-                    attachments[0].document_desc = request_line.document_desc
                     Attachment.save(attachments)
             cls.write([request_line], {
                     'data_status': 'done',

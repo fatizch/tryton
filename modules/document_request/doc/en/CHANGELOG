@@ -1,3 +1,4 @@
+* OTH#0000 Set document desc on attachment from request line sooner
 * OTH#0000 add for object field to form view of document request
 * FEA#14830 Allow to manually request documents
 * BUG#14550 Bypass document token generation when documentation_api not configured

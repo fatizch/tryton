@@ -627,6 +627,9 @@ class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
         attachments = []
         if self.format_for_internal_edm:
             attachments = self.save_reports_in_edm(reports)
+            for attachment in attachments:
+                if not attachment.document_desc and doc_desc:
+                    attachment.document_desc = doc_desc
         to_notify = ServerContext().get('user_to_notify')
         if to_notify:
             message = gettext('report_engine.msg_reports_produced',
