@@ -779,8 +779,8 @@ class CoogView(ModelView, FunctionalErrorMixIn):
             field_.depends += depends
 
     @classmethod
-    def fields_get(cls, field_names=None):
-        definitions = super().fields_get(field_names)
+    def fields_get(cls, fields_names=None):
+        definitions = super().fields_get(fields_names)
         for field_name in cls._never_modified_fields:
             if field_name in definitions:
                 definitions[field_name]['never_modified'] = True
