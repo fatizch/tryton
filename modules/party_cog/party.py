@@ -68,6 +68,53 @@ LONG_GENDER = [
     ('', ''),
     ]
 
+IDENTIFIERS_TO_REMOVE = {
+    'at_tin',  # Austrian Tax Identification
+    'au_tfn',  # Australian Tax File Number
+    'al_nipt',  # Albanian VAT Number
+    'ar_cuit',  # Argentifnian Tax Number
+    'bg_vat',  # Bulgarian VAT Number
+    'ch_vat',  # Swiss VAT Number
+    'cl_rut',  # Chilean National Tax Number
+    'co_rut',  # Colombian Business Tax Number
+    'cy_vat',  # Cypriot VAT Number
+    'cz_dic',  # Czech VAT Number
+    'de_stnr',  # German Tax Number
+    'de_vat',  # German VAT Number
+    'dk_cvr',  # Danish VAT Number
+    'do_rnc',  # Dominican Republic Tax
+    'ee_kmkr',  # Estonian VAT Number
+    'es_cif',  # Spanish Company Tax
+    'es_nif',  # Spanish VAT Number
+    'eu_vat',  # European VAT Number
+    'fi_alv',  # Finnish VAT Number
+    'fi_ytunnus',  # Finnish Business Identifier
+    'fr_nif',  # French Tax Identification Number
+    'fr_tva',  # French VAT Number
+    'gb_vat',  # United Kingdom (and Isle of Man) VAT Number
+    'gr_vat',  # Greek VAT Number
+    'hu_anum',  # Hungarian VAT Number
+    'ie_vat',  # Irish VAT Number
+    'in_pan',  # Indian Income Tax Identifier
+    'is_vsk',  # Icelandic VAT Number
+    'it_iva',  # Italian VAT Number
+    'lt_pvm',  # Lithuanian VAT Number
+    'lu_tva',  # Luxembourgian VAT Number
+    'lv_pvn',  # Latvian VAT Number
+    'mc_tva',  # Monacan VAT Number
+    'mt_vat',  # Maltese VAT Number
+    'mx_rfc',  # Mexican Tax Number
+    'nl_btw',  # Dutch VAT Number
+    'no_mva',  # Norwegian VAT Number
+    'pl_nip',  # Polish VAT Number
+    'pt_nif',  # Portuguese VAT Number
+    'ro_cf',  # Romanian VAT Number
+    'se_vat',  # Swedish VAT Number
+    'si_ddv',  # Slovenian VAT Number
+    'sk_dph',  # Slovak VAT Number
+    'sm_coe',  # San Marino National Tax Number"
+    }
+
 
 STATES_PERSON = Bool(Eval('is_person'))
 STATES_COMPANY = ~Eval('is_person')
@@ -846,7 +893,8 @@ class PartyIdentifier(export.ExportImportMixin):
 
     @classmethod
     def _get_base_types(cls):
-        return cls.__previous_type_selection
+        return [t for t in cls.__previous_type_selection
+            if t[0] not in IDENTIFIERS_TO_REMOVE]
 
     @classmethod
     def add_func_key(cls, values):
