@@ -1329,9 +1329,22 @@ msgstr ""
 "\n"
 "%(agent)s"
 
+msgctxt "model:ir.message,text:msg_bad_override_rate"
+msgid ""
+"Protocol %(agent)s requires a rate between %(minimum).2f %% and "
+"%(maximum).2f %%. Provided rate (%(provided).2f %%) does not match"
+msgstr ""
+"Le protocole %(agent)s impose un taux minimum de %(minimum).2f %% et un taux "
+"maximum de %(maximum).2f %%. Le taux demandé (%(provided).2f %%) ne convient "
+"pas"
+
 msgctxt "model:ir.message,text:msg_broker_fee"
 msgid "Broker Fee"
 msgstr "Frais d'apporteur"
+
+msgctxt "model:ir.message,text:msg_cannot_override_rate"
+msgid "Protocol %(agent)s does not allow per contract rate override"
+msgstr "Le protocole %(agent)s ne permet pas la surcharge de taux par contrat"
 
 msgctxt "model:ir.message,text:msg_invalid_month_day_combination"
 msgid "Invalid Month (%(month)s) Day (%(day)s) Combination."

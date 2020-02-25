@@ -497,6 +497,28 @@ class ContractCommissionRate(model.CoogSQL):
         domain=[('custom_rate', '>=', 0)],
         help='The custom rate for this contract for this agent')
 
+    @classmethod
+    def validate(cls, overrides):
+        for override in overrides:
+            if override.agent.rate_default is None:
+                raise ValidationError(gettext(
+                        'commission_insurance.msg_cannot_override_rate',
+                        agent=override.agent.rec_name))
+            elif override.agent.rate_minimum > override.custom_rate:
+                raise ValidationError(gettext(
+                        'commission_insurance.msg_bad_override_rate',
+                        agent=override.agent.rec_name,
+                        provided=override.custom_rate * 100,
+                        minimum=override.agent.rate_minimum * 100,
+                        maximum=override.agent.rate_maximum * 100))
+            elif override.agent.rate_maximum < override.custom_rate:
+                raise ValidationError(gettext(
+                        'commission_insurance.msg_bad_override_rate',
+                        agent=override.agent.rec_name,
+                        provided=override.custom_rate * 100,
+                        minimum=override.agent.rate_minimum * 100,
+                        maximum=override.agent.rate_maximum * 100))
+
 
 class ContractCommissionData(model.CoogView):
     'Contract Commission Data'

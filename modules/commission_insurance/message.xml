@@ -24,5 +24,11 @@
         <record model="ir.message" id="msg_no_broker_define_for_broker_fee">
             <field name="text">No broker define on contract %(contract)s for broker fee %(fee)s.</field>
         </record>
+        <record model="ir.message" id="msg_cannot_override_rate">
+            <field name="text">Protocol %(agent)s does not allow per contract rate override</field>
+        </record>
+        <record model="ir.message" id="msg_bad_override_rate">
+            <field name="text">Protocol %(agent)s requires a rate between %(minimum).2f %% and %(maximum).2f %%. Provided rate (%(provided).2f %%) does not match</field>
+        </record>
     </data>
 </tryton>

@@ -1070,7 +1070,7 @@ class Agent(model.CoogSQL):
         return bool(self.plan.allow_rate_override)
 
     def getter_per_contract_rate_override(self, name):
-        return bool(self.rate_default)
+        return self.rate_default is not None
 
     @fields.depends('plan', 'rate_override_allowed')
     def on_change_plan(self):
