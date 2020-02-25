@@ -110,6 +110,35 @@ The automatic way, which will automatically build a usable database:
 GEN_CREATE_NEW_DB=1 GEN_DB_NAME=coog coog db demo
 ```
 
+## Setup API related repositories
+
+This should be done if you want to / need to work with either the coog APIs or
+the front-end application (Portal).
+
+In the root of your environment (next to the coog / trytond repositories):
+
+```bash
+sudo apt install direnv
+sudo apt install docker.io   # (version 18.09 minimum)
+sudo apt install docker-compose   # (version 1.21 minimum)
+
+docker run --name mongo --restart always -d -p 27017:27017 mongo
+
+curl -s -L https://git.io/n-install | bash -s -- -y
+
+source ~/.bashrc
+
+npm i -g yarn
+
+source ~/.bashrc
+
+git clone git@github.com:coopengo/coog-portal
+
+cd coog-portal
+
+yarn
+```
+
 ## Coog command cheat sheet
 
 **Warning: All commands should be executed in an activated virtual
