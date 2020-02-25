@@ -120,7 +120,7 @@ class ClaimIndemnification(metaclass=PoolMeta):
             cls.append_functional_error(
                 RequiredValidationError(gettext(
                         'claim_indemnification_document.msg_required_document',
-                        document=doc.document_desc.name)))
+                        document=doc.rec_name)))
         if any((x.hidden_waiting_requests for x in indemnifications)):
             cls.append_functional_error(
                 AccessError(gettext(

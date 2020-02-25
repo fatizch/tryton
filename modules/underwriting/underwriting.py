@@ -406,7 +406,7 @@ class Underwriting(Printable, model.CoogView):
         return '\n'.join(descs)
 
     def getter_document_request_descriptions(self, name):
-        return '\n'.join(['%s (%s)' % (x.document_desc.name,
+        return '\n'.join(['%s (%s)' % (x.rec_name,
                     gettext(
                         'underwriting.msg_document_received_string'
                         if x.received else

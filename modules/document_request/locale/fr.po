@@ -6,6 +6,10 @@ msgctxt "field:batch.remind.documents,id:"
 msgid "ID"
 msgstr "Identifiant"
 
+msgctxt "field:document.description,customizable:"
+msgid "Customizable"
+msgstr "Personnalisable"
+
 msgctxt "field:document.description,extra_data_def:"
 msgid "Extra Data"
 msgstr "Données Complémentaires"
@@ -56,7 +60,7 @@ msgstr "Identifiant"
 
 msgctxt "field:document.description-extra_data,rec_name:"
 msgid "Record Name"
-msgstr "Numéro"
+msgstr "Nom de l'enregistrement"
 
 msgctxt "field:document.description-extra_data,write_date:"
 msgid "Write Date"
@@ -162,6 +166,10 @@ msgctxt "field:document.request,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:document.request.line,added_manually:"
+msgid "Added Manually"
+msgstr "Ajouté manuellement"
+
 msgctxt "field:document.request.line,allow_force_receive:"
 msgid "Force Receive"
 msgstr "Reception forcée autorisée"
@@ -198,6 +206,10 @@ msgctxt "field:document.request.line,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
+msgctxt "field:document.request.line,customizable:"
+msgid "Customizable"
+msgstr "Personnalisable"
+
 msgctxt "field:document.request.line,data_status:"
 msgid "Data Status"
 msgstr "Statut des données"
@@ -208,7 +220,7 @@ msgstr "Commentaire"
 
 msgctxt "field:document.request.line,document_desc:"
 msgid "Document Definition"
-msgstr "Définition des documents"
+msgstr "Type de document"
 
 msgctxt "field:document.request.line,extra_data:"
 msgid "Extra Data"
@@ -242,13 +254,17 @@ msgctxt "field:document.request.line,matching_attachments:"
 msgid "Matching Attachments"
 msgstr "Pièces jointes correspondantes"
 
+msgctxt "field:document.request.line,name:"
+msgid "Name"
+msgstr "Nom"
+
 msgctxt "field:document.request.line,rec_name:"
 msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:document.request.line,received:"
 msgid "Received"
-msgstr "Reçus"
+msgstr "Reçu"
 
 msgctxt "field:document.request.line,reception_date:"
 msgid "Reception Date"
@@ -357,6 +373,10 @@ msgstr "Modifié par"
 msgctxt "field:report.template-paper_form,xml_id:"
 msgid "XML Id"
 msgstr "XML Id"
+
+msgctxt "help:document.description,customizable:"
+msgid "The name of the required document can be chosen by the user"
+msgstr "Le nom du document requis peut être personnalisé par l'utilisateur"
 
 msgctxt "help:document.description,paper_form:"
 msgid ""
@@ -510,10 +530,6 @@ msgctxt "selection:ir.attachment,status:"
 msgid "Waiting Validation"
 msgstr "En attente de validation"
 
-msgctxt "view:document.request.line:"
-msgid "Invalidate"
-msgstr "Invalider"
-
 msgctxt "view:document.receive.line:"
 msgid "Lines"
 msgstr "Lignes"
@@ -527,8 +543,16 @@ msgid "Details"
 msgstr "Commentaire"
 
 msgctxt "view:document.request.line:"
+msgid "Invalidate"
+msgstr "Invalider"
+
+msgctxt "view:document.request.line:"
 msgid "Validate"
 msgstr "Valider"
+
+msgctxt "view:document.request.line:"
+msgid "Validate Attachment"
+msgstr "Valider la pièce jointe"
 
 msgctxt "view:document.request:"
 msgid "Send Request"

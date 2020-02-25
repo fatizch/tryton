@@ -189,7 +189,7 @@ class APIParty(metaclass=PoolMeta):
         pool = Pool()
         ApiCore = pool.get('api.core')
         line_data = {
-            'name': line.document_desc.name or '',
+            'name': line.rec_name or '',
             'id': line.id,
             }
         if line.extra_data:

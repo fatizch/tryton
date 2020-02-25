@@ -104,6 +104,8 @@ class DocumentDescription(metaclass=PoolMeta):
         ' will complete it manually and send it back',
         domain=[('input_kind', '=', 'flat_document')],  # For the moment
         )
+    customizable = fields.Boolean('Customizable',
+        help='The name of the required document can be chosen by the user')
 
 
 class DocumentRequestLine(Printable, model.CoogSQL, model.CoogView):
@@ -112,6 +114,11 @@ class DocumentRequestLine(Printable, model.CoogSQL, model.CoogView):
 
     document_desc = fields.Many2One('document.description',
         'Document Definition', required=True, ondelete='RESTRICT')
+    name = fields.Char('Name', states={
+            'required': Bool(Eval('customizable')),
+            'readonly': ~Eval('customizable'),
+            'invisible': ~Eval('customizable')}, depends=['customizable'],
+            help='Can be set manualy if document desc is customizable')
     for_object = fields.Reference('Needed For', selection='models_get',
         states={'readonly': ~~Eval('for_object')}, required=True, select=True,
         help='References the object for which the document is asked.')
@@ -161,6 +168,9 @@ class DocumentRequestLine(Printable, model.CoogSQL, model.CoogView):
         fields.Selection('get_possible_objects', 'Needed For',
             states={'readonly': ~Eval('added_manually')}, sort=False),
         'getter_for_object_selection', 'setter_void')
+    customizable = fields.Function(
+        fields.Boolean('Customizable'),
+        'on_change_with_customizable')
 
     @classmethod
     def __setup__(cls):
@@ -362,8 +372,13 @@ class DocumentRequestLine(Printable, model.CoogSQL, model.CoogView):
     def on_change_with_attachment_status(self, name=None):
         return self.attachment.status if self.attachment else ''
 
+    @fields.depends('document_desc')
+    def on_change_with_customizable(self, name=None):
+        return self.document_desc.customizable if self.document_desc else False
+
     def get_rec_name(self, name):
-        return self.document_desc.name if self.document_desc else ''
+        return (self.document_desc.name if self.document_desc
+            and not self.document_desc.customizable else self.name)
 
     @classmethod
     def default_request_date(cls):
@@ -409,7 +424,7 @@ class DocumentRequestLine(Printable, model.CoogSQL, model.CoogView):
                 if name == 'attachment_data':
                     request.attachment.data = value
                 elif name == 'attachment_name':
-                    request.attachment.name = request.document_desc.name
+                    request.attachment.name = request.rec_name
                     split_value = value.split('.')
                     if len(split_value) > 1:
                         request.attachment.name += '.' + split_value[-1]
@@ -431,7 +446,7 @@ class DocumentRequestLine(Printable, model.CoogSQL, model.CoogView):
         attachment.status = Attachment.default_status()
         attachment.resource = self.get_reference_object_for_edm()
         attachment.document_desc = self.document_desc
-        attachment.name = self.document_desc.name
+        attachment.name = self.rec_name
         # Set function field as hack because will be necesary for get_party
         attachment.request_line = self
         if name == 'attachment_data':
@@ -702,8 +717,7 @@ class DocumentRequest(Printable, model.CoogSQL, model.CoogView):
 
     @fields.depends('documents')
     def on_change_with_documents_str(self, name=None):
-        return ', '.join([d.document_desc.name for d in self.documents
-                if d.document_desc])
+        return ', '.join([d.rec_name for d in self.documents])
 
     @fields.depends('needed_by')
     def on_change_with_needed_by_str(self, name=None):

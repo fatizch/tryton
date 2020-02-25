@@ -2,15 +2,16 @@
 <!-- This file is part of Coog. The COPYRIGHT file at the top level of
 this repository contains the full copyright notices and license terms. -->
 <data>
-    <xpath expr="/form/field[@name='when_received']" position="after">
-        <newline/>
-        <label name="reception_requires_attachment"/>
-        <field name="reception_requires_attachment"/>
-        <newline/>
-        <label name="prerequisite"/>
-        <field name="prerequisite"/>
-        <newline/>
+    <xpath expr="/form/label[@name='when_received']" position="before">
         <label name="paper_form"/>
         <field name="paper_form"/>
+        <group id="checkboxes" colspan="2" col="6">
+            <label name="reception_requires_attachment"/>
+            <field name="reception_requires_attachment"/>
+            <label name="customizable"/>
+            <field name="customizable"/>
+            <label name="prerequisite"/>
+            <field name="prerequisite"/>
+        </group>
     </xpath>
 </data>

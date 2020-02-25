@@ -7,8 +7,9 @@ this repository contains the full copyright notices and license terms. -->
     <field name="request_date"/>
     <field name="send_date"/>
     <field name="reception_date"/>
+    <field name="for_object_selection" expand="1"/>
     <field name="document_desc" expand="1"/>
-    <field name="for_object_selection"/>
+    <field name="name"/>
     <field name="attachment"/>
     <field name="attachment_data"/>
     <button string="Validate" name="validate_attachment"/>

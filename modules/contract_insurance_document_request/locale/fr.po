@@ -26,9 +26,17 @@ msgctxt "field:contract,hidden_waiting_requests:"
 msgid "Hidden waiting requests"
 msgstr "Documents requis cachés"
 
+msgctxt "field:contract.covered_element,document_request_lines:"
+msgid "Requested Documents"
+msgstr "Documents demandés"
+
 msgctxt "field:contract.covered_element,document_token:"
 msgid "Document Token"
 msgstr "Jeton de document"
+
+msgctxt "field:contract.covered_element,hidden_waiting_request_lines:"
+msgid "Hidden Waiting Request Lines"
+msgstr "Demandes de documents cachés en attente"
 
 msgctxt "field:document.description,products:"
 msgid "Product Filter"
@@ -89,6 +97,10 @@ msgstr "Contrats disponibles"
 msgctxt "field:document.request.line,contract:"
 msgid "Contract"
 msgstr "Contrat"
+
+msgctxt "field:document.request.line,product:"
+msgid "Product"
+msgstr "Produit"
 
 msgctxt "field:document.rule,create_date:"
 msgid "Create Date"
@@ -266,6 +278,10 @@ msgstr "Règles de gestion des documents"
 msgctxt "model:document.rule-document.description,name:"
 msgid "Rule to Document Description Relation"
 msgstr "Relation règles descripteur des documents"
+
+msgctxt "model:ir.action,name:act_document_request_relate_form"
+msgid "Document Request Lines"
+msgstr "Demandes de document"
 
 msgctxt "model:ir.message,text:msg_missing_required_document"
 msgid "Some required documents are missing."

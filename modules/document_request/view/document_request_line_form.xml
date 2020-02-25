@@ -1,28 +1,38 @@
 <?xml version="1.0"?>
 <!-- This file is part of Coog. The COPYRIGHT file at the top level of
 this repository contains the full copyright notices and license terms. -->
-<form col="6">
-    <label name="document_desc" xalign="0"/>
-    <field name="document_desc" colspan="3"/>
-    <label name="received" xalign="0"/>
-    <field name="received"/>
-    <label name="blocking" xalign="0"/>
-    <field name="blocking"/>
-    <label name="request_date" xalign="0"/>
-    <field name="request_date"/>
-    <label name="send_date" xalign="0"/>
-    <field name="send_date"/>
-    <label name="reception_date" xalign="0"/>
-    <field name="reception_date"/>
-    <label name="first_reception_date" xalign="0"/>
-    <field name="first_reception_date"/>
-    <newline/>
-    <label name="for_object_selection" xalign="0"/>
-    <field name="for_object_selection" colspan="5"/>
-    <label name="attachment" xalign="0"/>
-    <field name="attachment" colspan="4"/>
-    <field name="attachment_data"/>
-    <notebook colspan="6">
+<form>
+    <label name="document_desc"/>
+    <group id="document_desc">
+        <field name="document_desc"/>
+        <field name="name"/>
+    </group>
+    <label name="for_object_selection"/>
+    <field name="for_object_selection"/>
+    <label name="attachment"/>
+    <group id="attachment">
+        <field name="attachment"/>
+        <field name="attachment_data"/>
+    </group>
+    <label name="received"/>
+    <group id="checkboxes">
+        <field name="received"/>
+        <label name="blocking"/>
+        <field name="blocking"/>
+    </group>
+    <label name="request_date"/>
+    <group id="request_date">
+        <field name="request_date"/>
+        <label name="send_date"/>
+        <field name="send_date"/>
+    </group>
+    <label name="first_reception_date"/>
+    <group id="first_reception_date">
+        <field name="first_reception_date"/>
+        <label name="reception_date"/>
+        <field name="reception_date"/>
+    </group>
+    <notebook colspan="4">
         <page name="details">
             <field name="details"/>
         </page>
