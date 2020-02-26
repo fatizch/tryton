@@ -86,7 +86,6 @@ IDENTIFIERS_TO_REMOVE = {
     'ee_kmkr',  # Estonian VAT Number
     'es_cif',  # Spanish Company Tax
     'es_nif',  # Spanish VAT Number
-    'eu_vat',  # European VAT Number
     'fi_alv',  # Finnish VAT Number
     'fi_ytunnus',  # Finnish Business Identifier
     'fr_nif',  # French Tax Identification Number
