@@ -195,6 +195,15 @@ class Contract(metaclass=PoolMeta):
             self.commission_rate_overrides = []
 
     def getter_commission_data(self, name):
+        # This field is only intended to be used by the client for:
+        #   - Displaying the various agents which will be considered
+        #   - Updating commission_rate_overrides through an on_change
+        #
+        # Using this field in the code is NOT POSSIBLE, you should use
+        # _calculated_commission_data instead
+        #
+        # This is because tryton does not properly manage O2M Function fields
+        # which are pure ModelView (meaning there is no id to work with).
         agents = self._calculated_commission_data
         return [model.dictionarize(x, set_rec_names=True) for x in agents]
 

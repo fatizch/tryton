@@ -57,5 +57,6 @@ class RuleEngineRuntime(metaclass=PoolMeta):
     @check_args('contract')
     def _re_contract_premium_commission_rate(cls, args):
         return sum([
-                x.premium_rate or 0 for x in args['contract'].commission_data],
+                x.premium_rate or 0
+                for x in args['contract']._calculated_commission_data],
             Decimal(0))

@@ -1,3 +1,4 @@
+* OTH#00000 Remplacer l'utilisation de commission_data dans le code par _calculated_commission_data
 * OTH#00000 Ajout de validations sur les surcharges de taux
 * FEA#13324 Ajout de la possibilité de faire varier (dans la mesure de ce qui est autorisé par paramétrage) le taux de commission par contrat pour un apporteur
 * OTH#00000 Passage du champ "contrat" sur les commissions en readonly
