@@ -126,6 +126,7 @@ class MigratorAddress(migrator.Migrator):
         cls._default_config_items.update({
                 'default_country_code': 'FR',
                 })
+        cls.ignore_null_zip = False
         cls.error_messages.update({
             'duplicate_address': "Address already imported",
             'address_zip_code_required': "The zip code is required for '%s'",
@@ -194,7 +195,7 @@ class MigratorAddress(migrator.Migrator):
         row = super(MigratorAddress, cls).populate(row)
         cls.resolve_key(row, 'party', 'party')
         cls.resolve_key(row, 'country_code', 'country', dest_key='country')
-        if not row['zip']:
+        if not cls.ignore_null_zip and not row['zip']:
             cls.raise_error(row, 'address_zip_code_required',
                 (row['party'].code,))
         for adr in row['party'].addresses:
