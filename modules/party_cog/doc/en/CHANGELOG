@@ -1,3 +1,4 @@
+* FEA#14891 Manage siren in Party API
 * BUG#13332 Clean up unused VAT codes in party identifier types
 * BUG#14927 Manage the case that death date could be birth date
 * OTH#0000 UI enhancements on party list view

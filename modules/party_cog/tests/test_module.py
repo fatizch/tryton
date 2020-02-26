@@ -15,6 +15,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
     Test Coog module.
     '''
     module = 'party_cog'
+    extras = ['party_siret']
 
     @classmethod
     def get_models(cls):
@@ -424,6 +425,46 @@ class ModuleTestCase(test_framework.CoogTestCase):
                         'id': parent.id,
                         'name': parent.full_name,
                         }})
+
+    def test0062_party_API_siren(self):
+        party_data = {
+            'parties': [
+                {
+                    'ref': '1',
+                    'is_person': True,
+                    'name': 'My API Company 2096',
+                    'siren': '732829320'
+                    },
+                ]}
+
+        self.assertEqual(self.APIParty.create_party(
+            party_data, {}).data[0]['type'], 'json_schema')
+
+        party_data['parties'][0]['is_person'] = False
+        self.APIParty.create_party(party_data, {})
+        companies = self.Party.search([('name', '=', 'My API Company 2096')])
+        self.assertEqual(len(companies), 1)
+        self.assertEqual(companies[0].siren,
+            '732829320')
+
+        party_data['parties'][0]['siren'] = '4815162342'
+        self.assertEqual(
+            self.APIParty.create_party(party_data, {}).data, [{
+                    'type': 'invalid_siren',
+                    'data': {'siren': '4815162342'}},
+                ])
+        party_data['parties'][0]['siren'] = '481516234'
+        self.assertEqual(
+            self.APIParty.create_party(party_data, {}).data, [{
+                    'type': 'invalid_siren',
+                    'data': {'siren': '481516234'}},
+                ])
+        party_data['parties'][0]['siren'] = 'sirentest'
+        self.assertEqual(
+            self.APIParty.create_party(party_data, {}).data, [{
+                    'type': 'invalid_siren',
+                    'data': {'siren': 'sirentest'}},
+                ])
 
 
 def suite():

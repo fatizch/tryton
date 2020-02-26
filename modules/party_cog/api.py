@@ -45,6 +45,7 @@ __all__ = [
     'Party',
     'APICore',
     'APIParty',
+    'APIPartySiret',
     ]
 
 
@@ -671,7 +672,7 @@ class APIParty(APIMixin):
     @classmethod
     def _update_company(cls, party, data, options):
         for fname in cls._update_company_fields():
-            if fname in data and getattr(party, fname) != data[fname]:
+            if fname in data and getattr(party, fname, None) != data[fname]:
                 setattr(party, fname, data[fname])
 
     @classmethod
@@ -833,3 +834,32 @@ class APIParty(APIMixin):
                     'type': data['type'].code,
                     },
                 })
+
+
+class APIPartySiret(metaclass=PoolMeta):
+    __name__ = 'api.party'
+
+    @classmethod
+    def _party_company_schema(cls):
+        schema = super()._party_company_schema()
+        schema['properties']['siren'] = {'type': 'string'}
+        return schema
+
+    @classmethod
+    def _update_company_fields(cls):
+        return super()._update_company_fields() + ['siren']
+
+    @classmethod
+    def _party_convert(cls, data, options, parameters):
+        API = Pool().get('api')
+        super()._party_convert(data, options, parameters)
+
+        from trytond.modules.party_siret import luhn
+        if 'siren' in data and data['siren'] and \
+                (len(data['siren']) != 9 or not luhn.validate(data['siren'])):
+            API.add_input_error({
+                    'type': 'invalid_siren',
+                    'data': {
+                        'siren': data['siren'],
+                        },
+                    })
