@@ -107,6 +107,9 @@ class BillingMode(model.CodedMixin, model.CoogView):
         'getter_products', searcher='search_products')
     fees = fields.Many2Many('offered.billing_mode-account.fee', 'billing_mode',
         'fee', 'Fees')
+    billing_rules = fields.Many2Many('offered.product-offered.billing_mode',
+        'billing_mode', 'billing_rule', 'Billing Rules',
+        help="Billing rules using this billing mode")
 
     @classmethod
     def __setup__(cls):

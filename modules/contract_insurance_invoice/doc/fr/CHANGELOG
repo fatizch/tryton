@@ -1,3 +1,4 @@
+* BUG#14989 Correction d'une erreur dans l'avenant 'Modification des paramètres de quittancement'
 * OTH#00000 L'iban n'est plus requis pour l'api de souscription
 * OTH#00000 Amélioration des performances de la génération des quittances en regroupant le calcul des comptes à recevoir
 * BUG#14274 Correctif sur la date de re-présentation des rejets de frais si l'action porte sur une date précise

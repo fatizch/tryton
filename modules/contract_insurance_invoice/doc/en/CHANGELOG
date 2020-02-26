@@ -1,3 +1,4 @@
+* BUG#14989 Fix error in change billing information endorsement
 * OTH#00000 Iban is no more required for subscription API
 * OTH#00000 Improve invoice generation performances by grouping invoice account calculation
 * BUG#14274 Fix on the present again date if the rejected fee's action specify a date
