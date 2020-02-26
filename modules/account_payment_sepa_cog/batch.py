@@ -93,6 +93,8 @@ class PaymentFailBatch(batch.BatchRootNoSelect):
         all_elements = []
         for file_name, file_path in files:
             with codecs.open(file_path, 'r') as _file:
+                if not file_name.endswith('.xml'):
+                    continue
                 source = _file.read().encode('utf8')
                 all_elements.extend(
                     [(x,) for x in handler.extract_elements(source,

@@ -1,3 +1,4 @@
+* BUG#14814 The batch now only takes .xml files
 * BUG#12202 Automatic directory creation from the path given in parameter for the payment fail batch if needed
 * FEA#14301 Allow to configure sepa dump file in a dedicated folder per journal
 * BUG#13991 Add chain to override the reject payments treatment date with the working days configuration

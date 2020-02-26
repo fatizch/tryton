@@ -1,3 +1,4 @@
+* BUG#14814 Le batch de traitement des rejets ne prend désormais que les fichiers .xml
 * BUG#12202 Création automatique du dossier passé en paramètre de batch de refus de paiement si besoin
 * FEA#14301 Permettre de configurer le dossier de sortie des fichiers SEPA en fonction du journal
 * BUG#13991 Ajout d'une chaine pour définir la date de traitement des rejets en fonction des jours ouvrés
