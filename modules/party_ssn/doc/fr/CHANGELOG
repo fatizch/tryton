@@ -1,3 +1,4 @@
+* BUG#15117 Reformuler le message d'erreur Invalid SSN Key
 * OTH#00000 Correction de l'API de création d'un tiers si le NIR est vide
 
 Version 2.6 - 2019-10-11

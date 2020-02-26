@@ -48,7 +48,7 @@ msgstr "Le premier chiffre du NIR ne correspond pas avec la civilité"
 
 msgctxt "model:ir.message,text:msg_invalid_ssn_key"
 msgid "Invalid SSN Key."
-msgstr "Clé de numéro de sécu non valide."
+msgstr "Clé de numéro de sécurité sociale non valide."
 
 msgctxt "model:ir.message,text:msg_invalid_ssn_year_or_month_of_birth"
 msgid "Invalid SSN : incorrect year or month of birth"

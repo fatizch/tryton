@@ -1,5 +1,6 @@
+* BUG#15117 Fix Invalid SSN Key error message
 * OTH#00000 Fix party convert API if SSN is empty
-
++
 Version 2.6 - 2019-10-11
 * FEA#12428 Add SSN check validation based on person data
 
