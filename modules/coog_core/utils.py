@@ -174,8 +174,7 @@ def read_file(filepath, binary=True):
 
 
 def mkdir_if_not_exists(dirpath, mode=0o755):
-    if not dirpath.exists():
-        dirpath.mkdir(mode=mode, parents=True)
+    dirpath.mkdir(mode=mode, parents=True, exist_ok=True)
 
 
 def multi_column_required(table, column_names):

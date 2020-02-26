@@ -223,7 +223,7 @@ class BatchRoot(ModelView):
             filepath_template = filepath_template.replace('%{TIMESTAMP}',
                 timestamp)
         filepath = Path(kwargs['root_dir']) / filepath_template
-        utils.mkdir_if_not_exists(filepath)
+        utils.mkdir_if_not_exists(filepath.parent if filename else filepath)
         return filepath
 
     @classmethod
