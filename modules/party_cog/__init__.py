@@ -77,7 +77,7 @@ def register():
 
     Pool.register(
         api.APIPartySiret,
-        module='party_cog', type_='model', depends=['party_siret'])
+        module='party_cog', type_='model', depends=['api', 'party_siret'])
 
     Pool.register_post_init_hooks(migrate_1_10_include_name_in_street,
         module='party')
