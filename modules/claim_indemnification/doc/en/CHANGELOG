@@ -1,3 +1,4 @@
+* BUG#15127 Allow to cancel create indemnification without a selected service
 * BUG#14996 Add check method to be used in claim process whether total beneficiary share amounts to 100% for each delivered services
 * BUG#14995 Do not check share for cancel paid indemnifications
 * BUG#14904 Fix code to python 3 causing crash in indemnification calculation with beneficiary share

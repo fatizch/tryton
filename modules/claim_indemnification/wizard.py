@@ -396,7 +396,6 @@ class SelectService(model.CoogView):
     __name__ = 'claim.select_service'
 
     selected_service = fields.Many2One('claim.service', 'Selected Service',
-        states={'required': Bool(Eval('possible_services'))},
         domain=([('id', 'in', Eval('possible_services'))]),
         depends=['possible_services'])
     contract = fields.Many2One('contract', 'Contract', readonly=True)
@@ -675,6 +674,7 @@ class CreateIndemnification(wizard_context.PersistentContextWizard):
         'claim_indemnification.select_service_view_form', [
             Button('Cancel', 'cancel', 'tryton-cancel'),
             Button('Continue', 'service_selected', 'tryton-go-next',
+                states={'readonly': ~Eval('selected_service')},
                 default=True)])
     service_selected = StateTransition()
     definition = StateView('claim.indemnification_definition',
