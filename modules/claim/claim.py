@@ -867,6 +867,9 @@ class Loss(model.CoogSQL, model.CoogView,
                 value_(self.event_desc, 'name'),
             }
 
+    def get_contact(self):
+        return self.claim.claimant
+
 
 class ClaimService(model.CoogSQL, model.CoogView,
         with_extra_data(['benefit'], schema='benefit',

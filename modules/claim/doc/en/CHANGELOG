@@ -1,3 +1,4 @@
+* BUG#15131 Fix error when saving a document request line needed for a loss
 * BUG#14638 Fix typo in getter
 * BUG#14487 Fix inability to add a beneficiary on a death claim
 * FEA#13851 Allow to define loss desc and event desc by configuration in xml file
