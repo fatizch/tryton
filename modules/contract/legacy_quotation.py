@@ -200,8 +200,15 @@ class LegacyQuotation(object):
             sim_party_coverages.append(sim_party_coverage)
 
         self.sim_parties = sim_parties
+        subs = legacy_input.get('subscriptions', [])
+        if not subs:
+            sub = legacy_input.get('transform')
+            if sub:
+                subs = [sub]
+            else:
+                subs = []
 
-        self.build_subscription_data(legacy_input.get('subscriptions', []))
+        self.build_subscription_data(subs)
 
         Product = pool.get('offered.product')
         product = Product(legacy_input['product'])
