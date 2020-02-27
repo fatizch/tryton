@@ -20,7 +20,9 @@ if [ -n "$IN_DIRECTORY" ]; then
         --working_days="$WORKING_DAYS"   \
         --conf_code="$CONF_CODE"
 else
-    chain_step account.payment.fail
+    chain_step account.payment.fail      \
+        --working_days="$WORKING_DAYS"   \
+        --conf_code="$CONF_CODE"
 fi
 
 chain_wait account.payment.fail || chain_end
