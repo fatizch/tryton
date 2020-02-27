@@ -41,30 +41,30 @@ this repository contains the full copyright notices and license terms. -->
         <record model="table.dimension.value" id="agirc_dimension_value_2016">
             <field name="definition" ref="claim_salary_fr.table_agirc"/>
             <field name="type">dimension1</field>
-            <field name="start_date">2016-01-01</field>
-            <field name="end_date">2017-01-01</field>
-            <field name="name">[01/01/2016 - 01/01/2017[</field>
+            <field name="start_date">2015-04-01</field>
+            <field name="end_date">2016-11-01</field>
+            <field name="name">[01/04/2015 - 01/11/2016[</field>
         </record>
         <record model="table.dimension.value" id="agirc_dimension_value_2017">
             <field name="definition" ref="claim_salary_fr.table_agirc"/>
             <field name="type">dimension1</field>
-            <field name="start_date">2017-01-01</field>
-            <field name="end_date">2018-01-01</field>
-            <field name="name">[01/01/2017 - 01/01/2018[</field>
+            <field name="start_date">2016-11-01</field>
+            <field name="end_date">2017-11-01</field>
+            <field name="name">[01/11/2016 - 01/11/2017[</field>
         </record>
         <record model="table.dimension.value" id="agirc_dimension_value_2018">
             <field name="definition" ref="claim_salary_fr.table_agirc"/>
             <field name="type">dimension1</field>
-            <field name="start_date">2018-01-01</field>
-            <field name="end_date">2019-01-01</field>
-            <field name="name">[01/01/2018 - 01/01/2019[</field>
+            <field name="start_date">2017-11-01</field>
+            <field name="end_date">2018-11-01</field>
+            <field name="name">[01/11/2017 - 01/11/2018[</field>
         </record>
         <record model="table.dimension.value" id="agirc_dimension_value_2019">
             <field name="definition" ref="claim_salary_fr.table_agirc"/>
             <field name="type">dimension1</field>
-            <field name="start_date">2019-01-01</field>
+            <field name="start_date">2018-11-01</field>
             <field name="end_date">2019-11-01</field>
-            <field name="name">[01/01/2019 - 01/11/2019[</field>
+            <field name="name">[01/11/2018 - 01/11/2019[</field>
         </record>
         <record model="table.dimension.value" id="agirc_dimension_value_2020">
             <field name="definition" ref="claim_salary_fr.table_agirc"/>
@@ -77,30 +77,30 @@ this repository contains the full copyright notices and license terms. -->
         <record model="table.dimension.value" id="arrco_dimension_value_2016">
             <field name="definition" ref="claim_salary_fr.table_arrco"/>
             <field name="type">dimension1</field>
-            <field name="start_date">2016-01-01</field>
-            <field name="end_date">2017-01-01</field>
-            <field name="name">[01/01/2016 - 01/01/2017[</field>
+            <field name="start_date">2015-04-01</field>
+            <field name="end_date">2016-11-01</field>
+            <field name="name">[01/04/2015 - 01/11/2016[</field>
         </record>
         <record model="table.dimension.value" id="arrco_dimension_value_2017">
             <field name="definition" ref="claim_salary_fr.table_arrco"/>
             <field name="type">dimension1</field>
-            <field name="start_date">2017-01-01</field>
-            <field name="end_date">2018-01-01</field>
-            <field name="name">[01/01/2017 - 01/01/2018[</field>
+            <field name="start_date">2016-11-01</field>
+            <field name="end_date">2017-11-01</field>
+            <field name="name">[01/11/2016 - 01/11/2017[</field>
         </record>
         <record model="table.dimension.value" id="arrco_dimension_value_2018">
             <field name="definition" ref="claim_salary_fr.table_arrco"/>
             <field name="type">dimension1</field>
-            <field name="start_date">2018-01-01</field>
-            <field name="end_date">2019-01-01</field>
-            <field name="name">[01/01/2018 - 01/01/2019[</field>
+            <field name="start_date">2017-11-01</field>
+            <field name="end_date">2018-11-01</field>
+            <field name="name">[01/11/2017 - 01/11/2018[</field>
         </record>
         <record model="table.dimension.value" id="arrco_dimension_value_2019">
             <field name="definition" ref="claim_salary_fr.table_arrco"/>
             <field name="type">dimension1</field>
-            <field name="start_date">2019-01-01</field>
+            <field name="start_date">2018-11-01</field>
             <field name="end_date">2019-11-01</field>
-            <field name="name">[01/01/2019 - 01/11/2019[</field>
+            <field name="name">[01/11/2018 - 01/11/2019[</field>
         </record>
         <record model="table.dimension.value" id="arrco_dimension_value_2020">
             <field name="definition" ref="claim_salary_fr.table_arrco"/>
@@ -261,9 +261,9 @@ this repository contains the full copyright notices and license terms. -->
         <record model="table.dimension.value" id="agirc_arrco_dimension_value_2019">
             <field name="definition" ref="claim_salary_fr.table_agirc_arrco"/>
             <field name="type">dimension1</field>
-            <field name="start_date">2019-01-01</field>
+            <field name="start_date">2018-11-01</field>
             <field name="end_date">2019-11-01</field>
-            <field name="name">[01/01/2019 - 01/11/2019[</field>
+            <field name="name">[01/11/2018 - 01/11/2019[</field>
         </record>
         <record model="table.dimension.value" id="agirc_arrco_dimension_value_2020">
             <field name="definition" ref="claim_salary_fr.table_agirc_arrco"/>
