@@ -302,6 +302,13 @@ class LegacyQuotation(object):
             debit_day = sub.get('allowed_direct_debit_day')
             if debit_day:
                 billing['direct_debit_day'] = debit_day
+            else:
+                pool = Pool()
+                BillingMode = pool.get('offered.billing_mode')
+                billing_mode = BillingMode(int(sub['billing_mode']))
+                if billing_mode.direct_debit:
+                    billing['direct_debit_day'] = \
+                        int(billing_mode.get_allowed_direct_debit_days()[0][0])
             sub['billing'] = billing
             if 'party' in sub:
                 sub_party = sub['party']
