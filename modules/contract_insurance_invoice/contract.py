@@ -1187,10 +1187,20 @@ class Contract(metaclass=PoolMeta):
             if invoices_to_post:
                 Invoice.post(invoices_to_post)
 
+            self.update_aperiodic_invoices()
             return invoices_to_post
 
     def is_invoiced_to_end(self):
         return self.last_invoice_end and self.last_invoice_end >= self.end_date
+
+    def update_aperiodic_invoices(self):
+        pool = Pool()
+        Invoice = pool.get('account.invoice')
+        to_update = Invoice.search([
+                ('contract', '=', self.id),
+                ('start', '=', None),
+                ('state', '=', 'posted')])
+        Invoice.update_payment_dates(to_update)
 
     def invoice_next_period(self):
         pool = Pool()

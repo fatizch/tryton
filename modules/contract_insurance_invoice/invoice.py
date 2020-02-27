@@ -346,8 +346,8 @@ class Invoice(metaclass=PoolMeta):
                     billing_information, payment_dates, present_again_after)
         else:
             new_date = billing_information.get_direct_debit_planned_date(line)
-        if new_date and (getattr(line, 'payment_date', None) or
-                datetime.date.min) < new_date:
+        existing = getattr(line, 'payment_date', None) or datetime.date.min
+        if (not new_date) or (new_date > existing):
             line.payment_date = new_date
 
     def _get_move_line(self, date, amount):
@@ -366,7 +366,10 @@ class Invoice(metaclass=PoolMeta):
         to_save = []
         for invoice in invoices:
             to_update = [x for x in invoice.lines_to_pay
-                if not x.reconciliation and x.contract]
+                if not x.reconciliation and x.contract
+                and not any(
+                        [y.state in ('draft', 'approved',
+                            'processing') for y in x.payments])]
             for line in to_update:
                 invoice.update_move_line_from_billing_information(line)
             to_save.extend(to_update)
