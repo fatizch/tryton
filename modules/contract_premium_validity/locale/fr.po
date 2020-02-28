@@ -1,0 +1,71 @@
+#
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:contract,premium_validity_end:"
+msgid "Premium Validity End"
+msgstr "Fin de validité des primes"
+
+msgctxt "field:contract.premium.calculate,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:contract.premium_validity.ending_rule,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:contract.premium_validity.ending_rule,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:contract.premium_validity.ending_rule,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:contract.premium_validity.ending_rule,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:contract.premium_validity.ending_rule,product:"
+msgid "Product"
+msgstr "Produit"
+
+msgctxt "field:contract.premium_validity.ending_rule,rec_name:"
+msgid "Record Name"
+msgstr "Nom de l'enregistrement"
+
+msgctxt "field:contract.premium_validity.ending_rule,rule:"
+msgid "Rule Engine"
+msgstr "Moteur de Règle"
+
+msgctxt "field:contract.premium_validity.ending_rule,rule_extra_data:"
+msgid "Rule Extra Data"
+msgstr "Règle Données complémentaires"
+
+msgctxt "field:contract.premium_validity.ending_rule,write_date:"
+msgid "Write Date"
+msgstr "Date de modification"
+
+msgctxt "field:contract.premium_validity.ending_rule,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:contract.premium_validity.ending_rule,xml_id:"
+msgid "XML Id"
+msgstr "XML Id"
+
+msgctxt "field:offered.product,premium_ending_rule:"
+msgid "Premiums Ending Rule"
+msgstr "Règle de fin de validité des primes"
+
+msgctxt "help:offered.product,premium_ending_rule:"
+msgid "Rule that returns a date which defines when the premiums will end"
+msgstr "Règle qui retourne une date qui définit quand les primes se terminent"
+
+msgctxt "model:contract.premium.calculate,name:"
+msgid "Calculate Premiums Batch"
+msgstr "Batch de calcul des primes"
+
+msgctxt "model:contract.premium_validity.ending_rule,name:"
+msgid "Premium Ending Rule"
+msgstr "Règle de fin de validité des primes"

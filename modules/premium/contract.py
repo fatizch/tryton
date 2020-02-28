@@ -135,19 +135,19 @@ class Contract(metaclass=PoolMeta):
         cls.store_prices(final_prices)
         return True, ()
 
-    def calculate_prices_between_dates(self, start=None, end=None):
-        def limit_dates(dates, start=None, end=None):
-            res = set([x for x in dates
-                    if (not start or x >= start) and (not end or x < end)])
-            if start:
-                res.add(start)
-            if end:
-                res.add(end)
-            return sorted(res)
+    def limit_dates(self, dates, start=None, end=None):
+        res = {x for x in dates
+                if (not start or x >= start) and (not end or x < end)}
+        if start:
+            res.add(start)
+        if end:
+            res.add(end)
+        return sorted(res)
 
+    def calculate_prices_between_dates(self, start=None, end=None):
         if not start or start < self.initial_start_date:
             start = self.initial_start_date
-        dates = limit_dates(self.get_dates(), start)
+        dates = self.limit_dates(self.get_dates(), start)
         lines = self.product.calculate_premiums(self, dates)
         return lines
 
