@@ -1,3 +1,4 @@
+* OTH#00000 Correction de la déclaration manquante de userwarning
 * OTH#00000 Ajout d'une option de vérification bloquante de l'éligibilité à l'API de souscription
 * OTH#00000 Correction d'une typo dans la méthode de vérification d'éligibilité d'une option
 * OTH#00000 Mise à jour du schéma de retour de l'API de simulation

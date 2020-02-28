@@ -3,7 +3,7 @@
 from trytond.i18n import gettext
 from trytond.model.exceptions import ValidationError
 from trytond.pool import PoolMeta, Pool
-from trytond.exceptions import UserError
+from trytond.exceptions import UserError, UserWarning
 
 from trytond.modules.coog_core import fields
 
