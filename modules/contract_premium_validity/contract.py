@@ -30,8 +30,8 @@ class Contract(metaclass=PoolMeta):
     def update_premium_validity_date(cls, contracts):
         to_save = []
         for contract in contracts:
-            validity_rule = contract.product.premium_ending_rule[0]
-            if validity_rule:
+            if contract.product.premium_ending_rule:
+                validity_rule = contract.product.premium_ending_rule[0]
                 context = {'date': utils.today()}
                 contract.init_dict_for_rule_engine(context)
                 end_date = validity_rule.calculate_rule(context)
