@@ -1,3 +1,4 @@
+* OTH#00000 Display error message if during the manage options endorsement the amount coverage was not set
 * OTH#00000 Fix error when clicking to fast on Next button in endorsement
 * BUG#14691 Fix crash when applying an endorsement on an empty contract
 * OTH#00000 No update of version data on an endorsement if the endorsement is at the effective date of the option. Improve code to add a method that updates the option version and can be overridden easily

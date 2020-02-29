@@ -881,6 +881,11 @@ class ManageOptions(EndorsementWizardStepMixin):
     def step_update(self):
         ExtraData = Pool().get('extra_data')
         self.update_all_options()
+        for option in self.all_options:
+            if option.coverage_amount_mode and not option.coverage_amount:
+                raise ValidationError(gettext(
+                    'endorsement.msg_no_amount_defined',
+                    coverage_name=option.display_name))
         endorsement = self.wizard.endorsement
         per_parent = defaultdict(list)
         for option in self.all_options:

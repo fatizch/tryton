@@ -106,5 +106,8 @@
         <record model="ir.message" id="msg_no_contract_selected">
             <field name="text">A contract must be set.</field>
         </record>
+        <record model="ir.message" id="msg_no_amount_defined">
+            <field name="text">No amount defined for coverage %(coverage_name)s</field>
+        </record>
     </data>
 </tryton>

@@ -2362,6 +2362,10 @@ msgctxt "model:ir.message,text:msg_new_version"
 msgid "New version:"
 msgstr "Nouvelle version"
 
+msgctxt "model:ir.message,text:msg_no_amount_defined"
+msgid "No amount defined for coverage %(coverage_name)s"
+msgstr "Le montant de couverture n'est pas défini pour l'option %(coverage_name)s"
+
 msgctxt "model:ir.message,text:msg_no_cancel_endorsement"
 msgid ""
 "Cancellation of this endorsement is not allowed in order to preserve the "
