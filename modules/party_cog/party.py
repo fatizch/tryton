@@ -273,6 +273,8 @@ class Party(export.ExportImportMixin, summary.SummaryMixin):
                     'invisible': Eval('has_multiple_addresses', False)}),
             ("/form/group[@id='button']", 'states', {'invisible': True}),
             ('/tree', 'colors', Eval('color')),
+            ("/form/notebook/page[@id='role']", 'states',
+                {'invisible': Eval('is_person')}),
             ]
 
     @staticmethod

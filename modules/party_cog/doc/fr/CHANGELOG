@@ -1,3 +1,4 @@
+* BUG#15009 Affichage de l'onglet role uniquement quand le tiers est une personne morale
 * FEA#14891 Gestion du Siren dans l'API des tiers
 * BUG#13332 Nettoyage des types d'identifiants de tiers inutilisés
 * BUG#14927 Gestion du cas d'une date de décès qui est égale à la date de naissance
