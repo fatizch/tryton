@@ -1,0 +1,113 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- ############### -->
+        <!-- # Third Party Debt Assignment Request # -->
+        <!-- ############### -->
+        <record model="ir.ui.view" id="debt_assignment_request_view_form">
+            <field name="model">debt_assignment_request</field>
+            <field name="type">form</field>
+            <field name="name">debt_assignment_request_form</field>
+        </record>
+        <record model="ir.ui.view" id="debt_assignment_request_view_list">
+            <field name="model">debt_assignment_request</field>
+            <field name="type">tree</field>
+            <field name="name">debt_assignment_request_list</field>
+        </record>
+
+        <record model="ir.model.button" id="debt_assignment_request_draft_button">
+            <field name="name">draft</field>
+            <field name="string">Draft</field>
+            <field name="model" search="[('model', '=', 'debt_assignment_request')]"/>
+        </record>
+        <record model="ir.model.button" id="debt_assignment_request_transmit_button">
+            <field name="name">transmit</field>
+            <field name="string">Transmit</field>
+            <field name="model" search="[('model', '=', 'debt_assignment_request')]"/>
+        </record>
+        <record model="ir.model.button" id="debt_assignment_request_refuse_button">
+            <field name="name">refuse</field>
+            <field name="string">Refuse</field>
+            <field name="model" search="[('model', '=', 'debt_assignment_request')]"/>
+        </record>
+        <record model="ir.model.button" id="debt_assignment_request_accept_button">
+            <field name="name">accept</field>
+            <field name="string">Accept</field>
+            <field name="model" search="[('model', '=', 'debt_assignment_request')]"/>
+        </record>
+        <record model="ir.model.button" id="debt_assignment_request_study_button">
+            <field name="name">study</field>
+            <field name="string">Study</field>
+            <field name="model" search="[('model', '=', 'debt_assignment_request')]"/>
+        </record>
+        <record model="ir.model.button" id="debt_assignment_request_pay_button">
+            <field name="name">pay</field>
+            <field name="string">Pay</field>
+            <field name="model" search="[('model', '=', 'debt_assignment_request')]"/>
+        </record>
+
+        <record model="ir.action.act_window" id="act_debt_assignment_request_form">
+            <field name="name">Debt Assignment Request</field>
+            <field name="res_model">debt_assignment_request</field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_debt_assignment_request_form_view1">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="debt_assignment_request_view_list"/>
+            <field name="act_window" ref="act_debt_assignment_request_form"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_debt_assignment_request_form_view2">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="debt_assignment_request_view_form"/>
+            <field name="act_window" ref="act_debt_assignment_request_form"/>
+        </record>
+
+        <record model="ir.action.act_window.domain" id="act_debt_assignment_request_draft">
+            <field name="name">Draft</field>
+            <field name="sequence" eval="35"/>
+            <field name="domain" eval="[('state', '=', 'draft')]" pyson="1"/>
+            <field name="act_window" ref="act_debt_assignment_request_form"/>
+        </record>
+        <record model="ir.action.act_window.domain" id="act_debt_assignment_request_transmitted">
+            <field name="name">Transmitted</field>
+            <field name="sequence" eval="35"/>
+            <field name="domain" eval="[('state', '=', 'transmitted')]" pyson="1"/>
+            <field name="act_window" ref="act_debt_assignment_request_form"/>
+        </record>
+        <record model="ir.action.act_window.domain" id="act_debt_assignment_request_in_study">
+            <field name="name">In study</field>
+            <field name="sequence" eval="35"/>
+            <field name="domain" eval="[('state', '=', 'in_study')]" pyson="1"/>
+            <field name="act_window" ref="act_debt_assignment_request_form"/>
+        </record>
+        <record model="ir.action.act_window.domain" id="act_debt_assignment_request_accepted">
+            <field name="name">Accepted</field>
+            <field name="sequence" eval="35"/>
+            <field name="domain" eval="[('state', '=', 'accepted')]" pyson="1"/>
+            <field name="act_window" ref="act_debt_assignment_request_form"/>
+        </record>
+        <record model="ir.action.act_window.domain" id="act_debt_assignment_request_refused">
+            <field name="name">Refused</field>
+            <field name="sequence" eval="35"/>
+            <field name="domain" eval="[('state', '=', 'refused')]" pyson="1"/>
+            <field name="act_window" ref="act_debt_assignment_request_form"/>
+        </record>
+        <record model="ir.action.act_window.domain" id="act_debt_assignment_request_paid">
+            <field name="name">Paid</field>
+            <field name="sequence" eval="35"/>
+            <field name="domain" eval="[('state', '=', 'paid')]" pyson="1"/>
+            <field name="act_window" ref="act_debt_assignment_request_form"/>
+        </record>
+        <menuitem name="Take Charge" parent="account.menu_account" id="menu_take_charge"/>
+        <menuitem name="Debt Assignment Request" parent="menu_take_charge" sequence="40" action="act_debt_assignment_request_form" id="menu_debt_assignment_request"/>
+        <!-- ################################## -->
+        <!-- # Print                          # -->
+        <!-- ################################## -->
+        <record model="ir.action.keyword" id="report_debt_assignment_request_keyword">
+            <field name="keyword">form_print</field>
+            <field name="model">debt_assignment_request,-1</field>
+            <field name="action" ref="report_engine.letter_generation_wizard"/>
+        </record>
+    </data>
+</tryton>

@@ -48,7 +48,7 @@ Sauvegarder. L'ensemble des groupes définis sur le rôle apparaît dans la sect
 
 Pour vérifier celà, se rendre dans le point d'entrée "Rôles". Ouvrir le rôle ajouté.
 
-.. image:: images/role_avec_groupes.png
+.. image:: images/roles_avec_groupes.png
 
 Ainsi, on retrouve les groupes qui ont été automatiquement attachés à l'utilisateur.
 Il est possible de définir autant de rôles/groupes que l'on souhaite sur un utilisateur. Si des droits d'accès liés au même objet sont définis sur plusieurs groupes liés à l'utilisateur, les droits les plus permissifs sont retenus.

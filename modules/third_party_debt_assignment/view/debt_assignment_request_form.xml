@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<form>
+    <label name="party"/>
+    <field name="party"/>
+    <label name="third_party"/>
+    <field name="third_party"/>
+    <separator string="request state" id="request_state" colspan="4"/>
+    <label name="state"/>
+    <field name="state"/>
+    <newline/>
+    <label name="transmission_date"/>
+    <field name="transmission_date"/>
+    <newline/>
+    <label name="in_study_date"/>
+    <field name="in_study_date"/>
+    <newline/>
+    <label name="acceptance_date"/>
+    <field name="acceptance_date"/>
+    <newline/>
+    <label name="refusal_date"/>
+    <field name="refusal_date"/>
+    <newline/>
+    <label name="contract_to_terminate"/>
+    <field name="contract_to_terminate"/>
+    <newline/>
+    <label name="requested_amount"/>
+    <field name="requested_amount"/>
+    <newline/>
+    <label name="debt_assignment_level"/>
+    <field name="debt_assignment_level"/>
+    <label name="debt_assignment_amount"/>
+    <field name="debt_assignment_amount"/>
+    <newline/>
+    <field name="currency" invisible="1"/>
+    <field name="currency_digits" invisible="1"/>
+    <field name="invoices" colspan="4"/>
+    <group col="8" colspan="4" id="buttons">
+        <button name="transmit"/>
+        <button name="refuse"/>
+        <button name="draft"/>
+        <button name="accept"/>
+        <button name="study"/>
+        <button name="pay"/>
+    </group>
+</form>

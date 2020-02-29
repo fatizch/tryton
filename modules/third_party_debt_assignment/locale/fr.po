@@ -1,0 +1,354 @@
+#
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:account.dunning.level,ask_for_third_party_take_care:"
+msgid "Ask for third party take care"
+msgstr "Demande de prise en charge"
+
+msgctxt "field:debt_assignment_request,acceptance_date:"
+msgid "Acceptance date"
+msgstr "Date d'acceptation"
+
+msgctxt "field:debt_assignment_request,contract_to_terminate:"
+msgid "Contract to terminate"
+msgstr "A radier"
+
+msgctxt "field:debt_assignment_request,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:debt_assignment_request,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:debt_assignment_request,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:debt_assignment_request,currency:"
+msgid "Currency"
+msgstr "Devise"
+
+msgctxt "field:debt_assignment_request,currency_digits:"
+msgid "Currency Digits"
+msgstr "Précision de la devise"
+
+msgctxt "field:debt_assignment_request,debt_assignment_amount:"
+msgid "Debt assignment amount"
+msgstr "Montant de prise en charge"
+
+msgctxt "field:debt_assignment_request,debt_assignment_level:"
+msgid "Debt assignment level"
+msgstr "Niveau de prise en charge"
+
+msgctxt "field:debt_assignment_request,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:debt_assignment_request,in_study_date:"
+msgid "In study date"
+msgstr "Date de passage en étude"
+
+msgctxt "field:debt_assignment_request,invoices:"
+msgid "Invoices"
+msgstr "Quittances"
+
+msgctxt "field:debt_assignment_request,is_paid:"
+msgid "Is paid"
+msgstr "Payé"
+
+msgctxt "field:debt_assignment_request,party:"
+msgid "Party"
+msgstr "Tiers"
+
+msgctxt "field:debt_assignment_request,rec_name:"
+msgid "Record Name"
+msgstr "Nom de l'enregistrement"
+
+msgctxt "field:debt_assignment_request,refusal_date:"
+msgid "Refusal date"
+msgstr "Date de refus"
+
+msgctxt "field:debt_assignment_request,requested_amount:"
+msgid "Requested amount"
+msgstr "Montant de prise en charge demandé"
+
+msgctxt "field:debt_assignment_request,state:"
+msgid "State"
+msgstr "État"
+
+msgctxt "field:debt_assignment_request,third_party:"
+msgid "Third Party"
+msgstr "Tierce partie"
+
+msgctxt "field:debt_assignment_request,transmission_date:"
+msgid "Transmission date"
+msgstr "Date de passage à l'état transmis"
+
+msgctxt "field:debt_assignment_request,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:debt_assignment_request,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:debt_assignment_request,xml_id:"
+msgid "XML Id"
+msgstr "XML Id"
+
+msgctxt "field:debt_assignment_request-account.invoice,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:debt_assignment_request-account.invoice,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:debt_assignment_request-account.invoice,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt ""
+"field:debt_assignment_request-account.invoice,debt_assignment_request:"
+msgid "Debt assignment request"
+msgstr "Demande de prise en charge"
+
+msgctxt "field:debt_assignment_request-account.invoice,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:debt_assignment_request-account.invoice,invoice:"
+msgid "Invoice"
+msgstr "Quittance"
+
+msgctxt "field:debt_assignment_request-account.invoice,rec_name:"
+msgid "Record Name"
+msgstr "Nom de l'enregistrement"
+
+msgctxt "field:debt_assignment_request-account.invoice,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:debt_assignment_request-account.invoice,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:debt_assignment_request-account.invoice,xml_id:"
+msgid "XML Id"
+msgstr "XML Id"
+
+msgctxt "field:debt_assignment_request.create_requests.view,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:offered.option.description,allow_third_party_assignment:"
+msgid "Allow third party assignment"
+msgstr "Garantie offrant la prise en charge des quittances impayées"
+
+msgctxt "help:account.dunning.level,ask_for_third_party_take_care:"
+msgid ""
+"If set, the contract that has an account dunning with this level, a debt "
+"assignment request will be created for"
+msgstr ""
+"Si vrai, une demande de prise en charge sera créée pour les contrats qui ont"
+" des relances avec ce niveau"
+
+msgctxt "help:debt_assignment_request,is_paid:"
+msgid "If set, all the invoices of the request are paid"
+msgstr "Si Vrai, toutes les quittances de la demande sont payées"
+
+msgctxt "help:offered.option.description,allow_third_party_assignment:"
+msgid ""
+"If set, The insurer party will be the third party in the debt assignment "
+"request of the subscriber"
+msgstr ""
+"Si Vrai, l'assureur de cette garantie sera utilisée pour prendre en charge "
+"les quittances impayées de l'assuré"
+
+msgctxt "model:debt_assignment_request,name:"
+msgid "Third Party Debt Assignment Request"
+msgstr "Demande de prise en charge"
+
+msgctxt "model:debt_assignment_request-account.invoice,name:"
+msgid "Third Party Debt Assignment Request Invoice"
+msgstr "Quittance de la Demande de prise en charge"
+
+msgctxt "model:debt_assignment_request.create_requests.view,name:"
+msgid "Debt Assignment Create Requests View"
+msgstr "Vue de la demande de prise en charge"
+
+msgctxt "model:ir.action,name:act_debt_assignment_request_change_state_accept"
+msgid "Accept"
+msgstr "Accepter"
+
+msgctxt "model:ir.action,name:act_debt_assignment_request_change_state_draft"
+msgid "Draft"
+msgstr "Brouillon"
+
+msgctxt "model:ir.action,name:act_debt_assignment_request_change_state_paid"
+msgid "Pay"
+msgstr "Payer"
+
+msgctxt "model:ir.action,name:act_debt_assignment_request_change_state_refuse"
+msgid "Refuse"
+msgstr "Refuser"
+
+msgctxt "model:ir.action,name:act_debt_assignment_request_change_state_study"
+msgid "Study"
+msgstr "Etudier"
+
+msgctxt ""
+"model:ir.action,name:act_debt_assignment_request_change_state_transmit"
+msgid "Transmit"
+msgstr "Transmettre"
+
+msgctxt "model:ir.action,name:act_debt_assignment_request_creation_wizard"
+msgid "Debt Assignment Requests Creation"
+msgstr "Création des demandes de prise en charge"
+
+msgctxt "model:ir.action,name:act_debt_assignment_request_form"
+msgid "Debt Assignment Request"
+msgstr "Demande de prise en charge"
+
+msgctxt ""
+"model:ir.action.act_window.domain,name:act_debt_assignment_request_accepted"
+msgid "Accepted"
+msgstr "Accepté"
+
+msgctxt ""
+"model:ir.action.act_window.domain,name:act_debt_assignment_request_draft"
+msgid "Draft"
+msgstr "Brouillon"
+
+msgctxt ""
+"model:ir.action.act_window.domain,name:act_debt_assignment_request_in_study"
+msgid "In study"
+msgstr "En étude"
+
+msgctxt ""
+"model:ir.action.act_window.domain,name:act_debt_assignment_request_paid"
+msgid "Paid"
+msgstr "Payé"
+
+msgctxt ""
+"model:ir.action.act_window.domain,name:act_debt_assignment_request_refused"
+msgid "Refused"
+msgstr "Refusé"
+
+msgctxt ""
+"model:ir.action.act_window.domain,name:act_debt_assignment_request_transmitted"
+msgid "Transmitted"
+msgstr "Transmis"
+
+msgctxt "model:ir.message,text:msg_disallowed_operation"
+msgid "This operation is not allowed for those requests."
+msgstr "Cette opération n'est pas permise pour ces demandes"
+
+msgctxt "model:ir.message,text:msg_empty_invoices"
+msgid "You cannot transmit a request that has no invoice."
+msgstr "Vous ne pouvez pas transmettre une demande qui n'a pas de quittance."
+
+msgctxt "model:ir.message,text:msg_request_delete_draft"
+msgid "To delete request \"%(request)s\" you must reset it to draft state."
+msgstr ""
+"Pour supprimer la demande « %(request)s », vous devez le réinitialiser à "
+"l'état brouillon."
+
+msgctxt "model:ir.message,text:msg_undefined_debt_assignment_level"
+msgid "Debt assignment level is not defined."
+msgstr "Le niveau de prise en charge n'est pas défini."
+
+msgctxt "model:ir.model.button,string:debt_assignment_request_accept_button"
+msgid "Accept"
+msgstr "Accepter"
+
+msgctxt "model:ir.model.button,string:debt_assignment_request_draft_button"
+msgid "Draft"
+msgstr "Brouillon"
+
+msgctxt "model:ir.model.button,string:debt_assignment_request_pay_button"
+msgid "Pay"
+msgstr "Payer"
+
+msgctxt "model:ir.model.button,string:debt_assignment_request_refuse_button"
+msgid "Refuse"
+msgstr "Refuser"
+
+msgctxt "model:ir.model.button,string:debt_assignment_request_study_button"
+msgid "Study"
+msgstr "En étude"
+
+msgctxt "model:ir.model.button,string:debt_assignment_request_transmit_button"
+msgid "Transmit"
+msgstr "Transmettre"
+
+msgctxt "model:ir.ui.menu,name:menu_debt_assignment_request"
+msgid "Debt Assignment Request"
+msgstr "Demande de prise en charge"
+
+msgctxt "model:ir.ui.menu,name:menu_take_charge"
+msgid "Take Charge"
+msgstr "Prise en charge"
+
+msgctxt "model:ir.ui.menu,name:wiz_debt_assignment_requests_creation"
+msgid "Debt Assignment Requests Creation"
+msgstr "Creation des demandes de prise en charge"
+
+msgctxt "selection:debt_assignment_request,contract_to_terminate:"
+msgid "No"
+msgstr "Non"
+
+msgctxt "selection:debt_assignment_request,contract_to_terminate:"
+msgid "Yes"
+msgstr "Oui"
+
+msgctxt "selection:debt_assignment_request,debt_assignment_level:"
+msgid "Full"
+msgstr "Prise en charge totale"
+
+msgctxt "selection:debt_assignment_request,debt_assignment_level:"
+msgid "Partial"
+msgstr "Prise en charge partielle"
+
+msgctxt "selection:debt_assignment_request,state:"
+msgid "Accepted"
+msgstr "Accepté"
+
+msgctxt "selection:debt_assignment_request,state:"
+msgid "Draft"
+msgstr "Brouillon"
+
+msgctxt "selection:debt_assignment_request,state:"
+msgid "In study"
+msgstr "En étude"
+
+msgctxt "selection:debt_assignment_request,state:"
+msgid "Paid"
+msgstr "Payé"
+
+msgctxt "selection:debt_assignment_request,state:"
+msgid "Refused"
+msgstr "Refusé"
+
+msgctxt "selection:debt_assignment_request,state:"
+msgid "Transmitted"
+msgstr "Transmis"
+
+msgctxt "view:debt_assignment_request.create_requests.view:"
+msgid "Do you want to create debt assignment requests?"
+msgstr "Voulez vous créer des demandes de prise en charge?"
+
+msgctxt "view:debt_assignment_request:"
+msgid "request state"
+msgstr "État de la demande"
+
+msgctxt ""
+"wizard_button:debt_assignment_request.create_requests,start,create_requests:"
+msgid "Create requests"
+msgstr "Créer"
+
+msgctxt "wizard_button:debt_assignment_request.create_requests,start,end:"
+msgid "Cancel"
+msgstr "Annuler"

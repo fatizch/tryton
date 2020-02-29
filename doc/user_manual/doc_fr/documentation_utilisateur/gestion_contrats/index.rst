@@ -13,3 +13,11 @@ mises en demeures, etc.
    cotisations
    prelevements
    mise_en_demeure
+
+Tutoriels
+---------
+
+.. toctree::
+   :maxdepth: 1
+
+   prise_en_charge_mutuelle_action_sociale

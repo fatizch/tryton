@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <record model="ir.message" id="msg_empty_invoices">
+            <field name="text">You cannot transmit a request that has no invoice.</field>
+        </record>
+        <record model="ir.message" id="msg_undefined_debt_assignment_level">
+            <field name="text">Debt assignment level is not defined.</field>
+        </record>
+        <record model="ir.message" id="msg_request_delete_draft">
+            <field name="text">To delete request "%(request)s" you must reset it to draft state.</field>
+        </record>
+        <record model="ir.message" id="msg_disallowed_operation">
+            <field name="text">This operation is not allowed for those requests.</field>
+        </record>
+    </data>
+</tryton>

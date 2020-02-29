@@ -1,0 +1,74 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <record model="ir.action.wizard" id="act_debt_assignment_request_creation_wizard">
+            <field name="name">Debt Assignment Requests Creation</field>
+            <field name="wiz_name">debt_assignment_request.create_requests</field>
+        </record>
+        <record model="ir.ui.view" id="debt_assignment_request_creation_view_form">
+            <field name="model">debt_assignment_request.create_requests.view</field>
+            <field name="type">form</field>
+            <field name="name">debt_assignment_request_creation_form</field>
+        </record>
+        <menuitem name="Debt Assignment Requests Creation" parent="third_party_debt_assignment.menu_take_charge" sequence="40" action="act_debt_assignment_request_creation_wizard" id="wiz_debt_assignment_requests_creation"/>
+        <record model="ir.action.wizard" id="act_debt_assignment_request_change_state_transmit">
+            <field name="name">Transmit</field>
+            <field name="wiz_name">debt_assignment_request.change_state</field>
+        </record>
+        <record model="ir.action.wizard" id="act_debt_assignment_request_change_state_draft">
+            <field name="name">Draft</field>
+            <field name="wiz_name">debt_assignment_request.change_state</field>
+        </record>
+        <record model="ir.action.wizard" id="act_debt_assignment_request_change_state_refuse">
+            <field name="name">Refuse</field>
+            <field name="wiz_name">debt_assignment_request.change_state</field>
+        </record>
+        <record model="ir.action.wizard" id="act_debt_assignment_request_change_state_study">
+            <field name="name">Study</field>
+            <field name="wiz_name">debt_assignment_request.change_state</field>
+        </record>
+        <record model="ir.action.wizard" id="act_debt_assignment_request_change_state_accept">
+            <field name="name">Accept</field>
+            <field name="wiz_name">debt_assignment_request.change_state</field>
+        </record>
+        <record model="ir.action.wizard" id="act_debt_assignment_request_change_state_paid">
+            <field name="name">Pay</field>
+            <field name="wiz_name">debt_assignment_request.change_state</field>
+        </record>
+        <!-- ##################################### -->
+        <!-- # debt_assignment_request's Actions # -->
+        <!-- ##################################### -->
+        <record model="ir.action.keyword" id="transmit_debt_assignment_request_keyword">
+            <field name="keyword">form_action</field>
+            <field name="model">debt_assignment_request,-1</field>
+            <field name="action" ref="act_debt_assignment_request_change_state_transmit"/>
+        </record>
+        <record model="ir.action.keyword" id="draft_debt_assignment_request_keyword">
+            <field name="keyword">form_action</field>
+            <field name="model">debt_assignment_request,-1</field>
+            <field name="action" ref="act_debt_assignment_request_change_state_draft"/>
+        </record>
+        <record model="ir.action.keyword" id="refuse_debt_assignment_request_keyword">
+            <field name="keyword">form_action</field>
+            <field name="model">debt_assignment_request,-1</field>
+            <field name="action" ref="act_debt_assignment_request_change_state_refuse"/>
+        </record>
+        <record model="ir.action.keyword" id="study_debt_assignment_request_keyword">
+            <field name="keyword">form_action</field>
+            <field name="model">debt_assignment_request,-1</field>
+            <field name="action" ref="act_debt_assignment_request_change_state_study"/>
+        </record>
+        <record model="ir.action.keyword" id="accept_debt_assignment_request_keyword">
+            <field name="keyword">form_action</field>
+            <field name="model">debt_assignment_request,-1</field>
+            <field name="action" ref="act_debt_assignment_request_change_state_accept"/>
+        </record>
+        <record model="ir.action.keyword" id="paid_debt_assignment_request_keyword">
+            <field name="keyword">form_action</field>
+            <field name="model">debt_assignment_request,-1</field>
+            <field name="action" ref="act_debt_assignment_request_change_state_paid"/>
+        </record>
+    </data>
+</tryton>
