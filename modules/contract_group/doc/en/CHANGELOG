@@ -1,3 +1,4 @@
+* BUG#15181 Fix Affiliations contract's action keyword domain
 * BUG#14428 Fix legal entity initialization when subsidiary is the contract subscriber
 
 Version 2.6 - 2019-10-11

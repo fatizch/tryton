@@ -111,7 +111,7 @@ this repository contains the full copyright notices and license terms. -->
         <record model="ir.action.act_window" id="act_display_enrollment_form">
             <field name="name">Enrollments</field>
             <field name="res_model">contract.covered_element</field>
-            <field name="domain" eval="[('contract', '=', Eval('active_id')), ('item_desc.kind', '=', 'person'), ('parent.item_desc.sub_item_descs.kind', '=', 'person')]" pyson="1"/>
+            <field name="domain" eval="[('contract', '=', Eval('active_id')), ('item_desc.kind', '=', 'person')]" pyson="1"/>
         </record>
         <record model="ir.action.act_window.view" id="act_display_enrollment_list_view">
             <field name="sequence" eval="10"/>
