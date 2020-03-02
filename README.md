@@ -70,6 +70,10 @@ git clone git@github.com:coopengo/coog.git
 # Optionnaly clone the customer repository
 git clone git@github.com:coopengo/customers.git
 
+# Init git submodules
+git -C trytond-modules submodule init
+git -C trytond-modules submodule update
+
 # Create a configuration folder
 mkdir conf
 
