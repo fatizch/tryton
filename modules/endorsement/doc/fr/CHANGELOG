@@ -1,3 +1,4 @@
+* BUG#15122 Correctif sur la liste des données complémentaires qui n'était pas mise à jour au cours d'un avenant
 * OTH#00000 Affichage d'un message d'erreur si lors de l'avenant de gestion des options le montant de couverture n'est pas renseigné
 * OTH#00000 Correctif d'une erreur quand on clique trop rapidement sur Suivant dans un Avenant
 * BUG#14691 Correctif de crash lors de l'application d'un avenant sur contrat non défini

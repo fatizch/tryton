@@ -5,6 +5,7 @@ this repository contains the full copyright notices and license terms. -->
     <field name="effective_date" invisible="1"/>
     <field name="endorsement_part" invisible="1"/>
     <field name="endorsement_definition" invisible="1"/>
+    <field name="product" invisible="1"/>
     <group id="current_data" colspan="2">
         <label name="current_extra_data_date"/>
         <field name="current_extra_data_date" readonly="1"/>

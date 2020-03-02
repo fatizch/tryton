@@ -626,10 +626,17 @@ class ChangeContractExtraData(EndorsementWizardStepMixin):
     new_extra_data_date = fields.Date('Date of New Extra Data')
     new_extra_data = fields.Dict(
         'extra_data', 'New Extra Data')
+    product = fields.Many2One('offered.product', 'Product', readonly=True)
 
     @classmethod
     def is_multi_instance(cls):
         return False
+
+    @fields.depends('new_extra_data', 'product')
+    def on_change_new_extra_data(self):
+        if self.product:
+            self.new_extra_data = \
+                self.product.refresh_extra_data(self.new_extra_data)
 
     def step_default(self, name):
         pool = Pool()
@@ -654,7 +661,7 @@ class ChangeContractExtraData(EndorsementWizardStepMixin):
                 defaults['new_extra_data'] = data_values
             else:
                 defaults['new_extra_data'] = extra_data_values
-
+            defaults['product'] = contract.product.id
         return defaults
 
     def get_rec_name(self, name):

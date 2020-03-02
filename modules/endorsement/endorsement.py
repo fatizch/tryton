@@ -2556,18 +2556,16 @@ class EndorsementExtraData(relation_mixin(
         def _get_name(name):
             return self.__class__.get_extra_data_def_cache(name).string
 
-        if cur_data_values and not endorsement_state == 'applied':
-            for k, v in cur_data_values.items():
-                if new_data_values[k] != v:
-                    label = '%s ' % _get_name(k)
-                    value = _translate(v, k) + ' → ' + _translate(
-                        new_data_values[k], k)
-                    res[1].append((label, value))
-        else:
-            for k, v in new_data_values.items():
-                label = '%s ' % _get_name(k)
+        for k, v in new_data_values.items():
+            if not cur_data_values or k not in cur_data_values:
                 value = ' → ' + _translate(v, k)
-                res[1].append((label, value))
+            elif cur_data_values[k] != v and not endorsement_state == 'applied':
+                value = _translate(v, k) + ' → ' + _translate(
+                    new_data_values[k], k)
+            else:
+                continue
+            label = '%s ' % _get_name(k)
+            res[1].append((label, value))
         return res
 
     def is_null(self):
