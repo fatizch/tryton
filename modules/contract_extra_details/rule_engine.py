@@ -36,7 +36,7 @@ class Runtime(metaclass=PoolMeta):
     def _re_contract_extra_detail(cls, args, key, date):
         assert date
         contract = args['contract']
-        extra_data = utils.get_version_at_date(contract.extra_datas, date)
+        extra_data = utils.get_value_at_date(contract.extra_datas, date)
         if extra_data is None:
             return None
         return (extra_data.extra_details or {}).get(key, None)

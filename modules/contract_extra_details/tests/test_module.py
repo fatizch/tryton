@@ -58,6 +58,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
         Product = pool.get('offered.product')
         Contract = pool.get('contract')
         ExtraData = pool.get('contract.extra_data')
+        Runtime = pool.get('rule_engine.runtime')
         product, = Product.search([
                 ('code', '=', 'AAA'),
                 ])
@@ -82,6 +83,9 @@ class ModuleTestCase(test_framework.CoogTestCase):
                 '2019': Decimal('1.1'),
                 '2020': Decimal('1.2'),
                 })
+
+        self.assertEqual(Runtime._re_contract_extra_detail(
+              {'contract': contract}, '2019', start_date), Decimal('1.1'))
 
         with Transaction().set_context(
                 client_defined_date=datetime.date(2077, 1, 1)):
