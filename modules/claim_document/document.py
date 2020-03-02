@@ -105,6 +105,8 @@ class DocumentRequestLine(metaclass=PoolMeta):
                 coog_string.translate_label(self, 'claim')))
             for loss in self.claim.losses:
                 selection.append((str(loss), loss.rec_name))
+            for beneficiary in self.claim.beneficiaries:
+                selection.append((str(beneficiary), beneficiary.rec_name))
         return selection
 
 

@@ -1,3 +1,4 @@
+* BUG#15138 beneficiaries are now accessible on the 'needed for' of a document request line
 * BUG#00000 Fixes on document resquest lines for claim process
 
 Version 2.6 - 2019-10-11
