@@ -15,4 +15,7 @@ this repository contains the full copyright notices and license terms. -->
         <label name="management_end_date"/>
         <field name="management_end_date"/>
     </xpath>
+    <xpath expr="/form/group[@id='invisible']">
+        <field name="possible_legal_entities"/>
+    </xpath>
 </data>

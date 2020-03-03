@@ -1,3 +1,4 @@
+* BUG#14427 Ajout d'un domaine sur la société d'un sinistre
 * BUG#14383 Correctif sur la récupération du beneficiaire lors de la création de périodes d'indemnisation
 
 Version 2.6 - 2019-10-11

@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
-from trytond.pool import PoolMeta
+from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval
 
 from trytond.modules.coog_core import fields
@@ -15,8 +15,12 @@ __all__ = [
 class Claim(metaclass=PoolMeta):
     __name__ = 'claim'
 
-    legal_entity = fields.Many2One('party.party', 'Legal Entity', select=True,
-        ondelete='RESTRICT')
+    possible_legal_entities = fields.Function(
+        fields.One2Many('party.party', None, 'Possible Legal Entities'),
+        'getter_possible_legal_entities')
+    legal_entity = fields.Many2One('party.party', 'Legal Entity',
+        domain=[('id', 'in', Eval('possible_legal_entities'))],
+        select=True, ondelete='RESTRICT', depends=['possible_legal_entities'])
     interlocutor = fields.Many2One('party.interlocutor', 'Interlocutor',
         ondelete='RESTRICT', domain=[
             ('party', '=', Eval('legal_entity'))
@@ -28,6 +32,25 @@ class Claim(metaclass=PoolMeta):
         recipients = [self.legal_entity] if self.legal_entity else []
         recipients += super(Claim, self).get_recipients()
         return recipients
+
+    def getter_possible_legal_entities(self, name=None):
+        pool = Pool()
+        CoveredElement = pool.get('contract.covered_element')
+        contracts = []
+        if self.main_contract:
+            contracts.append(self.main_contract)
+        contracts += [x.contract for x in self.delivered_services]
+        if contracts:
+            contracts = set(contracts)
+            entities = [x.party.id for x in CoveredElement.search([
+                        ('contract', 'in', [x.id for x in contracts]),
+                        ('party.is_person', '=', False),
+                        ])] + [x.subscriber.id for x in contracts
+                if x.subscriber]
+        else:
+            entities = [x.party.id for x in CoveredElement.search(
+                [('is_person', '=', False)])]
+        return entities
 
 
 class ClaimService(metaclass=PoolMeta):
