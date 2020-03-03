@@ -685,8 +685,11 @@ class ClaimIjSubscription(CoogProcessFramework, model.CoogView):
         return self.parties[0].rec_name if self.parties else ''
 
     def get_rec_name(self, name):
-        return ' - '.join([self.subscriber.full_name if self.subscriber else '',
-                self.parties[0].full_name if self.parties else ''])
+        return ' - '.join([
+                self.subscriber.full_name if self.subscriber else '',
+                next((party.full_name for party in self.parties
+                        if party.ssn == self.ssn or party.siren == self.siren),
+                    '') if self.parties else ''])
 
     @classmethod
     def search_rec_name(cls, name, clause):
