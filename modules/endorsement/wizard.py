@@ -963,7 +963,7 @@ class ManageOptions(EndorsementWizardStepMixin):
         for coverage in set(existing_options.keys()) - {x.coverage
                 for x in new_options}:
             to_remove += [x for x in existing_options[coverage]
-                if getattr(x, 'id', 0) <= 0]
+                if (getattr(x, 'id', 0) or 0) <= 0]
         parent.options = [x for x in parent.options if x not in to_remove]
 
     def _update_nothing(self, new_option, parent, existing_options, per_id):
