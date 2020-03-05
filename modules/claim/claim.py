@@ -576,8 +576,10 @@ class Loss(model.CoogSQL, model.CoogView,
             return res
         if not self.claim.main_contract:
             return [x.id for x in LossDesc.search([])]
+        self_copy = self
+        self_copy.loss_desc = None
         for benefit, option in self.claim.main_contract.get_possible_benefits(
-                self):
+                self_copy):
             res.extend(benefit.loss_descs)
         return [x.id for x in set(res)]
 

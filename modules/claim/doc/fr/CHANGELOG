@@ -1,3 +1,4 @@
+* BUG#14817 Correction de la disparition du descripteur de préjudice après saisie
 * BUG#15131 Correctif d'une erreur apparaissant lors de la sauvegarde d'une ligne de demande de documents requise pour un préjudice
 * BUG#14638 Correctif d'une erreur de typo dans un getter
 * BUG#14487 Correction de l'impossibilité d'ajouter un bénéficiaire sur un sinistre décès
